@@ -150,13 +150,70 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (filled by roadmapper) | | |
+| FND-01 | Phase 1 | Pending |
+| FND-02 | Phase 1 | Pending |
+| FND-03 | Phase 1 | Pending |
+| FND-04 | Phase 1 | Pending |
+| FND-05 | Phase 1 | Pending |
+| BRND-01 | Phase 2 | Pending |
+| BRND-02 | Phase 2 | Pending |
+| BRND-03 | Phase 2 | Pending |
+| BRND-04 | Phase 2 | Pending |
+| BRND-05 | Phase 2 | Pending |
+| PLAT-01 | Phase 3 | Pending |
+| PLAT-02 | Phase 3 | Pending |
+| PLAT-03 | Phase 3 | Pending |
+| PLAT-04 | Phase 3 | Pending |
+| PLAT-05 | Phase 3 | Pending |
+| PLAT-06 | Phase 3 | Pending |
+| DATA-01 | Phase 4 | Pending |
+| DATA-02 | Phase 4 | Pending |
+| DATA-03 | Phase 4 | Pending |
+| DATA-04 | Phase 4 | Pending |
+| DATA-05 | Phase 4 | Pending |
+| AI-01 | Phase 5 | Pending |
+| AI-02 | Phase 5 | Pending |
+| AI-03 | Phase 5 | Pending |
+| AI-04 | Phase 5 | Pending |
+| RENT-01 | Phase 6 | Pending |
+| RENT-02 | Phase 6 | Pending |
+| RENT-03 | Phase 6 | Pending |
+| RENT-04 | Phase 6 | Pending |
+| RENT-05 | Phase 6 | Pending |
+| RENT-06 | Phase 6 | Pending |
+| RENT-07 | Phase 6 | Pending |
+| RENT-08 | Phase 6 | Pending |
+| INV-01 | Phase 7 | Pending |
+| INV-02 | Phase 7 | Pending |
+| INV-03 | Phase 7 | Pending |
+| INV-04 | Phase 7 | Pending |
+| INV-05 | Phase 7 | Pending |
+| INV-06 | Phase 7 | Pending |
+| AGT-01 | Phase 8 | Pending |
+| AGT-02 | Phase 8 | Pending |
+| AGT-03 | Phase 8 | Pending |
+| AGT-04 | Phase 8 | Pending |
+| AGT-05 | Phase 8 | Pending |
+| AGT-06 | Phase 8 | Pending |
+| AGT-07 | Phase 8 | Pending |
+| STU-01 | Phase 9 | Pending |
+| STU-02 | Phase 9 | Pending |
+| STU-03 | Phase 9 | Pending |
+| STU-04 | Phase 9 | Pending |
+| EXT-01 | Phase 11 | Pending |
+| EXT-02 | Phase 11 | Pending |
+| EXT-03 | Phase 11 | Pending |
+| EXT-04 | Phase 11 | Pending |
+| GTM-01 | Phase 10 | Pending |
+| GTM-02 | Phase 10 | Pending |
+| GTM-03 | Phase 10 | Pending |
+| GTM-04 | Phase 10 | Pending |
 
 **Coverage:**
 - v1 requirements: 58 total
-- Mapped to phases: 0
-- Unmapped: 58 ⚠️
+- Mapped to phases: 58
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-13*
-*Last updated: 2026-09-13 after initial definition*
+*Last updated: 2026-09-13 after roadmap creation (traceability mapped)*
