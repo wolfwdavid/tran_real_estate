@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with three portals — **Renters**, **Investors**, and **Agents** — covering the entire United States. It replaces "refreshing Zillow all day" with tools that bring matching listings, deal math, and outreach to the user, powered by legitimate listing data (RentCast) and AI drafting. It runs at $0 infrastructure cost: a static site on GitHub Pages where each user brings their own data and AI API keys.
+Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with three portals — **Renters**, **Investors**, and **Agents** — covering the entire United States. It replaces "refreshing Zillow all day" with tools that bring matching listings, deal math, and outreach to the user, powered by legitimate listing data (RentCast) and AI drafting. v1 runs at $0 infrastructure cost: a static site on its own GitHub Pages origin where each user brings their own data and AI API keys.
 
 ## Core Value
 
@@ -17,77 +17,92 @@ A visitor in any of the three portals can go from "what I'm looking for" to an a
 ### Active
 
 **Platform (shared)**
-- [ ] One SvelteKit app, statically built and deployed to GitHub Pages, with a landing page that routes to Renter / Investor / Agent portals
-- [ ] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini); keys stored only in that browser, never sent anywhere except the provider
-- [ ] Demo-safe experience when no key is present (clear onboarding explaining how to get a free RentCast key)
-- [ ] Shared data layer: typed RentCast client with caching to conserve the 50-call/month free tier
+- [ ] One SvelteKit app, statically built and deployed to GitHub Pages under a dedicated free GitHub organization (own origin, e.g. `<org>.github.io`), with a landing page routing to Renter / Investor / Agent portals
+- [ ] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini); keys stored only in that browser, sent only to the provider
+- [ ] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key)
+- [ ] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap)
+- [ ] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle)
+- [ ] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers
 - [ ] Warm editorial visual identity (warm palette, elegant serif headings, cinematic imagery) designed with UI/UX Pro Max
-- [ ] GTM surface: marketing landing pages per audience that explain the value and drive sign-up/usage
+- [ ] GTM surface: marketing landing pages per audience that explain the value and drive usage
 
 **Renter portal**
-- [ ] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, availability; saved searches re-run on app open and highlight "N new since last visit"
-- [ ] AI outreach drafts: draft an interest message to the listing agent/landlord; human reviews and sends
+- [ ] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit"
+- [ ] AI outreach drafts: draft an interest message to the listing agent (asking about availability, pets, amenities not in the data); human reviews and sends
 - [ ] Fair-rent check: compare a listing's asking rent against estimated market rent
-- [ ] Zillow sponsored filter: browser extension that hides promoted/sponsored listing cards on Zillow pages the user is viewing (client-side only, no scraping)
+- [ ] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons
 
 **Investor portal**
-- [ ] Deal analyzer: cap rate, cash flow, cash-on-cash return using rent estimates and comps
-- [ ] Deal-flow alerts: saved buy-box searches over for-sale listings, re-run on app open
-- [ ] Market dashboards: rent trends, price-to-rent, and related market stats by zip/metro
-- [ ] AI investment memo: one-click proposal/report generated from a deal analysis
+- [ ] Deal analyzer: cap rate, NOI, cash flow, cash-on-cash return, DSCR using rent estimates and comps
+- [ ] Deal-flow alerts: saved buy-box searches over for-sale listings, re-run on app open when stale
+- [ ] Market dashboards: rent trends, price-to-rent, and related market stats by zip
+- [ ] AI investment memo: one-click proposal/report generated from a deal analysis, exportable
 
 **Agent portal**
-- [ ] Lead inbox: renter/investor inquiries delivered to the agent via a free form service (Web3Forms/Formspree)
+- [ ] Lead capture + inbox: shareable inquiry form delivering to the agent's email via Web3Forms (free tier); agent imports leads into the app by pasting the email (free tiers have no read API)
 - [ ] AI content studio: generate listing descriptions, social posts, and founder-story video scripts
 - [ ] Client CRM + follow-ups: track leads locally with AI follow-up reminders and drafted messages
-- [ ] Market reports: branded neighborhood/market reports agents can export and send to clients
+- [ ] Market reports: branded market reports (no demographic/school/crime data) agents can export and send to clients
 
 ### Out of Scope
 
 - MLS API / IDX / VOW data — no broker or agent sponsor; authorization cannot be obtained legitimately right now
 - Scraping Zillow (or any site) — violates Zillow Terms of Use; no public Zillow API since 2021
-- Faking credentials or implying Tran is licensed — explicit user requirement: legitimate access only
-- CoStar data in the product or repo — NYU Libraries access is academic-licensed; used for offline market research only
-- Hosted backend, user accounts, and Stripe billing — v1 is free-only and browser-only; paid SaaS mechanics come after the demo validates demand
+- Faking credentials or implying Tran is a licensed brokerage — explicit user requirement: legitimate access only
+- NYU CoStar in any form (product, repo, or offline research for Tran) — CoStar academic terms prohibit use with direct or indirect benefit, financial or otherwise
+- Hosted backend, user accounts, and Stripe billing — v1 is free-only and browser-only; paid SaaS must also move off GitHub Pages (Pages terms disallow commercial SaaS)
 - Server-side scheduled jobs / email alert digests — no backend in v1; alerts are check-on-open
-- Publishing RentCast data into the public repo or static JSON — RentCast license likely forbids redistribution; data is fetched per-user with their own key
-- Auto-sending outreach emails — human-in-the-loop send only (CAN-SPAM and reputation risk)
+- A shared/bundled RentCast demo key — RentCast terms make keys confidential and non-shareable
+- Committing real RentCast responses to the public repo — use synthetic fixtures only
+- Auto-sending outreach emails/SMS — human-in-the-loop send only (CAN-SPAM/TCPA and reputation risk)
+- Tenant screening or housing-eligibility decisions — Fair Housing risk; restricted by LLM provider usage policies
+- Hosting under the shared `wolfwdavid.github.io` origin — browser storage is shared with every sibling Pages site, exposing stored keys
+- Paid Chrome Web Store listing in v1 — $5 fee breaks $0 budget; load-unpacked + Edge Add-ons instead
 
 ## Context
 
-- **Origin:** A viral thread argued Zillow shows a "limited slice" (paid listings promoted first) and proposed pulling MLS rentals via a legitimate API into a database, auto-filtering, and drafting agent outreach. Feasibility review concluded the code is medium difficulty but MLS *access* is the hard, non-code part; MLS also doesn't include all rentals (landlord-direct, large property managers).
-- **Data source decision:** RentCast API offers nationwide active rental and sale listings, rent/value estimates, comps, and market stats without MLS sponsorship; free tier is 50 calls/month, so caching and BYOK are essential.
-- **Reference content:** Callen Faulkner / The Uncommon Business 63-second founder-story reel (real-estate investor turned AI educator; "a task that took an hour now takes two minutes"). Serves as (a) a GTM content template — hook → manual pain → before/after moment → results → mission → CTA — for the Agent content studio and marketing pages, and (b) the visual mood reference (warm cinematic B-roll, serif captions).
-- **Brand:** "Tran Real Estate" is the working brand name. Tran is also the client behind the sibling AI trading desk project (`Websites/Tran/Tran_desktop`), which already uses a Svelte frontend.
-- **NYU CoStar:** The user has CoStar access through NYU Libraries (NYU login + Duo). Use only for the user's own offline research to validate assumptions (e.g., rent benchmarks); never ingest, commit, or display it.
-- **Owner context:** Mechanical-engineer/ML full-stack developer; comfortable with Svelte, GitHub Pages, Hugging Face Spaces.
+- **Origin:** A viral thread argued Zillow shows a "limited slice" (paid listings promoted first) and proposed pulling MLS rentals via a legitimate API into a database, auto-filtering, and drafting agent outreach. Feasibility review concluded the code is medium difficulty but MLS *access* is the hard, non-code part; MLS also doesn't include all rentals.
+- **Data source:** RentCast API — nationwide active rental and sale listings, rent/value estimates, comps, zip-level market stats. Browser-callable (CORS `*`, GET + `x-api-key` only). Terms permit display/redistribution; keys are confidential. Only HTTP 200 responses are billed; free tier 50 calls/month, overage $0.20/call. Listings lack photos, descriptions, amenities, pet policy, and availability date; listing agent email/phone are present. One search returns up to 500 listings, so client-side filtering stretches calls.
+- **LLM providers:** Anthropic (official browser header), OpenAI (`dangerouslyAllowBrowser`, Responses API; historically brittle CORS), Gemini (browser build; free tier may use content for training → warn before sending client/CRM data).
+- **Lead forms:** Web3Forms free = 250 submissions/month, email delivery only; read API is paid.
+- **Compliance:** HUD withdrew its 2024 AI/digital-advertising guidance (2025/2026), but the Fair Housing Act and 24 CFR 100.75 still apply; New York AI advertising disclosure law effective June 2026; state rules require brokerage/license disclosure on agent ads.
+- **Reference content:** Callen Faulkner / The Uncommon Business 63-second founder-story reel. Serves as a GTM content template (hook → manual pain → before/after → results → mission → CTA) for the agent content studio and marketing pages, and as the visual mood reference (warm cinematic B-roll, serif captions).
+- **Brand:** Public brand is "Tran Real Estate Tools" (descriptor avoids implying a licensed brokerage); Tran is also the client behind the sibling AI trading desk (`Websites/Tran/Tran_desktop`, Svelte frontend).
+- **Research:** `.planning/research/` (STACK, FEATURES, ARCHITECTURE, PITFALLS, SUMMARY) — 2026-09-13.
 
 ## Constraints
 
-- **Tech stack**: Svelte/SvelteKit with static adapter — user requirement
+- **Tech stack**: SvelteKit 2 (Svelte 5) + adapter-static, TypeScript pinned to 6.x, Tailwind 4 + shadcn-svelte, Dexie, pnpm workspace — user requirement (Svelte) + research
 - **Workflow**: GSD for planning/execution; UI/UX Pro Max skill active for all UI work — user requirement
-- **Hosting**: GitHub Pages from public repo `wolfwdavid/tran_real_estate`; Hugging Face only if needed — user requirement, $0
-- **Budget**: $0/month to start — RentCast free tier + BYOK; no paid infra
-- **No backend**: browser-only; all secrets are user-supplied and stored client-side; nothing secret ever committed (public repo)
-- **Legal/compliance**: legitimate data only — no scraping, no MLS without authorization, no CoStar in product, respect RentCast terms, human-in-the-loop outreach, Fair Housing-safe AI copy
-- **Market**: nationwide US from day one
-- **Accessibility/responsive**: must work on mobile widths and meet WCAG AA contrast (UI/UX Pro Max standard)
+- **Hosting**: GitHub Pages under a dedicated free GitHub organization (own origin); Hugging Face only if needed — user decision, $0
+- **Budget**: $0/month — RentCast free tier + BYOK; no paid infra, no paid store listings
+- **No backend**: browser-only; secrets user-supplied and stored client-side; nothing secret committed (public repo); CSP via meta tag restricting connect-src to provider hosts
+- **Legal/compliance**: legitimate data only — no scraping, no MLS without authorization, no CoStar, respect RentCast terms, human-in-the-loop outreach, Fair Housing-safe AI copy, not-a-brokerage disclaimers
+- **Market**: nationwide US from day one (any US city/zip; every search requires a location)
+- **Accessibility/responsive**: mobile widths and WCAG AA contrast
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | GTM = go-to-market SaaS for renters, investors, agents | User clarified; one product per audience | — Pending |
-| One platform, three portals (not three sites) | Shared data layer, brand, and deploy; less duplication | — Pending |
-| RentCast as listing data source instead of MLS | No sponsor → MLS not legitimately accessible; RentCast is nationwide and has a free tier | — Pending |
-| BYOK for RentCast and LLM keys, stored in browser | $0 budget + no backend + public repo; avoids redistributing licensed data | — Pending |
+| One platform, three portals (not three sites) | Shared data layer, brand, and deploy | — Pending |
+| RentCast as listing data source instead of MLS | No sponsor → MLS not legitimately accessible; nationwide + free tier + browser CORS | — Pending |
+| BYOK for RentCast and LLM keys, stored in browser | $0 budget + no backend + public repo; RentCast keys non-shareable | — Pending |
 | No backend / accounts / billing in v1 | User chose free-only; v1 done = live demo of all 3 portals | — Pending |
-| Lead inbox via Web3Forms/Formspree free tier | Delivers inquiries to agents with no server | — Pending |
-| Alerts re-run on app open | No background server in v1 | — Pending |
-| Zillow filter as client-side browser extension | Only ToS-safe way to hide sponsored results; no scraping | — Pending |
-| CoStar (NYU) offline research only | Academic license prohibits commercial product use | — Pending |
+| Dedicated free GitHub org for Pages origin | Shared wolfwdavid.github.io origin would expose stored keys to sibling sites | — Pending |
+| Client-side hard stop before RentCast free limit | Overage billed at $0.20/call with no provider cap | — Pending |
+| Lead inbox = Web3Forms email delivery + paste-to-import | Free tiers have no read API | — Pending |
+| Alerts re-run on app open when cache is stale | No background server; protects call budget | — Pending |
+| Zillow filter as hide-only MV3 extension, load-unpacked + Edge Add-ons | ToS-safe, no scraping; $0 distribution | — Pending |
+| No CoStar at all | Academic terms prohibit indirect/financial benefit (reversed earlier "offline research" decision) | — Pending |
+| Include Gemini in v1 with training-data warning | User choice; Claude + OpenAI + Gemini | — Pending |
+| Deterministic Fair Housing checker on AI copy | FHA still applies after HUD guidance withdrawal; NY AI ad law | — Pending |
 | Warm editorial visual direction | Matches reference video's premium, trustworthy mood | — Pending |
-| Brand = "Tran Real Estate" (working name) | User choice | — Pending |
+| Public brand = "Tran Real Estate Tools" | "Real Estate" alone implies a licensed brokerage; descriptor signals a software tool | — Pending |
+| Analytics = first-party fetch beacon to Umami free tier, no third-party scripts | Any script on the origin can read stored keys; page/portal events only, no PII | — Pending |
+| GitHub org name `tranrealestate` → `tranrealestate.github.io` | Dedicated origin; name available 2026-09-13; owner creates org in browser | — Pending |
+| v1 depth = all three portals at capped depth | Honors "live demo of all 3 portals" without solo-build scope creep; each portal phase has demo-credible exit criteria and a named cut line | — Pending |
 
 ## Evolution
 
@@ -107,4 +122,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-13 after initialization*
+*Last updated: 2026-09-13 after research and owner decisions*
