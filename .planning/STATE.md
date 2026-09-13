@@ -49,17 +49,20 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+**Deferred owner actions (NON-BLOCKING, per owner instruction 2026-09-13: "I do not have a domain site just yet. Just keep going until we do."):** All phases build and verify locally. The deploy workflow is scaffolded but gated off (repo variable `PAGES_ENABLED`). No remote and no push until these are done.
+- [Phase 1 deploy]: Create the free GitHub org `tranrealestate` in the browser, create or transfer the repo, enable Pages, set `PAGES_ENABLED=true`, and enable secret-scanning push protection. Live-origin checks are verified locally until then.
+- [Phase 4]: Create a dedicated endpoint-restricted RentCast key for billing verification (never committed). Until then, the gateway is verified against fixtures and mocked responses.
+- [Phase 8]: Create a free Web3Forms access key for lead-delivery verification. Until then, verify with mocked submissions.
+- [Phase 11]: Read the Zillow Terms of Use manually and create a free Edge Add-ons Partner Center account.
 
-### Blockers/Concerns
-
-- [Phase 1]: HUMAN ACTION. The owner must create the free GitHub org `tranrealestate` in the browser (the API cannot create orgs), then enable Pages and secret-scanning push protection, before the first deploy.
-- [Phase 4]: HUMAN ACTION. The owner creates a dedicated endpoint-restricted RentCast key for billing verification (never committed).
-- [Phase 8]: HUMAN ACTION. The owner creates a free Web3Forms access key for lead-delivery verification.
-- [Phase 11]: HUMAN ACTION. The owner reads the Zillow Terms of Use manually and creates a free Edge Add-ons Partner Center account.
+**Notes:**
 - Research flags (run `/gsd:research-phase`): Phases 1, 4, 5, 8, 11. Light checks: Phases 3, 9, 10.
 - UI phases (run `/gsd:ui-phase` with UI/UX Pro Max before planning): 2, 3, 4 (light), 5, 6, 7, 8, 9, 10, 11 (popup).
 - Legal/compliance items are directionally sound but warrant professional review before the public GTM push.
+
+### Blockers/Concerns
+
+None. Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).
 
 ## Session Continuity
 
