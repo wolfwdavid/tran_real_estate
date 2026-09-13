@@ -233,3 +233,18 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd:profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Research Reconciliation Overrides
+
+`.planning/research/SUMMARY.md` resolves conflicts between the individual research files. Where the stack notes above disagree, these rules win:
+
+- **LLM clients:** use raw `fetch` adapters with a shared SSE parser. Do NOT use `@anthropic-ai/sdk`, `openai`, or `@google/genai` in the web app. Their telemetry headers break CORS, and dropping them shrinks the supply-chain surface on an origin that holds keys.
+- **PDF export:** print CSS plus `window.print()` is the primary path. pdfmake is an optional lazy-loaded upgrade only.
+- **Routing:** prerender every route with no dynamic `[param]` routes. Record IDs travel as `?id=` and are read in `onMount`. Use `trailingSlash: 'always'`.
+- **RentCast budget:** default hard cap is 40 of 50 calls, and every call goes through the DataGateway. Cache TTLs: listings 24h, estimates 14d, market stats 30d, property records 90d, 404 negative cache 24h.
+- **Keys:** session-only by default, "remember on this device" is opt-in, and a passphrase lock is available. Never include keys in backups, logs, or URLs.
+- **Analytics:** a first-party `fetch` beacon only, with no third-party `<script>` tags on the origin.
+- **Origin:** `tranrealestate.github.io`, a dedicated GitHub org. Never deploy under `wolfwdavid.github.io`.
+- **Brand:** the public name is "Tran Real Estate Tools". Copy must never imply brokerage, appraisal, or investment advice.
+- **Data hygiene:** never commit real RentCast responses or any CoStar-derived data. Use synthetic fixtures only.
+- **Commits:** keep commit messages focused on the change, and never mention AI assistants.
