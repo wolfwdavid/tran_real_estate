@@ -74,7 +74,16 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
   3. Loading any app page inside a third-party iframe does not render the app inside the frame.
   4. A push with a failing typecheck, lint, unit, end-to-end, or axe check does not deploy. A push where everything passes deploys to GitHub Pages automatically (deploy job uses `concurrency`).
   5. Pushing a commit containing a test API-key pattern is rejected by secret-scanning push protection. A commit adding PII-shaped listing data or a CoStar-pattern path fails CI.
-**Plans**: TBD
+**Plans**: 9 plans (waves 0-5)
+- [ ] 01-01-PLAN.md — Workspace, toolchain & commit gates (wave 0)
+- [ ] 01-02-PLAN.md — Unit-test harness & workspace packages (wave 1)
+- [ ] 01-03-PLAN.md — Web skeleton, base path & prerendered routes (wave 2)
+- [ ] 01-04-PLAN.md — CSP contract assertion & mutation tests (wave 3)
+- [ ] 01-05-PLAN.md — Pages emulator, Playwright harness & routing E2E (wave 3)
+- [ ] 01-06-PLAN.md — Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
+- [ ] 01-07-PLAN.md — Browser security & accessibility specs (CSP, framing, axe) (wave 4)
+- [ ] 01-08-PLAN.md — CI workflow, actionlint & gated Pages deploy (wave 4)
+- [ ] 01-09-PLAN.md — Full-suite verification & deferred hosting handoff (wave 5)
 **Research flag**: YES. Needs `/gsd:research-phase`: org Pages setup (org root repo vs. project repo + `BASE_PATH`), `kit.csp` meta emission on prerendered adapter-static pages, Pages `trailingSlash` and `.nojekyll` behavior.
 **UI hint**: no (smoke shell only)
 **Human action required (before deploy)**: The owner must create the free GitHub organization `tranrealestate` in the browser, because organizations cannot be created via the API. The owner then creates or transfers the repo into the org and enables GitHub Pages and secret scanning with push protection in the org/repo settings. Deploy steps block until this is done.
@@ -236,7 +245,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Origin & Security Baseline | 0/TBD | Not started | - |
+| 1. Foundation, Origin & Security Baseline | 0/9 | Planned | - |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Not started | - |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Not started | - |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 0/TBD | Not started | - |
