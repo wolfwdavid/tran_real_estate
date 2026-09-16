@@ -50,7 +50,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 **Deferred owner actions (NON-BLOCKING, per owner instruction 2026-09-13: "I do not have a domain site just yet. Just keep going until we do."):** All phases build and verify locally. The deploy workflow is scaffolded but gated off (repo variable `PAGES_ENABLED`). No remote and no push until these are done.
-- [Phase 1 deploy]: Create the free GitHub org `tranrealestate` in the browser, create or transfer the repo, enable Pages, set `PAGES_ENABLED=true`, and enable secret-scanning push protection. Live-origin checks are verified locally until then.
+- [Phase 1 deploy]: Create the free GitHub org `tranrealestate` in the browser, then create or transfer the repo **named `tranrealestate.github.io`** (required for a root org site). Enable Pages, set `PAGES_ENABLED=true`, and enable secret-scanning push protection. Live-origin checks are verified locally until then.
 - [Phase 4]: Create a dedicated endpoint-restricted RentCast key for billing verification (never committed). Until then, the gateway is verified against fixtures and mocked responses.
 - [Phase 8]: Create a free Web3Forms access key for lead-delivery verification. Until then, verify with mocked submissions.
 - [Phase 11]: Read the Zillow Terms of Use manually and create a free Edge Add-ons Partner Center account.
