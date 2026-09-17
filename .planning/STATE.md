@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-09-17T04:24:34.228Z"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-09-17T04:32:28.616Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 4 of 9
+Plan: 5 of 9
 
 ## Performance Metrics
 
@@ -49,6 +49,7 @@ Plan: 4 of 9
 | Phase 01 P01 | 6min | 2 tasks | 13 files |
 | Phase 01 P02 | 7min | 2 tasks | 14 files |
 | Phase 01 P03 | 8min | 3 tasks | 36 files |
+| Phase 01 P04 | 5min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01]: apps/web has prepare: svelte-kit sync || echo '' so .svelte-kit/tsconfig.json exists for Vite's TS transform on fresh installs
 - [Phase 01]: resolve('/renter/') with trailing slash typechecks under svelte-check 4.7.6; RESEARCH Open Question 1 fallback not needed
 - [Phase 01]: FND-01/02/03 left unchecked after 01-03 (carriers shipped: prerender, CSP meta, hidden+frame-guard); 01-04/05/07 assert them and 01-09 closes
+- [Phase 01]: checkBuild short-circuits the walk on a missing dir so csp:assert reports the nine carriers and exits 1 instead of throwing ENOENT
+- [Phase 01]: CSP allowlist kept as a deliberate literal duplicate in scripts/assert-csp.mjs; Phase 10 must add the beacon host to both files in one commit
+- [Phase 01]: FND-02/03 left unchecked after 01-04 (oracle + mutation proof shipped); 01-05/01-07 E2E and 01-09 close them
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-17T04:24:34.222Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-09-17T04:32:28.611Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
