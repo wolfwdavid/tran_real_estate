@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-09-17T04:11:51.731Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-09-17T04:24:34.228Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 3 of 9
+Plan: 4 of 9
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Plan: 3 of 9
 *Updated after each plan completion*
 | Phase 01 P01 | 6min | 2 tasks | 13 files |
 | Phase 01 P02 | 7min | 2 tasks | 14 files |
+| Phase 01 P03 | 8min | 3 tasks | 36 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,10 @@ Recent decisions affecting current work:
 - [Phase 01]: no-network wiring tests use targeted eslint-disable-next-line for the global fetch ban instead of an eslint.config.js override
 - [Phase 01]: Machine global pnpm aligned 11.0.9 -> 11.27.0 so nested pnpm -r under corepack matches the packageManager pin; no repo change
 - [Phase 01]: FND-04 left unchecked after 01-02 (harness half only); 01-08/01-09 close it
+- [Phase 01]: apps/web/vite.config.ts uses plain svelte() + $lib alias under Vitest because Kit's plugin pins Vite root to process.cwd() and breaks the root projects harness
+- [Phase 01]: apps/web has prepare: svelte-kit sync || echo '' so .svelte-kit/tsconfig.json exists for Vite's TS transform on fresh installs
+- [Phase 01]: resolve('/renter/') with trailing slash typechecks under svelte-check 4.7.6; RESEARCH Open Question 1 fallback not needed
+- [Phase 01]: FND-01/02/03 left unchecked after 01-03 (carriers shipped: prerender, CSP meta, hidden+frame-guard); 01-04/05/07 assert them and 01-09 closes
 
 ### Pending Todos
 
@@ -89,6 +94,6 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-17T04:11:51.724Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-09-17T04:24:34.222Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
