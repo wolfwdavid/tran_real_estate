@@ -51,6 +51,21 @@ importers:
         specifier: 4.1.11
         version: 4.1.11(@types/node@24.13.5)(vite@8.3.0(@types/node@24.13.5))
 
+  packages/brand:
+    devDependencies:
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
+  packages/core:
+    devDependencies:
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 4.1.11
+        version: 4.1.11(@types/node@24.13.5)(vite@8.3.0(@types/node@24.13.5))
+
 packages:
 
   '@cacheable/memory@2.2.0':

@@ -1,0 +1,15 @@
+{
+	"name": "@tran/core",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"typescript": "~6.0.3",
+		"vitest": "4.1.11"
+	}
+}

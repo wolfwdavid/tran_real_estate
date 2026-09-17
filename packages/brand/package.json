@@ -1,0 +1,14 @@
+{
+	"name": "@tran/brand",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"typescript": "~6.0.3"
+	}
+}
