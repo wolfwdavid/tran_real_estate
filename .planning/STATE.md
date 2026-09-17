@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-09-17T04:32:28.616Z"
+stopped_at: Completed 01-06-PLAN.md
+last_updated: "2026-09-17T04:34:11.827Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 5 of 9
+Plan: 6 of 9
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: 5 of 9
 | Phase 01 P02 | 7min | 2 tasks | 14 files |
 | Phase 01 P03 | 8min | 3 tasks | 36 files |
 | Phase 01 P04 | 5min | 2 tasks | 2 files |
+| Phase 01 P06 | 6min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 01]: checkBuild short-circuits the walk on a missing dir so csp:assert reports the nine carriers and exits 1 instead of throwing ENOENT
 - [Phase 01]: CSP allowlist kept as a deliberate literal duplicate in scripts/assert-csp.mjs; Phase 10 must add the beacon host to both files in one commit
 - [Phase 01]: FND-02/03 left unchecked after 01-04 (oracle + mutation proof shipped); 01-05/01-07 E2E and 01-09 close them
+- [Phase 01]: lintText with projectService:false proves ESLint boundaries against virtual .svelte paths; no fixture ever enters apps/web/src and the mkdtemp fallback was not needed
+- [Phase 01]: precommit suite uses a fresh temp git repo per test with the hook derived from package.json's simple-git-hooks string (equivalence asserted) and matches SIMPLE_GIT_HOOKS_RC, not the package name
+- [Phase 01]: FND-04/FND-05 left unchecked after 01-06 (local gates proven); 01-08 adds CI and 01-09 closes both
 
 ### Pending Todos
 
@@ -98,6 +102,6 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-17T04:32:28.611Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-09-17T04:34:11.823Z
+Stopped at: Completed 01-06-PLAN.md
 Resume file: None
