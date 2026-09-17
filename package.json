@@ -1,0 +1,41 @@
+{
+	"name": "tran-real-estate",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@11.27.0",
+	"engines": {
+		"node": ">=24 <25"
+	},
+	"scripts": {
+		"dev": "pnpm --filter web dev",
+		"check": "pnpm -r --if-present check",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test:unit": "vitest run",
+		"build:root": "node scripts/build-web.mjs root",
+		"build:sub": "node scripts/build-web.mjs sub",
+		"csp:assert": "node scripts/assert-csp.mjs apps/web/build && node scripts/assert-csp.mjs apps/web/build-sub",
+		"test:e2e": "pnpm --filter web exec playwright test",
+		"guard": "node scripts/guard-real-data.mjs --all",
+		"secrets:canary": "node scripts/gitleaks-canary.mjs",
+		"secrets:scan": "node scripts/gitleaks.mjs history",
+		"lint:workflows": "node scripts/actionlint.mjs",
+		"verify": "pnpm check && pnpm lint && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
+	},
+	"devDependencies": {
+		"@eslint/js": "10.0.1",
+		"@types/node": "^24",
+		"eslint": "10.10.0",
+		"eslint-config-prettier": "10.1.8",
+		"eslint-plugin-svelte": "3.23.0",
+		"globals": "17.12.0",
+		"prettier": "3.9.6",
+		"prettier-plugin-svelte": "4.1.1",
+		"prettier-plugin-tailwindcss": "0.8.1",
+		"simple-git-hooks": "2.14.0",
+		"svelte": "5.57.0",
+		"typescript": "~6.0.3",
+		"typescript-eslint": "8.70.0",
+		"vitest": "4.1.11"
+	}
+}

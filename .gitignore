@@ -8,3 +8,8 @@ dist/
 data/costar/
 *.log
 .DS_Store
+build-sub/
+test-results/
+playwright-report/
+.tools/
+**/__lintfix__/

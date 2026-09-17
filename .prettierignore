@@ -1,0 +1,12 @@
+node_modules/
+pnpm-lock.yaml
+.planning/
+CLAUDE.md
+.github/
+**/build/
+**/build-sub/
+**/.svelte-kit/
+test-results/
+playwright-report/
+.tools/
+**/__lintfix__/
