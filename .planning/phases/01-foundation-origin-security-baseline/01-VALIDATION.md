@@ -57,7 +57,8 @@ Final plan/task ownership after plan revision (7 waves, 0-6).
 | 01-07-01 | 07 | 5 | FND-02 | e2e | `corepack pnpm --filter web exec playwright test csp` (zero `securitypolicyviolation` events incl. during a transition) | ❌ W0 | ⬜ pending |
 | 01-07-02 | 07 | 5 | FND-03 | e2e | `corepack pnpm --filter web exec playwright test framing --project=root` (plain, sandbox-no-scripts, sandbox-with-scripts hidden; top-level visible); `--project=sub --pass-with-no-tests` exits 0 | ❌ W0 | ⬜ pending |
 | 01-07-03 | 07 | 5 | FND-04 | a11y | `corepack pnpm --filter web exec playwright test a11y` (axe wcag2a/2aa/21a/21aa/22aa, zero violations, both projects) | ❌ W0 | ⬜ pending |
-| 01-08-01 | 08 | 5 | FND-04 | static | `corepack pnpm lint:workflows` (actionlint 1.7.12, fail-closed on explicit `ACTIONLINT_BIN`) | ❌ W0 | ⬜ pending |
+| 01-08-01 | 08 | 5 | FND-04 | static | `ACTIONLINT_BIN=definitely-not-a-binary node scripts/actionlint.mjs` exits 1 (fail-closed probe; runner created here, workflow not yet written) | ❌ W0 | ⬜ pending |
+| 01-08-02 | 08 | 5 | FND-04 | static | `corepack pnpm lint:workflows` (actionlint 1.7.12 against `.github/workflows/ci.yml`; gitleaks install present in BOTH `hygiene` and `quality` jobs) | ❌ W0 | ⬜ pending |
 | 01-08-03 | 08 | 5 | FND-04 | unit | `corepack pnpm vitest run --project scripts workflow-gate` (deploy `if` has `vars.PAGES_ENABLED == 'true'`, `needs: [hygiene, quality]`, `concurrency: pages`, `include-hidden-files: true`, SHA-pinned actions) | ❌ W0 | ⬜ pending |
 | 01-09-01 | 09 | 6 | FND-01..05 | full suite | `corepack pnpm verify` green; walks this map | ❌ W0 | ⬜ pending |
 
