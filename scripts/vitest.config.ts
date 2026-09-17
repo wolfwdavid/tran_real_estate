@@ -6,6 +6,7 @@ export default defineConfig({
 		environment: 'node',
 		include: ['**/*.test.ts'],
 		exclude: ['**/node_modules/**'],
+		setupFiles: ['../tooling/vitest/no-network.ts'],
 		testTimeout: 60_000
 	}
 });
