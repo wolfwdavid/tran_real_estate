@@ -75,7 +75,7 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
   4. A push with a failing typecheck, lint, unit, end-to-end, or axe check does not deploy. A push where everything passes deploys to GitHub Pages automatically (deploy job uses `concurrency`).
   5. Pushing a commit containing a test API-key pattern is rejected by secret-scanning push protection. A commit adding PII-shaped listing data or a CoStar-pattern path fails CI.
 **Plans**: 9 plans (waves 0-6)
-- [ ] 01-01-PLAN.md - Workspace, toolchain & commit gates (wave 0)
+- [x] 01-01-PLAN.md - Workspace, toolchain & commit gates (wave 0)
 - [ ] 01-02-PLAN.md - Unit-test harness & workspace packages (wave 1)
 - [ ] 01-03-PLAN.md - Web skeleton, base path & prerendered routes (wave 2)
 - [ ] 01-04-PLAN.md - CSP contract assertion & mutation tests (wave 3)
