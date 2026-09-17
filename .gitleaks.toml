@@ -1,0 +1,10 @@
+title = "tran-real-estate gitleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "tran-canary-test-key"
+description = "Canary pattern proving the scanner blocks commits (never a real credential)"
+regex = '''TRANCANARY_[A-Z0-9]{32}'''
+keywords = ["trancanary_"]

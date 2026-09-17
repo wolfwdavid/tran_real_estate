@@ -7,6 +7,8 @@
 		"node": ">=24 <25"
 	},
 	"scripts": {
+		"prepare": "simple-git-hooks",
+		"hooks:install": "simple-git-hooks",
 		"dev": "pnpm --filter web dev",
 		"check": "pnpm -r --if-present check",
 		"lint": "prettier --check . && eslint .",
@@ -37,5 +39,8 @@
 		"typescript": "~6.0.3",
 		"typescript-eslint": "8.70.0",
 		"vitest": "4.1.11"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "node scripts/gitleaks.mjs staged && node scripts/guard-real-data.mjs --staged"
 	}
 }
