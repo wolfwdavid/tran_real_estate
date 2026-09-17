@@ -74,16 +74,18 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
   3. Loading any app page inside a third-party iframe does not render the app inside the frame.
   4. A push with a failing typecheck, lint, unit, end-to-end, or axe check does not deploy. A push where everything passes deploys to GitHub Pages automatically (deploy job uses `concurrency`).
   5. Pushing a commit containing a test API-key pattern is rejected by secret-scanning push protection. A commit adding PII-shaped listing data or a CoStar-pattern path fails CI.
-**Plans**: 9 plans (waves 0-5)
-- [ ] 01-01-PLAN.md — Workspace, toolchain & commit gates (wave 0)
-- [ ] 01-02-PLAN.md — Unit-test harness & workspace packages (wave 1)
-- [ ] 01-03-PLAN.md — Web skeleton, base path & prerendered routes (wave 2)
-- [ ] 01-04-PLAN.md — CSP contract assertion & mutation tests (wave 3)
-- [ ] 01-05-PLAN.md — Pages emulator, Playwright harness & routing E2E (wave 3)
-- [ ] 01-06-PLAN.md — Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
-- [ ] 01-07-PLAN.md — Browser security & accessibility specs (CSP, framing, axe) (wave 4)
-- [ ] 01-08-PLAN.md — CI workflow, actionlint & gated Pages deploy (wave 4)
-- [ ] 01-09-PLAN.md — Full-suite verification & deferred hosting handoff (wave 5)
+**Plans**: 9 plans (waves 0-6)
+- [ ] 01-01-PLAN.md - Workspace, toolchain & commit gates (wave 0)
+- [ ] 01-02-PLAN.md - Unit-test harness & workspace packages (wave 1)
+- [ ] 01-03-PLAN.md - Web skeleton, base path & prerendered routes (wave 2)
+- [ ] 01-04-PLAN.md - CSP contract assertion & mutation tests (wave 3)
+- [ ] 01-05-PLAN.md - Pages emulator, Playwright harness & routing E2E (wave 4)
+- [ ] 01-06-PLAN.md - Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
+- [ ] 01-07-PLAN.md - Browser security & accessibility specs (CSP, framing, axe) (wave 5)
+- [ ] 01-08-PLAN.md - CI workflow, actionlint & gated Pages deploy (wave 5)
+- [ ] 01-09-PLAN.md - Full-suite verification & deferred hosting handoff (wave 6)
+
+**Wave summary**: 0 = 01-01 | 1 = 01-02 | 2 = 01-03 | 3 = {01-04, 01-06} | 4 = 01-05 (sole owner of `apps/web/build*` while the E2E suite serves them) | 5 = {01-07, 01-08} | 6 = 01-09
 **Research flag**: YES. Needs `/gsd:research-phase`: org Pages setup (org root repo vs. project repo + `BASE_PATH`), `kit.csp` meta emission on prerendered adapter-static pages, Pages `trailingSlash` and `.nojekyll` behavior.
 **UI hint**: no (smoke shell only)
 **Human action required (before deploy)**: The owner must create the free GitHub organization `tranrealestate` in the browser, because organizations cannot be created via the API. The owner then creates or transfers the repo into the org and enables GitHub Pages and secret scanning with push protection in the org/repo settings. Deploy steps block until this is done.
