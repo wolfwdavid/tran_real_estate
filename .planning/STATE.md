@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-09-17T04:03:12.569Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-09-17T04:11:51.731Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 2 of 9
+Plan: 3 of 9
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Plan: 2 of 9
 
 *Updated after each plan completion*
 | Phase 01 P01 | 6min | 2 tasks | 13 files |
+| Phase 01 P02 | 7min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,10 @@ Recent decisions affecting current work:
 - [Phase 01]: Prettier-formatted eslint.config.js and package.json so pnpm lint is green from the first commit (line wrapping only)
 - [Phase 01]: No gitleaks allowlist added: 16-commit history scan was clean, so the Pitfall 7 regexTarget exception was never needed
 - [Phase 01]: FND-04/FND-05 left unchecked after 01-01: local gate half only; CI half lands in 01-08 and 01-09 closes both
+- [Phase 01]: PORTALS is Object.freeze'd on top of as const: the plan requires a frozen tuple and as const alone let a mutation test push into shared state
+- [Phase 01]: no-network wiring tests use targeted eslint-disable-next-line for the global fetch ban instead of an eslint.config.js override
+- [Phase 01]: Machine global pnpm aligned 11.0.9 -> 11.27.0 so nested pnpm -r under corepack matches the packageManager pin; no repo change
+- [Phase 01]: FND-04 left unchecked after 01-02 (harness half only); 01-08/01-09 close it
 
 ### Pending Todos
 
@@ -84,6 +89,6 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-17T04:03:12.563Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-09-17T04:11:51.724Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
