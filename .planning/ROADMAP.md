@@ -82,7 +82,7 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
 - [x] 01-05-PLAN.md - Pages emulator, Playwright harness & routing E2E (wave 4)
 - [x] 01-06-PLAN.md - Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
 - [ ] 01-07-PLAN.md - Browser security & accessibility specs (CSP, framing, axe) (wave 5)
-- [ ] 01-08-PLAN.md - CI workflow, actionlint & gated Pages deploy (wave 5)
+- [x] 01-08-PLAN.md - CI workflow, actionlint & gated Pages deploy (wave 5)
 - [ ] 01-09-PLAN.md - Full-suite verification & deferred hosting handoff (wave 6)
 
 **Wave summary**: 0 = 01-01 | 1 = 01-02 | 2 = 01-03 | 3 = {01-04, 01-06} | 4 = 01-05 (sole owner of `apps/web/build*` while the E2E suite serves them) | 5 = {01-07, 01-08} | 6 = 01-09

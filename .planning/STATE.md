@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-05; next wave F = 01-07 ∥ 01-08
-last_updated: "2026-09-22T18:34:58.549Z"
+stopped_at: "Completed 01-08-PLAN.md (wave F: 01-07 parallel); next 01-09"
+last_updated: "2026-09-22T18:46:10.381Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 7 of 9
+Plan: 8 of 9
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Plan: 7 of 9
 | Phase 01 P04 | 5min | 2 tasks | 2 files |
 | Phase 01 P06 | 6min | 3 tasks | 3 files |
 | Phase 01 P05 | 25min | 2 tasks | 4 files |
+| Phase 01 P08 | 7min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,11 @@ Recent decisions affecting current work:
 - [Phase 01]: FND-04/FND-05 left unchecked after 01-06 (local gates proven); 01-08 adds CI and 01-09 closes both
 - [Phase 01]: Playwright teardown stall root cause: machine PATH omits C:\Windows\System32 so taskkill (Playwright's only Windows kill path) fails silently; playwright.config.ts prepends %SystemRoot%\System32 to PATH inside the runner and serve-pages.mjs exits on stdin close (opt-in) plus SIGTERM/SIGINT/SIGHUP; machine PATH repair left to the owner
 - [Phase 01]: FND-01 left unchecked after 01-05 (routing contract proven under both bases); 01-08 wires CI and 01-09 closes it
+- [Phase 01]: ACTIONLINT_BIN is an absolute override in scripts/actionlint.mjs: an unresolvable value exits 1 with no fallthrough to .tools/ or PATH, so the fail-closed check cannot pass via the binary the task itself downloaded
+- [Phase 01]: ci.yml quality job duplicates the checksum-verified gitleaks install as a run: step before pnpm test:unit (fail-closed precommit suite); SHA-pinned uses: count stays exactly 7
+- [Phase 01]: No .gitleaks.toml allowlist for the GITLEAKS_SHA256 literal in ci.yml: history, dir and staged scans were all clean
+- [Phase 01]: workflow-gate.test.ts mutation-checked against seven ci.yml gate regressions (drop/fold deploy if, remove quality gitleaks install, float a tag, drop include-hidden-files, drop needs, flip pages cancel-in-progress); each fails the suite
+- [Phase 01]: FND-01/04/05 left unchecked after 01-08 (CI half delivered, dormant deploy gated on PAGES_ENABLED); 01-09 runs the composed verify and closes all five
 
 ### Pending Todos
 
@@ -105,7 +111,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-22T18:34:58.544Z
-Stopped at: Completed 01-05; next wave F = 01-07 ∥ 01-08
+Last session: 2026-09-22T18:46:10.373Z
+Stopped at: Completed 01-08-PLAN.md (wave F: 01-07 parallel); next 01-09
 Resume file: None
 Next: wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01 through 01-06 are complete (01-05 re-verified 2026-09-22: `playwright test routing --workers=1` 8/8 root+sub in 6 s, ports released, lint green). Windows note: the machine PATH still omits `C:\Windows\System32`; the repo is guarded at config level, machine repair is an owner decision.
