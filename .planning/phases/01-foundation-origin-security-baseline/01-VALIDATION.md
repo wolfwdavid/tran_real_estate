@@ -85,7 +85,7 @@ Split across plans 01-01 (wave 0) and 01-02 (wave 1) so neither exceeds context 
 |----------|-------------|------------|-------------------|
 | Live site loads at `https://tranrealestate.github.io/`, deep-link refresh works on the real host | FND-01 | Requires the GitHub org + Pages (deferred owner action) | Create org `tranrealestate` and repo named exactly `tranrealestate.github.io`, set `PAGES_ENABLED=true`, push, load `/`, navigate to `/renter/`, refresh, confirm no 404 |
 | Pages deploy job runs and publishes | FND-04 | Requires a remote and Pages enabled | Confirm `deploy` runs only on `main` pushes with `PAGES_ENABLED=true`; `.nojekyll` present in the published artifact |
-| GitHub secret-scanning push protection rejects a token push | FND-05 | Server-side GitHub feature | With push protection enabled, push a branch containing a canary pattern and confirm rejection |
+| GitHub secret-scanning push protection rejects a token push | FND-05 | Server-side GitHub feature | With push protection enabled, on a throwaway branch commit a GitHub-recognised TEST token pattern with `SKIP_SIMPLE_GIT_HOOKS=1` (never the `TRANCANARY_` pattern — push protection only recognises GitHub/partner formats), push, confirm rejection, delete the branch |
 
 *All other phase behaviors have automated local verification. The three rows above are deferred human verification, NOT gaps — the owner has no org/domain yet ("keep going until we do"). Plan 01-09 records them in `docs/DEPLOY-CHECKLIST.md`.*
 
