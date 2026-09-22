@@ -3,7 +3,7 @@ phase: 1
 slug: foundation-origin-security-baseline
 status: approved
 nyquist_compliant: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-09-16
 ---
 
@@ -40,27 +40,27 @@ Final plan/task ownership after plan revision (7 waves, 0-6).
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01 | 0 | FND-04 | wiring | `corepack pnpm install --frozen-lockfile` exits 0; `git remote -v` prints nothing | ❌ W0 | ⬜ pending |
-| 01-01-02 | 01 | 0 | FND-05 | integration | `corepack pnpm secrets:canary` (gitleaks config rejects runtime-assembled canary) | ❌ W0 | ⬜ pending |
-| 01-01-02 | 01 | 0 | FND-05 | integration | `corepack pnpm secrets:scan` (full history clean); `.git/hooks/pre-commit` exists | ❌ W0 | ⬜ pending |
-| 01-02-01 | 02 | 1 | FND-04 | unit | `corepack pnpm vitest run --project scripts no-network` (fetch throws) | ❌ W0 | ⬜ pending |
-| 01-02-02 | 02 | 1 | FND-04 | unit | `corepack pnpm vitest run --project core no-network` (fetch throws); core wiring test passes | ❌ W0 | ⬜ pending |
-| 01-03-01 | 03 | 2 | FND-01 | unit | `corepack pnpm vitest run --project web base-path` (validator rejects mangled Windows path) | ❌ W0 | ⬜ pending |
-| 01-03-01 | 03 | 2 | FND-04 | unit | `corepack pnpm vitest run --project web no-network` (web project setupFiles wiring proven) | ❌ W0 | ⬜ pending |
-| 01-03-03 | 03 | 2 | FND-01 | build assertion | `corepack pnpm build:root && corepack pnpm build:sub` (adapter `strict: true`, `handleUnseenRoutes: 'fail'`; output shows `build-web: pnpm 11.27.0`) | ❌ W0 | ⬜ pending |
-| 01-04-01 | 04 | 3 | FND-02 | build assertion | `corepack pnpm csp:assert` (meta on every page incl. 404.html, only `<meta charset>` precedes, exact connect-src, strict script/style, inline-script hashes, `<html hidden>`, `.nojekyll`) | ❌ W0 | ⬜ pending |
-| 01-04-02 | 04 | 3 | FND-02 | unit (mutation) | `corepack pnpm vitest run --project scripts assert-csp` (injected faults: missing meta, `unsafe-inline`, script before meta, connect-src drift, missing `hidden`) | ❌ W0 | ⬜ pending |
-| 01-06-01 | 06 | 3 | FND-04 | unit | `corepack pnpm vitest run --project scripts eslint-rules` (`lintText` only — marketing import ban, `fetch(` ban, `{@html}` ban fire; adapter + sanitizer allowlists clean; nothing written to `apps/web/src`) | ❌ W0 | ⬜ pending |
-| 01-06-02 | 06 | 3 | FND-05 | unit | `corepack pnpm vitest run --project scripts real-data-rules` (email/phone allowlist table + `*costar*` path rule) | ❌ W0 | ⬜ pending |
-| 01-06-03 | 06 | 3 | FND-05 | integration | `corepack pnpm vitest run --project scripts precommit` (temp git repo: staged canary makes `git commit` exit non-zero) | ❌ W0 | ⬜ pending |
-| 01-05-02 | 05 | 4 | FND-01 | e2e | `corepack pnpm --filter web exec playwright test routing` (301 deep link, refresh survives, unknown path → 404 status + branded page; both projects) | ❌ W0 | ⬜ pending |
-| 01-07-01 | 07 | 5 | FND-02 | e2e | `corepack pnpm --filter web exec playwright test csp` (zero `securitypolicyviolation` events incl. during a transition) | ❌ W0 | ⬜ pending |
-| 01-07-02 | 07 | 5 | FND-03 | e2e | `corepack pnpm --filter web exec playwright test framing --project=root` (plain, sandbox-no-scripts, sandbox-with-scripts hidden; top-level visible); `--project=sub --pass-with-no-tests` exits 0 | ❌ W0 | ⬜ pending |
-| 01-07-03 | 07 | 5 | FND-04 | a11y | `corepack pnpm --filter web exec playwright test a11y` (axe wcag2a/2aa/21a/21aa/22aa, zero violations, both projects) | ❌ W0 | ⬜ pending |
-| 01-08-01 | 08 | 5 | FND-04 | static | `ACTIONLINT_BIN=definitely-not-a-binary node scripts/actionlint.mjs` exits 1 (fail-closed probe; runner created here, workflow not yet written) | ❌ W0 | ⬜ pending |
-| 01-08-02 | 08 | 5 | FND-04 | static | `corepack pnpm lint:workflows` (actionlint 1.7.12 against `.github/workflows/ci.yml`; gitleaks install present in BOTH `hygiene` and `quality` jobs) | ❌ W0 | ⬜ pending |
-| 01-08-03 | 08 | 5 | FND-04 | unit | `corepack pnpm vitest run --project scripts workflow-gate` (deploy `if` has `vars.PAGES_ENABLED == 'true'`, `needs: [hygiene, quality]`, `concurrency: pages`, `include-hidden-files: true`, SHA-pinned actions) | ❌ W0 | ⬜ pending |
-| 01-09-01 | 09 | 6 | FND-01..05 | full suite | `corepack pnpm verify` green; walks this map | ❌ W0 | ⬜ pending |
+| 01-01-01 | 01 | 0 | FND-04 | wiring | `corepack pnpm install --frozen-lockfile` exits 0; `git remote -v` prints nothing | ❌ W0 | ✅ green |
+| 01-01-02 | 01 | 0 | FND-05 | integration | `corepack pnpm secrets:canary` (gitleaks config rejects runtime-assembled canary) | ❌ W0 | ✅ green |
+| 01-01-02 | 01 | 0 | FND-05 | integration | `corepack pnpm secrets:scan` (full history clean); `.git/hooks/pre-commit` exists | ❌ W0 | ✅ green |
+| 01-02-01 | 02 | 1 | FND-04 | unit | `corepack pnpm vitest run --project scripts no-network` (fetch throws) | ❌ W0 | ✅ green |
+| 01-02-02 | 02 | 1 | FND-04 | unit | `corepack pnpm vitest run --project core no-network` (fetch throws); core wiring test passes | ❌ W0 | ✅ green |
+| 01-03-01 | 03 | 2 | FND-01 | unit | `corepack pnpm vitest run --project web base-path` (validator rejects mangled Windows path) | ❌ W0 | ✅ green |
+| 01-03-01 | 03 | 2 | FND-04 | unit | `corepack pnpm vitest run --project web no-network` (web project setupFiles wiring proven) | ❌ W0 | ✅ green |
+| 01-03-03 | 03 | 2 | FND-01 | build assertion | `corepack pnpm build:root && corepack pnpm build:sub` (adapter `strict: true`, `handleUnseenRoutes: 'fail'`; output shows `build-web: pnpm 11.27.0`) | ❌ W0 | ✅ green |
+| 01-04-01 | 04 | 3 | FND-02 | build assertion | `corepack pnpm csp:assert` (meta on every page incl. 404.html, only `<meta charset>` precedes, exact connect-src, strict script/style, inline-script hashes, `<html hidden>`, `.nojekyll`) | ❌ W0 | ✅ green |
+| 01-04-02 | 04 | 3 | FND-02 | unit (mutation) | `corepack pnpm vitest run --project scripts assert-csp` (injected faults: missing meta, `unsafe-inline`, script before meta, connect-src drift, missing `hidden`) | ❌ W0 | ✅ green |
+| 01-06-01 | 06 | 3 | FND-04 | unit | `corepack pnpm vitest run --project scripts eslint-rules` (`lintText` only — marketing import ban, `fetch(` ban, `{@html}` ban fire; adapter + sanitizer allowlists clean; nothing written to `apps/web/src`) | ❌ W0 | ✅ green |
+| 01-06-02 | 06 | 3 | FND-05 | unit | `corepack pnpm vitest run --project scripts real-data-rules` (email/phone allowlist table + `*costar*` path rule) | ❌ W0 | ✅ green |
+| 01-06-03 | 06 | 3 | FND-05 | integration | `corepack pnpm vitest run --project scripts precommit` (temp git repo: staged canary makes `git commit` exit non-zero) | ❌ W0 | ✅ green |
+| 01-05-02 | 05 | 4 | FND-01 | e2e | `corepack pnpm --filter web exec playwright test routing` (301 deep link, refresh survives, unknown path → 404 status + branded page; both projects) | ❌ W0 | ✅ green |
+| 01-07-01 | 07 | 5 | FND-02 | e2e | `corepack pnpm --filter web exec playwright test csp` (zero `securitypolicyviolation` events incl. during a transition) | ❌ W0 | ✅ green |
+| 01-07-02 | 07 | 5 | FND-03 | e2e | `corepack pnpm --filter web exec playwright test framing --project=root` (plain, sandbox-no-scripts, sandbox-with-scripts hidden; top-level visible); `--project=sub --pass-with-no-tests` exits 0 | ❌ W0 | ✅ green |
+| 01-07-03 | 07 | 5 | FND-04 | a11y | `corepack pnpm --filter web exec playwright test a11y` (axe wcag2a/2aa/21a/21aa/22aa, zero violations, both projects) | ❌ W0 | ✅ green |
+| 01-08-01 | 08 | 5 | FND-04 | static | `ACTIONLINT_BIN=definitely-not-a-binary node scripts/actionlint.mjs` exits 1 (fail-closed probe; runner created here, workflow not yet written) | ❌ W0 | ✅ green |
+| 01-08-02 | 08 | 5 | FND-04 | static | `corepack pnpm lint:workflows` (actionlint 1.7.12 against `.github/workflows/ci.yml`; gitleaks install present in BOTH `hygiene` and `quality` jobs) | ❌ W0 | ✅ green |
+| 01-08-03 | 08 | 5 | FND-04 | unit | `corepack pnpm vitest run --project scripts workflow-gate` (deploy `if` has `vars.PAGES_ENABLED == 'true'`, `needs: [hygiene, quality]`, `concurrency: pages`, `include-hidden-files: true`, SHA-pinned actions) | ❌ W0 | ✅ green |
+| 01-09-01 | 09 | 6 | FND-01..05 | full suite | `corepack pnpm verify` green; walks this map | ❌ W0 | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
