@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "Completed 01-08-PLAN.md (wave F: 01-07 parallel); next 01-09"
-last_updated: "2026-09-22T18:46:10.381Z"
+stopped_at: Completed 01-07-PLAN.md
+last_updated: "2026-09-22T19:03:05.860Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 8 of 9
+Plan: 9 of 9
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Plan: 8 of 9
 | Phase 01 P06 | 6min | 3 tasks | 3 files |
 | Phase 01 P05 | 25min | 2 tasks | 4 files |
 | Phase 01 P08 | 7min | 3 tasks | 4 files |
+| Phase 01 P07 | 24min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 01]: No .gitleaks.toml allowlist for the GITLEAKS_SHA256 literal in ci.yml: history, dir and staged scans were all clean
 - [Phase 01]: workflow-gate.test.ts mutation-checked against seven ci.yml gate regressions (drop/fold deploy if, remove quality gitleaks install, float a tag, drop include-hidden-files, drop needs, flip pages cancel-in-progress); each fails the suite
 - [Phase 01]: FND-01/04/05 left unchecked after 01-08 (CI half delivered, dormant deploy gated on PAGES_ENABLED); 01-09 runs the composed verify and closes all five
+- [Phase 01]: Svelte 5.57 fade is pure Element.animate() (zero style attribute writes), so csp.spec proves style-src-attr with an explicit setAttribute('style') write rather than the transition alone
+- [Phase 01]: framing.spec runs with trace off and awaits iframe readiness via CDP-tracked frame url/lifecycle only: Playwright evaluations carry userGesture:true and tracer snapshots in #plain before commit let Chromium permit the framebust (2/4 flaky runs; plain Chromium blocks 22/22; 0/24 after fix)
+- [Phase 01]: FND-02/03/04 left unchecked after 01-07 (runtime CSP, framing and axe proofs shipped, framing guard mutation-tested); 01-08 CI and 01-09 full verify close them
 
 ### Pending Todos
 
@@ -111,7 +115,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-22T18:46:10.373Z
-Stopped at: Completed 01-08-PLAN.md (wave F: 01-07 parallel); next 01-09
+Last session: 2026-09-22T19:03:05.854Z
+Stopped at: Completed 01-07-PLAN.md
 Resume file: None
 Next: wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01 through 01-06 are complete (01-05 re-verified 2026-09-22: `playwright test routing --workers=1` 8/8 root+sub in 6 s, ports released, lint green). Windows note: the machine PATH still omits `C:\Windows\System32`; the repo is guarded at config level, machine repair is an owner decision.
