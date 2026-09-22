@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-07-PLAN.md
-last_updated: "2026-09-22T19:03:05.860Z"
+stopped_at: "Completed 01-09-PLAN.md (Phase 1: 9/9 plans)"
+last_updated: "2026-09-22T19:17:55.043Z"
 progress:
   total_phases: 11
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -23,7 +23,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 
 ## Current Position
 
-Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
+Phase: 1 (Foundation, Origin & Security Baseline) — ALL 9 PLANS EXECUTED, ready for verification
 Plan: 9 of 9
 
 ## Performance Metrics
@@ -54,6 +54,7 @@ Plan: 9 of 9
 | Phase 01 P05 | 25min | 2 tasks | 4 files |
 | Phase 01 P08 | 7min | 3 tasks | 4 files |
 | Phase 01 P07 | 24min | 3 tasks | 3 files |
+| Phase 01 P09 | 12min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Svelte 5.57 fade is pure Element.animate() (zero style attribute writes), so csp.spec proves style-src-attr with an explicit setAttribute('style') write rather than the transition alone
 - [Phase 01]: framing.spec runs with trace off and awaits iframe readiness via CDP-tracked frame url/lifecycle only: Playwright evaluations carry userGesture:true and tracer snapshots in #plain before commit let Chromium permit the framebust (2/4 flaky runs; plain Chromium blocks 22/22; 0/24 after fix)
 - [Phase 01]: FND-02/03/04 left unchecked after 01-07 (runtime CSP, framing and axe proofs shipped, framing guard mutation-tested); 01-08 CI and 01-09 full verify close them
+- [Phase 01]: Push-protection probe in DEPLOY-CHECKLIST uses a zero-permission, one-day fine-grained GitHub PAT revoked after the test, never the TRANCANARY_ pattern (push protection recognises only GitHub/partner formats)
+- [Phase 01]: pnpm verify measured at 71-79 s warm on this machine; 4-6 min estimate kept in 01-VALIDATION.md as the cold-CI figure, README states the warm figure
+- [Phase 01]: FND-01..05 marked complete by 01-09 after the composed verify and the 21-row map walk; live-origin behaviours recorded as deferred evidence in docs/DEPLOY-CHECKLIST.md Step 7, not gaps
 
 ### Pending Todos
 
@@ -115,7 +119,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-22T19:03:05.854Z
-Stopped at: Completed 01-07-PLAN.md
+Last session: 2026-09-22T19:17:55.038Z
+Stopped at: Completed 01-09-PLAN.md (Phase 1: 9/9 plans)
 Resume file: None
-Next: wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01 through 01-06 are complete (01-05 re-verified 2026-09-22: `playwright test routing --workers=1` 8/8 root+sub in 6 s, ports released, lint green). Windows note: the machine PATH still omits `C:\Windows\System32`; the repo is guarded at config level, machine repair is an owner decision.
+Next: gsd-verifier for Phase 1 (`/gsd:verify-work`), then Phase 2 planning. Phase 1 is 9/9: `corepack pnpm verify` green in 71-79 s, all 21 verification-map rows green, FND-01..05 complete, owner runbook at `docs/DEPLOY-CHECKLIST.md`, README in place. Still no remote and no push. Windows note: the machine PATH still omits `C:\Windows\System32`; the repo is guarded at config level, machine repair is an owner decision.

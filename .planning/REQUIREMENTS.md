@@ -9,11 +9,11 @@
 
 ### Foundation & Security
 
-- [ ] **FND-01**: Visitor can load the app at `tranrealestate.github.io` with every route prerendered and deep-link refresh working (base path configurable via environment variable)
-- [ ] **FND-02**: Every deployed page carries a strict Content-Security-Policy meta tag whose `connect-src` allows only RentCast, Anthropic, OpenAI, Gemini, OpenRouter, Web3Forms, and the analytics beacon host
-- [ ] **FND-03**: App refuses to render inside a third-party frame
-- [ ] **FND-04**: Every push runs typecheck, lint, unit, end-to-end, and accessibility checks, and deploys to GitHub Pages only when all pass
-- [ ] **FND-05**: Repository blocks committed secrets (secret scanning with push protection) and real listing or CoStar data (PII scan and path rules in CI)
+- [x] **FND-01**: Visitor can load the app at `tranrealestate.github.io` with every route prerendered and deep-link refresh working (base path configurable via environment variable)
+- [x] **FND-02**: Every deployed page carries a strict Content-Security-Policy meta tag whose `connect-src` allows only RentCast, Anthropic, OpenAI, Gemini, OpenRouter, Web3Forms, and the analytics beacon host
+- [x] **FND-03**: App refuses to render inside a third-party frame
+- [x] **FND-04**: Every push runs typecheck, lint, unit, end-to-end, and accessibility checks, and deploys to GitHub Pages only when all pass
+- [x] **FND-05**: Repository blocks committed secrets (secret scanning with push protection) and real listing or CoStar data (PII scan and path rules in CI)
 
 ### Brand & Marketing
 
@@ -150,11 +150,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | Phase 1 | Pending |
-| FND-02 | Phase 1 | Pending |
-| FND-03 | Phase 1 | Pending |
-| FND-04 | Phase 1 | Pending |
-| FND-05 | Phase 1 | Pending |
+| FND-01 | Phase 1 | Complete |
+| FND-02 | Phase 1 | Complete |
+| FND-03 | Phase 1 | Complete |
+| FND-04 | Phase 1 | Complete |
+| FND-05 | Phase 1 | Complete |
 | BRND-01 | Phase 2 | Pending |
 | BRND-02 | Phase 2 | Pending |
 | BRND-03 | Phase 2 | Pending |

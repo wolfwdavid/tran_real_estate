@@ -83,7 +83,7 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
 - [x] 01-06-PLAN.md - Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
 - [x] 01-07-PLAN.md - Browser security & accessibility specs (CSP, framing, axe) (wave 5)
 - [x] 01-08-PLAN.md - CI workflow, actionlint & gated Pages deploy (wave 5)
-- [ ] 01-09-PLAN.md - Full-suite verification & deferred hosting handoff (wave 6)
+- [x] 01-09-PLAN.md - Full-suite verification & deferred hosting handoff (wave 6)
 
 **Wave summary**: 0 = 01-01 | 1 = 01-02 | 2 = 01-03 | 3 = {01-04, 01-06} | 4 = 01-05 (sole owner of `apps/web/build*` while the E2E suite serves them) | 5 = {01-07, 01-08} | 6 = 01-09
 **Research flag**: YES. Needs `/gsd:research-phase`: org Pages setup (org root repo vs. project repo + `BASE_PATH`), `kit.csp` meta emission on prerendered adapter-static pages, Pages `trailingSlash` and `.nojekyll` behavior.
@@ -247,7 +247,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Origin & Security Baseline | 0/9 | Planned | - |
+| 1. Foundation, Origin & Security Baseline | 9/9 | Complete | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Not started | - |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Not started | - |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 0/TBD | Not started | - |
