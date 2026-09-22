@@ -98,3 +98,22 @@ http
 	.listen(ATTACKER, '127.0.0.1', () =>
 		console.log(`serve-pages: http://127.0.0.1:${ATTACKER}/ -> attacker page`)
 	);
+
+// Shutdown contract with Playwright's webServer. Playwright launches this file through a shell
+// (cmd.exe on Windows) and, when the run ends, terminates that shell. On POSIX the signal reaches
+// this process, so the handlers below make the exit immediate. On Windows no signal is delivered
+// to the orphaned grandchild: it keeps the inherited stdout/stderr pipes open and Playwright waits
+// well over two minutes for them to close, which looks like a hung test run. The parent's death
+// does close our stdin, so when Playwright launches us (it sets SERVE_PAGES_EXIT_ON_STDIN_END in
+// apps/web/playwright.config.ts) treat end-of-stdin as the shutdown signal. The behaviour is opt-in
+// because a shell background job (`node scripts/serve-pages.mjs &`) inherits a closed stdin and
+// would otherwise exit before serving a single request.
+for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
+	process.on(signal, () => process.exit(0));
+}
+if (process.env.SERVE_PAGES_EXIT_ON_STDIN_END === '1') {
+	for (const event of ['end', 'close', 'error']) {
+		process.stdin.on(event, () => process.exit(0));
+	}
+	process.stdin.resume();
+}

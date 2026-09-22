@@ -1,0 +1,63 @@
+import { test, expect } from '@playwright/test';
+
+// FND-01 routing contract, proven against the real built output served with GitHub Pages
+// semantics (scripts/serve-pages.mjs). Every page.goto uses a RELATIVE path so the same spec
+// runs under both the root base ('/') and the sub-path base ('/tran_real_estate/').
+const ROUTES = ['', 'renter/', 'investor/', 'agent/', 'settings/', 'print/'];
+const SUB_BASE = '/tran_real_estate/';
+
+test('every prerendered route responds 200 with a visible h1', async ({ page }) => {
+	for (const route of ROUTES) {
+		const res = await page.goto(route);
+		expect(res?.status(), `status for ${JSON.stringify(route)}`).toBe(200);
+		await expect(page.locator('h1')).toBeVisible();
+	}
+});
+
+test('deep link without trailing slash is redirected to the page and survives a refresh', async ({
+	page
+}) => {
+	const res = await page.goto('renter');
+	// Pages answers 301 for a directory without a trailing slash; trailingSlash: 'always' means the
+	// redirected URL is the prerendered one, so the final document is the page itself.
+	expect(res?.status()).toBe(200);
+	expect(page.url()).toMatch(/\/renter\/$/);
+	await expect(page.locator('h1')).toBeVisible();
+
+	await page.reload();
+	expect(page.url()).toMatch(/\/renter\/$/);
+	await expect(page.locator('h1')).toBeVisible();
+});
+
+test('unknown path returns HTTP 404 and renders the branded not-found page', async ({ page }) => {
+	const res = await page.goto('does-not-exist/deeper/');
+	expect(res?.status()).toBe(404);
+	await expect(page.locator('h1')).toContainText('404');
+});
+
+test('every in-page link resolves to a trailing-slash path under the current base', async ({
+	page
+}, testInfo) => {
+	for (const route of ROUTES) {
+		await page.goto(route);
+		// Prerendered hrefs are base-relative (./renter/, ../investor/), so resolve them against the
+		// page URL before asserting. Fragment links (the skip link) are same-page anchors, not routes.
+		const hrefs = await page
+			.locator('a:not([href^="#"])')
+			.evaluateAll((anchors) => anchors.map((a) => a.getAttribute('href') ?? ''));
+		// The print surface deliberately carries no navigation (only the skip link), so the
+		// "at least one link" guard applies to every other route.
+		if (route !== 'print/') {
+			expect(hrefs.length, `links on ${JSON.stringify(route)}`).toBeGreaterThan(0);
+		}
+		for (const href of hrefs) {
+			const { pathname } = new URL(href, page.url());
+			expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(/\/$/);
+			if (testInfo.project.name === 'sub') {
+				expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(
+					new RegExp(`^${SUB_BASE.replace(/[/_]/g, '\\$&')}`)
+				);
+			}
+		}
+	}
+});

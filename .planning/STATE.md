@@ -102,6 +102,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-17T04:34:11.823Z
-Stopped at: Completed 01-06-PLAN.md
+Last session: 2026-09-22
+Stopped at: Plan 01-05 mid-execution. Task 1 committed (`d915844`); Task 2 files (`apps/web/playwright.config.ts`, `apps/web/tests/e2e/routing.spec.ts`) written but uncommitted; no 01-05-SUMMARY.md. Executor stalled on Playwright run. ROOT CAUSE FOUND: (1) `scripts/serve-pages.mjs` lacked SIGTERM/SIGINT handlers so Playwright waited ~86s to kill it on Windows — handler added (uncommitted); (2) routing spec test 4 wrongly required nav links on `print/`, which has none by design — spec patched (uncommitted). Server, runner, Chromium each verified working in isolation; 3/4 tests passed in 1.5s before the patch.
 Resume file: None
+Next: run `corepack pnpm --filter web exec playwright test routing` (expect 8/8 root+sub, prompt exit) → commit 01-05 Task 2 → write 01-05-SUMMARY.md → wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01, 01-02, 01-03, 01-04, 01-06 are complete and spot-checked.
