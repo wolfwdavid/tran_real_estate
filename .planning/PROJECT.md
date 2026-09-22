@@ -12,12 +12,18 @@ A visitor in any of the three portals can go from "what I'm looking for" to an a
 
 ### Validated
 
-(None yet — ship to validate)
+Validated in Phase 1: Foundation, Origin & Security Baseline (2026-09-22) — all locally provable behaviour verified (35/35 must-haves, `pnpm verify` green: 134 unit tests, 30 browser tests, CSP oracle, secret and real-data scans, actionlint). Live-origin checks stay deferred until the owner creates the GitHub org (see `docs/DEPLOY-CHECKLIST.md`).
+
+- ✓ FND-01 — Every route prerendered; deep-link refresh and branded 404 proven under root and `/tran_real_estate` base paths (Phase 1)
+- ✓ FND-02 — Strict hash-mode CSP meta on every page with the exact 7-host `connect-src`; independent oracle + mutation tests (Phase 1)
+- ✓ FND-03 — App stays hidden inside cross-origin frames (`<html hidden>` + external frame guard), proven in three iframe variants (Phase 1)
+- ✓ FND-04 — Typecheck, lint, unit, E2E and axe gates run locally and in the CI workflow; Pages deploy job fully written but gated on `PAGES_ENABLED` (Phase 1)
+- ✓ FND-05 — Pre-commit gitleaks + real-data/CoStar guard proven to block staged secrets and PII; CI scans full history (Phase 1)
 
 ### Active
 
 **Platform (shared)**
-- [ ] One SvelteKit app, statically built and deployed to GitHub Pages under a dedicated free GitHub organization (own origin, e.g. `<org>.github.io`), with a landing page routing to Renter / Investor / Agent portals
+- [x] One SvelteKit app, statically built for GitHub Pages under a dedicated free GitHub organization (own origin `tranrealestate.github.io`), with placeholder routes for the landing page and Renter / Investor / Agent portals — skeleton shipped in Phase 1; real pages arrive in Phase 2
 - [ ] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini); keys stored only in that browser, sent only to the provider
 - [ ] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key)
 - [ ] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap)
@@ -122,4 +128,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-13 after research and owner decisions*
+*Last updated: 2026-09-22 after Phase 1 completion*
