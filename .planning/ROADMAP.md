@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 **Numbering note vs. research:** `research/SUMMARY.md` lists the extension as P10 and launch as P11. This roadmap swaps them (Launch = Phase 10, Extension = Phase 11), so the default numeric order launches the web app first and the slippable extension can never block it. The extension can still be pulled forward any time after Phase 2.
 
-- [ ] **Phase 1: Foundation, Origin & Security Baseline** - Dedicated-origin static deploy with strict meta CSP, frame-bust, CI gate, and secret/PII blocking
+- [x] **Phase 1: Foundation, Origin & Security Baseline** - Dedicated-origin static deploy with strict meta CSP, frame-bust, CI gate, and secret/PII blocking (completed 2026-09-22)
 - [ ] **Phase 2: Brand System, Marketing & Legal Pages** - Warm-editorial accessible landing, per-audience pages, legal pages, and portal switcher
 - [ ] **Phase 3: Local Platform: Storage, Key Vault & Backup** - Browser-only key vault (session / remember / passphrase), JSON backup, persistence status, PWA install
 - [ ] **Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures** - Single metered, cached, hard-capped RentCast gateway plus synthetic sample data and check-on-open alerts engine
@@ -247,7 +247,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Origin & Security Baseline | 9/9 | Complete | 2026-09-22 |
+| 1. Foundation, Origin & Security Baseline | 9/9 | Complete    | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Not started | - |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Not started | - |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 0/TBD | Not started | - |
