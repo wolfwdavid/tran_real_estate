@@ -79,7 +79,7 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
 - [x] 01-02-PLAN.md - Unit-test harness & workspace packages (wave 1)
 - [x] 01-03-PLAN.md - Web skeleton, base path & prerendered routes (wave 2)
 - [x] 01-04-PLAN.md - CSP contract assertion & mutation tests (wave 3)
-- [ ] 01-05-PLAN.md - Pages emulator, Playwright harness & routing E2E (wave 4)
+- [x] 01-05-PLAN.md - Pages emulator, Playwright harness & routing E2E (wave 4)
 - [x] 01-06-PLAN.md - Quality-gate rule tests (lint boundaries, PII rules, pre-commit) (wave 3)
 - [ ] 01-07-PLAN.md - Browser security & accessibility specs (CSP, framing, axe) (wave 5)
 - [ ] 01-08-PLAN.md - CI workflow, actionlint & gated Pages deploy (wave 5)

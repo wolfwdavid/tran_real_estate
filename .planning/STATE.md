@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-06-PLAN.md
-last_updated: "2026-09-17T04:34:11.827Z"
+stopped_at: Completed 01-05; next wave F = 01-07 ∥ 01-08
+last_updated: "2026-09-22T18:34:58.549Z"
 progress:
   total_phases: 11
   completed_phases: 0
   total_plans: 9
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 1 (Foundation, Origin & Security Baseline) — EXECUTING
-Plan: 6 of 9
+Plan: 7 of 9
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Plan: 6 of 9
 | Phase 01 P03 | 8min | 3 tasks | 36 files |
 | Phase 01 P04 | 5min | 2 tasks | 2 files |
 | Phase 01 P06 | 6min | 3 tasks | 3 files |
+| Phase 01 P05 | 25min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,8 @@ Recent decisions affecting current work:
 - [Phase 01]: lintText with projectService:false proves ESLint boundaries against virtual .svelte paths; no fixture ever enters apps/web/src and the mkdtemp fallback was not needed
 - [Phase 01]: precommit suite uses a fresh temp git repo per test with the hook derived from package.json's simple-git-hooks string (equivalence asserted) and matches SIMPLE_GIT_HOOKS_RC, not the package name
 - [Phase 01]: FND-04/FND-05 left unchecked after 01-06 (local gates proven); 01-08 adds CI and 01-09 closes both
+- [Phase 01]: Playwright teardown stall root cause: machine PATH omits C:\Windows\System32 so taskkill (Playwright's only Windows kill path) fails silently; playwright.config.ts prepends %SystemRoot%\System32 to PATH inside the runner and serve-pages.mjs exits on stdin close (opt-in) plus SIGTERM/SIGINT/SIGHUP; machine PATH repair left to the owner
+- [Phase 01]: FND-01 left unchecked after 01-05 (routing contract proven under both bases); 01-08 wires CI and 01-09 closes it
 
 ### Pending Todos
 
@@ -102,7 +105,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-09-22
-Stopped at: Plan 01-05 mid-execution. Task 1 committed (`d915844`); Task 2 files (`apps/web/playwright.config.ts`, `apps/web/tests/e2e/routing.spec.ts`) written but uncommitted; no 01-05-SUMMARY.md. Executor stalled on Playwright run. ROOT CAUSE FOUND: (1) `scripts/serve-pages.mjs` lacked SIGTERM/SIGINT handlers so Playwright waited ~86s to kill it on Windows — handler added (uncommitted); (2) routing spec test 4 wrongly required nav links on `print/`, which has none by design — spec patched (uncommitted). Server, runner, Chromium each verified working in isolation; 3/4 tests passed in 1.5s before the patch.
+Last session: 2026-09-22T18:34:58.544Z
+Stopped at: Completed 01-05; next wave F = 01-07 ∥ 01-08
 Resume file: None
-Next: run `corepack pnpm --filter web exec playwright test routing` (expect 8/8 root+sub, prompt exit) → commit 01-05 Task 2 → write 01-05-SUMMARY.md → wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01, 01-02, 01-03, 01-04, 01-06 are complete and spot-checked.
+Next: wave F (01-07 ∥ 01-08, `--no-verify`, then `secrets:scan` + `guard`) → 01-09 → gsd-verifier. Plans 01-01 through 01-06 are complete (01-05 re-verified 2026-09-22: `playwright test routing --workers=1` 8/8 root+sub in 6 s, ports released, lint green). Windows note: the machine PATH still omits `C:\Windows\System32`; the repo is guarded at config level, machine repair is an owner decision.
