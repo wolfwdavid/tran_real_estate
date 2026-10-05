@@ -20,9 +20,11 @@ if (process.platform === 'win32') {
 
 export default defineConfig({
 	plugins: [svelte()],
-	// Pre-bundle bits-ui up front. On a cold Vite cache it was discovered and re-optimized mid-run,
-	// which loaded a second copy of the Svelte runtime and failed every dialog test with effect_orphan.
+	// Discover every dependency up front by scanning the component tests as entries. On a cold Vite
+	// cache, deps found mid-run (bits-ui, individual @lucide/svelte icons) were re-optimized and the
+	// page reloaded, which loaded a second Svelte runtime and failed tests with effect_orphan.
 	optimizeDeps: {
+		entries: ['src/**/*.browser.test.ts', 'src/**/*.svelte'],
 		include: ['bits-ui']
 	},
 	resolve: {
