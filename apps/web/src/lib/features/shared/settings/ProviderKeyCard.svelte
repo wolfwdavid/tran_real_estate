@@ -12,6 +12,10 @@
 	// Both modules are tiny and browser-safe at import time (no vault, no Dexie).
 	import { getKeyTester, hasKeyTester, type KeyTestResult } from '$lib/storage/secrets/testers';
 	import { requestPersistence } from '$lib/storage/persistence';
+	import { rentCastKeyTest } from '$lib/data';
+	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
+	import RentCastKeyTestResult from '$lib/features/shared/data/KeyTestResult.svelte';
+	import { keyFormatLine, keyTestLine } from '$lib/features/shared/data/copy/source';
 	import KeyStatusBadge from './KeyStatusBadge.svelte';
 	import SecretInput from './SecretInput.svelte';
 	import { getSettingsContext } from './settings-context.svelte';
@@ -25,6 +29,13 @@
 	const ctx = getSettingsContext();
 
 	const id = $derived(provider.id);
+	// RentCast (Phase 4): the Test key button carries its cost, the result line is KeyTestResult
+	// (from the key-bound rentCastKeyTest record), and a pointer links to RentCast usage.
+	const isRentCast = $derived(provider.id === 'rentcast');
+	// 04-UI-SPEC card pointer, verbatim; its last words are the inline link to the section.
+	const POINTER = 'Usage, cap, and data source are in RentCast usage.';
+	const POINTER_LINK = 'RentCast usage';
+	const pointerLead = POINTER.slice(0, POINTER.lastIndexOf(POINTER_LINK));
 	const entry = $derived(ctx.vaultStatus?.providers[provider.id]);
 	const keyState = $derived(entry?.state ?? 'none');
 	const isLocked = $derived(Boolean(ctx.vaultStatus?.locked) && keyState === 'locked');
@@ -163,6 +174,17 @@
 		} finally {
 			testing = false;
 		}
+		const record = isRentCast ? rentCastKeyTest.current : null;
+		if (record) {
+			// KeyTestResult renders the line; announce the same words. Focus stays on the button.
+			testLine = null;
+			announce(
+				record.outcome === 'bad-format'
+					? keyFormatLine(record.formatError ?? 'empty')
+					: keyTestLine(record.outcome)
+			);
+			return;
+		}
 		const text = result.message ?? defaultTestMessage(result);
 		testLine = { ok: result.status === 'accepted', text };
 		announce(text);
@@ -249,14 +271,23 @@
 		</p>
 		<div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
 			{#if hasKeyTester(id)}
-				<Button variant="outline" onclick={testKey} disabled={testing} class="min-w-32">
-					{testing ? 'Testing…' : 'Test key'}
+				<!-- aria-disabled, not disabled: a disabled button drops focus, and focus stays here. -->
+				<Button variant="outline" onclick={testKey} aria-disabled={testing} class="min-w-32">
+					{#if testing}
+						Testing…
+					{:else if isRentCast}
+						Test key <CostLabel estimate="free" />
+					{:else}
+						Test key
+					{/if}
 				</Button>
 			{/if}
 			<Button variant="outline" onclick={replaceKey}>Replace key</Button>
 			<Button variant="ghost" onclick={removeKey}>Remove key</Button>
 		</div>
-		{#if testLine}
+		{#if isRentCast && rentCastKeyTest.current}
+			<RentCastKeyTestResult result={rentCastKeyTest.current} />
+		{:else if testLine}
 			<p class="flex items-center gap-1 text-label">
 				{#if testLine.ok}
 					<CircleCheck size={16} aria-hidden="true" class="shrink-0 text-secondary" />
@@ -264,6 +295,15 @@
 					<CircleAlert size={16} aria-hidden="true" class="shrink-0 text-destructive" />
 				{/if}
 				{testLine.text}
+			</p>
+		{/if}
+		{#if isRentCast}
+			<p class="text-label text-muted-foreground">
+				{pointerLead}<a
+					href="#rentcast-usage"
+					class="text-primary underline underline-offset-3 hover:text-primary-hover"
+					>{POINTER_LINK}</a
+				>.
 			</p>
 		{/if}
 	{/if}

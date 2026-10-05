@@ -49,8 +49,8 @@
 		RentCast usage
 	</h2>
 	<p class="mt-4 text-body">
-		Tran counts every RentCast call made from this browser and stops before your cap, so a busy
-		week can't use up your free calls. Results are saved in this browser and reused, so repeating a
+		Tran counts every RentCast call made from this browser and stops before your cap, so a busy week
+		can't use up your free calls. Results are saved in this browser and reused, so repeating a
 		search costs nothing.
 	</p>
 

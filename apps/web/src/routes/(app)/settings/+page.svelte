@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount, type Component } from 'svelte';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { enableRentCastKeyTest, getDataRuntime } from '$lib/data';
+	import RentCastUsageSection from '$lib/features/shared/data/RentCastUsageSection.svelte';
 	import { availableSections } from '$lib/features/shared/settings/sections';
 	import {
 		createSettingsContext,
@@ -18,10 +20,11 @@
 	// and Storage API code load only after hydration, through dynamic import() in onMount, so they
 	// never enter the prerender or any other route's entry chunk.
 
-	// Phase 3 sections. Later phases add their slot's component here and flip `available` in
-	// sections.ts; the registry order decides placement.
+	// Phase 3 sections plus Phase 4's RentCast usage. Later phases add their slot's component here
+	// and flip `available` in sections.ts; the registry order decides placement.
 	const SECTION_COMPONENTS: Record<string, Component> = {
 		'api-keys': ApiKeysSection,
+		'rentcast-usage': RentCastUsageSection,
 		'key-security': KeySecuritySection,
 		backup: BackupSection,
 		storage: StorageSection,
@@ -32,6 +35,10 @@
 	const ctx = createSettingsContext();
 	setSettingsContext(ctx);
 
+	// The app data runtime from DataShell ((app) layout). Read during init: context is not
+	// available inside onMount.
+	const dataRuntime = getDataRuntime();
+
 	// Announced when another Tran tab changes the vault (VaultEvent.remote).
 	const REMOTE_MESSAGES: Record<string, string | undefined> = {
 		forgotten: 'Your keys were forgotten in another Tran tab.',
@@ -41,7 +48,8 @@
 
 	onMount(() => {
 		let disposed = false;
-		const cleanups: (() => void)[] = [];
+		// The RentCast "Test key (0 calls)" hook: registered only while Settings is mounted.
+		const cleanups: (() => void)[] = [enableRentCastKeyTest(dataRuntime)];
 
 		void (async () => {
 			try {

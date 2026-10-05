@@ -3,10 +3,11 @@ import { announcer, openSettings } from './helpers/settings';
 
 // The Settings shell contract (03-10): fixed section order with reserved slots, static copy in the
 // prerendered HTML, lazy hydration, one live region, the CSP probe, blocked storage, and cross-tab
-// announcements.
+// announcements. Phase 4 (04-23) ships slot 2, "RentCast usage".
 
 const SECTIONS = [
 	['api-keys', 'API keys'],
+	['rentcast-usage', 'RentCast usage'],
 	['key-security', 'Key security'],
 	['backup', 'Backup and restore'],
 	['storage', 'Storage'],
@@ -28,8 +29,8 @@ test('prerendered HTML has the static shell in order and no reserved slots', asy
 		expect(at, `id="${id}" after the previous section`).toBeGreaterThan(last);
 		last = at;
 	}
-	// Reserved for Phases 4, 5 and 10: not rendered yet.
-	for (const id of ['rentcast-usage', 'ai-drafting', 'getting-started']) {
+	// Reserved for Phases 5 and 10: not rendered yet.
+	for (const id of ['ai-drafting', 'getting-started']) {
 		expect(html).not.toContain(`id="${id}"`);
 	}
 });
