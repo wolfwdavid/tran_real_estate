@@ -47,7 +47,7 @@
 </script>
 
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import ConfirmDialog from '$lib/features/shared/settings/ConfirmDialog.svelte';
@@ -86,7 +86,6 @@
 	let loadingMore = $state(false);
 	let titleEl = $state<HTMLElement | null>(null);
 	let justDeleted = false;
-	const openRefs: Record<string, HTMLElement | null> = $state({});
 
 	const now = new Date();
 
@@ -145,7 +144,8 @@
 		);
 		announce('Marked as not sent in Draft history.');
 		// The button just pressed is gone; keep focus in the same row.
-		openRefs[a.id]?.focus();
+		await tick();
+		document.getElementById(`${uid}-${a.id}-open`)?.focus();
 	}
 
 	async function remove(a: AiArtifact): Promise<void> {
@@ -210,7 +210,7 @@
 					<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
 						<Button
 							variant="outline"
-							bind:ref={openRefs[a.id]}
+							id="{uid}-{a.id}-open"
 							aria-describedby="{uid}-{a.id}-when"
 							onclick={() => onOpen(a)}>Open</Button
 						>
