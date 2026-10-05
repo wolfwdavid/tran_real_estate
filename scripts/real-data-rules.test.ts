@@ -16,7 +16,8 @@ import {
 } from './lib/real-data-rules.mjs';
 
 const j = (...parts: string[]) => parts.join('');
-const DATA_FILE = 'apps/web/src/lib/data/fixtures/sample.json';
+// A data-like path outside the fixture JSON directory, so only the line-based rules apply here.
+const DATA_FILE = 'apps/web/src/lib/data/samples/sample.json';
 
 const ALLOWED = [
 	j('jane', '@', 'example', '.com'),
@@ -230,7 +231,7 @@ describe('fixture rules', () => {
 
 	test('non-fixture data paths are unaffected', () => {
 		expect(
-			findProblems(DATA_FILE.replace('fixtures/', ''), json({ zipCode: j('787', '01') }))
+			findProblems('apps/web/src/lib/data/mocks/listings.json', json({ zipCode: j('787', '01') }))
 		).toEqual([]);
 	});
 });
