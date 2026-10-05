@@ -176,8 +176,8 @@ Plans:
 - [x] 04-12-PLAN.md — fixture fetch for every endpoint with date rebasing at load
 - [x] 04-13-PLAN.md — live DataGateway: cache/dedupe/peek/by-id/cost + 60-calls-block-#41 and identical-repeat tests
 - [ ] 04-14-PLAN.md — ProvenanceChip/Row, CostLabel, NewSinceBadge, sample-chip helper
-- [ ] 04-15-PLAN.md — CallMeter (full/compact) and GatewayError (8 variants)
-- [ ] 04-16-PLAN.md — CapConfirmDialog (A/B), CapAboveLimitDialog, CapEditor
+- [x] 04-15-PLAN.md — CallMeter (full/compact) and GatewayError (8 variants)
+- [x] 04-16-PLAN.md — CapConfirmDialog (A/B), CapAboveLimitDialog, CapEditor
 - [ ] 04-17-PLAN.md — sample-mode gateway, mode resolution, data-source preference
 - [ ] 04-18-PLAN.md — data runtime (mode, usage, per-call cap prompt, cross-tab), peek store, public $lib/data port
 - [ ] 04-19-PLAN.md — saved-search repo + check-on-open scheduler (5 due searches once / 24 h)
@@ -427,7 +427,7 @@ Plans:
   2. User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup.
   3. Extension permissions are limited to storage and zillow.com. Monitoring a browsing session shows zero network requests from the extension. The listing and popup show a "collects nothing, sends nothing" privacy notice and a "Not affiliated with or endorsed by Zillow Group" notice.
   4. User can install the extension from a GitHub Releases zip by following load-unpacked instructions, or from Microsoft Edge Add-ons (Firefox Add-ons optional).
-**Plans:** 13/25 plans executed
+**Plans:** 15/25 plans executed
 Plans:
 - [ ] 11-01-PLAN.md — Scaffold apps/extension (WXT 0.21.4), one-shot deps, test harness, contracts (selectors, copy, messages, settings)
 - [ ] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
@@ -457,7 +457,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 1. Foundation, Origin & Security Baseline | 9/9 | Complete    | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
-| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 13/25 | In Progress|  |
+| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 15/25 | In Progress|  |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 0/TBD | Not started | - |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |

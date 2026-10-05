@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-13-PLAN.md
-last_updated: "2026-10-05T11:17:02.670Z"
+stopped_at: Completed 04-16-PLAN.md
+last_updated: "2026-10-05T11:19:42.663Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 51
+  completed_plans: 53
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 13 of 25 (waves 1-2 complete; next wave 3: 04-13..04-16)
+Plan: 14 of 25 (waves 1-2 complete; next wave 3: 04-13..04-16)
 
 ## Performance Metrics
 
@@ -97,6 +97,7 @@ Plan: 13 of 25 (waves 1-2 complete; next wave 3: 04-13..04-16)
 | Phase 04 P12 | 12min | 2 tasks | 4 files |
 | Phase 04 P08 | 12min | 2 tasks | 9 files |
 | Phase 04 P13 | 25min | 2 tasks | 6 files |
+| Phase 04 P16 | 30min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -209,6 +210,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-08: shared no-network setup file works unchanged in Vitest browser mode; component tests are *.browser.test.ts in project web-browser, page from 'vitest/browser'
 - [Phase 04]: 04-13: apiCache.body stores the wire-shaped validated body; gateway rebuilds the ValidatedPayload on read (keeps cache-repo findListingById working)
 - [Phase 04]: 04-13: refresh shares the gateway in-flight map, so a double-clicked Refresh costs 1 call; spend re-checks the cache inside the queue
+- [Phase 04]: 04-16: cap dialogs route Cancel and Escape through one cancel() path (onCancel fires once; pending ignores Escape); dialogs close when the caller's onConfirm settles
+- [Phase 04]: 04-16: SAVE_FAILED [D] "Couldn't save your cap. Try again."; below-usage note when used >= new cap; cross-tab cap broadcast belongs to the Settings section owning writeCap
 
 ### Pending Todos
 
@@ -231,7 +234,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T11:17:02.665Z
-Stopped at: Completed 04-13-PLAN.md
+Last session: 2026-10-05T11:19:42.656Z
+Stopped at: Completed 04-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
