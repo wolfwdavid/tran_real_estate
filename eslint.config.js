@@ -7,7 +7,7 @@ import { defineConfig } from 'eslint/config';
 
 const WEB = 'apps/web/src';
 const PORTALS = ['renter', 'investor', 'agent'];
-const noFetch = [
+const restrictedSyntax = [
 	{
 		selector: "CallExpression[callee.name='fetch']",
 		message:
@@ -17,8 +17,22 @@ const noFetch = [
 		selector:
 			"CallExpression[callee.type='MemberExpression'][callee.property.name='fetch'][callee.object.name=/^(window|globalThis|self)$/]",
 		message: 'fetch is allowed only in adapter folders.'
+	},
+	{
+		// Layer 1 of the "10 re-renders spend 0" defense: a reactive effect must never spend a call.
+		selector:
+			"CallExpression:matches([callee.name='$effect'], [callee.object.name='$effect']) CallExpression[callee.property.name=/^(get|refresh|testKey|rentalListingById|runDue|runDueSearches)$/][callee.object.name=/(gateway|scheduler)$/i]",
+		message:
+			'Never spend RentCast calls from $effect. Read with gateway.peek() and spend only in event handlers or the scheduler.'
 	}
 ];
+// Merged into EVERY no-restricted-imports entry for apps/web/src: flat config replaces rule options,
+// so a pattern set only in a catch-all entry would be dropped by the per-portal entries below.
+const DATA_INTERNALS = {
+	group: ['$lib/data/*', '$lib/data/**', '**/lib/data/*', '**/lib/data/**'],
+	message:
+		'Import the data layer only through $lib/data (the gateway port). Internals stay inside lib/data.'
+};
 const forbid = (mods, message) => ({
 	group: mods.flatMap((m) => [`$lib/${m}`, `$lib/${m}/**`, `**/lib/${m}`, `**/lib/${m}/**`]),
 	message
@@ -38,7 +52,10 @@ export default defineConfig(
 			parserOptions: { projectService: true, extraFileExtensions: ['.svelte'], parser: ts.parser }
 		}
 	},
-	{ files: ['**/*.{ts,js,mjs,svelte}'], rules: { 'no-restricted-syntax': ['error', ...noFetch] } },
+	{
+		files: ['**/*.{ts,js,mjs,svelte}'],
+		rules: { 'no-restricted-syntax': ['error', ...restrictedSyntax] }
+	},
 	{
 		files: [`${WEB}/lib/data/rentcast/**`, `${WEB}/lib/ai/providers/**`, `${WEB}/lib/leads/**`],
 		rules: { 'no-restricted-syntax': 'off' }
@@ -72,6 +89,12 @@ export default defineConfig(
 		rules: { 'no-console': 'error' }
 	},
 	{
+		// Catch-all data-port boundary. Marketing forbids all of data below; portals re-merge DATA_INTERNALS.
+		files: [`${WEB}/**/*.{ts,js,svelte}`],
+		ignores: [`${WEB}/lib/data/**`],
+		rules: { 'no-restricted-imports': ['error', { patterns: [DATA_INTERNALS] }] }
+	},
+	{
 		files: [`${WEB}/routes/(marketing)/**`],
 		rules: {
 			'no-restricted-imports': [
@@ -97,7 +120,8 @@ export default defineConfig(
 						forbid(
 							PORTALS.filter((o) => o !== p).map((o) => `features/${o}`),
 							`The ${p} portal may import only features/${p} and features/shared.`
-						)
+						),
+						DATA_INTERNALS
 					]
 				}
 			]
