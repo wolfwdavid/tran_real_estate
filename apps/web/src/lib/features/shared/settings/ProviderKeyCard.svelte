@@ -16,6 +16,13 @@
 	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
 	import RentCastKeyTestResult from '$lib/features/shared/data/KeyTestResult.svelte';
 	import { keyFormatLine, keyTestLine } from '$lib/features/shared/data/copy/source';
+	import type { LiveProviderId } from '@tran/core/ai';
+	import { PROVIDER_ORDER } from '$lib/ai/models';
+	import { aiPrefs } from '$lib/ai/prefs.svelte';
+	import type { TestConnectionResult as AiTestOutcome } from '$lib/ai/ports';
+	import type { AiKeyTestResult } from '$lib/ai/setup';
+	import AiModelField from '$lib/ai/ui/AiModelField.svelte';
+	import TestConnectionResult from '$lib/ai/ui/TestConnectionResult.svelte';
 	import KeyStatusBadge from './KeyStatusBadge.svelte';
 	import SecretInput from './SecretInput.svelte';
 	import { getSettingsContext } from './settings-context.svelte';
@@ -36,6 +43,14 @@
 	const POINTER = 'Usage, cap, and data source are in RentCast usage.';
 	const POINTER_LINK = 'RentCast usage';
 	const pointerLead = POINTER.slice(0, POINTER.lastIndexOf(POINTER_LINK));
+	// AI providers (Phase 5): a Model override field, and the Test key slot reads "Test connection"
+	// with the five-outcome TestConnectionResult line. Every other card is unchanged.
+	const aiId = $derived(
+		(PROVIDER_ORDER as readonly string[]).includes(provider.id)
+			? (provider.id as LiveProviderId)
+			: null
+	);
+	const isAi = $derived(aiId !== null);
 	const entry = $derived(ctx.vaultStatus?.providers[provider.id]);
 	const keyState = $derived(entry?.state ?? 'none');
 	const isLocked = $derived(Boolean(ctx.vaultStatus?.locked) && keyState === 'locked');
@@ -47,6 +62,9 @@
 	let saving = $state(false);
 	let testing = $state(false);
 	let testLine = $state<{ ok: boolean; text: string } | null>(null);
+	// AI result line state; cleared together with testLine (next test or any key change).
+	let aiResult = $state<AiTestOutcome | null>(null);
+	let testedModel = $state('');
 	let canPaste = $state(false);
 	let inputRef = $state<HTMLInputElement | null>(null);
 	let secretInput = $state<SecretInput | null>(null);
@@ -99,6 +117,7 @@
 		try {
 			await vault.setKey(id, trimmed);
 			testLine = null;
+			aiResult = null;
 			replacing = false;
 			announce(
 				vault.getStatus().mode === 'remember'
@@ -132,6 +151,7 @@
 		replacing = true;
 		error = undefined;
 		testLine = null;
+		aiResult = null;
 		resetEntry();
 		await focusInput();
 	}
@@ -141,6 +161,7 @@
 		if (!vault) return;
 		await vault.removeKey(id);
 		testLine = null;
+		aiResult = null;
 		resetEntry();
 		announce(`${provider.label} key removed.`);
 	}
@@ -164,6 +185,9 @@
 		if (!tester || !vault || testing) return;
 		testing = true;
 		testLine = null;
+		aiResult = null;
+		// The AI tester probes the current effective model; the result line names the same one.
+		const model = aiId ? aiPrefs.effectiveModel(aiId) : '';
 		const controller = new AbortController();
 		let result: KeyTestResult;
 		try {
@@ -185,7 +209,15 @@
 			);
 			return;
 		}
+		const ai = isAi ? (result as AiKeyTestResult).ai : undefined;
 		const text = result.message ?? defaultTestMessage(result);
+		if (ai) {
+			// TestConnectionResult renders the five-outcome line; announce the same result line.
+			testedModel = model;
+			aiResult = ai;
+			announce(text);
+			return;
+		}
 		testLine = { ok: result.status === 'accepted', text };
 		announce(text);
 	}
@@ -277,6 +309,8 @@
 						Testing…
 					{:else if isRentCast}
 						Test key <CostLabel estimate="free" />
+					{:else if isAi}
+						Test connection
 					{:else}
 						Test key
 					{/if}
@@ -287,6 +321,8 @@
 		</div>
 		{#if isRentCast && rentCastKeyTest.current}
 			<RentCastKeyTestResult result={rentCastKeyTest.current} />
+		{:else if aiId && (aiResult || testing)}
+			<TestConnectionResult provider={aiId} model={testedModel} result={aiResult} {testing} />
 		{:else if testLine}
 			<p class="flex items-center gap-1 text-label">
 				{#if testLine.ok}
@@ -306,5 +342,14 @@
 				>.
 			</p>
 		{/if}
+	{/if}
+
+	{#if aiId && ctx.ready}
+		{@const ai = aiId}
+		<AiModelField
+			provider={ai}
+			value={aiPrefs.effectiveModel(ai)}
+			onSave={(model) => aiPrefs.setModel(ai, model)}
+		/>
 	{/if}
 </article>

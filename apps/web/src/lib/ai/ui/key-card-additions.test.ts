@@ -27,7 +27,7 @@ const text = (h: string) =>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function html(component: Component<any>, props: Record<string, unknown>): string {
-	return render(component, { props }).body;
+	return render(component, { props }).body.replace(/<!--[\s\S]*?-->/g, '');
 }
 
 const FAKE_KEY = 'sk-test-0000000000000000000000000000';
@@ -152,7 +152,7 @@ describe('ProviderKeyCard AI wiring (source)', () => {
 		);
 		expect(src).toMatch(/<AiModelField\b/);
 		expect(src).toMatch(/<TestConnectionResult\b/);
-		expect(src).toMatch(/\{#if isAi\b/);
+		expect(src).toContain('{#if aiId && ctx.ready}');
 	});
 
 	test('AI test button reads Test connection; RentCast keeps Test key with its cost', () => {
