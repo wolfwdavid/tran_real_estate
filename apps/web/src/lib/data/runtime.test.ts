@@ -423,11 +423,18 @@ describe('$lib/data public port', () => {
 			'createPeekStore',
 			'SAMPLE_METROS',
 			'isGatewayError',
-			'GatewayError'
+			'GatewayError',
+			'checkSavedSearchesOnOpen',
+			'savedSearchRepo'
 		]) {
 			expect(port[name], name).toBeDefined();
 		}
 		for (const name of [
+			// The scheduler and repo factory stay behind checkSavedSearchesOnOpen / savedSearchRepo.
+			'runDueSearches',
+			'createSavedSearchRepo',
+			'createDataDb',
+			'getDataDb',
 			'createRentCastClient',
 			'createFixtureFetch',
 			'createLedgerRepo',
