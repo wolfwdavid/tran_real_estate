@@ -13,7 +13,14 @@ const isVitest = process.env.VITEST === 'true';
 export default defineConfig({
 	plugins: isVitest ? [svelte()] : [tailwindcss(), sveltekit()],
 	resolve: isVitest
-		? { alias: { $lib: fileURLToPath(new URL('./src/lib', import.meta.url)) } }
+		? {
+				alias: {
+					$lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
+					'$app/paths': fileURLToPath(
+						new URL('./src/lib/testing/app-paths.stub.ts', import.meta.url)
+					)
+				}
+			}
 		: undefined,
 	// UI-SPEC: no data: URIs for fonts or SVG; every asset ships as a hashed same-origin file.
 	build: { assetsInlineLimit: 0 },
@@ -22,6 +29,8 @@ export default defineConfig({
 		name: 'web',
 		environment: 'node',
 		include: ['src/**/*.{test,spec}.ts'],
+		// *.browser.test.ts belong to the web-browser project (vitest.browser.config.ts).
+		exclude: ['src/**/*.browser.test.ts', 'node_modules/**'],
 		setupFiles: ['../../tooling/vitest/no-network.ts']
 	}
 });
