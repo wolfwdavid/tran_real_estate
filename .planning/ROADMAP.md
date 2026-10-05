@@ -129,7 +129,7 @@ Plans:
   5. User can install the app to their home screen or desktop as a PWA and launch it standalone. iOS users see an Add-to-Home-Screen tip.
 **Plans**: 17 plans in 7 waves
 Plans:
-- [ ] 03-01-PLAN.md — Exact-pinned deps, core provider registry (hosts ⊆ CSP, header-only auth), Syncable + reminder math, test fakes, lint guardrails (wave 1)
+- [x] 03-01-PLAN.md — Exact-pinned deps, core provider registry (hosts ⊆ CSP, header-only auth), Syncable + reminder math, test fakes, lint guardrails (wave 1)
 - [ ] 03-02-PLAN.md — Core backup: tran-backup-v1 envelope + error codes, migrations, merge/replace diff, key scan, filename (wave 2)
 - [ ] 03-03-PLAN.md — PWA manifest (relative URLs), brand-generated icons, beforeinstallprompt capture, CSP oracle carriers (wave 2)
 - [ ] 03-04-PLAN.md — Key vault core: WebCrypto, tran-secrets DB, session default / remember opt-in, forget-all broadcast, tester hook (wave 2)
