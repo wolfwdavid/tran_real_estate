@@ -7,6 +7,10 @@
 		description,
 		children
 	}: { title: string; docTitle: string; description: string; children: Snippet } = $props();
+
+	// Verbatim UI-SPEC notice line, kept on one line so it stays searchable.
+	const notice =
+		'This page explains, in plain language, how Tran Real Estate Tools works. It is not legal advice.';
 </script>
 
 <svelte:head>
@@ -18,10 +22,7 @@
 	<div class="max-w-reading">
 		<h1 class="font-display text-display font-semibold">{title}</h1>
 		<p class="mt-4 text-label font-semibold text-muted-foreground">Last updated: 4 October 2026</p>
-		<p class="mt-4 text-muted-foreground">
-			This page explains, in plain language, how Tran Real Estate Tools works. It is not legal
-			advice.
-		</p>
+		<p class="mt-4 text-muted-foreground">{notice}</p>
 		{@render children()}
 	</div>
 </article>
