@@ -37,13 +37,21 @@ Validated in Phase 3: Local Platform: Storage, Key Vault & Backup (2026-10-05) �
 - ✓ PLAT-05 — Storage section shows the persistence grant; app-wide `AppNotice` shows "last backup N days ago" once overdue (and "Your keys are locked" first when both apply), live-updating on export, snooze and import (Phase 3)
 - ✓ PLAT-06 — PWA manifest, allowlist-only precache service worker (same-origin GET, no runtime caching), pre-hydration `beforeinstallprompt` capture, Install section with iOS Add-to-Home-Screen tip (Phase 3)
 
+Validated in Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures (2026-10-05) — 5/5 must-haves verified against the codebase; `pnpm verify` green in one run (1384 unit tests including the new real-Chromium component project, 496 browser tests on both base paths, CSP oracle on 14+14 pages, fixture drift check, secret and real-data scans over 734 files, actionlint); 54/54 validation rows walked; 8 planned guards plus 15 further mutation runs recorded. Fourteen real-key checks (U1–U14) are parked in `04-HUMAN-UAT.md` until the owner creates a dedicated endpoint-restricted RentCast key.
+
+- ✓ DATA-01 — Without a key every data type (rental and sale listings, rent/value estimates, zip market stats) is served from seeded synthetic fixtures for three invented metros through the same gateway port, badged "Sample data" in the status bar and on every provenance chip; fixtures are PII-scanned with planted-case proof and drift-checked in verify and CI (Phase 4)
+- ✓ DATA-02 — Compact meter on every portal route and the full meter in Settings "RentCast usage"; every call-spending action carries a `CostLabel` computed by `estimateCost()` before it runs (Phase 4)
+- ✓ DATA-03 — Append-only ledger with reserve-then-settle in one IndexedDB transaction, user-editable cap (default 40, typed "overage" above 50), single-use over-cap grants behind a confirm dialog; proven by call-count tests: 60 calls block #41, 10 re-renders spend 0, 5 due saved searches run once per 24 h even across two tabs (Phase 4)
+- ✓ DATA-04 — Cache-first reads return the original "as of" stamp and spend 0; in-flight dedupe and a serial queue; explicit "Refresh (1 call)" bypass (Phase 4)
+- ✓ DATA-05 — Locked error taxonomy from `@tran/core/request` rendered by `GatewayError` with specific copy for invalid key, restricted key, rate limit (with countdown), budget cap reached and no results; "Test key (0 calls)" in Settings reports valid / invalid / restricted without a billed call (Phase 4)
+
 ### Active
 
 **Platform (shared)**
 - [x] One SvelteKit app, statically built for GitHub Pages under a dedicated free GitHub organization (own origin `tranrealestate.github.io`), with the landing page, audience pages, legal pages and branded portal placeholders — skeleton in Phase 1, real marketing surface in Phase 2
 - [x] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini / OpenRouter); keys stored only in that browser, sent only to the provider — shipped in Phase 3 (key testing hook lands with each provider in Phases 4–5)
-- [ ] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key)
-- [ ] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap)
+- [x] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key) — shipped in Phase 4 (sample gateway + fixtures; the "Getting started" onboarding section lands in Phase 10)
+- [x] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap) — shipped in Phase 4
 - [x] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle) — shipped in Phase 3
 - [ ] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers
 - [ ] Warm editorial visual identity (warm palette, elegant serif headings, cinematic imagery) designed with UI/UX Pro Max
@@ -145,4 +153,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-05 after Phase 3 completion*
+*Last updated: 2026-10-05 after Phase 4 completion*
