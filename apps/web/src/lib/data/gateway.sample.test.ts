@@ -132,7 +132,7 @@ describe('sample gateway: every endpoint from fixtures', () => {
 		expect(spy.calls).toHaveLength(0);
 		expect(await db.ledger.count()).toBe(0);
 		expect(await db.apiCache.count()).toBe(0);
-		expect((await gateway.usage()).used).toBe(0);
+		expect((await gateway.usage()).countedTowardCap).toBe(0);
 	});
 
 	it('rentalListingById returns the fixture listing badged sample', async () => {

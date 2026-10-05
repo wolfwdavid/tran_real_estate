@@ -27,9 +27,10 @@ import {
 	type Listing
 } from '@tran/core/listings';
 import type { CacheRepo } from './cache-repo';
+import { createFixtureFetch, type FixtureSet } from './fixtures/fixture-fetch';
 import { issueGrant, type OverCapGrant } from './grants';
 import type { LedgerRepo, UsageSnapshot } from './ledger-repo';
-import type { RentCastClient } from './rentcast/client';
+import { createRentCastClient, type RentCastClient } from './rentcast/client';
 import { mapListing, mapPayload, type DomainData } from './rentcast/mappers';
 import { testRentCastKey, type ProbeResult } from './rentcast/probe';
 import { parsePayload, type ValidatedPayload } from './rentcast/schemas';
@@ -94,6 +95,15 @@ export interface LiveGatewayDeps {
 	reactiveGuard?: () => boolean;
 }
 
+export interface SampleGatewayDeps {
+	fixtures: FixtureSet;
+	ledger: LedgerRepo;
+	clock: () => number;
+	/** The live fetch, used ONLY by testKey (a key test always targets RentCast). */
+	probeFetch: typeof fetch;
+	reactiveGuard?: () => boolean;
+}
+
 const LISTINGS_ENDPOINTS: ReadonlySet<EndpointId> = new Set(['rental-listings', 'sale-listings']);
 
 const isNegative = (status: number): boolean => status === 404 || status === 400;
@@ -135,6 +145,44 @@ function payloadOf(row: ApiCacheRow): ValidatedPayload {
 	}
 }
 
+/** Spends are only allowed outside reactive tracking contexts (both factories). */
+function assertNotReactive(reactiveGuard: (() => boolean) | undefined): void {
+	if (reactiveGuard?.()) throw new ReactiveSpendError();
+}
+
+/** True when a listings response filled the requested page (more rows may exist). */
+function truncatedOf(req: DataRequest, rawBody: unknown): boolean {
+	return (
+		LISTINGS_ENDPOINTS.has(req.endpoint) &&
+		Array.isArray(rawBody) &&
+		isTruncated(rawBody.length, limitOf(req))
+	);
+}
+
+/**
+ * The RentCast key test, identical in both modes: it always probes RentCast (sample mode included,
+ * since the user is checking a real key). Bypasses cache and cap, but every request that reached
+ * RentCast is metered.
+ */
+async function testKeyWith(
+	key: string,
+	probeFetch: typeof fetch,
+	ledger: LedgerRepo
+): Promise<ProbeResult> {
+	const result = await testRentCastKey(key, { fetch: probeFetch });
+	if (result.status !== null) {
+		await ledger.record(
+			{
+				endpoint: PROBE_REQUEST.endpoint,
+				key: canonicalKey(PROBE_REQUEST),
+				intent: 'key-test'
+			},
+			result.status
+		);
+	}
+	return result;
+}
+
 export function createDataGateway(deps: LiveGatewayDeps): DataGateway {
 	const { client, cache, ledger, clock } = deps;
 	const inflight = new Map<string, Promise<GatewayResult>>();
@@ -147,10 +195,6 @@ export function createDataGateway(deps: LiveGatewayDeps): DataGateway {
 		const run = tail.then(fn, fn);
 		tail = run.catch(() => undefined);
 		return run;
-	};
-
-	const assertNotReactive = (): void => {
-		if (deps.reactiveGuard?.()) throw new ReactiveSpendError();
 	};
 
 	const provenanceOf = (row: ApiCacheRow, now: number): Provenance => ({
@@ -223,10 +267,7 @@ export function createDataGateway(deps: LiveGatewayDeps): DataGateway {
 				status: 200,
 				body: storedBody(parsed.payload),
 				fetchedAt: now,
-				truncated:
-					LISTINGS_ENDPOINTS.has(req.endpoint) &&
-					Array.isArray(raw.body) &&
-					isTruncated(raw.body.length, limitOf(req)),
+				truncated: truncatedOf(req, raw.body),
 				droppedRows: parsed.droppedRows
 			};
 			await cache.put(row);
@@ -268,7 +309,7 @@ export function createDataGateway(deps: LiveGatewayDeps): DataGateway {
 		opts: SpendOptions | undefined,
 		bypassTtl: boolean
 	): Promise<GatewayResult> {
-		assertNotReactive();
+		assertNotReactive(deps.reactiveGuard);
 		const key = canonicalKey(req);
 		const existing = inflight.get(key);
 		if (existing) return existing;
@@ -327,27 +368,99 @@ export function createDataGateway(deps: LiveGatewayDeps): DataGateway {
 			read(req, opts, true) as Promise<GatewayResult<T>>,
 
 		async rentalListingById(id, opts) {
-			assertNotReactive();
+			assertNotReactive(deps.reactiveGuard);
 			return (await read(buildListingByIdRequest(id), opts, false)) as GatewayResult<Listing>;
 		},
 
 		grantOverCap: (req) => issueGrant(canonicalKey(req)),
 
-		async testKey(key) {
-			const result = await testRentCastKey(key, { fetch: deps.probeFetch });
-			if (result.status !== null) {
-				// Key tests bypass cache and cap, but every request that reached RentCast is metered.
-				await ledger.record(
-					{
-						endpoint: PROBE_REQUEST.endpoint,
-						key: canonicalKey(PROBE_REQUEST),
-						intent: 'key-test'
-					},
-					result.status
-				);
+		testKey: (key) => testKeyWith(key, deps.probeFetch, ledger),
+
+		usage: () => ledger.usage()
+	};
+}
+
+/**
+ * Sample (demo) mode behind the same port (DATA-01; RESEARCH Pattern 4). The REAL RentCast client,
+ * schemas and mappers run over the fixture fetch, so fixtures prove the live parsing path. Every
+ * result is badged source 'sample' and costs 0 calls.
+ *
+ * It never touches the response cache and never reserves ledger rows, so a sample answer can never be served
+ * by the live gateway as RentCast data (Pitfall 4) and never counts toward the cap.
+ */
+export function createSampleGateway(deps: SampleGatewayDeps): DataGateway {
+	const { ledger, clock } = deps;
+	const client = createRentCastClient({
+		fetch: createFixtureFetch(deps.fixtures, clock),
+		// The fixture fetch ignores the header; the client only needs a non-empty value.
+		getKey: () => 'sample-mode'
+	});
+
+	async function run(req: DataRequest): Promise<GatewayResult> {
+		const key = canonicalKey(req);
+		const raw = await client.get(req);
+		const provenance: Provenance = { source: 'sample', fetchedAt: clock(), stale: false };
+		if (raw.status === 200) {
+			const parsed = parsePayload(req.endpoint, raw.body);
+			if (!parsed.ok) {
+				throw new GatewayError({ kind: 'SchemaMismatch', issues: parsed.issues, requestKey: key });
 			}
-			return result;
+			return {
+				data: mapPayload(parsed.payload),
+				provenance,
+				truncated: truncatedOf(req, raw.body),
+				droppedRows: parsed.droppedRows,
+				requestKey: key
+			};
+		}
+		// 404 'sample/outside-coverage' classifies as NoResults 'outside-sample-coverage'.
+		const classified = classifyResponse(raw.status, raw.body) ?? { kind: 'NetworkError' as const };
+		throw new GatewayError({ ...classified, provenance, requestKey: key });
+	}
+
+	const spend = async (req: DataRequest): Promise<GatewayResult> => {
+		assertNotReactive(deps.reactiveGuard);
+		return run(req);
+	};
+
+	const FREE: CostEstimate = { calls: 0, reason: 'sample' };
+
+	return {
+		source: 'sample',
+
+		async peek<T = DomainData>(req: DataRequest): Promise<PeekResult<T> | undefined> {
+			try {
+				return { kind: 'data', result: (await run(req)) as GatewayResult<T> };
+			} catch (e) {
+				if (e instanceof GatewayError) return { kind: 'error', error: e };
+				throw e;
+			}
 		},
+
+		async peekListingById(id) {
+			try {
+				const result = await run(buildListingByIdRequest(id));
+				return { listing: result.data as Listing, provenance: result.provenance };
+			} catch (e) {
+				if (e instanceof GatewayError && e.kind === 'NoResults') return undefined;
+				throw e;
+			}
+		},
+
+		estimateCost: async () => ({ ...FREE }),
+
+		estimateBatchCost: async () => ({ ...FREE }),
+
+		get: <T = DomainData>(req: DataRequest) => spend(req) as Promise<GatewayResult<T>>,
+
+		refresh: <T = DomainData>(req: DataRequest) => spend(req) as Promise<GatewayResult<T>>,
+
+		rentalListingById: (id) =>
+			spend(buildListingByIdRequest(id)) as Promise<GatewayResult<Listing>>,
+
+		grantOverCap: (req) => issueGrant(canonicalKey(req)),
+
+		testKey: (key) => testKeyWith(key, deps.probeFetch, ledger),
 
 		usage: () => ledger.usage()
 	};
