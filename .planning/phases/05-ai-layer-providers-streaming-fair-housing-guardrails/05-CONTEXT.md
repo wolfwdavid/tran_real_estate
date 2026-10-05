@@ -52,6 +52,9 @@ The owner chose fully autonomous mode on 2026-10-04. Researched recommended defa
 ### Artifacts
 - Every generation is stored (Phase 3 Dexie) as `{id, feature, promptId@version, provider, model, inputHash, text, findings, status: draft|acknowledged|sent, createdAt}`; registered in the backup export.
 
+### Amendments (2026-10-04, cross-phase reconciliation)
+- Settings section order is fixed as: 1 API keys · 2 RentCast usage (Phase 4) · 3 AI drafting (Phase 5) · 4 Key security · 5 Backup & restore · 6 Storage status · 7 Install app · 8 Getting started (Phase 10). Phase 5's UI-SPEC placed "AI drafting" second; it is third. Data before AI mirrors phase order.
+
 ### Claude's Discretion
 - SSE parser implementation details; cost table values; render throttle; exact lexicon wording and count beyond the minimums; prompt registry file layout.
 
