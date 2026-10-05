@@ -44,6 +44,34 @@ export default defineConfig(
 		rules: { 'no-restricted-syntax': 'off' }
 	},
 	{
+		// The SvelteKit service worker must forward same-origin precache misses to the network.
+		// Scoped to this ONE file; every other module keeps the Phase 1 fetch ban.
+		files: [`${WEB}/service-worker.ts`],
+		rules: { 'no-restricted-syntax': 'off' }
+	},
+	{
+		// Only sets these two rules; it never re-enables or overrides the fetch ban above.
+		files: [`${WEB}/**/*.{ts,js,svelte}`],
+		rules: {
+			'no-restricted-globals': [
+				'error',
+				{
+					name: 'confirm',
+					message: 'Use ConfirmDialog (03-UI-SPEC): window.confirm is not accessible.'
+				}
+			],
+			'no-restricted-properties': [
+				'error',
+				{ object: 'window', property: 'confirm', message: 'Use ConfirmDialog (03-UI-SPEC).' }
+			]
+		}
+	},
+	{
+		// Key material must never reach a console (CONTEXT: never leak keys).
+		files: [`${WEB}/lib/storage/secrets/**`],
+		rules: { 'no-console': 'error' }
+	},
+	{
 		files: [`${WEB}/routes/(marketing)/**`],
 		rules: {
 			'no-restricted-imports': [
