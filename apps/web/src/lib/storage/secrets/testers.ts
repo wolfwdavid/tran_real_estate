@@ -1,3 +1,4 @@
+import { SvelteMap } from 'svelte/reactivity';
 import type { ProviderId } from '@tran/core';
 
 // Pluggable "Test key" checks. Phases 4/5 register one per provider (RentCast, LLMs); the vault
@@ -15,7 +16,9 @@ export interface KeyTestResult {
 
 export type KeyTester = (key: string, signal: AbortSignal) => Promise<KeyTestResult>;
 
-const testers = new Map<ProviderId, KeyTester>();
+// Reactive: Settings registers the AI testers asynchronously (05-15), so a key card that rendered
+// before registration must update when its tester arrives. Outside an effect it is a plain Map.
+const testers = new SvelteMap<ProviderId, KeyTester>();
 
 /** Registers (or replaces: last wins) the tester for a provider. Returns an unregister function. */
 export function registerKeyTester(p: ProviderId, fn: KeyTester): () => void {
