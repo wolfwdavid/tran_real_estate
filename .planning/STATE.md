@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-stopped_at: Completed 04-24-PLAN.md
-last_updated: "2026-10-05T12:40:07.721Z"
+status: phase-complete
+stopped_at: Completed 04-25-PLAN.md (Phase 4 gate)
+last_updated: "2026-10-05T13:00:19.804Z"
 progress:
   total_phases: 11
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 206
-  completed_plans: 62
+  completed_plans: 63
 ---
 
 # Project State
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 
 ## Current Position
 
-Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 24 of 25 (waves 1-8 complete; next wave 9: 04-25 phase gate)
+Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — COMPLETE (25/25 plans; gate 04-25 green: verify 229 s)
+Plan: 25 of 25 — next: /gsd:verify-work 4, then Phase 5 (owner real-key UAT U1-U14 in 04-HUMAN-UAT.md is non-blocking)
 
 ## Performance Metrics
 
@@ -108,6 +108,7 @@ Plan: 24 of 25 (waves 1-8 complete; next wave 9: 04-25 phase gate)
 | Phase 04 P22 | 25min | 2 tasks | 13 files |
 | Phase 04 P23 | 13 min | 3 tasks | 12 files |
 | Phase 04 P24 | 40min | 2 tasks | 6 files |
+| Phase 04 P25 | 20min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -241,6 +242,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-23: Test key uses aria-disabled while running so focus stays on the button
 - [Phase 04]: 04-24: data runtime start() awaits KeyPort.ready (connectRentCastKey) before resolving mode; fixes keyed sessions starting in sample mode and the on-open alerts pass consuming due searches against fixtures
 - [Phase 04]: 04-24: E2E seeds due saved searches from the home page (no DataShell) and new data specs use reducedMotion reduce (smooth scroll loses clicks)
+- [Phase 04]: Playwright runs with reducedMotion 'reduce' suite-wide; smooth scrolling made Settings clicks land mid-scroll (Phase 3 import-preview flake root cause)
+- [Phase 04]: Phase 4 gate: verify green 229 s; owner real-key checks U1-U14 in 04-HUMAN-UAT.md are non-blocking
 
 ### Pending Todos
 
@@ -263,7 +266,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T12:40:07.716Z
-Stopped at: Completed 04-24-PLAN.md
+Last session: 2026-10-05T13:00:19.798Z
+Stopped at: Completed 04-25-PLAN.md (Phase 4 gate)
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
