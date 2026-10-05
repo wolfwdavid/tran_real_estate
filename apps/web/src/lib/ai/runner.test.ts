@@ -38,8 +38,7 @@ function resultOf(updates: RunUpdate[]): GenerationResult {
 	return last.result;
 }
 
-const texts = (updates: RunUpdate[]) =>
-	updates.flatMap((u) => (u.type === 'text' ? [u.text] : []));
+const texts = (updates: RunUpdate[]) => updates.flatMap((u) => (u.type === 'text' ? [u.text] : []));
 
 async function run(
 	p: LlmProvider,
