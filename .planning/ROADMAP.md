@@ -234,7 +234,7 @@ Plans:
 **Plans**: 22 plans in 8 waves
 Plans:
 - [x] 06-01-PLAN.md — Core renter types, location normalization, fetch-wide params and local filters (TDD)
-- [ ] 06-02-PLAN.md — Core fair-rent comparison and affordability math (TDD)
+- [x] 06-02-PLAN.md — Core fair-rent comparison and affordability math (TDD)
 - [x] 06-03-PLAN.md — Core history, sparkline, safe contact links, honest recency status, formatters (TDD)
 - [ ] 06-04-PLAN.md — Renter route shells + sub-nav, OSM img-src in both CSP files, E2E route lists
 - [ ] 06-05-PLAN.md — Guardrails: map-library and shared-affordability lint boundaries, scoped renter banned terms, SW tile exclusion
@@ -459,7 +459,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
-| 6. Renter Portal | 2/22 | In Progress|  |
+| 6. Renter Portal | 3/22 | In Progress|  |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
