@@ -191,7 +191,11 @@ describe('openStream', () => {
 			deps: { fetch: fetchImpl }
 		});
 		expect(res.ok).toBe(true);
-		expect(calls[0]?.init).toMatchObject({ credentials: 'omit', cache: 'no-store', method: 'POST' });
+		expect(calls[0]?.init).toMatchObject({
+			credentials: 'omit',
+			cache: 'no-store',
+			method: 'POST'
+		});
 	});
 
 	it('classifies a non-OK JSON body served as text/event-stream', async () => {
