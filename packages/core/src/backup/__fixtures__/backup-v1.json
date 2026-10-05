@@ -1,0 +1,29 @@
+{
+	"format": "tran-backup-v1",
+	"schemaVersion": 1,
+	"app": "Tran Real Estate Tools",
+	"exportedAt": "2026-10-04T12:00:00.000Z",
+	"tables": {
+		"prefs": [
+			{
+				"id": "00000000-0000-4000-8000-000000000001",
+				"ownerId": "local",
+				"createdAt": "2026-10-01T12:00:00.000Z",
+				"updatedAt": "2026-10-01T12:00:00.000Z",
+				"schemaVersion": 1,
+				"key": "ui.density",
+				"value": "comfortable"
+			},
+			{
+				"id": "00000000-0000-4000-8000-000000000002",
+				"ownerId": "local",
+				"createdAt": "2026-10-01T12:00:00.000Z",
+				"updatedAt": "2026-10-02T12:00:00.000Z",
+				"deletedAt": "2026-10-02T12:00:00.000Z",
+				"schemaVersion": 1,
+				"key": "demo.portal",
+				"value": "renter"
+			}
+		]
+	}
+}
