@@ -213,7 +213,30 @@ Plans:
   3. Renter can compare a listing's asking rent to the zip median for that bedroom count and optionally to a rent estimate with range and comparables (call cost shown first). Renter can also calculate affordable rent from income with zero API calls.
   4. Renter can generate an AI outreach draft to the listing agent asking about availability, pets, fees, and lease terms. The draft passes the Fair Housing checker and goes out only via copy or the renter's own email client.
   5. Demo-credible: every renter route works fully on sample data with no key, stays under the call budget with a real key, has all AI copy passing the Fair Housing checker, and passes axe checks.
-**Plans**: TBD
+**Plans**: 22 plans in 8 waves
+Plans:
+- [ ] 06-01-PLAN.md — Core renter types, location normalization, fetch-wide params and local filters (TDD)
+- [ ] 06-02-PLAN.md — Core fair-rent comparison and affordability math (TDD)
+- [ ] 06-03-PLAN.md — Core history, sparkline, safe contact links, honest recency status, formatters (TDD)
+- [ ] 06-04-PLAN.md — Renter route shells + sub-nav, OSM img-src in both CSP files, E2E route lists
+- [ ] 06-05-PLAN.md — Guardrails: map-library and shared-affordability lint boundaries, scoped renter banned terms, SW tile exclusion
+- [ ] 06-06-PLAN.md — renter/outreach.v1 prompt with minimized inputs + artifact subjectId
+- [ ] 06-07-PLAN.md — Core sort, URL state codec, filter labels, filtered new-since (TDD)
+- [ ] 06-08-PLAN.md — Core shortlist and saved-search record schemas (TDD)
+- [ ] 06-09-PLAN.md — No-network E2E harness: deny-all, synthetic tile, RentCast mocks, mocked key
+- [ ] 06-10-PLAN.md — Shared listing components: property marks, LocationField, PriceHistory, status chip
+- [ ] 06-11-PLAN.md — Renter request builders, gateway 0-call/by-id contract, Dexie shortlist + search-meta repos
+- [ ] 06-12-PLAN.md — Zero-call affordability calculator (shared) + route + E2E
+- [ ] 06-13-PLAN.md — Search controller, form, filters, results header, truncation + Narrow, sample search + E2E
+- [ ] 06-14-PLAN.md — Listing detail (?id=) with 0-call resolution, contact, history, not-found, shortlist toggle + E2E
+- [ ] 06-15-PLAN.md — Shortlist board with status tracking and notes + E2E
+- [ ] 06-16-PLAN.md — Listing cards, paginated list, List/Map tabs + E2E
+- [ ] 06-17-PLAN.md — Fair-rent check: ZIP median (Tier 1) + rent estimate (Tier 2) + E2E
+- [ ] 06-18-PLAN.md — AI outreach section via GenerationPanel (Fair Housing gated) + E2E
+- [ ] 06-19-PLAN.md — Lazy Leaflet + OSM map with supercluster, sample backdrop, selection + E2E
+- [ ] 06-20-PLAN.md — Saved searches with "N new since last visit" (page.clock 24h) + E2E
+- [ ] 06-21-PLAN.md — Map split view and list-map linking polish (cut line 1) + E2E
+- [ ] 06-22-PLAN.md — Demo-credibility matrix, 3-call journey, validation close-out, pnpm verify
 **Research flag**: no (standard patterns). Verify the OSM tile usage policy and add the tile host to CSP `img-src` when the map ships.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 6`.
 **Cut line** (cut in this order if the phase overruns): (1) map clustering and visual polish; (2) RENT-05 status tracking, keeping the plain shortlist; (3) the optional rent-estimate tier of RENT-06, keeping the zero-call zip-median comparison.
@@ -260,7 +283,31 @@ Plans:
   3. Agent can generate a founder-story reel script (hook → manual pain → before/after → results → mission → call to action) with timed beats, captions, B-roll list, and an AI-disclosure checklist, using only results the agent supplies.
   4. Agent can create a branded Market Snapshot report for a zip code (their logo, colors, and disclosures), labeled as not a CMA or appraisal, and print it to PDF.
   5. Demo-credible: every studio and report route works fully on sample data with no keys, the Market Snapshot stays under the call budget with a real key, all AI copy passes the Fair Housing checker, and axe checks pass.
-**Plans**: TBD
+**Plans**: 23 plans in 10 waves
+Plans:
+- [ ] 09-01-PLAN.md — Disclosure variants (ad-inline/ad-block/print), platform limits, disclosure-last assembly, state team/title warnings (wave 1)
+- [ ] 09-02-PLAN.md — Number check exposed from @tran/core/numbers, number-word detector, allowed-number sets (wave 1)
+- [ ] 09-03-PLAN.md — Listing facts whitelist + validation, unsupported-feature check (wave 1)
+- [ ] 09-04-PLAN.md — Fair Housing lexicon: listing hot spots, hashtag forms, advertising category, safe-harbor neutrals (wave 1)
+- [ ] 09-05-PLAN.md — Snapshot metrics, aggregate-only listings summary, shared figure formatting, allowed numbers (wave 1)
+- [ ] 09-06-PLAN.md — Social pack section parser + hashtags; reel parser, code-owned timing, results placeholder rule (wave 1)
+- [ ] 09-07-PLAN.md — Banned-terms gate: studio scope + studio phrases, no allowlist, non-vacuity (wave 1)
+- [ ] 09-08-PLAN.md — GenerationPanel footerLabel/formatForExit, Fixture sample hook, PrintReport preparedLine, ChartFigure print sizing (wave 1)
+- [ ] 09-09-PLAN.md — Six prerendered studio/print routes, route lists, AgentNav Studio, snapshot-only DataStatusBar (wave 1)
+- [ ] 09-10-PLAN.md — @tran/core/studio barrel, composer variant overload, shared agent-profile module, Phase 8 boundary scope (wave 2)
+- [ ] 09-11-PLAN.md — Studio storage: studioDraft + snapshots tables, backup, autosave (wave 3)
+- [ ] 09-12-PLAN.md — DisclosureStatus, InputFairHousingNote, CharacterCount, Studio hub (wave 4)
+- [ ] 09-13-PLAN.md — listing.v1 + snapshot.v1 prompts with input-built samples, studio post-checks (wave 3)
+- [ ] 09-14-PLAN.md — Snapshot data via shared market request (0/1/2 calls), frozen record builder, sample record (wave 4)
+- [ ] 09-15-PLAN.md — STU-01 listing description page + keyless E2E (wave 5)
+- [ ] 09-16-PLAN.md — Snapshot ZIP picker, key figures, section toggles, aggregate listings table (wave 5)
+- [ ] 09-17-PLAN.md — STU-04 snapshot builder steps 3-4, save gate, saved list + E2E (wave 6)
+- [ ] 09-18-PLAN.md — STU-04 print route, brand band, labels, prominence, studio boundaries + print E2E (wave 6)
+- [ ] 09-19-PLAN.md — social.v1 prompt + GenerationPanel sections mode with PlatformCard (wave 7)
+- [ ] 09-20-PLAN.md — STU-02 social post pack page + E2E (wave 8)
+- [ ] 09-21-PLAN.md — reel.v1 prompt, results/quote checks, AI-disclosure checklist, copy formatter (wave 8)
+- [ ] 09-22-PLAN.md — STU-03 reel script page + E2E (wave 9)
+- [ ] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
 **Research flag**: light (state license-law ad disclosure requirements, NY AI advertising disclosure checklist)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 9`.
 **Cut line** (cut in this order): ship STU-01 (listing descriptions) and STU-04 (Market Snapshot) first. If the phase overruns, cut (1) STU-03 reel script generator, then (2) STU-02 social post pack.
@@ -324,6 +371,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
-| 9. Agent Content Studio & Market Snapshot Reports | 0/TBD | Not started | - |
+| 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/TBD | Not started | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
