@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { ROUTES } from './routes';
+import { announcer, fakeKey, openSettings, saveKey } from './helpers/settings';
 
 // FND-02 at runtime: the build-time oracle (scripts/assert-csp.mjs) proves the policy TEXT is
 // right; this spec proves the running app actually survives it in Chromium. Only built output is
@@ -89,4 +90,65 @@ test('the collector reports a deliberately provoked violation (non-vacuity contr
 		.poll(() => violations(page))
 		.toEqual(expect.arrayContaining([expect.stringMatching(/^script-src(-elem)? inline$/)]));
 	expect(await page.evaluate(() => '__cspProbeRan' in window)).toBe(false);
+});
+
+test('real Settings dialogs, radios and checkboxes run with zero CSP violations', async ({
+	page
+}) => {
+	// The probe above proves the policy allows a Svelte transition; this proves the real Phase 3 UI
+	// (bits-ui dialogs with their open/close animations, radio groups, checkboxes) runs under it.
+	await installCollector(page);
+	await openSettings(page);
+	const styleCount = () => page.evaluate(() => document.querySelectorAll('style').length);
+	const stylesBefore = await styleCount();
+	expect(await violations(page)).toEqual([]);
+
+	const key = fakeKey('openai');
+	await saveKey(page, 'OpenAI', key);
+	await expect(page.locator('#key-openai')).toContainText(`Key ending in ${key.slice(-4)}`);
+	expect(await violations(page)).toEqual([]);
+
+	// Forget all API keys? opens, animates, and closes on Escape.
+	await page
+		.locator('#api-keys')
+		.getByRole('button', { name: 'Forget all keys', exact: true })
+		.click();
+	const forget = page.getByRole('alertdialog', { name: 'Forget all API keys?' });
+	await expect(forget).toBeVisible();
+	expect(await violations(page)).toEqual([]);
+	await page.keyboard.press('Escape');
+	await expect(forget).toBeHidden();
+	expect(await violations(page)).toEqual([]);
+
+	// Storage mode radios, both directions.
+	const security = page.locator('#key-security');
+	const remember = security.getByRole('radio', { name: 'Remember on this device', exact: true });
+	const tabOnly = security.getByRole('radio', { name: 'This tab only (default)', exact: true });
+	await remember.click();
+	await expect(announcer(page)).toHaveText('Keys will be remembered on this device.');
+	expect(await violations(page)).toEqual([]);
+	await tabOnly.click();
+	await expect(tabOnly).toBeChecked();
+	expect(await violations(page)).toEqual([]);
+	await remember.click();
+	await expect(remember).toBeChecked();
+	expect(await violations(page)).toEqual([]);
+
+	// Add a passphrase dialog: tick and untick the checkbox, then Cancel.
+	await security.getByRole('button', { name: 'Add a passphrase' }).click();
+	const lock = page.getByRole('dialog', { name: 'Lock your remembered keys' });
+	await expect(lock).toBeVisible();
+	expect(await violations(page)).toEqual([]);
+	const ack = lock.getByRole('checkbox');
+	await ack.check();
+	await expect(ack).toBeChecked();
+	await ack.uncheck();
+	await expect(ack).not.toBeChecked();
+	expect(await violations(page)).toEqual([]);
+	await lock.getByRole('button', { name: 'Cancel', exact: true }).click();
+	await expect(lock).toBeHidden();
+	expect(await violations(page)).toEqual([]);
+
+	// bits-ui writes styles through the CSSOM only: no <style> elements were injected.
+	expect(await styleCount()).toBe(stylesBefore);
 });
