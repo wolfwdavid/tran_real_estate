@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, test, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { axeViolations } from '$lib/testing/axe';
@@ -38,6 +38,15 @@ async function typeCap(value: string): Promise<void> {
 	await input.clear();
 	if (value !== '') await input.fill(value);
 }
+
+// Component tests load no CSS, so an unstyled input and button stack 21px tall and touching, which
+// axe's target-size rule flags. Restore just the heights the real classes give them (Button and
+// Input are `h-12`, 48px); the E2E axe runs cover the full stylesheet.
+beforeAll(() => {
+	const style = document.createElement('style');
+	style.textContent = '[data-slot="button"], [data-slot="input"] { height: 48px; }';
+	document.head.appendChild(style);
+});
 
 afterEach(() => {
 	vi.restoreAllMocks();
