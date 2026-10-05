@@ -188,6 +188,7 @@ describe('mapPayload: markets', () => {
 		expect(rental?.median).toBe(fixture.rentalData.medianRent);
 		expect(rental?.average).toBe(fixture.rentalData.averageRent);
 		expect(rental?.averagePerSquareFoot).toBe(fixture.rentalData.averageRentPerSquareFoot);
+		expect(rental?.lastUpdatedDate).toBe(fixture.rentalData.lastUpdatedDate);
 		expect(rental?.byBedrooms).toHaveLength(fixture.rentalData.dataByBedrooms.length);
 		expect(rental?.byBedrooms[0]).toEqual({
 			bedrooms: fixture.rentalData.dataByBedrooms[0].bedrooms,
@@ -234,6 +235,7 @@ describe('mapPayload: markets', () => {
 		) as MarketStats;
 		expect(out.sale).toBeNull();
 		expect(out.rental?.median).toBeNull();
+		expect(out.rental?.lastUpdatedDate).toBeNull();
 		expect(out.rental?.byBedrooms).toEqual([]);
 		expect(out.rental?.history).toEqual([]);
 	});

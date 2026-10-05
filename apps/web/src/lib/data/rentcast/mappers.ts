@@ -178,7 +178,8 @@ function marketSide(v: unknown, p: SidePrefix): MarketSide | null {
 		totalListings: num(v.totalListings),
 		byBedrooms: breakdowns(v.dataByBedrooms, p),
 		byPropertyType: breakdowns(v.dataByPropertyType, p),
-		history: marketHistory(v.history, p)
+		history: marketHistory(v.history, p),
+		lastUpdatedDate: str(v.lastUpdatedDate)
 	};
 }
 

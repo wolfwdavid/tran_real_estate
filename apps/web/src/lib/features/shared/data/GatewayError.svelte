@@ -28,6 +28,10 @@
 		onEditSearch?: () => void;
 		/** Move focus to the title on mount (when the panel replaced content after a user action). */
 		focusOnMount?: boolean;
+		/** Replaces the kind's body copy (e.g. a section-specific NoResults explanation). */
+		body?: string;
+		/** false hides the action row, for a panel whose actions don't apply where it is shown. */
+		actions?: boolean;
 	}
 
 	let {
@@ -36,11 +40,16 @@
 		onUseSample,
 		onContinuePastCap,
 		onEditSearch,
-		focusOnMount = false
+		focusOnMount = false,
+		body: bodyOverride,
+		actions = true
 	}: Props = $props();
 
 	const titleId = $props.id();
-	const copy = $derived(errorCopy(error));
+	const copy = $derived.by(() => {
+		const c = errorCopy(error);
+		return bodyOverride ? { ...c, body: bodyOverride } : c;
+	});
 	const neutral = $derived(copy.variant === 'neutral');
 
 	let titleEl = $state<HTMLElement | null>(null);
@@ -54,7 +63,7 @@
 		const current = error;
 		return untrack(() => {
 			const { title, body } = errorCopy(current);
-			announce(`${title}. ${body}`);
+			announce(`${title}. ${bodyOverride ?? body}`);
 			if (focusOnMount) titleEl?.focus();
 
 			const seconds =
@@ -145,35 +154,38 @@
 			{copy.title}
 		</p>
 		<p data-testid="gateway-error-body" class="text-body tabular-nums">{copy.body}</p>
-		<div data-testid="gateway-error-actions" class="flex flex-wrap items-center gap-2 sm:gap-4">
-			{#if error.kind === 'InvalidKey'}
-				{@render checkKeyLink()}
-				{@render useSampleButton()}
-			{:else if error.kind === 'RestrictedKey'}
-				{@render checkKeyLink()}
-				<a href="https://app.rentcast.io/app/api" rel="external" class={textLink}>
-					{ACTION_LABELS.openDashboard}
-					<ExternalLinkIcon size={14} aria-hidden="true" /><span class="sr-only"
-						>(opens external site)</span
+		{#if actions}<div
+				data-testid="gateway-error-actions"
+				class="flex flex-wrap items-center gap-2 sm:gap-4"
+			>
+				{#if error.kind === 'InvalidKey'}
+					{@render checkKeyLink()}
+					{@render useSampleButton()}
+				{:else if error.kind === 'RestrictedKey'}
+					{@render checkKeyLink()}
+					<a href="https://app.rentcast.io/app/api" rel="external" class={textLink}>
+						{ACTION_LABELS.openDashboard}
+						<ExternalLinkIcon size={14} aria-hidden="true" /><span class="sr-only"
+							>(opens external site)</span
+						>
+					</a>
+				{:else if error.kind === 'RateLimited' || error.kind === 'NetworkError'}
+					{@render tryAgainButton()}
+				{:else if error.kind === 'BudgetCapReached'}
+					<Button variant="outline" onclick={() => onContinuePastCap?.()}
+						>{ACTION_LABELS.continuePastCap}</Button
 					>
-				</a>
-			{:else if error.kind === 'RateLimited' || error.kind === 'NetworkError'}
-				{@render tryAgainButton()}
-			{:else if error.kind === 'BudgetCapReached'}
-				<Button variant="outline" onclick={() => onContinuePastCap?.()}
-					>{ACTION_LABELS.continuePastCap}</Button
-				>
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-				<a href={`${resolve('/settings/')}#rentcast-usage`} class={textLink}
-					>{ACTION_LABELS.changeCap}</a
-				>
-			{:else if error.kind === 'NoResults'}
-				<Button variant="outline" onclick={() => onEditSearch?.()}
-					>{ACTION_LABELS.editSearch}</Button
-				>
-			{:else}
-				{@render useSampleButton()}
-			{/if}
-		</div>
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
+					<a href={`${resolve('/settings/')}#rentcast-usage`} class={textLink}
+						>{ACTION_LABELS.changeCap}</a
+					>
+				{:else if error.kind === 'NoResults'}
+					<Button variant="outline" onclick={() => onEditSearch?.()}
+						>{ACTION_LABELS.editSearch}</Button
+					>
+				{:else}
+					{@render useSampleButton()}
+				{/if}
+			</div>{/if}
 	</div>
 </section>

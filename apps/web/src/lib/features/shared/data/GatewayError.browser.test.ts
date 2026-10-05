@@ -246,3 +246,19 @@ describe('GatewayError rate-limit countdown', () => {
 		expect(onTryAgain).toHaveBeenCalledOnce();
 	});
 });
+
+describe('GatewayError overrides', () => {
+	test('a body override replaces the body and its announcement; actions={false} hides the row', async () => {
+		const body = 'RentCast has no rent data for 74201 yet.';
+		const { container } = await render(GatewayError, {
+			props: { error: err({ kind: 'NoResults' }), body, actions: false }
+		});
+		expect(container.querySelector('[data-testid="gateway-error-body"]')!.textContent!.trim()).toBe(
+			body
+		);
+		expect(container.querySelector('[data-testid="gateway-error-actions"]')).toBeNull();
+		expect(container.querySelector('button')).toBeNull();
+		expect(vi.mocked(announce)).toHaveBeenCalledWith(`No results for this search. ${body}`);
+		expect(await axeViolations(container)).toEqual([]);
+	});
+});

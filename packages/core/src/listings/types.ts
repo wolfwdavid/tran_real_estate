@@ -122,6 +122,8 @@ export interface MarketSide {
 	byBedrooms: MarketBreakdown[];
 	byPropertyType: MarketBreakdown[];
 	history: MarketHistoryPoint[];
+	/** When RentCast last updated these stats (ISO). Optional so hand-built values stay valid. */
+	lastUpdatedDate?: string | null;
 }
 
 export interface MarketStats {

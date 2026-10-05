@@ -1,22 +1,37 @@
 <script lang="ts">
-	// Stub: filled by 06-17 (they own this file). 06-14 mounts it on the listing detail with
-	// `row` and `provenance`; until 06-17 lands it renders the section heading only.
+	// 06-UI-SPEC "FairRentCheck" (RENT-06): how the asking rent compares, in two tiers. Tier 1 reads
+	// the ZIP median (0 calls when the ZIP's market stats are cached, always 0 in sample mode). The
+	// copy is a comparison only; it never judges the price.
 	import type { Listing } from '@tran/core/listings';
-	import type { Provenance } from '$lib/data';
+	import { getDataRuntime, type Provenance } from '$lib/data';
+	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import ZipMedianTier from './ZipMedianTier.svelte';
 
 	let { row, provenance }: { row: Listing; provenance: Provenance } = $props();
+
+	const runtime = getDataRuntime();
+	/** Both tiers read fixtures in sample mode, so the card carries the Sample chip in its header. */
+	const sample = $derived(runtime.mode?.source !== 'rentcast');
+	const SAMPLE = { source: 'sample', fetchedAt: 0, stale: false } as const;
 </script>
 
 <section
-	class="grid gap-4 rounded-lg border border-border bg-card p-4 sm:p-6"
+	class="grid gap-6 rounded-lg border border-border bg-card p-4 sm:p-6"
 	aria-labelledby="fair-rent-heading"
 	data-fair-rent={row.id}
 	data-fair-rent-source={provenance.source}
 >
-	<h2
-		id="fair-rent-heading"
-		class="font-display text-heading font-semibold text-balance text-foreground"
-	>
-		How this rent compares
-	</h2>
+	<div class="flex flex-wrap items-center gap-2">
+		<h2
+			id="fair-rent-heading"
+			class="font-display text-heading font-semibold text-balance text-foreground"
+		>
+			How this rent compares
+		</h2>
+		{#if sample}
+			<ProvenanceChip provenance={SAMPLE} now={0} />
+		{/if}
+	</div>
+
+	<ZipMedianTier {row} />
 </section>
