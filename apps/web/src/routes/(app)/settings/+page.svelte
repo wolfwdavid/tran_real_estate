@@ -94,6 +94,7 @@
 </svelte:head>
 
 <div
+	data-settings-page
 	data-hydrated={ctx.ready ? 'true' : undefined}
 	class="mx-auto max-w-page px-6 py-12 md:px-8 md:py-16"
 >
