@@ -38,6 +38,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+	vi.restoreAllMocks();
 	db.close();
 	_resetBackupRegistry();
 });
@@ -160,7 +161,9 @@ describe('exportBackup', () => {
 	});
 
 	it('unexpected read error -> export-failed (message is the code only)', async () => {
-		vi.spyOn(db.prefs, 'toArray').mockRejectedValueOnce(new Error('disk on fire'));
+		vi.spyOn(db, 'table').mockImplementation(() => {
+			throw new Error('disk on fire');
+		});
 		const download = vi.fn();
 		await expectCode(exportBackup(db, noSecrets, { now: NOW, download }), 'export-failed');
 		expect(download).not.toHaveBeenCalled();
