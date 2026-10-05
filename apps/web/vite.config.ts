@@ -15,6 +15,9 @@ export default defineConfig({
 	resolve: isVitest
 		? { alias: { $lib: fileURLToPath(new URL('./src/lib', import.meta.url)) } }
 		: undefined,
+	// UI-SPEC: no data: URIs for fonts or SVG; every asset ships as a hashed same-origin file.
+	build: { assetsInlineLimit: 0 },
+	define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
 	test: {
 		name: 'web',
 		environment: 'node',
