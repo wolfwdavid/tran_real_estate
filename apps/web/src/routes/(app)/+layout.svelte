@@ -1,17 +1,12 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import SiteHeader from '$lib/components/layout/SiteHeader.svelte';
+	import SiteFooter from '$lib/components/layout/SiteFooter.svelte';
 
 	let { children } = $props();
 </script>
 
-<nav aria-label="Portals">
-	<ul>
-		<li><a href={resolve('/')}>Home</a></li>
-		<li><a href={resolve('/renter/')}>Renter</a></li>
-		<li><a href={resolve('/investor/')}>Investor</a></li>
-		<li><a href={resolve('/agent/')}>Agent</a></li>
-		<li><a href={resolve('/settings/')}>Settings</a></li>
-	</ul>
-</nav>
-
-{@render children()}
+<SiteHeader showSettings={true} />
+<main id="main-content" tabindex="-1">
+	{@render children()}
+</main>
+<SiteFooter />

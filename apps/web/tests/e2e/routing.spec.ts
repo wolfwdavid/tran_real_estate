@@ -42,16 +42,28 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 		await page.goto(route);
 		// Prerendered hrefs are base-relative (./renter/, ../investor/), so resolve them against the
 		// page URL before asserting. Fragment links (the skip link) are same-page anchors, not routes.
-		const hrefs = await page
-			.locator('a:not([href^="#"])')
-			.evaluateAll((anchors) => anchors.map((a) => a.getAttribute('href') ?? ''));
+		const links = await page.locator('a:not([href^="#"])').evaluateAll((anchors) =>
+			anchors.map((a) => ({
+				href: a.getAttribute('href') ?? '',
+				target: a.getAttribute('target')
+			}))
+		);
 		// The print surface deliberately carries no navigation (only the skip link), so the
 		// "at least one link" guard applies to every other route.
 		if (route !== 'print/') {
-			expect(hrefs.length, `links on ${JSON.stringify(route)}`).toBeGreaterThan(0);
+			expect(links.length, `links on ${JSON.stringify(route)}`).toBeGreaterThan(0);
 		}
-		for (const href of hrefs) {
-			const { pathname } = new URL(href, page.url());
+		const origin = new URL(page.url()).origin;
+		for (const { href, target } of links) {
+			const url = new URL(href, page.url());
+			// Cross-origin links (HUD, data providers on the legal pages) are not routes: they must be
+			// https and open in the same tab, then skip the base-path assertions.
+			if (url.origin !== origin) {
+				expect(url.protocol, `${href} on ${JSON.stringify(route)}`).toBe('https:');
+				expect(target, `${href} on ${JSON.stringify(route)} target`).toBeNull();
+				continue;
+			}
+			const { pathname } = url;
 			expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(/\/$/);
 			if (testInfo.project.name === 'sub') {
 				expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(
