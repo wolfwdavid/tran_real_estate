@@ -78,7 +78,8 @@
 			void requestPersistence();
 			busy = true;
 			try {
-				await getShortlistRepo().add(row, provenance);
+				// The repo structuredClones the row: hand it a plain snapshot, never a $state proxy.
+				await getShortlistRepo().add($state.snapshot(row), $state.snapshot(provenance));
 				announce(`Saved ${streetLine} to your shortlist.`);
 			} finally {
 				busy = false;

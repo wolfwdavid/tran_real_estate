@@ -7,6 +7,7 @@ import { render } from 'vitest-browser-svelte';
 import { axeViolations } from '$lib/testing/axe';
 import { getShortlistRepo } from '../storage/shortlist-repo';
 import ShortlistToggle from './ShortlistToggle.svelte';
+import ProxiedToggle from './testing/ProxiedToggle.svelte';
 
 const PROV = { source: 'sample' as const, fetchedAt: Date.parse('2026-10-01T00:00:00.000Z') };
 const STREET = '12 Fictional Ln';
@@ -96,5 +97,18 @@ describe('ShortlistToggle (card)', () => {
 		await expect.element(saved).toHaveTextContent('Saved');
 		expect(page.getByRole('link').query()).toBeNull();
 		expect(await axeViolations(container)).toEqual([]);
+	});
+});
+
+describe('ShortlistToggle with a $state row', () => {
+	it('saves a deeply proxied row (the listing page holds its row in $state)', async () => {
+		const id = `TOGGLE-${crypto.randomUUID()}`;
+		await render(ProxiedToggle, { props: { id, streetLine: STREET } });
+		await page.getByRole('button', { name: 'Save to shortlist' }).click();
+		await expect
+			.element(page.getByRole('button', { name: 'On your shortlist' }))
+			.toHaveAttribute('aria-pressed', 'true');
+		const item = await getShortlistRepo().getByListingId(id);
+		expect(item?.listing.history).toEqual([{ date: '2026-09-01', event: 'Listed', price: 1500 }]);
 	});
 });
