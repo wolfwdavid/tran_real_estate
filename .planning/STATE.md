@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-19-PLAN.md
-last_updated: "2026-10-05T11:43:22.404Z"
+stopped_at: Completed 04-18-PLAN.md
+last_updated: "2026-10-05T11:44:31.617Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 57
+  completed_plans: 58
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 19 of 25 (waves 1-4 complete; next wave 5: 04-18, 04-19)
+Plan: 20 of 25 (waves 1-4 complete; next wave 5: 04-18, 04-19)
 
 ## Performance Metrics
 
@@ -103,6 +103,7 @@ Plan: 19 of 25 (waves 1-4 complete; next wave 5: 04-18, 04-19)
 | Phase 04 P17 | 12min | 2 tasks | 5 files |
 | Phase 04 P20 | 9min | 3 tasks | 10 files |
 | Phase 04 P19 | 20min | 2 tasks | 4 files |
+| Phase 04 P18 | 20min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -225,6 +226,9 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-20: KeyTestResult charset/length format errors share one [D] 'doesn't look like a complete RentCast key' sentence; [D] singular forms for due-search/alert copy
 - [Phase 04]: 04-20: DueSearchesDialog owns open as bindable, busy = pending OR caller progress, focus returns to <main>; DataStatus type exported from DataStatusBar module script
 - [Phase 04]: 04-19: scheduler claim-then-run in rw tx; SchedulerResult.failed added; skipped 'cap' only when cap reached (matches DataStatusBar skippedForCap)
+- [Phase 04]: 04-18: one over-cap prompt at a time; a second over-cap request while a prompt is open rejects with its original BudgetCapReached
+- [Phase 04]: 04-18: requestSpend checks the reactive guard synchronously before any await, and every runtime-built gateway also gets the guard
+- [Phase 04]: 04-18: $lib/data index.ts is the explicit additive public port; runtime cleanup dismisses a parked cap prompt
 
 ### Pending Todos
 
@@ -247,7 +251,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T11:43:22.397Z
-Stopped at: Completed 04-19-PLAN.md
+Last session: 2026-10-05T11:44:31.611Z
+Stopped at: Completed 04-18-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
