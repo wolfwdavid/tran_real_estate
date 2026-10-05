@@ -44,6 +44,8 @@ jobs:
         run: node scripts/guard-real-data.mjs --all
       - name: Banned marketing/legal terms
         run: node scripts/banned-terms.mjs
+      - name: shadcn class guard
+        run: node scripts/ui-class-guard.mjs
 
   quality:
     name: check, lint, unit, build, csp, e2e+axe (${{ matrix.target }})

@@ -13,6 +13,7 @@
 		"check": "pnpm -r --if-present check",
 		"lint": "prettier --check . && eslint .",
 		"banned": "node scripts/banned-terms.mjs",
+		"ui:guard": "node scripts/ui-class-guard.mjs",
 		"format": "prettier --write .",
 		"test:unit": "vitest run",
 		"build:root": "node scripts/build-web.mjs root",
@@ -23,7 +24,7 @@
 		"secrets:canary": "node scripts/gitleaks-canary.mjs",
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
-		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
+		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",
