@@ -90,9 +90,7 @@ describe('geminiProvider request', () => {
 	it('adds no thinkingConfig for a model without extras', async () => {
 		const { fetchImpl, calls } = fakeSseFetch(DONE_FRAMES);
 		const p = geminiProvider({ fetch: fetchImpl, getKey: async () => 'k' });
-		await collect(
-			p.stream(req({ model: 'gemini-3.5-flash-lite' }), new AbortController().signal)
-		);
+		await collect(p.stream(req({ model: 'gemini-3.5-flash-lite' }), new AbortController().signal));
 		const body = JSON.parse(String(calls[0].init.body)) as { generationConfig: unknown };
 		expect(body.generationConfig).toEqual({ maxOutputTokens: 400 });
 		expectNoKeyInUrls(calls);
@@ -141,10 +139,7 @@ describe('geminiProvider consent guard', () => {
 		const { fetchImpl, calls } = fakeSseFetch(DONE_FRAMES);
 		const p = geminiProvider({ fetch: fetchImpl, getKey: async () => 'k' });
 		await collect(
-			p.stream(
-				req({ containsClientData: true, clientDataAck: true }),
-				new AbortController().signal
-			)
+			p.stream(req({ containsClientData: true, clientDataAck: true }), new AbortController().signal)
 		);
 		expect(calls.length).toBe(1);
 		expectNoKeyInUrls(calls);
