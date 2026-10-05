@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-13-PLAN.md
-last_updated: "2026-10-05T23:35:53.641Z"
+stopped_at: Completed 06-14-PLAN.md
+last_updated: "2026-10-05T23:41:09.641Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 92
+  completed_plans: 93
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 13 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
+Plan: 14 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
 
 ## Performance Metrics
 
@@ -138,6 +138,7 @@ Plan: 13 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
 | Phase 06 P12 | 35min | 2 tasks | 11 files |
 | Phase 06 P11 | 40min | 2 tasks | 13 files |
 | Phase 06 P13 | 40min | 2 tasks | 14 files |
+| Phase 06 P14 | 28min | 2 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -326,6 +327,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-11: shortlist re-add restores the tombstone (same id/createdAt, deletedAt removed, fresh saved history)
 - [Phase 06]: 06-13: renter search URL mirror uses shallow replaceState gated on restore; URL carries the committed location, never keystrokes
 - [Phase 06]: 06-13: createRenterSearch spends only via runtime.requestSpend in search/narrow/refresh; restore and mode switch re-peek at 0 calls
+- [Phase 06]: 06-14: listing detail resolves shortlist -> peekListingById -> not-found at 0 calls; only 'Look it up again (1 call)' spends, via runtime.requestSpend
+- [Phase 06]: 06-14: core Listing gains optional addressLine2/hoaFee (mapper sets them); pass $state.snapshot() to Dexie repo writes
 
 ### Pending Todos
 
@@ -348,7 +351,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T23:35:53.635Z
-Stopped at: Completed 06-13-PLAN.md
+Last session: 2026-10-05T23:41:09.634Z
+Stopped at: Completed 06-14-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
