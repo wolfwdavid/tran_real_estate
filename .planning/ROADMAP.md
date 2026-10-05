@@ -109,7 +109,7 @@ Plans:
 - [x] 02-05-PLAN.md — Shared E2E route list, routing/CSP/axe on all routes, drift guard (wave 4)
 - [ ] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
 - [ ] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
-- [ ] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
+- [x] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
 - [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
 - [ ] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
 - [ ] 02-11-PLAN.md — Marketing content E2E + axe at 375px, 404 and menu open (wave 5)
