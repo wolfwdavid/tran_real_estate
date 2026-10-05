@@ -110,7 +110,7 @@ Plans:
 - [ ] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
 - [ ] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
 - [ ] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
-- [ ] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
+- [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
 - [ ] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
 - [ ] 02-11-PLAN.md — Marketing content E2E + axe at 375px, 404 and menu open (wave 5)
 - [ ] 02-12-PLAN.md — Full verify, validation map walk, README + requirements (wave 6)
@@ -156,7 +156,24 @@ Plans:
   2. AI-generated housing copy containing a problem phrase (e.g., "perfect for young professionals", "no kids") is flagged inline with an explanation and a compliant alternative before the user can copy or send it. The checker's test suite of 30+ known-bad and 30+ neutral phrases passes.
   3. User with a free-tier Gemini key is warned before any client or lead data is sent and can cancel.
   4. The generation panel offers only copy, open in the user's own email client, and mark as sent. No code path sends AI output automatically.
-**Plans**: TBD
+**Plans**: 16 plans in 7 waves
+Plans:
+- [ ] 05-01-PLAN.md — Core AI primitives: SSE parser (every-offset fuzz), error classifier, date-effective cost; web depends on @tran/core (wave 1)
+- [ ] 05-02-PLAN.md — Fair Housing engine: types, p`` helper + ReDoS guard, Unicode matcher, allow-list, overlap merge, applyAlternative (wave 1)
+- [ ] 05-03-PLAN.md — PII minimization: redactPii + restorePii (wave 1)
+- [ ] 05-04-PLAN.md — Fair Housing lexicon (41 entries) + 42 bad / 40 neutral suite, leave-one-out + planted mutation, ReDoS budget (wave 2)
+- [ ] 05-05-PLAN.md — LlmProvider port, models.ts registry, HTTP/SSE helpers, fake SSE, Test connection + TypeError disambiguation (wave 2)
+- [ ] 05-06-PLAN.md — Panel controller (gating incl. postChecks/per-exit disable, tokens/footer payloads), exits, Gemini gate, AI copy module (wave 2)
+- [ ] 05-07-PLAN.md — Anthropic + OpenAI streaming adapters and probes (wave 3)
+- [ ] 05-08-PLAN.md — Gemini + OpenRouter streaming adapters and probes (wave 3)
+- [ ] 05-09-PLAN.md — Prompt registry (guardrail, redaction, inputHash), runGeneration runner, fixture provider (wave 3)
+- [ ] 05-12-PLAN.md — popover/textarea copy-ins, FairHousingText, FindingPopover, FindingsSummary, contrast pairs (wave 3)
+- [ ] 05-10-PLAN.md — No-auto-send enforcement: ESLint lib/ai boundary + TS import-graph test (wave 4)
+- [ ] 05-11-PLAN.md — Phase 3 integration: aiArtifacts table + backup, AI prefs, provider selection, testKey hooks (wave 4)
+- [ ] 05-13-PLAN.md — GenerationPanel + PanelState, GenerationError, GeminiDataDialog, ProviderChip; exactly-three-exits SSR test (wave 5)
+- [ ] 05-14-PLAN.md — Draft history, provider picker, sample toggle, model override + Test connection in key cards (wave 5)
+- [ ] 05-15-PLAN.md — Settings "AI drafting" section (position 3) + E2E spike and core flows (wave 6)
+- [ ] 05-16-PLAN.md — Guardrail E2E, axe across all states, HUMAN-UAT, VALIDATION, pnpm verify (wave 7)
 **Research flag**: YES. Needs `/gsd:research-phase`: current model IDs and a models-list validation path, streaming event shapes per provider, Gemini key types and browser viability, models-endpoint CORS, and legal sourcing of Fair Housing phrase lists (Achtenberg memo + state lists).
 **UI hint**: yes (generation panel, Fair Housing flag UI, provider picker). Use `/gsd:ui-phase 5`.
 
