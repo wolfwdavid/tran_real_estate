@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-10-05T10:52:45.227Z"
+stopped_at: Completed 04-10-PLAN.md
+last_updated: "2026-10-05T11:01:51.729Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 45
+  completed_plans: 46
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 8 of 25
+Plan: 9 of 25
 
 ## Performance Metrics
 
@@ -91,6 +91,7 @@ Plan: 8 of 25
 | Phase 04 P04 | 6min | 2 tasks | 9 files |
 | Phase 04 P06 | 7min | 3 tasks | 15 files |
 | Phase 04 P01 | 25min | 2 tasks | 15 files |
+| Phase 04 P10 | 5min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -194,6 +195,8 @@ Recent decisions affecting current work:
 - [Phase 04]: getRentCastKey is a sync mirror over the async Phase 3 vault (bindRentCastVault/connectRentCastKey)
 - [Phase 04]: Backed-up Phase 4 rows are Syncable (backup validates SyncableSchema): DATA_PREF_IDS fixed uuids, snapshot id === searchId, ISO updatedAt
 - [Phase 04]: Phase 4 backup tables live in backup-registry DEFAULT_TABLES; apiCache in BACKUP_EXCLUDED_TABLES; lib/storage may import $lib/data/tables only
+- [Phase 04]: RentCast schemas drop+count bad rows; SchemaMismatch only on wrong top-level shape or all rows bad; issues are path:code only
+- [Phase 04]: RentCast mappers are total over unknown input (num/str helpers); unknown propertyType/status -> Other
 
 ### Pending Todos
 
@@ -216,7 +219,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T10:52:45.221Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-10-05T11:01:51.723Z
+Stopped at: Completed 04-10-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
