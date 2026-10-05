@@ -29,7 +29,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { hostFor } from '../models';
-	import type { ArtifactRepo } from '../storage/artifacts';
+	import type { AiArtifact, ArtifactRepo } from '../storage/artifacts';
 	import { sampleNotice } from './ai-copy';
 	import FairHousingText from './FairHousingText.svelte';
 	import FindingsSummary from './FindingsSummary.svelte';
@@ -58,6 +58,7 @@
 		canExit = $bindable(false),
 		blocked = $bindable(false),
 		findings = $bindable([]),
+		savedId = $bindable(null),
 		/* eslint-enable no-useless-assignment */
 		state: provided
 	}: {
@@ -77,6 +78,8 @@
 		canExit?: boolean;
 		blocked?: boolean;
 		findings?: Finding[];
+		/** Read-only: the id of the stored draft shown in the panel (changes after each save/open). */
+		savedId?: string | null;
 		state?: PanelState;
 	} = $props();
 
@@ -160,7 +163,23 @@
 		canExit = st.gate.canExit;
 		blocked = st.gate.blocked;
 		findings = st.findings;
+		savedId = st.artifactId;
 	});
+
+	/**
+	 * Draft history "Open" (05-UI-SPEC focus table): loads the stored draft into this panel and
+	 * moves focus to the output box. Called by the host through bind:this.
+	 */
+	export async function openArtifact(artifact: AiArtifact): Promise<void> {
+		st.open(artifact);
+		await tick();
+		outputEl?.focus();
+	}
+
+	/** Re-reads the provider selection (chip + "What will be sent") after a Settings change. */
+	export function refreshProvider(): void {
+		if (!st.running) void st.preview();
+	}
 
 	const titleId = `${id}-title`;
 	const findingsTitleId = `${id}-findings-title`;

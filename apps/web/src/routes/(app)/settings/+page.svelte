@@ -3,6 +3,7 @@
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import { enableRentCastKeyTest, getDataRuntime } from '$lib/data';
 	import RentCastUsageSection from '$lib/features/shared/data/RentCastUsageSection.svelte';
+	import AiDraftingSection from '$lib/ai/ui/AiDraftingSection.svelte';
 	import { availableSections } from '$lib/features/shared/settings/sections';
 	import {
 		createSettingsContext,
@@ -20,11 +21,12 @@
 	// and Storage API code load only after hydration, through dynamic import() in onMount, so they
 	// never enter the prerender or any other route's entry chunk.
 
-	// Phase 3 sections plus Phase 4's RentCast usage. Later phases add their slot's component here
+	// Phase 3 sections plus Phase 4's RentCast usage and Phase 5's AI drafting. Later phases add their slot's component here
 	// and flip `available` in sections.ts; the registry order decides placement.
 	const SECTION_COMPONENTS: Record<string, Component> = {
 		'api-keys': ApiKeysSection,
 		'rentcast-usage': RentCastUsageSection,
+		'ai-drafting': AiDraftingSection,
 		'key-security': KeySecuritySection,
 		backup: BackupSection,
 		storage: StorageSection,

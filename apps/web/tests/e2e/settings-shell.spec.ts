@@ -3,11 +3,13 @@ import { announcer, openSettings } from './helpers/settings';
 
 // The Settings shell contract (03-10): fixed section order with reserved slots, static copy in the
 // prerendered HTML, lazy hydration, one live region, the CSP probe, blocked storage, and cross-tab
-// announcements. Phase 4 (04-23) ships slot 2, "RentCast usage".
+// announcements. Phase 4 (04-23) ships slot 2, "RentCast usage"; Phase 5 (05-15) ships slot 3,
+// "AI drafting".
 
 const SECTIONS = [
 	['api-keys', 'API keys'],
 	['rentcast-usage', 'RentCast usage'],
+	['ai-drafting', 'AI drafting'],
 	['key-security', 'Key security'],
 	['backup', 'Backup and restore'],
 	['storage', 'Storage'],
@@ -29,10 +31,8 @@ test('prerendered HTML has the static shell in order and no reserved slots', asy
 		expect(at, `id="${id}" after the previous section`).toBeGreaterThan(last);
 		last = at;
 	}
-	// Reserved for Phases 5 and 10: not rendered yet.
-	for (const id of ['ai-drafting', 'getting-started']) {
-		expect(html).not.toContain(`id="${id}"`);
-	}
+	// Reserved for Phase 10: not rendered yet.
+	expect(html).not.toContain('id="getting-started"');
 });
 
 test('hydrated page shows the heading, section nav and h2s in registry order', async ({ page }) => {

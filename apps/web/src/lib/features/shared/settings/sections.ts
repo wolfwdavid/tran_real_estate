@@ -13,7 +13,7 @@ export interface SettingsSection {
 export const SETTINGS_SECTIONS: readonly SettingsSection[] = Object.freeze([
 	{ id: 'api-keys', label: 'API keys', owner: 3, available: true },
 	{ id: 'rentcast-usage', label: 'RentCast usage', owner: 4, available: true },
-	{ id: 'ai-drafting', label: 'AI drafting', owner: 5, available: false },
+	{ id: 'ai-drafting', label: 'AI drafting', owner: 5, available: true },
 	{ id: 'key-security', label: 'Key security', owner: 3, available: true },
 	{ id: 'backup', label: 'Backup and restore', owner: 3, available: true },
 	{ id: 'storage', label: 'Storage', owner: 3, available: true },
