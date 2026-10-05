@@ -581,3 +581,122 @@ export async function relay(): Promise<unknown> {
 		expect(ruleIds(messages)).toEqual([]);
 	});
 });
+
+// Phase 6: the map libraries live in ONE lazily loaded folder, features/shared never reaches into a
+// portal, and the affordability calculator (reused on a Phase 10 marketing page) stays free of
+// storage, data and AI.
+const svelteImports = (...specs: string[]) =>
+	`<script lang="ts">\n${specs.map((s, i) => `\timport * as m${i} from '${s}';`).join('\n')}\n\tconst all = [${specs.map((_, i) => `m${i}`).join(', ')}];\n</script>\n\n<p>{all.length}</p>\n`;
+
+describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)', () => {
+	const MAP = `${WEB}/lib/features/shared/listings/map/ListingMap.svelte`;
+	const AFFORD = `${WEB}/lib/features/shared/affordability/AffordabilityCalculator.svelte`;
+
+	test.each([
+		[`${WEB}/routes/(marketing)/+page.svelte`, 'leaflet'],
+		[`${WEB}/lib/features/renter/search/X.svelte`, 'supercluster'],
+		[`${WEB}/routes/(app)/renter/+page.svelte`, 'leaflet/dist/leaflet.css'],
+		[`${WEB}/lib/features/shared/listings/PriceHistory.svelte`, 'leaflet'],
+		[`${WEB}/lib/storage/__lintfix__/x.ts`, 'leaflet'],
+		[`${WEB}/lib/data/__lintfix__/x.ts`, 'supercluster'],
+		[`${WEB}/lib/ai/__lintfix__/x.ts`, 'leaflet'],
+		[`${WEB}/lib/components/__lintfix__/x.ts`, 'supercluster/dist/index.js']
+	])('%s importing %s is rejected', async (file, spec) => {
+		const code = file.endsWith('.svelte') ? svelteImports(spec) : importModule(spec);
+		const messages = await lint(file, code);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('listings/map');
+	});
+
+	test('the map folder may import leaflet, its CSS and supercluster', async () => {
+		const messages = await lint(
+			MAP,
+			svelteImports('leaflet', 'leaflet/dist/leaflet.css', 'supercluster')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('the map folder still may not import a portal folder or data internals', async () => {
+		const messages = await lint(
+			MAP,
+			svelteImports('$lib/features/renter/x', '$lib/data/rentcast/client')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(2);
+	});
+
+	test('the affordability calculator may not import storage, data or AI', async () => {
+		const messages = await lint(
+			AFFORD,
+			svelteImports('$lib/storage/db', '$lib/data', '$lib/ai/runner')
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(3);
+		for (const e of errors) expect(e.message).toContain('marketing page');
+	});
+
+	test('the affordability calculator may import core math and UI primitives', async () => {
+		const messages = await lint(
+			AFFORD,
+			svelteImports('@tran/core/renter/affordability', '$lib/components/ui/slider')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test.each(['renter', 'investor', 'agent'])(
+		'the affordability calculator may not import features/%s',
+		async (p) => {
+			const messages = await lint(AFFORD, svelteImports(`$lib/features/${p}/x`));
+			expectNoParseErrors(messages);
+			expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
+		}
+	);
+
+	test.each(['renter', 'investor', 'agent'])(
+		'features/shared/listings may not import features/%s',
+		async (p) => {
+			const messages = await lint(
+				`${WEB}/lib/features/shared/listings/PriceHistory.svelte`,
+				svelteImports(`$lib/features/${p}/x`)
+			);
+			expectNoParseErrors(messages);
+			const errors = errorsFor(messages, 'no-restricted-imports');
+			expect(errors).toHaveLength(1);
+			expect(errors[0].message).toContain('Shared features must not import a portal folder.');
+		}
+	);
+
+	test('features/shared keeps the Phase 4 data-port boundary', async () => {
+		const messages = await lint(
+			`${WEB}/lib/features/shared/listings/x.ts`,
+			importModule('$lib/data/gateway')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
+		const ok = await lint(`${WEB}/lib/features/shared/listings/x.ts`, importModule('$lib/data'));
+		expect(errorsFor(ok, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('regression: portals keep their cross-portal ban alongside MAP_LIBS', async () => {
+		const messages = await lint(
+			`${WEB}/lib/features/renter/__lintfix__/x.ts`,
+			importModule('$lib/features/investor/x')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
+	});
+
+	test('regression: marketing keeps the storage ban alongside MAP_LIBS', async () => {
+		const messages = await lint(
+			`${WEB}/routes/(marketing)/+page.svelte`,
+			svelteImports('$lib/storage/db', 'leaflet')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(2);
+	});
+});

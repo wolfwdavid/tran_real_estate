@@ -50,6 +50,19 @@ const forbid = (mods, message) => ({
 	group: mods.flatMap((m) => [`$lib/${m}`, `$lib/${m}/**`, `**/lib/${m}`, `**/lib/${m}/**`]),
 	message
 });
+// Phase 6: the map libraries are lazy-loaded from ONE folder (the Map tab). Merged into EVERY
+// no-restricted-imports entry below except the map folder's own override, which comes last.
+const MAP_LIBS = {
+	group: ['leaflet', 'leaflet/**', 'supercluster', 'supercluster/**'],
+	message:
+		'Leaflet and supercluster load lazily, only inside lib/features/shared/listings/map (Map tab).'
+};
+const PORTAL_FOLDERS = PORTALS.map((p) => `features/${p}`);
+const SHARED_NO_PORTALS = forbid(
+	PORTAL_FOLDERS,
+	'Shared features must not import a portal folder.'
+);
+const restricted = (...patterns) => ['error', { patterns }];
 
 export default defineConfig(
 	{ ignores: ['**/build/', '**/build-sub/', '**/.svelte-kit/', '**/test-results/', '.planning/'] },
@@ -93,10 +106,16 @@ export default defineConfig(
 		rules: { 'no-console': 'error' }
 	},
 	{
+		// Phase 6 catch-all: no file may import the map libraries. Every more specific entry below
+		// repeats MAP_LIBS (flat config replaces options); only the map folder override drops it.
+		files: [`${WEB}/**/*.{ts,js,svelte}`],
+		rules: { 'no-restricted-imports': restricted(MAP_LIBS) }
+	},
+	{
 		// Catch-all data-port boundary. Marketing forbids all of data below; portals re-merge DATA_INTERNALS.
 		files: [`${WEB}/**/*.{ts,js,svelte}`],
 		ignores: [`${WEB}/lib/data/**`],
-		rules: { 'no-restricted-imports': ['error', { patterns: [DATA_INTERNALS] }] }
+		rules: { 'no-restricted-imports': restricted(DATA_INTERNALS, MAP_LIBS) }
 	},
 	{
 		// Phase 3 storage hosts the Phase 4 tables (TranDb version block, backup registry), so these
@@ -110,7 +129,8 @@ export default defineConfig(
 						{
 							...DATA_INTERNALS,
 							group: [...DATA_INTERNALS.group, '!$lib/data/tables', '!**/lib/data/tables']
-						}
+						},
+						MAP_LIBS
 					]
 				}
 			]
@@ -126,7 +146,8 @@ export default defineConfig(
 						forbid(
 							['storage', 'ai', 'data'],
 							'Marketing routes must not import storage, AI, or data modules.'
-						)
+						),
+						MAP_LIBS
 					]
 				}
 			]
@@ -143,12 +164,31 @@ export default defineConfig(
 							PORTALS.filter((o) => o !== p).map((o) => `features/${o}`),
 							`The ${p} portal may import only features/${p} and features/shared.`
 						),
-						DATA_INTERNALS
+						DATA_INTERNALS,
+						MAP_LIBS
 					]
 				}
 			]
 		}
 	})),
+	{
+		// features/shared is reused by every portal (and Phase 10 marketing): never a portal folder.
+		files: [`${WEB}/lib/features/shared/**`],
+		rules: { 'no-restricted-imports': restricted(SHARED_NO_PORTALS, DATA_INTERNALS, MAP_LIBS) }
+	},
+	{
+		files: [`${WEB}/lib/features/shared/affordability/**`],
+		rules: {
+			'no-restricted-imports': restricted(
+				forbid(
+					['storage', 'data', 'ai', ...PORTAL_FOLDERS],
+					'The affordability calculator is reused on a marketing page: core and UI primitives only.'
+				),
+				DATA_INTERNALS,
+				MAP_LIBS
+			)
+		}
+	},
 	{
 		// AI-04 "no auto-send" boundary. Deliberately uses rule names DISTINCT from
 		// no-restricted-syntax, which the providers folder turns off, so this block also binds
@@ -160,6 +200,7 @@ export default defineConfig(
 				{
 					patterns: [
 						DATA_INTERNALS,
+						MAP_LIBS,
 						{
 							group: [
 								...forbid(['leads'], '').group,
@@ -190,6 +231,12 @@ export default defineConfig(
 				{ object: 'location', property: 'replace', message: NO_NAV }
 			]
 		}
+	},
+	{
+		// The ONE folder that may import leaflet/supercluster. Placed after every other
+		// no-restricted-imports entry; it re-states the shared restrictions WITHOUT MAP_LIBS.
+		files: [`${WEB}/lib/features/shared/listings/map/**`],
+		rules: { 'no-restricted-imports': restricted(SHARED_NO_PORTALS, DATA_INTERNALS) }
 	},
 	{
 		files: [`${WEB}/lib/security/sanitize-html.svelte`],
