@@ -9,3 +9,4 @@ export * from './sparkline.js';
 export * from './contact-links.js';
 export * from './listing-status.js';
 export * from './format.js';
+export * from './affordability.js';
