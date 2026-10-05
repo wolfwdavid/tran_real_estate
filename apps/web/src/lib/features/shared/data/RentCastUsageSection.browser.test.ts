@@ -1,7 +1,7 @@
 // The Settings "RentCast usage" section in real Chromium (DATA-02, DATA-03): the full meter, the
 // cap editor and the data source choice, wired to a real data runtime on its own IndexedDB
 // database with an injected clock, a fetch spy and a fake key port. Never fake timers.
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { announce } from '$lib/components/a11y/announcer.svelte';
@@ -55,6 +55,15 @@ const keys = (state: KeyState) => ({
 	get: () => (state === 'available' ? TEST_KEY : null),
 	state: () => state,
 	onChange: () => () => undefined
+});
+
+// Component tests load no CSS, so the unstyled cap input and Save cap button stack 21px tall and
+// touching, which axe's target-size rule flags. Restore the heights the real classes give them
+// (as CapEditor.browser.test.ts does); the E2E axe runs cover the full stylesheet.
+beforeAll(() => {
+	const style = document.createElement('style');
+	style.textContent = '[data-slot="button"], [data-slot="input"] { height: 48px; }';
+	document.head.appendChild(style);
 });
 
 const teardown: (() => unknown)[] = [];
@@ -166,5 +175,30 @@ describe('RentCastUsageSection', () => {
 		await expect.poll(() => runtime.mode?.reason).toBe('chosen');
 		await expect.element(page.getByRole('radio', { name: 'Sample data' })).toBeChecked();
 		await expect.poll(() => vi.mocked(announce).mock.calls.length).toBeGreaterThan(0);
+	});
+
+	test('a cap saved in another tab updates the meter and the cap input', async () => {
+		const db = createDataDb({ name: `usage-${crypto.randomUUID()}` });
+		teardown.push(() => db.delete());
+		const handlers: ((e: { data: { type: 'cap-changed' } }) => void)[] = [];
+		const channel = {
+			postMessage: () => undefined,
+			addEventListener: (_t: 'message', cb: (typeof handlers)[number]) => void handlers.push(cb),
+			close: () => undefined
+		};
+		const base = { db, clock, fetch: fakeFetch, keys: keys('available') };
+		const runtime = createDataRuntime({ ...base, channel });
+		teardown.push(await runtime.start());
+		await mount(runtime);
+		await expect.element(page.getByLabelText('Monthly call cap')).toHaveValue('40');
+
+		const other = createDataRuntime({ ...base, channel: null });
+		const stop = await other.start();
+		await other.saveCap(30);
+		stop();
+		for (const h of handlers) h({ data: { type: 'cap-changed' } });
+
+		await expect.element(page.getByText(/^Cap: 30 · 30 left before your cap/)).toBeVisible();
+		await expect.element(page.getByLabelText('Monthly call cap')).toHaveValue('30');
 	});
 });
