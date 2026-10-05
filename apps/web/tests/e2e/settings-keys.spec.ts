@@ -28,7 +28,8 @@ test('five cards in fixed order with hosts, notes and same-tab Get a key links',
 	for (const p of PROVIDERS) {
 		const c = card(page, p.id);
 		await expect(c).toHaveAttribute('aria-labelledby', `key-${p.id}-name`);
-		await expect(c.locator('code')).toHaveText(p.host);
+		// The host is the first <code> in every card; AI cards add a second one for the model field.
+		await expect(c.locator('code').first()).toHaveText(p.host);
 		await expect(c).toContainText(
 			`Where this key goes: only from your browser, directly to ${p.host}.`
 		);
