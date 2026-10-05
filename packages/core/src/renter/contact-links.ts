@@ -63,5 +63,5 @@ export function outboundSearchLinks(fullAddress: string): { id: OutboundSearchId
 
 /** Shape check for a `?id=` listing id read from the URL before any lookup. */
 export function looksLikeListingId(s: string): boolean {
-	return typeof s === 'string' && /^[A-Za-z0-9][A-Za-z0-9,.\-]{2,199}$/.test(s);
+	return typeof s === 'string' && /^[A-Za-z0-9][A-Za-z0-9,.-]{2,199}$/.test(s);
 }
