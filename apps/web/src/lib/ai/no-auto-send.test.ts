@@ -75,7 +75,11 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 		const g = collectImportGraph(['/v/web/lib/ai/e.ts'], { io, ...V });
 		expect(g.external.sort()).toEqual(['bits-ui', 'svelte']);
 		expect(g.visited).toEqual(
-			expect.arrayContaining(['/v/core/src/ai/index.ts', '/v/core/src/ai/z.ts', '/v/core/src/index.ts'])
+			expect.arrayContaining([
+				'/v/core/src/ai/index.ts',
+				'/v/core/src/ai/z.ts',
+				'/v/core/src/index.ts'
+			])
 		);
 	});
 
