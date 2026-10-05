@@ -33,7 +33,11 @@ test('prerendered HTML marks the current portal', async ({ page }) => {
 	// `scope` narrows the raw HTML to one landmark. Without it the footer's own portal links
 	// (which mark the current page too) would mask a broken header switcher on renter/investor/
 	// agent: the mutation check in 02-10 caught the bug only on settings/ until this was scoped.
-	const anchors = async (route: string, scope: 'Portals' | 'footer' | 'all') => {
+	const anchors = async (
+		route: string,
+		scope: 'Portals' | 'footer' | 'all',
+		value: 'page' | 'true' = 'page'
+	) => {
 		const res = await page.request.get(route);
 		expect(res.status(), `status for ${JSON.stringify(route)}`).toBe(200);
 		let html = await res.text();
@@ -41,15 +45,17 @@ test('prerendered HTML marks the current portal', async ({ page }) => {
 			html = html.match(/<nav\b[^>]*aria-label="Portals"[\s\S]*?<\/nav>/)?.[0] ?? '';
 		if (scope === 'footer') html = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? '';
 		expect(scope === 'all' || html.length > 0, `${scope} found in ${route}`).toBe(true);
-		return html.match(/<a\b[^>]*aria-current="page"[^>]*>/g) ?? [];
+		return html.match(new RegExp(String.raw`<a\b[^>]*aria-current="${value}"[^>]*>`, 'g')) ?? [];
 	};
 	const marked = (tags: string[], route: string) =>
 		tags.some((t) => new RegExp(`href="[^"]*${route}"`).test(t));
 
-	// The header switcher marks each app page (the inline list and the menu panel both do).
+	// The header switcher marks each app page (the inline list and the menu panel both do). A
+	// portal sub-page (renter/shortlist/) marks its portal root as the current section instead.
 	for (const route of APP_ROUTES) {
-		const tags = await anchors(route, 'Portals');
-		expect(marked(tags, route), `Portals nav in raw ${route}: ${JSON.stringify(tags)}`).toBe(true);
+		const root = `${route.split('/')[0]}/`;
+		const tags = await anchors(route, 'Portals', route === root ? 'page' : 'true');
+		expect(marked(tags, root), `Portals nav in raw ${route}: ${JSON.stringify(tags)}`).toBe(true);
 	}
 	// The footer marks a legal page.
 	const legal = await anchors('legal/privacy/', 'footer');

@@ -27,7 +27,10 @@
 	const settings = { href: resolve('/settings/'), label: 'Settings', id: '/(app)/settings' };
 
 	// Compare route ids so aria-current is already present in the prerendered HTML under any base.
-	const current = (id: string) => (page.route.id === id ? 'page' : undefined);
+	// A portal's own sub-pages (e.g. /renter/shortlist/) mark it as the current section with
+	// aria-current="true": the link is not the current page, but it is where the visitor is.
+	const current = (id: string) =>
+		page.route.id === id ? 'page' : page.route.id?.startsWith(`${id}/`) ? 'true' : undefined;
 
 	onMount(() => (hydrated = true));
 	afterNavigate(() => (open = false));
@@ -61,7 +64,7 @@
 				<a
 					href={p.href}
 					aria-current={current(p.id)}
-					class="inline-flex min-h-11 items-center px-4 text-body underline-offset-[6px] hover:underline aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-2"
+					class="inline-flex min-h-11 items-center px-4 text-body underline-offset-[6px] hover:underline aria-[current]:font-semibold aria-[current]:underline aria-[current]:decoration-primary aria-[current]:decoration-2"
 					>{p.label}</a
 				>
 			</li>
@@ -72,7 +75,7 @@
 				<a
 					href={settings.href}
 					aria-current={current(settings.id)}
-					class="inline-flex min-h-11 items-center px-4 text-body text-muted-foreground underline-offset-[6px] hover:underline aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-2"
+					class="inline-flex min-h-11 items-center px-4 text-body text-muted-foreground underline-offset-[6px] hover:underline aria-[current]:font-semibold aria-[current]:underline aria-[current]:decoration-primary aria-[current]:decoration-2"
 					>{settings.label}</a
 				>
 			</li>
@@ -99,7 +102,7 @@
 				<a
 					href={p.href}
 					aria-current={current(p.id)}
-					class="flex min-h-12 items-center border-l-4 border-transparent px-4 text-body aria-[current=page]:border-primary aria-[current=page]:font-semibold"
+					class="flex min-h-12 items-center border-l-4 border-transparent px-4 text-body aria-[current]:border-primary aria-[current]:font-semibold"
 					>{p.label}</a
 				>
 			</li>
@@ -109,7 +112,7 @@
 				<a
 					href={settings.href}
 					aria-current={current(settings.id)}
-					class="flex min-h-12 items-center border-l-4 border-transparent px-4 text-body text-muted-foreground aria-[current=page]:border-primary aria-[current=page]:font-semibold"
+					class="flex min-h-12 items-center border-l-4 border-transparent px-4 text-body text-muted-foreground aria-[current]:border-primary aria-[current]:font-semibold"
 					>{settings.label}</a
 				>
 			</li>

@@ -18,7 +18,14 @@ export default {
 		// cache.addAll() in the service worker is all-or-nothing, and $service-worker `files`
 		// included /.nojekyll, which GitHub Pages never serves. Keep every dotfile out of the precache.
 		serviceWorker: { files: (filepath) => !/(^|[\\/])\./.test(filepath) },
-		prerender: { handleHttpError: 'fail', handleMissingId: 'fail', handleUnseenRoutes: 'fail' },
+		// /renter/listing/ is reached only through client-rendered links (?id= in onMount), so the
+		// crawler never sees it; list it explicitly so handleUnseenRoutes stays 'fail'.
+		prerender: {
+			entries: ['*', '/renter/listing/'],
+			handleHttpError: 'fail',
+			handleMissingId: 'fail',
+			handleUnseenRoutes: 'fail'
+		},
 		csp: {
 			mode: 'hash',
 			directives: {
@@ -26,6 +33,8 @@ export default {
 				'script-src': ['self'],
 				'style-src': ['self'],
 				'style-src-attr': ['unsafe-inline'],
+				// Map tiles (Phase 6) only: no data or blob schemes, no a./b./c. tile subdomains.
+				'img-src': ['self', 'https://tile.openstreetmap.org'],
 				'connect-src': [
 					'self',
 					'https://api.rentcast.io',

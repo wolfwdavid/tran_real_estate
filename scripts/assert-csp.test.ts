@@ -11,6 +11,7 @@ import { describe, expect, test } from 'vitest';
 import {
 	CARRIERS,
 	CONNECT,
+	EXACT,
 	EXPECTED_PAGES,
 	checkAssetText,
 	checkBuild,
@@ -68,6 +69,7 @@ function policy(overrides: Directives = {}): string {
 		'script-src': `'self' ${sha256(BOOT)}`,
 		'style-src': "'self'",
 		'style-src-attr': "'unsafe-inline'",
+		'img-src': "'self' https://tile.openstreetmap.org",
 		'base-uri': "'self'",
 		'form-action': "'self' https://api.web3forms.com",
 		...overrides
@@ -252,6 +254,25 @@ describe('checkHtml injected faults', () => {
 		expect(errors.some((e) => e.includes('hash'))).toBe(true);
 	});
 
+	test.each([
+		['removed', undefined],
+		['widened with data:', "'self' https://tile.openstreetmap.org data:"],
+		['widened with blob:', "'self' https://tile.openstreetmap.org blob:"],
+		['widened to any https: host', "'self' https:"],
+		['missing the OSM tile host', "'self'"],
+		['missing self', 'https://tile.openstreetmap.org'],
+		['an OSM tile subdomain', "'self' https://a.tile.openstreetmap.org"]
+	])('Fault 10: img-src %s is rejected', (_name, value) => {
+		const errors = checkHtml('index.html', makePage({ directives: { 'img-src': value } }));
+		expect(errors.some((e) => e.includes('img-src'))).toBe(true);
+	});
+
+	test('Fault 10b: img-src order does not matter, but every token must be present', () => {
+		const reordered = "https://tile.openstreetmap.org 'self'";
+		expect(checkHtml('index.html', makePage({ directives: { 'img-src': reordered } }))).toEqual([]);
+		expect(EXACT['img-src']).toEqual(["'self'", 'https://tile.openstreetmap.org']);
+	});
+
 	test.each(['default-src', 'object-src', 'base-uri', 'form-action'])(
 		'Fault 9: exact-set directive %s drift is rejected',
 		(directive) => {
@@ -356,6 +377,16 @@ describe('checkBuild over a temp directory', () => {
 	test('a missing directory reports every carrier as missing', () => {
 		const errors = checkBuild(join(tmpdir(), 'csp-does-not-exist-' + process.pid));
 		expect(errors).toHaveLength(CARRIERS.length + EXPECTED_PAGES.length);
+	});
+
+	test('EXPECTED_PAGES pins the Phase 6 renter pages', () => {
+		for (const page of [
+			'renter/listing/index.html',
+			'renter/shortlist/index.html',
+			'renter/affordability/index.html'
+		]) {
+			expect(EXPECTED_PAGES).toContain(page);
+		}
 	});
 });
 

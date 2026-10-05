@@ -7,7 +7,14 @@ export const LEGAL_ROUTES = [
 	'legal/fair-housing/',
 	'legal/data-coverage/'
 ] as const;
-export const APP_ROUTES = ['renter/', 'investor/', 'agent/', 'settings/'] as const;
+/** The renter portal (Phase 6): Search, the ?id= listing detail shell, Shortlist and Affordability. */
+export const RENTER_ROUTES = [
+	'renter/',
+	'renter/listing/',
+	'renter/shortlist/',
+	'renter/affordability/'
+] as const;
+export const APP_ROUTES = [...RENTER_ROUTES, 'investor/', 'agent/', 'settings/'] as const;
 export const PRINT = 'print/';
 export const ROUTES: readonly string[] = [
 	...MARKETING_ROUTES,
@@ -31,5 +38,10 @@ export const EXTERNAL_HOSTS: readonly string[] = [
 	'app.rentcast.io',
 	'platform.claude.com',
 	'platform.openai.com',
-	'aistudio.google.com'
+	'aistudio.google.com',
+	// Renter portal (Phase 6): OSM map attribution and "Report a map problem", plus the listing
+	// detail's "Look it up elsewhere" links.
+	'www.openstreetmap.org',
+	'www.google.com',
+	'www.zillow.com'
 ];

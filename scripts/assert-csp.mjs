@@ -3,6 +3,7 @@
 // The allowlist below is a deliberate literal duplicate of apps/web/svelte.config.js:
 // changing the policy must produce a reviewed two-file diff, never a silent pass.
 // The Phase 10 beacon host is NOT accepted here yet (Phase 10 adds it to both files together).
+// img-src gains exactly one host (OSM tiles, Phase 6). Never data: or blob:.
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -18,12 +19,16 @@ export const EXACT = {
 	'object-src': ["'none'"],
 	'base-uri': ["'self'"],
 	'form-action': ["'self'", 'https://api.web3forms.com'],
-	'connect-src': CONNECT
+	'connect-src': CONNECT,
+	'img-src': ["'self'", 'https://tile.openstreetmap.org']
 };
 
 export const EXPECTED_PAGES = [
 	'index.html',
 	'renter/index.html',
+	'renter/listing/index.html',
+	'renter/shortlist/index.html',
+	'renter/affordability/index.html',
 	'investor/index.html',
 	'agent/index.html',
 	'settings/index.html',

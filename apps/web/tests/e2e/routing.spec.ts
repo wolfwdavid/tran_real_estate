@@ -55,6 +55,9 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 		}
 		const origin = new URL(page.url()).origin;
 		for (const { href, target } of links) {
+			// Phone/email actions open the renter's own apps (UI-SPEC honesty rule 4); they are not
+			// routes, so they skip both the cross-origin and the base-path assertions.
+			if (/^(tel|mailto):/i.test(href)) continue;
 			const url = new URL(href, page.url());
 			// Cross-origin links (HUD, data providers on the legal pages) are not routes: they must be
 			// https and open in the same tab, then skip the base-path assertions.
