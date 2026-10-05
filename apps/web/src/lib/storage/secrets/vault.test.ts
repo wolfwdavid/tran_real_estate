@@ -214,6 +214,20 @@ describe('remember mode', () => {
 		expect(b.vault.getStatus().mode).toBe('remember');
 		expect(await b.vault.getKey('gemini')).toBe(k);
 	});
+
+	it('remote mode-changed to remember: the other tab moves its own session keys into tran-secrets', async () => {
+		const own = fakeKey('openai', 'B');
+		const a = await makeVault();
+		const b = await makeVault({ idb: a.idb, channelName: a.channelName });
+		await b.vault.setKey('openai', own);
+		await a.vault.setKey('gemini', fakeKey('gemini'));
+		await a.vault.setMode('remember');
+		await vi.waitFor(() => expect(b.events).toContainEqual({ kind: 'mode-changed', remote: true }));
+		expect(b.session.getItem(SESSION_KEY)).toBeNull();
+		expect((await a.db.keys.get('openai'))?.value).toBe(own);
+		expect(b.vault.getStatus().providers.openai.state).toBe('remembered');
+		expect(await b.vault.getKey('openai')).toBe(own);
+	});
 });
 
 describe('removeKey', () => {
