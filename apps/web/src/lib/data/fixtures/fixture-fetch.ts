@@ -335,6 +335,192 @@ function queryListings(rows: Row[], params: URLSearchParams, metros: Metro[], no
 	return page.length === 0 ? notFound() : ok(page);
 }
 
+// ---------------------------------------------------------------------------------------------
+// Estimates (AVM) and market statistics
+// ---------------------------------------------------------------------------------------------
+
+/** A latitude/longitude AVM request matches a subject within this many degrees. */
+const SUBJECT_TOLERANCE_DEG = 0.0005;
+const DEFAULT_HISTORY_RANGE = 12;
+const SUBJECT_FIELDS = [
+	'id',
+	'formattedAddress',
+	'addressLine1',
+	'addressLine2',
+	'city',
+	'state',
+	'zipCode',
+	'county',
+	'latitude',
+	'longitude',
+	'propertyType',
+	'bedrooms',
+	'bathrooms',
+	'squareFootage',
+	'lotSize',
+	'yearBuilt'
+] as const;
+const COMPARABLE_FIELDS = [
+	'id',
+	'formattedAddress',
+	'addressLine1',
+	'addressLine2',
+	'city',
+	'state',
+	'zipCode',
+	'county',
+	'latitude',
+	'longitude',
+	'propertyType',
+	'bedrooms',
+	'bathrooms',
+	'squareFootage',
+	'lotSize',
+	'yearBuilt',
+	'status',
+	'price',
+	'listingType',
+	'listedDate',
+	'removedDate',
+	'lastSeenDate',
+	'daysOnMarket'
+] as const;
+
+function pick(row: Row, fields: readonly string[]): Row {
+	const out: Row = {};
+	for (const field of fields) if (field in row) out[field] = row[field];
+	return out;
+}
+
+const round2 = (n: number): number => Math.round(n * 100) / 100;
+
+/** Finds the estimate entry for an AVM request, or the error result to answer instead. */
+function findSubject(
+	entries: Row[],
+	params: URLSearchParams,
+	metros: Metro[]
+): { entry: Row } | { result: Result } {
+	const address = params.get('address');
+	if (address) {
+		const zip = zipOfAddress(address);
+		if (zip !== undefined && !isSampleZip(zip)) return { result: outside() };
+		const wanted = normalizeAddress(address);
+		const entry = entries.find(
+			(e) =>
+				typeof e.formattedAddress === 'string' && normalizeAddress(e.formattedAddress) === wanted
+		);
+		return entry ? { entry } : { result: notFound() };
+	}
+	const lat = num(params.get('latitude'));
+	const lon = num(params.get('longitude'));
+	if (lat === undefined || lon === undefined) {
+		return { result: badRequest('An address, or latitude and longitude, is required.') };
+	}
+	const entry = entries.find(
+		(e) =>
+			typeof e.latitude === 'number' &&
+			typeof e.longitude === 'number' &&
+			Math.abs(e.latitude - lat) <= SUBJECT_TOLERANCE_DEG &&
+			Math.abs(e.longitude - lon) <= SUBJECT_TOLERANCE_DEG
+	);
+	if (entry) return { entry };
+	return { result: nearMetro(metros, lat, lon) ? notFound() : outside() };
+}
+
+function estimate(
+	kind: 'rent' | 'sale',
+	data: FixtureSet,
+	params: URLSearchParams,
+	metros: Metro[],
+	now: number
+): Result {
+	const found = findSubject(data.estimates[kind], params, metros);
+	if ('result' in found) return found.result;
+	const { entry } = found;
+
+	// The subject's own listing (rental or sale), when there is one, supplies the richer fields.
+	const listing = [...data.sales, ...data.rentals].find(
+		(r) => r.formattedAddress === entry.formattedAddress
+	);
+	const subjectProperty = {
+		...pick(entry, SUBJECT_FIELDS),
+		...pick(listing ?? {}, SUBJECT_FIELDS)
+	};
+
+	const pool = kind === 'rent' ? data.rentals : data.sales;
+	const subjectLat = entry.latitude as number;
+	const subjectLon = entry.longitude as number;
+	const comparableIds = (entry.comparableIds as string[] | undefined) ?? [];
+	const comparables = comparableIds
+		.filter((id) => id !== subjectProperty.id)
+		.map((id) => pool.find((r) => r.id === id))
+		.filter((r): r is Row => r !== undefined)
+		.map((comp, i) => ({
+			...pick(comp, COMPARABLE_FIELDS),
+			daysOld: Math.floor((now - Date.parse(String(comp.lastSeenDate))) / DAY_MS),
+			distance: round2(
+				haversineMiles(subjectLat, subjectLon, comp.latitude as number, comp.longitude as number)
+			),
+			correlation: round2(0.9 - 0.02 * i)
+		}));
+
+	const values =
+		kind === 'rent'
+			? {
+					rent: entry.rent,
+					rentRangeLow: entry.rentRangeLow,
+					rentRangeHigh: entry.rentRangeHigh
+				}
+			: {
+					price: entry.price,
+					priceRangeLow: entry.priceRangeLow,
+					priceRangeHigh: entry.priceRangeHigh
+				};
+	return ok({
+		...values,
+		latitude: entry.latitude,
+		longitude: entry.longitude,
+		subjectProperty,
+		comparables
+	});
+}
+
+function trimHistory(side: unknown, range: number): unknown {
+	if (!side || typeof side !== 'object') return side;
+	const out: Row = { ...(side as Row) };
+	const history = out.history as Record<string, unknown> | undefined;
+	if (history && typeof history === 'object') {
+		const keys = Object.keys(history).sort().slice(-range);
+		out.history = Object.fromEntries(keys.map((k) => [k, history[k]]));
+	}
+	return out;
+}
+
+function marketStats(data: FixtureSet, params: URLSearchParams): Result {
+	const zip = params.get('zipCode');
+	if (!zip) return badRequest('zipCode is required.');
+	if (!isSampleZip(zip)) return outside();
+	const dataType = params.get('dataType') ?? 'All';
+	if (dataType !== 'All' && dataType !== 'Sale' && dataType !== 'Rental') {
+		return badRequest('dataType must be All, Sale or Rental.');
+	}
+	const historyRange = Math.max(
+		1,
+		Math.trunc(num(params.get('historyRange')) ?? DEFAULT_HISTORY_RANGE)
+	);
+	const market = data.markets.find((m) => m.zipCode === zip);
+	if (!market) return notFound();
+
+	const body: Row = { id: market.id, zipCode: market.zipCode };
+	if (dataType !== 'Rental' && market.saleData) {
+		body.saleData = trimHistory(market.saleData, historyRange);
+	}
+	if (dataType !== 'Sale' && market.rentalData) {
+		body.rentalData = trimHistory(market.rentalData, historyRange);
+	}
+	return ok(body);
+}
+
 function route(data: FixtureSet, metros: Metro[], url: URL, now: number): Result {
 	const matched = matchRoute(url.pathname);
 	if (!matched) return notFound();
@@ -348,8 +534,12 @@ function route(data: FixtureSet, metros: Metro[], url: URL, now: number): Result
 			const row = data.rentals.find((r) => r.id === matched.id);
 			return row ? ok(row) : notFound();
 		}
-		default:
-			return notFound();
+		case 'rent-estimate':
+			return estimate('rent', data, params, metros, now);
+		case 'value-estimate':
+			return estimate('sale', data, params, metros, now);
+		case 'markets':
+			return marketStats(data, params);
 	}
 }
 
