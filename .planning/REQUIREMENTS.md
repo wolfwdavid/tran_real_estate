@@ -43,9 +43,9 @@
 ### AI & Compliance
 
 - [ ] **AI-01**: User can choose Anthropic, OpenAI, Gemini, or OpenRouter as the AI provider and watch output stream in, with the ability to stop generation
-- [x] **AI-02**: Every piece of AI-generated housing copy is scanned by a Fair Housing checker that flags problem phrases with an explanation and a compliant alternative before the user can copy or send it
-- [x] **AI-03**: User is warned before sending client or lead data to a free-tier Gemini key
-- [x] **AI-04**: No AI output is ever sent automatically — user copies it or opens it in their own email client
+- [ ] **AI-02**: Every piece of AI-generated housing copy is scanned by a Fair Housing checker that flags problem phrases with an explanation and a compliant alternative before the user can copy or send it
+- [ ] **AI-03**: User is warned before sending client or lead data to a free-tier Gemini key
+- [ ] **AI-04**: No AI output is ever sent automatically — user copies it or opens it in their own email client
 
 ### Renter Portal
 
@@ -172,9 +172,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 4 | Complete |
 | DATA-05 | Phase 4 | Complete |
 | AI-01 | Phase 5 | Pending |
-| AI-02 | Phase 5 | Complete |
-| AI-03 | Phase 5 | Complete |
-| AI-04 | Phase 5 | Complete |
+| AI-02 | Phase 5 | Pending |
+| AI-03 | Phase 5 | Pending |
+| AI-04 | Phase 5 | Pending |
 | RENT-01 | Phase 6 | Pending |
 | RENT-02 | Phase 6 | Pending |
 | RENT-03 | Phase 6 | Pending |
