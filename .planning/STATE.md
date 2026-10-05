@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 13 of 25
+Plan: 12 of 25 (waves 1-2 complete; next wave 3: 04-13..04-16)
 
 ## Performance Metrics
 
