@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-13-PLAN.md
-last_updated: "2026-10-05T03:02:23.146Z"
+stopped_at: Completed 03-14-PLAN.md
+last_updated: "2026-10-05T03:05:34.636Z"
 progress:
   total_phases: 11
   completed_phases: 2
   total_plans: 206
-  completed_plans: 33
+  completed_plans: 34
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 3 (Local Platform: Storage, Key Vault & Backup) — EXECUTING
-Plan: 13 of 17
+Plan: 14 of 17
 
 ## Performance Metrics
 
@@ -79,6 +79,7 @@ Plan: 13 of 17
 | Phase 03 P10 | 11min | 3 tasks | 20 files |
 | Phase 03 P11 | 25min | 2 tasks | 5 files |
 | Phase 03 P13 | 25min | 2 tasks | 6 files |
+| Phase 03 P14 | 30min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -160,6 +161,8 @@ Recent decisions affecting current work:
 - [Phase 03]: E2E waits on [data-settings-page][data-hydrated=true] (PortalSwitcher also uses data-hydrated)
 - [Phase 03]: ApiKeysSection focuses #api-keys-heading on a local vault 'forgotten' event because forget-all unmounts the footer dialog before its close handler runs
 - [Phase 03]: Backup section loads storage modules via one dynamic-import BackupKit; preview held in $state.raw so IndexedDB can clone it
+- [Phase 03]: 03-14: accepted install prompt announces once; installed state only on appinstalled (tran:installed), deduped
+- [Phase 03]: 03-14: persistence.ts static import so persist() is the Ask handler's first call; Dexie/@tran/core stay dynamic
 
 ### Pending Todos
 
@@ -182,7 +185,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T03:02:23.140Z
-Stopped at: Completed 03-13-PLAN.md
+Last session: 2026-10-05T03:05:34.631Z
+Stopped at: Completed 03-14-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
