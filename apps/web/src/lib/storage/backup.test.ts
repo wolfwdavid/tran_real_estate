@@ -1,11 +1,29 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { BackupError, backupFilename, newSyncable, parseBackup, tombstone } from '@tran/core';
+import {
+	BackupError,
+	MAX_BACKUP_BYTES,
+	backupFilename,
+	buildEnvelope,
+	newSyncable,
+	parseBackup,
+	planMerge,
+	planReplace,
+	tombstone,
+	touch,
+	type Syncable
+} from '@tran/core';
 import { fakeKey } from '../../../tests/support/fake-keys';
 import { freshIdb } from '$lib/storage/test-utils';
 import { _resetBackupRegistry, listBackupTables, registerBackupTable } from './backup-registry';
 import { TranDb, type DbOptions, type PrefRecord } from './db';
 import { META, getMeta, setMeta } from './meta';
-import { buildBackupText, exportBackup } from './backup';
+import {
+	applyImport,
+	buildBackupText,
+	exportBackup,
+	previewImport,
+	type BackupFileLike
+} from './backup';
 
 const NOW = new Date('2026-10-01T12:00:00.000Z');
 
@@ -168,5 +186,202 @@ describe('exportBackup', () => {
 		await expectCode(exportBackup(db, noSecrets, { now: NOW, download }), 'export-failed');
 		expect(download).not.toHaveBeenCalled();
 		expect(await getMeta(db, META.lastBackupAt)).toBeUndefined();
+	});
+});
+
+// ---------------------------------------------------------------- import
+
+const LATER = new Date('2026-10-02T09:00:00.000Z');
+
+function fileLike(text: string, size = new TextEncoder().encode(text).length, name = 'b.json') {
+	const textSpy = vi.fn(async () => text);
+	const file: BackupFileLike = { name, size, text: textSpy };
+	return { file, text: textSpy };
+}
+
+function backupText(tables: Record<string, Syncable[]>, now = LATER): string {
+	return JSON.stringify(buildEnvelope(tables, now), null, 2);
+}
+
+async function snapshot(): Promise<PrefRecord[]> {
+	return (await db.prefs.toArray()).sort((a, b) => a.id.localeCompare(b.id));
+}
+
+/** Wraps db.table('prefs') so bulkPut really writes, then throws (a failure part-way). */
+function failPrefsBulkPut(error: unknown = new Error('boom')) {
+	const real = db.table.bind(db);
+	vi.spyOn(db, 'table').mockImplementation(((name: string) => {
+		const t = real(name);
+		if (name !== 'prefs') return t;
+		return Object.assign(Object.create(t) as typeof t, {
+			bulkPut: async (recs: readonly unknown[]) => {
+				await t.bulkPut(recs as never);
+				throw error;
+			}
+		});
+	}) as typeof db.table);
+}
+
+describe('previewImport', () => {
+	it('over 25 MB -> too-large and file.text() is never called', async () => {
+		const { file, text } = fileLike('{}', MAX_BACKUP_BYTES + 1);
+		await expectCode(previewImport(db, file), 'too-large');
+		expect(text).not.toHaveBeenCalled();
+	});
+
+	it('exactly 25 MB is allowed through to parsing', async () => {
+		const { file, text } = fileLike('{', MAX_BACKUP_BYTES);
+		await expectCode(previewImport(db, file), 'not-json');
+		expect(text).toHaveBeenCalledTimes(1);
+	});
+
+	it('maps parse failures to their codes', async () => {
+		await expectCode(previewImport(db, fileLike('{').file), 'not-json');
+		await expectCode(previewImport(db, fileLike('{"format":"x"}').file), 'not-tran');
+		const newer = { ...buildEnvelope({ prefs: [] }, LATER), schemaVersion: 99 };
+		await expectCode(previewImport(db, fileLike(JSON.stringify(newer)).file), 'newer');
+		const bad = buildEnvelope({ prefs: [{ id: 'not-a-uuid' } as unknown as Syncable] }, LATER);
+		await expectCode(previewImport(db, fileLike(JSON.stringify(bad)).file), 'invalid');
+	});
+
+	it('a table this build does not know -> invalid', async () => {
+		const other = buildEnvelope({ prefs: [], notes: [] }, LATER);
+		await expectCode(previewImport(db, fileLike(JSON.stringify(other)).file), 'invalid');
+	});
+
+	it('returns counts equal to planMerge/planReplace against the current DB', async () => {
+		const a = pref('a', 1);
+		const b = pref('b', 2);
+		await db.prefs.bulkPut([a, b]);
+		const bNewer = touch({ ...b, value: 3 }, LATER);
+		const c = pref('c', 4, LATER);
+		const text = backupText({ prefs: [bNewer, c] });
+
+		const p = await previewImport(db, fileLike(text, undefined, 'my.json').file);
+		const tables = listBackupTables();
+		const incoming = { prefs: [bNewer, c] };
+		const local = { prefs: await db.prefs.toArray() };
+		expect(p.fileName).toBe('my.json');
+		expect(p.exportedAt).toBe(LATER.toISOString());
+		expect(p.schemaVersion).toBe(1);
+		expect(p.migratedFrom).toBeNull();
+		expect(p.tables).toEqual(['prefs']);
+		expect(p.merge).toEqual(planMerge(local, incoming, tables));
+		expect(p.replace).toEqual(planReplace(local, incoming, tables));
+		expect(p.merge.totals).toEqual({ add: 1, update: 1, unchanged: 2 });
+		expect(p.replace.totals).toEqual({ delete: 2, add: 2 });
+	});
+});
+
+describe('applyImport', () => {
+	it('merge writes add + update; re-merging the same file changes nothing', async () => {
+		const a = pref('a', 1);
+		const b = pref('b', 2);
+		await db.prefs.bulkPut([a, b]);
+		const bNewer = touch({ ...b, value: 3 }, LATER);
+		const c = pref('c', 4, LATER);
+		const text = backupText({ prefs: [bNewer, c] });
+
+		const res = await applyImport(db, await previewImport(db, fileLike(text).file), 'merge');
+		expect(res).toEqual({ mode: 'merge', added: 1, updated: 1, unchanged: 2 });
+		expect(await snapshot()).toEqual([a, bNewer, c].sort((x, y) => x.id.localeCompare(y.id)));
+
+		const after = await snapshot();
+		const again = await previewImport(db, fileLike(text).file);
+		expect(again.merge.noChanges).toBe(true);
+		const res2 = await applyImport(db, again, 'merge');
+		expect(res2).toEqual({ mode: 'merge', added: 0, updated: 0, unchanged: 3 });
+		expect(await snapshot()).toEqual(after);
+	});
+
+	it('merge applies an incoming tombstone to a local record', async () => {
+		const a = pref('a', 1);
+		await db.prefs.put(a);
+		const dead = tombstone(a, LATER);
+		const preview = await previewImport(db, fileLike(backupText({ prefs: [dead] })).file);
+		await applyImport(db, preview, 'merge');
+		expect((await db.prefs.get(a.id))?.deletedAt).toBe(LATER.toISOString());
+	});
+
+	it("replace leaves exactly the file's live items in every registered table", async () => {
+		db.close();
+		db = new TestDb(freshIdb());
+		await db.open();
+		registerBackupTable({ name: 'notes', label: 'Notes' });
+		await db.prefs.bulkPut([pref('a', 1), pref('b', 2)]);
+		await db.table('notes').put(newSyncable({ id: id(), now: NOW, schemaVersion: 1 }));
+
+		const c = pref('c', 3, LATER);
+		const gone = tombstone(pref('d', 4), LATER);
+		const note = { ...newSyncable({ id: id(), now: LATER, schemaVersion: 1 }), body: 'x' };
+		const text = backupText({ prefs: [c, gone], notes: [note] });
+
+		const preview = await previewImport(db, fileLike(text, undefined, 'r.json').file);
+		const res = await applyImport(db, preview, 'replace');
+		expect(res).toEqual({ mode: 'replace', total: 2, fileName: 'r.json' });
+		expect(await db.prefs.toArray()).toEqual([c]);
+		expect(await db.table('notes').toArray()).toEqual([note]);
+	});
+
+	for (const mode of ['merge', 'replace'] as const) {
+		it(`${mode}: a failure part-way rolls every table back (write-failed)`, async () => {
+			await db.prefs.bulkPut([pref('a', 1), pref('b', 2)]);
+			const before = await snapshot();
+			const text = backupText({ prefs: [pref('c', 3, LATER), pref('d', 4, LATER)] });
+			const preview = await previewImport(db, fileLike(text).file);
+
+			failPrefsBulkPut();
+			await expectCode(applyImport(db, preview, mode), 'write-failed');
+			vi.restoreAllMocks();
+			expect(await snapshot()).toEqual(before);
+			expect(await getMeta(db, META.firstRecordAt)).toBeUndefined();
+		});
+	}
+
+	it('QuotaExceededError inside the transaction -> out-of-space', async () => {
+		const text = backupText({ prefs: [pref('c', 3, LATER)] });
+		const preview = await previewImport(db, fileLike(text).file);
+		failPrefsBulkPut(new DOMException('full', 'QuotaExceededError'));
+		await expectCode(applyImport(db, preview, 'replace'), 'out-of-space');
+		vi.restoreAllMocks();
+		expect(await db.prefs.count()).toBe(0);
+	});
+
+	it('Dexie-wrapped QuotaExceededError (inner) -> out-of-space', async () => {
+		const text = backupText({ prefs: [pref('c', 3, LATER)] });
+		const preview = await previewImport(db, fileLike(text).file);
+		const wrapped = Object.assign(new Error('AbortError'), {
+			name: 'AbortError',
+			inner: new DOMException('full', 'QuotaExceededError')
+		});
+		failPrefsBulkPut(wrapped);
+		await expectCode(applyImport(db, preview, 'merge'), 'out-of-space');
+	});
+
+	it('sets firstRecordAt when absent; never touches lastBackupAt', async () => {
+		const text = backupText({ prefs: [pref('c', 3, LATER)] });
+		await applyImport(db, await previewImport(db, fileLike(text).file), 'merge');
+		expect(await getMeta<string>(db, META.firstRecordAt)).toEqual(expect.any(String));
+		expect(await getMeta(db, META.lastBackupAt)).toBeUndefined();
+	});
+
+	it('keeps an existing firstRecordAt', async () => {
+		const first = '2026-01-01T00:00:00.000Z';
+		await setMeta(db, META.firstRecordAt, first);
+		const text = backupText({ prefs: [pref('c', 3, LATER)] });
+		await applyImport(db, await previewImport(db, fileLike(text).file), 'replace');
+		expect(await getMeta<string>(db, META.firstRecordAt)).toBe(first);
+	});
+
+	it('does not set firstRecordAt when the result holds no live record', async () => {
+		const text = backupText({ prefs: [] });
+		await applyImport(db, await previewImport(db, fileLike(text).file), 'replace');
+		expect(await getMeta(db, META.firstRecordAt)).toBeUndefined();
+	});
+
+	it('refuses a preview whose table set differs from the current registry (invalid)', async () => {
+		const preview = await previewImport(db, fileLike(backupText({ prefs: [] })).file);
+		registerBackupTable({ name: 'notes', label: 'Notes' });
+		await expectCode(applyImport(db, preview, 'merge'), 'invalid');
 	});
 });
