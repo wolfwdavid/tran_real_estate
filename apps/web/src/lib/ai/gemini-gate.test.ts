@@ -14,14 +14,22 @@ describe('needsGeminiWarning', () => {
 		expect(rows).toHaveLength(16);
 	});
 
-	it.each(rows)('provider=%s sample=%s clientData=%s acked=%s', (provider, sample, containsClientData, acked) => {
-		const expected = provider === 'gemini' && !sample && containsClientData && !acked;
-		expect(needsGeminiWarning({ provider, sample, containsClientData, acked })).toBe(expected);
-	});
+	it.each(rows)(
+		'provider=%s sample=%s clientData=%s acked=%s',
+		(provider, sample, containsClientData, acked) => {
+			const expected = provider === 'gemini' && !sample && containsClientData && !acked;
+			expect(needsGeminiWarning({ provider, sample, containsClientData, acked })).toBe(expected);
+		}
+	);
 
 	it('never warns for the fixture provider', () => {
 		expect(
-			needsGeminiWarning({ provider: 'fixture', sample: false, containsClientData: true, acked: false })
+			needsGeminiWarning({
+				provider: 'fixture',
+				sample: false,
+				containsClientData: true,
+				acked: false
+			})
 		).toBe(false);
 	});
 });

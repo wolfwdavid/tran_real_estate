@@ -3,7 +3,9 @@ import { MAILTO_LONG_THRESHOLD, buildMailto, copyText, markSent } from './exits'
 
 describe('buildMailto', () => {
 	it('encodes line breaks as %0D%0A', () => {
-		expect(buildMailto({ body: 'Line 1\nLine 2' }).href).toBe('mailto:?body=Line%201%0D%0ALine%202');
+		expect(buildMailto({ body: 'Line 1\nLine 2' }).href).toBe(
+			'mailto:?body=Line%201%0D%0ALine%202'
+		);
 	});
 
 	it('does not double CRLF input', () => {
