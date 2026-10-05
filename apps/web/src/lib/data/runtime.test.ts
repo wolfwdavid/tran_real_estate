@@ -157,6 +157,31 @@ describe('mode selection', () => {
 		expect(loadFixtures).not.toHaveBeenCalled();
 	});
 
+	it('start() waits for the key port to be ready before resolving the mode (no sample flash)', async () => {
+		// The app's key mirror reads 'none' until the vault's first read finishes. Resolving the mode
+		// before that put a keyed session into sample mode, and the on-open alerts pass then "ran"
+		// every due search against fixtures for free.
+		const keys = fakeKeys(NO_KEY);
+		let release!: () => void;
+		const gate = new Promise<void>((r) => (release = r));
+		const port: KeyPort = {
+			...keys.port,
+			ready: () =>
+				gate.then(() => {
+					keys.set(LIVE);
+				})
+		};
+		const { rt, loadFixtures } = makeRuntime({ keys: port });
+		const starting = rt.start();
+		await Promise.resolve();
+		expect(rt.mode).toBeNull();
+		release();
+		const stop = await starting;
+		expect(rt.mode).toEqual({ source: 'rentcast', reason: 'live' });
+		expect(loadFixtures).not.toHaveBeenCalled();
+		stop();
+	});
+
 	it('a key change to locked rebuilds as sample/locked', async () => {
 		const keys = fakeKeys(LIVE);
 		const { rt } = makeRuntime({ keys: keys.port });

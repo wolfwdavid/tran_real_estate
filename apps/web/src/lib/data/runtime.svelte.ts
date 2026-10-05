@@ -29,6 +29,7 @@ import {
 import { createLedgerRepo, type UsageSnapshot } from './ledger-repo';
 import { resolveMode, type ResolvedMode } from './mode';
 import {
+	connectRentCastKey,
 	getDataDb,
 	getRentCastKey,
 	getRentCastKeyState,
@@ -49,6 +50,11 @@ export interface KeyPort {
 	get(): string | null;
 	state(): RentCastKeyState;
 	onChange(cb: () => void): () => void;
+	/**
+	 * Resolves once state() reflects the stored key (the app mirror reads 'none' until the vault's
+	 * first read finishes). start() awaits it before resolving the mode; omitted means ready now.
+	 */
+	ready?(): Promise<void>;
 }
 
 export interface CapPrompt {
@@ -148,7 +154,8 @@ class Runtime implements DataRuntime {
 		this.#keys = deps.keys ?? {
 			get: getRentCastKey,
 			state: getRentCastKeyState,
-			onChange: onRentCastKeyChange
+			onChange: onRentCastKeyChange,
+			ready: connectRentCastKey
 		};
 		this.#channelOverride = 'channel' in deps ? deps.channel : undefined;
 		this.#reactiveGuard = deps.reactiveGuard ?? inReactiveContext;
@@ -210,6 +217,9 @@ class Runtime implements DataRuntime {
 		};
 
 		try {
+			// Without this, a keyed session briefly resolves as sample/no-key: the status bar flashes
+			// "Sample data" and the on-open alerts pass runs every due search against fixtures.
+			await this.#keys.ready?.();
 			await this.#rebuild();
 			await this.#refreshUsage();
 		} catch (e) {
