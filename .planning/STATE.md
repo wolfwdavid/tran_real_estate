@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-12-PLAN.md
-last_updated: "2026-10-05T13:38:48.730Z"
+stopped_at: Completed 05-10-PLAN.md
+last_updated: "2026-10-05T13:48:08.886Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 206
-  completed_plans: 73
+  completed_plans: 74
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 10 of 16 (waves 1-3 complete; next wave 4: 05-10, 05-11)
+Plan: 11 of 16 (waves 1-3 complete; next wave 4: 05-10, 05-11)
 
 ## Performance Metrics
 
@@ -119,6 +119,7 @@ Plan: 10 of 16 (waves 1-3 complete; next wave 4: 05-10, 05-11)
 | Phase 05 P08 | 9min | 2 tasks | 4 files |
 | Phase 05 P09 | 6min | 3 tasks | 11 files |
 | Phase 05 P12 | 9min | 2 tasks | 19 files |
+| Phase 05 P10 | 5min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -271,6 +272,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-09: runner 'refused' finish → status error with LlmError('refused'), partial text kept; fixture output lookup is own-property only
 - [Phase 05]: 05-12: popover/textarea use text-base+leading-[1.6] (not text-body) to dodge the tailwind-merge font-size collision; finding triggers build class strings directly
 - [Phase 05]: 05-12: finding trigger always carries aria-controls (bits-ui sets it only while open); FindingDetails primary button is data-finding-apply (popover focus target)
+- [Phase 05]: 05-10: lib/ai lint block repeats DATA_INTERNALS + hoisted GLOBAL_RESTRICTED_* lists; distinct rule names bind lib/ai/providers despite no-restricted-syntax off
+- [Phase 05]: 05-10: AI-04 import-graph walker (ts.preProcessFile, injected io) treats type imports as coupling and asserts zero unresolved local specifiers
 
 ### Pending Todos
 
@@ -293,7 +296,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T13:38:48.725Z
-Stopped at: Completed 05-12-PLAN.md
+Last session: 2026-10-05T13:48:08.881Z
+Stopped at: Completed 05-10-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

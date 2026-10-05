@@ -212,7 +212,7 @@ Plans:
 - [x] 05-08-PLAN.md — Gemini + OpenRouter streaming adapters and probes (wave 3)
 - [x] 05-09-PLAN.md — Prompt registry (guardrail, redaction, inputHash), runGeneration runner, fixture provider (wave 3)
 - [x] 05-12-PLAN.md — popover/textarea copy-ins, FairHousingText, FindingPopover, FindingsSummary, contrast pairs (wave 3)
-- [ ] 05-10-PLAN.md — No-auto-send enforcement: ESLint lib/ai boundary + TS import-graph test (wave 4)
+- [x] 05-10-PLAN.md — No-auto-send enforcement: ESLint lib/ai boundary + TS import-graph test (wave 4)
 - [ ] 05-11-PLAN.md — Phase 3 integration: aiArtifacts table + backup, AI prefs, provider selection, testKey hooks (wave 4)
 - [ ] 05-13-PLAN.md — GenerationPanel + PanelState, GenerationError, GeminiDataDialog, ProviderChip; exactly-three-exits SSR test (wave 5)
 - [ ] 05-14-PLAN.md — Draft history, provider picker, sample toggle, model override + Test connection in key cards (wave 5)
@@ -458,7 +458,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
-| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 10/16 | In Progress|  |
+| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 11/16 | In Progress|  |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
