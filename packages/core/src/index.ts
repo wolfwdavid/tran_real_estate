@@ -9,3 +9,4 @@ export function isPortal(value: string): value is Portal {
 export * from './providers';
 export * from './syncable';
 export * from './reminder';
+export * from './backup/index';
