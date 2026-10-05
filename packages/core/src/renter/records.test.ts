@@ -26,6 +26,14 @@ const sortModule: Record<string, unknown> | null = await import(/* @vite-ignore 
 	() => null
 );
 
+/** A copy of `obj` without `key` (for missing-field cases). */ function without(
+	obj: object,
+	key: string
+): Record<string, unknown> {
+	const copy: Record<string, unknown> = { ...obj };
+	delete copy[key];
+	return copy;
+}
 const ISO = '2026-10-05T12:00:00.000Z';
 const syncable = (id = '6f1c2b1e-4b8a-4d0e-9a51-3c7d2e8f4a10') => ({
 	id,
@@ -108,7 +116,7 @@ describe('shortlistItemSchema', () => {
 	});
 
 	test('rejects a missing or empty listingId', () => {
-		const { listingId: _drop, ...missing } = item();
+		const missing = without(item(), 'listingId');
 		expect(shortlistItemSchema.safeParse(missing).success).toBe(false);
 		expect(shortlistItemSchema.safeParse(item({ listingId: '' })).success).toBe(false);
 	});
@@ -124,7 +132,7 @@ describe('shortlistItemSchema', () => {
 	});
 
 	test('rejects missing Syncable fields', () => {
-		const { createdAt: _drop, ...bad } = item();
+		const bad = without(item(), 'createdAt');
 		expect(shortlistItemSchema.safeParse(bad).success).toBe(false);
 	});
 
@@ -341,7 +349,7 @@ describe('renterSearchMetaSchema', () => {
 	});
 
 	test('rejects missing Syncable fields', () => {
-		const { id: _drop, ...bad } = meta();
+		const bad = without(meta(), 'id');
 		expect(renterSearchMetaSchema.safeParse(bad).success).toBe(false);
 	});
 });
