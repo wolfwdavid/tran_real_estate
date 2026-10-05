@@ -386,6 +386,7 @@ Voice `[P2]` `[P3]`: plain, warm, specific, second person, short sentences. **Ne
 | Sample streaming | "Writing sample output…" | "Showing sample output." |
 | Done | "Draft ready." | "Draft ready. {Findings sentence}" |
 | Stopped | "Stopped. The partial draft is kept, so you can edit it, use it, or generate again." | "Stopped. Partial draft kept. {Findings sentence}" |
+| Stopped before any text (added 05-16) | "Stopped before any text arrived. Nothing was saved, so you can generate again." | same |
 | Hit length limit | "Draft ready, but it reached the length limit and may end mid-sentence. Edit the ending, or generate again." | same text |
 | Gemini canceled | "Canceled. Nothing was sent to Google." | same text |
 | Copied | "Copied to your clipboard." | same text |

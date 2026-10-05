@@ -187,6 +187,11 @@ describe('statusCopy', () => {
 			`Stopped. Partial draft kept. ${fs}`
 		],
 		[
+			'stopped-empty',
+			'Stopped before any text arrived. Nothing was saved, so you can generate again.',
+			'Stopped before any text arrived. Nothing was saved, so you can generate again.'
+		],
+		[
 			'length',
 			'Draft ready, but it reached the length limit and may end mid-sentence. Edit the ending, or generate again.',
 			'Draft ready, but it reached the length limit and may end mid-sentence. Edit the ending, or generate again.'

@@ -135,6 +135,7 @@ export type RunStatus =
 	| 'sample-streaming'
 	| 'done'
 	| 'stopped'
+	| 'stopped-empty'
 	| 'length'
 	| 'gemini-canceled'
 	| 'copied'
@@ -168,6 +169,9 @@ export function statusCopy(
 				line: 'Stopped. The partial draft is kept, so you can edit it, use it, or generate again.',
 				announce: withFindings('Stopped. Partial draft kept.')
 			};
+		case 'stopped-empty':
+			// Stop pressed before the first word: there is no partial draft to keep (05-16).
+			return same('Stopped before any text arrived. Nothing was saved, so you can generate again.');
 		case 'length':
 			return same(
 				'Draft ready, but it reached the length limit and may end mid-sentence. Edit the ending, or generate again.'

@@ -230,6 +230,24 @@ describe('streaming, Stop and sample output', () => {
 		expect(repo.create.mock.calls[0]![0].text).toBe('Perfect for young professionals. ');
 	});
 
+	test('Stop before any text arrives says nothing was kept and stores nothing', async () => {
+		const { state, repo, announce } = setup({ script: { chunks: [], hold: true } });
+		const run = state.generate();
+		await vi.waitFor(() => expect(state.running).toBe(true));
+		state.stop();
+		await run;
+		expect(state.text).toBe('');
+		expect(state.hasDraft).toBe(false);
+		expect(state.statusLine).toBe(
+			'Stopped before any text arrived. Nothing was saved, so you can generate again.'
+		);
+		expect(said(announce)).toContain(
+			'Stopped before any text arrived. Nothing was saved, so you can generate again.'
+		);
+		expect(said(announce).join(' ')).not.toContain('Partial draft kept');
+		expect(repo.create).not.toHaveBeenCalled();
+	});
+
 	test('length finish uses the length-limit status', async () => {
 		const { state } = setup({ script: { chunks: ['Short and'], finish: 'length' } });
 		await state.generate();

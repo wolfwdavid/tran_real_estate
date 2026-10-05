@@ -351,7 +351,9 @@ export class PanelState {
 		} else {
 			const s =
 				result.status === 'stopped'
-					? statusCopy('stopped', { providerLabel, findingsSentence: sentence })
+					? this.text === ''
+						? statusCopy('stopped-empty', { providerLabel })
+						: statusCopy('stopped', { providerLabel, findingsSentence: sentence })
 					: result.finish === 'length'
 						? statusCopy('length', { providerLabel })
 						: statusCopy('done', { providerLabel, findingsSentence: sentence });
