@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-08-PLAN.md
-last_updated: "2026-10-05T02:41:40.565Z"
+stopped_at: Completed 03-07-PLAN.md
+last_updated: "2026-10-05T02:43:29.792Z"
 progress:
   total_phases: 11
   completed_phases: 2
   total_plans: 206
-  completed_plans: 29
+  completed_plans: 30
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 3 (Local Platform: Storage, Key Vault & Backup) — EXECUTING
-Plan: 9 of 17
+Plan: 10 of 17
 
 ## Performance Metrics
 
@@ -75,6 +75,7 @@ Plan: 9 of 17
 | Phase 03 P04 | 10min | 3 tasks | 12 files |
 | Phase 03 P09 | 8min | 2 tasks | 6 files |
 | Phase 03 P08 | 8min | 2 tasks | 2 files |
+| Phase 03 P07 | 9min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -150,6 +151,8 @@ Recent decisions affecting current work:
 - [Phase 03]: 03-09: Service worker answers only same-origin GETs in the build precache; no runtime caching, no early activation; dotfiles filtered from precache
 - [Phase 03]: applyImport re-plans inside the rw transaction from preview.incoming so a stale preview never overwrites newer local edits
 - [Phase 03]: Export key scan checks known secrets raw and JSON-escaped
+- [Phase 03]: 03-07: changePassphrase requires an unlocked tab (closes a non-counting guessing oracle around the unlock cooldown)
+- [Phase 03]: 03-07: envelope encryption with a per-tab DEK stash in sessionStorage (tran.vault.dek.v1); swapped/undecryptable rows throw VaultError corrupt from getKey
 
 ### Pending Todos
 
@@ -172,7 +175,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T02:41:40.560Z
-Stopped at: Completed 03-08-PLAN.md
+Last session: 2026-10-05T02:43:29.782Z
+Stopped at: Completed 03-07-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
