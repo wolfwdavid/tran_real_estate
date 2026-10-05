@@ -5,9 +5,14 @@ export const PENDING_STALE_MS = 120_000;
 
 export type LedgerStatus = 'pending' | number;
 
+/** Ledger intent of a key-test probe: billed like any call, but never a search. */
+export const KEY_TEST_INTENT = 'key-test';
+
 export interface LedgerEntryLike {
 	at: number;
 	status: LedgerStatus;
+	/** Why the call was made. A key test with no results is not a search, so it is not in `noResults`. */
+	intent?: string;
 }
 
 export interface UsageSummary {
@@ -20,7 +25,8 @@ export interface UsageSummary {
 
 /**
  * Summarize ledger rows for the cap and meter. `billed` is always derived from
- * the status via isBilled(), never from a stored flag.
+ * the status via isBilled(), never from a stored flag. A 404/400 key test is
+ * neither billed nor a search, so it is left out of every count.
  */
 export function summarize(entries: readonly LedgerEntryLike[], now: number): UsageSummary {
 	let billed = 0;
@@ -34,7 +40,7 @@ export function summarize(entries: readonly LedgerEntryLike[], now: number): Usa
 		} else if (isBilled(entry.status)) {
 			billed += 1;
 		} else if (entry.status === 404 || entry.status === 400) {
-			noResults += 1;
+			if (entry.intent !== KEY_TEST_INTENT) noResults += 1;
 		} else {
 			failed += 1;
 		}

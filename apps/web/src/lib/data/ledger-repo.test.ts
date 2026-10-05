@@ -200,6 +200,18 @@ describe('record (key tests)', () => {
 		expect(row?.settledAt).toBe(T0);
 		expect((await repo.usage()).billed).toBe(41);
 	});
+
+	it('a no-results key test is not a search: noResults stays 0 while a 404 search counts', async () => {
+		await repo.record(req('key-test', 'key-test'), 404);
+		let u = await repo.usage();
+		expect(u.noResults).toBe(0);
+		expect(u.billed).toBe(0);
+		expect(u.countedTowardCap).toBe(0);
+		await repo.settle(await repo.reserve(req('search')), 404);
+		u = await repo.usage();
+		expect(u.noResults).toBe(1);
+		expect(u.billed).toBe(0);
+	});
 });
 
 describe('secrets', () => {

@@ -98,6 +98,24 @@ describe('summarize', () => {
 		});
 	});
 
+	test('a no-results key test is not counted as a search; a billed key test still counts', () => {
+		const now = Date.parse('2026-10-15T12:00:00Z');
+		const entries: LedgerEntryLike[] = [
+			{ at: now - 3000, status: 404, intent: 'key-test' },
+			{ at: now - 3000, status: 400, intent: 'key-test' },
+			{ at: now - 2000, status: 200, intent: 'key-test' },
+			{ at: now - 1000, status: 404, intent: 'user' },
+			{ at: now - 1000, status: 404 }
+		];
+		expect(summarize(entries, now)).toEqual({
+			billed: 1,
+			noResults: 2,
+			failed: 0,
+			pending: 0,
+			countedTowardCap: 1
+		});
+	});
+
 	test('an empty ledger summarizes to zeros', () => {
 		expect(summarize([], 0)).toEqual({
 			billed: 0,
