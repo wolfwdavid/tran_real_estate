@@ -81,7 +81,12 @@ export interface DataRuntime {
 	cancelCapPrompt(): void;
 	setSourcePreference(p: DataSourcePref): Promise<void>;
 	saveCap(cap: number): Promise<void>;
-	testKey(): Promise<KeyTestRecord>;
+	/**
+	 * The metered live key check (always RentCast, in every mode). Tests `key` when given (the
+	 * Settings "Test key" hook passes the vault key), else the current RentCast key. Refreshes usage,
+	 * because a 200 probe is billed and recorded.
+	 */
+	testKey(key?: string): Promise<KeyTestRecord>;
 }
 
 export interface DataRuntimeDeps {
@@ -389,9 +394,9 @@ class Runtime implements DataRuntime {
 		this.#post({ type: 'cap-changed' });
 	}
 
-	async testKey(): Promise<KeyTestRecord> {
+	async testKey(key?: string): Promise<KeyTestRecord> {
 		const gateway = await this.#currentGateway();
-		const result = await gateway.testKey(this.#keys.get() ?? '');
+		const result = await gateway.testKey(key ?? this.#keys.get() ?? '');
 		const at = this.#clock();
 		await this.#refreshUsage().catch(() => undefined);
 		return result.outcome === 'bad-format'
