@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-07-PLAN.md
-last_updated: "2026-10-05T13:32:52.299Z"
+stopped_at: Completed 05-08-PLAN.md
+last_updated: "2026-10-05T13:33:47.380Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 206
-  completed_plans: 70
+  completed_plans: 71
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 7 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
+Plan: 8 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
 
 ## Performance Metrics
 
@@ -116,6 +116,7 @@ Plan: 7 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
 | Phase 05 P06 | 10min | 3 tasks | 8 files |
 | Phase 05 P05 | 12min | 3 tasks | 9 files |
 | Phase 05 P07 | 9min | 2 tasks | 4 files |
+| Phase 05 P08 | 9min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -263,6 +264,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-05: model registry lookups use Object.hasOwn so user-typed IDs never hit prototype members
 - [Phase 05]: 05-05: generation fetch TypeErrors are disambiguated by the keyed probe in openStream (401->auth, 200->cors-blocked, unreachable->network only when offline)
 - [Phase 05]: 05-07: Adapters stop reading at the terminal event; OpenAI emits one finish per stream (refusal wins); unknown incomplete reasons finish as length
+- [Phase 05]: 05-08: OpenRouter [DONE] or end-of-body with no finish_reason is interrupted/truncated (never a silent empty draft); Gemini consent guard runs before getKey and any fetch
 
 ### Pending Todos
 
@@ -285,7 +287,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T13:32:52.293Z
-Stopped at: Completed 05-07-PLAN.md
+Last session: 2026-10-05T13:33:47.369Z
+Stopped at: Completed 05-08-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
