@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-11-PLAN.md
-last_updated: "2026-10-05T23:09:51.457Z"
+stopped_at: Completed 06-13-PLAN.md
+last_updated: "2026-10-05T23:35:53.641Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 91
+  completed_plans: 92
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 12 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
+Plan: 13 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
 
 ## Performance Metrics
 
@@ -137,6 +137,7 @@ Plan: 12 of 22 (waves 1-3 complete; next wave 4: 06-13, 06-14)
 | Phase 06 P10 | 12min | 2 tasks | 15 files |
 | Phase 06 P12 | 35min | 2 tasks | 11 files |
 | Phase 06 P11 | 40min | 2 tasks | 13 files |
+| Phase 06 P13 | 40min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -323,6 +324,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-12: affordability onlyTop heading is 'Rent that fits: up to {$high} a month'; CTA hidden when top is $0; slider thumb ARIA via narrow thumbProps
 - [Phase 06]: 06-11: renter tables take Dexie v4 (next free: 5); renter backups via registry DEFAULT_TABLES; Phase 4 gateway needed no additions
 - [Phase 06]: 06-11: shortlist re-add restores the tombstone (same id/createdAt, deletedAt removed, fresh saved history)
+- [Phase 06]: 06-13: renter search URL mirror uses shallow replaceState gated on restore; URL carries the committed location, never keystrokes
+- [Phase 06]: 06-13: createRenterSearch spends only via runtime.requestSpend in search/narrow/refresh; restore and mode switch re-peek at 0 calls
 
 ### Pending Todos
 
@@ -345,7 +348,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T23:09:51.451Z
-Stopped at: Completed 06-11-PLAN.md
+Last session: 2026-10-05T23:35:53.635Z
+Stopped at: Completed 06-13-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
