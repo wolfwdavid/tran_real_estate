@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-18-PLAN.md
-last_updated: "2026-10-05T11:44:31.617Z"
+stopped_at: Completed 04-21-PLAN.md
+last_updated: "2026-10-05T11:52:38.574Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 58
+  completed_plans: 59
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 20 of 25 (waves 1-5 complete; next wave 6: 04-21, 04-22)
+Plan: 21 of 25 (waves 1-5 complete; next wave 6: 04-21, 04-22)
 
 ## Performance Metrics
 
@@ -104,6 +104,7 @@ Plan: 20 of 25 (waves 1-5 complete; next wave 6: 04-21, 04-22)
 | Phase 04 P20 | 9min | 3 tasks | 10 files |
 | Phase 04 P19 | 20min | 2 tasks | 4 files |
 | Phase 04 P18 | 20min | 2 tasks | 8 files |
+| Phase 04 P21 | 15min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -229,6 +230,7 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-18: one over-cap prompt at a time; a second over-cap request while a prompt is open rejects with its original BudgetCapReached
 - [Phase 04]: 04-18: requestSpend checks the reactive guard synchronously before any await, and every runtime-built gateway also gets the guard
 - [Phase 04]: 04-18: $lib/data index.ts is the explicit additive public port; runtime cleanup dismisses a parked cap prompt
+- [Phase 04]: 04-21: mutant view detects the guard via the rejected gateway.get promise (get is async); re-render proof counts fetch spy calls and ledger rows
 
 ### Pending Todos
 
@@ -251,7 +253,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T11:44:31.611Z
-Stopped at: Completed 04-18-PLAN.md
+Last session: 2026-10-05T11:52:38.567Z
+Stopped at: Completed 04-21-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
