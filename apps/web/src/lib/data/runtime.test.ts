@@ -356,6 +356,19 @@ describe('reactive guard', () => {
 		expect(calls).toHaveLength(0);
 	});
 
+	it('requestSpend checks the guard synchronously, before its first await', async () => {
+		// $effect.tracking() is only true during the synchronous part of an effect: a check after
+		// an await would see an untracked context and let the spend through.
+		let tracking = false;
+		const { rt, calls } = makeRuntime({ reactiveGuard: () => tracking });
+		await started(rt);
+		tracking = true;
+		const p = rt.requestSpend(rentals('74201'));
+		tracking = false;
+		await expect(p).rejects.toBeInstanceOf(ReactiveSpendError);
+		expect(calls).toHaveLength(0);
+	});
+
 	it('the sample gateway built by the runtime is guarded too', async () => {
 		const { rt } = makeRuntime({ keys: fakeKeys(NO_KEY).port, reactiveGuard: () => true });
 		await started(rt);
