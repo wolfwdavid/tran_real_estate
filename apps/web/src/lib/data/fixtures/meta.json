@@ -1,0 +1,9 @@
+{
+	"schema": "tran-fixtures",
+	"version": 1,
+	"seed": 20261004,
+	"anchor": "2026-10-01T00:00:00.000Z",
+	"generator": "scripts/gen-fixtures.mjs",
+	"counts": { "rentals": 60, "sales": 40, "rentEstimates": 100, "saleEstimates": 40, "markets": 6 },
+	"note": "Synthetic sample data. Every place, person and number here is made up."
+}

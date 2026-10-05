@@ -34,7 +34,7 @@
 
 ### Data Layer & Demo
 
-- [ ] **DATA-01**: Visitor without a RentCast key can use every portal on clearly badged synthetic sample data
+- [x] **DATA-01**: Visitor without a RentCast key can use every portal on clearly badged synthetic sample data
 - [x] **DATA-02**: User can see RentCast calls used this month and the call cost of an action before running it
 - [x] **DATA-03**: App stops RentCast calls at a user-editable cap (default 40 of 50) and requires explicit confirmation to go beyond it
 - [x] **DATA-04**: Repeated identical requests are served from a local cache showing an "as of" timestamp, with a manual "Refresh (1 call)" option
@@ -166,7 +166,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAT-04 | Phase 3 | Complete |
 | PLAT-05 | Phase 3 | Complete |
 | PLAT-06 | Phase 3 | Complete |
-| DATA-01 | Phase 4 | Pending |
+| DATA-01 | Phase 4 | Complete |
 | DATA-02 | Phase 4 | Complete |
 | DATA-03 | Phase 4 | Complete |
 | DATA-04 | Phase 4 | Complete |

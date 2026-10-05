@@ -1,0 +1,4194 @@
+[
+	{
+		"id": "74201",
+		"zipCode": "74201",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 295000,
+			"medianPrice": 281000,
+			"minPrice": 129000,
+			"maxPrice": 670000,
+			"averagePricePerSquareFoot": 156,
+			"medianPricePerSquareFoot": 148.6,
+			"averageSquareFootage": 1891,
+			"averageDaysOnMarket": 34.29,
+			"medianDaysOnMarket": 30,
+			"newListings": 12,
+			"totalListings": 88,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averagePrice": 294000,
+					"medianPrice": 281000,
+					"minPrice": 137000,
+					"maxPrice": 657000,
+					"totalListings": 28
+				},
+				{
+					"propertyType": "Condo",
+					"averagePrice": 301000,
+					"medianPrice": 288000,
+					"minPrice": 148000,
+					"maxPrice": 689000,
+					"totalListings": 13
+				},
+				{
+					"propertyType": "Manufactured",
+					"averagePrice": 300000,
+					"medianPrice": 288000,
+					"minPrice": 150000,
+					"maxPrice": 694000,
+					"totalListings": 21
+				},
+				{
+					"propertyType": "Single Family",
+					"averagePrice": 274000,
+					"medianPrice": 261000,
+					"minPrice": 123000,
+					"maxPrice": 576000,
+					"totalListings": 26
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 178000,
+					"medianPrice": 169000,
+					"minPrice": 98000,
+					"maxPrice": 351000,
+					"totalListings": 4
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 226000,
+					"medianPrice": 214000,
+					"minPrice": 101000,
+					"maxPrice": 427000,
+					"totalListings": 15
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 268000,
+					"medianPrice": 259000,
+					"minPrice": 135000,
+					"maxPrice": 561000,
+					"totalListings": 8
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 313000,
+					"medianPrice": 303000,
+					"minPrice": 151000,
+					"maxPrice": 777000,
+					"totalListings": 22
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 366000,
+					"medianPrice": 348000,
+					"minPrice": 188000,
+					"maxPrice": 824000,
+					"totalListings": 25
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 402000,
+					"medianPrice": 393000,
+					"minPrice": 199000,
+					"maxPrice": 997000,
+					"totalListings": 8
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 272000,
+					"medianPrice": 255000,
+					"minPrice": 132000,
+					"maxPrice": 546000,
+					"averageDaysOnMarket": 48.95,
+					"newListings": 41,
+					"totalListings": 118
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 271000,
+					"medianPrice": 256000,
+					"minPrice": 141000,
+					"maxPrice": 637000,
+					"averageDaysOnMarket": 31.15,
+					"newListings": 38,
+					"totalListings": 144
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 272000,
+					"medianPrice": 259000,
+					"minPrice": 133000,
+					"maxPrice": 672000,
+					"averageDaysOnMarket": 38.42,
+					"newListings": 45,
+					"totalListings": 128
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 279000,
+					"medianPrice": 261000,
+					"minPrice": 119000,
+					"maxPrice": 586000,
+					"averageDaysOnMarket": 46.28,
+					"newListings": 23,
+					"totalListings": 121
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 281000,
+					"medianPrice": 264000,
+					"minPrice": 123000,
+					"maxPrice": 672000,
+					"averageDaysOnMarket": 45.97,
+					"newListings": 30,
+					"totalListings": 129
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 280000,
+					"medianPrice": 267000,
+					"minPrice": 125000,
+					"maxPrice": 525000,
+					"averageDaysOnMarket": 54.48,
+					"newListings": 28,
+					"totalListings": 115
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 287000,
+					"medianPrice": 268000,
+					"minPrice": 159000,
+					"maxPrice": 586000,
+					"averageDaysOnMarket": 41.22,
+					"newListings": 27,
+					"totalListings": 148
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 286000,
+					"medianPrice": 269000,
+					"minPrice": 134000,
+					"maxPrice": 644000,
+					"averageDaysOnMarket": 44.09,
+					"newListings": 37,
+					"totalListings": 101
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 288000,
+					"medianPrice": 268000,
+					"minPrice": 156000,
+					"maxPrice": 583000,
+					"averageDaysOnMarket": 51.17,
+					"newListings": 31,
+					"totalListings": 122
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 273000,
+					"medianPrice": 267000,
+					"minPrice": 121000,
+					"maxPrice": 530000,
+					"averageDaysOnMarket": 63.26,
+					"newListings": 17,
+					"totalListings": 96
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 287000,
+					"medianPrice": 266000,
+					"minPrice": 126000,
+					"maxPrice": 628000,
+					"averageDaysOnMarket": 67.9,
+					"newListings": 13,
+					"totalListings": 147
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 279000,
+					"medianPrice": 266000,
+					"minPrice": 126000,
+					"maxPrice": 525000,
+					"averageDaysOnMarket": 55.21,
+					"newListings": 14,
+					"totalListings": 118
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 287000,
+					"medianPrice": 266000,
+					"minPrice": 124000,
+					"maxPrice": 674000,
+					"averageDaysOnMarket": 50.42,
+					"newListings": 34,
+					"totalListings": 100
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 279000,
+					"medianPrice": 268000,
+					"minPrice": 153000,
+					"maxPrice": 523000,
+					"averageDaysOnMarket": 56.61,
+					"newListings": 22,
+					"totalListings": 123
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 280000,
+					"medianPrice": 270000,
+					"minPrice": 152000,
+					"maxPrice": 574000,
+					"averageDaysOnMarket": 64.02,
+					"newListings": 40,
+					"totalListings": 98
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 292000,
+					"medianPrice": 273000,
+					"minPrice": 160000,
+					"maxPrice": 649000,
+					"averageDaysOnMarket": 60.65,
+					"newListings": 10,
+					"totalListings": 153
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 290000,
+					"medianPrice": 276000,
+					"minPrice": 133000,
+					"maxPrice": 590000,
+					"averageDaysOnMarket": 45.24,
+					"newListings": 45,
+					"totalListings": 96
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 295000,
+					"medianPrice": 279000,
+					"minPrice": 164000,
+					"maxPrice": 555000,
+					"averageDaysOnMarket": 45.34,
+					"newListings": 12,
+					"totalListings": 174
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 287000,
+					"medianPrice": 280000,
+					"minPrice": 158000,
+					"maxPrice": 690000,
+					"averageDaysOnMarket": 69.66,
+					"newListings": 11,
+					"totalListings": 168
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 303000,
+					"medianPrice": 281000,
+					"minPrice": 138000,
+					"maxPrice": 615000,
+					"averageDaysOnMarket": 65.04,
+					"newListings": 35,
+					"totalListings": 179
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 297000,
+					"medianPrice": 280000,
+					"minPrice": 141000,
+					"maxPrice": 596000,
+					"averageDaysOnMarket": 63.94,
+					"newListings": 28,
+					"totalListings": 108
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 288000,
+					"medianPrice": 279000,
+					"minPrice": 165000,
+					"maxPrice": 544000,
+					"averageDaysOnMarket": 50.18,
+					"newListings": 31,
+					"totalListings": 120
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 288000,
+					"medianPrice": 278000,
+					"minPrice": 149000,
+					"maxPrice": 619000,
+					"averageDaysOnMarket": 36.19,
+					"newListings": 36,
+					"totalListings": 78
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 293000,
+					"medianPrice": 277000,
+					"minPrice": 140000,
+					"maxPrice": 537000,
+					"averageDaysOnMarket": 57.24,
+					"newListings": 16,
+					"totalListings": 89
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 1805,
+			"medianRent": 1725,
+			"minRent": 930,
+			"maxRent": 3840,
+			"averageRentPerSquareFoot": 1.15,
+			"medianRentPerSquareFoot": 1.1,
+			"averageSquareFootage": 1569,
+			"averageDaysOnMarket": 42.7,
+			"medianDaysOnMarket": 40.5,
+			"newListings": 21,
+			"totalListings": 144,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averageRent": 1715,
+					"medianRent": 1660,
+					"minRent": 925,
+					"maxRent": 4240,
+					"totalListings": 14
+				},
+				{
+					"propertyType": "Manufactured",
+					"averageRent": 1625,
+					"medianRent": 1560,
+					"minRent": 805,
+					"maxRent": 2980,
+					"totalListings": 29
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 2115,
+					"medianRent": 2015,
+					"minRent": 1190,
+					"maxRent": 3860,
+					"totalListings": 34
+				},
+				{
+					"propertyType": "Single Family",
+					"averageRent": 1735,
+					"medianRent": 1665,
+					"minRent": 795,
+					"maxRent": 3565,
+					"totalListings": 24
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 1855,
+					"medianRent": 1815,
+					"minRent": 1085,
+					"maxRent": 3930,
+					"totalListings": 42
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1085,
+					"medianRent": 1035,
+					"minRent": 565,
+					"maxRent": 2635,
+					"totalListings": 13
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 1385,
+					"medianRent": 1310,
+					"minRent": 675,
+					"maxRent": 3045,
+					"totalListings": 7
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 1650,
+					"medianRent": 1585,
+					"minRent": 890,
+					"maxRent": 4010,
+					"totalListings": 9
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 1945,
+					"medianRent": 1865,
+					"minRent": 1065,
+					"maxRent": 3560,
+					"totalListings": 26
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 2250,
+					"medianRent": 2140,
+					"minRent": 1040,
+					"maxRent": 5225,
+					"totalListings": 7
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 2545,
+					"medianRent": 2415,
+					"minRent": 1320,
+					"maxRent": 5675,
+					"totalListings": 36
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 1625,
+					"medianRent": 1565,
+					"minRent": 895,
+					"maxRent": 3280,
+					"averageDaysOnMarket": 23.4,
+					"newListings": 28,
+					"totalListings": 188
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 1650,
+					"medianRent": 1570,
+					"minRent": 760,
+					"maxRent": 3335,
+					"averageDaysOnMarket": 40.45,
+					"newListings": 62,
+					"totalListings": 223
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 1635,
+					"medianRent": 1585,
+					"minRent": 910,
+					"maxRent": 3390,
+					"averageDaysOnMarket": 34.58,
+					"newListings": 57,
+					"totalListings": 116
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 1700,
+					"medianRent": 1605,
+					"minRent": 930,
+					"maxRent": 3570,
+					"averageDaysOnMarket": 34.08,
+					"newListings": 48,
+					"totalListings": 173
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 1720,
+					"medianRent": 1625,
+					"minRent": 885,
+					"maxRent": 3240,
+					"averageDaysOnMarket": 20.66,
+					"newListings": 36,
+					"totalListings": 176
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 1690,
+					"medianRent": 1640,
+					"minRent": 945,
+					"maxRent": 3365,
+					"averageDaysOnMarket": 26.76,
+					"newListings": 41,
+					"totalListings": 248
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 1770,
+					"medianRent": 1645,
+					"minRent": 925,
+					"maxRent": 3530,
+					"averageDaysOnMarket": 28.96,
+					"newListings": 52,
+					"totalListings": 120
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 1700,
+					"medianRent": 1650,
+					"minRent": 795,
+					"maxRent": 3150,
+					"averageDaysOnMarket": 24.99,
+					"newListings": 37,
+					"totalListings": 217
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 1760,
+					"medianRent": 1645,
+					"minRent": 970,
+					"maxRent": 3420,
+					"averageDaysOnMarket": 27.86,
+					"newListings": 20,
+					"totalListings": 144
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 1735,
+					"medianRent": 1640,
+					"minRent": 910,
+					"maxRent": 3460,
+					"averageDaysOnMarket": 37.98,
+					"newListings": 25,
+					"totalListings": 93
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 1700,
+					"medianRent": 1635,
+					"minRent": 805,
+					"maxRent": 3330,
+					"averageDaysOnMarket": 40.93,
+					"newListings": 53,
+					"totalListings": 236
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 1725,
+					"medianRent": 1630,
+					"minRent": 770,
+					"maxRent": 3275,
+					"averageDaysOnMarket": 31.31,
+					"newListings": 27,
+					"totalListings": 239
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 1675,
+					"medianRent": 1635,
+					"minRent": 750,
+					"maxRent": 3950,
+					"averageDaysOnMarket": 35.15,
+					"newListings": 22,
+					"totalListings": 106
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 1715,
+					"medianRent": 1645,
+					"minRent": 825,
+					"maxRent": 4155,
+					"averageDaysOnMarket": 31.82,
+					"newListings": 20,
+					"totalListings": 192
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 1705,
+					"medianRent": 1660,
+					"minRent": 955,
+					"maxRent": 3580,
+					"averageDaysOnMarket": 37.63,
+					"newListings": 57,
+					"totalListings": 190
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 1740,
+					"medianRent": 1675,
+					"minRent": 1000,
+					"maxRent": 3580,
+					"averageDaysOnMarket": 33.6,
+					"newListings": 26,
+					"totalListings": 254
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 1735,
+					"medianRent": 1695,
+					"minRent": 905,
+					"maxRent": 3645,
+					"averageDaysOnMarket": 35.21,
+					"newListings": 40,
+					"totalListings": 181
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 1835,
+					"medianRent": 1710,
+					"minRent": 865,
+					"maxRent": 3460,
+					"averageDaysOnMarket": 35.88,
+					"newListings": 66,
+					"totalListings": 176
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 1825,
+					"medianRent": 1720,
+					"minRent": 785,
+					"maxRent": 3520,
+					"averageDaysOnMarket": 21.41,
+					"newListings": 57,
+					"totalListings": 175
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 1810,
+					"medianRent": 1725,
+					"minRent": 885,
+					"maxRent": 3320,
+					"averageDaysOnMarket": 40.82,
+					"newListings": 58,
+					"totalListings": 242
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 1820,
+					"medianRent": 1720,
+					"minRent": 880,
+					"maxRent": 3725,
+					"averageDaysOnMarket": 27.09,
+					"newListings": 48,
+					"totalListings": 169
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 1805,
+					"medianRent": 1715,
+					"minRent": 965,
+					"maxRent": 3780,
+					"averageDaysOnMarket": 27.31,
+					"newListings": 29,
+					"totalListings": 260
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 1805,
+					"medianRent": 1705,
+					"minRent": 775,
+					"maxRent": 3720,
+					"averageDaysOnMarket": 41.3,
+					"newListings": 35,
+					"totalListings": 179
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 1745,
+					"medianRent": 1705,
+					"minRent": 770,
+					"maxRent": 3785,
+					"averageDaysOnMarket": 25.99,
+					"newListings": 51,
+					"totalListings": 129
+				}
+			}
+		}
+	},
+	{
+		"id": "74203",
+		"zipCode": "74203",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 394000,
+			"medianPrice": 373000,
+			"minPrice": 169000,
+			"maxPrice": 944000,
+			"averagePricePerSquareFoot": 283.05,
+			"medianPricePerSquareFoot": 267.96,
+			"averageSquareFootage": 1392,
+			"averageDaysOnMarket": 53.71,
+			"medianDaysOnMarket": 68,
+			"newListings": 37,
+			"totalListings": 114,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averagePrice": 349000,
+					"medianPrice": 325000,
+					"minPrice": 173000,
+					"maxPrice": 630000,
+					"totalListings": 26
+				},
+				{
+					"propertyType": "Condo",
+					"averagePrice": 320000,
+					"medianPrice": 305000,
+					"minPrice": 157000,
+					"maxPrice": 647000,
+					"totalListings": 24
+				},
+				{
+					"propertyType": "Land",
+					"averagePrice": 425000,
+					"medianPrice": 403000,
+					"minPrice": 233000,
+					"maxPrice": 770000,
+					"totalListings": 26
+				},
+				{
+					"propertyType": "Manufactured",
+					"averagePrice": 420000,
+					"medianPrice": 404000,
+					"minPrice": 206000,
+					"maxPrice": 1002000,
+					"totalListings": 18
+				},
+				{
+					"propertyType": "Townhouse",
+					"averagePrice": 426000,
+					"medianPrice": 399000,
+					"minPrice": 238000,
+					"maxPrice": 1034000,
+					"totalListings": 20
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 241000,
+					"medianPrice": 224000,
+					"minPrice": 123000,
+					"maxPrice": 560000,
+					"totalListings": 11
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 293000,
+					"medianPrice": 283000,
+					"minPrice": 137000,
+					"maxPrice": 636000,
+					"totalListings": 10
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 360000,
+					"medianPrice": 343000,
+					"minPrice": 168000,
+					"maxPrice": 852000,
+					"totalListings": 18
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 424000,
+					"medianPrice": 403000,
+					"minPrice": 233000,
+					"maxPrice": 942000,
+					"totalListings": 22
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 481000,
+					"medianPrice": 463000,
+					"minPrice": 277000,
+					"maxPrice": 1182000,
+					"totalListings": 38
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 556000,
+					"medianPrice": 522000,
+					"minPrice": 262000,
+					"maxPrice": 1027000,
+					"totalListings": 22
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 350000,
+					"medianPrice": 338000,
+					"minPrice": 199000,
+					"maxPrice": 742000,
+					"averageDaysOnMarket": 44.12,
+					"newListings": 31,
+					"totalListings": 184
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 361000,
+					"medianPrice": 340000,
+					"minPrice": 168000,
+					"maxPrice": 850000,
+					"averageDaysOnMarket": 48.39,
+					"newListings": 31,
+					"totalListings": 61
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 370000,
+					"medianPrice": 343000,
+					"minPrice": 178000,
+					"maxPrice": 836000,
+					"averageDaysOnMarket": 58.38,
+					"newListings": 40,
+					"totalListings": 150
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 362000,
+					"medianPrice": 347000,
+					"minPrice": 179000,
+					"maxPrice": 725000,
+					"averageDaysOnMarket": 34.28,
+					"newListings": 27,
+					"totalListings": 81
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 375000,
+					"medianPrice": 351000,
+					"minPrice": 160000,
+					"maxPrice": 823000,
+					"averageDaysOnMarket": 39.4,
+					"newListings": 11,
+					"totalListings": 134
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 369000,
+					"medianPrice": 354000,
+					"minPrice": 187000,
+					"maxPrice": 873000,
+					"averageDaysOnMarket": 46.16,
+					"newListings": 24,
+					"totalListings": 96
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 379000,
+					"medianPrice": 356000,
+					"minPrice": 194000,
+					"maxPrice": 845000,
+					"averageDaysOnMarket": 62.55,
+					"newListings": 29,
+					"totalListings": 181
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 380000,
+					"medianPrice": 357000,
+					"minPrice": 200000,
+					"maxPrice": 822000,
+					"averageDaysOnMarket": 69.12,
+					"newListings": 31,
+					"totalListings": 134
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 366000,
+					"medianPrice": 356000,
+					"minPrice": 178000,
+					"maxPrice": 856000,
+					"averageDaysOnMarket": 69.36,
+					"newListings": 25,
+					"totalListings": 86
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 378000,
+					"medianPrice": 355000,
+					"minPrice": 177000,
+					"maxPrice": 810000,
+					"averageDaysOnMarket": 62.81,
+					"newListings": 45,
+					"totalListings": 64
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 366000,
+					"medianPrice": 353000,
+					"minPrice": 182000,
+					"maxPrice": 783000,
+					"averageDaysOnMarket": 48.87,
+					"newListings": 27,
+					"totalListings": 124
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 367000,
+					"medianPrice": 353000,
+					"minPrice": 193000,
+					"maxPrice": 803000,
+					"averageDaysOnMarket": 67.3,
+					"newListings": 35,
+					"totalListings": 120
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 365000,
+					"medianPrice": 353000,
+					"minPrice": 189000,
+					"maxPrice": 813000,
+					"averageDaysOnMarket": 34.1,
+					"newListings": 42,
+					"totalListings": 88
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 370000,
+					"medianPrice": 355000,
+					"minPrice": 171000,
+					"maxPrice": 869000,
+					"averageDaysOnMarket": 43.23,
+					"newListings": 11,
+					"totalListings": 90
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 372000,
+					"medianPrice": 359000,
+					"minPrice": 169000,
+					"maxPrice": 744000,
+					"averageDaysOnMarket": 57.32,
+					"newListings": 10,
+					"totalListings": 113
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 384000,
+					"medianPrice": 363000,
+					"minPrice": 167000,
+					"maxPrice": 719000,
+					"averageDaysOnMarket": 63.85,
+					"newListings": 44,
+					"totalListings": 162
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 381000,
+					"medianPrice": 367000,
+					"minPrice": 218000,
+					"maxPrice": 756000,
+					"averageDaysOnMarket": 66.57,
+					"newListings": 37,
+					"totalListings": 109
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 385000,
+					"medianPrice": 370000,
+					"minPrice": 204000,
+					"maxPrice": 786000,
+					"averageDaysOnMarket": 59.07,
+					"newListings": 11,
+					"totalListings": 73
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 400000,
+					"medianPrice": 372000,
+					"minPrice": 190000,
+					"maxPrice": 763000,
+					"averageDaysOnMarket": 65.3,
+					"newListings": 38,
+					"totalListings": 127
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 388000,
+					"medianPrice": 373000,
+					"minPrice": 186000,
+					"maxPrice": 798000,
+					"averageDaysOnMarket": 66.85,
+					"newListings": 23,
+					"totalListings": 99
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 384000,
+					"medianPrice": 372000,
+					"minPrice": 220000,
+					"maxPrice": 907000,
+					"averageDaysOnMarket": 45.89,
+					"newListings": 17,
+					"totalListings": 150
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 388000,
+					"medianPrice": 370000,
+					"minPrice": 192000,
+					"maxPrice": 842000,
+					"averageDaysOnMarket": 43.01,
+					"newListings": 38,
+					"totalListings": 116
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 394000,
+					"medianPrice": 369000,
+					"minPrice": 191000,
+					"maxPrice": 716000,
+					"averageDaysOnMarket": 41.17,
+					"newListings": 31,
+					"totalListings": 146
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 382000,
+					"medianPrice": 368000,
+					"minPrice": 216000,
+					"maxPrice": 835000,
+					"averageDaysOnMarket": 46.96,
+					"newListings": 34,
+					"totalListings": 143
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 1850,
+			"medianRent": 1775,
+			"minRent": 1025,
+			"maxRent": 3905,
+			"averageRentPerSquareFoot": 0.88,
+			"medianRentPerSquareFoot": 0.84,
+			"averageSquareFootage": 2101,
+			"averageDaysOnMarket": 43.5,
+			"medianDaysOnMarket": 44,
+			"newListings": 32,
+			"totalListings": 101,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averageRent": 1815,
+					"medianRent": 1690,
+					"minRent": 1005,
+					"maxRent": 3270,
+					"totalListings": 16
+				},
+				{
+					"propertyType": "Condo",
+					"averageRent": 1945,
+					"medianRent": 1840,
+					"minRent": 1060,
+					"maxRent": 3815,
+					"totalListings": 10
+				},
+				{
+					"propertyType": "Manufactured",
+					"averageRent": 2070,
+					"medianRent": 1935,
+					"minRent": 980,
+					"maxRent": 4935,
+					"totalListings": 21
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 2045,
+					"medianRent": 1920,
+					"minRent": 1150,
+					"maxRent": 4220,
+					"totalListings": 20
+				},
+				{
+					"propertyType": "Single Family",
+					"averageRent": 1560,
+					"medianRent": 1445,
+					"minRent": 865,
+					"maxRent": 3705,
+					"totalListings": 20
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 1620,
+					"medianRent": 1520,
+					"minRent": 875,
+					"maxRent": 3425,
+					"totalListings": 14
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1130,
+					"medianRent": 1065,
+					"minRent": 545,
+					"maxRent": 2735,
+					"totalListings": 33
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 1380,
+					"medianRent": 1350,
+					"minRent": 735,
+					"maxRent": 3070,
+					"totalListings": 16
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 1740,
+					"medianRent": 1635,
+					"minRent": 840,
+					"maxRent": 4080,
+					"totalListings": 5
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 1975,
+					"medianRent": 1915,
+					"minRent": 1060,
+					"maxRent": 3640,
+					"totalListings": 28
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 2315,
+					"medianRent": 2200,
+					"minRent": 1180,
+					"maxRent": 5200,
+					"totalListings": 29
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 2630,
+					"medianRent": 2485,
+					"minRent": 1210,
+					"maxRent": 5070,
+					"totalListings": 11
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 1665,
+					"medianRent": 1610,
+					"minRent": 770,
+					"maxRent": 3605,
+					"averageDaysOnMarket": 25.64,
+					"newListings": 58,
+					"totalListings": 173
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 1720,
+					"medianRent": 1620,
+					"minRent": 915,
+					"maxRent": 3760,
+					"averageDaysOnMarket": 23.29,
+					"newListings": 42,
+					"totalListings": 216
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 1675,
+					"medianRent": 1635,
+					"minRent": 765,
+					"maxRent": 3385,
+					"averageDaysOnMarket": 22.89,
+					"newListings": 58,
+					"totalListings": 148
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 1750,
+					"medianRent": 1650,
+					"minRent": 980,
+					"maxRent": 3195,
+					"averageDaysOnMarket": 20.94,
+					"newListings": 38,
+					"totalListings": 215
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 1790,
+					"medianRent": 1670,
+					"minRent": 885,
+					"maxRent": 4215,
+					"averageDaysOnMarket": 32.95,
+					"newListings": 41,
+					"totalListings": 243
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 1765,
+					"medianRent": 1685,
+					"minRent": 960,
+					"maxRent": 4060,
+					"averageDaysOnMarket": 22.14,
+					"newListings": 69,
+					"totalListings": 214
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 1795,
+					"medianRent": 1695,
+					"minRent": 970,
+					"maxRent": 4310,
+					"averageDaysOnMarket": 31.13,
+					"newListings": 58,
+					"totalListings": 179
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 1805,
+					"medianRent": 1700,
+					"minRent": 1010,
+					"maxRent": 4270,
+					"averageDaysOnMarket": 21.78,
+					"newListings": 33,
+					"totalListings": 168
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 1735,
+					"medianRent": 1695,
+					"minRent": 825,
+					"maxRent": 3350,
+					"averageDaysOnMarket": 26.36,
+					"newListings": 44,
+					"totalListings": 132
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 1775,
+					"medianRent": 1690,
+					"minRent": 855,
+					"maxRent": 4190,
+					"averageDaysOnMarket": 28.99,
+					"newListings": 47,
+					"totalListings": 112
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 1805,
+					"medianRent": 1680,
+					"minRent": 960,
+					"maxRent": 3585,
+					"averageDaysOnMarket": 29.16,
+					"newListings": 61,
+					"totalListings": 212
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 1765,
+					"medianRent": 1680,
+					"minRent": 920,
+					"maxRent": 3655,
+					"averageDaysOnMarket": 27.04,
+					"newListings": 46,
+					"totalListings": 197
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 1795,
+					"medianRent": 1680,
+					"minRent": 985,
+					"maxRent": 3925,
+					"averageDaysOnMarket": 20.24,
+					"newListings": 27,
+					"totalListings": 95
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 1815,
+					"medianRent": 1690,
+					"minRent": 820,
+					"maxRent": 3720,
+					"averageDaysOnMarket": 35.41,
+					"newListings": 36,
+					"totalListings": 136
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 1760,
+					"medianRent": 1705,
+					"minRent": 775,
+					"maxRent": 3820,
+					"averageDaysOnMarket": 35.94,
+					"newListings": 26,
+					"totalListings": 91
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 1765,
+					"medianRent": 1725,
+					"minRent": 915,
+					"maxRent": 3320,
+					"averageDaysOnMarket": 29.11,
+					"newListings": 36,
+					"totalListings": 118
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 1800,
+					"medianRent": 1745,
+					"minRent": 825,
+					"maxRent": 4205,
+					"averageDaysOnMarket": 29.59,
+					"newListings": 36,
+					"totalListings": 174
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 1840,
+					"medianRent": 1760,
+					"minRent": 995,
+					"maxRent": 3890,
+					"averageDaysOnMarket": 18.98,
+					"newListings": 70,
+					"totalListings": 148
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 1910,
+					"medianRent": 1770,
+					"minRent": 825,
+					"maxRent": 3675,
+					"averageDaysOnMarket": 39.91,
+					"newListings": 69,
+					"totalListings": 163
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 1890,
+					"medianRent": 1775,
+					"minRent": 845,
+					"maxRent": 3825,
+					"averageDaysOnMarket": 21.26,
+					"newListings": 66,
+					"totalListings": 239
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 1815,
+					"medianRent": 1770,
+					"minRent": 860,
+					"maxRent": 4255,
+					"averageDaysOnMarket": 40.35,
+					"newListings": 66,
+					"totalListings": 180
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 1830,
+					"medianRent": 1765,
+					"minRent": 965,
+					"maxRent": 3665,
+					"averageDaysOnMarket": 31.19,
+					"newListings": 60,
+					"totalListings": 151
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 1840,
+					"medianRent": 1755,
+					"minRent": 930,
+					"maxRent": 3775,
+					"averageDaysOnMarket": 40.02,
+					"newListings": 40,
+					"totalListings": 244
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 1805,
+					"medianRent": 1750,
+					"minRent": 920,
+					"maxRent": 3965,
+					"averageDaysOnMarket": 33.25,
+					"newListings": 23,
+					"totalListings": 144
+				}
+			}
+		}
+	},
+	{
+		"id": "70201",
+		"zipCode": "70201",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 252000,
+			"medianPrice": 234000,
+			"minPrice": 121000,
+			"maxPrice": 582000,
+			"averagePricePerSquareFoot": 137.48,
+			"medianPricePerSquareFoot": 127.66,
+			"averageSquareFootage": 1833,
+			"averageDaysOnMarket": 41.43,
+			"medianDaysOnMarket": 34,
+			"newListings": 19,
+			"totalListings": 99,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averagePrice": 237000,
+					"medianPrice": 229000,
+					"minPrice": 126000,
+					"maxPrice": 586000,
+					"totalListings": 43
+				},
+				{
+					"propertyType": "Manufactured",
+					"averagePrice": 275000,
+					"medianPrice": 267000,
+					"minPrice": 140000,
+					"maxPrice": 546000,
+					"totalListings": 20
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averagePrice": 294000,
+					"medianPrice": 278000,
+					"minPrice": 137000,
+					"maxPrice": 574000,
+					"totalListings": 36
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 147000,
+					"medianPrice": 140000,
+					"minPrice": 76000,
+					"maxPrice": 288000,
+					"totalListings": 23
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 182000,
+					"medianPrice": 178000,
+					"minPrice": 86000,
+					"maxPrice": 342000,
+					"totalListings": 4
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 231000,
+					"medianPrice": 215000,
+					"minPrice": 103000,
+					"maxPrice": 558000,
+					"totalListings": 12
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 264000,
+					"medianPrice": 253000,
+					"minPrice": 115000,
+					"maxPrice": 606000,
+					"totalListings": 7
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 312000,
+					"medianPrice": 290000,
+					"minPrice": 171000,
+					"maxPrice": 696000,
+					"totalListings": 28
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 338000,
+					"medianPrice": 328000,
+					"minPrice": 174000,
+					"maxPrice": 782000,
+					"totalListings": 17
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 223000,
+					"medianPrice": 212000,
+					"minPrice": 110000,
+					"maxPrice": 471000,
+					"averageDaysOnMarket": 46.61,
+					"newListings": 38,
+					"totalListings": 127
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 220000,
+					"medianPrice": 213000,
+					"minPrice": 126000,
+					"maxPrice": 491000,
+					"averageDaysOnMarket": 65.94,
+					"newListings": 10,
+					"totalListings": 149
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 230000,
+					"medianPrice": 215000,
+					"minPrice": 109000,
+					"maxPrice": 534000,
+					"averageDaysOnMarket": 39.18,
+					"newListings": 36,
+					"totalListings": 137
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 231000,
+					"medianPrice": 218000,
+					"minPrice": 107000,
+					"maxPrice": 506000,
+					"averageDaysOnMarket": 42.18,
+					"newListings": 33,
+					"totalListings": 88
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 230000,
+					"medianPrice": 220000,
+					"minPrice": 107000,
+					"maxPrice": 560000,
+					"averageDaysOnMarket": 40.6,
+					"newListings": 17,
+					"totalListings": 153
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 234000,
+					"medianPrice": 222000,
+					"minPrice": 112000,
+					"maxPrice": 429000,
+					"averageDaysOnMarket": 62.39,
+					"newListings": 20,
+					"totalListings": 162
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 231000,
+					"medianPrice": 223000,
+					"minPrice": 131000,
+					"maxPrice": 527000,
+					"averageDaysOnMarket": 30.11,
+					"newListings": 37,
+					"totalListings": 125
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 238000,
+					"medianPrice": 224000,
+					"minPrice": 124000,
+					"maxPrice": 502000,
+					"averageDaysOnMarket": 39.85,
+					"newListings": 40,
+					"totalListings": 159
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 234000,
+					"medianPrice": 223000,
+					"minPrice": 121000,
+					"maxPrice": 434000,
+					"averageDaysOnMarket": 55.08,
+					"newListings": 25,
+					"totalListings": 121
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 235000,
+					"medianPrice": 223000,
+					"minPrice": 112000,
+					"maxPrice": 424000,
+					"averageDaysOnMarket": 47.28,
+					"newListings": 27,
+					"totalListings": 134
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 230000,
+					"medianPrice": 222000,
+					"minPrice": 113000,
+					"maxPrice": 437000,
+					"averageDaysOnMarket": 39.82,
+					"newListings": 29,
+					"totalListings": 79
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 231000,
+					"medianPrice": 221000,
+					"minPrice": 121000,
+					"maxPrice": 436000,
+					"averageDaysOnMarket": 34.61,
+					"newListings": 45,
+					"totalListings": 102
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 238000,
+					"medianPrice": 222000,
+					"minPrice": 125000,
+					"maxPrice": 546000,
+					"averageDaysOnMarket": 46.33,
+					"newListings": 45,
+					"totalListings": 82
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 236000,
+					"medianPrice": 223000,
+					"minPrice": 129000,
+					"maxPrice": 529000,
+					"averageDaysOnMarket": 34.99,
+					"newListings": 17,
+					"totalListings": 179
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 233000,
+					"medianPrice": 225000,
+					"minPrice": 116000,
+					"maxPrice": 491000,
+					"averageDaysOnMarket": 53.11,
+					"newListings": 30,
+					"totalListings": 71
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 237000,
+					"medianPrice": 227000,
+					"minPrice": 126000,
+					"maxPrice": 486000,
+					"averageDaysOnMarket": 69.08,
+					"newListings": 31,
+					"totalListings": 154
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 238000,
+					"medianPrice": 230000,
+					"minPrice": 124000,
+					"maxPrice": 474000,
+					"averageDaysOnMarket": 66.74,
+					"newListings": 14,
+					"totalListings": 106
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 241000,
+					"medianPrice": 232000,
+					"minPrice": 126000,
+					"maxPrice": 582000,
+					"averageDaysOnMarket": 58.89,
+					"newListings": 34,
+					"totalListings": 118
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 251000,
+					"medianPrice": 233000,
+					"minPrice": 121000,
+					"maxPrice": 479000,
+					"averageDaysOnMarket": 45.59,
+					"newListings": 20,
+					"totalListings": 185
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 248000,
+					"medianPrice": 234000,
+					"minPrice": 108000,
+					"maxPrice": 580000,
+					"averageDaysOnMarket": 39.96,
+					"newListings": 19,
+					"totalListings": 103
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 241000,
+					"medianPrice": 233000,
+					"minPrice": 111000,
+					"maxPrice": 475000,
+					"averageDaysOnMarket": 64.39,
+					"newListings": 18,
+					"totalListings": 152
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 237000,
+					"medianPrice": 232000,
+					"minPrice": 118000,
+					"maxPrice": 473000,
+					"averageDaysOnMarket": 57.24,
+					"newListings": 35,
+					"totalListings": 63
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 242000,
+					"medianPrice": 231000,
+					"minPrice": 132000,
+					"maxPrice": 459000,
+					"averageDaysOnMarket": 56.57,
+					"newListings": 20,
+					"totalListings": 87
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 241000,
+					"medianPrice": 231000,
+					"minPrice": 125000,
+					"maxPrice": 495000,
+					"averageDaysOnMarket": 60.25,
+					"newListings": 18,
+					"totalListings": 60
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 2425,
+			"medianRent": 2340,
+			"minRent": 1060,
+			"maxRent": 5985,
+			"averageRentPerSquareFoot": 1.32,
+			"medianRentPerSquareFoot": 1.27,
+			"averageSquareFootage": 1841,
+			"averageDaysOnMarket": 35.8,
+			"medianDaysOnMarket": 32,
+			"newListings": 41,
+			"totalListings": 213,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averageRent": 2345,
+					"medianRent": 2235,
+					"minRent": 1025,
+					"maxRent": 4750,
+					"totalListings": 56
+				},
+				{
+					"propertyType": "Condo",
+					"averageRent": 2655,
+					"medianRent": 2555,
+					"minRent": 1295,
+					"maxRent": 6195,
+					"totalListings": 33
+				},
+				{
+					"propertyType": "Manufactured",
+					"averageRent": 2445,
+					"medianRent": 2285,
+					"minRent": 1055,
+					"maxRent": 4565,
+					"totalListings": 41
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 2210,
+					"medianRent": 2050,
+					"minRent": 945,
+					"maxRent": 3975,
+					"totalListings": 36
+				},
+				{
+					"propertyType": "Single Family",
+					"averageRent": 2035,
+					"medianRent": 1920,
+					"minRent": 885,
+					"maxRent": 4700,
+					"totalListings": 29
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 2790,
+					"medianRent": 2605,
+					"minRent": 1395,
+					"maxRent": 6075,
+					"totalListings": 18
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1450,
+					"medianRent": 1405,
+					"minRent": 830,
+					"maxRent": 2900,
+					"totalListings": 44
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 1815,
+					"medianRent": 1775,
+					"minRent": 1000,
+					"maxRent": 4580,
+					"totalListings": 33
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 2240,
+					"medianRent": 2150,
+					"minRent": 1190,
+					"maxRent": 5465,
+					"totalListings": 53
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 2685,
+					"medianRent": 2525,
+					"minRent": 1305,
+					"maxRent": 6560,
+					"totalListings": 63
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 3085,
+					"medianRent": 2900,
+					"minRent": 1645,
+					"maxRent": 7375,
+					"totalListings": 32
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 3400,
+					"medianRent": 3275,
+					"minRent": 1595,
+					"maxRent": 7820,
+					"totalListings": 69
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 2220,
+					"medianRent": 2120,
+					"minRent": 1200,
+					"maxRent": 5405,
+					"averageDaysOnMarket": 20.01,
+					"newListings": 66,
+					"totalListings": 209
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 2230,
+					"medianRent": 2130,
+					"minRent": 1130,
+					"maxRent": 5025,
+					"averageDaysOnMarket": 40.17,
+					"newListings": 24,
+					"totalListings": 221
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 2250,
+					"medianRent": 2150,
+					"minRent": 1005,
+					"maxRent": 4775,
+					"averageDaysOnMarket": 19,
+					"newListings": 62,
+					"totalListings": 139
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 2245,
+					"medianRent": 2175,
+					"minRent": 1225,
+					"maxRent": 5580,
+					"averageDaysOnMarket": 18.77,
+					"newListings": 60,
+					"totalListings": 245
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 2280,
+					"medianRent": 2200,
+					"minRent": 1055,
+					"maxRent": 4640,
+					"averageDaysOnMarket": 38.56,
+					"newListings": 44,
+					"totalListings": 148
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 2310,
+					"medianRent": 2220,
+					"minRent": 1205,
+					"maxRent": 4865,
+					"averageDaysOnMarket": 24.25,
+					"newListings": 55,
+					"totalListings": 263
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 2375,
+					"medianRent": 2230,
+					"minRent": 1045,
+					"maxRent": 5785,
+					"averageDaysOnMarket": 22.86,
+					"newListings": 61,
+					"totalListings": 237
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 2290,
+					"medianRent": 2235,
+					"minRent": 1095,
+					"maxRent": 5650,
+					"averageDaysOnMarket": 27.15,
+					"newListings": 70,
+					"totalListings": 105
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 2390,
+					"medianRent": 2230,
+					"minRent": 1010,
+					"maxRent": 4440,
+					"averageDaysOnMarket": 27.16,
+					"newListings": 38,
+					"totalListings": 85
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 2335,
+					"medianRent": 2225,
+					"minRent": 1290,
+					"maxRent": 5700,
+					"averageDaysOnMarket": 37.5,
+					"newListings": 45,
+					"totalListings": 95
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 2295,
+					"medianRent": 2215,
+					"minRent": 1000,
+					"maxRent": 5215,
+					"averageDaysOnMarket": 29.3,
+					"newListings": 21,
+					"totalListings": 210
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 2285,
+					"medianRent": 2210,
+					"minRent": 1025,
+					"maxRent": 4655,
+					"averageDaysOnMarket": 31.83,
+					"newListings": 46,
+					"totalListings": 138
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 2270,
+					"medianRent": 2215,
+					"minRent": 1195,
+					"maxRent": 5570,
+					"averageDaysOnMarket": 22.71,
+					"newListings": 31,
+					"totalListings": 123
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 2335,
+					"medianRent": 2225,
+					"minRent": 1100,
+					"maxRent": 5135,
+					"averageDaysOnMarket": 41.64,
+					"newListings": 60,
+					"totalListings": 238
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 2390,
+					"medianRent": 2245,
+					"minRent": 1055,
+					"maxRent": 5155,
+					"averageDaysOnMarket": 33.29,
+					"newListings": 41,
+					"totalListings": 155
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 2335,
+					"medianRent": 2270,
+					"minRent": 1030,
+					"maxRent": 4735,
+					"averageDaysOnMarket": 41.45,
+					"newListings": 63,
+					"totalListings": 144
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 2425,
+					"medianRent": 2300,
+					"minRent": 1175,
+					"maxRent": 5645,
+					"averageDaysOnMarket": 30.6,
+					"newListings": 66,
+					"totalListings": 213
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 2460,
+					"medianRent": 2320,
+					"minRent": 1245,
+					"maxRent": 4635,
+					"averageDaysOnMarket": 18.49,
+					"newListings": 66,
+					"totalListings": 157
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 2400,
+					"medianRent": 2330,
+					"minRent": 1155,
+					"maxRent": 4945,
+					"averageDaysOnMarket": 20.8,
+					"newListings": 33,
+					"totalListings": 221
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 2515,
+					"medianRent": 2335,
+					"minRent": 1245,
+					"maxRent": 5885,
+					"averageDaysOnMarket": 22.83,
+					"newListings": 20,
+					"totalListings": 254
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 2410,
+					"medianRent": 2330,
+					"minRent": 1290,
+					"maxRent": 5090,
+					"averageDaysOnMarket": 27.82,
+					"newListings": 34,
+					"totalListings": 121
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 2445,
+					"medianRent": 2320,
+					"minRent": 1260,
+					"maxRent": 4580,
+					"averageDaysOnMarket": 21.21,
+					"newListings": 59,
+					"totalListings": 141
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 2425,
+					"medianRent": 2310,
+					"minRent": 1040,
+					"maxRent": 4835,
+					"averageDaysOnMarket": 23.43,
+					"newListings": 30,
+					"totalListings": 95
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 2460,
+					"medianRent": 2305,
+					"minRent": 1355,
+					"maxRent": 5035,
+					"averageDaysOnMarket": 23.7,
+					"newListings": 57,
+					"totalListings": 129
+				}
+			}
+		}
+	},
+	{
+		"id": "70204",
+		"zipCode": "70204",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 279000,
+			"medianPrice": 263000,
+			"minPrice": 139000,
+			"maxPrice": 568000,
+			"averagePricePerSquareFoot": 135.31,
+			"medianPricePerSquareFoot": 127.55,
+			"averageSquareFootage": 2062,
+			"averageDaysOnMarket": 42.33,
+			"medianDaysOnMarket": 39,
+			"newListings": 25,
+			"totalListings": 98,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Condo",
+					"averagePrice": 288000,
+					"medianPrice": 272000,
+					"minPrice": 132000,
+					"maxPrice": 518000,
+					"totalListings": 25
+				},
+				{
+					"propertyType": "Land",
+					"averagePrice": 259000,
+					"medianPrice": 253000,
+					"minPrice": 148000,
+					"maxPrice": 646000,
+					"totalListings": 27
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averagePrice": 320000,
+					"medianPrice": 304000,
+					"minPrice": 169000,
+					"maxPrice": 713000,
+					"totalListings": 18
+				},
+				{
+					"propertyType": "Single Family",
+					"averagePrice": 327000,
+					"medianPrice": 309000,
+					"minPrice": 152000,
+					"maxPrice": 756000,
+					"totalListings": 20
+				},
+				{
+					"propertyType": "Townhouse",
+					"averagePrice": 308000,
+					"medianPrice": 286000,
+					"minPrice": 149000,
+					"maxPrice": 657000,
+					"totalListings": 8
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 170000,
+					"medianPrice": 158000,
+					"minPrice": 79000,
+					"maxPrice": 306000,
+					"totalListings": 5
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 215000,
+					"medianPrice": 200000,
+					"minPrice": 119000,
+					"maxPrice": 460000,
+					"totalListings": 10
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 252000,
+					"medianPrice": 242000,
+					"minPrice": 135000,
+					"maxPrice": 519000,
+					"totalListings": 14
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 299000,
+					"medianPrice": 284000,
+					"minPrice": 136000,
+					"maxPrice": 570000,
+					"totalListings": 32
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 333000,
+					"medianPrice": 326000,
+					"minPrice": 187000,
+					"maxPrice": 803000,
+					"totalListings": 19
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 381000,
+					"medianPrice": 368000,
+					"minPrice": 175000,
+					"maxPrice": 721000,
+					"totalListings": 13
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 253000,
+					"medianPrice": 238000,
+					"minPrice": 133000,
+					"maxPrice": 531000,
+					"averageDaysOnMarket": 49.84,
+					"newListings": 21,
+					"totalListings": 100
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 250000,
+					"medianPrice": 240000,
+					"minPrice": 129000,
+					"maxPrice": 614000,
+					"averageDaysOnMarket": 40.01,
+					"newListings": 11,
+					"totalListings": 129
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 248000,
+					"medianPrice": 242000,
+					"minPrice": 138000,
+					"maxPrice": 479000,
+					"averageDaysOnMarket": 40.95,
+					"newListings": 35,
+					"totalListings": 164
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 261000,
+					"medianPrice": 245000,
+					"minPrice": 123000,
+					"maxPrice": 600000,
+					"averageDaysOnMarket": 57.7,
+					"newListings": 15,
+					"totalListings": 143
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 259000,
+					"medianPrice": 247000,
+					"minPrice": 112000,
+					"maxPrice": 599000,
+					"averageDaysOnMarket": 31.81,
+					"newListings": 15,
+					"totalListings": 60
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 264000,
+					"medianPrice": 250000,
+					"minPrice": 134000,
+					"maxPrice": 550000,
+					"averageDaysOnMarket": 69.53,
+					"newListings": 13,
+					"totalListings": 112
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 258000,
+					"medianPrice": 251000,
+					"minPrice": 135000,
+					"maxPrice": 611000,
+					"averageDaysOnMarket": 53.52,
+					"newListings": 31,
+					"totalListings": 105
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 265000,
+					"medianPrice": 252000,
+					"minPrice": 122000,
+					"maxPrice": 590000,
+					"averageDaysOnMarket": 44.54,
+					"newListings": 17,
+					"totalListings": 173
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 269000,
+					"medianPrice": 251000,
+					"minPrice": 142000,
+					"maxPrice": 626000,
+					"averageDaysOnMarket": 67.39,
+					"newListings": 31,
+					"totalListings": 57
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 256000,
+					"medianPrice": 250000,
+					"minPrice": 113000,
+					"maxPrice": 576000,
+					"averageDaysOnMarket": 45.89,
+					"newListings": 33,
+					"totalListings": 113
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 256000,
+					"medianPrice": 249000,
+					"minPrice": 131000,
+					"maxPrice": 516000,
+					"averageDaysOnMarket": 64.56,
+					"newListings": 44,
+					"totalListings": 100
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 255000,
+					"medianPrice": 249000,
+					"minPrice": 147000,
+					"maxPrice": 570000,
+					"averageDaysOnMarket": 65.78,
+					"newListings": 36,
+					"totalListings": 122
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 261000,
+					"medianPrice": 249000,
+					"minPrice": 115000,
+					"maxPrice": 525000,
+					"averageDaysOnMarket": 49.94,
+					"newListings": 25,
+					"totalListings": 139
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 259000,
+					"medianPrice": 251000,
+					"minPrice": 131000,
+					"maxPrice": 515000,
+					"averageDaysOnMarket": 34.7,
+					"newListings": 17,
+					"totalListings": 137
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 259000,
+					"medianPrice": 253000,
+					"minPrice": 146000,
+					"maxPrice": 657000,
+					"averageDaysOnMarket": 36.59,
+					"newListings": 35,
+					"totalListings": 184
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 264000,
+					"medianPrice": 256000,
+					"minPrice": 117000,
+					"maxPrice": 626000,
+					"averageDaysOnMarket": 60.05,
+					"newListings": 15,
+					"totalListings": 100
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 271000,
+					"medianPrice": 259000,
+					"minPrice": 125000,
+					"maxPrice": 576000,
+					"averageDaysOnMarket": 62.88,
+					"newListings": 27,
+					"totalListings": 158
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 276000,
+					"medianPrice": 261000,
+					"minPrice": 151000,
+					"maxPrice": 629000,
+					"averageDaysOnMarket": 46.32,
+					"newListings": 17,
+					"totalListings": 105
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 277000,
+					"medianPrice": 262000,
+					"minPrice": 118000,
+					"maxPrice": 520000,
+					"averageDaysOnMarket": 43.2,
+					"newListings": 24,
+					"totalListings": 72
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 278000,
+					"medianPrice": 263000,
+					"minPrice": 142000,
+					"maxPrice": 660000,
+					"averageDaysOnMarket": 38.8,
+					"newListings": 34,
+					"totalListings": 141
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 276000,
+					"medianPrice": 262000,
+					"minPrice": 142000,
+					"maxPrice": 500000,
+					"averageDaysOnMarket": 53.66,
+					"newListings": 20,
+					"totalListings": 113
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 273000,
+					"medianPrice": 261000,
+					"minPrice": 133000,
+					"maxPrice": 556000,
+					"averageDaysOnMarket": 43.04,
+					"newListings": 36,
+					"totalListings": 167
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 278000,
+					"medianPrice": 260000,
+					"minPrice": 121000,
+					"maxPrice": 543000,
+					"averageDaysOnMarket": 50.74,
+					"newListings": 42,
+					"totalListings": 56
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 270000,
+					"medianPrice": 260000,
+					"minPrice": 135000,
+					"maxPrice": 619000,
+					"averageDaysOnMarket": 53.26,
+					"newListings": 27,
+					"totalListings": 122
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 2795,
+			"medianRent": 2665,
+			"minRent": 1255,
+			"maxRent": 6200,
+			"averageRentPerSquareFoot": 1.52,
+			"medianRentPerSquareFoot": 1.45,
+			"averageSquareFootage": 1834,
+			"averageDaysOnMarket": 35.6,
+			"medianDaysOnMarket": 30.5,
+			"newListings": 64,
+			"totalListings": 162,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Condo",
+					"averageRent": 2745,
+					"medianRent": 2690,
+					"minRent": 1610,
+					"maxRent": 5145,
+					"totalListings": 41
+				},
+				{
+					"propertyType": "Manufactured",
+					"averageRent": 3145,
+					"medianRent": 3045,
+					"minRent": 1375,
+					"maxRent": 7490,
+					"totalListings": 28
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 3040,
+					"medianRent": 2950,
+					"minRent": 1540,
+					"maxRent": 7525,
+					"totalListings": 25
+				},
+				{
+					"propertyType": "Single Family",
+					"averageRent": 3185,
+					"medianRent": 2950,
+					"minRent": 1695,
+					"maxRent": 7345,
+					"totalListings": 46
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 2590,
+					"medianRent": 2500,
+					"minRent": 1455,
+					"maxRent": 5950,
+					"totalListings": 23
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1640,
+					"medianRent": 1600,
+					"minRent": 885,
+					"maxRent": 3785,
+					"totalListings": 50
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 2090,
+					"medianRent": 2025,
+					"minRent": 1090,
+					"maxRent": 4095,
+					"totalListings": 13
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 2645,
+					"medianRent": 2450,
+					"minRent": 1315,
+					"maxRent": 6180,
+					"totalListings": 14
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 3045,
+					"medianRent": 2875,
+					"minRent": 1470,
+					"maxRent": 6945,
+					"totalListings": 46
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 3505,
+					"medianRent": 3300,
+					"minRent": 1970,
+					"maxRent": 7305,
+					"totalListings": 51
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 3940,
+					"medianRent": 3725,
+					"minRent": 2115,
+					"maxRent": 8995,
+					"totalListings": 43
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 2605,
+					"medianRent": 2415,
+					"minRent": 1175,
+					"maxRent": 5700,
+					"averageDaysOnMarket": 21.21,
+					"newListings": 65,
+					"totalListings": 130
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 2565,
+					"medianRent": 2425,
+					"minRent": 1345,
+					"maxRent": 6255,
+					"averageDaysOnMarket": 23.4,
+					"newListings": 51,
+					"totalListings": 240
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 2640,
+					"medianRent": 2450,
+					"minRent": 1405,
+					"maxRent": 4855,
+					"averageDaysOnMarket": 41.48,
+					"newListings": 70,
+					"totalListings": 153
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 2545,
+					"medianRent": 2475,
+					"minRent": 1120,
+					"maxRent": 5265,
+					"averageDaysOnMarket": 18.97,
+					"newListings": 68,
+					"totalListings": 145
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 2610,
+					"medianRent": 2505,
+					"minRent": 1315,
+					"maxRent": 6450,
+					"averageDaysOnMarket": 23.22,
+					"newListings": 30,
+					"totalListings": 184
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 2705,
+					"medianRent": 2530,
+					"minRent": 1465,
+					"maxRent": 5870,
+					"averageDaysOnMarket": 38.44,
+					"newListings": 28,
+					"totalListings": 250
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 2605,
+					"medianRent": 2545,
+					"minRent": 1300,
+					"maxRent": 5865,
+					"averageDaysOnMarket": 20.17,
+					"newListings": 63,
+					"totalListings": 128
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 2725,
+					"medianRent": 2545,
+					"minRent": 1475,
+					"maxRent": 5195,
+					"averageDaysOnMarket": 29.6,
+					"newListings": 68,
+					"totalListings": 255
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 2685,
+					"medianRent": 2545,
+					"minRent": 1440,
+					"maxRent": 6105,
+					"averageDaysOnMarket": 42.68,
+					"newListings": 51,
+					"totalListings": 159
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 2735,
+					"medianRent": 2535,
+					"minRent": 1400,
+					"maxRent": 5195,
+					"averageDaysOnMarket": 42.66,
+					"newListings": 22,
+					"totalListings": 208
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 2645,
+					"medianRent": 2525,
+					"minRent": 1215,
+					"maxRent": 5375,
+					"averageDaysOnMarket": 21.34,
+					"newListings": 58,
+					"totalListings": 177
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 2690,
+					"medianRent": 2520,
+					"minRent": 1310,
+					"maxRent": 5530,
+					"averageDaysOnMarket": 24.33,
+					"newListings": 40,
+					"totalListings": 144
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 2650,
+					"medianRent": 2520,
+					"minRent": 1335,
+					"maxRent": 6180,
+					"averageDaysOnMarket": 34.37,
+					"newListings": 29,
+					"totalListings": 116
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 2595,
+					"medianRent": 2535,
+					"minRent": 1235,
+					"maxRent": 4970,
+					"averageDaysOnMarket": 40.88,
+					"newListings": 59,
+					"totalListings": 201
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 2675,
+					"medianRent": 2560,
+					"minRent": 1195,
+					"maxRent": 6245,
+					"averageDaysOnMarket": 24.71,
+					"newListings": 62,
+					"totalListings": 140
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 2730,
+					"medianRent": 2590,
+					"minRent": 1470,
+					"maxRent": 4995,
+					"averageDaysOnMarket": 38.9,
+					"newListings": 62,
+					"totalListings": 120
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 2725,
+					"medianRent": 2615,
+					"minRent": 1520,
+					"maxRent": 5060,
+					"averageDaysOnMarket": 42,
+					"newListings": 32,
+					"totalListings": 186
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 2710,
+					"medianRent": 2640,
+					"minRent": 1330,
+					"maxRent": 5785,
+					"averageDaysOnMarket": 30.99,
+					"newListings": 38,
+					"totalListings": 210
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 2730,
+					"medianRent": 2655,
+					"minRent": 1225,
+					"maxRent": 5255,
+					"averageDaysOnMarket": 38.61,
+					"newListings": 56,
+					"totalListings": 265
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 2800,
+					"medianRent": 2660,
+					"minRent": 1275,
+					"maxRent": 6705,
+					"averageDaysOnMarket": 34.94,
+					"newListings": 69,
+					"totalListings": 85
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 2755,
+					"medianRent": 2655,
+					"minRent": 1425,
+					"maxRent": 6805,
+					"averageDaysOnMarket": 32.34,
+					"newListings": 56,
+					"totalListings": 97
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 2750,
+					"medianRent": 2645,
+					"minRent": 1280,
+					"maxRent": 6440,
+					"averageDaysOnMarket": 22.11,
+					"newListings": 41,
+					"totalListings": 111
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 2845,
+					"medianRent": 2635,
+					"minRent": 1415,
+					"maxRent": 5980,
+					"averageDaysOnMarket": 30.34,
+					"newListings": 58,
+					"totalListings": 168
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 2685,
+					"medianRent": 2630,
+					"minRent": 1310,
+					"maxRent": 6105,
+					"averageDaysOnMarket": 34.51,
+					"newListings": 27,
+					"totalListings": 224
+				}
+			}
+		}
+	},
+	{
+		"id": "85801",
+		"zipCode": "85801",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 378000,
+			"medianPrice": 354000,
+			"minPrice": 163000,
+			"maxPrice": 711000,
+			"averagePricePerSquareFoot": 192.96,
+			"medianPricePerSquareFoot": 180.7,
+			"averageSquareFootage": 1959,
+			"averageDaysOnMarket": 27.71,
+			"medianDaysOnMarket": 28,
+			"newListings": 13,
+			"totalListings": 163,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Condo",
+					"averagePrice": 345000,
+					"medianPrice": 338000,
+					"minPrice": 179000,
+					"maxPrice": 867000,
+					"totalListings": 23
+				},
+				{
+					"propertyType": "Manufactured",
+					"averagePrice": 326000,
+					"medianPrice": 317000,
+					"minPrice": 171000,
+					"maxPrice": 730000,
+					"totalListings": 42
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averagePrice": 299000,
+					"medianPrice": 285000,
+					"minPrice": 169000,
+					"maxPrice": 559000,
+					"totalListings": 49
+				},
+				{
+					"propertyType": "Single Family",
+					"averagePrice": 315000,
+					"medianPrice": 294000,
+					"minPrice": 147000,
+					"maxPrice": 579000,
+					"totalListings": 21
+				},
+				{
+					"propertyType": "Townhouse",
+					"averagePrice": 360000,
+					"medianPrice": 350000,
+					"minPrice": 163000,
+					"maxPrice": 906000,
+					"totalListings": 28
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 224000,
+					"medianPrice": 212000,
+					"minPrice": 106000,
+					"maxPrice": 496000,
+					"totalListings": 54
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 287000,
+					"medianPrice": 269000,
+					"minPrice": 135000,
+					"maxPrice": 593000,
+					"totalListings": 49
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 351000,
+					"medianPrice": 326000,
+					"minPrice": 154000,
+					"maxPrice": 808000,
+					"totalListings": 51
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 404000,
+					"medianPrice": 382000,
+					"minPrice": 184000,
+					"maxPrice": 804000,
+					"totalListings": 28
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 456000,
+					"medianPrice": 439000,
+					"minPrice": 251000,
+					"maxPrice": 1038000,
+					"totalListings": 28
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 535000,
+					"medianPrice": 496000,
+					"minPrice": 245000,
+					"maxPrice": 1113000,
+					"totalListings": 48
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 342000,
+					"medianPrice": 321000,
+					"minPrice": 191000,
+					"maxPrice": 741000,
+					"averageDaysOnMarket": 37.53,
+					"newListings": 39,
+					"totalListings": 130
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 344000,
+					"medianPrice": 323000,
+					"minPrice": 186000,
+					"maxPrice": 791000,
+					"averageDaysOnMarket": 37.95,
+					"newListings": 30,
+					"totalListings": 163
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 348000,
+					"medianPrice": 326000,
+					"minPrice": 147000,
+					"maxPrice": 818000,
+					"averageDaysOnMarket": 34.32,
+					"newListings": 38,
+					"totalListings": 161
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 337000,
+					"medianPrice": 329000,
+					"minPrice": 162000,
+					"maxPrice": 795000,
+					"averageDaysOnMarket": 58.67,
+					"newListings": 22,
+					"totalListings": 105
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 344000,
+					"medianPrice": 333000,
+					"minPrice": 186000,
+					"maxPrice": 769000,
+					"averageDaysOnMarket": 50.74,
+					"newListings": 42,
+					"totalListings": 148
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 355000,
+					"medianPrice": 336000,
+					"minPrice": 190000,
+					"maxPrice": 687000,
+					"averageDaysOnMarket": 60.34,
+					"newListings": 20,
+					"totalListings": 110
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 351000,
+					"medianPrice": 338000,
+					"minPrice": 152000,
+					"maxPrice": 833000,
+					"averageDaysOnMarket": 37.47,
+					"newListings": 28,
+					"totalListings": 163
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 359000,
+					"medianPrice": 339000,
+					"minPrice": 177000,
+					"maxPrice": 742000,
+					"averageDaysOnMarket": 61.34,
+					"newListings": 35,
+					"totalListings": 96
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 345000,
+					"medianPrice": 338000,
+					"minPrice": 168000,
+					"maxPrice": 830000,
+					"averageDaysOnMarket": 37.58,
+					"newListings": 44,
+					"totalListings": 80
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 344000,
+					"medianPrice": 337000,
+					"minPrice": 198000,
+					"maxPrice": 706000,
+					"averageDaysOnMarket": 59.96,
+					"newListings": 31,
+					"totalListings": 73
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 345000,
+					"medianPrice": 335000,
+					"minPrice": 183000,
+					"maxPrice": 817000,
+					"averageDaysOnMarket": 68.71,
+					"newListings": 21,
+					"totalListings": 108
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 344000,
+					"medianPrice": 335000,
+					"minPrice": 193000,
+					"maxPrice": 723000,
+					"averageDaysOnMarket": 50.1,
+					"newListings": 10,
+					"totalListings": 131
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 352000,
+					"medianPrice": 335000,
+					"minPrice": 188000,
+					"maxPrice": 820000,
+					"averageDaysOnMarket": 60.1,
+					"newListings": 19,
+					"totalListings": 116
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 362000,
+					"medianPrice": 337000,
+					"minPrice": 190000,
+					"maxPrice": 713000,
+					"averageDaysOnMarket": 61.84,
+					"newListings": 18,
+					"totalListings": 182
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 362000,
+					"medianPrice": 340000,
+					"minPrice": 164000,
+					"maxPrice": 659000,
+					"averageDaysOnMarket": 44.43,
+					"newListings": 10,
+					"totalListings": 174
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 366000,
+					"medianPrice": 344000,
+					"minPrice": 160000,
+					"maxPrice": 667000,
+					"averageDaysOnMarket": 48.97,
+					"newListings": 21,
+					"totalListings": 64
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 355000,
+					"medianPrice": 348000,
+					"minPrice": 169000,
+					"maxPrice": 838000,
+					"averageDaysOnMarket": 35.55,
+					"newListings": 19,
+					"totalListings": 149
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 368000,
+					"medianPrice": 351000,
+					"minPrice": 182000,
+					"maxPrice": 891000,
+					"averageDaysOnMarket": 35.57,
+					"newListings": 22,
+					"totalListings": 88
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 379000,
+					"medianPrice": 353000,
+					"minPrice": 174000,
+					"maxPrice": 728000,
+					"averageDaysOnMarket": 66.53,
+					"newListings": 30,
+					"totalListings": 107
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 372000,
+					"medianPrice": 354000,
+					"minPrice": 210000,
+					"maxPrice": 721000,
+					"averageDaysOnMarket": 47.43,
+					"newListings": 12,
+					"totalListings": 130
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 374000,
+					"medianPrice": 353000,
+					"minPrice": 196000,
+					"maxPrice": 898000,
+					"averageDaysOnMarket": 42.02,
+					"newListings": 16,
+					"totalListings": 68
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 371000,
+					"medianPrice": 352000,
+					"minPrice": 202000,
+					"maxPrice": 824000,
+					"averageDaysOnMarket": 46.35,
+					"newListings": 42,
+					"totalListings": 75
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 373000,
+					"medianPrice": 350000,
+					"minPrice": 171000,
+					"maxPrice": 840000,
+					"averageDaysOnMarket": 40.25,
+					"newListings": 35,
+					"totalListings": 91
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 360000,
+					"medianPrice": 349000,
+					"minPrice": 159000,
+					"maxPrice": 716000,
+					"averageDaysOnMarket": 45.25,
+					"newListings": 18,
+					"totalListings": 141
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 2005,
+			"medianRent": 1890,
+			"minRent": 855,
+			"maxRent": 4255,
+			"averageRentPerSquareFoot": 1.34,
+			"medianRentPerSquareFoot": 1.26,
+			"averageSquareFootage": 1498,
+			"averageDaysOnMarket": 45.9,
+			"medianDaysOnMarket": 50,
+			"newListings": 66,
+			"totalListings": 206,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averageRent": 1650,
+					"medianRent": 1535,
+					"minRent": 815,
+					"maxRent": 3875,
+					"totalListings": 52
+				},
+				{
+					"propertyType": "Condo",
+					"averageRent": 2155,
+					"medianRent": 2005,
+					"minRent": 1165,
+					"maxRent": 4425,
+					"totalListings": 48
+				},
+				{
+					"propertyType": "Manufactured",
+					"averageRent": 2145,
+					"medianRent": 2015,
+					"minRent": 1095,
+					"maxRent": 4375,
+					"totalListings": 27
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 2070,
+					"medianRent": 1935,
+					"minRent": 925,
+					"maxRent": 4885,
+					"totalListings": 52
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 2130,
+					"medianRent": 2005,
+					"minRent": 965,
+					"maxRent": 3880,
+					"totalListings": 27
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1185,
+					"medianRent": 1135,
+					"minRent": 635,
+					"maxRent": 2745,
+					"totalListings": 22
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 1475,
+					"medianRent": 1435,
+					"minRent": 740,
+					"maxRent": 3520,
+					"totalListings": 22
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 1835,
+					"medianRent": 1735,
+					"minRent": 840,
+					"maxRent": 4315,
+					"totalListings": 59
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 2130,
+					"medianRent": 2040,
+					"minRent": 1155,
+					"maxRent": 5280,
+					"totalListings": 45
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 2465,
+					"medianRent": 2340,
+					"minRent": 1060,
+					"maxRent": 5720,
+					"totalListings": 63
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 2760,
+					"medianRent": 2645,
+					"minRent": 1210,
+					"maxRent": 6095,
+					"totalListings": 14
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 1790,
+					"medianRent": 1710,
+					"minRent": 780,
+					"maxRent": 3505,
+					"averageDaysOnMarket": 20.03,
+					"newListings": 20,
+					"totalListings": 232
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 1855,
+					"medianRent": 1720,
+					"minRent": 1020,
+					"maxRent": 4240,
+					"averageDaysOnMarket": 27.51,
+					"newListings": 25,
+					"totalListings": 184
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 1840,
+					"medianRent": 1735,
+					"minRent": 1030,
+					"maxRent": 4330,
+					"averageDaysOnMarket": 27.67,
+					"newListings": 52,
+					"totalListings": 248
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 1815,
+					"medianRent": 1755,
+					"minRent": 870,
+					"maxRent": 3435,
+					"averageDaysOnMarket": 42.64,
+					"newListings": 61,
+					"totalListings": 149
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 1900,
+					"medianRent": 1775,
+					"minRent": 805,
+					"maxRent": 4540,
+					"averageDaysOnMarket": 33.76,
+					"newListings": 44,
+					"totalListings": 218
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 1890,
+					"medianRent": 1790,
+					"minRent": 1050,
+					"maxRent": 3725,
+					"averageDaysOnMarket": 41.44,
+					"newListings": 25,
+					"totalListings": 191
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 1855,
+					"medianRent": 1805,
+					"minRent": 870,
+					"maxRent": 3745,
+					"averageDaysOnMarket": 36.83,
+					"newListings": 32,
+					"totalListings": 206
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 1905,
+					"medianRent": 1805,
+					"minRent": 1025,
+					"maxRent": 4030,
+					"averageDaysOnMarket": 24.09,
+					"newListings": 28,
+					"totalListings": 154
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 1850,
+					"medianRent": 1800,
+					"minRent": 1050,
+					"maxRent": 3660,
+					"averageDaysOnMarket": 19.65,
+					"newListings": 24,
+					"totalListings": 128
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 1925,
+					"medianRent": 1795,
+					"minRent": 905,
+					"maxRent": 3920,
+					"averageDaysOnMarket": 38.58,
+					"newListings": 51,
+					"totalListings": 86
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 1850,
+					"medianRent": 1790,
+					"minRent": 890,
+					"maxRent": 3720,
+					"averageDaysOnMarket": 24.25,
+					"newListings": 57,
+					"totalListings": 245
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 1835,
+					"medianRent": 1785,
+					"minRent": 1030,
+					"maxRent": 3675,
+					"averageDaysOnMarket": 28.62,
+					"newListings": 20,
+					"totalListings": 159
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 1910,
+					"medianRent": 1790,
+					"minRent": 935,
+					"maxRent": 3495,
+					"averageDaysOnMarket": 39.86,
+					"newListings": 26,
+					"totalListings": 264
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 1890,
+					"medianRent": 1800,
+					"minRent": 985,
+					"maxRent": 4240,
+					"averageDaysOnMarket": 18.78,
+					"newListings": 20,
+					"totalListings": 124
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 1925,
+					"medianRent": 1815,
+					"minRent": 1040,
+					"maxRent": 4455,
+					"averageDaysOnMarket": 30.92,
+					"newListings": 34,
+					"totalListings": 97
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 1895,
+					"medianRent": 1835,
+					"minRent": 1055,
+					"maxRent": 3720,
+					"averageDaysOnMarket": 35.09,
+					"newListings": 47,
+					"totalListings": 89
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 1995,
+					"medianRent": 1855,
+					"minRent": 1015,
+					"maxRent": 3995,
+					"averageDaysOnMarket": 21.5,
+					"newListings": 67,
+					"totalListings": 130
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 1955,
+					"medianRent": 1870,
+					"minRent": 1065,
+					"maxRent": 3655,
+					"averageDaysOnMarket": 30.72,
+					"newListings": 42,
+					"totalListings": 109
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 1995,
+					"medianRent": 1880,
+					"minRent": 1020,
+					"maxRent": 3695,
+					"averageDaysOnMarket": 21.67,
+					"newListings": 32,
+					"totalListings": 240
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 1950,
+					"medianRent": 1885,
+					"minRent": 1105,
+					"maxRent": 4550,
+					"averageDaysOnMarket": 38.13,
+					"newListings": 21,
+					"totalListings": 157
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 2020,
+					"medianRent": 1880,
+					"minRent": 885,
+					"maxRent": 4825,
+					"averageDaysOnMarket": 18.51,
+					"newListings": 50,
+					"totalListings": 95
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 2020,
+					"medianRent": 1875,
+					"minRent": 1070,
+					"maxRent": 4825,
+					"averageDaysOnMarket": 36.99,
+					"newListings": 34,
+					"totalListings": 192
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 1945,
+					"medianRent": 1865,
+					"minRent": 920,
+					"maxRent": 4350,
+					"averageDaysOnMarket": 29.02,
+					"newListings": 39,
+					"totalListings": 109
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 1985,
+					"medianRent": 1865,
+					"minRent": 1100,
+					"maxRent": 4710,
+					"averageDaysOnMarket": 29.12,
+					"newListings": 60,
+					"totalListings": 90
+				}
+			}
+		}
+	},
+	{
+		"id": "85806",
+		"zipCode": "85806",
+		"saleData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averagePrice": 485000,
+			"medianPrice": 467000,
+			"minPrice": 247000,
+			"maxPrice": 973000,
+			"averagePricePerSquareFoot": 244.95,
+			"medianPricePerSquareFoot": 235.86,
+			"averageSquareFootage": 1980,
+			"averageDaysOnMarket": 30.17,
+			"medianDaysOnMarket": 13.5,
+			"newListings": 31,
+			"totalListings": 93,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Condo",
+					"averagePrice": 417000,
+					"medianPrice": 387000,
+					"minPrice": 205000,
+					"maxPrice": 801000,
+					"totalListings": 27
+				},
+				{
+					"propertyType": "Land",
+					"averagePrice": 444000,
+					"medianPrice": 432000,
+					"minPrice": 242000,
+					"maxPrice": 935000,
+					"totalListings": 21
+				},
+				{
+					"propertyType": "Manufactured",
+					"averagePrice": 571000,
+					"medianPrice": 554000,
+					"minPrice": 272000,
+					"maxPrice": 1186000,
+					"totalListings": 9
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averagePrice": 422000,
+					"medianPrice": 404000,
+					"minPrice": 208000,
+					"maxPrice": 988000,
+					"totalListings": 26
+				},
+				{
+					"propertyType": "Townhouse",
+					"averagePrice": 521000,
+					"medianPrice": 496000,
+					"minPrice": 268000,
+					"maxPrice": 1199000,
+					"totalListings": 10
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averagePrice": 291000,
+					"medianPrice": 280000,
+					"minPrice": 157000,
+					"maxPrice": 616000,
+					"totalListings": 27
+				},
+				{
+					"bedrooms": 1,
+					"averagePrice": 369000,
+					"medianPrice": 355000,
+					"minPrice": 200000,
+					"maxPrice": 885000,
+					"totalListings": 5
+				},
+				{
+					"bedrooms": 2,
+					"averagePrice": 442000,
+					"medianPrice": 430000,
+					"minPrice": 237000,
+					"maxPrice": 1080000,
+					"totalListings": 9
+				},
+				{
+					"bedrooms": 3,
+					"averagePrice": 520000,
+					"medianPrice": 504000,
+					"minPrice": 249000,
+					"maxPrice": 1286000,
+					"totalListings": 4
+				},
+				{
+					"bedrooms": 4,
+					"averagePrice": 598000,
+					"medianPrice": 579000,
+					"minPrice": 299000,
+					"maxPrice": 1146000,
+					"totalListings": 19
+				},
+				{
+					"bedrooms": 5,
+					"averagePrice": 668000,
+					"medianPrice": 654000,
+					"minPrice": 295000,
+					"maxPrice": 1409000,
+					"totalListings": 19
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averagePrice": 441000,
+					"medianPrice": 423000,
+					"minPrice": 211000,
+					"maxPrice": 804000,
+					"averageDaysOnMarket": 36.08,
+					"newListings": 42,
+					"totalListings": 97
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averagePrice": 448000,
+					"medianPrice": 426000,
+					"minPrice": 214000,
+					"maxPrice": 969000,
+					"averageDaysOnMarket": 59.79,
+					"newListings": 30,
+					"totalListings": 140
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averagePrice": 456000,
+					"medianPrice": 430000,
+					"minPrice": 244000,
+					"maxPrice": 957000,
+					"averageDaysOnMarket": 64.35,
+					"newListings": 31,
+					"totalListings": 92
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averagePrice": 446000,
+					"medianPrice": 435000,
+					"minPrice": 198000,
+					"maxPrice": 960000,
+					"averageDaysOnMarket": 51.48,
+					"newListings": 45,
+					"totalListings": 84
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averagePrice": 468000,
+					"medianPrice": 439000,
+					"minPrice": 229000,
+					"maxPrice": 1105000,
+					"averageDaysOnMarket": 30.42,
+					"newListings": 36,
+					"totalListings": 173
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averagePrice": 478000,
+					"medianPrice": 443000,
+					"minPrice": 224000,
+					"maxPrice": 1062000,
+					"averageDaysOnMarket": 30.17,
+					"newListings": 29,
+					"totalListings": 71
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averagePrice": 457000,
+					"medianPrice": 446000,
+					"minPrice": 227000,
+					"maxPrice": 875000,
+					"averageDaysOnMarket": 64.67,
+					"newListings": 32,
+					"totalListings": 84
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averagePrice": 475000,
+					"medianPrice": 447000,
+					"minPrice": 249000,
+					"maxPrice": 894000,
+					"averageDaysOnMarket": 62.65,
+					"newListings": 22,
+					"totalListings": 98
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averagePrice": 475000,
+					"medianPrice": 446000,
+					"minPrice": 263000,
+					"maxPrice": 1123000,
+					"averageDaysOnMarket": 53.56,
+					"newListings": 42,
+					"totalListings": 73
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averagePrice": 470000,
+					"medianPrice": 444000,
+					"minPrice": 242000,
+					"maxPrice": 990000,
+					"averageDaysOnMarket": 57.33,
+					"newListings": 42,
+					"totalListings": 113
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averagePrice": 471000,
+					"medianPrice": 443000,
+					"minPrice": 201000,
+					"maxPrice": 849000,
+					"averageDaysOnMarket": 50.72,
+					"newListings": 16,
+					"totalListings": 95
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averagePrice": 473000,
+					"medianPrice": 442000,
+					"minPrice": 257000,
+					"maxPrice": 1112000,
+					"averageDaysOnMarket": 34.98,
+					"newListings": 35,
+					"totalListings": 150
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averagePrice": 467000,
+					"medianPrice": 442000,
+					"minPrice": 263000,
+					"maxPrice": 847000,
+					"averageDaysOnMarket": 65.57,
+					"newListings": 18,
+					"totalListings": 129
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averagePrice": 475000,
+					"medianPrice": 445000,
+					"minPrice": 215000,
+					"maxPrice": 1102000,
+					"averageDaysOnMarket": 50.32,
+					"newListings": 25,
+					"totalListings": 124
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averagePrice": 468000,
+					"medianPrice": 449000,
+					"minPrice": 243000,
+					"maxPrice": 905000,
+					"averageDaysOnMarket": 56.6,
+					"newListings": 30,
+					"totalListings": 156
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averagePrice": 479000,
+					"medianPrice": 454000,
+					"minPrice": 238000,
+					"maxPrice": 918000,
+					"averageDaysOnMarket": 38.66,
+					"newListings": 44,
+					"totalListings": 136
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averagePrice": 472000,
+					"medianPrice": 459000,
+					"minPrice": 259000,
+					"maxPrice": 971000,
+					"averageDaysOnMarket": 69.35,
+					"newListings": 16,
+					"totalListings": 112
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averagePrice": 483000,
+					"medianPrice": 463000,
+					"minPrice": 259000,
+					"maxPrice": 1159000,
+					"averageDaysOnMarket": 55.06,
+					"newListings": 33,
+					"totalListings": 69
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averagePrice": 480000,
+					"medianPrice": 466000,
+					"minPrice": 257000,
+					"maxPrice": 922000,
+					"averageDaysOnMarket": 36.85,
+					"newListings": 21,
+					"totalListings": 83
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averagePrice": 495000,
+					"medianPrice": 466000,
+					"minPrice": 256000,
+					"maxPrice": 1112000,
+					"averageDaysOnMarket": 57.43,
+					"newListings": 31,
+					"totalListings": 74
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averagePrice": 491000,
+					"medianPrice": 466000,
+					"minPrice": 237000,
+					"maxPrice": 963000,
+					"averageDaysOnMarket": 55.28,
+					"newListings": 13,
+					"totalListings": 75
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averagePrice": 493000,
+					"medianPrice": 464000,
+					"minPrice": 270000,
+					"maxPrice": 899000,
+					"averageDaysOnMarket": 32.17,
+					"newListings": 15,
+					"totalListings": 59
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averagePrice": 480000,
+					"medianPrice": 462000,
+					"minPrice": 254000,
+					"maxPrice": 1133000,
+					"averageDaysOnMarket": 65.15,
+					"newListings": 35,
+					"totalListings": 80
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averagePrice": 496000,
+					"medianPrice": 461000,
+					"minPrice": 252000,
+					"maxPrice": 928000,
+					"averageDaysOnMarket": 36.06,
+					"newListings": 27,
+					"totalListings": 92
+				}
+			}
+		},
+		"rentalData": {
+			"lastUpdatedDate": "2026-09-30T00:00:00.000Z",
+			"averageRent": 2375,
+			"medianRent": 2315,
+			"minRent": 1260,
+			"maxRent": 5635,
+			"averageRentPerSquareFoot": 1.88,
+			"medianRentPerSquareFoot": 1.83,
+			"averageSquareFootage": 1262,
+			"averageDaysOnMarket": 40.2,
+			"medianDaysOnMarket": 36.5,
+			"newListings": 56,
+			"totalListings": 240,
+			"dataByPropertyType": [
+				{
+					"propertyType": "Apartment",
+					"averageRent": 2785,
+					"medianRent": 2685,
+					"minRent": 1255,
+					"maxRent": 6975,
+					"totalListings": 42
+				},
+				{
+					"propertyType": "Condo",
+					"averageRent": 2230,
+					"medianRent": 2065,
+					"minRent": 985,
+					"maxRent": 4455,
+					"totalListings": 72
+				},
+				{
+					"propertyType": "Multi-Family",
+					"averageRent": 2810,
+					"medianRent": 2720,
+					"minRent": 1415,
+					"maxRent": 6730,
+					"totalListings": 35
+				},
+				{
+					"propertyType": "Single Family",
+					"averageRent": 2200,
+					"medianRent": 2120,
+					"minRent": 1205,
+					"maxRent": 4070,
+					"totalListings": 31
+				},
+				{
+					"propertyType": "Townhouse",
+					"averageRent": 2395,
+					"medianRent": 2265,
+					"minRent": 1305,
+					"maxRent": 4785,
+					"totalListings": 60
+				}
+			],
+			"dataByBedrooms": [
+				{
+					"bedrooms": 0,
+					"averageRent": 1500,
+					"medianRent": 1390,
+					"minRent": 755,
+					"maxRent": 3115,
+					"totalListings": 72
+				},
+				{
+					"bedrooms": 1,
+					"averageRent": 1840,
+					"medianRent": 1760,
+					"minRent": 1040,
+					"maxRent": 3990,
+					"totalListings": 49
+				},
+				{
+					"bedrooms": 2,
+					"averageRent": 2180,
+					"medianRent": 2130,
+					"minRent": 1270,
+					"maxRent": 4205,
+					"totalListings": 6
+				},
+				{
+					"bedrooms": 3,
+					"averageRent": 2675,
+					"medianRent": 2500,
+					"minRent": 1275,
+					"maxRent": 6370,
+					"totalListings": 18
+				},
+				{
+					"bedrooms": 4,
+					"averageRent": 2955,
+					"medianRent": 2870,
+					"minRent": 1375,
+					"maxRent": 7135,
+					"totalListings": 74
+				},
+				{
+					"bedrooms": 5,
+					"averageRent": 3370,
+					"medianRent": 3240,
+					"minRent": 1555,
+					"maxRent": 6270,
+					"totalListings": 10
+				}
+			],
+			"history": {
+				"2024-10": {
+					"date": "2024-10-01T00:00:00.000Z",
+					"averageRent": 2210,
+					"medianRent": 2095,
+					"minRent": 1020,
+					"maxRent": 4380,
+					"averageDaysOnMarket": 37.75,
+					"newListings": 24,
+					"totalListings": 225
+				},
+				"2024-11": {
+					"date": "2024-11-01T00:00:00.000Z",
+					"averageRent": 2255,
+					"medianRent": 2110,
+					"minRent": 1105,
+					"maxRent": 4390,
+					"averageDaysOnMarket": 19,
+					"newListings": 35,
+					"totalListings": 152
+				},
+				"2024-12": {
+					"date": "2024-12-01T00:00:00.000Z",
+					"averageRent": 2295,
+					"medianRent": 2130,
+					"minRent": 1225,
+					"maxRent": 5030,
+					"averageDaysOnMarket": 27.99,
+					"newListings": 27,
+					"totalListings": 113
+				},
+				"2025-01": {
+					"date": "2025-01-01T00:00:00.000Z",
+					"averageRent": 2315,
+					"medianRent": 2150,
+					"minRent": 1275,
+					"maxRent": 5440,
+					"averageDaysOnMarket": 29.11,
+					"newListings": 53,
+					"totalListings": 219
+				},
+				"2025-02": {
+					"date": "2025-02-01T00:00:00.000Z",
+					"averageRent": 2340,
+					"medianRent": 2175,
+					"minRent": 1035,
+					"maxRent": 4385,
+					"averageDaysOnMarket": 33.32,
+					"newListings": 22,
+					"totalListings": 132
+				},
+				"2025-03": {
+					"date": "2025-03-01T00:00:00.000Z",
+					"averageRent": 2240,
+					"medianRent": 2195,
+					"minRent": 1120,
+					"maxRent": 4380,
+					"averageDaysOnMarket": 28.13,
+					"newListings": 40,
+					"totalListings": 265
+				},
+				"2025-04": {
+					"date": "2025-04-01T00:00:00.000Z",
+					"averageRent": 2360,
+					"medianRent": 2210,
+					"minRent": 1265,
+					"maxRent": 4410,
+					"averageDaysOnMarket": 39.36,
+					"newListings": 41,
+					"totalListings": 257
+				},
+				"2025-05": {
+					"date": "2025-05-01T00:00:00.000Z",
+					"averageRent": 2275,
+					"medianRent": 2210,
+					"minRent": 1120,
+					"maxRent": 5000,
+					"averageDaysOnMarket": 28.09,
+					"newListings": 65,
+					"totalListings": 198
+				},
+				"2025-06": {
+					"date": "2025-06-01T00:00:00.000Z",
+					"averageRent": 2330,
+					"medianRent": 2210,
+					"minRent": 1155,
+					"maxRent": 5540,
+					"averageDaysOnMarket": 26.97,
+					"newListings": 58,
+					"totalListings": 155
+				},
+				"2025-07": {
+					"date": "2025-07-01T00:00:00.000Z",
+					"averageRent": 2265,
+					"medianRent": 2200,
+					"minRent": 1320,
+					"maxRent": 4760,
+					"averageDaysOnMarket": 34.68,
+					"newListings": 66,
+					"totalListings": 200
+				},
+				"2025-08": {
+					"date": "2025-08-01T00:00:00.000Z",
+					"averageRent": 2240,
+					"medianRent": 2190,
+					"minRent": 1265,
+					"maxRent": 5065,
+					"averageDaysOnMarket": 41.09,
+					"newListings": 65,
+					"totalListings": 125
+				},
+				"2025-09": {
+					"date": "2025-09-01T00:00:00.000Z",
+					"averageRent": 2270,
+					"medianRent": 2185,
+					"minRent": 1095,
+					"maxRent": 5670,
+					"averageDaysOnMarket": 31.22,
+					"newListings": 55,
+					"totalListings": 181
+				},
+				"2025-10": {
+					"date": "2025-10-01T00:00:00.000Z",
+					"averageRent": 2335,
+					"medianRent": 2190,
+					"minRent": 1200,
+					"maxRent": 4650,
+					"averageDaysOnMarket": 24.53,
+					"newListings": 35,
+					"totalListings": 207
+				},
+				"2025-11": {
+					"date": "2025-11-01T00:00:00.000Z",
+					"averageRent": 2265,
+					"medianRent": 2205,
+					"minRent": 1285,
+					"maxRent": 4940,
+					"averageDaysOnMarket": 25.22,
+					"newListings": 39,
+					"totalListings": 111
+				},
+				"2025-12": {
+					"date": "2025-12-01T00:00:00.000Z",
+					"averageRent": 2335,
+					"medianRent": 2225,
+					"minRent": 1180,
+					"maxRent": 5090,
+					"averageDaysOnMarket": 35.8,
+					"newListings": 44,
+					"totalListings": 138
+				},
+				"2026-01": {
+					"date": "2026-01-01T00:00:00.000Z",
+					"averageRent": 2400,
+					"medianRent": 2250,
+					"minRent": 1105,
+					"maxRent": 4560,
+					"averageDaysOnMarket": 22.61,
+					"newListings": 61,
+					"totalListings": 131
+				},
+				"2026-02": {
+					"date": "2026-02-01T00:00:00.000Z",
+					"averageRent": 2430,
+					"medianRent": 2275,
+					"minRent": 1355,
+					"maxRent": 5090,
+					"averageDaysOnMarket": 37.36,
+					"newListings": 39,
+					"totalListings": 102
+				},
+				"2026-03": {
+					"date": "2026-03-01T00:00:00.000Z",
+					"averageRent": 2345,
+					"medianRent": 2295,
+					"minRent": 1175,
+					"maxRent": 5045,
+					"averageDaysOnMarket": 38.75,
+					"newListings": 26,
+					"totalListings": 231
+				},
+				"2026-04": {
+					"date": "2026-04-01T00:00:00.000Z",
+					"averageRent": 2420,
+					"medianRent": 2305,
+					"minRent": 1310,
+					"maxRent": 5475,
+					"averageDaysOnMarket": 20.35,
+					"newListings": 36,
+					"totalListings": 98
+				},
+				"2026-05": {
+					"date": "2026-05-01T00:00:00.000Z",
+					"averageRent": 2415,
+					"medianRent": 2310,
+					"minRent": 1310,
+					"maxRent": 4645,
+					"averageDaysOnMarket": 31.95,
+					"newListings": 52,
+					"totalListings": 202
+				},
+				"2026-06": {
+					"date": "2026-06-01T00:00:00.000Z",
+					"averageRent": 2430,
+					"medianRent": 2305,
+					"minRent": 1280,
+					"maxRent": 5745,
+					"averageDaysOnMarket": 24.76,
+					"newListings": 35,
+					"totalListings": 238
+				},
+				"2026-07": {
+					"date": "2026-07-01T00:00:00.000Z",
+					"averageRent": 2370,
+					"medianRent": 2295,
+					"minRent": 1315,
+					"maxRent": 4435,
+					"averageDaysOnMarket": 38.6,
+					"newListings": 34,
+					"totalListings": 207
+				},
+				"2026-08": {
+					"date": "2026-08-01T00:00:00.000Z",
+					"averageRent": 2450,
+					"medianRent": 2285,
+					"minRent": 1075,
+					"maxRent": 5700,
+					"averageDaysOnMarket": 20.73,
+					"newListings": 43,
+					"totalListings": 236
+				},
+				"2026-09": {
+					"date": "2026-09-01T00:00:00.000Z",
+					"averageRent": 2360,
+					"medianRent": 2280,
+					"minRent": 1075,
+					"maxRent": 4680,
+					"averageDaysOnMarket": 22.3,
+					"newListings": 46,
+					"totalListings": 238
+				}
+			}
+		}
+	}
+]

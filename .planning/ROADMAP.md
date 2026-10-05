@@ -165,7 +165,7 @@ Plans:
 - [ ] 04-01-PLAN.md — Phase 3 gate, platform adapter, Phase 4 Dexie tables + backup registration, exact-pin deps, schema-registry test
 - [x] 04-02-PLAN.md — core budget: UTC period, isBilled policy, usage summary, cap validation, meter states
 - [x] 04-03-PLAN.md — core request: endpoints (incl. rental listing by id), canonical key, TTLs, error taxonomy, zero-cost probe mapping
-- [ ] 04-04-PLAN.md — core normalizeLocation, listings domain types, filterListings, fetch-wide + narrow request builders
+- [x] 04-04-PLAN.md — core normalizeLocation, listings domain types, filterListings, fetch-wide + narrow request builders
 - [x] 04-05-PLAN.md — core alerts: diffSnapshots, due-search selection, cap-aware run plan
 - [ ] 04-06-PLAN.md — fixture guard rules + planted-PII proof, seeded fixture generator, drift check in verify/CI
 - [x] 04-07-PLAN.md — ESLint: ban spends in $effect, data layer only through $lib/data

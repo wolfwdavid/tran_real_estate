@@ -1,0 +1,2666 @@
+{
+	"rent": [
+		{
+			"formattedAddress": "1172 Amberfield Way, Bayou Verde, LA 70201",
+			"latitude": 29.309,
+			"longitude": -90.924,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 650,
+			"propertyType": "Single Family",
+			"rent": 3050,
+			"rentRangeLow": 2600,
+			"rentRangeHigh": 3500,
+			"comparableIds": [
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038",
+				"SAMPLE-70204-R040"
+			]
+		},
+		{
+			"formattedAddress": "3103 Quillbrook Dr, Bayou Verde, LA 70201",
+			"latitude": 29.2918,
+			"longitude": -90.9694,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 2550,
+			"propertyType": "Multi-Family",
+			"rent": 3100,
+			"rentRangeLow": 2625,
+			"rentRangeHigh": 3575,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026",
+				"SAMPLE-70204-R034"
+			]
+		},
+		{
+			"formattedAddress": "260 Quillbrook Dr, Bayou Verde, LA 70201",
+			"latitude": 29.3332,
+			"longitude": -90.9599,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 1270,
+			"propertyType": "Townhouse",
+			"rent": 2025,
+			"rentRangeLow": 1725,
+			"rentRangeHigh": 2325,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026",
+				"SAMPLE-70204-R034"
+			]
+		},
+		{
+			"formattedAddress": "9023 Saltmarrow Ct, Bayou Verde, LA 70201",
+			"latitude": 29.2916,
+			"longitude": -90.9254,
+			"bedrooms": 5,
+			"bathrooms": 2,
+			"squareFootage": 3010,
+			"propertyType": "Condo",
+			"rent": 2425,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2800,
+			"comparableIds": [
+				"SAMPLE-70204-R022",
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035"
+			]
+		},
+		{
+			"formattedAddress": "6837 Quillbrook Dr, Bayou Verde, LA 70204",
+			"latitude": 29.2844,
+			"longitude": -90.9399,
+			"bedrooms": 5,
+			"bathrooms": 2,
+			"squareFootage": 680,
+			"propertyType": "Condo",
+			"rent": 2875,
+			"rentRangeLow": 2450,
+			"rentRangeHigh": 3300,
+			"comparableIds": [
+				"SAMPLE-70201-R033",
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035"
+			]
+		},
+		{
+			"formattedAddress": "1790 Amberfield Way, Bayou Verde, LA 70204",
+			"latitude": 29.3163,
+			"longitude": -90.9659,
+			"bedrooms": 1,
+			"bathrooms": 3,
+			"squareFootage": 2900,
+			"propertyType": "Multi-Family",
+			"rent": 2825,
+			"rentRangeLow": 2400,
+			"rentRangeHigh": 3250,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R038",
+				"SAMPLE-70204-R040"
+			]
+		},
+		{
+			"formattedAddress": "1938 Amberfield Way, Bayou Verde, LA 70204",
+			"latitude": 29.3284,
+			"longitude": -90.9111,
+			"bedrooms": 2,
+			"bathrooms": 1.5,
+			"squareFootage": 920,
+			"propertyType": "Manufactured",
+			"rent": 3025,
+			"rentRangeLow": 2575,
+			"rentRangeHigh": 3475,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031"
+			]
+		},
+		{
+			"formattedAddress": "835 Wrenhollow Trl, Bayou Verde, LA 70204",
+			"latitude": 29.331,
+			"longitude": -90.9534,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 1890,
+			"propertyType": "Townhouse",
+			"rent": 2800,
+			"rentRangeLow": 2375,
+			"rentRangeHigh": 3225,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031"
+			]
+		},
+		{
+			"formattedAddress": "6190 Marrowby Cir, Harlow Springs, OK 74201",
+			"latitude": 36.7233,
+			"longitude": -102.0026,
+			"bedrooms": 3,
+			"bathrooms": 1.5,
+			"squareFootage": 1590,
+			"propertyType": "Townhouse",
+			"rent": 1450,
+			"rentRangeLow": 1225,
+			"rentRangeHigh": 1675,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010",
+				"SAMPLE-74203-R014"
+			]
+		},
+		{
+			"formattedAddress": "3662 Gildenreach Blvd, Harlow Springs, OK 74201",
+			"latitude": 36.7496,
+			"longitude": -101.9663,
+			"bedrooms": 2,
+			"bathrooms": 3.5,
+			"squareFootage": 910,
+			"propertyType": "Manufactured",
+			"rent": 1725,
+			"rentRangeLow": 1475,
+			"rentRangeHigh": 1975,
+			"comparableIds": [
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R011"
+			]
+		},
+		{
+			"formattedAddress": "2880 Saltmarrow Ct, Harlow Springs, OK 74203",
+			"latitude": 36.7426,
+			"longitude": -102.0128,
+			"bedrooms": 3,
+			"bathrooms": 3.5,
+			"squareFootage": 3120,
+			"propertyType": "Single Family",
+			"rent": 1825,
+			"rentRangeLow": 1550,
+			"rentRangeHigh": 2100,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R014"
+			]
+		},
+		{
+			"formattedAddress": "6433 Amberfield Way, Harlow Springs, OK 74203",
+			"latitude": 36.7415,
+			"longitude": -101.9928,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 2120,
+			"propertyType": "Manufactured",
+			"rent": 1100,
+			"rentRangeLow": 925,
+			"rentRangeHigh": 1275,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R011"
+			]
+		},
+		{
+			"formattedAddress": "3414 Thimbleridge Rd, Harlow Springs, OK 74203",
+			"latitude": 36.7298,
+			"longitude": -102.0158,
+			"bedrooms": 3,
+			"bathrooms": 3.5,
+			"squareFootage": 2970,
+			"propertyType": "Multi-Family",
+			"rent": 2125,
+			"rentRangeLow": 1800,
+			"rentRangeHigh": 2450,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010"
+			]
+		},
+		{
+			"formattedAddress": "2709 Ledgerstone Ln, Juniper Mesa, AZ 85801",
+			"latitude": 32.1374,
+			"longitude": -113.2396,
+			"bedrooms": 4,
+			"bathrooms": 1.5,
+			"squareFootage": 1870,
+			"propertyType": "Multi-Family",
+			"rent": 1925,
+			"rentRangeLow": 1625,
+			"rentRangeHigh": 2225,
+			"comparableIds": [
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048",
+				"SAMPLE-85806-R054",
+				"SAMPLE-85806-R060",
+				"SAMPLE-85801-R043"
+			]
+		},
+		{
+			"formattedAddress": "934 Copperwick Ave, Juniper Mesa, AZ 85801",
+			"latitude": 32.1511,
+			"longitude": -113.2,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 570,
+			"propertyType": "Condo",
+			"rent": 2050,
+			"rentRangeLow": 1750,
+			"rentRangeHigh": 2350,
+			"comparableIds": [
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "6680 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.125,
+			"longitude": -113.2269,
+			"bedrooms": 2,
+			"bathrooms": 2.5,
+			"squareFootage": 660,
+			"propertyType": "Manufactured",
+			"rent": 2275,
+			"rentRangeLow": 1925,
+			"rentRangeHigh": 2625,
+			"comparableIds": [
+				"SAMPLE-85801-R049",
+				"SAMPLE-85806-R042",
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055"
+			]
+		},
+		{
+			"formattedAddress": "2886 Thimbleridge Rd, Juniper Mesa, AZ 85801",
+			"latitude": 32.1677,
+			"longitude": -113.1935,
+			"bedrooms": 5,
+			"bathrooms": 3,
+			"squareFootage": 2380,
+			"propertyType": "Townhouse",
+			"rent": 1800,
+			"rentRangeLow": 1525,
+			"rentRangeHigh": 2075,
+			"comparableIds": [
+				"SAMPLE-85806-R050",
+				"SAMPLE-85806-R056",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048"
+			]
+		},
+		{
+			"formattedAddress": "7029 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.135,
+			"longitude": -113.2438,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 2380,
+			"propertyType": "Townhouse",
+			"rent": 1475,
+			"rentRangeLow": 1250,
+			"rentRangeHigh": 1700,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "6772 Gildenreach Blvd, Juniper Mesa, AZ 85801",
+			"latitude": 32.1472,
+			"longitude": -113.1987,
+			"bedrooms": 1,
+			"bathrooms": 3,
+			"squareFootage": 450,
+			"propertyType": "Apartment",
+			"rent": 1650,
+			"rentRangeLow": 1400,
+			"rentRangeHigh": 1900,
+			"comparableIds": [
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85801-R057"
+			]
+		},
+		{
+			"formattedAddress": "3396 Brindlecott St, Juniper Mesa, AZ 85806",
+			"latitude": 32.1637,
+			"longitude": -113.2329,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 990,
+			"propertyType": "Apartment",
+			"rent": 2350,
+			"rentRangeLow": 2000,
+			"rentRangeHigh": 2700,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85801-R057"
+			]
+		},
+		{
+			"formattedAddress": "8486 Ledgerstone Ln, Juniper Mesa, AZ 85806",
+			"latitude": 32.161,
+			"longitude": -113.1958,
+			"bedrooms": 0,
+			"bathrooms": 3,
+			"squareFootage": 2670,
+			"propertyType": "Apartment",
+			"rent": 2350,
+			"rentRangeLow": 2000,
+			"rentRangeHigh": 2700,
+			"comparableIds": [
+				"SAMPLE-85801-R057",
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "1550 Thimbleridge Rd, Juniper Mesa, AZ 85806",
+			"latitude": 32.144,
+			"longitude": -113.223,
+			"bedrooms": 5,
+			"bathrooms": 3.5,
+			"squareFootage": 570,
+			"propertyType": "Townhouse",
+			"rent": 1000,
+			"rentRangeLow": 850,
+			"rentRangeHigh": 1150,
+			"comparableIds": [
+				"SAMPLE-85801-R053",
+				"SAMPLE-85806-R050",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048"
+			]
+		},
+		{
+			"formattedAddress": "8042 Marrowby Cir, Bayou Verde, LA 70201",
+			"latitude": 29.3238,
+			"longitude": -90.9691,
+			"bedrooms": 0,
+			"bathrooms": 1,
+			"squareFootage": 760,
+			"propertyType": "Apartment",
+			"rent": 2600,
+			"rentRangeLow": 2200,
+			"rentRangeHigh": 3000,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038"
+			]
+		},
+		{
+			"formattedAddress": "7220 Thimbleridge Rd, Bayou Verde, LA 70204",
+			"latitude": 29.2868,
+			"longitude": -90.9655,
+			"bedrooms": 4,
+			"bathrooms": 1.5,
+			"squareFootage": 3000,
+			"propertyType": "Manufactured",
+			"rent": 2400,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2750,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R034"
+			]
+		},
+		{
+			"formattedAddress": "8789 Thimbleridge Rd, Bayou Verde, LA 70204",
+			"latitude": 29.2824,
+			"longitude": -90.914,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2430,
+			"propertyType": "Multi-Family",
+			"rent": 1950,
+			"rentRangeLow": 1650,
+			"rentRangeHigh": 2250,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031"
+			]
+		},
+		{
+			"formattedAddress": "7125 Ledgerstone Ln, Bayou Verde, LA 70204",
+			"latitude": 29.3321,
+			"longitude": -90.9706,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 1940,
+			"propertyType": "Manufactured",
+			"rent": 2650,
+			"rentRangeLow": 2250,
+			"rentRangeHigh": 3050,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026"
+			]
+		},
+		{
+			"formattedAddress": "1367 Brindlecott St, Bayou Verde, LA 70204",
+			"latitude": 29.3322,
+			"longitude": -90.9324,
+			"bedrooms": 1,
+			"bathrooms": 3.5,
+			"squareFootage": 2530,
+			"propertyType": "Condo",
+			"rent": 2650,
+			"rentRangeLow": 2250,
+			"rentRangeHigh": 3050,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038"
+			]
+		},
+		{
+			"formattedAddress": "1980 Fernmoss Loop, Harlow Springs, OK 74201",
+			"latitude": 36.7241,
+			"longitude": -102.0076,
+			"bedrooms": 5,
+			"bathrooms": 3.5,
+			"squareFootage": 1010,
+			"propertyType": "Multi-Family",
+			"rent": 2525,
+			"rentRangeLow": 2150,
+			"rentRangeHigh": 2900,
+			"comparableIds": [
+				"SAMPLE-74201-R013",
+				"SAMPLE-74203-R006",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020"
+			]
+		},
+		{
+			"formattedAddress": "3169 Amberfield Way, Harlow Springs, OK 74201",
+			"latitude": 36.7558,
+			"longitude": -101.9895,
+			"bedrooms": 3,
+			"bathrooms": 1.5,
+			"squareFootage": 1260,
+			"propertyType": "Single Family",
+			"rent": 1800,
+			"rentRangeLow": 1525,
+			"rentRangeHigh": 2075,
+			"comparableIds": [
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010",
+				"SAMPLE-74203-R014"
+			]
+		},
+		{
+			"formattedAddress": "8500 Quillbrook Dr, Harlow Springs, OK 74201",
+			"latitude": 36.7626,
+			"longitude": -101.968,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 1700,
+			"propertyType": "Single Family",
+			"rent": 1075,
+			"rentRangeLow": 925,
+			"rentRangeHigh": 1225,
+			"comparableIds": [
+				"SAMPLE-74201-R007",
+				"SAMPLE-74203-R020",
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R013"
+			]
+		},
+		{
+			"formattedAddress": "2942 Quillbrook Dr, Harlow Springs, OK 74201",
+			"latitude": 36.7443,
+			"longitude": -102.0161,
+			"bedrooms": 1,
+			"bathrooms": 1,
+			"squareFootage": 560,
+			"propertyType": "Single Family",
+			"rent": 2000,
+			"rentRangeLow": 1700,
+			"rentRangeHigh": 2300,
+			"comparableIds": [
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008"
+			]
+		},
+		{
+			"formattedAddress": "103 Tallowmere Pl, Harlow Springs, OK 74201",
+			"latitude": 36.7444,
+			"longitude": -101.9946,
+			"bedrooms": 5,
+			"bathrooms": 1.5,
+			"squareFootage": 2520,
+			"propertyType": "Townhouse",
+			"rent": 2450,
+			"rentRangeLow": 2075,
+			"rentRangeHigh": 2825,
+			"comparableIds": [
+				"SAMPLE-74201-R001",
+				"SAMPLE-74203-R006",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020"
+			]
+		},
+		{
+			"formattedAddress": "9788 Copperwick Ave, Harlow Springs, OK 74201",
+			"latitude": 36.7521,
+			"longitude": -101.975,
+			"bedrooms": 3,
+			"bathrooms": 3.5,
+			"squareFootage": 1450,
+			"propertyType": "Apartment",
+			"rent": 1100,
+			"rentRangeLow": 925,
+			"rentRangeHigh": 1275,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010",
+				"SAMPLE-74203-R014"
+			]
+		},
+		{
+			"formattedAddress": "7099 Marrowby Cir, Harlow Springs, OK 74203",
+			"latitude": 36.727,
+			"longitude": -102.0081,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2460,
+			"propertyType": "Townhouse",
+			"rent": 2275,
+			"rentRangeLow": 1925,
+			"rentRangeHigh": 2625,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R011"
+			]
+		},
+		{
+			"formattedAddress": "6430 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7446,
+			"longitude": -101.9857,
+			"bedrooms": 1,
+			"bathrooms": 1,
+			"squareFootage": 2570,
+			"propertyType": "Manufactured",
+			"rent": 2050,
+			"rentRangeLow": 1750,
+			"rentRangeHigh": 2350,
+			"comparableIds": [
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008"
+			]
+		},
+		{
+			"formattedAddress": "1059 Quillbrook Dr, Juniper Mesa, AZ 85801",
+			"latitude": 32.1219,
+			"longitude": -113.2184,
+			"bedrooms": 2,
+			"bathrooms": 1,
+			"squareFootage": 2500,
+			"propertyType": "Apartment",
+			"rent": 2075,
+			"rentRangeLow": 1775,
+			"rentRangeHigh": 2375,
+			"comparableIds": [
+				"SAMPLE-85801-R045",
+				"SAMPLE-85806-R042",
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055"
+			]
+		},
+		{
+			"formattedAddress": "7920 Gildenreach Blvd, Juniper Mesa, AZ 85801",
+			"latitude": 32.1371,
+			"longitude": -113.2456,
+			"bedrooms": 0,
+			"bathrooms": 1,
+			"squareFootage": 3110,
+			"propertyType": "Apartment",
+			"rent": 1000,
+			"rentRangeLow": 850,
+			"rentRangeHigh": 1150,
+			"comparableIds": [
+				"SAMPLE-85806-R052",
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "9463 Fernmoss Loop, Juniper Mesa, AZ 85806",
+			"latitude": 32.1255,
+			"longitude": -113.2479,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 980,
+			"propertyType": "Apartment",
+			"rent": 2200,
+			"rentRangeLow": 1875,
+			"rentRangeHigh": 2525,
+			"comparableIds": [
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055"
+			]
+		},
+		{
+			"formattedAddress": "2062 Brindlecott St, Juniper Mesa, AZ 85806",
+			"latitude": 32.155,
+			"longitude": -113.2355,
+			"bedrooms": 4,
+			"bathrooms": 1.5,
+			"squareFootage": 1230,
+			"propertyType": "Townhouse",
+			"rent": 2475,
+			"rentRangeLow": 2100,
+			"rentRangeHigh": 2850,
+			"comparableIds": [
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R054",
+				"SAMPLE-85806-R060",
+				"SAMPLE-85801-R043"
+			]
+		},
+		{
+			"formattedAddress": "9047 Marrowby Cir, Bayou Verde, LA 70201",
+			"latitude": 29.3048,
+			"longitude": -90.9235,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 2450,
+			"propertyType": "Manufactured",
+			"rent": 1775,
+			"rentRangeLow": 1500,
+			"rentRangeHigh": 2050,
+			"comparableIds": [
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026",
+				"SAMPLE-70204-R034"
+			]
+		},
+		{
+			"formattedAddress": "3403 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.3203,
+			"longitude": -90.9432,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 1410,
+			"propertyType": "Condo",
+			"rent": 2350,
+			"rentRangeLow": 2000,
+			"rentRangeHigh": 2700,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038",
+				"SAMPLE-70204-R040"
+			]
+		},
+		{
+			"formattedAddress": "2085 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.3284,
+			"longitude": -90.9328,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 3090,
+			"propertyType": "Townhouse",
+			"rent": 1975,
+			"rentRangeLow": 1675,
+			"rentRangeHigh": 2275,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70204-R026",
+				"SAMPLE-70204-R034"
+			]
+		},
+		{
+			"formattedAddress": "5620 Wrenhollow Trl, Bayou Verde, LA 70201",
+			"latitude": 29.2856,
+			"longitude": -90.9122,
+			"bedrooms": 2,
+			"bathrooms": 2.5,
+			"squareFootage": 960,
+			"propertyType": "Multi-Family",
+			"rent": 1675,
+			"rentRangeLow": 1425,
+			"rentRangeHigh": 1925,
+			"comparableIds": [
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031"
+			]
+		},
+		{
+			"formattedAddress": "3214 Marrowby Cir, Bayou Verde, LA 70204",
+			"latitude": 29.2988,
+			"longitude": -90.9441,
+			"bedrooms": 3,
+			"bathrooms": 3.5,
+			"squareFootage": 1320,
+			"propertyType": "Manufactured",
+			"rent": 2325,
+			"rentRangeLow": 1975,
+			"rentRangeHigh": 2675,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70201-R037"
+			]
+		},
+		{
+			"formattedAddress": "2376 Gildenreach Blvd, Bayou Verde, LA 70204",
+			"latitude": 29.3219,
+			"longitude": -90.9167,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 730,
+			"propertyType": "Single Family",
+			"rent": 2050,
+			"rentRangeLow": 1750,
+			"rentRangeHigh": 2350,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R040"
+			]
+		},
+		{
+			"formattedAddress": "6922 Wrenhollow Trl, Harlow Springs, OK 74201",
+			"latitude": 36.7568,
+			"longitude": -101.9865,
+			"bedrooms": 0,
+			"bathrooms": 2.5,
+			"squareFootage": 1530,
+			"propertyType": "Apartment",
+			"rent": 950,
+			"rentRangeLow": 800,
+			"rentRangeHigh": 1100,
+			"comparableIds": [
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008"
+			]
+		},
+		{
+			"formattedAddress": "6846 Thimbleridge Rd, Harlow Springs, OK 74201",
+			"latitude": 36.7621,
+			"longitude": -102.0081,
+			"bedrooms": 4,
+			"bathrooms": 2,
+			"squareFootage": 3160,
+			"propertyType": "Single Family",
+			"rent": 2000,
+			"rentRangeLow": 1700,
+			"rentRangeHigh": 2300,
+			"comparableIds": [
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020",
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R013"
+			]
+		},
+		{
+			"formattedAddress": "4282 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7466,
+			"longitude": -101.9997,
+			"bedrooms": 1,
+			"bathrooms": 3.5,
+			"squareFootage": 2090,
+			"propertyType": "Apartment",
+			"rent": 1650,
+			"rentRangeLow": 1400,
+			"rentRangeHigh": 1900,
+			"comparableIds": [
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008"
+			]
+		},
+		{
+			"formattedAddress": "9776 Saltmarrow Ct, Harlow Springs, OK 74203",
+			"latitude": 36.7371,
+			"longitude": -101.9782,
+			"bedrooms": 3,
+			"bathrooms": 3.5,
+			"squareFootage": 1440,
+			"propertyType": "Single Family",
+			"rent": 1625,
+			"rentRangeLow": 1375,
+			"rentRangeHigh": 1875,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R010",
+				"SAMPLE-74203-R014"
+			]
+		},
+		{
+			"formattedAddress": "5982 Thimbleridge Rd, Harlow Springs, OK 74203",
+			"latitude": 36.7249,
+			"longitude": -102.0034,
+			"bedrooms": 5,
+			"bathrooms": 1.5,
+			"squareFootage": 1950,
+			"propertyType": "Single Family",
+			"rent": 1875,
+			"rentRangeLow": 1600,
+			"rentRangeHigh": 2150,
+			"comparableIds": [
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R013",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020"
+			]
+		},
+		{
+			"formattedAddress": "5641 Thimbleridge Rd, Harlow Springs, OK 74203",
+			"latitude": 36.7305,
+			"longitude": -101.9677,
+			"bedrooms": 2,
+			"bathrooms": 2.5,
+			"squareFootage": 1700,
+			"propertyType": "Condo",
+			"rent": 3300,
+			"rentRangeLow": 2800,
+			"rentRangeHigh": 3800,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R011"
+			]
+		},
+		{
+			"formattedAddress": "3549 Saltmarrow Ct, Harlow Springs, OK 74203",
+			"latitude": 36.7377,
+			"longitude": -102.0054,
+			"bedrooms": 4,
+			"bathrooms": 1.5,
+			"squareFootage": 590,
+			"propertyType": "Multi-Family",
+			"rent": 1525,
+			"rentRangeLow": 1300,
+			"rentRangeHigh": 1750,
+			"comparableIds": [
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R013"
+			]
+		},
+		{
+			"formattedAddress": "744 Ledgerstone Ln, Juniper Mesa, AZ 85801",
+			"latitude": 32.1634,
+			"longitude": -113.2002,
+			"bedrooms": 4,
+			"bathrooms": 1.5,
+			"squareFootage": 460,
+			"propertyType": "Townhouse",
+			"rent": 1425,
+			"rentRangeLow": 1200,
+			"rentRangeHigh": 1650,
+			"comparableIds": [
+				"SAMPLE-85801-R041",
+				"SAMPLE-85806-R048",
+				"SAMPLE-85806-R054",
+				"SAMPLE-85806-R060",
+				"SAMPLE-85801-R043"
+			]
+		},
+		{
+			"formattedAddress": "9623 Quillbrook Dr, Juniper Mesa, AZ 85801",
+			"latitude": 32.174,
+			"longitude": -113.2462,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 600,
+			"propertyType": "Townhouse",
+			"rent": 2550,
+			"rentRangeLow": 2175,
+			"rentRangeHigh": 2925,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "2711 Wrenhollow Trl, Juniper Mesa, AZ 85806",
+			"latitude": 32.1356,
+			"longitude": -113.2428,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 890,
+			"propertyType": "Condo",
+			"rent": 1250,
+			"rentRangeLow": 1075,
+			"rentRangeHigh": 1450,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85801-R057"
+			]
+		},
+		{
+			"formattedAddress": "4285 Tallowmere Pl, Juniper Mesa, AZ 85806",
+			"latitude": 32.1723,
+			"longitude": -113.234,
+			"bedrooms": 5,
+			"bathrooms": 3.5,
+			"squareFootage": 1940,
+			"propertyType": "Condo",
+			"rent": 2675,
+			"rentRangeLow": 2275,
+			"rentRangeHigh": 3075,
+			"comparableIds": [
+				"SAMPLE-85801-R053",
+				"SAMPLE-85806-R056",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048"
+			]
+		},
+		{
+			"formattedAddress": "8092 Wrenhollow Trl, Juniper Mesa, AZ 85806",
+			"latitude": 32.1693,
+			"longitude": -113.196,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 720,
+			"propertyType": "Single Family",
+			"rent": 2750,
+			"rentRangeLow": 2350,
+			"rentRangeHigh": 3150,
+			"comparableIds": [
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048",
+				"SAMPLE-85806-R060",
+				"SAMPLE-85801-R043"
+			]
+		},
+		{
+			"formattedAddress": "103 Saltmarrow Ct, Juniper Mesa, AZ 85806",
+			"latitude": 32.1793,
+			"longitude": -113.1991,
+			"bedrooms": 3,
+			"bathrooms": 2,
+			"squareFootage": 560,
+			"propertyType": "Townhouse",
+			"rent": 1075,
+			"rentRangeLow": 925,
+			"rentRangeHigh": 1225,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R045"
+			]
+		},
+		{
+			"formattedAddress": "2323 Ledgerstone Ln, Juniper Mesa, AZ 85806",
+			"latitude": 32.1605,
+			"longitude": -113.2204,
+			"bedrooms": 4,
+			"bathrooms": 2,
+			"squareFootage": 2070,
+			"propertyType": "Multi-Family",
+			"rent": 2625,
+			"rentRangeLow": 2225,
+			"rentRangeHigh": 3025,
+			"comparableIds": [
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048",
+				"SAMPLE-85806-R054",
+				"SAMPLE-85801-R043"
+			]
+		},
+		{
+			"formattedAddress": "9795 Gildenreach Blvd, Bayou Verde, LA 70201",
+			"latitude": 29.2925,
+			"longitude": -90.9235,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 2260,
+			"propertyType": "Single Family",
+			"rent": 3125,
+			"rentRangeLow": 2650,
+			"rentRangeHigh": 3600,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038",
+				"SAMPLE-70204-R040"
+			]
+		},
+		{
+			"formattedAddress": "2602 Gildenreach Blvd, Bayou Verde, LA 70204",
+			"latitude": 29.2981,
+			"longitude": -90.9369,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2250,
+			"propertyType": "Townhouse",
+			"rent": 1950,
+			"rentRangeLow": 1650,
+			"rentRangeHigh": 2250,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025"
+			]
+		},
+		{
+			"formattedAddress": "1871 Thimbleridge Rd, Bayou Verde, LA 70204",
+			"latitude": 29.3106,
+			"longitude": -90.9479,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"rent": 850,
+			"rentRangeLow": 725,
+			"rentRangeHigh": 975,
+			"comparableIds": [
+				"SAMPLE-70201-R023",
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024"
+			]
+		},
+		{
+			"formattedAddress": "7613 Wrenhollow Trl, Bayou Verde, LA 70204",
+			"latitude": 29.3257,
+			"longitude": -90.9113,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 1810,
+			"propertyType": "Single Family",
+			"rent": 2500,
+			"rentRangeLow": 2125,
+			"rentRangeHigh": 2875,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026"
+			]
+		},
+		{
+			"formattedAddress": "5090 Gildenreach Blvd, Harlow Springs, OK 74201",
+			"latitude": 36.7495,
+			"longitude": -101.9708,
+			"bedrooms": 2,
+			"bathrooms": 1,
+			"squareFootage": 1000,
+			"propertyType": "Single Family",
+			"rent": 1700,
+			"rentRangeLow": 1450,
+			"rentRangeHigh": 1950,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005"
+			]
+		},
+		{
+			"formattedAddress": "9393 Amberfield Way, Harlow Springs, OK 74203",
+			"latitude": 36.7606,
+			"longitude": -101.9592,
+			"bedrooms": 5,
+			"bathrooms": 2,
+			"squareFootage": 1830,
+			"propertyType": "Manufactured",
+			"rent": 2850,
+			"rentRangeLow": 2425,
+			"rentRangeHigh": 3275,
+			"comparableIds": [
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R013",
+				"SAMPLE-74203-R006",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009"
+			]
+		},
+		{
+			"formattedAddress": "1274 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7727,
+			"longitude": -101.9873,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 1260,
+			"propertyType": "Townhouse",
+			"rent": 2400,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2750,
+			"comparableIds": [
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020",
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R005"
+			]
+		},
+		{
+			"formattedAddress": "2518 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7339,
+			"longitude": -102.0085,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 490,
+			"propertyType": "Condo",
+			"rent": 1275,
+			"rentRangeLow": 1075,
+			"rentRangeHigh": 1475,
+			"comparableIds": [
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R019"
+			]
+		},
+		{
+			"formattedAddress": "1642 Copperwick Ave, Juniper Mesa, AZ 85801",
+			"latitude": 32.1618,
+			"longitude": -113.1961,
+			"bedrooms": 1,
+			"bathrooms": 3.5,
+			"squareFootage": 3090,
+			"propertyType": "Multi-Family",
+			"rent": 1800,
+			"rentRangeLow": 1525,
+			"rentRangeHigh": 2075,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049"
+			]
+		},
+		{
+			"formattedAddress": "6162 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1687,
+			"longitude": -113.2478,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 2790,
+			"propertyType": "Multi-Family",
+			"rent": 1725,
+			"rentRangeLow": 1475,
+			"rentRangeHigh": 1975,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049"
+			]
+		},
+		{
+			"formattedAddress": "7751 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1227,
+			"longitude": -113.2398,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"rent": 850,
+			"rentRangeLow": 725,
+			"rentRangeHigh": 975,
+			"comparableIds": [
+				"SAMPLE-85801-R057",
+				"SAMPLE-85806-R052",
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046"
+			]
+		},
+		{
+			"formattedAddress": "1372 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1358,
+			"longitude": -113.2482,
+			"bedrooms": 3,
+			"bathrooms": 2.5,
+			"squareFootage": 2170,
+			"propertyType": "Manufactured",
+			"rent": 2250,
+			"rentRangeLow": 1925,
+			"rentRangeHigh": 2600,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041"
+			]
+		},
+		{
+			"formattedAddress": "3323 Marrowby Cir, Bayou Verde, LA 70201",
+			"latitude": 29.3331,
+			"longitude": -90.919,
+			"bedrooms": 5,
+			"bathrooms": 1.5,
+			"squareFootage": 1510,
+			"propertyType": "Multi-Family",
+			"rent": 2775,
+			"rentRangeLow": 2350,
+			"rentRangeHigh": 3200,
+			"comparableIds": [
+				"SAMPLE-70201-R033",
+				"SAMPLE-70204-R022",
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029"
+			]
+		},
+		{
+			"formattedAddress": "8012 Amberfield Way, Bayou Verde, LA 70201",
+			"latitude": 29.3011,
+			"longitude": -90.9593,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 2070,
+			"propertyType": "Manufactured",
+			"rent": 1925,
+			"rentRangeLow": 1625,
+			"rentRangeHigh": 2225,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025"
+			]
+		},
+		{
+			"formattedAddress": "9621 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.3138,
+			"longitude": -90.938,
+			"bedrooms": 2,
+			"bathrooms": 3.5,
+			"squareFootage": 2870,
+			"propertyType": "Apartment",
+			"rent": 2075,
+			"rentRangeLow": 1775,
+			"rentRangeHigh": 2375,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025"
+			]
+		},
+		{
+			"formattedAddress": "3409 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.2888,
+			"longitude": -90.9278,
+			"bedrooms": 1,
+			"bathrooms": 1,
+			"squareFootage": 2670,
+			"propertyType": "Apartment",
+			"rent": 1700,
+			"rentRangeLow": 1450,
+			"rentRangeHigh": 1950,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038"
+			]
+		},
+		{
+			"formattedAddress": "3445 Brindlecott St, Bayou Verde, LA 70201",
+			"latitude": 29.3375,
+			"longitude": -90.9347,
+			"bedrooms": 2,
+			"bathrooms": 1.5,
+			"squareFootage": 1790,
+			"propertyType": "Apartment",
+			"rent": 1850,
+			"rentRangeLow": 1575,
+			"rentRangeHigh": 2125,
+			"comparableIds": [
+				"SAMPLE-70201-R037",
+				"SAMPLE-70204-R028",
+				"SAMPLE-70204-R030",
+				"SAMPLE-70204-R032",
+				"SAMPLE-70201-R025"
+			]
+		},
+		{
+			"formattedAddress": "5409 Saltmarrow Ct, Bayou Verde, LA 70204",
+			"latitude": 29.2842,
+			"longitude": -90.9634,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 2890,
+			"propertyType": "Multi-Family",
+			"rent": 2725,
+			"rentRangeLow": 2325,
+			"rentRangeHigh": 3125,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026"
+			]
+		},
+		{
+			"formattedAddress": "4358 Wrenhollow Trl, Harlow Springs, OK 74201",
+			"latitude": 36.7293,
+			"longitude": -101.9939,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 2970,
+			"propertyType": "Apartment",
+			"rent": 2425,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2800,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010"
+			]
+		},
+		{
+			"formattedAddress": "4948 Tallowmere Pl, Harlow Springs, OK 74201",
+			"latitude": 36.7807,
+			"longitude": -101.9754,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 2000,
+			"propertyType": "Single Family",
+			"rent": 1575,
+			"rentRangeLow": 1350,
+			"rentRangeHigh": 1800,
+			"comparableIds": [
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R019"
+			]
+		},
+		{
+			"formattedAddress": "7432 Ledgerstone Ln, Harlow Springs, OK 74203",
+			"latitude": 36.7214,
+			"longitude": -101.9612,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 2670,
+			"propertyType": "Manufactured",
+			"rent": 2350,
+			"rentRangeLow": 2000,
+			"rentRangeHigh": 2700,
+			"comparableIds": [
+				"SAMPLE-74201-R005",
+				"SAMPLE-74201-R015",
+				"SAMPLE-74201-R017",
+				"SAMPLE-74203-R004",
+				"SAMPLE-74203-R010"
+			]
+		},
+		{
+			"formattedAddress": "6783 Ledgerstone Ln, Juniper Mesa, AZ 85801",
+			"latitude": 32.1481,
+			"longitude": -113.2072,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 660,
+			"propertyType": "Manufactured",
+			"rent": 1625,
+			"rentRangeLow": 1375,
+			"rentRangeHigh": 1875,
+			"comparableIds": [
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85806-R042",
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051"
+			]
+		},
+		{
+			"formattedAddress": "6410 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.1536,
+			"longitude": -113.1947,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 1690,
+			"propertyType": "Manufactured",
+			"rent": 2175,
+			"rentRangeLow": 1850,
+			"rentRangeHigh": 2500,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041"
+			]
+		},
+		{
+			"formattedAddress": "5112 Quillbrook Dr, Juniper Mesa, AZ 85801",
+			"latitude": 32.136,
+			"longitude": -113.1987,
+			"bedrooms": 3,
+			"bathrooms": 1,
+			"squareFootage": 2990,
+			"propertyType": "Multi-Family",
+			"rent": 2425,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2800,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041"
+			]
+		},
+		{
+			"formattedAddress": "3708 Marrowby Cir, Juniper Mesa, AZ 85801",
+			"latitude": 32.1269,
+			"longitude": -113.2238,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2210,
+			"propertyType": "Townhouse",
+			"rent": 1950,
+			"rentRangeLow": 1650,
+			"rentRangeHigh": 2250,
+			"comparableIds": [
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049",
+				"SAMPLE-85806-R042",
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051"
+			]
+		},
+		{
+			"formattedAddress": "2156 Fernmoss Loop, Juniper Mesa, AZ 85806",
+			"latitude": 32.1666,
+			"longitude": -113.1942,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 1910,
+			"propertyType": "Multi-Family",
+			"rent": 1550,
+			"rentRangeLow": 1325,
+			"rentRangeHigh": 1775,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049"
+			]
+		},
+		{
+			"formattedAddress": "6230 Fernmoss Loop, Bayou Verde, LA 70201",
+			"latitude": 29.2915,
+			"longitude": -90.9453,
+			"bedrooms": 4,
+			"bathrooms": 3,
+			"squareFootage": 1330,
+			"propertyType": "Manufactured",
+			"rent": 2425,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2800,
+			"comparableIds": [
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029",
+				"SAMPLE-70201-R035",
+				"SAMPLE-70204-R026"
+			]
+		},
+		{
+			"formattedAddress": "9211 Quillbrook Dr, Bayou Verde, LA 70201",
+			"latitude": 29.2809,
+			"longitude": -90.9415,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 590,
+			"propertyType": "Apartment",
+			"rent": 1300,
+			"rentRangeLow": 1100,
+			"rentRangeHigh": 1500,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038"
+			]
+		},
+		{
+			"formattedAddress": "8181 Tallowmere Pl, Bayou Verde, LA 70204",
+			"latitude": 29.3151,
+			"longitude": -90.9294,
+			"bedrooms": 5,
+			"bathrooms": 1,
+			"squareFootage": 810,
+			"propertyType": "Condo",
+			"rent": 2625,
+			"rentRangeLow": 2225,
+			"rentRangeHigh": 3025,
+			"comparableIds": [
+				"SAMPLE-70201-R033",
+				"SAMPLE-70204-R022",
+				"SAMPLE-70201-R021",
+				"SAMPLE-70201-R027",
+				"SAMPLE-70201-R029"
+			]
+		},
+		{
+			"formattedAddress": "7888 Amberfield Way, Bayou Verde, LA 70204",
+			"latitude": 29.3252,
+			"longitude": -90.9353,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 2550,
+			"propertyType": "Condo",
+			"rent": 1675,
+			"rentRangeLow": 1425,
+			"rentRangeHigh": 1925,
+			"comparableIds": [
+				"SAMPLE-70201-R025",
+				"SAMPLE-70201-R031",
+				"SAMPLE-70201-R039",
+				"SAMPLE-70204-R024",
+				"SAMPLE-70204-R038"
+			]
+		},
+		{
+			"formattedAddress": "6765 Tallowmere Pl, Harlow Springs, OK 74201",
+			"latitude": 36.726,
+			"longitude": -101.9807,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 1840,
+			"propertyType": "Condo",
+			"rent": 1875,
+			"rentRangeLow": 1600,
+			"rentRangeHigh": 2150,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005"
+			]
+		},
+		{
+			"formattedAddress": "1454 Wrenhollow Trl, Harlow Springs, OK 74201",
+			"latitude": 36.7699,
+			"longitude": -101.9664,
+			"bedrooms": 5,
+			"bathrooms": 3.5,
+			"squareFootage": 1760,
+			"propertyType": "Single Family",
+			"rent": 2825,
+			"rentRangeLow": 2400,
+			"rentRangeHigh": 3250,
+			"comparableIds": [
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R013",
+				"SAMPLE-74203-R006",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009"
+			]
+		},
+		{
+			"formattedAddress": "2751 Fernmoss Loop, Harlow Springs, OK 74201",
+			"latitude": 36.7311,
+			"longitude": -101.9668,
+			"bedrooms": 5,
+			"bathrooms": 1,
+			"squareFootage": 2270,
+			"propertyType": "Manufactured",
+			"rent": 2925,
+			"rentRangeLow": 2475,
+			"rentRangeHigh": 3375,
+			"comparableIds": [
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R013",
+				"SAMPLE-74203-R006",
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009"
+			]
+		},
+		{
+			"formattedAddress": "417 Gildenreach Blvd, Harlow Springs, OK 74201",
+			"latitude": 36.7533,
+			"longitude": -101.9806,
+			"bedrooms": 0,
+			"bathrooms": 1.5,
+			"squareFootage": 1400,
+			"propertyType": "Apartment",
+			"rent": 1125,
+			"rentRangeLow": 950,
+			"rentRangeHigh": 1300,
+			"comparableIds": [
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R019"
+			]
+		},
+		{
+			"formattedAddress": "8724 Thimbleridge Rd, Harlow Springs, OK 74203",
+			"latitude": 36.7649,
+			"longitude": -101.974,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"rent": 850,
+			"rentRangeLow": 725,
+			"rentRangeHigh": 975,
+			"comparableIds": [
+				"SAMPLE-74201-R003",
+				"SAMPLE-74201-R011",
+				"SAMPLE-74203-R002",
+				"SAMPLE-74203-R018",
+				"SAMPLE-74201-R019"
+			]
+		},
+		{
+			"formattedAddress": "3548 Copperwick Ave, Harlow Springs, OK 74203",
+			"latitude": 36.7698,
+			"longitude": -101.9887,
+			"bedrooms": 2,
+			"bathrooms": 2.5,
+			"squareFootage": 680,
+			"propertyType": "Apartment",
+			"rent": 1625,
+			"rentRangeLow": 1375,
+			"rentRangeHigh": 1875,
+			"comparableIds": [
+				"SAMPLE-74201-R019",
+				"SAMPLE-74203-R008",
+				"SAMPLE-74203-R012",
+				"SAMPLE-74203-R016",
+				"SAMPLE-74201-R005"
+			]
+		},
+		{
+			"formattedAddress": "2639 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.1283,
+			"longitude": -113.2329,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 1940,
+			"propertyType": "Single Family",
+			"rent": 2550,
+			"rentRangeLow": 2175,
+			"rentRangeHigh": 2925,
+			"comparableIds": [
+				"SAMPLE-85801-R041",
+				"SAMPLE-85801-R047",
+				"SAMPLE-85806-R048",
+				"SAMPLE-85806-R054",
+				"SAMPLE-85806-R060"
+			]
+		},
+		{
+			"formattedAddress": "6364 Wrenhollow Trl, Juniper Mesa, AZ 85801",
+			"latitude": 32.1301,
+			"longitude": -113.2225,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 1130,
+			"propertyType": "Condo",
+			"rent": 1400,
+			"rentRangeLow": 1200,
+			"rentRangeHigh": 1600,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049"
+			]
+		},
+		{
+			"formattedAddress": "6397 Amberfield Way, Juniper Mesa, AZ 85806",
+			"latitude": 32.1434,
+			"longitude": -113.2189,
+			"bedrooms": 3,
+			"bathrooms": 2.5,
+			"squareFootage": 1310,
+			"propertyType": "Townhouse",
+			"rent": 2075,
+			"rentRangeLow": 1775,
+			"rentRangeHigh": 2375,
+			"comparableIds": [
+				"SAMPLE-85801-R043",
+				"SAMPLE-85801-R051",
+				"SAMPLE-85801-R055",
+				"SAMPLE-85806-R058",
+				"SAMPLE-85801-R041"
+			]
+		},
+		{
+			"formattedAddress": "3223 Ledgerstone Ln, Juniper Mesa, AZ 85806",
+			"latitude": 32.1453,
+			"longitude": -113.2416,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 1720,
+			"propertyType": "Condo",
+			"rent": 1525,
+			"rentRangeLow": 1300,
+			"rentRangeHigh": 1750,
+			"comparableIds": [
+				"SAMPLE-85801-R059",
+				"SAMPLE-85806-R044",
+				"SAMPLE-85806-R046",
+				"SAMPLE-85801-R045",
+				"SAMPLE-85801-R049"
+			]
+		},
+		{
+			"formattedAddress": "5638 Saltmarrow Ct, Harlow Springs, OK 74203",
+			"latitude": 36.7789,
+			"longitude": -101.9972,
+			"bedrooms": 4,
+			"bathrooms": 3.5,
+			"squareFootage": 1420,
+			"propertyType": "Townhouse",
+			"rent": 2425,
+			"rentRangeLow": 2050,
+			"rentRangeHigh": 2800,
+			"comparableIds": [
+				"SAMPLE-74201-R007",
+				"SAMPLE-74201-R009",
+				"SAMPLE-74203-R020",
+				"SAMPLE-74201-R001",
+				"SAMPLE-74201-R005"
+			]
+		}
+	],
+	"sale": [
+		{
+			"formattedAddress": "2602 Gildenreach Blvd, Bayou Verde, LA 70204",
+			"latitude": 29.2981,
+			"longitude": -90.9369,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2250,
+			"propertyType": "Townhouse",
+			"price": 223000,
+			"priceRangeLow": 190000,
+			"priceRangeHigh": 256000,
+			"comparableIds": [
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023",
+				"SAMPLE-70201-S027",
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025"
+			]
+		},
+		{
+			"formattedAddress": "1871 Thimbleridge Rd, Bayou Verde, LA 70204",
+			"latitude": 29.3106,
+			"longitude": -90.9479,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"price": 211000,
+			"priceRangeLow": 179000,
+			"priceRangeHigh": 243000,
+			"comparableIds": [
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025",
+				"SAMPLE-70204-S024",
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023"
+			]
+		},
+		{
+			"formattedAddress": "7613 Wrenhollow Trl, Bayou Verde, LA 70204",
+			"latitude": 29.3257,
+			"longitude": -90.9113,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 1810,
+			"propertyType": "Single Family",
+			"price": 323000,
+			"priceRangeLow": 275000,
+			"priceRangeHigh": 371000,
+			"comparableIds": [
+				"SAMPLE-70201-S019",
+				"SAMPLE-70204-S022",
+				"SAMPLE-70201-S015",
+				"SAMPLE-70204-S018",
+				"SAMPLE-70201-S017"
+			]
+		},
+		{
+			"formattedAddress": "5090 Gildenreach Blvd, Harlow Springs, OK 74201",
+			"latitude": 36.7495,
+			"longitude": -101.9708,
+			"bedrooms": 2,
+			"bathrooms": 1,
+			"squareFootage": 1000,
+			"propertyType": "Single Family",
+			"price": 442000,
+			"priceRangeLow": 376000,
+			"priceRangeHigh": 508000,
+			"comparableIds": [
+				"SAMPLE-74201-S001",
+				"SAMPLE-74203-S008",
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S005",
+				"SAMPLE-74203-S010"
+			]
+		},
+		{
+			"formattedAddress": "9393 Amberfield Way, Harlow Springs, OK 74203",
+			"latitude": 36.7606,
+			"longitude": -101.9592,
+			"bedrooms": 5,
+			"bathrooms": 2,
+			"squareFootage": 1830,
+			"propertyType": "Manufactured",
+			"price": 149000,
+			"priceRangeLow": 127000,
+			"priceRangeHigh": 171000,
+			"comparableIds": [
+				"SAMPLE-74201-S007",
+				"SAMPLE-74201-S011",
+				"SAMPLE-74203-S004",
+				"SAMPLE-74203-S014",
+				"SAMPLE-74201-S003"
+			]
+		},
+		{
+			"formattedAddress": "1274 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7727,
+			"longitude": -101.9873,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 1260,
+			"propertyType": "Townhouse",
+			"price": 408000,
+			"priceRangeLow": 347000,
+			"priceRangeHigh": 469000,
+			"comparableIds": [
+				"SAMPLE-74203-S014",
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S007",
+				"SAMPLE-74201-S011",
+				"SAMPLE-74203-S002"
+			]
+		},
+		{
+			"formattedAddress": "2518 Wrenhollow Trl, Harlow Springs, OK 74203",
+			"latitude": 36.7339,
+			"longitude": -102.0085,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 490,
+			"propertyType": "Condo",
+			"price": 355000,
+			"priceRangeLow": 302000,
+			"priceRangeHigh": 408000,
+			"comparableIds": [
+				"SAMPLE-74201-S005",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009",
+				"SAMPLE-74201-S013",
+				"SAMPLE-74203-S006"
+			]
+		},
+		{
+			"formattedAddress": "1642 Copperwick Ave, Juniper Mesa, AZ 85801",
+			"latitude": 32.1618,
+			"longitude": -113.1961,
+			"bedrooms": 1,
+			"bathrooms": 3.5,
+			"squareFootage": 3090,
+			"propertyType": "Multi-Family",
+			"price": 410000,
+			"priceRangeLow": 349000,
+			"priceRangeHigh": 471000,
+			"comparableIds": [
+				"SAMPLE-85801-S036",
+				"SAMPLE-85806-S029",
+				"SAMPLE-85806-S035",
+				"SAMPLE-85806-S039",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "6162 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1687,
+			"longitude": -113.2478,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 2790,
+			"propertyType": "Multi-Family",
+			"price": 470000,
+			"priceRangeLow": 400000,
+			"priceRangeHigh": 541000,
+			"comparableIds": [
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85806-S035",
+				"SAMPLE-85806-S039",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "7751 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1227,
+			"longitude": -113.2398,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"price": 445000,
+			"priceRangeLow": 378000,
+			"priceRangeHigh": 512000,
+			"comparableIds": [
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85806-S029",
+				"SAMPLE-85806-S035",
+				"SAMPLE-85806-S039"
+			]
+		},
+		{
+			"formattedAddress": "1372 Copperwick Ave, Juniper Mesa, AZ 85806",
+			"latitude": 32.1358,
+			"longitude": -113.2482,
+			"bedrooms": 3,
+			"bathrooms": 2.5,
+			"squareFootage": 2170,
+			"propertyType": "Manufactured",
+			"price": 482000,
+			"priceRangeLow": 410000,
+			"priceRangeHigh": 554000,
+			"comparableIds": [
+				"SAMPLE-85801-S032",
+				"SAMPLE-85801-S038",
+				"SAMPLE-85806-S031",
+				"SAMPLE-85801-S030",
+				"SAMPLE-85801-S034"
+			]
+		},
+		{
+			"formattedAddress": "3323 Marrowby Cir, Bayou Verde, LA 70201",
+			"latitude": 29.3331,
+			"longitude": -90.919,
+			"bedrooms": 5,
+			"bathrooms": 1.5,
+			"squareFootage": 1510,
+			"propertyType": "Multi-Family",
+			"price": 230000,
+			"priceRangeLow": 196000,
+			"priceRangeHigh": 265000,
+			"comparableIds": [
+				"SAMPLE-70204-S018",
+				"SAMPLE-70201-S019",
+				"SAMPLE-70204-S022",
+				"SAMPLE-70204-S026",
+				"SAMPLE-70201-S017"
+			]
+		},
+		{
+			"formattedAddress": "8012 Amberfield Way, Bayou Verde, LA 70201",
+			"latitude": 29.3011,
+			"longitude": -90.9593,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 2070,
+			"propertyType": "Manufactured",
+			"price": 193000,
+			"priceRangeLow": 164000,
+			"priceRangeHigh": 222000,
+			"comparableIds": [
+				"SAMPLE-70201-S023",
+				"SAMPLE-70201-S027",
+				"SAMPLE-70204-S016",
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025"
+			]
+		},
+		{
+			"formattedAddress": "9621 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.3138,
+			"longitude": -90.938,
+			"bedrooms": 2,
+			"bathrooms": 3.5,
+			"squareFootage": 2870,
+			"propertyType": "Apartment",
+			"price": 290000,
+			"priceRangeLow": 247000,
+			"priceRangeHigh": 334000,
+			"comparableIds": [
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S027",
+				"SAMPLE-70204-S016",
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025"
+			]
+		},
+		{
+			"formattedAddress": "3409 Copperwick Ave, Bayou Verde, LA 70201",
+			"latitude": 29.2888,
+			"longitude": -90.9278,
+			"bedrooms": 1,
+			"bathrooms": 1,
+			"squareFootage": 2670,
+			"propertyType": "Apartment",
+			"price": 198000,
+			"priceRangeLow": 168000,
+			"priceRangeHigh": 228000,
+			"comparableIds": [
+				"SAMPLE-70201-S021",
+				"SAMPLE-70204-S024",
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023",
+				"SAMPLE-70201-S027"
+			]
+		},
+		{
+			"formattedAddress": "3445 Brindlecott St, Bayou Verde, LA 70201",
+			"latitude": 29.3375,
+			"longitude": -90.9347,
+			"bedrooms": 2,
+			"bathrooms": 1.5,
+			"squareFootage": 1790,
+			"propertyType": "Apartment",
+			"price": 428000,
+			"priceRangeLow": 364000,
+			"priceRangeHigh": 492000,
+			"comparableIds": [
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023",
+				"SAMPLE-70204-S016",
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025"
+			]
+		},
+		{
+			"formattedAddress": "5409 Saltmarrow Ct, Bayou Verde, LA 70204",
+			"latitude": 29.2842,
+			"longitude": -90.9634,
+			"bedrooms": 4,
+			"bathrooms": 2.5,
+			"squareFootage": 2890,
+			"propertyType": "Multi-Family",
+			"price": 507000,
+			"priceRangeLow": 431000,
+			"priceRangeHigh": 583000,
+			"comparableIds": [
+				"SAMPLE-70201-S019",
+				"SAMPLE-70204-S026",
+				"SAMPLE-70201-S015",
+				"SAMPLE-70204-S018",
+				"SAMPLE-70201-S017"
+			]
+		},
+		{
+			"formattedAddress": "4358 Wrenhollow Trl, Harlow Springs, OK 74201",
+			"latitude": 36.7293,
+			"longitude": -101.9939,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 2970,
+			"propertyType": "Apartment",
+			"price": 291000,
+			"priceRangeLow": 247000,
+			"priceRangeHigh": 335000,
+			"comparableIds": [
+				"SAMPLE-74203-S010",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009",
+				"SAMPLE-74203-S004",
+				"SAMPLE-74203-S008"
+			]
+		},
+		{
+			"formattedAddress": "4948 Tallowmere Pl, Harlow Springs, OK 74201",
+			"latitude": 36.7807,
+			"longitude": -101.9754,
+			"bedrooms": 1,
+			"bathrooms": 1.5,
+			"squareFootage": 2000,
+			"propertyType": "Single Family",
+			"price": 310000,
+			"priceRangeLow": 264000,
+			"priceRangeHigh": 357000,
+			"comparableIds": [
+				"SAMPLE-74203-S012",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009",
+				"SAMPLE-74201-S013",
+				"SAMPLE-74203-S006"
+			]
+		},
+		{
+			"formattedAddress": "7432 Ledgerstone Ln, Harlow Springs, OK 74203",
+			"latitude": 36.7214,
+			"longitude": -101.9612,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 2670,
+			"propertyType": "Manufactured",
+			"price": 277000,
+			"priceRangeLow": 235000,
+			"priceRangeHigh": 319000,
+			"comparableIds": [
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009",
+				"SAMPLE-74203-S004",
+				"SAMPLE-74203-S008"
+			]
+		},
+		{
+			"formattedAddress": "6783 Ledgerstone Ln, Juniper Mesa, AZ 85801",
+			"latitude": 32.1481,
+			"longitude": -113.2072,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 660,
+			"propertyType": "Manufactured",
+			"price": 219000,
+			"priceRangeLow": 186000,
+			"priceRangeHigh": 252000,
+			"comparableIds": [
+				"SAMPLE-85801-S040",
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S032",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85801-S038"
+			]
+		},
+		{
+			"formattedAddress": "6410 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.1536,
+			"longitude": -113.1947,
+			"bedrooms": 3,
+			"bathrooms": 3,
+			"squareFootage": 1690,
+			"propertyType": "Manufactured",
+			"price": 581000,
+			"priceRangeLow": 494000,
+			"priceRangeHigh": 668000,
+			"comparableIds": [
+				"SAMPLE-85801-S038",
+				"SAMPLE-85806-S031",
+				"SAMPLE-85806-S037",
+				"SAMPLE-85801-S030",
+				"SAMPLE-85801-S034"
+			]
+		},
+		{
+			"formattedAddress": "5112 Quillbrook Dr, Juniper Mesa, AZ 85801",
+			"latitude": 32.136,
+			"longitude": -113.1987,
+			"bedrooms": 3,
+			"bathrooms": 1,
+			"squareFootage": 2990,
+			"propertyType": "Multi-Family",
+			"price": 189000,
+			"priceRangeLow": 161000,
+			"priceRangeHigh": 217000,
+			"comparableIds": [
+				"SAMPLE-85801-S032",
+				"SAMPLE-85806-S031",
+				"SAMPLE-85806-S037",
+				"SAMPLE-85801-S030",
+				"SAMPLE-85801-S034"
+			]
+		},
+		{
+			"formattedAddress": "3708 Marrowby Cir, Juniper Mesa, AZ 85801",
+			"latitude": 32.1269,
+			"longitude": -113.2238,
+			"bedrooms": 2,
+			"bathrooms": 3,
+			"squareFootage": 2210,
+			"propertyType": "Townhouse",
+			"price": 395000,
+			"priceRangeLow": 336000,
+			"priceRangeHigh": 454000,
+			"comparableIds": [
+				"SAMPLE-85801-S030",
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S032",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85801-S038"
+			]
+		},
+		{
+			"formattedAddress": "2156 Fernmoss Loop, Juniper Mesa, AZ 85806",
+			"latitude": 32.1666,
+			"longitude": -113.1942,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 1910,
+			"propertyType": "Multi-Family",
+			"price": 162000,
+			"priceRangeLow": 138000,
+			"priceRangeHigh": 186000,
+			"comparableIds": [
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85806-S029",
+				"SAMPLE-85806-S035",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "6230 Fernmoss Loop, Bayou Verde, LA 70201",
+			"latitude": 29.2915,
+			"longitude": -90.9453,
+			"bedrooms": 4,
+			"bathrooms": 3,
+			"squareFootage": 1330,
+			"propertyType": "Manufactured",
+			"price": 276000,
+			"priceRangeLow": 235000,
+			"priceRangeHigh": 317000,
+			"comparableIds": [
+				"SAMPLE-70204-S022",
+				"SAMPLE-70204-S026",
+				"SAMPLE-70201-S015",
+				"SAMPLE-70204-S018",
+				"SAMPLE-70201-S017"
+			]
+		},
+		{
+			"formattedAddress": "9211 Quillbrook Dr, Bayou Verde, LA 70201",
+			"latitude": 29.2809,
+			"longitude": -90.9415,
+			"bedrooms": 1,
+			"bathrooms": 2.5,
+			"squareFootage": 590,
+			"propertyType": "Apartment",
+			"price": 164000,
+			"priceRangeLow": 139000,
+			"priceRangeHigh": 189000,
+			"comparableIds": [
+				"SAMPLE-70201-S025",
+				"SAMPLE-70204-S024",
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023",
+				"SAMPLE-70201-S027"
+			]
+		},
+		{
+			"formattedAddress": "8181 Tallowmere Pl, Bayou Verde, LA 70204",
+			"latitude": 29.3151,
+			"longitude": -90.9294,
+			"bedrooms": 5,
+			"bathrooms": 1,
+			"squareFootage": 810,
+			"propertyType": "Condo",
+			"price": 494000,
+			"priceRangeLow": 420000,
+			"priceRangeHigh": 568000,
+			"comparableIds": [
+				"SAMPLE-70201-S015",
+				"SAMPLE-70201-S019",
+				"SAMPLE-70204-S022",
+				"SAMPLE-70204-S026",
+				"SAMPLE-70201-S017"
+			]
+		},
+		{
+			"formattedAddress": "7888 Amberfield Way, Bayou Verde, LA 70204",
+			"latitude": 29.3252,
+			"longitude": -90.9353,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 2550,
+			"propertyType": "Condo",
+			"price": 140000,
+			"priceRangeLow": 119000,
+			"priceRangeHigh": 161000,
+			"comparableIds": [
+				"SAMPLE-70201-S021",
+				"SAMPLE-70201-S025",
+				"SAMPLE-70201-S017",
+				"SAMPLE-70201-S023",
+				"SAMPLE-70201-S027"
+			]
+		},
+		{
+			"formattedAddress": "6765 Tallowmere Pl, Harlow Springs, OK 74201",
+			"latitude": 36.726,
+			"longitude": -101.9807,
+			"bedrooms": 2,
+			"bathrooms": 2,
+			"squareFootage": 1840,
+			"propertyType": "Condo",
+			"price": 250000,
+			"priceRangeLow": 213000,
+			"priceRangeHigh": 288000,
+			"comparableIds": [
+				"SAMPLE-74201-S009",
+				"SAMPLE-74203-S008",
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S005",
+				"SAMPLE-74203-S010"
+			]
+		},
+		{
+			"formattedAddress": "1454 Wrenhollow Trl, Harlow Springs, OK 74201",
+			"latitude": 36.7699,
+			"longitude": -101.9664,
+			"bedrooms": 5,
+			"bathrooms": 3.5,
+			"squareFootage": 1760,
+			"propertyType": "Single Family",
+			"price": 267000,
+			"priceRangeLow": 227000,
+			"priceRangeHigh": 307000,
+			"comparableIds": [
+				"SAMPLE-74201-S011",
+				"SAMPLE-74203-S002",
+				"SAMPLE-74203-S004",
+				"SAMPLE-74203-S014",
+				"SAMPLE-74201-S003"
+			]
+		},
+		{
+			"formattedAddress": "2751 Fernmoss Loop, Harlow Springs, OK 74201",
+			"latitude": 36.7311,
+			"longitude": -101.9668,
+			"bedrooms": 5,
+			"bathrooms": 1,
+			"squareFootage": 2270,
+			"propertyType": "Manufactured",
+			"price": 363000,
+			"priceRangeLow": 309000,
+			"priceRangeHigh": 417000,
+			"comparableIds": [
+				"SAMPLE-74201-S007",
+				"SAMPLE-74203-S002",
+				"SAMPLE-74203-S004",
+				"SAMPLE-74203-S014",
+				"SAMPLE-74201-S003"
+			]
+		},
+		{
+			"formattedAddress": "417 Gildenreach Blvd, Harlow Springs, OK 74201",
+			"latitude": 36.7533,
+			"longitude": -101.9806,
+			"bedrooms": 0,
+			"bathrooms": 1.5,
+			"squareFootage": 1400,
+			"propertyType": "Apartment",
+			"price": 270000,
+			"priceRangeLow": 230000,
+			"priceRangeHigh": 311000,
+			"comparableIds": [
+				"SAMPLE-74203-S006",
+				"SAMPLE-74201-S005",
+				"SAMPLE-74203-S012",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009"
+			]
+		},
+		{
+			"formattedAddress": "8724 Thimbleridge Rd, Harlow Springs, OK 74203",
+			"latitude": 36.7649,
+			"longitude": -101.974,
+			"bedrooms": null,
+			"bathrooms": null,
+			"squareFootage": null,
+			"propertyType": "Land",
+			"price": 187000,
+			"priceRangeLow": 159000,
+			"priceRangeHigh": 215000,
+			"comparableIds": [
+				"SAMPLE-74201-S013",
+				"SAMPLE-74201-S005",
+				"SAMPLE-74203-S012",
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009"
+			]
+		},
+		{
+			"formattedAddress": "3548 Copperwick Ave, Harlow Springs, OK 74203",
+			"latitude": 36.7698,
+			"longitude": -101.9887,
+			"bedrooms": 2,
+			"bathrooms": 2.5,
+			"squareFootage": 680,
+			"propertyType": "Apartment",
+			"price": 422000,
+			"priceRangeLow": 359000,
+			"priceRangeHigh": 485000,
+			"comparableIds": [
+				"SAMPLE-74201-S001",
+				"SAMPLE-74201-S009",
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S005",
+				"SAMPLE-74203-S010"
+			]
+		},
+		{
+			"formattedAddress": "2639 Fernmoss Loop, Juniper Mesa, AZ 85801",
+			"latitude": 32.1283,
+			"longitude": -113.2329,
+			"bedrooms": 4,
+			"bathrooms": 1,
+			"squareFootage": 1940,
+			"propertyType": "Single Family",
+			"price": 201000,
+			"priceRangeLow": 171000,
+			"priceRangeHigh": 231000,
+			"comparableIds": [
+				"SAMPLE-85801-S032",
+				"SAMPLE-85801-S038",
+				"SAMPLE-85806-S031",
+				"SAMPLE-85806-S037",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "6364 Wrenhollow Trl, Juniper Mesa, AZ 85801",
+			"latitude": 32.1301,
+			"longitude": -113.2225,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 1130,
+			"propertyType": "Condo",
+			"price": 343000,
+			"priceRangeLow": 292000,
+			"priceRangeHigh": 394000,
+			"comparableIds": [
+				"SAMPLE-85801-S028",
+				"SAMPLE-85806-S029",
+				"SAMPLE-85806-S035",
+				"SAMPLE-85806-S039",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "6397 Amberfield Way, Juniper Mesa, AZ 85806",
+			"latitude": 32.1434,
+			"longitude": -113.2189,
+			"bedrooms": 3,
+			"bathrooms": 2.5,
+			"squareFootage": 1310,
+			"propertyType": "Townhouse",
+			"price": 476000,
+			"priceRangeLow": 405000,
+			"priceRangeHigh": 547000,
+			"comparableIds": [
+				"SAMPLE-85801-S032",
+				"SAMPLE-85801-S038",
+				"SAMPLE-85806-S037",
+				"SAMPLE-85801-S030",
+				"SAMPLE-85801-S034"
+			]
+		},
+		{
+			"formattedAddress": "3223 Ledgerstone Ln, Juniper Mesa, AZ 85806",
+			"latitude": 32.1453,
+			"longitude": -113.2416,
+			"bedrooms": 1,
+			"bathrooms": 2,
+			"squareFootage": 1720,
+			"propertyType": "Condo",
+			"price": 587000,
+			"priceRangeLow": 499000,
+			"priceRangeHigh": 675000,
+			"comparableIds": [
+				"SAMPLE-85801-S028",
+				"SAMPLE-85801-S036",
+				"SAMPLE-85806-S029",
+				"SAMPLE-85806-S039",
+				"SAMPLE-85801-S030"
+			]
+		},
+		{
+			"formattedAddress": "5638 Saltmarrow Ct, Harlow Springs, OK 74203",
+			"latitude": 36.7789,
+			"longitude": -101.9972,
+			"bedrooms": 4,
+			"bathrooms": 3.5,
+			"squareFootage": 1420,
+			"propertyType": "Townhouse",
+			"price": 533000,
+			"priceRangeLow": 453000,
+			"priceRangeHigh": 613000,
+			"comparableIds": [
+				"SAMPLE-74203-S004",
+				"SAMPLE-74201-S003",
+				"SAMPLE-74201-S007",
+				"SAMPLE-74201-S011",
+				"SAMPLE-74203-S002"
+			]
+		}
+	]
+}

@@ -1,0 +1,32 @@
+[
+	{
+		"id": "metro-742",
+		"slug": "harlow-springs",
+		"city": "Harlow Springs",
+		"state": "OK",
+		"stateFips": "40",
+		"county": "Harlow County",
+		"zipCodes": ["74201", "74203"],
+		"centroid": { "latitude": 36.7512, "longitude": -101.9874 }
+	},
+	{
+		"id": "metro-702",
+		"slug": "bayou-verde",
+		"city": "Bayou Verde",
+		"state": "LA",
+		"stateFips": "22",
+		"county": "Verde Parish",
+		"zipCodes": ["70201", "70204"],
+		"centroid": { "latitude": 29.3105, "longitude": -90.9411 }
+	},
+	{
+		"id": "metro-858",
+		"slug": "juniper-mesa",
+		"city": "Juniper Mesa",
+		"state": "AZ",
+		"stateFips": "04",
+		"county": "Mesa Verdant County",
+		"zipCodes": ["85801", "85806"],
+		"centroid": { "latitude": 32.1508, "longitude": -113.2216 }
+	}
+]
