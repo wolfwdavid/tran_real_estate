@@ -9,6 +9,8 @@ import {
 	EMAIL,
 	PHONE,
 	TEXT_EXT,
+	FIXTURE_PATH,
+	SAMPLE_ZIP3,
 	findProblems,
 	isFictionalPhone
 } from './lib/real-data-rules.mjs';
@@ -152,5 +154,83 @@ describe('regex state safety', () => {
 		expect(PHONE.flags).toContain('g');
 		expect(COSTAR_PATH.flags).toContain('i');
 		expect(ALLOWED_EMAIL.test(j('x', '@', 'EXAMPLE', '.COM'))).toBe(true);
+	});
+});
+
+describe('fixture rules', () => {
+	const FIXTURE = 'apps/web/src/lib/data/fixtures/rentals.json';
+	const json = (value: unknown) => JSON.stringify(value);
+
+	test('FIXTURE_PATH matches fixture JSON only', () => {
+		expect(FIXTURE_PATH.test(FIXTURE)).toBe(true);
+		expect(FIXTURE_PATH.test('apps/web/src/lib/data/fixtures/fixture-fetch.ts')).toBe(false);
+		expect(FIXTURE_PATH.test('scripts/gen-fixtures.mjs')).toBe(false);
+	});
+
+	test('SAMPLE_ZIP3 lists the three unassigned prefixes', () => {
+		expect(SAMPLE_ZIP3).toEqual(['742', '702', '858']);
+	});
+
+	test('a sample zipCode passes; a non-sample zipCode is flagged', () => {
+		expect(findProblems(FIXTURE, json({ zipCode: '74201' }))).toEqual([]);
+		const problems = findProblems(FIXTURE, json({ zipCode: j('787', '01') }));
+		expect(problems).toHaveLength(1);
+		expect(problems[0]).toContain('outside sample prefixes 742/702/858');
+	});
+
+	test('zipCodes arrays are checked per element', () => {
+		expect(findProblems(FIXTURE, json({ zipCodes: ['74201', '85806'] }))).toEqual([]);
+		expect(findProblems(FIXTURE, json({ zipCodes: ['74201', j('730', '01')] }))).toHaveLength(1);
+	});
+
+	test('formattedAddress ZIPs must use a sample prefix', () => {
+		const ok = '12 Ledgerstone Ln, Harlow Springs, OK 74201';
+		expect(findProblems(FIXTURE, json({ formattedAddress: ok }))).toEqual([]);
+		const bad = j('12 Ledgerstone Ln, Harlow Springs, OK ', '730', '01');
+		expect(findProblems(FIXTURE, json({ formattedAddress: bad }))).toHaveLength(1);
+	});
+
+	test('URL hosts must be example.com, example.org or .test', () => {
+		expect(findProblems(FIXTURE, json({ website: 'https://example.com/agents/a' }))).toEqual([]);
+		expect(findProblems(FIXTURE, json({ website: 'https://shop.test/x' }))).toEqual([]);
+		const problems = findProblems(
+			FIXTURE,
+			json({ website: 'https://' + j('zil', 'low', '.com') + '/x' })
+		);
+		expect(problems).toHaveLength(1);
+		expect(problems[0]).toContain('URL host');
+	});
+
+	test('mlsNumber must start SAMPLE- and mlsName must be Sample MLS', () => {
+		expect(findProblems(FIXTURE, json({ mlsNumber: 'SAMPLE-742-0001' }))).toEqual([]);
+		expect(findProblems(FIXTURE, json({ mlsNumber: j('AB', 'OR', '12345') }))).toHaveLength(1);
+		expect(findProblems(FIXTURE, json({ mlsName: 'Sample MLS' }))).toEqual([]);
+		expect(findProblems(FIXTURE, json({ mlsName: 'Austin Board' }))).toHaveLength(1);
+		expect(findProblems(FIXTURE, json({ mlsNumber: null, mlsName: null }))).toEqual([]);
+	});
+
+	test('ids must carry a sample ZIP prefix', () => {
+		expect(findProblems(FIXTURE, json({ id: 'SAMPLE-74201-R001' }))).toEqual([]);
+		expect(findProblems(FIXTURE, json({ id: 'metro-858' }))).toEqual([]);
+		const problems = findProblems(FIXTURE, json({ id: j('LST', '-', '99') }));
+		expect(problems).toHaveLength(1);
+		expect(problems[0]).toContain('id');
+	});
+
+	test('nested records are walked', () => {
+		const text = json([{ listingAgent: { website: 'https://' + j('zil', 'low', '.com') } }]);
+		expect(findProblems(FIXTURE, text)).toHaveLength(1);
+	});
+
+	test('invalid JSON in a fixture path is a problem', () => {
+		const problems = findProblems(FIXTURE, '{"zipCode":');
+		expect(problems).toHaveLength(1);
+		expect(problems[0]).toContain('not valid JSON');
+	});
+
+	test('non-fixture data paths are unaffected', () => {
+		expect(
+			findProblems(DATA_FILE.replace('fixtures/', ''), json({ zipCode: j('787', '01') }))
+		).toEqual([]);
 	});
 });
