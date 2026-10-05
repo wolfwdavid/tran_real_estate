@@ -80,7 +80,7 @@ async function world(opts: { cap?: number; used?: number; zips?: string[]; db?: 
 	const repo = createSavedSearchRepo(g.db, tick);
 	const ids: string[] = [];
 	for (const zip of opts.zips ?? ZIPS) ids.push((await repo.create(search(zip))).id);
-	const confirm = vi.fn(async (_input: ConfirmInput) => true);
+	const confirm = vi.fn<(input: ConfirmInput) => Promise<boolean>>(async () => true);
 	const run = (over: Partial<Parameters<typeof runDueSearches>[0]> = {}) =>
 		runDueSearches({ gateway: g.gateway, repo, clock: tick, confirm, ...over });
 	return { ...g, clock, tick, rc, repo, ids, confirm, run };
