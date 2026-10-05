@@ -38,6 +38,21 @@ export const EXPECTED_PAGES = [
 	'404.html'
 ];
 
+// Non-page files every build must ship: Pages/anti-framing carriers plus the PWA install set.
+export const CARRIERS = [
+	'.nojekyll',
+	'frame-guard.js',
+	'pwa-capture.js',
+	'manifest.webmanifest',
+	'icons/icon-192.png',
+	'icons/icon-512.png',
+	'icons/icon-maskable-512.png',
+	'icons/apple-touch-icon-180.png'
+];
+
+// Linked from app.html (not the manifest); checked for its declared size alongside manifest icons.
+const APPLE_TOUCH_ICON = { src: 'icons/apple-touch-icon-180.png', sizes: '180x180' };
+
 // Directives a <meta> CSP silently ignores; their presence is a false sense of safety.
 const META_IGNORED = ['frame-ancestors', 'report-uri', 'sandbox'];
 
@@ -134,17 +149,106 @@ export function checkAssetText(relPath, text) {
 	return errors;
 }
 
-/** Returns [] when every carrier file exists, every .html page passes checkHtml and no built .css/.html embeds a data: URI. */
+// A manifest URL must resolve against the manifest's own URL so one file serves both bases.
+const isRelativeUrl = (u) =>
+	typeof u === 'string' && u !== '' && !u.startsWith('/') && !/^[a-z][a-z0-9+.-]*:/i.test(u);
+
+/** Returns [] when the web app manifest is valid, relative-URL only and installable. */
+export function checkManifest(text) {
+	let m;
+	try {
+		m = JSON.parse(text);
+	} catch (e) {
+		return [`invalid JSON (${e.message})`];
+	}
+	if (m === null || typeof m !== 'object' || Array.isArray(m))
+		return ['invalid JSON (not an object)'];
+	const errors = [];
+	for (const k of ['name', 'short_name']) {
+		if (typeof m[k] !== 'string' || m[k].trim() === '')
+			errors.push(`${k} must be a non-empty string`);
+	}
+	for (const k of ['id', 'start_url', 'scope']) {
+		if (m[k] !== './') errors.push(`${k} is ${JSON.stringify(m[k])}, expected "./"`);
+	}
+	if (m.display !== 'standalone')
+		errors.push(`display is ${JSON.stringify(m.display)}, expected "standalone"`);
+	const icons = Array.isArray(m.icons) ? m.icons : [];
+	if (icons.length === 0) errors.push('icons must be a non-empty array');
+	for (const icon of icons) {
+		if (!isRelativeUrl(icon?.src))
+			errors.push(`icon src ${JSON.stringify(icon?.src)} must be a relative URL`);
+	}
+	if (icons.length && !icons.some((i) => i?.sizes === '192x192')) errors.push('no 192x192 icon');
+	if (
+		icons.length &&
+		!icons.some((i) =>
+			String(i?.purpose ?? '')
+				.split(/\s+/)
+				.includes('maskable')
+		)
+	) {
+		errors.push('no maskable icon');
+	}
+	return errors;
+}
+
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+/** Reads width/height from a PNG's IHDR chunk; null when the buffer is not a PNG. */
+function pngSize(buf) {
+	if (buf.length < 24 || !buf.subarray(0, 8).equals(PNG_SIGNATURE)) return null;
+	return `${buf.readUInt32BE(16)}x${buf.readUInt32BE(20)}`;
+}
+
+/** Manifest validity plus the declared pixel size of every manifest icon and the apple-touch icon. */
+function checkPwaAssets(dir) {
+	const errors = [];
+	const manifestFile = join(dir, 'manifest.webmanifest');
+	let icons = [];
+	if (existsSync(manifestFile)) {
+		const text = readFileSync(manifestFile, 'utf8');
+		const faults = checkManifest(text);
+		errors.push(...faults.map((e) => `manifest.webmanifest: ${e}`));
+		if (faults.length === 0) icons = JSON.parse(text).icons;
+	}
+	for (const { src, sizes } of [...icons, APPLE_TOUCH_ICON]) {
+		const file = join(dir, src);
+		if (!existsSync(file)) {
+			if (!CARRIERS.includes(src)) errors.push(`missing ${src}`);
+			continue;
+		}
+		const actual = pngSize(readFileSync(file));
+		if (actual === null) errors.push(`${src}: not a PNG`);
+		else if (actual !== sizes) errors.push(`${src}: is ${actual}, declared ${sizes}`);
+	}
+	return errors;
+}
+
+/** Install carriers every page must link from <head>. */
+function checkPwaHead(relPath, html) {
+	const head = (/<head>([\s\S]*?)<\/head>/i.exec(html)?.[1] ?? '').replace(/<!--[\s\S]*?-->/g, '');
+	const errors = [];
+	if (!/<link\b[^>]*\brel="manifest"/i.test(head)) errors.push(`${relPath}: missing manifest link`);
+	if (!/<script\b[^>]*\bsrc="[^"]*pwa-capture\.js"/i.test(head)) {
+		errors.push(`${relPath}: missing pwa-capture.js`);
+	}
+	return errors;
+}
+
+/** Returns [] when every carrier file exists, the PWA manifest/icons are valid, every .html page passes checkHtml and links the install carriers, and no built .css/.html embeds a data: URI. */
 export function checkBuild(dir) {
 	const errors = [];
-	for (const f of ['.nojekyll', 'frame-guard.js', ...EXPECTED_PAGES]) {
+	for (const f of [...CARRIERS, ...EXPECTED_PAGES]) {
 		if (!existsSync(join(dir, f))) errors.push(`missing ${f}`);
 	}
 	if (!existsSync(dir)) return errors;
+	errors.push(...checkPwaAssets(dir));
 	const pages = walk(dir).filter((f) => f.endsWith('.html'));
 	for (const file of pages) {
 		const rel = relative(dir, file).split(sep).join('/');
-		errors.push(...checkHtml(rel, readFileSync(file, 'utf8')));
+		const html = readFileSync(file, 'utf8');
+		errors.push(...checkHtml(rel, html), ...checkPwaHead(rel, html));
 	}
 	for (const file of walk(dir).filter((f) => f.endsWith('.css') || f.endsWith('.html'))) {
 		const rel = relative(dir, file).split(sep).join('/');

@@ -26,7 +26,9 @@ const types = {
 	'.css': 'text/css',
 	'.json': 'application/json',
 	'.svg': 'image/svg+xml',
-	'.woff2': 'font/woff2'
+	'.woff2': 'font/woff2',
+	'.webmanifest': 'application/manifest+json',
+	'.png': 'image/png'
 };
 
 function site(port, mount, dir) {
