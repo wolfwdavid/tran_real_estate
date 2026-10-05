@@ -33,7 +33,9 @@ describe('billing period (UTC calendar month)', () => {
 	});
 
 	test('resetsAt is the 1st of the next UTC month, December rolls over the year', () => {
-		expect(resetsAt(Date.parse('2026-10-15T12:00:00Z'))).toBe(Date.parse('2026-11-01T00:00:00.000Z'));
+		expect(resetsAt(Date.parse('2026-10-15T12:00:00Z'))).toBe(
+			Date.parse('2026-11-01T00:00:00.000Z')
+		);
 		expect(resetsAt(Date.parse('2026-12-31T23:59:59.999Z'))).toBe(
 			Date.parse('2027-01-01T00:00:00.000Z')
 		);
