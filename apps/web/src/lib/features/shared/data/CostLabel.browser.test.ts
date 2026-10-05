@@ -19,7 +19,7 @@ async function inButton(verb: string, estimate: CostEstimate | 'free' | null) {
 	host.append(button);
 	document.body.append(host);
 	hosts.push(host);
-	await render(CostLabel, { props: { estimate } }, { container: button });
+	await render(CostLabel, { props: { estimate }, target: button });
 	return { host, button };
 }
 

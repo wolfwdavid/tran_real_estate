@@ -94,7 +94,7 @@ describe('ProvenanceRow', () => {
 		expect(onRefresh).toHaveBeenCalledTimes(1);
 		const busy = page.getByRole('button', { name: 'Refreshing…' });
 		await expect.element(busy).toBeDisabled();
-		expect(container.querySelector('button svg.motion-safe\:animate-spin')).not.toBeNull();
+		expect(container.querySelector('button svg[class~="motion-safe:animate-spin"]')).not.toBeNull();
 		expect(await axeViolations(container)).toEqual([]);
 
 		resolve();
@@ -149,11 +149,7 @@ describe('findUnbadgedSampleCards', () => {
 		document.body.append(root);
 		cards.push(root);
 
-		await render(
-			ProvenanceChip,
-			{ props: { provenance: sample, now: NOW } },
-			{ container: badged }
-		);
+		await render(ProvenanceChip, { props: { provenance: sample, now: NOW }, target: badged });
 
 		expect(findUnbadgedSampleCards(root)).toEqual([unbadged, hiddenChipCard]);
 	});

@@ -23,7 +23,7 @@ export const REFRESH_DONE = 'Refreshed from RentCast. 1 call used.';
 export const NO_NEW_LISTINGS = 'No new listings';
 
 /** "Sample data" · "RentCast · as of {relative}" · "… · may be out of date". */
-export function chipText(p: Pick<Provenance, 'source' | 'stale'>, relative: string): string {
+export function chipText(p: Provenance, relative: string): string {
 	if (p.source === 'sample') return CHIP_SAMPLE;
 	return CHIP_LIVE_PREFIX + relative + (p.stale ? CHIP_STALE_SUFFIX : '');
 }
@@ -61,9 +61,14 @@ export function detailText(d: DiffCounts): string {
 	return parts.join(', ');
 }
 
+export const CHECKED_PREFIX = 'Checked ';
+
+/** The words after `{relative}` in the checked line (lets the UI wrap `{relative}` in <time>). */
+export function checkedSuffix(source: Provenance['source']): string {
+	return source === 'rentcast' ? ' from RentCast' : ' (sample data)';
+}
+
 /** "Checked {relative} from RentCast" or "Checked {relative} (sample data)". */
 export function checkedText(relative: string, source: Provenance['source']): string {
-	return source === 'rentcast'
-		? `Checked ${relative} from RentCast`
-		: `Checked ${relative} (sample data)`;
+	return CHECKED_PREFIX + relative + checkedSuffix(source);
 }
