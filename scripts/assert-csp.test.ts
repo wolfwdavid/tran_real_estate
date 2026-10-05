@@ -8,9 +8,41 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { CONNECT, EXPECTED_PAGES, checkAssetText, checkBuild, checkHtml } from './assert-csp.mjs';
+import {
+	CARRIERS,
+	CONNECT,
+	EXPECTED_PAGES,
+	checkAssetText,
+	checkBuild,
+	checkHtml,
+	checkManifest
+} from './assert-csp.mjs';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const MANIFEST = readFileSync(
+	join(REPO_ROOT, 'apps', 'web', 'static', 'manifest.webmanifest'),
+	'utf8'
+);
+
+/** A minimal PNG header: the 8-byte signature plus an IHDR chunk carrying width and height. */
+function png(w: number, h: number): Buffer {
+	const buf = Buffer.alloc(33);
+	Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(buf, 0);
+	buf.writeUInt32BE(13, 8);
+	buf.write('IHDR', 12, 'ascii');
+	buf.writeUInt32BE(w, 16);
+	buf.writeUInt32BE(h, 20);
+	buf.writeUInt8(8, 24);
+	buf.writeUInt8(2, 25);
+	return buf;
+}
+
+const PWA_HEAD = [
+	'\t\t<script src="./pwa-capture.js"></script>',
+	'\t\t<link rel="manifest" href="./manifest.webmanifest" />',
+	'\t\t<link rel="apple-touch-icon" href="./icons/apple-touch-icon-180.png" />',
+	'\t\t<meta name="theme-color" content="#fbf7f0" />'
+];
 
 // A Kit-shaped hydration boot script. Its hash is computed at runtime so the golden page is
 // self-consistent and the hash-mismatch fault below is a genuine mismatch rather than a typo.
@@ -52,6 +84,7 @@ interface PageOptions {
 	directives?: Directives;
 	meta?: string | null;
 	boot?: string;
+	pwaHead?: string[];
 }
 
 function makePage(o: PageOptions = {}): string {
@@ -71,6 +104,7 @@ function makePage(o: PageOptions = {}): string {
 		'\t\t<!--skv6c4--><!----><title>Tran Real Estate Tools</title>',
 		'\t\t<link href="./_app/immutable/assets/0.css" rel="stylesheet">',
 		'\t\t<script src="./frame-guard.js"></script>',
+		...(o.pwaHead ?? PWA_HEAD),
 		'\t\t<meta name="viewport" content="width=device-width, initial-scale=1" />',
 		'\t</head>',
 		'\t<body data-sveltekit-preload-data="hover">',
@@ -240,9 +274,22 @@ function withTempBuild(populate: (dir: string) => void, run: (dir: string) => vo
 	}
 }
 
+const CARRIER_PNG: Record<string, [number, number]> = {
+	'icons/icon-192.png': [192, 192],
+	'icons/icon-512.png': [512, 512],
+	'icons/icon-maskable-512.png': [512, 512],
+	'icons/apple-touch-icon-180.png': [180, 180]
+};
+
 function writeFullBuild(dir: string): void {
-	writeFileSync(join(dir, '.nojekyll'), '');
-	writeFileSync(join(dir, 'frame-guard.js'), '(function () {})();\n');
+	mkdirSync(join(dir, 'icons'), { recursive: true });
+	for (const carrier of CARRIERS) {
+		const file = join(dir, carrier);
+		if (carrier in CARRIER_PNG) writeFileSync(file, png(...CARRIER_PNG[carrier]));
+		else if (carrier === 'manifest.webmanifest') writeFileSync(file, MANIFEST);
+		else if (carrier.endsWith('.js')) writeFileSync(file, '(function () {})();\n');
+		else writeFileSync(file, '');
+	}
 	for (const page of EXPECTED_PAGES) {
 		mkdirSync(dirname(join(dir, page)), { recursive: true });
 		writeFileSync(join(dir, page), golden);
@@ -308,7 +355,176 @@ describe('checkBuild over a temp directory', () => {
 
 	test('a missing directory reports every carrier as missing', () => {
 		const errors = checkBuild(join(tmpdir(), 'csp-does-not-exist-' + process.pid));
-		expect(errors).toHaveLength(2 + EXPECTED_PAGES.length);
+		expect(errors).toHaveLength(CARRIERS.length + EXPECTED_PAGES.length);
+	});
+});
+
+describe('PWA carriers', () => {
+	test('CARRIERS lists every security and install carrier', () => {
+		expect(CARRIERS).toEqual([
+			'.nojekyll',
+			'frame-guard.js',
+			'pwa-capture.js',
+			'manifest.webmanifest',
+			'icons/icon-192.png',
+			'icons/icon-512.png',
+			'icons/icon-maskable-512.png',
+			'icons/apple-touch-icon-180.png'
+		]);
+	});
+
+	test.each(CARRIERS.filter((c) => c !== '.nojekyll' && c !== 'frame-guard.js'))(
+		'a build missing %s is rejected',
+		(carrier) => {
+			withTempBuild(
+				(dir) => {
+					writeFullBuild(dir);
+					rmSync(join(dir, carrier));
+				},
+				(dir) => {
+					expect(checkBuild(dir)).toEqual([`missing ${carrier}`]);
+				}
+			);
+		}
+	);
+
+	test('an icon with the wrong pixel size is reported by file name', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				writeFileSync(join(dir, 'icons', 'icon-512.png'), png(1, 1));
+			},
+			(dir) => {
+				const errors = checkBuild(dir);
+				expect(errors).toHaveLength(1);
+				expect(errors[0]).toMatch(/icons\/icon-512\.png.*1x1.*512x512/);
+			}
+		);
+	});
+
+	test('a wrong-size apple-touch icon is reported', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				writeFileSync(join(dir, 'icons', 'apple-touch-icon-180.png'), png(192, 192));
+			},
+			(dir) => {
+				const errors = checkBuild(dir);
+				expect(errors).toHaveLength(1);
+				expect(errors[0]).toMatch(/apple-touch-icon-180\.png/);
+			}
+		);
+	});
+
+	test('a non-PNG icon file is reported', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				writeFileSync(join(dir, 'icons', 'icon-192.png'), 'not a png at all, nope, not even close');
+			},
+			(dir) => {
+				const errors = checkBuild(dir);
+				expect(errors).toHaveLength(1);
+				expect(errors[0]).toMatch(/icons\/icon-192\.png.*not a PNG/);
+			}
+		);
+	});
+
+	test('checkBuild runs checkManifest on the built manifest', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				const m = JSON.parse(MANIFEST) as Record<string, unknown>;
+				writeFileSync(join(dir, 'manifest.webmanifest'), JSON.stringify({ ...m, start_url: '/' }));
+			},
+			(dir) => {
+				const errors = checkBuild(dir);
+				expect(errors).toHaveLength(1);
+				expect(errors[0]).toMatch(/^manifest\.webmanifest: .*start_url/);
+			}
+		);
+	});
+
+	test.each([
+		['manifest link', [PWA_HEAD[0], PWA_HEAD[2], PWA_HEAD[3]], 'missing manifest link'],
+		['pwa-capture.js', [PWA_HEAD[1], PWA_HEAD[2], PWA_HEAD[3]], 'missing pwa-capture.js']
+	])('a page without the %s in <head> is rejected', (_name, pwaHead, message) => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				writeFileSync(join(dir, 'renter', 'index.html'), makePage({ pwaHead }));
+			},
+			(dir) => {
+				expect(checkBuild(dir)).toEqual([`renter/index.html: ${message}`]);
+			}
+		);
+	});
+
+	test('a manifest link outside <head> does not count', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				const page = makePage({ pwaHead: [PWA_HEAD[0]] }).replace(
+					'</body>',
+					`${PWA_HEAD[1]}\n\t</body>`
+				);
+				writeFileSync(join(dir, '404.html'), page);
+			},
+			(dir) => {
+				expect(checkBuild(dir)).toEqual(['404.html: missing manifest link']);
+			}
+		);
+	});
+});
+
+type MutableManifest = Record<string, unknown> & { icons: object[] };
+
+describe('checkManifest', () => {
+	const mutate = (fn: (m: MutableManifest) => unknown) => {
+		const m = JSON.parse(MANIFEST) as MutableManifest;
+		fn(m);
+		return JSON.stringify(m);
+	};
+	const icon = (src: string, sizes = '192x192', purpose = 'any') => ({
+		src,
+		sizes,
+		type: 'image/png',
+		purpose
+	});
+
+	test('the real manifest passes', () => {
+		expect(checkManifest(MANIFEST)).toEqual([]);
+	});
+
+	test('invalid JSON is rejected', () => {
+		expect(checkManifest('{ "name": ')[0]).toMatch(/invalid JSON/);
+	});
+
+	test.each<[string, (m: MutableManifest) => unknown, string]>([
+		['start_url /', (m) => (m.start_url = '/'), 'start_url'],
+		['absolute scope', (m) => (m.scope = 'https://x.test/'), 'scope'],
+		['missing id', (m) => delete m.id, 'id'],
+		['empty name', (m) => (m.name = ''), 'name'],
+		['missing short_name', (m) => delete m.short_name, 'short_name'],
+		['display browser', (m) => (m.display = 'browser'), 'display'],
+		['no icons', (m) => (m.icons = []), 'icons'],
+		['root-absolute icon src', (m) => m.icons.push(icon('/icons/x.png')), '/icons/x.png'],
+		['data: icon src', (m) => m.icons.push(icon('data:image/png;base64,AA')), 'data:'],
+		[
+			'scheme icon src',
+			(m) => m.icons.push(icon('https://cdn.test/x.png')),
+			'https://cdn.test/x.png'
+		],
+		['no maskable icon', (m) => (m.icons = [icon('icons/icon-192.png')]), 'maskable'],
+		[
+			'no 192x192 icon',
+			(m) => (m.icons = [icon('icons/icon-maskable-512.png', '512x512', 'maskable')]),
+			'192x192'
+		]
+	])('%s is rejected', (_name, fn, needle) => {
+		const errors = checkManifest(mutate(fn));
+		expect(errors.length).toBeGreaterThan(0);
+		expect(errors.some((e) => e.includes(needle))).toBe(true);
 	});
 });
 
