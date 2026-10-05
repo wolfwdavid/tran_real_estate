@@ -241,7 +241,7 @@ Plans:
 - [x] 06-06-PLAN.md — renter/outreach.v1 prompt with minimized inputs + artifact subjectId
 - [ ] 06-07-PLAN.md — Core sort, URL state codec, filter labels, filtered new-since (TDD)
 - [x] 06-08-PLAN.md — Core shortlist and saved-search record schemas (TDD)
-- [ ] 06-09-PLAN.md — No-network E2E harness: deny-all, synthetic tile, RentCast mocks, mocked key
+- [x] 06-09-PLAN.md — No-network E2E harness: deny-all, synthetic tile, RentCast mocks, mocked key
 - [ ] 06-10-PLAN.md — Shared listing components: property marks, LocationField, PriceHistory, status chip
 - [ ] 06-11-PLAN.md — Renter request builders, gateway 0-call/by-id contract, Dexie shortlist + search-meta repos
 - [ ] 06-12-PLAN.md — Zero-call affordability calculator (shared) + route + E2E
@@ -459,7 +459,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
-| 6. Renter Portal | 7/22 | In Progress|  |
+| 6. Renter Portal | 8/22 | In Progress|  |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
