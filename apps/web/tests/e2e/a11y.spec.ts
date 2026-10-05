@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { ROUTES } from './routes';
 
 // FND-04's automated accessibility gate: axe over every prerendered route, on both bases.
 // Exactly the WCAG 2.0/2.1/2.2 A and AA tag set; best-practice tags are deliberately NOT included
 // in this phase (Phase 2 owns brand, contrast and component work). One test per route so a
 // failure names the route, and the assertion message lists the failing rule ids.
-const ROUTES = ['', 'renter/', 'investor/', 'agent/', 'settings/', 'print/'];
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 for (const route of ROUTES) {

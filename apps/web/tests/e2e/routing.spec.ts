@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { ROUTES, PRINT, EXTERNAL_HOSTS } from './routes';
 
 // FND-01 routing contract, proven against the real built output served with GitHub Pages
 // semantics (scripts/serve-pages.mjs). Every page.goto uses a RELATIVE path so the same spec
 // runs under both the root base ('/') and the sub-path base ('/tran_real_estate/').
-const ROUTES = ['', 'renter/', 'investor/', 'agent/', 'settings/', 'print/'];
 const SUB_BASE = '/tran_real_estate/';
 
 test('every prerendered route responds 200 with a visible h1', async ({ page }) => {
@@ -50,7 +50,7 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 		);
 		// The print surface deliberately carries no navigation (only the skip link), so the
 		// "at least one link" guard applies to every other route.
-		if (route !== 'print/') {
+		if (route !== PRINT) {
 			expect(links.length, `links on ${JSON.stringify(route)}`).toBeGreaterThan(0);
 		}
 		const origin = new URL(page.url()).origin;
@@ -61,6 +61,7 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 			if (url.origin !== origin) {
 				expect(url.protocol, `${href} on ${JSON.stringify(route)}`).toBe('https:');
 				expect(target, `${href} on ${JSON.stringify(route)} target`).toBeNull();
+				expect(EXTERNAL_HOSTS, href).toContain(url.hostname);
 				continue;
 			}
 			const { pathname } = url;

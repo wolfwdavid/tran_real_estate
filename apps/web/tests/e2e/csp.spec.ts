@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
+import { ROUTES } from './routes';
 
 // FND-02 at runtime: the build-time oracle (scripts/assert-csp.mjs) proves the policy TEXT is
 // right; this spec proves the running app actually survives it in Chromium. Only built output is
 // authoritative (in dev Kit loosens style-src), so this runs against serve-pages.mjs serving
 // apps/web/build*. Relative page.goto paths keep one spec valid under both bases.
-const ROUTES = ['', 'renter/', 'investor/', 'agent/', 'settings/', 'print/'];
 
 declare global {
 	interface Window {
