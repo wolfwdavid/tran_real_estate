@@ -1,10 +1,28 @@
-import type { Category, Severity } from './types.js';
+import { checkFairHousing } from './check.js';
+import { LEXICON } from './lexicon.js';
+import type { Category, LexiconEntry, Severity } from './types.js';
 
 /**
  * Fair Housing test suites. Reused by the Phase 10 checker page as worked
  * examples, so every row is plain listing copy.
  */
 export type BadPhrase = { text: string; entryId: string; category: Category; severity: Severity };
+
+/**
+ * The suite's comparison: true when checking `text` against `lexicon` yields a
+ * member with the row's entry id, category and severity.
+ */
+export function flagsRow(
+	text: string,
+	row: BadPhrase,
+	lexicon: readonly LexiconEntry[] = LEXICON
+): boolean {
+	return checkFairHousing(text, lexicon).some((f) =>
+		f.members.some(
+			(m) => m.entryId === row.entryId && m.category === row.category && m.severity === row.severity
+		)
+	);
+}
 
 /** One row per lexicon example. Each must be flagged by its own entry. */
 export const BAD_PHRASES: readonly BadPhrase[] = [

@@ -2,20 +2,13 @@ import { describe, expect, test } from 'vitest';
 
 import { checkFairHousing } from './check.js';
 import { LEXICON } from './lexicon.js';
-import { BAD_PHRASES, NEUTRAL_PHRASES, type BadPhrase } from './suite.js';
+import { BAD_PHRASES, NEUTRAL_PHRASES, flagsRow } from './suite.js';
 import type { Category, Finding } from './types.js';
 
 const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** Every member across findings, flattened. */
 const members = (findings: Finding[]) => findings.flatMap((f) => f.members);
-
-/** True when some member matches the row's entry, category and severity. */
-function flags(text: string, row: BadPhrase): boolean {
-	return members(checkFairHousing(text)).some(
-		(m) => m.entryId === row.entryId && m.category === row.category && m.severity === row.severity
-	);
-}
 
 const STATE_CATEGORIES: readonly Category[] = ['source-of-income', 'age', 'marital-status', 'sogi'];
 
@@ -52,15 +45,15 @@ describe('suite sizes (non-vacuous)', () => {
 
 describe('known-bad phrases are flagged', () => {
 	test.each(BAD_PHRASES)('alone: "$text" -> $entryId', (row) => {
-		expect(flags(row.text, row)).toBe(true);
+		expect(flagsRow(row.text, row)).toBe(true);
 	});
 
 	test.each(BAD_PHRASES)('inside a sentence: "$text"', (row) => {
-		expect(flags(`Bright unit. ${row.text}. Call today.`, row)).toBe(true);
+		expect(flagsRow(`Bright unit. ${row.text}. Call today.`, row)).toBe(true);
 	});
 
 	test.each(BAD_PHRASES)('sentence-initial capitalized: "$text"', (row) => {
-		expect(flags(`${cap(row.text)} today.`, row)).toBe(true);
+		expect(flagsRow(`${cap(row.text)} today.`, row)).toBe(true);
 	});
 });
 
