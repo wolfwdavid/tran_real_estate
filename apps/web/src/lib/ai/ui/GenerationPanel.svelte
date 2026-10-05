@@ -8,7 +8,7 @@
 	// and the email link loses its href while gated.
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
-	// onExit, subjectId (Phase 6), and the read-only bindables canExit / blocked / findings. `state` is the test/SSR seam
+	// onExit, subjectId and beforeGenerate (Phase 6), and the read-only bindables canExit / blocked / findings. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
 	import { onMount, tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
@@ -54,6 +54,7 @@
 		exitDisabled = {},
 		onExit,
 		subjectId,
+		beforeGenerate,
 		// Read-only outputs: written by the $effect below, never read here.
 		/* eslint-disable no-useless-assignment */
 		canExit = $bindable(false),
@@ -81,6 +82,11 @@
 		 * DraftHistory to filter it. Absent: drafts are stored without one (Phase 5 behavior).
 		 */
 		subjectId?: string;
+		/**
+		 * Phase 6 host hook: runs when the renter presses the generate control (not Stop). Return
+		 * false to skip the run, e.g. after the host form showed its own field errors. Absent: runs.
+		 */
+		beforeGenerate?: () => boolean;
 		canExit?: boolean;
 		blocked?: boolean;
 		findings?: Finding[];
@@ -233,7 +239,7 @@
 
 	async function onRun(): Promise<void> {
 		if (st.running) st.stop();
-		else await st.generate();
+		else if (beforeGenerate?.() ?? true) await st.generate();
 	}
 
 	async function toggleEdit(): Promise<void> {
