@@ -39,6 +39,11 @@ The owner chose fully autonomous mode on 2026-10-04. Recommended defaults adopte
 ### Demo credibility
 - Sample contacts fixture (synthetic, `example.com`, 555-01xx) when the CRM is empty with a "Load sample contacts" action and a clear "Sample" chip; zero RentCast calls anywhere in `/agent/*` (asserted by a test that the gateway is never imported by `features/agent`).
 
+### Amendments from downstream research (2026-10-04, Phase 9 research)
+- Profile gains three fields required by state ad rules: `licenseType` (e.g. "Licensed Real Estate Salesperson" / "Associate Broker" — NY bans the bare titles "sales associate" and "broker"), `teamName` (optional), `brokeragePhone` (NJ requires it on web pages; NY requires brokerage address or phone).
+- Disclosure composer output format (brokerage first): `{Brokerage} · {Name}, {License type} · Lic. #{num} ({ST}) · {Brokerage phone}`; with a team: `{Team} at {Brokerage} · …`. Sources and per-state rules are in `.planning/phases/09-*/09-RESEARCH.md`.
+- The "features/agent never imports lib/data" boundary test must be scoped to `features/agent` and `/agent/*` routes EXCLUDING the Phase 9 `features/studio` module and `/agent/studio/*`, which legitimately use the RentCast gateway for the Market Snapshot.
+
 ### Claude's Discretion
 - DnD library choice (native HTML5 DnD with keyboard fallback vs. a small Svelte 5 lib) — prefer no new dependency; CSV column mapping UX; logo size limits.
 

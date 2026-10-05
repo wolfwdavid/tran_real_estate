@@ -38,6 +38,10 @@ The owner chose fully autonomous mode on 2026-10-04. Recommended defaults adopte
 ### Demo credibility
 - Every investor route works keyless on fixtures; E2E with mocks; axe on all routes incl. the print route.
 
+### Amendments from downstream research (2026-10-04, Phase 9 research)
+- The memo numeric post-check (extract numerals from generated text, match against an allowed set, flag extras) must be implemented as pure functions in `packages/core/src/numbers/` (not inside `features/investor`), so Phase 9's `features/studio` can reuse it with a different allowed set.
+- The watched-zip market-stats request parameters are the canonical ones Phase 9's Market Snapshot reuses; keep them in `features/shared/markets/` so cached zips are shared.
+
 ### Claude's Discretion
 - Expense default percentages; chart styling within tokens; compare table layout at 375px (stacked cards).
 
