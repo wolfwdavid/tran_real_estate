@@ -103,7 +103,7 @@ P1 Foundation ─┬─► P2 Brand/Marketing ───────────�
 **Plans**: 12 plans in 6 waves
 Plans:
 - [x] 02-01-PLAN.md — Brand tokens in @tran/brand + WCAG contrast gate (wave 1)
-- [ ] 02-02-PLAN.md — Banned-terms copy gate: rules, CLI, verify + CI hygiene step (wave 1)
+- [x] 02-02-PLAN.md — Banned-terms copy gate: rules, CLI, verify + CI hygiene step (wave 1)
 - [ ] 02-03-PLAN.md — Tailwind @theme + parity test, self-hosted fonts, Lucide pin, data: URI oracle (wave 2)
 - [ ] 02-04-PLAN.md — Site chrome: header/portal switcher, footer, skip link, layouts, 404, 7 route stubs (wave 3)
 - [ ] 02-05-PLAN.md — Shared E2E route list, routing/CSP/axe on all routes, drift guard (wave 4)
