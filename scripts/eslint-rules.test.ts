@@ -454,3 +454,127 @@ export const used = [a, b];
 		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
 	});
 });
+
+// Phase 5 (AI-04): no AI output is ever sent automatically. The lib/ai block uses rule names
+// DISTINCT from no-restricted-syntax, because the providers folder turns that rule fully off;
+// these cases lint fixtures in lib/ai/providers too, so an override there cannot clobber the ban.
+const AI = `${WEB}/lib/ai`;
+const PROVIDERS_FIX = `${AI}/providers/__lintfix__`;
+const LEADS_MESSAGE = 'AI modules must never import lead delivery';
+
+describe('AI no-auto-send boundary (lintText, in memory)', () => {
+	let hasGlobalConfirmBan = false;
+
+	beforeAll(async () => {
+		for (const p of [PROVIDERS_FIX, `${AI}/__lintfix__`, `${AI}/ui/__lintfix__`]) {
+			expect(existsSync(resolve(repoRoot, p))).toBe(false);
+		}
+		const probe = await lint(`${WEB}/lib/__lintfix__/confirm.ts`, `export const ok = confirm('x');\n`);
+		hasGlobalConfirmBan = errorsFor(probe, 'no-restricted-globals').length > 0;
+	});
+
+	test('a lib/ai Svelte component importing $lib/leads/web3forms is rejected', async () => {
+		const messages = await lint(
+			`${AI}/ui/__lintfix__/panel-fixture.svelte`,
+			`<script lang="ts">
+	import { send } from '$lib/leads/web3forms';
+	const go = () => send();
+</script>
+
+<button onclick={go}>Go</button>
+`
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain(LEADS_MESSAGE);
+	});
+
+	test('the providers folder: a relative leads import is rejected and fetch() stays allowed', async () => {
+		const messages = await lint(
+			`${PROVIDERS_FIX}/adapter-fixture.ts`,
+			`import { send } from '../../../leads/web3forms';
+
+export async function relay(): Promise<unknown> {
+	const res = await fetch('https://x.test');
+	return send(await res.text());
+}
+`
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain(LEADS_MESSAGE);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+
+	test('the providers folder: navigator.sendBeacon is rejected (override did not clobber it)', async () => {
+		const messages = await lint(
+			`${PROVIDERS_FIX}/beacon.ts`,
+			`export const sent = navigator.sendBeacon('https://x.test', 'a');\n`
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-properties')).toHaveLength(1);
+	});
+
+	test.each([
+		["window.open('mailto:x')", 'no-restricted-properties'],
+		["location.assign('mailto:x')", 'no-restricted-properties'],
+		["location.replace('mailto:x')", 'no-restricted-properties'],
+		["open('mailto:x')", 'no-restricted-globals'],
+		['new XMLHttpRequest()', 'no-restricted-globals'],
+		["new WebSocket('wss://x')", 'no-restricted-globals'],
+		["new EventSource('/x')", 'no-restricted-globals']
+	])('lib/ai: %s is rejected by %s', async (expr, ruleId) => {
+		const messages = await lint(`${AI}/__lintfix__/nav.ts`, `export const x = () => ${expr};\n`);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, ruleId)).toHaveLength(1);
+	});
+
+	test('lib/ai: navigator.clipboard.writeText (the Copy exit) is allowed', async () => {
+		const messages = await lint(
+			`${AI}/__lintfix__/exits-fixture.ts`,
+			`export async function copy(t: string): Promise<void> {
+	await navigator.clipboard.writeText(t);
+}
+`
+		);
+		expect(ruleIds(messages)).toEqual([]);
+	});
+
+	test('lib/ai keeps the global confirm() and window.confirm() bans', async () => {
+		expect(hasGlobalConfirmBan).toBe(true);
+		const messages = await lint(
+			`${AI}/__lintfix__/confirm.ts`,
+			`export const a = confirm('x');\nexport const b = window.confirm('y');\n`
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-globals')).toHaveLength(1);
+		expect(errorsFor(messages, 'no-restricted-properties')).toHaveLength(1);
+	});
+
+	test('lib/ai keeps the Phase 4 data-port import boundary', async () => {
+		const messages = await lint(
+			`${AI}/__lintfix__/data-import.ts`,
+			importModule('$lib/data/rentcast/client')
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('$lib/data');
+	});
+
+	test('control: lib/leads itself is not under the AI block', async () => {
+		const messages = await lint(
+			`${WEB}/lib/leads/__lintfix__/x.ts`,
+			`export async function deliver(): Promise<boolean> {
+	await fetch('https://x.test');
+	return navigator.sendBeacon('https://x.test', 'a');
+}
+`
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-properties')).toEqual([]);
+		expect(ruleIds(messages)).toEqual([]);
+	});
+});
