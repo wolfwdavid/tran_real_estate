@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-17-PLAN.md
-last_updated: "2026-10-05T10:39:00.916Z"
+stopped_at: Completed 04-07-PLAN.md
+last_updated: "2026-10-05T10:46:05.530Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 38
+  completed_plans: 41
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-13)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 03 — Local Platform: Storage, Key Vault & Backup
+**Current focus:** Phase 04 — Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures
 
 ## Current Position
 
-Phase: 04
-Plan: Not started
+Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
+Plan: 4 of 25
 
 ## Performance Metrics
 
@@ -84,6 +84,9 @@ Plan: Not started
 | Phase 03 P12 | 30min | 2 tasks | 6 files |
 | Phase 03 P16 | 25min | 2 tasks | 3 files |
 | Phase 03 P17 | 40min | 2 tasks | 4 files |
+| Phase 04 P05 | 10min | 2 tasks | 5 files |
+| Phase 04 P02 | 6min | 2 tasks | 9 files |
+| Phase 04 P07 | 5min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -174,6 +177,12 @@ Recent decisions affecting current work:
 - [Phase 03]: 03-16: Overlay paint check targets the shadcn wrapper data-slot (dialog-overlay / alert-dialog-overlay); mutation-proven
 - [Phase 03]: Phase 3 gate: verify green in one run (210 s); 37 validation rows walked; 28-row mutation ledger; 9 device checks deferred as HUMAN-UAT until tranrealestate.github.io exists
 - [Phase 03]: Load-only import-preview E2E flake tracked in 03 deferred-items.md; capture trace before changing timeouts
+- [Phase 04]: 04-05: diffSnapshots reports ids missing from a truncated snapshot as unknown, never gone; off-market (Inactive/removedDate) items are gone only if previously on-market
+- [Phase 04]: 04-05: planRun admits a search only while used + calls + marginal <= cap; shared keys and cached runs cost 0; confirm only when more than 3 are due
+- [Phase 04]: Budget: UTC calendar month period; only HTTP 200 billed (isBilled one-liner); pending >=120s counted as billed
+- [Phase 04]: Meter: past (used>=50) outranks at/near; transitions announce only on worsening, never on load
+- [Phase 04]: 04-07: DATA_INTERNALS import pattern lives in a catch-all apps/web entry (lib/data exempt) AND is re-merged into each portal entry; any new entry setting no-restricted-imports on apps/web/src must include it
+- [Phase 04]: 04-07: $effect spend ban covers get/refresh/testKey/rentalListingById/runDue/runDueSearches on *gateway/*scheduler objects; peek is the reactive read
 
 ### Pending Todos
 
@@ -196,7 +205,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T10:34:09.102Z
-Stopped at: Completed 03-17-PLAN.md
+Last session: 2026-10-05T10:46:05.519Z
+Stopped at: Completed 04-07-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

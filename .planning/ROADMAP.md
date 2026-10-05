@@ -163,12 +163,12 @@ Plans:
 **Plans**: 25 plans in 9 waves
 Plans:
 - [ ] 04-01-PLAN.md — Phase 3 gate, platform adapter, Phase 4 Dexie tables + backup registration, exact-pin deps, schema-registry test
-- [ ] 04-02-PLAN.md — core budget: UTC period, isBilled policy, usage summary, cap validation, meter states
+- [x] 04-02-PLAN.md — core budget: UTC period, isBilled policy, usage summary, cap validation, meter states
 - [ ] 04-03-PLAN.md — core request: endpoints (incl. rental listing by id), canonical key, TTLs, error taxonomy, zero-cost probe mapping
 - [ ] 04-04-PLAN.md — core normalizeLocation, listings domain types, filterListings, fetch-wide + narrow request builders
-- [ ] 04-05-PLAN.md — core alerts: diffSnapshots, due-search selection, cap-aware run plan
+- [x] 04-05-PLAN.md — core alerts: diffSnapshots, due-search selection, cap-aware run plan
 - [ ] 04-06-PLAN.md — fixture guard rules + planted-PII proof, seeded fixture generator, drift check in verify/CI
-- [ ] 04-07-PLAN.md — ESLint: ban spends in $effect, data layer only through $lib/data
+- [x] 04-07-PLAN.md — ESLint: ban spends in $effect, data layer only through $lib/data
 - [ ] 04-08-PLAN.md — web-browser Vitest project (Chromium + axe) spike, CI Chromium order
 - [ ] 04-09-PLAN.md — RentCast GET client (only fetch site) + zero-cost key probe
 - [ ] 04-10-PLAN.md — tolerant zod/mini schemas + mappers, proven on fixtures
@@ -427,7 +427,7 @@ Plans:
   2. User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup.
   3. Extension permissions are limited to storage and zillow.com. Monitoring a browsing session shows zero network requests from the extension. The listing and popup show a "collects nothing, sends nothing" privacy notice and a "Not affiliated with or endorsed by Zillow Group" notice.
   4. User can install the extension from a GitHub Releases zip by following load-unpacked instructions, or from Microsoft Edge Add-ons (Firefox Add-ons optional).
-**Plans:** 17/17 plans complete
+**Plans:** 3/25 plans executed
 Plans:
 - [ ] 11-01-PLAN.md — Scaffold apps/extension (WXT 0.21.4), one-shot deps, test harness, contracts (selectors, copy, messages, settings)
 - [ ] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
@@ -457,7 +457,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 1. Foundation, Origin & Security Baseline | 9/9 | Complete    | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
-| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 0/TBD | Not started | - |
+| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 3/25 | In Progress|  |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 0/TBD | Not started | - |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
