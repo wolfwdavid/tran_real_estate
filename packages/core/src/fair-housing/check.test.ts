@@ -17,12 +17,7 @@ function flags(text: string, row: BadPhrase): boolean {
 	);
 }
 
-const STATE_CATEGORIES: readonly Category[] = [
-	'source-of-income',
-	'age',
-	'marital-status',
-	'sogi'
-];
+const STATE_CATEGORIES: readonly Category[] = ['source-of-income', 'age', 'marital-status', 'sogi'];
 
 describe('suite sizes (non-vacuous)', () => {
 	test('at least 30 bad and 30 neutral phrases', () => {
