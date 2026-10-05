@@ -110,3 +110,163 @@ test.describe('request filter control', () => {
 		await expect.poll(() => foreign(urls, origin).length).toBeGreaterThan(0);
 	});
 });
+
+// ---------------------------------------------------------------------------------------------
+// BRND-03/05 responsive behaviour. 375px is the smallest supported width; 640px is the `sm`
+// breakpoint where the inline portal list replaces the Menu disclosure. Interactions wait for
+// nav[data-hydrated] (set in onMount) because a click before hydration does nothing (Pitfall 10).
+
+const overflow = (page: Page) =>
+	page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+const inlineList = (page: Page) => portals(page).locator('ul:not(#portal-menu)');
+const hydrated = (page: Page) => expect(page.locator('nav[data-hydrated]')).toBeAttached();
+
+/** WCAG 1.4.12 text-spacing overrides. page.addStyleTag is refused by style-src-elem, so the
+ *  sheet is constructed in the page and adopted (constructed sheets are not governed by CSP). */
+const applyTextSpacing = (page: Page) =>
+	page.evaluate(() => {
+		const s = new CSSStyleSheet();
+		s.replaceSync(
+			'*{line-height:1.5!important;letter-spacing:.12em!important;word-spacing:.16em!important}p{margin-bottom:2em!important}'
+		);
+		document.adoptedStyleSheets = [...document.adoptedStyleSheets, s];
+	});
+
+test.describe('375px', () => {
+	test.use({ viewport: { width: 375, height: 812 } });
+
+	for (const route of [...ROUTES, NOT_FOUND]) {
+		test(`no horizontal scroll on ${JSON.stringify(route)}`, async ({ page }) => {
+			await page.goto(route);
+			await expect(page.locator('h1')).toBeVisible();
+			expect(await overflow(page)).toBeLessThanOrEqual(0);
+			if (route !== PRINT) {
+				await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible();
+				await expect(inlineList(page)).toBeHidden();
+			}
+		});
+	}
+
+	for (const route of CHROME_ROUTES) {
+		test(`no horizontal scroll with the menu open on ${JSON.stringify(route)}`, async ({
+			page
+		}) => {
+			await page.goto(route);
+			await hydrated(page);
+			await page.getByRole('button', { name: 'Menu' }).click();
+			await expect(page.locator('#portal-menu')).toBeVisible();
+			expect(await overflow(page)).toBeLessThanOrEqual(0);
+		});
+	}
+
+	for (const route of ROUTES) {
+		test(`text spacing overrides keep ${JSON.stringify(route)} usable`, async ({ page }) => {
+			await page.goto(route);
+			await applyTextSpacing(page);
+			// The override must actually be in force, or the overflow check proves nothing.
+			await expect(page.locator('h1')).not.toHaveCSS('word-spacing', '0px');
+			expect(
+				await page.evaluate(() => getComputedStyle(document.body).letterSpacing),
+				'letter-spacing override applied'
+			).not.toBe('normal');
+			expect(await overflow(page)).toBeLessThanOrEqual(0);
+			await expect(page.locator('h1')).toBeVisible();
+		});
+	}
+
+	test('overflow detector catches a planted wide element (non-vacuity)', async ({ page }) => {
+		await page.goto('');
+		expect(await overflow(page)).toBeLessThanOrEqual(0);
+		await page.evaluate(() => {
+			const d = document.createElement('div');
+			d.setAttribute('style', 'width:1000px;height:1px');
+			document.body.append(d);
+		});
+		expect(await overflow(page)).toBeGreaterThan(0);
+	});
+});
+
+test.describe('disclosure menu at 375px', () => {
+	test.use({ viewport: { width: 375, height: 812 } });
+
+	const button = (page: Page) => page.locator('button[aria-controls="portal-menu"]');
+	const panel = (page: Page) => page.locator('#portal-menu');
+
+	test.beforeEach(async ({ page }) => {
+		await page.goto('renter/');
+		await hydrated(page);
+	});
+
+	test('mouse toggles the panel and marks the current portal', async ({ page }) => {
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'false');
+		await expect(panel(page)).toBeHidden();
+		await expect(button(page)).toHaveText('Menu');
+
+		await button(page).click();
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'true');
+		await expect(button(page)).toHaveText('Close');
+		await expect(panel(page)).toBeVisible();
+		await expect(panel(page).locator('a[aria-current="page"]')).toHaveText('Renter');
+	});
+
+	test('Escape closes the panel and returns focus to the button', async ({ page }) => {
+		await button(page).click();
+		await panel(page).getByRole('link', { name: 'Investor' }).focus();
+		await page.keyboard.press('Escape');
+		await expect(panel(page)).toBeHidden();
+		await expect(button(page)).toBeFocused();
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'false');
+	});
+
+	test('Enter opens and Space closes the panel', async ({ page }) => {
+		await button(page).focus();
+		await page.keyboard.press('Enter');
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'true');
+		await expect(panel(page)).toBeVisible();
+		await page.keyboard.press('Space');
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'false');
+		await expect(panel(page)).toBeHidden();
+	});
+
+	test('choosing a portal navigates and closes the panel', async ({ page }) => {
+		await button(page).click();
+		await panel(page).getByRole('link', { name: 'Investor' }).click();
+		await expect(page).toHaveURL(/investor\/$/);
+		await hydrated(page);
+		await expect(panel(page)).toBeHidden();
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'false');
+		await expect(panel(page).locator('a[aria-current="page"]')).toHaveText('Investor');
+	});
+
+	test('resizing to 640px closes the panel and swaps to the inline list', async ({ page }) => {
+		await button(page).click();
+		await expect(panel(page)).toBeVisible();
+		await page.setViewportSize({ width: 640, height: 812 });
+		await expect(button(page)).toBeHidden();
+		await expect(panel(page)).toBeHidden();
+		await expect(inlineList(page)).toBeVisible();
+		await page.setViewportSize({ width: 639, height: 812 });
+		await expect(button(page)).toBeVisible();
+		// The open state was reset by the breakpoint crossing, not merely hidden by CSS.
+		await expect(button(page)).toHaveAttribute('aria-expanded', 'false');
+		await expect(panel(page)).toBeHidden();
+	});
+});
+
+test.describe('640px', () => {
+	test.use({ viewport: { width: 640, height: 900 } });
+
+	for (const route of CHROME_ROUTES) {
+		test(`inline portal links replace the menu on ${JSON.stringify(route)}`, async ({ page }) => {
+			await page.goto(route);
+			await expect(page.locator('button[aria-controls="portal-menu"]')).toBeHidden();
+			const inline = inlineList(page);
+			for (const name of ['Renter', 'Investor', 'Agent']) {
+				await expect(inline.getByRole('link', { name, exact: true })).toBeVisible();
+			}
+			const settings = inline.getByRole('link', { name: 'Settings', exact: true });
+			if ((APP_ROUTES as readonly string[]).includes(route)) await expect(settings).toBeVisible();
+			else await expect(settings).toHaveCount(0);
+		});
+	}
+});
