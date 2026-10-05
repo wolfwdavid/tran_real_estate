@@ -116,7 +116,14 @@ export const contrastPairs: readonly Pair[] = Object.freeze([
 	{ fg: 'input', bg: 'surface', min: 3, kind: 'ui' },
 	{ fg: 'input', bg: 'background', min: 3, kind: 'ui' },
 	{ fg: 'primary', bg: 'card', min: 3, kind: 'ui' },
-	{ fg: 'card', bg: 'primary', min: 3, kind: 'ui' }
+	{ fg: 'card', bg: 'primary', min: 3, kind: 'ui' },
+	// Phase 5 Fair Housing highlights (05-UI-SPEC contrast record). Every text pass row is already
+	// covered by the TEXT_FOREGROUNDS x SURFACES matrix and the ring/input rows above; these are the
+	// non-text rows it lacks: block underline + OctagonAlert on its fill, warn dashed underline +
+	// TriangleAlert on its fill, and the streaming caret on the output box.
+	{ fg: 'destructive', bg: 'accent-surface', min: 3, kind: 'ui' },
+	{ fg: 'foreground', bg: 'surface', min: 3, kind: 'ui' },
+	{ fg: 'foreground', bg: 'background', min: 3, kind: 'ui' }
 ] satisfies Pair[]);
 
 /** Pairs whose ratio falls below their minimum. Empty for the shipped matrix. */

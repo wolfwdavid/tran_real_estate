@@ -112,3 +112,45 @@ describe('Phase 3 shadcn alias tokens', () => {
 		expect(has('card', 'primary', 3)).toBe(true);
 	});
 });
+
+describe('Phase 5 contrast record', () => {
+	const has = (fg: string, bg: string, min: number) =>
+		contrastPairs.some((p) => p.fg === fg && p.bg === bg && p.min >= min);
+
+	test('every 05-UI-SPEC pass row is guarded by the frozen matrix', () => {
+		const text: Array<[string, string]> = [
+			['foreground', 'accent-surface'],
+			['foreground', 'surface'],
+			['foreground', 'background'],
+			['foreground', 'card'],
+			['muted-foreground', 'card'],
+			['muted-foreground', 'background'],
+			['muted-foreground', 'surface'],
+			['muted-foreground', 'accent-surface'],
+			['destructive', 'card'],
+			['secondary', 'secondary-surface'],
+			['secondary', 'card'],
+			['foreground', 'secondary-surface']
+		];
+		const ui: Array<[string, string]> = [
+			['destructive', 'accent-surface'],
+			['foreground', 'surface'],
+			['ring', 'accent-surface'],
+			['ring', 'surface'],
+			['ring', 'card'],
+			['ring', 'background'],
+			['input', 'card'],
+			['foreground', 'background']
+		];
+		for (const [fg, bg] of text) expect(has(fg, bg, 4.5), `${fg} on ${bg}`).toBe(true);
+		for (const [fg, bg] of ui) expect(has(fg, bg, 3), `${fg} on ${bg}`).toBe(true);
+	});
+
+	test('matches the Phase 5 computed ratios', () => {
+		const c = tokens.color;
+		expect(round2(contrastRatio(c.destructive, c['accent-surface']))).toBe(5.98);
+		expect(round2(contrastRatio(c.foreground, c.surface))).toBe(13.53);
+		expect(round2(contrastRatio(c.secondary, c['secondary-surface']))).toBe(5.27);
+		expect(round2(contrastRatio(c.destructive, c.card))).toBe(7.32);
+	});
+});
