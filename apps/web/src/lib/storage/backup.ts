@@ -15,11 +15,17 @@ import {
 	backupFilename,
 	buildEnvelope,
 	findKeyMaterial,
+	MAX_BACKUP_BYTES,
+	parseBackup,
+	planMerge,
+	planReplace,
+	type MergePlan,
+	type ReplacePlan,
 	type Syncable
 } from '@tran/core';
 import { listBackupTables } from './backup-registry';
 import type { TranDb } from './db';
-import { META, setMeta } from './meta';
+import { META, getMeta, setMeta } from './meta';
 
 /** The vault's exact-value list. Only the export scan uses it. */
 export interface KnownSecretsSource {
@@ -95,5 +101,140 @@ export async function exportBackup(
 	} catch (err) {
 		if (err instanceof BackupError) throw err;
 		throw new BackupError('export-failed');
+	}
+}
+
+// ---------------------------------------------------------------- import
+
+/** The subset of File the import needs (tests pass a plain object). */
+export interface BackupFileLike {
+	readonly name: string;
+	readonly size: number;
+	text(): Promise<string>;
+}
+
+export interface ImportPreview {
+	fileName: string;
+	exportedAt: string;
+	schemaVersion: number;
+	migratedFrom: number | null;
+	merge: MergePlan;
+	replace: ReplacePlan;
+	/** Registered table names at preview time, in display order. */
+	tables: readonly string[];
+	/** The validated (and migrated) file records; apply re-plans against them in its transaction. */
+	incoming: Record<string, Syncable[]>;
+}
+
+export type ImportResult =
+	| { mode: 'merge'; added: number; updated: number; unchanged: number }
+	| { mode: 'replace'; total: number; fileName: string };
+
+/**
+ * Reads, validates and dry-runs a backup file. The 25 MB limit is checked on `file.size` BEFORE
+ * the file is read, so an oversized file is never loaded into memory.
+ */
+export async function previewImport(db: TranDb, file: BackupFileLike): Promise<ImportPreview> {
+	if (file.size > MAX_BACKUP_BYTES) throw new BackupError('too-large');
+	const tables = listBackupTables();
+	const names = tables.map((t) => t.name);
+	let text: string;
+	try {
+		text = await file.text();
+	} catch {
+		throw new BackupError('not-json');
+	}
+	const { envelope, migratedFrom } = parseBackup(text, { registeredTables: names });
+	const incoming = envelope.tables as Record<string, Syncable[]>;
+	let local: Record<string, Syncable[]>;
+	try {
+		local = await readRegisteredTables(db);
+	} catch {
+		throw new BackupError('write-failed');
+	}
+	return {
+		fileName: file.name,
+		exportedAt: envelope.exportedAt,
+		schemaVersion: envelope.schemaVersion,
+		migratedFrom,
+		merge: planMerge(local, incoming, tables),
+		replace: planReplace(local, incoming, tables),
+		tables: names,
+		incoming
+	};
+}
+
+/** Walks Dexie's wrapper chain (inner / cause / BulkError failures) for a QuotaExceededError. */
+function isQuotaExceeded(err: unknown): boolean {
+	const seen = new Set<unknown>();
+	const queue: unknown[] = [err];
+	while (queue.length > 0 && seen.size < 10) {
+		const e = queue.shift();
+		if (!e || typeof e !== 'object' || seen.has(e)) continue;
+		seen.add(e);
+		if ((e as { name?: unknown }).name === 'QuotaExceededError') return true;
+		const w = e as { inner?: unknown; cause?: unknown; failures?: unknown };
+		queue.push(w.inner, w.cause);
+		if (Array.isArray(w.failures)) queue.push(...w.failures);
+	}
+	return false;
+}
+
+/**
+ * Applies a previewed import in ONE read-write transaction over every registered table plus
+ * `meta`: any failure part-way rolls every table back. The plan is recomputed inside the
+ * transaction against the then-current records, so an edit made between preview and confirm can
+ * never be overwritten by a stale plan (merge keeps "local wins ties").
+ * Replace = clear() every registered table, then bulkPut the file's live records.
+ * Merge = bulkPut the added and newer records. lastBackupAt is never touched by an import.
+ * The persistence request is NOT made here: the UI calls requestPersistence() synchronously in
+ * the confirm click handler.
+ */
+export async function applyImport(
+	db: TranDb,
+	preview: ImportPreview,
+	mode: 'merge' | 'replace'
+): Promise<ImportResult> {
+	const tables = listBackupTables();
+	const names = tables.map((t) => t.name);
+	if (names.length !== preview.tables.length || names.some((n, i) => n !== preview.tables[i])) {
+		throw new BackupError('invalid');
+	}
+	try {
+		return await db.transaction('rw', [...names, 'meta'], async () => {
+			const local: Record<string, Syncable[]> = {};
+			for (const name of names) local[name] = await db.table<Syncable>(name).toArray();
+
+			let result: ImportResult;
+			if (mode === 'replace') {
+				const plan = planReplace(local, preview.incoming, tables);
+				for (const name of names) await db.table(name).clear();
+				for (const name of names) await db.table(name).bulkPut(plan.writes[name] ?? []);
+				result = { mode, total: plan.totals.add, fileName: preview.fileName };
+			} else {
+				const plan = planMerge(local, preview.incoming, tables);
+				for (const name of names) await db.table(name).bulkPut(plan.writes[name] ?? []);
+				const { add, update, unchanged } = plan.totals;
+				result = { mode, added: add, updated: update, unchanged };
+			}
+
+			if ((await getMeta(db, META.firstRecordAt)) === undefined) {
+				for (const name of names) {
+					const live = await db
+						.table<Syncable>(name)
+						.filter((r) => r.deletedAt === undefined)
+						.first();
+					if (live) {
+						await setMeta(db, META.firstRecordAt, new Date().toISOString());
+						break;
+					}
+				}
+			}
+			return result;
+		});
+	} catch (err) {
+		if (err instanceof BackupError) throw err;
+		if (isQuotaExceeded(err)) throw new BackupError('out-of-space');
+		throw new BackupError('write-failed');
 	}
 }

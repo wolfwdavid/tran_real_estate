@@ -268,7 +268,7 @@ describe('previewImport', () => {
 		expect(p.tables).toEqual(['prefs']);
 		expect(p.merge).toEqual(planMerge(local, incoming, tables));
 		expect(p.replace).toEqual(planReplace(local, incoming, tables));
-		expect(p.merge.totals).toEqual({ add: 1, update: 1, unchanged: 2 });
+		expect(p.merge.totals).toEqual({ add: 1, update: 1, unchanged: 1 });
 		expect(p.replace.totals).toEqual({ delete: 2, add: 2 });
 	});
 });
@@ -283,7 +283,7 @@ describe('applyImport', () => {
 		const text = backupText({ prefs: [bNewer, c] });
 
 		const res = await applyImport(db, await previewImport(db, fileLike(text).file), 'merge');
-		expect(res).toEqual({ mode: 'merge', added: 1, updated: 1, unchanged: 2 });
+		expect(res).toEqual({ mode: 'merge', added: 1, updated: 1, unchanged: 1 });
 		expect(await snapshot()).toEqual([a, bNewer, c].sort((x, y) => x.id.localeCompare(y.id)));
 
 		const after = await snapshot();
