@@ -167,6 +167,10 @@ describe('hygiene job', () => {
 		expect(hygiene).toContain('run: node scripts/guard-real-data.mjs --all');
 		expect(hygiene).toContain('fetch-depth: 0');
 	});
+
+	test('runs the banned marketing/legal terms gate', () => {
+		expect(job('hygiene')).toContain('run: node scripts/banned-terms.mjs');
+	});
 });
 
 describe('no remote side effects', () => {

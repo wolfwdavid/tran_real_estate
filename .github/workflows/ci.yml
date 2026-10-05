@@ -42,6 +42,8 @@ jobs:
         run: gitleaks git --no-banner --redact --config .gitleaks.toml .
       - name: Real-data / CoStar guard
         run: node scripts/guard-real-data.mjs --all
+      - name: Banned marketing/legal terms
+        run: node scripts/banned-terms.mjs
 
   quality:
     name: check, lint, unit, build, csp, e2e+axe (${{ matrix.target }})
