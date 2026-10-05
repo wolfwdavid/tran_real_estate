@@ -251,7 +251,29 @@ Plans:
   3. Investor can save buy-box searches over for-sale listings and, on opening the app, see new matches with quick metrics.
   4. Investor can view rent-trend and price-to-rent dashboards for up to 5 watched zip codes. Investor can generate an AI investment memo whose numbers all come from the analyzer and print it to PDF with a not-investment-advice disclaimer.
   5. Demo-credible: every investor route works fully on sample data with no key, stays under the call budget with a real key, has the memo copy passing the Fair Housing checker, and passes axe checks.
-**Plans**: TBD
+**Plans**: 21 plans in 8 waves
+Plans:
+- [ ] 07-01-PLAN.md — Core money (exact mulBps), single formatter, amortization anchors; fast-check + layerchart installs (wave 1)
+- [ ] 07-02-PLAN.md — Core numeric post-check in packages/core/src/numbers (tolerant matching, spelled-out warns) (wave 1)
+- [ ] 07-03-PLAN.md — Nine route stubs, shared PortalSubNav + NotFoundPanel, route registries, banned-terms scope, E2E helpers (wave 1)
+- [ ] 07-04-PLAN.md — GenerationPanel postChecks + gate state, grouped findings, DraftHistory subjectId, prompt sample text (wave 1)
+- [ ] 07-05-PLAN.md — analyze(), expense lines, defaults, definitions, 9 exact reference cases, fast-check invariants (wave 2)
+- [ ] 07-06-PLAN.md — Market series math (rent trend, price-to-rent), summaries, 5-ZIP watch rules (wave 2)
+- [ ] 07-07-PLAN.md — Best-in-row comparison and zero-call quick metrics (wave 3)
+- [ ] 07-08-PLAN.md — Memo FACTS + allowed set, sample memo, analysis hash, advice-language check (wave 4)
+- [ ] 07-09-PLAN.md — Dexie tables + backup, deals and watched-ZIP repos, InvestorDataPort and MarketsPort (wave 3)
+- [ ] 07-10-PLAN.md — Analyzer form model, money/percent inputs, unit toggle, expense-lines editor (wave 3)
+- [ ] 07-11-PLAN.md — Shared accessible charts (ChartFigure, ZipTrendChart, PriceToRentChart) on LayerChart + token mapping (wave 3)
+- [ ] 07-12-PLAN.md — Analyzer page, results panel, draft autosave, save/sample/clear; E2E manual = 0 calls (wave 4)
+- [ ] 07-13-PLAN.md — Markets page + ZIP dashboard; E2E cap 5, cost labels, chart a11y/tokens/CSP (wave 4)
+- [ ] 07-14-PLAN.md — Buy-box repo on Phase 4 saved searches/scheduler, local matches, 0-call quick metrics (wave 4)
+- [ ] 07-15-PLAN.md — Autofill rent/value with cost first and provenance chips; E2E (wave 5)
+- [ ] 07-16-PLAN.md — Saved deals list + side-by-side compare (table / stacked at 375px); E2E (wave 5)
+- [ ] 07-17-PLAN.md — Memo prompt (FACTS only), number/advice post-checks, memo page; E2E gating (wave 5)
+- [ ] 07-18-PLAN.md — Buy boxes page, Load ZIP rents, Deep analyze (2 calls); E2E call counts (wave 6)
+- [ ] 07-19-PLAN.md — (print) PrintReport shell + print.css, /print/memo/; E2E print media + PDF pages (wave 6)
+- [ ] 07-20-PLAN.md — Investor overview + cross-route axe/CSP/375px sweep in both modes (wave 7)
+- [ ] 07-21-PLAN.md — Demo + budget E2E (keyless 0 calls, keyed exactly 6), validation walk, full verify (wave 8)
 **Research flag**: no (standard patterns)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 7`.
 **Note**: This phase establishes the `(print)` route + print-CSS pipeline and zip market-stats dashboards that Phase 9 reuses.
