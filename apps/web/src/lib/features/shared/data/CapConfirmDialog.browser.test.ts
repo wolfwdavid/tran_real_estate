@@ -32,6 +32,17 @@ async function open(used: number, cap: number, onConfirm = vi.fn(async () => {})
 	};
 }
 
+/**
+ * Component tests load no CSS, so the overlay has no box. A fixed target at the bottom of the
+ * viewport stands in for it: proven non-vacuous by flipping interactOutsideBehavior to 'close'.
+ */
+function plantOutsideTarget(): HTMLElement {
+	const el = document.createElement('div');
+	el.style.cssText = 'position:fixed;bottom:0;left:0;width:40px;height:40px;pointer-events:auto';
+	document.body.appendChild(el);
+	return el;
+}
+
 afterEach(() => {
 	vi.restoreAllMocks();
 });
@@ -80,13 +91,15 @@ describe('CapConfirmDialog', () => {
 		await expect.poll(() => announcerMessage()).toBe('Nothing was spent.');
 	});
 
-	test('clicking the overlay does not cancel', async () => {
+	test('clicking outside the dialog does not cancel', async () => {
+		const outside = plantOutsideTarget();
 		const { onCancel, dialog } = await open(40, 40);
-		const overlay = document.querySelector('[data-slot="alert-dialog-overlay"]') as HTMLElement;
-		expect(overlay).not.toBeNull();
-		await userEvent.click(overlay, { position: { x: 4, y: 4 } });
+		await userEvent.click(outside, { force: true });
+		// bits-ui debounces outside-interaction handling by 10ms; give it time to (not) close.
+		await new Promise((r) => setTimeout(r, 150));
 		await expect.element(dialog).toBeVisible();
 		expect(onCancel).not.toHaveBeenCalled();
+		outside.remove();
 	});
 
 	test('confirm runs once; while pending both buttons are disabled and Escape is ignored', async () => {
