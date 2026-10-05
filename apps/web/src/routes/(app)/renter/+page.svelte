@@ -1,6 +1,5 @@
-<svelte:head>
-	<title>Renter portal — Tran Real Estate Tools</title>
-</svelte:head>
+<script lang="ts">
+	import PortalPlaceholder from '$lib/components/marketing/PortalPlaceholder.svelte';
+</script>
 
-<h1>Renter portal</h1>
-<p>Placeholder. Renter tools arrive in a later phase.</p>
+<PortalPlaceholder portal="renter" />
