@@ -75,6 +75,7 @@ corepack pnpm verify
 | `corepack pnpm check`          | `svelte-kit sync` plus `svelte-check` and `tsc --noEmit` across the workspace                                                               |
 | `corepack pnpm lint`           | Prettier check and ESLint (import boundaries, `fetch` and `{@html}` bans)                                                                   |
 | `corepack pnpm banned`         | Banned marketing/legal terms check over routes, components and content                                                                      |
+| `corepack pnpm ui:guard`       | Class guard over the shadcn-svelte primitives: brand tokens only, no `dark:`, every animation `motion-safe:`                                |
 | `corepack pnpm test:unit`      | Vitest across the `web`, `core`, `brand`, and `scripts` projects                                                                            |
 | `corepack pnpm build:root`     | Build for the root origin into `apps/web/build`                                                                                             |
 | `corepack pnpm build:sub`      | Build under `BASE_PATH=/tran_real_estate` into `apps/web/build-sub`                                                                         |
@@ -86,30 +87,39 @@ corepack pnpm verify
 | `corepack pnpm lint:workflows` | actionlint over `.github/workflows`                                                                                                         |
 | `corepack pnpm verify`         | All of the above in order, as one gate                                                                                                      |
 
-`verify` is `check`, `lint`, `banned`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
-`guard`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in under two minutes on a
+`verify` is `check`, `lint`, `banned`, `ui:guard`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
+`guard`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about three and a half minutes on a
 warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
 same steps, split across a hygiene job and a two-leg quality matrix (root and sub base paths).
+
+## Local data, API keys and backups
+
+- **Keys are session-only by default.** A pasted key lives in this tab's `sessionStorage` and is gone when the tab closes. "Remember on this device" is opt-in and stores keys in a separate `tran-secrets` IndexedDB database, never in the app data database.
+- **Optional passphrase.** Remembered keys can be sealed with a passphrase (PBKDF2-SHA-256, 600,000 iterations, wrapping an AES-GCM data key). It protects keys at rest only: anyone using an unlocked tab can still use them. "Forget all keys" clears every open Tran tab.
+- **Backups never contain keys.** Export writes a `tran-backup-v1` JSON file from the registered app tables only, and refuses to download if any key-shaped value or known key appears. Import shows a preview and offers Merge (newer edit wins) or Replace (after a confirmation).
+- **The PWA service worker never touches API traffic.** It precaches same-origin build assets only and ignores every cross-origin request.
+- **Where the code lives:** `apps/web/src/lib/storage/` (Dexie database, persistence, backup; the key vault is in `storage/secrets/`), `packages/core/src/backup/` (envelope, migrations, merge/replace diff, key scan), and `apps/web/src/service-worker.ts`.
+- **UI gate:** `corepack pnpm ui:guard` scans the copied-in shadcn-svelte primitives in `apps/web/src/lib/components/ui/` and fails on raw palette colors, `dark:` variants, `ring-ring/*` focus styles and animations without `motion-safe:`. Before running `shadcn-svelte add` in a later phase, follow the add procedure in `.planning/phases/03-local-platform-storage-key-vault-backup/03-06-SUMMARY.md` (back up `app.css` and `package.json`, add with `--no-deps-install`, restore `app.css`, re-pin exact versions), then run `ui:guard` before committing.
 
 ## Routes
 
 Every page is prerendered with a trailing slash. Thirteen pages ship today:
 
-| Route                   | Group                              |
-| ----------------------- | ---------------------------------- |
-| `/`                     | Marketing (landing)                |
-| `/for-renters/`         | Marketing                          |
-| `/for-investors/`       | Marketing                          |
-| `/for-agents/`          | Marketing                          |
-| `/legal/privacy/`       | Legal                              |
-| `/legal/terms/`         | Legal                              |
-| `/legal/fair-housing/`  | Legal                              |
-| `/legal/data-coverage/` | Legal                              |
-| `/renter/`              | App (placeholder until Phase 6)    |
-| `/investor/`            | App (placeholder until Phase 7)    |
-| `/agent/`               | App (placeholder until Phases 8-9) |
-| `/settings/`            | App (placeholder until Phase 3)    |
-| `/print/`               | Chrome-free print surface          |
+| Route                   | Group                                             |
+| ----------------------- | ------------------------------------------------- |
+| `/`                     | Marketing (landing)                               |
+| `/for-renters/`         | Marketing                                         |
+| `/for-investors/`       | Marketing                                         |
+| `/for-agents/`          | Marketing                                         |
+| `/legal/privacy/`       | Legal                                             |
+| `/legal/terms/`         | Legal                                             |
+| `/legal/fair-housing/`  | Legal                                             |
+| `/legal/data-coverage/` | Legal                                             |
+| `/renter/`              | App (placeholder until Phase 6)                   |
+| `/investor/`            | App (placeholder until Phase 7)                   |
+| `/agent/`               | App (placeholder until Phases 8-9)                |
+| `/settings/`            | App: keys, key security, backup, storage, install |
+| `/print/`               | Chrome-free print surface                         |
 
 Adding or removing a page means updating two lists as well: `apps/web/tests/e2e/routes.ts`
 (a drift test fails if the build and the list disagree) and `EXPECTED_PAGES` in

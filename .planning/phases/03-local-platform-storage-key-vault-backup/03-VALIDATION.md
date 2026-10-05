@@ -76,7 +76,7 @@ created: 2026-10-04
 | 3-16-01 | 16 | 6 | PLAT-01..06 | E2E axe matrix (11 states × 2 bases), overlay paint, 375px | `corepack pnpm --filter web exec playwright test settings-a11y a11y` | ✅ created W0 (settings-a11y.spec.ts) | ✅ green |
 | 3-16-02 | 16 | 6 | PLAT-01, PLAT-03 | E2E (real-dialog CSP, locked notice) + full suite | `corepack pnpm test:e2e` | ✅ extend csp.spec / created W0 app-notice-locked.spec.ts | ✅ green |
 | 3-17-01 | 17 | 7 | PLAT-01..06 | full gate | `corepack pnpm verify` | ✅ | ✅ green |
-| 3-17-02 | 17 | 7 | PLAT-01..06 | docs + requirements check | `corepack pnpm lint && corepack pnpm banned` (+ PLAT checkbox node one-liner) | ✅ | ⬜ pending |
+| 3-17-02 | 17 | 7 | PLAT-01..06 | docs + requirements check | `corepack pnpm lint && corepack pnpm banned` (+ PLAT checkbox node one-liner) | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
