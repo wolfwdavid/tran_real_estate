@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-03-PLAN.md
-last_updated: "2026-10-05T02:27:30.342Z"
+stopped_at: Completed 03-04-PLAN.md
+last_updated: "2026-10-05T02:30:01.025Z"
 progress:
   total_phases: 11
   completed_phases: 2
   total_plans: 206
-  completed_plans: 25
+  completed_plans: 27
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 3 (Local Platform: Storage, Key Vault & Backup) — EXECUTING
-Plan: 5 of 17
+Plan: 7 of 17
 
 ## Performance Metrics
 
@@ -71,6 +71,8 @@ Plan: 5 of 17
 | Phase 03 P05 | 12min | 2 tasks | 10 files |
 | Phase 03 P02 | 6min | 2 tasks | 13 files |
 | Phase 03 P03 | 9min | 2 tasks | 12 files |
+| Phase 03 P06 | 9min | 3 tasks | 55 files |
+| Phase 03 P04 | 10min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -140,6 +142,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Merge: strictly newer updatedAt wins, local wins ties, incoming tombstone without local is skipped; replace never writes tombstones
 - [Phase 03]: PWA head-link checks live in assert-csp checkBuild (checkPwaHead); checkHtml stays the pure CSP contract
 - [Phase 03]: Required non-page build files are listed once in assert-csp CARRIERS; tests derive counts from it
+- [Phase 03]: shadcn primitives restyled to Phase 2 tokens; Button has no secondary variant; ui:guard enforces token-only classes
+- [Phase 03]: Vault: a tab receiving a remote switch to remember moves its own session-only keys into tran-secrets (rows win)
+- [Phase 03]: registerKeyTester unregister removes only its own registration (last wins)
 
 ### Pending Todos
 
@@ -162,7 +167,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T02:27:30.336Z
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-10-05T02:30:01.020Z
+Stopped at: Completed 03-04-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

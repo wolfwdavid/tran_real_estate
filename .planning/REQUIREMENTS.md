@@ -27,7 +27,7 @@
 
 - [x] **PLAT-01**: User can paste, test, and forget a RentCast key and AI provider keys (Anthropic, OpenAI, Gemini, OpenRouter), with a plain-language "where your key goes" explanation
 - [x] **PLAT-02**: Keys are kept for the browser session only by default; user can opt into "remember on this device"
-- [ ] **PLAT-03**: User can lock remembered keys behind a passphrase
+- [x] **PLAT-03**: User can lock remembered keys behind a passphrase
 - [x] **PLAT-04**: User can export all app data (never keys) to a JSON file and import it back after previewing what will change
 - [x] **PLAT-05**: User can see whether the browser granted persistent storage and receives a "last backup N days ago" reminder
 - [x] **PLAT-06**: User can install the app to their home screen or desktop as a progressive web app
@@ -162,7 +162,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRND-05 | Phase 2 | Complete |
 | PLAT-01 | Phase 3 | Complete |
 | PLAT-02 | Phase 3 | Complete |
-| PLAT-03 | Phase 3 | Pending |
+| PLAT-03 | Phase 3 | Complete |
 | PLAT-04 | Phase 3 | Complete |
 | PLAT-05 | Phase 3 | Complete |
 | PLAT-06 | Phase 3 | Complete |
