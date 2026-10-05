@@ -8,6 +8,7 @@ import type { LiveProviderId } from '@tran/core/ai';
 import { axeViolations } from '$lib/testing/axe';
 import { AI_PREF_KEYS, aiPrefs } from '$lib/ai/prefs.svelte';
 import type { AiArtifact, ArtifactRepo, ArtifactStatus } from '$lib/ai/storage/artifacts';
+import type { TestConnectionResult as TestOutcomeResult } from '$lib/ai/ports';
 import type { AiKeyState } from '$lib/ai/setup';
 import AiModelField from './AiModelField.svelte';
 import AiProviderPicker from './AiProviderPicker.svelte';
@@ -106,7 +107,7 @@ describe('TestConnectionResult', () => {
 		[{ outcome: 'auth' }],
 		[{ outcome: 'quota' }],
 		[{ outcome: 'network' }]
-	])('%o is axe clean', async (result) => {
+	] as [TestOutcomeResult][])('%o is axe clean', async (result) => {
 		const { container } = await render(TestConnectionResult, {
 			props: { provider: 'anthropic', model: 'claude-sonnet-5-5', result, testing: false }
 		});
@@ -142,6 +143,7 @@ function memoryRepo(rows: AiArtifact[]): ArtifactRepo & { rows: AiArtifact[] } {
 function artifact(id: string, createdAt: string, status: ArtifactStatus): AiArtifact {
 	return {
 		id,
+		ownerId: 'local',
 		createdAt,
 		updatedAt: createdAt,
 		schemaVersion: 1,
@@ -155,7 +157,7 @@ function artifact(id: string, createdAt: string, status: ArtifactStatus): AiArti
 		findings: [],
 		status,
 		sentAt: status === 'sent' ? createdAt : null
-	} as AiArtifact;
+	};
 }
 
 describe('DraftHistory', () => {
