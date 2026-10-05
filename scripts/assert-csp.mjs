@@ -28,6 +28,13 @@ export const EXPECTED_PAGES = [
 	'agent/index.html',
 	'settings/index.html',
 	'print/index.html',
+	'for-renters/index.html',
+	'for-investors/index.html',
+	'for-agents/index.html',
+	'legal/privacy/index.html',
+	'legal/terms/index.html',
+	'legal/fair-housing/index.html',
+	'legal/data-coverage/index.html',
 	'404.html'
 ];
 
