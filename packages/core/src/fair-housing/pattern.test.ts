@@ -6,7 +6,7 @@ import { CATEGORY_LABELS, STATE_SCOPE_NOTE } from './types.js';
 const matches = (source: string, text: string): boolean => compilePattern(source).test(text);
 
 describe('p`` authoring helper', () => {
-	test.each(['able bodied', 'able-bodied', 'able bodied', 'able  bodied'])(
+	test.each(['able bodied', 'able-bodied', 'able\u00A0bodied', 'able  bodied'])(
 		'able bodied matches %j',
 		(text) => {
 			expect(matches(p`able bodied`, text)).toBe(true);
@@ -64,12 +64,17 @@ describe('compilePattern', () => {
 });
 
 describe('assertSafePattern (ReDoS guard)', () => {
-	test.each(['(?:a+)+', '(?:\\w+ )*', '(?:x{2,})+', '(?:(?:ab)+)+', '(?:a*)+?', '(a+)*', '(?:a+){2}'])(
-		'rejects %j',
-		(source) => {
-			expect(() => assertSafePattern(source)).toThrow('Unsafe lexicon pattern: ' + source);
-		}
-	);
+	test.each([
+		'(?:a+)+',
+		'(?:\\w+ )*',
+		'(?:x{2,})+',
+		'(?:(?:ab)+)+',
+		'(?:a*)+?',
+		'(a+)*',
+		'(?:a+){2}'
+	])('rejects %j', (source) => {
+		expect(() => assertSafePattern(source)).toThrow('Unsafe lexicon pattern: ' + source);
+	});
 
 	test.each([
 		'(?:no|not)+',
