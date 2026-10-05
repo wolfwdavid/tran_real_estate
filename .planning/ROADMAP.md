@@ -183,7 +183,7 @@ Plans:
 - [x] 04-19-PLAN.md — saved-search repo + check-on-open scheduler (5 due searches once / 24 h)
 - [x] 04-20-PLAN.md — KeyTestResult, DataSourceChoice, DueSearchesDialog, DataStatusBar
 - [x] 04-21-PLAN.md — 10 re-renders spend 0 (browser) with mutant proofs
-- [ ] 04-22-PLAN.md — DataShell in the (app) layout: status bar, cap prompt host, on-open alerts, announcements
+- [x] 04-22-PLAN.md — DataShell in the (app) layout: status bar, cap prompt host, on-open alerts, announcements
 - [ ] 04-23-PLAN.md — Settings "RentCast usage" section + Test key (0 calls) hook
 - [ ] 04-24-PLAN.md — E2E + axe: status bar, due-search dialog, Settings data states (RentCast fully mocked)
 - [ ] 04-25-PLAN.md — real-key HUMAN-UAT (U1-U14), validation walk, requirements, full verify
@@ -427,7 +427,7 @@ Plans:
   2. User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup.
   3. Extension permissions are limited to storage and zillow.com. Monitoring a browsing session shows zero network requests from the extension. The listing and popup show a "collects nothing, sends nothing" privacy notice and a "Not affiliated with or endorsed by Zillow Group" notice.
   4. User can install the extension from a GitHub Releases zip by following load-unpacked instructions, or from Microsoft Edge Add-ons (Firefox Add-ons optional).
-**Plans:** 21/25 plans executed
+**Plans:** 22/25 plans executed
 Plans:
 - [ ] 11-01-PLAN.md — Scaffold apps/extension (WXT 0.21.4), one-shot deps, test harness, contracts (selectors, copy, messages, settings)
 - [ ] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
@@ -457,7 +457,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 1. Foundation, Origin & Security Baseline | 9/9 | Complete    | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
-| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 21/25 | In Progress|  |
+| 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 22/25 | In Progress|  |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 0/TBD | Not started | - |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
