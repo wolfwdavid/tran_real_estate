@@ -72,9 +72,7 @@ describe('meter copy', () => {
 		expect(thresholdAnnouncement('at', { used: 40, cap: 40 })).toBe(
 			"You've reached your RentCast cap: 40 of 40 calls this month."
 		);
-		expect(thresholdAnnouncement('past')).toBe(
-			"You're past RentCast's free 50 calls this month."
-		);
+		expect(thresholdAnnouncement('past')).toBe("You're past RentCast's free 50 calls this month.");
 	});
 });
 
