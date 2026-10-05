@@ -4,7 +4,8 @@
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts",
-		"./*": "./src/*/index.ts"
+		"./*": "./src/*/index.ts",
+		"./renter/*": "./src/renter/*.ts"
 	},
 	"scripts": {
 		"check": "tsc --noEmit"
