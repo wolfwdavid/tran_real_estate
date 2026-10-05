@@ -34,7 +34,12 @@ const ROWS: Row[] = [
 		},
 		'auth'
 	],
-	['gemini', 400, { error: { message: 'API key not valid. Please pass a valid API key.' } }, 'auth'],
+	[
+		'gemini',
+		400,
+		{ error: { message: 'API key not valid. Please pass a valid API key.' } },
+		'auth'
+	],
 	['gemini', 403, { error: { code: 403, status: 'PERMISSION_DENIED' } }, 'auth'],
 	['openai', 401, 'Unauthorized', 'auth'],
 	// quota

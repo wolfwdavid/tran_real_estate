@@ -4,7 +4,10 @@ import type { LlmUsage, PricingRow } from './types.js';
  * The pricing row in effect at `at`: the row with the latest `from` that is on
  * or before the UTC calendar date of `at`. Row order does not matter.
  */
-export function pricingAt(rows: readonly PricingRow[] | undefined, at: Date): PricingRow | undefined {
+export function pricingAt(
+	rows: readonly PricingRow[] | undefined,
+	at: Date
+): PricingRow | undefined {
 	if (!rows) return undefined;
 	const day = at.toISOString().slice(0, 10);
 	let best: PricingRow | undefined;

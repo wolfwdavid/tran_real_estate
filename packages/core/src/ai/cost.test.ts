@@ -74,9 +74,9 @@ describe('estimateCostUsd', () => {
 	});
 
 	test('reasoning tokens are not billed twice', () => {
-		expect(
-			estimateCostUsd({ outputTokens: 1_000_000, reasoningTokens: 500_000 }, SONNET, D)
-		).toBe(10);
+		expect(estimateCostUsd({ outputTokens: 1_000_000, reasoningTokens: 500_000 }, SONNET, D)).toBe(
+			10
+		);
 	});
 });
 
