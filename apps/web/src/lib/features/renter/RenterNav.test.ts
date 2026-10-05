@@ -55,6 +55,11 @@ describe('RenterNav', () => {
 		expect(links(h)[1].text).toBe('Shortlist 3 listings');
 	});
 
+	test('a single shortlisted listing reads "1 listing"', () => {
+		const h = html({ shortlistCount: 1 });
+		expect(links(h)[1].text).toBe('Shortlist 1 listing');
+	});
+
 	test.each([null, 0])('shortlistCount %s renders no badge', (shortlistCount) => {
 		const h = html({ shortlistCount });
 		expect(h).not.toContain('sr-only');

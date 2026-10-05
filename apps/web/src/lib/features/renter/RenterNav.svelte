@@ -24,7 +24,7 @@
 		page.route.id !== null && ids.includes(page.route.id) ? 'page' : undefined;
 	// The link reads "Shortlist 3 listings". A variable, because Svelte trims a leading space in
 	// literal element text.
-	const LISTINGS_SUFFIX = ' listings';
+	const listingsSuffix = $derived(shortlistCount === 1 ? ' listing' : ' listings');
 	const showCount = $derived(typeof shortlistCount === 'number' && shortlistCount > 0);
 </script>
 
@@ -39,7 +39,7 @@
 					>{l.label}
 					{#if l.label === 'Shortlist' && showCount}<span
 							class="rounded-full bg-surface px-2 text-label font-semibold tabular-nums"
-							>{shortlistCount}<span class="sr-only">{LISTINGS_SUFFIX}</span></span
+							>{shortlistCount}<span class="sr-only">{listingsSuffix}</span></span
 						>{/if}</a
 				>
 			</li>

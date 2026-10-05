@@ -1,3 +1,12 @@
+<script lang="ts">
+	// /renter/shortlist/ (RENT-05). Prerendered with the heading and lead only; the board reads the
+	// shortlist in the browser. The gateway is passed for the cache-only rent-change check.
+	import { getDataRuntime } from '$lib/data';
+	import ShortlistBoard from '$lib/features/renter/shortlist/ShortlistBoard.svelte';
+
+	const runtime = getDataRuntime();
+</script>
+
 <svelte:head>
 	<title>Your shortlist: Tran Real Estate Tools</title>
 	<meta
@@ -14,4 +23,5 @@
 			in this browser and is included in your backups.
 		</p>
 	</div>
+	<ShortlistBoard gateway={runtime.gateway ?? null} />
 </div>
