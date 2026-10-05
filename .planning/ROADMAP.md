@@ -105,7 +105,7 @@ Plans:
 - [x] 02-01-PLAN.md — Brand tokens in @tran/brand + WCAG contrast gate (wave 1)
 - [x] 02-02-PLAN.md — Banned-terms copy gate: rules, CLI, verify + CI hygiene step (wave 1)
 - [x] 02-03-PLAN.md — Tailwind @theme + parity test, self-hosted fonts, Lucide pin, data: URI oracle (wave 2)
-- [ ] 02-04-PLAN.md — Site chrome: header/portal switcher, footer, skip link, layouts, 404, 7 route stubs (wave 3)
+- [x] 02-04-PLAN.md — Site chrome: header/portal switcher, footer, skip link, layouts, 404, 7 route stubs (wave 3)
 - [ ] 02-05-PLAN.md — Shared E2E route list, routing/CSP/axe on all routes, drift guard (wave 4)
 - [ ] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
 - [ ] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
@@ -246,7 +246,20 @@ Plans:
   2. User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup.
   3. Extension permissions are limited to storage and zillow.com. Monitoring a browsing session shows zero network requests from the extension. The listing and popup show a "collects nothing, sends nothing" privacy notice and a "Not affiliated with or endorsed by Zillow Group" notice.
   4. User can install the extension from a GitHub Releases zip by following load-unpacked instructions, or from Microsoft Edge Add-ons (Firefox Add-ons optional).
-**Plans**: TBD
+**Plans:** 12 plans
+Plans:
+- [ ] 11-01-PLAN.md — Scaffold apps/extension (WXT 0.21.4), one-shot deps, test harness, contracts (selectors, copy, messages, settings)
+- [ ] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
+- [ ] 11-03-PLAN.md — Label-first detector + synthetic fixtures A-D
+- [ ] 11-04-PLAN.md — Closed-shadow reveal pill, manifest content CSS, brand parity gate
+- [ ] 11-05-PLAN.md — Popup state model (DI'd messaging) + token mirror
+- [ ] 11-06-PLAN.md — Zero-network: ESLint ban + production manifest/bundle/zip oracle (mutation-tested)
+- [ ] 11-07-PLAN.md — Gated release workflow, install guide, Edge listing copy, privacy #browser-extension section
+- [ ] 11-08-PLAN.md — Reconcile, scoped debounced observer, filter controller (scroll + SPA)
+- [ ] 11-09-PLAN.md — Svelte popup components + browser-mode axe across all states
+- [ ] 11-10-PLAN.md — Content + badge entrypoints, first production build through the oracle
+- [ ] 11-11-PLAN.md — Runtime Playwright E2E with a zero-network monitored session
+- [ ] 11-12-PLAN.md — Verify/CI wiring, HUMAN-UAT, validation sign-off
 **Research flag**: YES. Needs `/gsd:research-phase`: current Zillow sponsored-card DOM and labels, store naming tolerance for "for Zillow", and WXT 0.x stability.
 **UI hint**: yes, small (toolbar popup using Phase 2 brand tokens). Use `/gsd:ui-phase 11`.
 **Human action required**: The owner reads the Zillow Terms of Use manually before release (automated fetch returns 403). The owner also creates a free Microsoft Edge Add-ons Partner Center account and, optionally, a Firefox AMO account.

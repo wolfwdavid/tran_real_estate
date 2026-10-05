@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-10-05T01:18:50.757Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-10-05T01:26:51.860Z"
 progress:
   total_phases: 11
   completed_phases: 1
-  total_plans: 56
-  completed_plans: 12
+  total_plans: 115
+  completed_plans: 13
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 2 (Brand System, Marketing & Legal Pages) — EXECUTING
-Plan: 4 of 12
+Plan: 5 of 12
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Plan: 4 of 12
 | Phase 02 P01 | 3min | 2 tasks | 6 files |
 | Phase 02 P02 | 5min | 2 tasks | 6 files |
 | Phase 02 P03 | 5min | 3 tasks | 10 files |
+| Phase 02 P04 | 7min | 3 tasks | 19 files |
 
 ## Accumulated Context
 
@@ -107,6 +108,8 @@ Recent decisions affecting current work:
 - [Phase 02]: app.css @theme parity-tested against @tran/brand (forward, reverse, mutation control); raw-hex ban over .svelte files is non-vacuous
 - [Phase 02]: csp:assert rejects data: URIs in built .css/.html via checkAssetText; Fontsource relative woff2 urls work under both bases
 - [Phase 02]: BRND-01/BRND-03 left unchecked after 02-03 (fonts + token theme shipped); page plans close them
+- [Phase 02]: Portals nav wraps the whole header row so the mobile panel stays in one landmark at every width
+- [Phase 02]: Link arrays use satisfies T[] (not : T[]) so svelte/no-navigation-without-resolve can trace resolve()
 
 ### Pending Todos
 
@@ -129,7 +132,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T01:18:50.753Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-10-05T01:26:51.856Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

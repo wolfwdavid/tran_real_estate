@@ -20,8 +20,8 @@
 - [x] **BRND-01**: Visitor sees a warm-editorial landing page that explains Tran Real Estate Tools and routes to the Renter, Investor, and Agent portals
 - [ ] **BRND-02**: Visitor can read dedicated For Renters, For Investors, and For Agents pages describing each portal's value
 - [x] **BRND-03**: Every page meets WCAG 2.2 AA color contrast and is fully usable at 375px viewport width
-- [ ] **BRND-04**: Visitor can read legal pages: privacy policy, terms stating Tran is a software tool (not a brokerage; not investment, legal, or tax advice), Fair Housing statement, and data-coverage explainer
-- [ ] **BRND-05**: User can switch between portals from any app page
+- [x] **BRND-04**: Visitor can read legal pages: privacy policy, terms stating Tran is a software tool (not a brokerage; not investment, legal, or tax advice), Fair Housing statement, and data-coverage explainer
+- [x] **BRND-05**: User can switch between portals from any app page
 
 ### Local Platform
 
@@ -158,8 +158,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRND-01 | Phase 2 | Complete |
 | BRND-02 | Phase 2 | Pending |
 | BRND-03 | Phase 2 | Complete |
-| BRND-04 | Phase 2 | Pending |
-| BRND-05 | Phase 2 | Pending |
+| BRND-04 | Phase 2 | Complete |
+| BRND-05 | Phase 2 | Complete |
 | PLAT-01 | Phase 3 | Pending |
 | PLAT-02 | Phase 3 | Pending |
 | PLAT-03 | Phase 3 | Pending |
