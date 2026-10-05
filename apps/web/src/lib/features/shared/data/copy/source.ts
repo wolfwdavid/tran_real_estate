@@ -19,7 +19,6 @@ export type DataSource = 'rentcast' | 'sample';
 
 export const STATUS_HYDRATING = 'Checking data source…';
 export const SAMPLE_LABEL = 'Sample data';
-export const STATUS_REGION_LABEL = 'Data source';
 
 const ADD_KEY: SettingsLink = { text: 'Add a RentCast key', hash: '#api-keys' };
 const UNLOCK: SettingsLink = { text: 'Unlock your keys', hash: '#key-security' };
