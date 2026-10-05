@@ -187,9 +187,9 @@ describe('fetch wide, filter local', () => {
 		search.locInput = '74201';
 		await search.search();
 		expect(s.calls).toHaveLength(1);
-		expect(new URL(s.calls[0]).searchParams.toString()).toBe(
-			'zipCode=74201&status=Active&limit=500'
-		);
+		const sent = Object.fromEntries(new URL(s.calls[0]).searchParams);
+		delete sent.suppressLogging;
+		expect(sent).toEqual({ zipCode: '74201', status: 'Active', limit: '500' });
 		expect(search.status).toBe('ready');
 		expect(search.rows).toHaveLength(12);
 		expect(search.filtered).toHaveLength(12);
@@ -210,6 +210,21 @@ describe('fetch wide, filter local', () => {
 		expect(prices).toEqual([...prices].sort((a, b) => a - b));
 
 		// Five changes later, still the one call.
+		expect(s.calls).toHaveLength(1);
+	});
+
+	it('filters set before searching never reach the request; re-searching after a change is cached', async () => {
+		const s = await setup();
+		const search = s.controller();
+		search.locInput = '74201';
+		search.setFilters({ ...search.filters, priceMax: 2000, beds: 2 });
+		await search.search();
+		expect(s.calls).toHaveLength(1);
+		const sent = new URL(s.calls[0]).searchParams;
+		expect(sent.has('price')).toBe(false);
+		expect(sent.has('bedrooms')).toBe(false);
+		search.setFilters({ ...search.filters, priceMax: 1500, types: ['Condo'] });
+		await search.search();
 		expect(s.calls).toHaveLength(1);
 	});
 
