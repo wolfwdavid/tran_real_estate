@@ -10,7 +10,8 @@ export type NormalizedLocation =
 
 export type LocationError = 'empty' | 'invalid-zip' | 'missing-state' | 'unknown-state';
 
-export type LocationResult = ({ ok: true } & NormalizedLocation) | { ok: false; error: LocationError };
+export type LocationResult =
+	({ ok: true } & NormalizedLocation) | { ok: false; error: LocationError };
 
 const ZIP_RE = /^\d{5}(-\d{4})?$/;
 
