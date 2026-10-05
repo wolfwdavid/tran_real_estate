@@ -425,7 +425,9 @@ describe('$lib/data public port', () => {
 			'isGatewayError',
 			'GatewayError',
 			'checkSavedSearchesOnOpen',
-			'savedSearchRepo'
+			'savedSearchRepo',
+			'enableRentCastKeyTest',
+			'rentCastKeyTest'
 		]) {
 			expect(port[name], name).toBeDefined();
 		}
@@ -443,7 +445,10 @@ describe('$lib/data public port', () => {
 			'browserFetch',
 			'createDataGateway',
 			'createSampleGateway',
-			'getRentCastKey'
+			'getRentCastKey',
+			// Settings registers the tester through enableRentCastKeyTest only.
+			'registerRentCastKeyTest',
+			'onRentCastKeyChange'
 		]) {
 			expect(port[name], name).toBeUndefined();
 		}
