@@ -6,6 +6,7 @@
 import { redactPii } from '@tran/core/privacy';
 import { HOUSING_COPY_GUARDRAIL } from './guardrail.js';
 import { sha256Hex } from './hash.js';
+import { renterOutreachV1 } from './renter/outreach.v1.js';
 import { demoV1 } from './shared/demo.v1.js';
 import type { BuiltPrompt, PromptDef } from './types.js';
 
@@ -47,3 +48,5 @@ export async function buildPrompt(id: string, inputs: unknown): Promise<BuiltPro
 }
 
 registerPrompt(demoV1 as PromptDef);
+// Phase 6: renter/outreach.v1 (RENT-07).
+registerPrompt(renterOutreachV1 as PromptDef);

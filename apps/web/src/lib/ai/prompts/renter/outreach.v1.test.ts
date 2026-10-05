@@ -33,7 +33,11 @@ const FORM: RenterOutreachForm = {
 	extraQuestion: ''
 };
 
-const form = (o: Partial<RenterOutreachForm> = {}): RenterOutreachForm => ({ ...FORM, ...o });
+const form = (o: Partial<RenterOutreachForm> = {}): RenterOutreachForm => ({
+	...FORM,
+	topics: { ...FORM.topics },
+	...o
+});
 
 const TOPIC_LINES = {
 	availability: 'availability and move-in timing',
@@ -64,13 +68,16 @@ describe('buildOutreachInputs', () => {
 	});
 
 	it('maps pets to yes/no plus a trimmed description capped at 60 characters', () => {
-		expect(buildOutreachInputs(LISTING, form({ pets: 'none', petDescription: 'cat' })).pets).toEqual(
-			{ has: false }
-		);
+		expect(
+			buildOutreachInputs(LISTING, form({ pets: 'none', petDescription: 'cat' })).pets
+		).toEqual({ has: false });
 		expect(
 			buildOutreachInputs(LISTING, form({ pets: 'yes', petDescription: '  one cat  ' })).pets
 		).toEqual({ has: true, description: 'one cat' });
-		const long = buildOutreachInputs(LISTING, form({ pets: 'yes', petDescription: 'x'.repeat(80) }));
+		const long = buildOutreachInputs(
+			LISTING,
+			form({ pets: 'yes', petDescription: 'x'.repeat(80) })
+		);
 		expect(long.pets).toEqual({ has: true, description: 'x'.repeat(60) });
 	});
 
@@ -170,7 +177,7 @@ describe('renter/outreach.v1 prompt', () => {
 	});
 
 	it('redacts the contact name and any email or phone in the extra question', async () => {
-		const email = ['casey', 'example.com'].join('@');
+		const email = ['pat.lee', 'example.com'].join('@');
 		const phone = ['(212)', '555', '0147'].join(' ').replace(') 555 ', ') 555-');
 		const built = await buildPrompt(
 			'renter/outreach.v1',
