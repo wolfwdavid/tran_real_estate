@@ -213,10 +213,13 @@ const consoleLeak = `export function save(key: string): void {
 }
 `;
 
+const VAULT_PROBE = `${WEB}/lib/storage/secrets/__lint-probe__.ts`;
+
 describe('Phase 3 guardrails', () => {
 	beforeAll(() => {
-		// These production paths are linted virtually; the vault fixture must never exist on disk.
-		expect(existsSync(resolve(repoRoot, `${WEB}/lib/storage/secrets/vault.ts`))).toBe(false);
+		// Fixtures are linted virtually. The vault probe uses a reserved name that no real module may take,
+		// so it coexists with the real secrets/vault.ts while still exercising the folder-wide rule.
+		expect(existsSync(resolve(repoRoot, VAULT_PROBE))).toBe(false);
 		expect(existsSync(resolve(repoRoot, `${WEB}/lib/pwa/install.ts`))).toBe(false);
 	});
 
@@ -270,7 +273,7 @@ describe('Phase 3 guardrails', () => {
 	});
 
 	test('console.* is an error inside the key vault folder', async () => {
-		const messages = await lint(`${WEB}/lib/storage/secrets/vault.ts`, consoleLeak);
+		const messages = await lint(VAULT_PROBE, consoleLeak);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-console')).toHaveLength(1);
 	});
