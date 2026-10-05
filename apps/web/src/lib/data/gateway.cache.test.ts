@@ -75,7 +75,10 @@ describe('gateway cache', () => {
 
 	it('dedupes two concurrent identical gets into 1 fetch and 1 ledger row', async () => {
 		const { gateway, spy, db } = setup();
-		const [a, b] = await Promise.all([gateway.get(rentals('74201')), gateway.get(rentals('74201'))]);
+		const [a, b] = await Promise.all([
+			gateway.get(rentals('74201')),
+			gateway.get(rentals('74201'))
+		]);
 		expect(spy.calls).toHaveLength(1);
 		expect(await db.ledger.count()).toBe(1);
 		expect(a.provenance.fetchedAt).toBe(T0);
@@ -216,9 +219,7 @@ describe('gateway reactive guard', () => {
 		const { gateway, spy, db } = setup({ reactive: () => true });
 		expect(await kindOf(gateway.get(rentals('74201')))).toBe('ReactiveSpendError');
 		expect(await kindOf(gateway.refresh(rentals('74201')))).toBe('ReactiveSpendError');
-		expect(await kindOf(gateway.rentalListingById('SAMPLE-74201-R001'))).toBe(
-			'ReactiveSpendError'
-		);
+		expect(await kindOf(gateway.rentalListingById('SAMPLE-74201-R001'))).toBe('ReactiveSpendError');
 		expect(spy.calls).toHaveLength(0);
 		expect(await db.ledger.count()).toBe(0);
 		expect(await gateway.peek(rentals('74201'))).toBeUndefined();
