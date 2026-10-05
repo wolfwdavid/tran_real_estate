@@ -15,7 +15,8 @@ const decode = (s: string) =>
 		.replace(/&quot;/g, '"')
 		.replace(/&#39;/g, "'")
 		.replace(/&amp;/g, '&');
-const strip = (h: string) => decode(h.replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' '));
+const strip = (h: string) =>
+	decode(h.replace(/<!--[\s\S]*?-->/g, '').replace(/<(?:[^>"']|"[^"]*"|'[^']*')*>/g, ' '));
 const text = (h: string) => strip(h).replace(/\s+/g, ' ').trim();
 const count = (h: string, re: RegExp) => (h.match(re) ?? []).length;
 
