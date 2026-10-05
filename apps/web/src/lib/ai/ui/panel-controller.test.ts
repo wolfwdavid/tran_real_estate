@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { checkFairHousing, type Finding, type FindingMember, type Severity } from '@tran/core/fair-housing';
+import {
+	checkFairHousing,
+	type Finding,
+	type FindingMember,
+	type Severity
+} from '@tran/core/fair-housing';
 import {
 	WARN_REASON,
 	blockReason,
@@ -19,7 +24,12 @@ import {
 
 const EXITS: ExitKind[] = ['copy', 'email', 'marked-sent'];
 
-function member(sev: Severity, start: number, end: number, phrase = 'x'.repeat(end - start)): FindingMember {
+function member(
+	sev: Severity,
+	start: number,
+	end: number,
+	phrase = 'x'.repeat(end - start)
+): FindingMember {
 	return {
 		entryId: `test.${sev}`,
 		checker: 'fair-housing',
@@ -81,7 +91,11 @@ describe('computeGate', () => {
 	});
 
 	it('gates all exits on block findings with the plural reason', () => {
-		const g = computeGate({ phase: 'ready', findings: [fh('block', 0, 3), fh('block', 5, 8)], warnAck: true });
+		const g = computeGate({
+			phase: 'ready',
+			findings: [fh('block', 0, 3), fh('block', 5, 8)],
+			warnAck: true
+		});
 		expect(g.blocked).toBe(true);
 		expect(g.canExit).toBe(false);
 		expect(g.blockCount).toBe(2);
@@ -112,7 +126,11 @@ describe('computeGate', () => {
 	});
 
 	it('lets the block reason win over warn and hides the acknowledgement', () => {
-		const g = computeGate({ phase: 'ready', findings: [fh('block', 0, 3), fh('warn', 5, 8)], warnAck: false });
+		const g = computeGate({
+			phase: 'ready',
+			findings: [fh('block', 0, 3), fh('warn', 5, 8)],
+			warnAck: false
+		});
 		expect(g.reason).toBe('Fix the 1 phrase marked Must fix to copy or email this draft.');
 		expect(g.needsAck).toBe(false);
 		expect(g.warnCount).toBe(1);
@@ -227,14 +245,28 @@ describe('usageLine', () => {
 
 	it('formats tokens and cost', () => {
 		expect(
-			usageLine({ providerLabel: 'Anthropic', usage, costUsd: 0.0123, status: 'done', sample: false })
+			usageLine({
+				providerLabel: 'Anthropic',
+				usage,
+				costUsd: 0.0123,
+				status: 'done',
+				sample: false
+			})
 		).toBe('1,234 tokens in · 567 tokens out · about $0.01 on your Anthropic account (estimate)');
 	});
 
 	it('says less than $0.01 below one cent', () => {
 		expect(
-			usageLine({ providerLabel: 'Anthropic', usage, costUsd: 0.004, status: 'done', sample: false })
-		).toBe('1,234 tokens in · 567 tokens out · about less than $0.01 on your Anthropic account (estimate)');
+			usageLine({
+				providerLabel: 'Anthropic',
+				usage,
+				costUsd: 0.004,
+				status: 'done',
+				sample: false
+			})
+		).toBe(
+			'1,234 tokens in · 567 tokens out · about less than $0.01 on your Anthropic account (estimate)'
+		);
 	});
 
 	it('never fabricates a cost when pricing is unknown', () => {
@@ -247,6 +279,10 @@ describe('usageLine', () => {
 		expect(usageLine({ providerLabel: 'OpenAI', status: 'stopped', sample: false })).toBe(
 			"OpenAI didn't report usage for this stopped draft."
 		);
+	});
+
+	it('omits the line for a finished draft without usage', () => {
+		expect(usageLine({ providerLabel: 'OpenAI', status: 'done', sample: false })).toBe('');
 	});
 });
 
@@ -268,7 +304,9 @@ describe('payloads', () => {
 
 describe('segmentText', () => {
 	const join = (segs: ReturnType<typeof segmentText>, text: string): string =>
-		segs.map((s) => (s.kind === 'text' ? s.value : text.slice(s.finding.start, s.finding.end))).join('');
+		segs
+			.map((s) => (s.kind === 'text' ? s.value : text.slice(s.finding.start, s.finding.end)))
+			.join('');
 
 	it('splits around findings and reproduces the input', () => {
 		const text = 'a no kids b';
