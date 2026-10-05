@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { SyncableSchema } from '@tran/core';
 import { CLAIM_TTL_MS, DUE_AFTER_MS } from '@tran/core/alerts';
 import { createDataDb, type DataDb } from './platform';
-import { createSavedSearchRepo, type SavedSearchRepo } from './saved-search-repo';
+import { createSavedSearchRepo } from './saved-search-repo';
 import { makeDb, T0 } from './testing/harness';
 
 const HOUR = 3_600_000;
