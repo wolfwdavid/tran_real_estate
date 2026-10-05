@@ -91,10 +91,10 @@ export function createRenterSearch(deps: RenterSearchDeps) {
 	const sorted = $derived(sortRentals(filtered, sort));
 	/** The wide request for the searched/restored location (its key ignores the filters). */
 	const request = $derived(location ? searchRequest(location) : null);
-	/** What clicking Search would request: the typed location when valid, else the current one. */
+	/** What clicking Search would request: the typed location, or null while it is not valid. */
 	const typedRequest = $derived.by(() => {
 		const r = normalizeRenterLocation(locInput);
-		return r.ok ? searchRequest(r.location) : request;
+		return r.ok ? searchRequest(r.location) : null;
 	});
 	const narrowRequest = $derived(location ? searchRequest(location, filters, 'narrow') : null);
 	const locationText = $derived(location ? locationDisplay(location) : '');

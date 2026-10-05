@@ -1,3 +1,7 @@
+<script lang="ts">
+	import SearchPage from '$lib/features/renter/search/SearchPage.svelte';
+</script>
+
 <svelte:head>
 	<title>Find a rental: Tran Real Estate Tools</title>
 	<meta
@@ -14,4 +18,5 @@
 			back.
 		</p>
 	</div>
+	<SearchPage />
 </div>

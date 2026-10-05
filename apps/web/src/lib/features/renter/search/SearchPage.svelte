@@ -1,0 +1,105 @@
+<script lang="ts">
+	// The /renter/ search page body (RENT-01/RENT-02) under the route's h1 and lead.
+	//
+	// Loading a URL never spends: onMount restores from the query string with gateway.peek only, and
+	// a mode switch (new gateway) re-peeks. The URL mirror effect only writes history. Calls are
+	// spent solely from the Search / Narrow / Refresh click handlers (search-state.svelte.ts).
+	import { onMount, untrack } from 'svelte';
+	import { page } from '$app/state';
+	import { replaceState } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import type { Listing } from '@tran/core/listings';
+	import { getDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
+	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
+	import SavedSearchesSection from '../saved/SavedSearchesSection.svelte';
+	import ActiveFilterChips from './ActiveFilterChips.svelte';
+	import ResultsHeader from './ResultsHeader.svelte';
+	import SearchForm from './SearchForm.svelte';
+	import StartEmptyState from './StartEmptyState.svelte';
+	import TruncationNotice from './TruncationNotice.svelte';
+	import { createRenterSearch } from './search-state.svelte';
+
+	const runtime = getDataRuntime();
+	const search = createRenterSearch({
+		gateway: () => runtime.gateway,
+		spend: (req, kind) => runtime.requestSpend<Listing[]>(req, kind),
+		now: () => new Date(),
+		announce
+	});
+
+	let form = $state<ReturnType<typeof SearchForm> | null>(null);
+	let restored = $state(false);
+	let peekedWith: DataGateway | null = null;
+
+	const gateway = $derived(runtime.gateway);
+	const sample = $derived(runtime.mode?.source === 'sample');
+
+	onMount(() => {
+		peekedWith = untrack(() => runtime.gateway);
+		search.restoreFromUrl(page.url.searchParams).finally(() => {
+			restored = true;
+		});
+		return () => search.dispose();
+	});
+
+	// A new gateway (runtime started, or the mode changed): re-read the cache for the current
+	// location. peek only, 0 calls.
+	$effect(() => {
+		const gw = runtime.gateway;
+		if (!gw || !restored) return;
+		untrack(() => {
+			if (gw === peekedWith) return;
+			peekedWith = gw;
+			void search.peekCurrent();
+		});
+	});
+
+	// Mirror the search into the URL (replaceState: Back, reload and shared links restore it).
+	// History only; never the gateway.
+	$effect(() => {
+		const qs = search.toUrlParams().toString();
+		if (!restored) return;
+		untrack(() => {
+			if (new URLSearchParams(page.url.search).toString() === qs) return;
+			// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own query string
+			replaceState(`${resolve('/renter/')}${qs ? `?${qs}` : ''}`, page.state);
+		});
+	});
+
+	function trySample() {
+		search.locInput = SAMPLE_METROS[0].zipCodes[0] ?? SAMPLE_METROS[0].label;
+		void search.search();
+	}
+</script>
+
+<div class="mt-8 flex flex-col gap-8">
+	<SavedSearchesSection {search} />
+
+	<div class="flex flex-col gap-4">
+		<SearchForm bind:this={form} {search} {gateway} />
+		<ActiveFilterChips {search} onEmpty={() => form?.focusFilters()} />
+	</div>
+
+	{#if search.status === 'error' && search.error}
+		<GatewayError
+			error={search.error}
+			onTryAgain={() => search.search()}
+			onUseSample={() => void runtime.setSourcePreference('sample')}
+			onContinuePastCap={() => void search.search()}
+			onEditSearch={() => form?.focusLocation()}
+		/>
+	{:else if search.status === 'ready' || search.rows.length > 0}
+		<section
+			aria-labelledby="results-heading"
+			aria-busy={search.status === 'loading'}
+			class="flex flex-col gap-4"
+		>
+			<ResultsHeader {search} />
+			<TruncationNotice {search} {gateway} />
+			<!-- Result cards, tabs and the map: 06-16 / 06-19. -->
+		</section>
+	{:else}
+		<StartEmptyState {sample} onSample={trySample} />
+	{/if}
+</div>
