@@ -23,8 +23,7 @@ export const LISTED_WITHIN = [7, 14, 30, 60] as const;
 export type ListedWithin = 'any' | (typeof LISTED_WITHIN)[number];
 
 export type RenterLocation =
-	| { kind: 'zip'; zipCode: string }
-	| { kind: 'city'; city: string; state: string };
+	{ kind: 'zip'; zipCode: string } | { kind: 'city'; city: string; state: string };
 
 export interface RentalFilters {
 	priceMin: number | null;
