@@ -5,28 +5,36 @@ import {
 	listBackupTables,
 	registerBackupTable
 } from './backup-registry';
+import { PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 import { TranDb } from './db';
+
+/** Built-in registrations: Phase 3 prefs, then the Phase 4 data tables. */
+const DEFAULTS = [{ name: 'prefs', label: 'Settings' }, ...PHASE4_BACKUP_TABLES];
+const DEFAULT_NAMES = DEFAULTS.map((t) => t.name);
 
 afterEach(() => {
 	_resetBackupRegistry();
 });
 
 describe('backup registry', () => {
-	it('registers prefs as "Settings" by default', () => {
-		expect(listBackupTables()).toEqual([{ name: 'prefs', label: 'Settings' }]);
+	it('registers prefs as "Settings" (then the Phase 4 data tables) by default', () => {
+		expect(listBackupTables()).toEqual(DEFAULTS);
+		expect(listBackupTables()[0]).toEqual({ name: 'prefs', label: 'Settings' });
 	});
 
 	it('appends new tables in registration order', () => {
 		registerBackupTable({ name: 'savedSearches', label: 'Saved searches' });
-		expect(listBackupTables().map((t) => t.name)).toEqual(['prefs', 'savedSearches']);
+		registerBackupTable({ name: 'notes', label: 'Notes' });
+		expect(listBackupTables().map((t) => t.name)).toEqual([...DEFAULT_NAMES, 'notes']);
 	});
 
 	it('replaces the label when a name is registered again, keeping its position', () => {
-		registerBackupTable({ name: 'savedSearches', label: 'Saved searches' });
+		registerBackupTable({ name: 'notes', label: 'Notes' });
 		registerBackupTable({ name: 'prefs', label: 'Preferences' });
 		expect(listBackupTables()).toEqual([
 			{ name: 'prefs', label: 'Preferences' },
-			{ name: 'savedSearches', label: 'Saved searches' }
+			...PHASE4_BACKUP_TABLES,
+			{ name: 'notes', label: 'Notes' }
 		]);
 	});
 
@@ -38,17 +46,18 @@ describe('backup registry', () => {
 	it('returns a snapshot that callers cannot mutate into the registry', () => {
 		const list = listBackupTables() as { name: string; label: string }[];
 		expect(() => list.push({ name: 'x', label: 'X' })).toThrow();
-		expect(listBackupTables()).toHaveLength(1);
+		expect(listBackupTables()).toHaveLength(DEFAULTS.length);
 	});
 
 	it('_resetBackupRegistry restores the default', () => {
-		registerBackupTable({ name: 'savedSearches', label: 'Saved searches' });
+		registerBackupTable({ name: 'notes', label: 'Notes' });
 		_resetBackupRegistry();
-		expect(listBackupTables()).toEqual([{ name: 'prefs', label: 'Settings' }]);
+		expect(listBackupTables()).toEqual(DEFAULTS);
 	});
 
 	it('excludes meta, and is frozen', () => {
 		expect(BACKUP_EXCLUDED_TABLES).toContain('meta');
+		expect(BACKUP_EXCLUDED_TABLES).toContain('apiCache');
 		expect(Object.isFrozen(BACKUP_EXCLUDED_TABLES)).toBe(true);
 	});
 

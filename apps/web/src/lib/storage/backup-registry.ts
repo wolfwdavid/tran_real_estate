@@ -3,15 +3,28 @@
 // Later phases call registerBackupTable() for each user-data table they add, and list local-only
 // tables in BACKUP_EXCLUDED_TABLES. Every TranDb table must be exactly one of the two.
 
+import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
+
 export interface BackupTable {
 	readonly name: string;
 	readonly label: string;
 }
 
-/** Local-only tables. `meta` holds lastBackupAt etc.: importing it would fake backup recency. */
-export const BACKUP_EXCLUDED_TABLES: readonly string[] = Object.freeze(['meta']); // Phase 4 adds 'apiCache' here
+/**
+ * Local-only tables. `meta` holds lastBackupAt etc.: importing it would fake backup recency.
+ * Phase 4's `apiCache` is a disposable RentCast response cache.
+ */
+export const BACKUP_EXCLUDED_TABLES: readonly string[] = Object.freeze([
+	'meta',
+	...PHASE4_BACKUP_EXCLUDED
+]);
 
-const DEFAULT_TABLES: readonly BackupTable[] = [{ name: 'prefs', label: 'Settings' }];
+// Built-in registrations live here (not in a side-effect import) so a backup made from Settings
+// always includes them, even when no data-layer module has loaded yet.
+const DEFAULT_TABLES: readonly BackupTable[] = [
+	{ name: 'prefs', label: 'Settings' },
+	...PHASE4_BACKUP_TABLES
+];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));
 

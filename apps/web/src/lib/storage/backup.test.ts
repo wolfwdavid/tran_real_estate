@@ -31,7 +31,7 @@ const NOW = new Date('2026-10-01T12:00:00.000Z');
 class TestDb extends TranDb {
 	constructor(options?: DbOptions) {
 		super(options);
-		this.version(2).stores({ notes: 'id, updatedAt' });
+		this.version(3).stores({ notes: 'id, updatedAt' }); // after TranDb's latest (2)
 	}
 }
 
@@ -45,6 +45,12 @@ function pref(key: string, value: unknown, now = NOW): PrefRecord {
 }
 
 const noSecrets = { knownSecrets: () => [] as string[] };
+
+/** Registered table names (prefs plus the Phase 4 data tables). */
+const names = (): string[] => listBackupTables().map((t) => t.name);
+/** `value` for every registered table. */
+const each = <T>(value: () => T): Record<string, T> =>
+	Object.fromEntries(names().map((n) => [n, value()]));
 
 let db: TranDb;
 
@@ -75,9 +81,9 @@ describe('buildBackupText', () => {
 	it('empty DB -> a valid tran-backup-v1 file with { prefs: [] } and the dated filename', async () => {
 		const out = await buildBackupText(db, { now: NOW, knownSecrets: [] });
 		expect(out.filename).toBe(backupFilename(NOW));
-		expect(out.counts).toEqual({ prefs: 0 });
-		const parsed = parseBackup(out.text, { registeredTables: ['prefs'] });
-		expect(parsed.envelope.tables).toEqual({ prefs: [] });
+		expect(out.counts).toEqual(each(() => 0));
+		const parsed = parseBackup(out.text, { registeredTables: names() });
+		expect(parsed.envelope.tables).toEqual(each(() => []));
 		expect(parsed.envelope.exportedAt).toBe(NOW.toISOString());
 		expect(parsed.migratedFrom).toBeNull();
 	});
@@ -107,9 +113,10 @@ describe('buildBackupText', () => {
 
 		const out = await buildBackupText(db, { now: NOW, knownSecrets: [] });
 		const env = JSON.parse(out.text) as { tables: Record<string, unknown[]> };
-		expect(Object.keys(env.tables)).toEqual(['prefs', 'notes']);
+		expect(Object.keys(env.tables)).toEqual(names());
+		expect(names().at(-1)).toBe('notes');
 		expect(env.tables.notes).toEqual([note]);
-		expect(out.counts).toEqual({ prefs: 0, notes: 1 });
+		expect(out.counts).toEqual({ ...each(() => 0), notes: 1 });
 	});
 
 	it('a key-shaped value -> key-material', async () => {
@@ -142,9 +149,7 @@ describe('exportBackup', () => {
 		expect(download).toHaveBeenCalledTimes(1);
 		const [text, filename] = download.mock.calls[0] as [string, string];
 		expect(filename).toBe(backupFilename(NOW));
-		expect(parseBackup(text, { registeredTables: ['prefs'] }).envelope.tables.prefs).toHaveLength(
-			1
-		);
+		expect(parseBackup(text, { registeredTables: names() }).envelope.tables.prefs).toHaveLength(1);
 		expect(await getMeta<string>(db, META.lastBackupAt)).toBe(NOW.toISOString());
 	});
 
@@ -260,12 +265,12 @@ describe('previewImport', () => {
 		const p = await previewImport(db, fileLike(text, undefined, 'my.json').file);
 		const tables = listBackupTables();
 		const incoming = { prefs: [bNewer, c] };
-		const local = { prefs: await db.prefs.toArray() };
+		const local = { ...each((): Syncable[] => []), prefs: await db.prefs.toArray() };
 		expect(p.fileName).toBe('my.json');
 		expect(p.exportedAt).toBe(LATER.toISOString());
 		expect(p.schemaVersion).toBe(1);
 		expect(p.migratedFrom).toBeNull();
-		expect(p.tables).toEqual(['prefs']);
+		expect(p.tables).toEqual(names());
 		expect(p.merge).toEqual(planMerge(local, incoming, tables));
 		expect(p.replace).toEqual(planReplace(local, incoming, tables));
 		expect(p.merge.totals).toEqual({ add: 1, update: 1, unchanged: 1 });

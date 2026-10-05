@@ -3,6 +3,14 @@
 // through getDb()/openDb() from onMount, event handlers, or modules imported only by (app) routes.
 import Dexie, { type Table } from 'dexie';
 import type { Syncable } from '@tran/core';
+import {
+	PHASE4_STORES,
+	type ApiCacheRow,
+	type DataPrefRow,
+	type LedgerRow,
+	type SavedSearchRow,
+	type SearchSnapshotRow
+} from '$lib/data/tables';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -21,12 +29,20 @@ export type DbOptions = { indexedDB?: IDBFactory; IDBKeyRange?: typeof IDBKeyRan
 export class TranDb extends Dexie {
 	meta!: Table<MetaRow, string>;
 	prefs!: Table<PrefRecord, string>;
+	// Phase 4 data layer (apps/web/src/lib/data/tables.ts).
+	apiCache!: Table<ApiCacheRow, string>;
+	ledger!: Table<LedgerRow, string>;
+	savedSearches!: Table<SavedSearchRow, string>;
+	searchSnapshots!: Table<SearchSnapshotRow, string>;
+	dataPrefs!: Table<DataPrefRow, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
 		// Version history is APPEND-ONLY. Later phases add this.version(n + 1).stores({...}) below
 		// (plus .upgrade() when a record shape changes); never edit an existing block.
 		this.version(1).stores({ meta: 'key', prefs: 'id, key, updatedAt' });
+		// Phase 4: RentCast cache, call ledger, saved searches + snapshots, data prefs.
+		this.version(2).stores(PHASE4_STORES);
 	}
 }
 

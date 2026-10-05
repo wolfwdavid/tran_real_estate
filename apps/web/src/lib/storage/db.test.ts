@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
+import { PHASE4_STORES } from '$lib/data/tables';
 import { freshIdb } from '$lib/storage/test-utils';
 import { StorageBlockedError, TranDb, _resetDb, getDb, openDb } from './db';
 
@@ -23,12 +24,14 @@ afterEach(() => {
 });
 
 describe('TranDb', () => {
-	it("opens as 'tran' with exactly the meta and prefs tables at version 1", async () => {
+	it("opens as 'tran' with the Phase 3 tables plus the Phase 4 data tables at version 2", async () => {
 		const db = new TranDb(freshIdb());
 		await db.open();
 		expect(db.name).toBe('tran');
-		expect(db.tables.map((t) => t.name).sort()).toEqual(['meta', 'prefs']);
-		expect(db.verno).toBe(1);
+		expect(db.tables.map((t) => t.name).sort()).toEqual(
+			['meta', 'prefs', ...Object.keys(PHASE4_STORES)].sort()
+		);
+		expect(db.verno).toBe(2);
 		db.close();
 	});
 

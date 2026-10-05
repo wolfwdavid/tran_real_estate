@@ -95,6 +95,24 @@ export default defineConfig(
 		rules: { 'no-restricted-imports': ['error', { patterns: [DATA_INTERNALS] }] }
 	},
 	{
+		// Phase 3 storage hosts the Phase 4 tables (TranDb version block, backup registry), so these
+		// files may import the table schema module $lib/data/tables and nothing else from lib/data.
+		files: [`${WEB}/lib/storage/*.ts`],
+		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							...DATA_INTERNALS,
+							group: [...DATA_INTERNALS.group, '!$lib/data/tables', '!**/lib/data/tables']
+						}
+					]
+				}
+			]
+		}
+	},
+	{
 		files: [`${WEB}/routes/(marketing)/**`],
 		rules: {
 			'no-restricted-imports': [
