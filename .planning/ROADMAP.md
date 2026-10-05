@@ -112,7 +112,7 @@ Plans:
 - [x] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
 - [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
 - [ ] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
-- [ ] 02-11-PLAN.md — Marketing content E2E + axe at 375px, 404 and menu open (wave 5)
+- [x] 02-11-PLAN.md — Marketing content E2E + axe at 375px, 404 and menu open (wave 5)
 - [ ] 02-12-PLAN.md — Full verify, validation map walk, README + requirements (wave 6)
 **Research flag**: no (standard patterns)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 2` before planning. This phase defines the brand tokens consumed by every portal and the extension popup.
@@ -362,7 +362,32 @@ Plans:
   3. Visitor can find and use free affordability, cap rate, cash-on-cash, and DSCR calculator pages via `sitemap.xml` and share cards, with no key and zero API calls.
   4. Owner can see page and portal usage counts through a first-party analytics beacon. Network inspection shows no third-party script tags and no personal data in beacon payloads.
   5. Launch audit passes: axe on every route in keyless and keyed states, CSP review, `pnpm audit` clean, banned-terms and disclaimer audit, and the PITFALLS "Looks Done But Isn't" checklist.
-**Plans**: TBD
+**Plans**: 23 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Wave 0 gate + Phase 2-9 contract map; validated site-config (PUBLIC_* optional), SITE_URL define, prerender.origin
+- [ ] 10-02-PLAN.md — Host-aware CSP builder; build targets root/sub/configured; CSP oracle JSON-LD exemption + optional analytics host
+- [ ] 10-03-PLAN.md — Lint boundaries (lib/analytics fetch allowlist, marketing-safe imports) + banned-terms scope
+- [ ] 10-04-PLAN.md — Full pnpm audit clean with reviewed exceptions; Dependabot npm; supply-chain test
+- [ ] 10-05-PLAN.md — E2E harness: configured build/project, MIME types, beacon collector, siteEnv, CI configured leg
+- [ ] 10-06-PLAN.md — Analytics beacon modules (payload whitelist, GPC/DNT, no-cors transport) test-first
+- [ ] 10-07-PLAN.md — SEO libs: JSON-LD serializer, canonical paths, WOFF->SFNT + resvg share-card renderer
+- [ ] 10-08-PLAN.md — Core finance calculators (cap rate, cash-on-cash, DSCR) + input parsing/formatting
+- [ ] 10-09-PLAN.md — SEO and JS-budget build oracles with mutation tests
+- [ ] 10-10-PLAN.md — Calculator content module, SeoHead, sitemap/robots and six OG endpoints
+- [ ] 10-11-PLAN.md — SeoHead on marketing pages, noindex elsewhere, SEO E2E
+- [ ] 10-12-PLAN.md — Calculator components (shell, fields, three calculators)
+- [ ] 10-13-PLAN.md — ToolPage frame, /tools/ hub and three calculator pages
+- [ ] 10-14-PLAN.md — Affordability tool page, footer Tools column, tools E2E
+- [ ] 10-15-PLAN.md — Onboarding state + inline Get started guide on the landing
+- [ ] 10-16-PLAN.md — /setup/rentcast/ guided key setup + ?source=sample hand-off
+- [ ] 10-17-PLAN.md — Form gates + owner Web3Forms sink + per-portal waitlist (+ E2E)
+- [ ] 10-18-PLAN.md — Feedback form/page, footer + Settings Getting started (+ E2E)
+- [ ] 10-19-PLAN.md — Beacon wiring, privacy Usage counts, owner go-live steps, beacon/third-party E2E
+- [ ] 10-20-PLAN.md — Onboarding, setup and CLS E2E
+- [ ] 10-21-PLAN.md — Keyed-state axe on every route, disclaimer audit, final route lists
+- [ ] 10-22-PLAN.md — Launch-audit generator + PITFALLS evidence map
+- [ ] 10-23-PLAN.md — Compose verify/CI, generate docs/LAUNCH-AUDIT.md, HUMAN-UAT, validation sign-off
 **Research flag**: light (verify Umami collection-API CORS from the deployed origin)
 **UI hint**: yes (onboarding tour, SEO tool pages, waitlist/feedback). Use `/gsd:ui-phase 10`.
 **Cut line**: If Umami collection-API CORS fails from the deployed origin, ship without analytics and move GTM-04 to v2. The owner then records the decision in PROJECT.md.
@@ -412,5 +437,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
-| 10. Launch Hardening & Go-to-Market | 0/TBD | Not started | - |
+| 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
