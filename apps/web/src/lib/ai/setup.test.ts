@@ -115,6 +115,15 @@ describe('selectProvider', () => {
 		});
 		expect(defaultPreferred(states({}))).toBeNull();
 	});
+
+	it('with no preference and only locked keys, the first locked provider is used (never "no key")', () => {
+		const ks = states({ gemini: 'locked', anthropic: 'locked' });
+		expect(defaultPreferred(ks)).toBe('anthropic');
+		expect(selectProvider({ preferred: null, sample: false, keyState: ks })).toEqual({
+			kind: 'locked',
+			id: 'anthropic'
+		});
+	});
 });
 
 describe('createLiveProvider / resolveProvider', () => {

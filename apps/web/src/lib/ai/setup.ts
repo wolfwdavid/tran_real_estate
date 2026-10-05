@@ -78,11 +78,19 @@ export type Selection =
 	| { kind: 'sample'; reason: 'no-key' | 'toggle'; id: LiveProviderId | null }
 	| { kind: 'locked'; id: LiveProviderId };
 
-/** The first provider in PROVIDER_ORDER with a saved key, else null (UI-SPEC picker default). */
+/**
+ * The first provider in PROVIDER_ORDER with a saved key (UI-SPEC picker default), else the first
+ * with a locked key, else null. A locked key is still a key: falling back to it surfaces "Your keys
+ * are locked" instead of the false "No AI key yet" sample notice (05-16).
+ */
 export function defaultPreferred(
 	keyState: (id: LiveProviderId) => AiKeyState
 ): LiveProviderId | null {
-	return PROVIDER_ORDER.find((id) => keyState(id) === 'saved') ?? null;
+	return (
+		PROVIDER_ORDER.find((id) => keyState(id) === 'saved') ??
+		PROVIDER_ORDER.find((id) => keyState(id) === 'locked') ??
+		null
+	);
 }
 
 /**
