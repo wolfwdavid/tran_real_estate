@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-06-PLAN.md
-last_updated: "2026-10-05T13:24:20.076Z"
+stopped_at: Completed 05-05-PLAN.md
+last_updated: "2026-10-05T13:25:31.529Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 206
-  completed_plans: 68
+  completed_plans: 69
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 5 of 16 (wave 1 complete; next wave 2: 05-04, 05-05, 05-06)
+Plan: 6 of 16 (wave 1 complete; next wave 2: 05-04, 05-05, 05-06)
 
 ## Performance Metrics
 
@@ -114,6 +114,7 @@ Plan: 5 of 16 (wave 1 complete; next wave 2: 05-04, 05-05, 05-06)
 | Phase 05 P02 | 6min | 3 tasks | 10 files |
 | Phase 05 P04 | 12min | 2 tasks | 5 files |
 | Phase 05 P06 | 10min | 3 tasks | 8 files |
+| Phase 05 P05 | 12min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -258,6 +259,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Fair Housing suite comparison exported as flagsRow from suite.ts so planted mutations are detected by the suite's own check
 - [Phase 05]: 05-06: per-exit disables never override global block/warn gating; canExit ignores them
 - [Phase 05]: 05-06: usageLine 'didn't report usage' copy only for stopped drafts; other statuses omit the line
+- [Phase 05]: 05-05: model registry lookups use Object.hasOwn so user-typed IDs never hit prototype members
+- [Phase 05]: 05-05: generation fetch TypeErrors are disambiguated by the keyed probe in openStream (401->auth, 200->cors-blocked, unreachable->network only when offline)
 
 ### Pending Todos
 
@@ -280,7 +283,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T13:24:20.071Z
-Stopped at: Completed 05-06-PLAN.md
+Last session: 2026-10-05T13:25:31.522Z
+Stopped at: Completed 05-05-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
