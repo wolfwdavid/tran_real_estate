@@ -46,6 +46,8 @@ export type ArtifactInput = {
 	inputHash: string;
 	text: string;
 	findings: readonly Finding[];
+	/** Opaque id of what the draft is about (e.g. a listing id). Stored only when given. */
+	subjectId?: string;
 };
 
 export interface ArtifactRepo {
@@ -58,12 +60,25 @@ export interface ArtifactRepo {
 	/** Newest first, tombstones excluded, `limit` defaults to 10. */
 	listByFeature(feature: string, o?: { limit?: number; offset?: number }): Promise<AiArtifact[]>;
 	countByFeature(feature: string): Promise<number>;
+	/** listByFeature narrowed to one subjectId: newest first, tombstones excluded. */
+	listBySubject(
+		feature: string,
+		subjectId: string,
+		o?: { limit?: number; offset?: number }
+	): Promise<AiArtifact[]>;
+	countBySubject(feature: string, subjectId: string): Promise<number>;
 	softDelete(id: string, at: Date): Promise<void>;
 }
 
 export type ArtifactRepoOptions = { now?: () => Date; uuid?: () => string };
 
 const SHA256_HEX = /^[0-9a-f]{64}$/;
+/** A subjectId is a short opaque id (a listing or deal id), never free text from the prompt. */
+const SUBJECT_ID_MAX = 200;
+
+function isSubjectId(v: unknown): v is string {
+	return typeof v === 'string' && v.length > 0 && v.length <= SUBJECT_ID_MAX;
+}
 
 export function toStoredFindings(findings: readonly Finding[]): StoredFinding[] {
 	return findings.map((f) => ({
@@ -102,6 +117,9 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 	return {
 		async create(i) {
 			if (!SHA256_HEX.test(i.inputHash)) throw new Error('artifact-input-hash');
+			if (i.subjectId !== undefined && !isSubjectId(i.subjectId)) {
+				throw new Error('artifact-subject-id');
+			}
 			const d = await getDb();
 			const t = d.table<AiArtifact, string>(AI_ARTIFACTS_TABLE);
 			const at = now();
@@ -118,7 +136,8 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 				text: i.text,
 				findings: toStoredFindings(i.findings),
 				status: 'draft',
-				sentAt: null
+				sentAt: null,
+				...(i.subjectId !== undefined ? { subjectId: i.subjectId } : {})
 			};
 			await d.transaction('rw', [t, d.meta], async () => {
 				await t.add(artifact);
@@ -170,6 +189,27 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 
 		async countByFeature(feature) {
 			return (await table()).where('feature').equals(feature).filter(isLive).count();
+		},
+
+		async listBySubject(feature, subjectId, opts = {}) {
+			const limit = opts.limit ?? DEFAULT_PAGE_SIZE;
+			const offset = opts.offset ?? 0;
+			return (await table())
+				.where('[feature+createdAt]')
+				.between([feature, Dexie.minKey], [feature, Dexie.maxKey])
+				.reverse()
+				.filter((a) => isLive(a) && a.subjectId === subjectId)
+				.offset(offset)
+				.limit(limit)
+				.toArray();
+		},
+
+		async countBySubject(feature, subjectId) {
+			return (await table())
+				.where('feature')
+				.equals(feature)
+				.filter((a) => isLive(a) && a.subjectId === subjectId)
+				.count();
 		},
 
 		softDelete(id, at) {

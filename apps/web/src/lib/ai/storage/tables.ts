@@ -40,4 +40,10 @@ export interface AiArtifact extends Syncable {
 	findings: StoredFinding[];
 	status: ArtifactStatus;
 	sentAt: string | null;
+	/**
+	 * Optional opaque id of what the draft is about (Phase 6: the listing id), so Draft history
+	 * can be filtered to it. Absent on Phase 5 rows. Never holds prompt inputs. Not indexed:
+	 * filtered in memory after the [feature+createdAt] range, so no Dexie version bump.
+	 */
+	subjectId?: string;
 }

@@ -8,7 +8,7 @@
 	// and the email link loses its href while gated.
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
-	// onExit, and the read-only bindables canExit / blocked / findings. `state` is the test/SSR seam
+	// onExit, subjectId (Phase 6), and the read-only bindables canExit / blocked / findings. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
 	import { onMount, tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
@@ -53,6 +53,7 @@
 		emailFooter,
 		exitDisabled = {},
 		onExit,
+		subjectId,
 		// Read-only outputs: written by the $effect below, never read here.
 		/* eslint-disable no-useless-assignment */
 		canExit = $bindable(false),
@@ -75,6 +76,11 @@
 		emailFooter?: { text: string; label: string };
 		exitDisabled?: ExitDisabled;
 		onExit?: (kind: ExitKind, payload: ExitEventPayload) => void;
+		/**
+		 * Opaque id stored on each saved draft (Phase 6: the listing id). Pass the same value to
+		 * DraftHistory to filter it. Absent: drafts are stored without one (Phase 5 behavior).
+		 */
+		subjectId?: string;
 		canExit?: boolean;
 		blocked?: boolean;
 		findings?: Finding[];
@@ -139,6 +145,9 @@
 			},
 			get onExit() {
 				return onExit;
+			},
+			get subjectId() {
+				return subjectId;
 			},
 			get repo() {
 				return repo;

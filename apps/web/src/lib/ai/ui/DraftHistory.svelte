@@ -67,9 +67,20 @@
 		/** Bump to reload (e.g. after the panel saves a new draft). */
 		refreshKey?: number;
 		initial?: { artifacts: AiArtifact[]; count: number };
+		/** Only drafts saved with this subjectId (Phase 6: the current listing). Absent: all drafts. */
+		subjectId?: string;
 	}
 
-	let { feature, repo, headingLevel, onOpen, refreshKey = 0, initial }: Props = $props();
+	let { feature, repo, headingLevel, onOpen, refreshKey = 0, initial, subjectId }: Props = $props();
+
+	const list = (o: { limit: number; offset: number }) =>
+		subjectId === undefined
+			? repo.listByFeature(feature, o)
+			: repo.listBySubject(feature, subjectId, o);
+	const count = () =>
+		subjectId === undefined
+			? repo.countByFeature(feature)
+			: repo.countBySubject(feature, subjectId);
 
 	const uid = $props.id();
 	const LEGEND =
@@ -91,10 +102,7 @@
 
 	async function load(limit: number): Promise<void> {
 		try {
-			const [rows, n] = await Promise.all([
-				repo.listByFeature(feature, { limit, offset: 0 }),
-				repo.countByFeature(feature)
-			]);
+			const [rows, n] = await Promise.all([list({ limit, offset: 0 }), count()]);
 			artifacts = rows;
 			total = n;
 			failed = false;
@@ -105,9 +113,10 @@
 		}
 	}
 
-	// Browser only: load on mount, and again whenever the feature or refreshKey changes.
+	// Browser only: load on mount, and again whenever the feature, subject or refreshKey changes.
 	$effect(() => {
 		void feature;
+		void subjectId;
 		void refreshKey;
 		void load(
 			Math.max(
@@ -121,10 +130,7 @@
 		if (loadingMore) return;
 		loadingMore = true;
 		try {
-			const older = await repo.listByFeature(feature, {
-				limit: PAGE_SIZE,
-				offset: artifacts.length
-			});
+			const older = await list({ limit: PAGE_SIZE, offset: artifacts.length });
 			const seen = new Set(artifacts.map((a) => a.id));
 			artifacts = [...artifacts, ...older.filter((a) => !seen.has(a.id))];
 		} catch {

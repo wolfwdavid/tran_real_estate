@@ -54,6 +54,8 @@ export type PanelDeps = {
 	exitDisabled?: ExitDisabled;
 	mailto?: { to?: string; subject?: string };
 	onExit?: (kind: ExitKind, payload: ExitEventPayload) => void;
+	/** Opaque id stored on each saved artifact (Phase 6: the listing id) for Draft history filtering. */
+	subjectId?: string;
 	/** Live adapter or the keyless fixture, plus the selection that chose it. */
 	resolve: () => Promise<Resolved>;
 	/** null in SSR and in tests that don't persist. */
@@ -378,7 +380,8 @@ export class PanelState {
 				sample,
 				inputHash: built.inputHash,
 				text: this.text,
-				findings
+				findings,
+				...(this.deps.subjectId !== undefined ? { subjectId: this.deps.subjectId } : {})
 			});
 			this.artifactId = a.id;
 			this.artifactStatus = a.status;
