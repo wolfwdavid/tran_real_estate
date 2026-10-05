@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-09-PLAN.md
-last_updated: "2026-10-05T13:34:37.532Z"
+stopped_at: Completed 05-12-PLAN.md
+last_updated: "2026-10-05T13:38:48.730Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 206
-  completed_plans: 72
+  completed_plans: 73
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 9 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
+Plan: 10 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
 
 ## Performance Metrics
 
@@ -118,6 +118,7 @@ Plan: 9 of 16 (waves 1-2 complete; next wave 3: 05-07, 05-08, 05-09, 05-12)
 | Phase 05 P07 | 9min | 2 tasks | 4 files |
 | Phase 05 P08 | 9min | 2 tasks | 4 files |
 | Phase 05 P09 | 6min | 3 tasks | 11 files |
+| Phase 05 P12 | 9min | 2 tasks | 19 files |
 
 ## Accumulated Context
 
@@ -268,6 +269,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-08: OpenRouter [DONE] or end-of-body with no finish_reason is interrupted/truncated (never a silent empty draft); Gemini consent guard runs before getKey and any fetch
 - [Phase 05]: 05-09: buildPrompt is the only path to a provider — guardrail prepended + redactPii + sha256 of the redacted payload; raw inputs never on BuiltPrompt
 - [Phase 05]: 05-09: runner 'refused' finish → status error with LlmError('refused'), partial text kept; fixture output lookup is own-property only
+- [Phase 05]: 05-12: popover/textarea use text-base+leading-[1.6] (not text-body) to dodge the tailwind-merge font-size collision; finding triggers build class strings directly
+- [Phase 05]: 05-12: finding trigger always carries aria-controls (bits-ui sets it only while open); FindingDetails primary button is data-finding-apply (popover focus target)
 
 ### Pending Todos
 
@@ -290,7 +293,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T13:34:37.527Z
-Stopped at: Completed 05-09-PLAN.md
+Last session: 2026-10-05T13:38:48.725Z
+Stopped at: Completed 05-12-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
