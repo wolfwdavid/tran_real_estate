@@ -76,3 +76,34 @@ describe('svelte.config.js serviceWorker.files dotfile filter', () => {
 		}
 	});
 });
+
+describe('OSM tiles are never handled (no offline use, OSM tile policy)', () => {
+	const TILE = 'https://tile.openstreetmap.org/3/1/2.png';
+
+	test('the cross-origin early return is still present, so tile requests fall through', () => {
+		// Runs before any respondWith: every cross-origin request (tile.openstreetmap.org included)
+		// is ignored by the worker and goes straight to the network, never into a cache.
+		const sw = readSw();
+		expect(sw).toContain('url.origin !== sw.location.origin');
+		expect(sw.indexOf('url.origin !== sw.location.origin')).toBeLessThan(sw.indexOf('respondWith'));
+	});
+
+	test('the worker names no tile host and no absolute URL', () => {
+		const sw = readSw();
+		expect(sw).not.toMatch(/openstreetmap/i);
+		expect(sw).not.toContain('https://');
+	});
+
+	test.each(['https://tranrealestate.github.io', 'http://127.0.0.1:4273'])(
+		'tile.openstreetmap.org is cross-origin to %s',
+		(origin) => {
+			expect(new URL(TILE).origin).not.toBe(new URL(origin).origin);
+		}
+	);
+
+	test('non-vacuity: a planted tile cache rule is caught', () => {
+		const planted = `${readSw()}\nif (url.hostname === 'tile.openstreetmap.org') cache.put(req, res);\n`;
+		expect(planted).toMatch(/openstreetmap/i);
+		expect(guardFaults(planted)).toContain('forbidden .put(');
+	});
+});

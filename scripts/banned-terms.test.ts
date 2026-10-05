@@ -6,7 +6,14 @@ import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { collectFiles } from './banned-terms.mjs';
-import { EXCLUDED, SCANNED_EXT, findBanned } from './lib/banned-terms-rules.mjs';
+import {
+	EXCLUDED,
+	RENTER_BANNED,
+	RENTER_SCOPES,
+	SCANNED_EXT,
+	SCOPE,
+	findBanned
+} from './lib/banned-terms-rules.mjs';
 
 const REPO_ROOT = join(import.meta.dirname, '..');
 const CLI = join(import.meta.dirname, 'banned-terms.mjs');
@@ -166,6 +173,110 @@ describe('real scope coverage', () => {
 		for (const f of collectFiles(REPO_ROOT)) {
 			expect(f).toMatch(SCANNED_EXT);
 			expect(f).not.toMatch(EXCLUDED);
+		}
+	});
+});
+
+describe('Phase 6 renter-scoped phrases (06-UI-SPEC)', () => {
+	const RENTER = 'apps/web/src/lib/features/renter/x.svelte';
+
+	test('non-vacuity: "This unit is still available" fails in a renter path', () => {
+		const hits = findBanned(RENTER, 'This unit is still available');
+		expect(hits.some((h) => h.includes('banned term "still available"'))).toBe(true);
+		expect(hits[0]).toContain(`${RENTER}:1`);
+	});
+
+	test('scoping: the same line outside renter scopes is not flagged', () => {
+		expect(
+			findBanned('apps/web/src/lib/components/x.svelte', 'This unit is still available')
+		).toEqual([]);
+	});
+
+	test('a phrase wrapped across lines is still caught', () => {
+		const hits = findBanned(RENTER, 'Is it\n  available now?');
+		expect(hits.some((h) => h.includes('"available now"'))).toBe(true);
+	});
+
+	const renterPositives = [
+		'This unit is available',
+		'Overpriced',
+		'over-priced',
+		'underpriced',
+		'a good deal',
+		'Bargains',
+		'fair market value',
+		'market value',
+		'valuation report',
+		'appraised at'
+	];
+	test.each(renterPositives)('flags %j in every renter scope', (text) => {
+		for (const scope of RENTER_SCOPES) {
+			expect(findBanned(`${scope}x.svelte`, text).length, scope).toBeGreaterThanOrEqual(1);
+		}
+	});
+
+	test('the renter list carries all eleven UI-SPEC phrases', () => {
+		expect(RENTER_BANNED.map(([label]) => label)).toEqual([
+			'is available',
+			'still available',
+			'available now',
+			'overpriced',
+			'underpriced',
+			'good deal',
+			'bargain',
+			'fair market value',
+			'market value',
+			'valuation report',
+			'appraised'
+		]);
+	});
+
+	const renterNegatives = [
+		'Availability and move-in timing',
+		'Last seen listed 3 days ago',
+		"It's an automated estimate, not a professional valuation, and it isn't a figure a landlord has to accept.",
+		'12% above the median rent',
+		'about the same as the median'
+	];
+	test.each(renterNegatives)('accepts UI-SPEC renter copy %j', (text) => {
+		expect(findBanned(RENTER, text)).toEqual([]);
+	});
+
+	test('SCOPE contains the three Phase 6 folders', () => {
+		expect(SCOPE).toEqual(
+			expect.arrayContaining([
+				'apps/web/src/lib/features/renter',
+				'apps/web/src/lib/features/shared/listings',
+				'apps/web/src/lib/features/shared/affordability'
+			])
+		);
+	});
+
+	test('CLI fails on a planted renter route line and passes the same line elsewhere', () => {
+		withTree(
+			{ 'apps/web/src/routes/(app)/renter/+page.svelte': '<p>This unit is still available.</p>\n' },
+			(dir) => {
+				const r = runCli(dir);
+				expect(r.status).toBe(1);
+				expect(r.out).toContain('still available');
+			}
+		);
+		withTree({ [PAGE]: '<p>This unit is still available.</p>\n' }, (dir) => {
+			expect(runCli(dir).status).toBe(0);
+		});
+	});
+
+	test('CLI scans the new feature folders (non-vacuity for the extended SCOPE)', () => {
+		for (const rel of [
+			'apps/web/src/lib/features/renter/a.svelte',
+			'apps/web/src/lib/features/shared/listings/b.svelte',
+			'apps/web/src/lib/features/shared/affordability/c.svelte'
+		]) {
+			withTree({ [rel]: '<p>Guaranteed approval.</p>\n' }, (dir) => {
+				expect(collectFiles(dir)).toEqual([rel]);
+				const r = runCli(dir);
+				expect(r.status, rel).toBe(1);
+			});
 		}
 	});
 });

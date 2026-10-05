@@ -32,7 +32,37 @@ export const BANNED = [
 export const SCOPE = [
 	'apps/web/src/routes',
 	'apps/web/src/lib/components',
-	'apps/web/src/lib/content'
+	'apps/web/src/lib/content',
+	// Phase 6 renter portal: the global list applies here too.
+	'apps/web/src/lib/features/renter',
+	'apps/web/src/lib/features/shared/listings',
+	'apps/web/src/lib/features/shared/affordability'
+];
+
+/**
+ * Phase 6 (06-UI-SPEC "banned-terms additions"): renter copy never claims a listing is available
+ * (listing data can be stale) and never judges a price. Scoped to renter paths only, because these
+ * phrases can be legitimate elsewhere. Model output is not scanned (the Fair Housing checker owns it).
+ */
+export const RENTER_SCOPES = [
+	'apps/web/src/routes/(app)/renter/',
+	'apps/web/src/lib/features/renter/',
+	'apps/web/src/lib/features/shared/listings/'
+];
+
+/** @type {ReadonlyArray<readonly [string, RegExp]>} */
+export const RENTER_BANNED = [
+	['is available', new RegExp(`\\b${words('is available')}\\b`, 'i')],
+	['still available', new RegExp(`\\b${words('still available')}\\b`, 'i')],
+	['available now', new RegExp(`\\b${words('available now')}\\b`, 'i')],
+	['overpriced', /\bover-?priced\b/i],
+	['underpriced', /\bunder-?priced\b/i],
+	['good deal', new RegExp(`\\b${words('good deal')}s?\\b`, 'i')],
+	['bargain', /\bbargains?\b/i],
+	['fair market value', new RegExp(`\\b${words('fair market value')}s?\\b`, 'i')],
+	['market value', new RegExp(`\\b${words('market value')}s?\\b`, 'i')],
+	['valuation report', new RegExp(`\\b${words('valuation report')}s?\\b`, 'i')],
+	['appraised', /\bappraised\b/i]
 ];
 export const SCANNED_EXT = /\.(svelte|ts|js|md)$/i;
 export const EXCLUDED = /\.(test|spec)\.[tj]s$/i;
@@ -47,12 +77,17 @@ export function findBanned(file, text) {
 	const src = text ?? '';
 	/** @type {string[]} */
 	const hits = [];
-	for (const [label, re] of BANNED) {
-		// Clone with 'g' per call so callers never see a stale lastIndex.
-		const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
-		for (const m of src.matchAll(g)) {
-			const line = (src.slice(0, m.index).match(/\n/g)?.length ?? 0) + 1;
-			hits.push(`${file}:${line}: banned term "${label}" (matched "${m[0].replace(/\s+/g, ' ')}")`);
+	const renter = RENTER_SCOPES.some((s) => file.startsWith(s));
+	for (const list of renter ? [BANNED, RENTER_BANNED] : [BANNED]) {
+		for (const [label, re] of list) {
+			// Clone with 'g' per call so callers never see a stale lastIndex.
+			const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');
+			for (const m of src.matchAll(g)) {
+				const line = (src.slice(0, m.index).match(/\n/g)?.length ?? 0) + 1;
+				hits.push(
+					`${file}:${line}: banned term "${label}" (matched "${m[0].replace(/\s+/g, ' ')}")`
+				);
+			}
 		}
 	}
 	return hits;
