@@ -108,7 +108,7 @@ Plans:
 - [x] 02-04-PLAN.md — Site chrome: header/portal switcher, footer, skip link, layouts, 404, 7 route stubs (wave 3)
 - [x] 02-05-PLAN.md — Shared E2E route list, routing/CSP/axe on all routes, drift guard (wave 4)
 - [ ] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
-- [ ] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
+- [x] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
 - [x] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
 - [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
 - [ ] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
@@ -142,7 +142,33 @@ Plans:
   3. With a real key, the app blocks the next RentCast call at the user-editable cap (default 40 of 50) and requires explicit confirmation to go beyond it. Call-count tests prove that 60 simulated calls block call #41, that re-rendering a view 10 times spends no extra calls, and that opening the app with 5 due saved searches re-runs each at most once per 24 hours.
   4. Repeating an identical request returns cached data with an "as of" timestamp and spends zero calls. "Refresh (1 call)" refetches on demand.
   5. Testing a RentCast key in Settings reports valid / invalid / restricted without a billed call. User sees specific messages for invalid key, restricted key, rate limit, budget cap reached, and no results.
-**Plans**: TBD
+**Plans**: 25 plans in 9 waves
+Plans:
+- [ ] 04-01-PLAN.md — Phase 3 gate, platform adapter, Phase 4 Dexie tables + backup registration, exact-pin deps, schema-registry test
+- [ ] 04-02-PLAN.md — core budget: UTC period, isBilled policy, usage summary, cap validation, meter states
+- [ ] 04-03-PLAN.md — core request: endpoints (incl. rental listing by id), canonical key, TTLs, error taxonomy, zero-cost probe mapping
+- [ ] 04-04-PLAN.md — core normalizeLocation, listings domain types, filterListings, fetch-wide + narrow request builders
+- [ ] 04-05-PLAN.md — core alerts: diffSnapshots, due-search selection, cap-aware run plan
+- [ ] 04-06-PLAN.md — fixture guard rules + planted-PII proof, seeded fixture generator, drift check in verify/CI
+- [ ] 04-07-PLAN.md — ESLint: ban spends in $effect, data layer only through $lib/data
+- [ ] 04-08-PLAN.md — web-browser Vitest project (Chromium + axe) spike, CI Chromium order
+- [ ] 04-09-PLAN.md — RentCast GET client (only fetch site) + zero-cost key probe
+- [ ] 04-10-PLAN.md — tolerant zod/mini schemas + mappers, proven on fixtures
+- [ ] 04-11-PLAN.md — transactional ledger reserve/settle, single-use grants, cache repo, cross-connection race proof
+- [ ] 04-12-PLAN.md — fixture fetch for every endpoint with date rebasing at load
+- [ ] 04-13-PLAN.md — live DataGateway: cache/dedupe/peek/by-id/cost + 60-calls-block-#41 and identical-repeat tests
+- [ ] 04-14-PLAN.md — ProvenanceChip/Row, CostLabel, NewSinceBadge, sample-chip helper
+- [ ] 04-15-PLAN.md — CallMeter (full/compact) and GatewayError (8 variants)
+- [ ] 04-16-PLAN.md — CapConfirmDialog (A/B), CapAboveLimitDialog, CapEditor
+- [ ] 04-17-PLAN.md — sample-mode gateway, mode resolution, data-source preference
+- [ ] 04-18-PLAN.md — data runtime (mode, usage, per-call cap prompt, cross-tab), peek store, public $lib/data port
+- [ ] 04-19-PLAN.md — saved-search repo + check-on-open scheduler (5 due searches once / 24 h)
+- [ ] 04-20-PLAN.md — KeyTestResult, DataSourceChoice, DueSearchesDialog, DataStatusBar
+- [ ] 04-21-PLAN.md — 10 re-renders spend 0 (browser) with mutant proofs
+- [ ] 04-22-PLAN.md — DataShell in the (app) layout: status bar, cap prompt host, on-open alerts, announcements
+- [ ] 04-23-PLAN.md — Settings "RentCast usage" section + Test key (0 calls) hook
+- [ ] 04-24-PLAN.md — E2E + axe: status bar, due-search dialog, Settings data states (RentCast fully mocked)
+- [ ] 04-25-PLAN.md — real-key HUMAN-UAT (U1-U14), validation walk, requirements, full verify
 **Research flag**: YES. Needs `/gsd:research-phase` with a real dedicated, endpoint-restricted key: whether 404s are unbilled, how pagination is billed, field coverage including listing-agent contacts, whether the free plan requires a card, and endpoint-restriction behavior. Real responses are never committed.
 **UI hint**: yes, light (call meter, cost labels, cap-confirm dialog, error states, provenance chips). Use `/gsd:ui-phase 4`.
 **Human action required**: The owner creates a dedicated, endpoint-restricted RentCast key for verification (stored only in the browser, never committed).
