@@ -2,7 +2,7 @@
 
 ## From 04-14
 
-- **Phase 3 Badge/Button lose their font-size token class (pre-existing, out of scope).**
+- **OPEN, carried to Phase 5+ (UI).** **Phase 3 Badge/Button lose their font-size token class (pre-existing, out of scope).**
   `tailwind-variants`/`tailwind-merge` treat custom `text-label` / `text-body` as text-colour
   utilities, so the variant colour (`text-muted-foreground`, `text-foreground`, ...) drops them:
   `twMerge('text-label text-muted-foreground')` returns `text-muted-foreground`. Badge then renders
@@ -10,7 +10,9 @@
   `classGroups: { 'font-size': [{ text: ['label', 'body', 'heading', 'display'] }] }` in
   `$lib/utils.ts` and the `tv()` config. 04-14's chips build their own class string (no merge) and
   are unaffected.
-- **Vitest browser failure artifacts are untracked, not gitignored.** Failing browser tests write
+- **RESOLVED (orchestrator housekeeping, before 04-25).** `.gitignore` now ignores
+  `apps/web/.vitest-attachments/` and `**/__screenshots__/`.
+  **Vitest browser failure artifacts are untracked, not gitignored.** Failing browser tests write
   `apps/web/.vitest-attachments/` and `src/**/__screenshots__/`. Add both to `.gitignore`.
 
 ## From 04-23
@@ -27,3 +29,17 @@
   failed/cap counts are unchanged, so a 200 probe still counts toward the cap. `ledger-repo` passes
   its rows through unchanged because `LedgerRow` already carries `intent`. Covered by a core
   `summarize` test and a `ledger-repo` `record` test.
+
+## From 04-25
+
+- **RESOLVED in 72b6875.** **Lost E2E clicks under smooth scrolling (Phase 3's "import preview
+  click" flake, root-caused).** The first 04-25 `verify` failed 2 of 498 E2E tests:
+  `app-notice` "Remind me tomorrow" (root, `Import backup` click) and `settings-keys` "keys are
+  session-only by default" (sub, `Save key` click). Both traces show "element is not stable", then
+  "element is outside of the viewport", then "click action done" with no effect: `app.css` sets
+  `html { scroll-behavior: smooth }` under `prefers-reduced-motion: no-preference`, so Playwright's
+  scroll-into-view animated while Settings was still filling in, and the click landed mid-scroll.
+  04-24 had applied `reducedMotion: 'reduce'` to its two new specs only. Fix: `reducedMotion:
+  'reduce'` is the suite default in `apps/web/playwright.config.ts` (per-spec copies removed). No
+  timeout was raised. Proof: the three affected specs pass 156/156 with `--repeat-each 3`, and the
+  re-run `verify` is green (496 passed + 2 skipped).

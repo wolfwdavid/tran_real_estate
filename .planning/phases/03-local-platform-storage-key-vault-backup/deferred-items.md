@@ -2,6 +2,13 @@
 
 ## Load-dependent E2E flake: import preview click not reflected within 5 s (found in 03-17)
 
+- **RESOLVED in 72b6875 (04-25).** The traces were copied this time (04-25 first `verify`, same
+  `app-notice` `seed()` click plus a `settings-keys` Save key click): "element is not stable" ->
+  "outside of the viewport" -> "click action done" with no effect. `html { scroll-behavior: smooth }`
+  animated Playwright's scroll-into-view while Settings filled in, so the click landed mid-scroll.
+  Playwright now runs with `reducedMotion: 'reduce'` suite-wide; no timeout was raised. Details in
+  the Phase 4 `deferred-items.md` "From 04-25".
+
 - **Seen:** first `corepack pnpm verify` of 2026-10-05 (2 of 456 E2E failed). Also seen once in 03-15 (app-notice test 4).
 - **Tests:** `apps/web/tests/e2e/app-notice.spec.ts` "never-backed-up notice at 8 days on every app page" [root], at the `seed()` helper's `import-result` expectation after clicking **Import backup**; `apps/web/tests/e2e/settings-backup.spec.ts` "fresh-profile import with preview" [sub], at `expect(preview).toHaveCount(0)` after clicking **Close**.
 - **Symptom:** the click is accepted but the ImportPreview panel does not change within the default 5 s expect timeout. The snapshot shows the preview still rendered with the buttons enabled.

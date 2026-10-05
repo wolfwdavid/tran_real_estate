@@ -13,7 +13,7 @@ This repository is a pnpm workspace:
 | Path             | What it is                                                                                                                              |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `apps/web`       | The SvelteKit app (adapter-static), its E2E specs, and Playwright config                                                                |
-| `packages/core`  | Shared pure logic                                                                                                                       |
+| `packages/core`  | Shared pure logic: backup, RentCast budget and request rules, listings, saved-search alerts                                             |
 | `packages/brand` | Design tokens (colors, fonts, radii, shadows) and the WCAG contrast gate; mirrored in `apps/web/src/app.css` `@theme` and parity-tested |
 | `scripts`        | Build, CSP assertion, Pages emulator, secret and real-data guards, workflow lint                                                        |
 | `docs`           | Owner runbooks such as the deploy checklist                                                                                             |
@@ -30,8 +30,8 @@ This repository is a pnpm workspace:
 ## Setup
 
 All four steps are required before `corepack pnpm verify` can pass end to end, because `verify`
-finishes with `test:e2e` (needs Chromium) and `lint:workflows` (needs actionlint). Do them in
-this order.
+runs browser component tests and `test:e2e` (both need Chromium) and finishes with
+`lint:workflows` (needs actionlint). Do them in this order.
 
 1. Install dependencies:
 
@@ -45,7 +45,8 @@ this order.
    corepack pnpm hooks:install
    ```
 
-3. Install the Chromium build that Playwright expects, for `test:e2e`:
+3. Install the Chromium build that Playwright expects, for the `web-browser` Vitest project and
+   `test:e2e`:
 
    ```sh
    corepack pnpm --filter web exec playwright install chromium
@@ -69,28 +70,34 @@ corepack pnpm verify
 
 ## Commands
 
-| Command                        | What it does                                                                                                                                |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `corepack pnpm dev`            | Vite dev server for `apps/web`                                                                                                              |
-| `corepack pnpm check`          | `svelte-kit sync` plus `svelte-check` and `tsc --noEmit` across the workspace                                                               |
-| `corepack pnpm lint`           | Prettier check and ESLint (import boundaries, `fetch` and `{@html}` bans)                                                                   |
-| `corepack pnpm banned`         | Banned marketing/legal terms check over routes, components and content                                                                      |
-| `corepack pnpm ui:guard`       | Class guard over the shadcn-svelte primitives: brand tokens only, no `dark:`, every animation `motion-safe:`                                |
-| `corepack pnpm test:unit`      | Vitest across the `web`, `core`, `brand`, and `scripts` projects                                                                            |
-| `corepack pnpm build:root`     | Build for the root origin into `apps/web/build`                                                                                             |
-| `corepack pnpm build:sub`      | Build under `BASE_PATH=/tran_real_estate` into `apps/web/build-sub`                                                                         |
-| `corepack pnpm csp:assert`     | Assert the CSP contract on every page of both builds                                                                                        |
-| `corepack pnpm test:e2e`       | Playwright: routing, CSP, framing, layout (375px/640px, landmarks, footer legal links), marketing content, and axe WCAG A/AA on both builds |
-| `corepack pnpm guard`          | Real-data and CoStar guard over every tracked file                                                                                          |
-| `corepack pnpm secrets:canary` | Prove the gitleaks config rejects the repository's canary pattern                                                                           |
-| `corepack pnpm secrets:scan`   | gitleaks over the full git history                                                                                                          |
-| `corepack pnpm lint:workflows` | actionlint over `.github/workflows`                                                                                                         |
-| `corepack pnpm verify`         | All of the above in order, as one gate                                                                                                      |
+| Command                        | What it does                                                                                                                         |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `corepack pnpm dev`            | Vite dev server for `apps/web`                                                                                                       |
+| `corepack pnpm check`          | `svelte-kit sync` plus `svelte-check` and `tsc --noEmit` across the workspace                                                        |
+| `corepack pnpm lint`           | Prettier check and ESLint (import boundaries, `fetch` and `{@html}` bans)                                                            |
+| `corepack pnpm banned`         | Banned marketing/legal terms check over routes, components and content                                                               |
+| `corepack pnpm ui:guard`       | Class guard over the shadcn-svelte primitives: brand tokens only, no `dark:`, every animation `motion-safe:`                         |
+| `corepack pnpm test:unit`      | Vitest across the `web`, `web-browser`, `core`, `brand`, and `scripts` projects                                                      |
+| `corepack pnpm build:root`     | Build for the root origin into `apps/web/build`                                                                                      |
+| `corepack pnpm build:sub`      | Build under `BASE_PATH=/tran_real_estate` into `apps/web/build-sub`                                                                  |
+| `corepack pnpm csp:assert`     | Assert the CSP contract on every page of both builds                                                                                 |
+| `corepack pnpm test:e2e`       | Playwright: routing, CSP, framing, layout, marketing content, settings, data status and RentCast usage, axe WCAG A/AA on both builds |
+| `corepack pnpm guard`          | Real-data and CoStar guard over every tracked file                                                                                   |
+| `corepack pnpm fixtures:gen`   | Regenerate the synthetic sample data in `apps/web/src/lib/data/fixtures/` from `scripts/gen-fixtures.mjs`                            |
+| `corepack pnpm fixtures:check` | Drift check: fail if the committed sample data differs from what the generator produces (part of `verify`)                           |
+| `corepack pnpm secrets:canary` | Prove the gitleaks config rejects the repository's canary pattern                                                                    |
+| `corepack pnpm secrets:scan`   | gitleaks over the full git history                                                                                                   |
+| `corepack pnpm lint:workflows` | actionlint over `.github/workflows`                                                                                                  |
+| `corepack pnpm verify`         | All of the above in order, as one gate                                                                                               |
 
 `verify` is `check`, `lint`, `banned`, `ui:guard`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
-`guard`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about three and a half minutes on a
+`guard`, `fixtures:check`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about four minutes on a
 warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
 same steps, split across a hygiene job and a two-leg quality matrix (root and sub base paths).
+
+The browser component tests (`*.browser.test.ts`, the `web-browser` project) run inside
+`corepack pnpm test:unit` in real Chromium, so `test:unit` also needs
+`corepack pnpm --filter web exec playwright install chromium`.
 
 ## Local data, API keys and backups
 
@@ -101,25 +108,56 @@ same steps, split across a hygiene job and a two-leg quality matrix (root and su
 - **Where the code lives:** `apps/web/src/lib/storage/` (Dexie database, persistence, backup; the key vault is in `storage/secrets/`), `packages/core/src/backup/` (envelope, migrations, merge/replace diff, key scan), and `apps/web/src/service-worker.ts`.
 - **UI gate:** `corepack pnpm ui:guard` scans the copied-in shadcn-svelte primitives in `apps/web/src/lib/components/ui/` and fails on raw palette colors, `dark:` variants, `ring-ring/*` focus styles and animations without `motion-safe:`. Before running `shadcn-svelte add` in a later phase, follow the add procedure in `.planning/phases/03-local-platform-storage-key-vault-backup/03-06-SUMMARY.md` (back up `app.css` and `package.json`, add with `--no-deps-install`, restore `app.css`, re-pin exact versions), then run `ui:guard` before committing.
 
+## Data layer (RentCast, sample data, budget)
+
+- **Sample mode without a key.** With no RentCast key saved, every data request is answered from
+  synthetic fixtures (fictional addresses, generated by `scripts/gen-fixtures.mjs`, dates shifted
+  relative to today at load) and the status bar shows a "Sample data" badge. Sample mode never
+  touches the network and never spends a call. Never commit real RentCast responses.
+- **Bring your own RentCast key.** Paste a key in Settings → API keys. **Test key** is free: it asks
+  RentCast for market data on the never-assigned ZIP `00000`, so a valid key gets a 404 that
+  RentCast does not bill; 401 means invalid, 403 means the key is restricted, and a 200 would be
+  billed and is labelled as 1 call.
+- **One gateway, metered.** Every RentCast call goes through the data gateway in
+  `apps/web/src/lib/data/`: cache first, then a ledger reservation, then the fetch. Settings →
+  RentCast usage shows "N of 50 calls used this month" (this browser only; the RentCast dashboard
+  is authoritative), and buttons that spend show their cost first.
+- **Cap.** The default cap is 40 of the free plan's 50 calls, editable in Settings. Past the cap,
+  every call asks for confirmation; a cap above 50 shows the possible overage cost first.
+- **Cache.** Identical requests are served from the local cache with their original "as of" time
+  and a "Refresh (1 call)" option. Lifetimes: listings 24 hours, estimates 7 days, market data
+  30 days, no-result (404/400) answers 24 hours.
+- **Saved-search alerts.** Due saved searches are checked when the app opens, at most once per
+  24 hours each, inside the cap; more than 3 due asks first.
+- **Backups.** The RentCast call history, saved searches, saved search results and data settings
+  are in backups; the response cache (`apiCache`) is deliberately excluded. A schema-registry test
+  fails if a new table is neither registered nor excluded.
+- **Where the code lives:** `packages/core/src/{budget,request,listings,alerts}/` (pure rules),
+  `apps/web/src/lib/data/` (gateway, ledger, cache, scheduler, runtime, RentCast client and
+  schemas, fixtures), `apps/web/src/lib/features/shared/data/` (meter, status bar, dialogs).
+- **Owner real-key checks** (billing behaviour that only a real key can show) are listed in
+  `.planning/phases/04-data-layer-rentcast-gateway-budget-guard-demo-fixtures/04-HUMAN-UAT.md`.
+
 ## Routes
 
-Every page is prerendered with a trailing slash. Thirteen pages ship today:
+Every page is prerendered with a trailing slash. Thirteen pages ship today, plus the `404.html`
+fallback (14 HTML files per build, all checked by `csp:assert`):
 
-| Route                   | Group                                             |
-| ----------------------- | ------------------------------------------------- |
-| `/`                     | Marketing (landing)                               |
-| `/for-renters/`         | Marketing                                         |
-| `/for-investors/`       | Marketing                                         |
-| `/for-agents/`          | Marketing                                         |
-| `/legal/privacy/`       | Legal                                             |
-| `/legal/terms/`         | Legal                                             |
-| `/legal/fair-housing/`  | Legal                                             |
-| `/legal/data-coverage/` | Legal                                             |
-| `/renter/`              | App (placeholder until Phase 6)                   |
-| `/investor/`            | App (placeholder until Phase 7)                   |
-| `/agent/`               | App (placeholder until Phases 8-9)                |
-| `/settings/`            | App: keys, key security, backup, storage, install |
-| `/print/`               | Chrome-free print surface                         |
+| Route                   | Group                                                             |
+| ----------------------- | ----------------------------------------------------------------- |
+| `/`                     | Marketing (landing)                                               |
+| `/for-renters/`         | Marketing                                                         |
+| `/for-investors/`       | Marketing                                                         |
+| `/for-agents/`          | Marketing                                                         |
+| `/legal/privacy/`       | Legal                                                             |
+| `/legal/terms/`         | Legal                                                             |
+| `/legal/fair-housing/`  | Legal                                                             |
+| `/legal/data-coverage/` | Legal                                                             |
+| `/renter/`              | App (placeholder until Phase 6)                                   |
+| `/investor/`            | App (placeholder until Phase 7)                                   |
+| `/agent/`               | App (placeholder until Phases 8-9)                                |
+| `/settings/`            | App: keys, RentCast usage, key security, backup, storage, install |
+| `/print/`               | Chrome-free print surface                                         |
 
 Adding or removing a page means updating two lists as well: `apps/web/tests/e2e/routes.ts`
 (a drift test fails if the build and the list disagree) and `EXPECTED_PAGES` in

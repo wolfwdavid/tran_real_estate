@@ -95,6 +95,13 @@ Fill the **Result** column of each row with: date, HTTP status code, dashboard d
 When every row you can run is filled (U6, U8, U9, U12-U14 depend on Phase 6 surfaces or an
 optional cancellation and may stay `[pending]`), run `/gsd:verify-work 4`.
 
+## Carried forward (tech debt, not owner checks)
+
+- **tailwind-merge font-size collision** (deferred-items.md, from 04-14): Phase 3 Badge/Button lose
+  `text-label` / `text-body` when a variant colour class is merged. A Phase 5+ UI fix
+  (`extendTailwindMerge` font-size class group in `$lib/utils.ts` and the `tv()` config). Not a
+  Phase 4 data-layer gap; Phase 4 chips build their own class strings and are unaffected.
+
 ## Summary
 
 total: 14
