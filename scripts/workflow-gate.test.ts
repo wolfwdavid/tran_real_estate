@@ -151,6 +151,18 @@ describe('quality matrix', () => {
 		expect([...idx].sort((a, b) => a - b)).toEqual(idx);
 	});
 
+	test('quality installs Chromium BEFORE pnpm test:unit (browser component tests)', () => {
+		// pnpm test:unit includes the web-browser Vitest project, which launches real Chromium.
+		const quality = job('quality');
+		const deps = quality.indexOf('run: pnpm install --frozen-lockfile');
+		const chromium = quality.indexOf('playwright install --with-deps chromium');
+		const unit = quality.indexOf('run: pnpm test:unit');
+		expect(deps).toBeGreaterThan(-1);
+		expect(chromium).toBeGreaterThan(deps);
+		expect(unit).toBeGreaterThan(chromium);
+		expect(count(quality, 'playwright install --with-deps chromium')).toBe(1);
+	});
+
 	test('quality runs the fixture drift check after pnpm install (it needs Prettier)', () => {
 		const quality = job('quality');
 		const install = quality.indexOf('run: pnpm install --frozen-lockfile');

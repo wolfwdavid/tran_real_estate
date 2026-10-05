@@ -78,6 +78,8 @@ jobs:
           tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
       - run: pnpm install --frozen-lockfile
+      # Before pnpm test:unit: the web-browser Vitest project runs component tests in Chromium.
+      - run: pnpm --filter web exec playwright install --with-deps chromium
       - run: pnpm check
       - run: pnpm lint
       - run: node scripts/gen-fixtures.mjs --check
@@ -88,7 +90,6 @@ jobs:
           BASE_PATH: ${{ matrix.base_path }}
           BUILD_DIR: ${{ matrix.build_dir }}
       - run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }}
-      - run: pnpm --filter web exec playwright install --with-deps chromium
       - name: E2E + axe
         run: pnpm --filter web exec playwright test --project=${{ matrix.target }}
       - name: Upload Pages artifact
