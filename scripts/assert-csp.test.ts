@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { CONNECT, EXPECTED_PAGES, checkBuild, checkHtml } from './assert-csp.mjs';
+import { CONNECT, EXPECTED_PAGES, checkAssetText, checkBuild, checkHtml } from './assert-csp.mjs';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -309,6 +309,50 @@ describe('checkBuild over a temp directory', () => {
 	test('a missing directory reports every carrier as missing', () => {
 		const errors = checkBuild(join(tmpdir(), 'csp-does-not-exist-' + process.pid));
 		expect(errors).toHaveLength(2 + EXPECTED_PAGES.length);
+	});
+});
+
+describe('data: URI ban', () => {
+	test('a data: font in a CSS url() is rejected', () => {
+		const errors = checkAssetText('_app/x.css', 'a{src:url(data:font/woff2;base64,AA)}');
+		expect(errors).toHaveLength(1);
+		expect(errors[0]).toMatch(/data: URI/);
+	});
+
+	test('a quoted, padded data: SVG in a CSS url() is rejected', () => {
+		expect(
+			checkAssetText('_app/x.css', "a{background:url( 'data:image/svg+xml,<svg/>')}")
+		).toHaveLength(1);
+	});
+
+	test('a data: image in an HTML attribute is rejected', () => {
+		expect(checkAssetText('p/index.html', '<img src="data:image/png;base64,AA">')).toHaveLength(1);
+	});
+
+	test("Kit's inline boot data object is not a URI", () => {
+		expect(
+			checkAssetText('index.html', '<script>__sveltekit = { data: [null, null] }</script>')
+		).toEqual([]);
+	});
+
+	test('data-* attributes are not URIs', () => {
+		expect(checkAssetText('index.html', '<body data-sveltekit-preload-data="hover">')).toEqual([]);
+	});
+
+	test('checkBuild reports a data: URI in built CSS by relative path', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				const assets = join(dir, '_app', 'immutable', 'assets');
+				mkdirSync(assets, { recursive: true });
+				writeFileSync(join(assets, '0.css'), '@font-face{src:url(data:font/woff2;base64,AA)}');
+			},
+			(dir) => {
+				const errors = checkBuild(dir);
+				expect(errors).toHaveLength(1);
+				expect(errors[0]).toMatch(/^_app\/immutable\/assets\/0\.css: data: URI/);
+			}
+		);
 	});
 });
 
