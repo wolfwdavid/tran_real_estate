@@ -127,7 +127,9 @@ describe('createFixtureFetch: listings', () => {
 		expect(await rows(`${RENTALS}?zipCode=74201&limit=3`)).toHaveLength(3);
 		expect(await rows(`${RENTALS}?zipCode=74201&limit=0`)).toHaveLength(1);
 		const all = await rows(`${RENTALS}?city=Harlow%20Springs&state=OK&limit=9999`);
-		expect(all.length).toBe(rentals.filter((r) => r.city === 'Harlow Springs' && r.status === 'Active').length);
+		expect(all.length).toBe(
+			rentals.filter((r) => r.city === 'Harlow Springs' && r.status === 'Active').length
+		);
 	});
 
 	it('matches city and state case-sensitively', async () => {
