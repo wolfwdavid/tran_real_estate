@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-15-PLAN.md
-last_updated: "2026-10-05T21:34:56.800Z"
+stopped_at: Completed 05-16-PLAN.md
+last_updated: "2026-10-05T22:07:35.339Z"
 progress:
   total_phases: 11
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 206
-  completed_plans: 78
+  completed_plans: 79
 ---
 
 # Project State
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 
 ## Current Position
 
-Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 15 of 16 (waves 1-6 complete; next wave 7: 05-16 phase gate)
+Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — COMPLETE (gate green 2026-10-05)
+Plan: 16 of 16 (all 7 waves complete; 05-16 gate: verify exit 0, AI-01..04 complete, live checks owner-gated in 05-HUMAN-UAT.md)
 
 ## Performance Metrics
 
@@ -124,6 +124,7 @@ Plan: 15 of 16 (waves 1-6 complete; next wave 7: 05-16 phase gate)
 | Phase 05 P14 | 17min | 3 tasks | 11 files |
 | Phase 05 P13 | 45min | 3 tasks | 9 files |
 | Phase 05 P15 | 25min | 2 tasks | 8 files |
+| Phase 05 P16 | 28min | 3 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -285,6 +286,10 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-13: ProviderChip mirrors Phase 4 ProvenanceChip sample visual (not wrapped); GeminiDataDialog has an inline (portal-disabled) SSR seam
 - [Phase 05]: 05-15: AI drafting is Settings slot 3; nav comes from the sections registry; Draft history Open goes through GenerationPanel.openArtifact (bind:this)
 - [Phase 05]: 05-15: E2E AI mocks block all four provider hosts first, then classify generate/canary/models/key per host with CORS on every fulfill
+- [Phase 05]: 05-16: key tester registry is a SvelteMap so remembered-key cards gain Test connection when AI testers register late
+- [Phase 05]: 05-16: Stop before any text uses a stopped-empty status (nothing saved), not the partial-draft line
+- [Phase 05]: 05-16: defaultPreferred falls back saved -> locked -> none so only-locked users see 'Your keys are locked', not 'No AI key yet'
+- [Phase 05]: 05-16: Phase 5 gate green (verify 318s, 2541 unit, 566 E2E); AI-01..04 complete; live-provider checks owner-gated in 05-HUMAN-UAT.md H1-H10
 
 ### Pending Todos
 
@@ -307,7 +312,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T21:34:56.794Z
-Stopped at: Completed 05-15-PLAN.md
+Last session: 2026-10-05T22:07:35.333Z
+Stopped at: Completed 05-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

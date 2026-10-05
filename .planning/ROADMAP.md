@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Brand System, Marketing & Legal Pages** - Warm-editorial accessible landing, per-audience pages, legal pages, and portal switcher (completed 2026-10-05)
 - [x] **Phase 3: Local Platform: Storage, Key Vault & Backup** - Browser-only key vault (session / remember / passphrase), JSON backup, persistence status, PWA install (completed 2026-10-05)
 - [x] **Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures** - Single metered, cached, hard-capped RentCast gateway plus synthetic sample data and check-on-open alerts engine (completed 2026-10-05)
-- [ ] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path
+- [x] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path (completed 2026-10-05)
 - [ ] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach
 - [ ] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF
 - [ ] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV
@@ -217,7 +217,7 @@ Plans:
 - [x] 05-13-PLAN.md — GenerationPanel + PanelState, GenerationError, GeminiDataDialog, ProviderChip; exactly-three-exits SSR test (wave 5)
 - [x] 05-14-PLAN.md — Draft history, provider picker, sample toggle, model override + Test connection in key cards (wave 5)
 - [x] 05-15-PLAN.md — Settings "AI drafting" section (position 3) + E2E spike and core flows (wave 6)
-- [ ] 05-16-PLAN.md — Guardrail E2E, axe across all states, HUMAN-UAT, VALIDATION, pnpm verify (wave 7)
+- [x] 05-16-PLAN.md — Guardrail E2E, axe across all states, HUMAN-UAT, VALIDATION, pnpm verify (wave 7)
 **Research flag**: YES. Needs `/gsd:research-phase`: current model IDs and a models-list validation path, streaming event shapes per provider, Gemini key types and browser viability, models-endpoint CORS, and legal sourcing of Fair Housing phrase lists (Achtenberg memo + state lists).
 **UI hint**: yes (generation panel, Fair Housing flag UI, provider picker). Use `/gsd:ui-phase 5`.
 
@@ -458,7 +458,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
-| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 15/16 | In Progress|  |
+| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete   | 2026-10-05 |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
