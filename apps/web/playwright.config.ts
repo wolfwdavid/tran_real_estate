@@ -24,7 +24,12 @@ export default defineConfig({
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
 	reporter: process.env.CI ? [['github'], ['list']] : 'list',
-	use: { ...devices['Desktop Chrome'], trace: 'retain-on-failure' },
+	// Reduced motion for every spec: app.css sets html { scroll-behavior: smooth } under
+	// no-preference, which animates Playwright's scroll-into-view. Settings fills in late (RentCast
+	// usage, data status), so a click could land while the page was still scrolling and hit nothing
+	// (traces: "element is not stable" then "outside of the viewport", then a lost "Save key" /
+	// "Import backup" click). With reduce, the scroll is instant and transitions are 0 ms.
+	use: { ...devices['Desktop Chrome'], trace: 'retain-on-failure', reducedMotion: 'reduce' },
 	// ONE webServer entry: a multi-entry array stalled on readiness on Windows during research.
 	// serve-pages.mjs starts the root/sub listeners only when their build directory exists, but
 	// the attacker listener always starts and answers GET / with 200. CI builds one target per

@@ -14,9 +14,6 @@ import {
 // RentCast is never reached: blockRentCast aborts every request, and mocked tests count requests.
 
 test.describe.configure({ timeout: 120_000 });
-// html { scroll-behavior: smooth } animates Playwright's scroll-into-view, so a click can land
-// while the target is still moving (seen as a lost "Save key" click). Reduced motion scrolls at once.
-test.use({ reducedMotion: 'reduce' });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
