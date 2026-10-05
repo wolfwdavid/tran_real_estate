@@ -111,7 +111,7 @@ Plans:
 - [x] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
 - [x] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
 - [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)
-- [ ] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
+- [x] 02-10-PLAN.md — Layout E2E: landmarks, aria-current, footer legal links, 375/640, disclosure, same-origin (wave 5)
 - [x] 02-11-PLAN.md — Marketing content E2E + axe at 375px, 404 and menu open (wave 5)
 - [ ] 02-12-PLAN.md — Full verify, validation map walk, README + requirements (wave 6)
 **Research flag**: no (standard patterns)
