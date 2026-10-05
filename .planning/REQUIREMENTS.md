@@ -30,7 +30,7 @@
 - [ ] **PLAT-03**: User can lock remembered keys behind a passphrase
 - [x] **PLAT-04**: User can export all app data (never keys) to a JSON file and import it back after previewing what will change
 - [x] **PLAT-05**: User can see whether the browser granted persistent storage and receives a "last backup N days ago" reminder
-- [ ] **PLAT-06**: User can install the app to their home screen or desktop as a progressive web app
+- [x] **PLAT-06**: User can install the app to their home screen or desktop as a progressive web app
 
 ### Data Layer & Demo
 
@@ -165,7 +165,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAT-03 | Phase 3 | Pending |
 | PLAT-04 | Phase 3 | Complete |
 | PLAT-05 | Phase 3 | Complete |
-| PLAT-06 | Phase 3 | Pending |
+| PLAT-06 | Phase 3 | Complete |
 | DATA-01 | Phase 4 | Pending |
 | DATA-02 | Phase 4 | Pending |
 | DATA-03 | Phase 4 | Pending |

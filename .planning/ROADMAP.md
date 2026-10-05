@@ -131,7 +131,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Exact-pinned deps, core provider registry (hosts ⊆ CSP, header-only auth), Syncable + reminder math, test fakes, lint guardrails (wave 1)
 - [x] 03-02-PLAN.md — Core backup: tran-backup-v1 envelope + error codes, migrations, merge/replace diff, key scan, filename (wave 2)
-- [ ] 03-03-PLAN.md — PWA manifest (relative URLs), brand-generated icons, beforeinstallprompt capture, CSP oracle carriers (wave 2)
+- [x] 03-03-PLAN.md — PWA manifest (relative URLs), brand-generated icons, beforeinstallprompt capture, CSP oracle carriers (wave 2)
 - [ ] 03-04-PLAN.md — Key vault core: WebCrypto, tran-secrets DB, session default / remember opt-in, forget-all broadcast, tester hook (wave 2)
 - [x] 03-05-PLAN.md — Dexie data layer: TranDb, Syncable repos, meta, backup registry, persist()/estimate, liveQuery helper (wave 2)
 - [ ] 03-06-PLAN.md — shadcn-svelte 1.6.1 init reconciled to Phase 2 tokens, 9 primitives, alias tokens, UI class guard (wave 2; needs Phase 2)
