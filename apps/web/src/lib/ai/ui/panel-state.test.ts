@@ -106,9 +106,12 @@ function setup(
 	} = {}
 ) {
 	const selection = o.selection ?? LIVE('anthropic');
-	const s = scripted(selection.kind === 'live' ? selection.id : 'fixture', o.script ?? {
-		chunks: ['Bright ', 'two-bedroom ', 'near transit.']
-	});
+	const s = scripted(
+		selection.kind === 'live' ? selection.id : 'fixture',
+		o.script ?? {
+			chunks: ['Bright ', 'two-bedroom ', 'near transit.']
+		}
+	);
 	const provider = o.provider ?? s.provider;
 	const repo = memoryRepo();
 	const announce = vi.fn<(m: string) => void>();
