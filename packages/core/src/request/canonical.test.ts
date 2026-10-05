@@ -86,7 +86,9 @@ describe('canonicalParams normalization', () => {
 	});
 
 	test('numbers become decimal strings and booleans become true/false', () => {
-		expect(canonicalParams({ limit: 500, offset: 0, radius: 2.5, lookupSubjectAttributes: true })).toEqual([
+		expect(
+			canonicalParams({ limit: 500, offset: 0, radius: 2.5, lookupSubjectAttributes: true })
+		).toEqual([
 			['limit', '500'],
 			['lookupSubjectAttributes', 'true'],
 			['offset', '0'],
@@ -162,11 +164,14 @@ describe('TTLs', () => {
 		expect(NEGATIVE_TTL_MS).toBe(DAY_MS);
 	});
 
-	test.each(ALL_ENDPOINTS)('%s: 404 and 400 are negative-cached for 24h, 200 uses the table', (e) => {
-		expect(ttlFor(e, 404)).toBe(NEGATIVE_TTL_MS);
-		expect(ttlFor(e, 400)).toBe(NEGATIVE_TTL_MS);
-		expect(ttlFor(e, 200)).toBe(TTL_MS[e]);
-	});
+	test.each(ALL_ENDPOINTS)(
+		'%s: 404 and 400 are negative-cached for 24h, 200 uses the table',
+		(e) => {
+			expect(ttlFor(e, 404)).toBe(NEGATIVE_TTL_MS);
+			expect(ttlFor(e, 400)).toBe(NEGATIVE_TTL_MS);
+			expect(ttlFor(e, 200)).toBe(TTL_MS[e]);
+		}
+	);
 });
 
 describe('isStale', () => {
