@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-11-PLAN.md
-last_updated: "2026-10-05T13:52:38.622Z"
+stopped_at: Completed 05-14-PLAN.md
+last_updated: "2026-10-05T21:16:02.133Z"
 progress:
   total_phases: 11
   completed_phases: 4
   total_plans: 206
-  completed_plans: 75
+  completed_plans: 76
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 12 of 16 (waves 1-4 complete; next wave 5: 05-13, 05-14)
+Plan: 13 of 16 (waves 1-4 complete; next wave 5: 05-13, 05-14)
 
 ## Performance Metrics
 
@@ -121,6 +121,7 @@ Plan: 12 of 16 (waves 1-4 complete; next wave 5: 05-13, 05-14)
 | Phase 05 P12 | 9min | 2 tasks | 19 files |
 | Phase 05 P10 | 5min | 2 tasks | 4 files |
 | Phase 05 P11 | 8min | 2 tasks | 12 files |
+| Phase 05 P14 | 17min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -277,6 +278,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-10: AI-04 import-graph walker (ts.preProcessFile, injected io) treats type imports as coupling and asserts zero unresolved local specifiers
 - [Phase 05]: 05-11: aiArtifacts is TranDb version 3, backed up as 'AI drafts'; live rows omit deletedAt (SyncableSchema rejects null)
 - [Phase 05]: 05-11: AI prefs in runed PersistedState (tran.ai.*), not backed up; locked/keyless selection resolves to the fixture provider; registerAiTestKeys call site deferred to 05-15 Settings onMount
+- [Phase 05]: 05-14: AI key cards show TestConnectionResult only when the tester returns AiKeyTestResult.ai; the Model field shows on every AI card once Settings is ready; the picker shows defaultPreferred as checked without persisting it
 
 ### Pending Todos
 
@@ -299,7 +301,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T13:52:38.616Z
-Stopped at: Completed 05-11-PLAN.md
+Last session: 2026-10-05T21:16:02.127Z
+Stopped at: Completed 05-14-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

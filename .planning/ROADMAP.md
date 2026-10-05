@@ -215,7 +215,7 @@ Plans:
 - [x] 05-10-PLAN.md — No-auto-send enforcement: ESLint lib/ai boundary + TS import-graph test (wave 4)
 - [x] 05-11-PLAN.md — Phase 3 integration: aiArtifacts table + backup, AI prefs, provider selection, testKey hooks (wave 4)
 - [ ] 05-13-PLAN.md — GenerationPanel + PanelState, GenerationError, GeminiDataDialog, ProviderChip; exactly-three-exits SSR test (wave 5)
-- [ ] 05-14-PLAN.md — Draft history, provider picker, sample toggle, model override + Test connection in key cards (wave 5)
+- [x] 05-14-PLAN.md — Draft history, provider picker, sample toggle, model override + Test connection in key cards (wave 5)
 - [ ] 05-15-PLAN.md — Settings "AI drafting" section (position 3) + E2E spike and core flows (wave 6)
 - [ ] 05-16-PLAN.md — Guardrail E2E, axe across all states, HUMAN-UAT, VALIDATION, pnpm verify (wave 7)
 **Research flag**: YES. Needs `/gsd:research-phase`: current model IDs and a models-list validation path, streaming event shapes per provider, Gemini key types and browser viability, models-endpoint CORS, and legal sourcing of Fair Housing phrase lists (Achtenberg memo + state lists).
@@ -458,7 +458,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
-| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 12/16 | In Progress|  |
+| 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 13/16 | In Progress|  |
 | 6. Renter Portal | 0/TBD | Not started | - |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
