@@ -107,7 +107,7 @@ Plans:
 - [x] 02-03-PLAN.md — Tailwind @theme + parity test, self-hosted fonts, Lucide pin, data: URI oracle (wave 2)
 - [x] 02-04-PLAN.md — Site chrome: header/portal switcher, footer, skip link, layouts, 404, 7 route stubs (wave 3)
 - [x] 02-05-PLAN.md — Shared E2E route list, routing/CSP/axe on all routes, drift guard (wave 4)
-- [ ] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
+- [x] 02-06-PLAN.md — Landing page: hero, portal cards with marks, How it works, trust strip (wave 4)
 - [x] 02-07-PLAN.md — Audience template + For Renters / Investors / Agents pages (wave 4)
 - [x] 02-08-PLAN.md — Legal pages: privacy, terms, Fair Housing, data coverage (wave 4)
 - [x] 02-09-PLAN.md — Branded portal and settings placeholders (wave 4)

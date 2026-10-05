@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-07-PLAN.md
-last_updated: "2026-10-05T01:36:34.450Z"
+stopped_at: Completed 02-06-PLAN.md
+last_updated: "2026-10-05T01:38:06.359Z"
 progress:
   total_phases: 11
   completed_phases: 1
-  total_plans: 177
-  completed_plans: 17
+  total_plans: 187
+  completed_plans: 18
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 2 (Brand System, Marketing & Legal Pages) — EXECUTING
-Plan: 9 of 12
+Plan: 10 of 12
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Plan: 9 of 12
 | Phase 02 P09 | 4min | 2 tasks | 5 files |
 | Phase 02 P08 | 15min | 2 tasks | 6 files |
 | Phase 02 P07 | 6min | 2 tasks | 6 files |
+| Phase 02 P06 | 7min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -119,6 +120,7 @@ Recent decisions affecting current work:
 - [Phase 02]: Portal placeholders share one PortalPlaceholder copy table; Settings keeps the CSP fade probe with aria-expanded
 - [Phase 02]: Verbatim legal sentences that greps target live in script constants so Prettier cannot split them
 - [Phase 02]: Audience copy lives in typed $lib/content/audiences.ts; one AudiencePage template renders all three audience pages; both CTAs link to the portal root until Phase 4 sample mode
+- [Phase 02]: PortalCard whole-card link via ::after with card-level :has(a:focus-visible) ring; eslint disable/enable block for prop href
 
 ### Pending Todos
 
@@ -141,7 +143,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T01:36:34.444Z
-Stopped at: Completed 02-07-PLAN.md
+Last session: 2026-10-05T01:38:06.353Z
+Stopped at: Completed 02-06-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
