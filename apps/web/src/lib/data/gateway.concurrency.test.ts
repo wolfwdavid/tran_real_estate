@@ -39,7 +39,16 @@ describe('within one gateway', () => {
 		);
 		expect(spy.calls).toHaveLength(1);
 		expect(await db.ledger.count()).toBe(1);
-		expect(new Set(results.map((r) => r.requestKey)).size).toBe(1);
+		// Joined callers share the one in-flight promise, so they get the very same result.
+		expect(new Set(results).size).toBe(1);
+	});
+
+	it('a double-clicked refresh costs 1 call, not 2', async () => {
+		const spy = slowFetch();
+		const { gateway, db } = makeGateway({ fetch: spy.fetch, clock: () => T0 });
+		await Promise.all([gateway.refresh(rentals('74201')), gateway.refresh(rentals('74201'))]);
+		expect(spy.calls).toHaveLength(1);
+		expect(await db.ledger.count()).toBe(1);
 	});
 
 	it('serializes distinct spends: never two requests in flight', async () => {
