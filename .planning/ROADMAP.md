@@ -307,7 +307,33 @@ Plans:
   3. Agent can drag contacts through New → Contacted → Touring → Offer → Closed, create follow-up tasks, and see a due-today queue when opening the app.
   4. Agent can generate an AI follow-up email draft that includes their postal address and an opt-out line, passes the Fair Housing checker, and is sent only via copy or their own email client. Agent can import contacts from CSV and export them to CSV.
   5. Demo-credible: every agent CRM route works fully on sample contacts with no keys, spends zero RentCast calls with a real key present, has all AI copy passing the Fair Housing checker, and passes axe checks.
-**Plans**: TBD
+**Plans**: 26 plans (waves 1-8)
+- [ ] 08-01-PLAN.md - Core agent contracts, schemas, sample profile and normalization (wave 1)
+- [ ] 08-02-PLAN.md - Merged agent gateway ban, (public) boundary and transitive import-graph test (wave 1)
+- [ ] 08-03-PLAN.md - CSP img-src blob: two-file change, oracle tests and banned-terms scope (wave 1)
+- [ ] 08-04-PLAN.md - Brand color contrast assessment and logo byte sniffing (wave 1)
+- [ ] 08-05-PLAN.md - TRAN-LEAD v1 builder, tolerant parser and free-form extraction (wave 2)
+- [ ] 08-06-PLAN.md - Dedupe dry-run diff and inquiry link parameter contract (wave 2)
+- [ ] 08-07-PLAN.md - RFC 4180 CSV module and contacts column contract (wave 2)
+- [ ] 08-08-PLAN.md - State-aware disclosure composer and CAN-SPAM email footer (wave 2)
+- [ ] 08-09-PLAN.md - Stage transitions, due-today grouping and smart lists (wave 2)
+- [ ] 08-10-PLAN.md - Agent UI primitives, dropdown-menu copy-in and local dates (wave 2)
+- [ ] 08-11-PLAN.md - Agent shell: AgentNav, layout, skeleton routes and route lists (wave 2)
+- [ ] 08-12-PLAN.md - Dexie tables, profile and contacts repos, backup registration (wave 3)
+- [ ] 08-13-PLAN.md - Public inquiry page, Web3Forms sink and mocked E2E (wave 3)
+- [ ] 08-17-PLAN.md - ContactCard, DueBadge and SmartListFilter (wave 3)
+- [ ] 08-14-PLAN.md - Tasks repository and single-transaction import commit (wave 4)
+- [ ] 08-15-PLAN.md - Sample contacts, quick add with duplicates, empty state and notice (wave 4)
+- [ ] 08-16-PLAN.md - Profile details and live disclosure preview (wave 4)
+- [ ] 08-18-PLAN.md - Contacts page and CSV export (wave 5)
+- [ ] 08-19-PLAN.md - Pipeline board with Move menu and native drag and drop (wave 5)
+- [ ] 08-20-PLAN.md - Paste and CSV import with dry-run review (wave 5)
+- [ ] 08-21-PLAN.md - Due-today queue, agent home and task rows (wave 5)
+- [ ] 08-22-PLAN.md - Logo upload, brand colors and brand preview (wave 5)
+- [ ] 08-23-PLAN.md - Contact detail: tasks, notes, activity, stage, delete (wave 6)
+- [ ] 08-24-PLAN.md - Inquiry share-link builder (wave 6)
+- [ ] 08-25-PLAN.md - AI follow-up composer with CAN-SPAM footer (wave 7)
+- [ ] 08-26-PLAN.md - Demo-credibility sweep, HUMAN-UAT and full verify (wave 8)
 **Research flag**: YES. Needs `/gsd:research-phase`: Web3Forms free-tier limits, captcha and domain-restriction options, whether the `TRAN-LEAD v1` payload survives major email clients, and the Formspree fallback.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 8`.
 **Human action required**: The owner creates a free Web3Forms access key to verify end-to-end lead delivery.
