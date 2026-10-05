@@ -37,7 +37,12 @@ describe('buildSnapshot', () => {
 		const s = buildSnapshot(null, [obs('a', 1000)], { takenAt: T1, truncated: false });
 		expect(s.takenAt).toBe(T1);
 		expect(s.truncated).toBe(false);
-		expect(s.items.a).toEqual({ price: 1000, status: 'Active', removedDate: null, firstSeenAt: T1 });
+		expect(s.items.a).toEqual({
+			price: 1000,
+			status: 'Active',
+			removedDate: null,
+			firstSeenAt: T1
+		});
 	});
 
 	test('carries firstSeenAt over for kept items and stamps new ones', () => {

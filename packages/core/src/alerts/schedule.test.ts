@@ -13,7 +13,11 @@ import {
 const NOW = 1_760_000_000_000;
 const HOUR = 3_600_000;
 
-const cand = (id: string, lastRunAt: number | null, extra: Partial<DueCandidate> = {}): DueCandidate => ({
+const cand = (
+	id: string,
+	lastRunAt: number | null,
+	extra: Partial<DueCandidate> = {}
+): DueCandidate => ({
 	id,
 	lastRunAt,
 	claimedAt: null,
