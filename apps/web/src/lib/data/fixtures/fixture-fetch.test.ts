@@ -256,3 +256,141 @@ describe('SAMPLE_METROS', () => {
 		);
 	});
 });
+
+const RENT_AVM = '/v1/avm/rent/long-term';
+const VALUE_AVM = '/v1/avm/value';
+const MARKETS = '/v1/markets';
+const SALE = sales[0]!;
+const RENTAL_ONLY = rentals.find(
+	(r) => !sales.some((s) => s.formattedAddress === r.formattedAddress)
+)!;
+const q = (address: string) => `address=${encodeURIComponent(address)}`;
+
+describe('createFixtureFetch: estimates', () => {
+	it('answers a rent estimate with subject property and 5 rebased comparables', async () => {
+		const now = ANCHOR + 30 * DAY;
+		const { res, body } = await call(`${RENT_AVM}?${q(SALE.formattedAddress)}`, now);
+		expect(res.status).toBe(200);
+		const est = body as Row;
+		for (const key of ['rent', 'rentRangeLow', 'rentRangeHigh', 'latitude', 'longitude']) {
+			expect(typeof est[key]).toBe('number');
+		}
+		const subject = est.subjectProperty as Row;
+		expect(subject.formattedAddress).toBe(SALE.formattedAddress);
+		for (const key of ['bedrooms', 'bathrooms', 'squareFootage', 'propertyType']) {
+			expect(subject).toHaveProperty(key);
+		}
+		const comps = est.comparables as Row[];
+		expect(comps).toHaveLength(5);
+		comps.forEach((comp, i) => {
+			for (const key of [
+				'id',
+				'formattedAddress',
+				'price',
+				'listedDate',
+				'lastSeenDate',
+				'daysOld',
+				'distance',
+				'correlation',
+				'bedrooms',
+				'bathrooms',
+				'squareFootage',
+				'propertyType',
+				'status'
+			]) {
+				expect(comp).toHaveProperty(key);
+			}
+			expect(comp.id).not.toBe(SALE.id);
+			expect(comp.correlation).toBe(Math.round((0.9 - 0.02 * i) * 100) / 100);
+			const original = rentals.find((r) => r.id === comp.id)!;
+			expect(comp.lastSeenDate).toBe(shifted(original.lastSeenDate, 30 * DAY));
+			expect(comp.daysOld).toBe(Math.floor((now - Date.parse(comp.lastSeenDate as string)) / DAY));
+			const d = miles(SALE.latitude, SALE.longitude, original.latitude, original.longitude);
+			expect(comp.distance).toBe(Math.round(d * 100) / 100);
+		});
+	});
+
+	it('matches addresses ignoring case and repeated spaces, and points within 0.0005 degrees', async () => {
+		const messy = SALE.formattedAddress.toUpperCase().replace(/ /g, '  ');
+		const loose = await call(`${RENT_AVM}?${q(messy)}`);
+		expect(loose.res.status).toBe(200);
+		expect(((loose.body as Row).subjectProperty as Row).formattedAddress).toBe(
+			SALE.formattedAddress
+		);
+
+		const point = await call(
+			`${RENT_AVM}?latitude=${SALE.latitude + 0.0003}&longitude=${SALE.longitude - 0.0003}`
+		);
+		expect(point.res.status).toBe(200);
+		expect(((point.body as Row).subjectProperty as Row).formattedAddress).toBe(
+			SALE.formattedAddress
+		);
+	});
+
+	it('answers not-found inside coverage and outside-coverage elsewhere', async () => {
+		const unknown = await call(`${RENT_AVM}?${q('1 Nowhere St, Harlow Springs, OK 74201')}`);
+		expect(unknown.res.status).toBe(404);
+		expect((unknown.body as Row).error).toBe('resource/not-found');
+
+		const away = await call(`${RENT_AVM}?${q('100 Congress Ave, Austin, TX 78701')}`);
+		expect(away.res.status).toBe(404);
+		expect((away.body as Row).error).toBe('sample/outside-coverage');
+	});
+
+	it('answers a value estimate for a sale address with 5 sale comparables', async () => {
+		const { res, body } = await call(`${VALUE_AVM}?${q(SALE.formattedAddress)}`);
+		expect(res.status).toBe(200);
+		const est = body as Row;
+		for (const key of ['price', 'priceRangeLow', 'priceRangeHigh']) {
+			expect(typeof est[key]).toBe('number');
+		}
+		expect((est.subjectProperty as Row).formattedAddress).toBe(SALE.formattedAddress);
+		const comps = est.comparables as Row[];
+		expect(comps).toHaveLength(5);
+		const saleIds = new Set(sales.map((s) => s.id));
+		for (const comp of comps) {
+			expect(saleIds.has(comp.id as string)).toBe(true);
+			expect(comp.id).not.toBe(SALE.id);
+		}
+
+		const rentalOnly = await call(`${VALUE_AVM}?${q(RENTAL_ONLY.formattedAddress)}`);
+		expect(rentalOnly.res.status).toBe(404);
+	});
+});
+
+describe('createFixtureFetch: markets', () => {
+	it('returns rental data only, trimmed to historyRange, ending the month before now', async () => {
+		const now = ANCHOR + 400 * DAY; // 2027-11-05
+		const { res, body } = await call(
+			`${MARKETS}?zipCode=74201&dataType=Rental&historyRange=12`,
+			now
+		);
+		expect(res.status).toBe(200);
+		const market = body as Row;
+		expect(market.zipCode).toBe('74201');
+		expect(market).not.toHaveProperty('saleData');
+		const keys = Object.keys((market.rentalData as Row).history as Row).sort();
+		expect(keys).toHaveLength(12);
+		expect(keys.at(-1)).toBe('2027-10');
+		expect(keys[0]).toBe('2026-11');
+	});
+
+	it('includes both sides for dataType=All or absent, with a default 12-month history', async () => {
+		for (const path of [`${MARKETS}?zipCode=74201&dataType=All`, `${MARKETS}?zipCode=74201`]) {
+			const { res, body } = await call(path);
+			expect(res.status).toBe(200);
+			const market = body as Row;
+			expect(Object.keys((market.saleData as Row).history as Row)).toHaveLength(12);
+			expect(Object.keys((market.rentalData as Row).history as Row)).toHaveLength(12);
+		}
+		const sale = await call(`${MARKETS}?zipCode=74201&dataType=Sale&historyRange=3`);
+		expect(sale.body).not.toHaveProperty('rentalData');
+		expect(Object.keys(((sale.body as Row).saleData as Row).history as Row)).toHaveLength(3);
+	});
+
+	it('never succeeds for the key-probe ZIP (zipCode=00000)', async () => {
+		const { res, body } = await call(`${MARKETS}?zipCode=00000`);
+		expect(res.status).toBe(404);
+		expect((body as Row).error).toBe('sample/outside-coverage');
+	});
+});
