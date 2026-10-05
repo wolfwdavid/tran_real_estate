@@ -1,0 +1,300 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { BackupError, SyncableSchema, parseBackup } from '@tran/core';
+import type { Finding } from '@tran/core/fair-housing';
+import { fakeKey } from '../../../../tests/support/fake-keys';
+import { _resetBackupRegistry, listBackupTables } from '$lib/storage/backup-registry';
+import { buildBackupText } from '$lib/storage/backup';
+import { TranDb } from '$lib/storage/db';
+import { META, getMeta } from '$lib/storage/meta';
+import { freshIdb } from '$lib/storage/test-utils';
+import {
+	AI_ARTIFACTS_LABEL,
+	AI_ARTIFACTS_TABLE,
+	AI_STORES,
+	createArtifactRepo,
+	toStoredFindings,
+	type AiArtifact
+} from './artifacts';
+
+const V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const HASH = 'a'.repeat(64);
+const T0 = Date.parse('2026-10-05T12:00:00.000Z');
+
+/** Deterministic clock: each call advances one minute from T0. */
+function clock(start = T0) {
+	let t = start;
+	return () => {
+		const d = new Date(t);
+		t += 60_000;
+		return d;
+	};
+}
+
+const FINDING: Finding = {
+	id: '10-17',
+	start: 10,
+	end: 17,
+	severity: 'block',
+	phrase: 'no kids',
+	members: [
+		{
+			entryId: 'familial.no-kids',
+			checker: 'fair-housing',
+			category: 'familial-status',
+			categoryLabel: 'Familial status',
+			scope: 'federal',
+			severity: 'block',
+			explanation: 'Excludes families with children.',
+			alternative: 'all households welcome',
+			source: 'HUD',
+			phrase: 'no kids',
+			start: 10,
+			end: 17
+		},
+		{
+			entryId: 'familial.adults-only',
+			checker: 'fair-housing',
+			category: 'familial-status',
+			categoryLabel: 'Familial status',
+			scope: 'federal',
+			severity: 'warn',
+			explanation: 'x',
+			alternative: '',
+			source: 'HUD',
+			phrase: 'no kids',
+			start: 10,
+			end: 17
+		}
+	]
+};
+
+const input = (o: Partial<Parameters<ReturnType<typeof createArtifactRepo>['create']>[0]> = {}) => ({
+	feature: 'demo',
+	promptId: 'shared/demo@1',
+	provider: 'anthropic' as const,
+	model: 'claude-sonnet-5-5',
+	sample: false,
+	inputHash: HASH,
+	text: 'A bright, no kids condo.',
+	findings: [FINDING],
+	...o
+});
+
+const ARTIFACT_KEYS = [
+	'id',
+	'ownerId',
+	'createdAt',
+	'updatedAt',
+	'schemaVersion',
+	'feature',
+	'promptId',
+	'provider',
+	'model',
+	'sample',
+	'inputHash',
+	'text',
+	'findings',
+	'status',
+	'sentAt'
+].sort();
+
+let db: TranDb;
+
+beforeEach(async () => {
+	_resetBackupRegistry();
+	db = new TranDb(freshIdb());
+	await db.open();
+});
+
+afterEach(() => {
+	db.close();
+	_resetBackupRegistry();
+});
+
+describe('aiArtifacts table', () => {
+	it('declares the aiArtifacts store with the feature+createdAt index', () => {
+		expect(AI_ARTIFACTS_TABLE).toBe('aiArtifacts');
+		expect(AI_STORES).toEqual({ aiArtifacts: 'id, feature, [feature+createdAt], status, updatedAt' });
+		expect(db.tables.map((t) => t.name)).toContain('aiArtifacts');
+	});
+
+	it("is registered for backup as 'AI drafts'", () => {
+		expect(AI_ARTIFACTS_LABEL).toBe('AI drafts');
+		expect(listBackupTables()).toContainEqual({ name: 'aiArtifacts', label: 'AI drafts' });
+	});
+});
+
+describe('toStoredFindings', () => {
+	it('keeps phrase, severity and the member entry ids only', () => {
+		expect(toStoredFindings([FINDING])).toEqual([
+			{
+				phrase: 'no kids',
+				severity: 'block',
+				entryIds: ['familial.no-kids', 'familial.adults-only']
+			}
+		]);
+		expect(toStoredFindings([])).toEqual([]);
+	});
+});
+
+describe('createArtifactRepo', () => {
+	it('create() stamps a Syncable draft', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input());
+		expect(a.id).toMatch(V4);
+		expect(a.ownerId).toBe('local');
+		expect(a.schemaVersion).toBe(1);
+		expect(a.status).toBe('draft');
+		expect(a.sentAt).toBeNull();
+		expect(a.deletedAt).toBeUndefined();
+		expect(a.createdAt).toBe(new Date(T0).toISOString());
+		expect(a.updatedAt).toBe(a.createdAt);
+		expect(a.promptId).toBe('shared/demo@1');
+		expect(a.findings).toEqual(toStoredFindings([FINDING]));
+		expect(SyncableSchema.safeParse(a).success).toBe(true);
+		expect(await repo.get(a.id)).toEqual(a);
+		expect(await getMeta(db, META.firstRecordAt)).toBe(a.createdAt);
+	});
+
+	it('stores exactly the artifact keys: never inputs, prompts or key material', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const extra = {
+			...input(),
+			inputs: { client: 'Pat' },
+			system: 'sys',
+			user: 'raw prompt',
+			key: fakeKey('anthropic'),
+			apiKey: fakeKey('openai')
+		};
+		const a = await repo.create(extra);
+		const stored = (await db.table(AI_ARTIFACTS_TABLE).get(a.id)) as Record<string, unknown>;
+		expect(Object.keys(stored).sort()).toEqual(ARTIFACT_KEYS);
+		for (const k of ['inputs', 'system', 'user', 'key', 'apiKey']) {
+			expect(stored).not.toHaveProperty(k);
+		}
+		expect(JSON.stringify(stored)).not.toContain(fakeKey('anthropic'));
+	});
+
+	it('rejects an inputHash that is not a SHA-256 hex digest (no raw input can slip in)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		await expect(repo.create(input({ inputHash: 'Pat Doe, pat@example.com' }))).rejects.toThrow(
+			'artifact-input-hash'
+		);
+		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(0);
+	});
+
+	it('listByFeature: newest first, ten per page, other features never appear', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const made: AiArtifact[] = [];
+		for (let i = 0; i < 12; i++) made.push(await repo.create(input({ text: `draft ${i}` })));
+		await repo.create(input({ feature: 'other', text: 'elsewhere' }));
+
+		const page1 = await repo.listByFeature('demo');
+		expect(page1).toHaveLength(10);
+		expect(page1.map((a) => a.text)).toEqual(
+			made
+				.slice(2)
+				.reverse()
+				.map((a) => a.text)
+		);
+		const page2 = await repo.listByFeature('demo', { offset: 10 });
+		expect(page2.map((a) => a.text)).toEqual(['draft 1', 'draft 0']);
+		expect((await repo.listByFeature('demo', { limit: 3 })).map((a) => a.text)).toEqual([
+			'draft 11',
+			'draft 10',
+			'draft 9'
+		]);
+		expect(await repo.countByFeature('demo')).toBe(12);
+		expect(await repo.countByFeature('other')).toBe(1);
+		expect((await repo.listByFeature('other')).map((a) => a.text)).toEqual(['elsewhere']);
+	});
+
+	it("setStatus('sent') sets sentAt; leaving 'sent' clears it", async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input());
+		const d = new Date('2026-10-05T13:00:00.000Z');
+		await repo.setStatus(a.id, 'sent', d);
+		const sent = await repo.get(a.id);
+		expect(sent?.status).toBe('sent');
+		expect(sent?.sentAt).toBe(d.toISOString());
+		expect(sent?.updatedAt).toBe(d.toISOString());
+
+		const d2 = new Date('2026-10-05T14:00:00.000Z');
+		await repo.setStatus(a.id, 'acknowledged', d2);
+		const ack = await repo.get(a.id);
+		expect(ack?.status).toBe('acknowledged');
+		expect(ack?.sentAt).toBeNull();
+		expect(ack?.updatedAt).toBe(d2.toISOString());
+		expect(ack?.createdAt).toBe(a.createdAt);
+	});
+
+	it('setStatus rejects an unknown status', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input());
+		await expect(
+			repo.setStatus(a.id, 'published' as unknown as 'sent', new Date(T0 + 1))
+		).rejects.toThrow('artifact-status');
+		expect((await repo.get(a.id))?.status).toBe('draft');
+	});
+
+	it('updateText changes text and findings and bumps updatedAt', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input());
+		await repo.updateText(a.id, 'A bright condo. All households welcome.', []);
+		const b = await repo.get(a.id);
+		expect(b?.text).toBe('A bright condo. All households welcome.');
+		expect(b?.findings).toEqual([]);
+		expect(b?.updatedAt).toBe(new Date(T0 + 60_000).toISOString());
+		expect(b?.createdAt).toBe(a.createdAt);
+	});
+
+	it('softDelete tombstones: hidden from list and count, still readable with deletedAt', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input({ text: 'keep' }));
+		const b = await repo.create(input({ text: 'drop' }));
+		const at = new Date('2026-10-05T15:00:00.000Z');
+		await repo.softDelete(b.id, at);
+		expect((await repo.listByFeature('demo')).map((x) => x.id)).toEqual([a.id]);
+		expect(await repo.countByFeature('demo')).toBe(1);
+		const dead = await repo.get(b.id);
+		expect(dead?.deletedAt).toBe(at.toISOString());
+		expect(dead?.updatedAt).toBe(at.toISOString());
+	});
+
+	it('writes to a missing id are no-ops', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const missing = '00000000-0000-4000-8000-000000000999';
+		await repo.updateText(missing, 'x', []);
+		await repo.setStatus(missing, 'sent', new Date(T0));
+		await repo.softDelete(missing, new Date(T0));
+		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(0);
+	});
+});
+
+describe('backup export', () => {
+	it('includes the artifact under aiArtifacts and passes the key-free scan', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(input());
+		const out = await buildBackupText(db, {
+			now: new Date(T0 + 3_600_000),
+			knownSecrets: [fakeKey('anthropic')]
+		});
+		const env = JSON.parse(out.text) as { tables: Record<string, unknown[]> };
+		expect(env.tables.aiArtifacts).toEqual([a]);
+		expect(out.counts.aiArtifacts).toBe(1);
+		const parsed = parseBackup(out.text, {
+			registeredTables: listBackupTables().map((t) => t.name)
+		});
+		expect(parsed.envelope.tables.aiArtifacts).toHaveLength(1);
+	});
+
+	it('a key pasted into a draft blocks the export (key-material)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		await repo.create(input({ text: `use ${fakeKey('openai')} here` }));
+		const err = await buildBackupText(db, { now: new Date(T0), knownSecrets: [] }).catch(
+			(e: unknown) => e
+		);
+		expect(err).toBeInstanceOf(BackupError);
+		expect((err as BackupError).code).toBe('key-material');
+	});
+});
