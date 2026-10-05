@@ -112,7 +112,22 @@ export function checkHtml(relPath, html) {
 	return errors;
 }
 
-/** Returns [] when every carrier file exists and every .html page passes checkHtml. */
+const DATA_URL_CSS = /url\(\s*['"]?\s*data:/i;
+const DATA_URL_ATTR = /\b(?:src|href|srcset|poster)\s*=\s*["']?\s*data:/i;
+
+/** Returns [] unless built CSS/HTML embeds a data: URI (img-src/font-src fall back to 'self'). */
+export function checkAssetText(relPath, text) {
+	const errors = [];
+	if (DATA_URL_CSS.test(text)) {
+		errors.push(`${relPath}: data: URI in url() (set build.assetsInlineLimit: 0)`);
+	}
+	if (relPath.endsWith('.html') && DATA_URL_ATTR.test(text)) {
+		errors.push(`${relPath}: data: URI in an attribute`);
+	}
+	return errors;
+}
+
+/** Returns [] when every carrier file exists, every .html page passes checkHtml and no built .css/.html embeds a data: URI. */
 export function checkBuild(dir) {
 	const errors = [];
 	for (const f of ['.nojekyll', 'frame-guard.js', ...EXPECTED_PAGES]) {
@@ -123,6 +138,10 @@ export function checkBuild(dir) {
 	for (const file of pages) {
 		const rel = relative(dir, file).split(sep).join('/');
 		errors.push(...checkHtml(rel, readFileSync(file, 'utf8')));
+	}
+	for (const file of walk(dir).filter((f) => f.endsWith('.css') || f.endsWith('.html'))) {
+		const rel = relative(dir, file).split(sep).join('/');
+		errors.push(...checkAssetText(rel, readFileSync(file, 'utf8')));
 	}
 	return errors;
 }
