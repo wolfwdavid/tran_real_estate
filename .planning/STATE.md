@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 05 (AI Layer: Providers, Streaming & Fair Housing Guardrails) — EXECUTING
-Plan: 12 of 16 (waves 1-3 complete; next wave 4: 05-10, 05-11)
+Plan: 12 of 16 (waves 1-4 complete; next wave 5: 05-13, 05-14)
 
 ## Performance Metrics
 
