@@ -45,6 +45,13 @@ Validated in Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures
 - ✓ DATA-04 — Cache-first reads return the original "as of" stamp and spend 0; in-flight dedupe and a serial queue; explicit "Refresh (1 call)" bypass (Phase 4)
 - ✓ DATA-05 — Locked error taxonomy from `@tran/core/request` rendered by `GatewayError` with specific copy for invalid key, restricted key, rate limit (with countdown), budget cap reached and no results; "Test key (0 calls)" in Settings reports valid / invalid / restricted without a billed call (Phase 4)
 
+Validated in Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails (2026-10-05) — 4/4 must-haves verified against the codebase; `pnpm verify` green in one run (2541 unit tests including real-Chromium component tests, 566 browser tests on both base paths with every provider mocked, CSP oracle on 14+14 pages, secret and real-data scans, actionlint). Ten owner-gated checks (H1–H10: deployed-origin CORS per provider, real spend-limited keys, model-ID recheck by 2026-10-18, legal review of the lexicon wording) are parked in `05-HUMAN-UAT.md`.
+
+- ✓ AI-01 — Anthropic, OpenAI, Gemini and OpenRouter raw-`fetch` streaming adapters (no SDKs; Gemini key in the `x-goog-api-key` header only) behind one `LlmProvider` port; `runGeneration` streams with a working Stop that keeps partial text; "Test connection" distinguishes ok / cors-blocked / auth / quota / network; a keyless Fixture provider streams pre-linted sample output; "AI drafting" is Settings section 3 (Phase 5)
+- ✓ AI-02 — Deterministic 41-entry Fair Housing lexicon (FHA §3604(c) classes plus state additions, each entry sourced) with a ReDoS-guarded Unicode matcher; 42 bad / 40 neutral suite rows, every entry proven load-bearing by leave-one-out; `block` findings disable all exits until the alternative is applied, `warn` findings need an explicit acknowledgement; inline highlights with popover explanation and one-click "Use alternative" (Phase 5)
+- ✓ AI-03 — Prompt inputs pass through `redactPii` with a "What will be sent" preview; a Gemini client-data dialog (Cancel default, session-only acknowledgement) plus an adapter-level `consent-required` guard; E2E proves cancel sends zero requests (Phase 5)
+- ✓ AI-04 — `GenerationPanel` exposes exactly Copy, Open in email (`mailto:`) and Mark as sent; enforced by an ESLint boundary for `lib/ai/**`, a TypeScript import-graph walk with a planted non-vacuity case, and a single-implementation assertion (`mailto:` and `navigator.clipboard` appear only in `exits.ts`) (Phase 5)
+
 ### Active
 
 **Platform (shared)**
@@ -53,7 +60,7 @@ Validated in Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures
 - [x] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key) — shipped in Phase 4 (sample gateway + fixtures; the "Getting started" onboarding section lands in Phase 10)
 - [x] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap) — shipped in Phase 4
 - [x] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle) — shipped in Phase 3
-- [ ] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers
+- [x] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers — checker shipped in Phase 5, disclaimers on the Phase 2 legal pages
 - [ ] Warm editorial visual identity (warm palette, elegant serif headings, cinematic imagery) designed with UI/UX Pro Max
 - [x] GTM surface: marketing landing pages per audience that explain the value and drive usage — shipped in Phase 2 (`/`, `/for-renters/`, `/for-investors/`, `/for-agents/`)
 
@@ -153,4 +160,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-05 after Phase 4 completion*
+*Last updated: 2026-10-05 after Phase 5 completion*
