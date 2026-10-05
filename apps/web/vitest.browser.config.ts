@@ -20,6 +20,11 @@ if (process.platform === 'win32') {
 
 export default defineConfig({
 	plugins: [svelte()],
+	// Pre-bundle bits-ui up front. On a cold Vite cache it was discovered and re-optimized mid-run,
+	// which loaded a second copy of the Svelte runtime and failed every dialog test with effect_orphan.
+	optimizeDeps: {
+		include: ['bits-ui']
+	},
 	resolve: {
 		alias: {
 			$lib: fileURLToPath(new URL('./src/lib', import.meta.url)),

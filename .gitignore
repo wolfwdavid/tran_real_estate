@@ -13,3 +13,7 @@ test-results/
 playwright-report/
 .tools/
 **/__lintfix__/
+
+# Browser component-test artifacts (failure screenshots, attachments)
+apps/web/.vitest-attachments/
+**/__screenshots__/
