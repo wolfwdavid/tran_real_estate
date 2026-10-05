@@ -92,8 +92,8 @@ created: 2026-10-04
 | 4-23-01 | 23 | 7 | DATA-05 | unit | `corepack pnpm vitest run --project web key-test runtime` | ❌ W0 | ⬜ pending |
 | 4-23-02 | 23 | 7 | DATA-02, DATA-03 | component + axe | `corepack pnpm vitest run --project web-browser RentCastUsageSection` | ❌ W0 | ⬜ pending |
 | 4-23-03 | 23 | 7 | DATA-02, DATA-05 | build + E2E | `corepack pnpm build:root && corepack pnpm build:sub && corepack pnpm csp:assert && corepack pnpm test:e2e` | ✅ | ⬜ pending |
-| 4-24-01 | 24 | 8 | DATA-01, DATA-02, DATA-03 | E2E + axe (root, sub) | `corepack pnpm --filter web exec playwright test data-status` | ❌ W0 | ⬜ pending |
-| 4-24-02 | 24 | 8 | DATA-02, DATA-03, DATA-05 | E2E + axe (root, sub) | `corepack pnpm test:e2e` | ❌ W0 | ⬜ pending |
+| 4-24-01 | 24 | 8 | DATA-01, DATA-02, DATA-03 | E2E + axe (root, sub) | `corepack pnpm --filter web exec playwright test data-status` | ✅ | ✅ green |
+| 4-24-02 | 24 | 8 | DATA-02, DATA-03, DATA-05 | E2E + axe (root, sub) | `corepack pnpm test:e2e` | ✅ | ✅ green |
 | 4-25-01 | 25 | 9 | DATA-01..05 | doc | `grep -c "^| U" .planning/phases/04-data-layer-rentcast-gateway-budget-guard-demo-fixtures/04-HUMAN-UAT.md` (= 14) | ❌ W0 | ⬜ pending |
 | 4-25-02 | 25 | 9 | DATA-01..05 | full gate | `corepack pnpm verify` | ✅ | ⬜ pending |
 

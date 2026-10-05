@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-23-PLAN.md
-last_updated: "2026-10-05T12:20:14.306Z"
+stopped_at: Completed 04-24-PLAN.md
+last_updated: "2026-10-05T12:40:07.721Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 61
+  completed_plans: 62
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 23 of 25 (waves 1-7 complete; wave 8: 04-24 + key-test noResults fix; next wave 9: 04-25)
+Plan: 24 of 25 (waves 1-7 complete; wave 8: 04-24 + key-test noResults fix; next wave 9: 04-25)
 
 ## Performance Metrics
 
@@ -107,6 +107,7 @@ Plan: 23 of 25 (waves 1-7 complete; wave 8: 04-24 + key-test noResults fix; next
 | Phase 04 P21 | 15min | 2 tasks | 3 files |
 | Phase 04 P22 | 25min | 2 tasks | 13 files |
 | Phase 04 P23 | 13 min | 3 tasks | 12 files |
+| Phase 04 P24 | 40min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -238,6 +239,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-22: AppNotice is now main's second child on portal routes (Data source bar first); Phase 3 notice E2E specs updated
 - [Phase 04]: 04-23: RentCast key tester calls runtime.testKey(key) (waits for gateway, refreshes usage); bad-format maps to 'invalid' for the Phase 3 hook; registered only while Settings is mounted
 - [Phase 04]: 04-23: Test key uses aria-disabled while running so focus stays on the button
+- [Phase 04]: 04-24: data runtime start() awaits KeyPort.ready (connectRentCastKey) before resolving mode; fixes keyed sessions starting in sample mode and the on-open alerts pass consuming due searches against fixtures
+- [Phase 04]: 04-24: E2E seeds due saved searches from the home page (no DataShell) and new data specs use reducedMotion reduce (smooth scroll loses clicks)
 
 ### Pending Todos
 
@@ -260,7 +263,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T12:20:14.301Z
-Stopped at: Completed 04-23-PLAN.md
+Last session: 2026-10-05T12:40:07.716Z
+Stopped at: Completed 04-24-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
