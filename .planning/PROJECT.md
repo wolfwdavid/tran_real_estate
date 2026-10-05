@@ -20,17 +20,25 @@ Validated in Phase 1: Foundation, Origin & Security Baseline (2026-09-22) — al
 - ✓ FND-04 — Typecheck, lint, unit, E2E and axe gates run locally and in the CI workflow; Pages deploy job fully written but gated on `PAGES_ENABLED` (Phase 1)
 - ✓ FND-05 — Pre-commit gitleaks + real-data/CoStar guard proven to block staged secrets and PII; CI scans full history (Phase 1)
 
+Validated in Phase 2: Brand System, Marketing & Legal Pages (2026-10-05) — 5/5 must-haves verified against the codebase; `pnpm verify` green in one run (205 unit tests, 306 browser tests on both base paths, CSP oracle on 14+14 pages, banned-terms gate, secret and real-data scans, actionlint). Three owner-gated items (375px aesthetic pass, professional legal review, live-origin checks) are parked in `02-HUMAN-UAT.md`.
+
+- ✓ BRND-01 — Warm-editorial landing (Fraunces + Inter self-hosted, token palette with WCAG-AA contrast gate) routes to the three portals; no third-party requests (Phase 2)
+- ✓ BRND-02 — For Renters / Investors / Agents pages from one typed content file and shared template; banned-terms gate in `verify` and CI with a non-vacuity test (Phase 2)
+- ✓ BRND-03 — Every page passes axe WCAG 2.2 AA at 1280 and 375px, with the menu open and on the 404 page; no horizontal scroll (Phase 2)
+- ✓ BRND-04 — Privacy, Terms (not a brokerage; not investment, legal or tax advice), Fair Housing and Data-coverage pages reachable from every page's footer (Phase 2)
+- ✓ BRND-05 — Portals nav with prerendered `aria-current` on every app page; disclosure menu below 640px with keyboard/Escape behaviour (Phase 2)
+
 ### Active
 
 **Platform (shared)**
-- [x] One SvelteKit app, statically built for GitHub Pages under a dedicated free GitHub organization (own origin `tranrealestate.github.io`), with placeholder routes for the landing page and Renter / Investor / Agent portals — skeleton shipped in Phase 1; real pages arrive in Phase 2
+- [x] One SvelteKit app, statically built for GitHub Pages under a dedicated free GitHub organization (own origin `tranrealestate.github.io`), with the landing page, audience pages, legal pages and branded portal placeholders — skeleton in Phase 1, real marketing surface in Phase 2
 - [ ] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini); keys stored only in that browser, sent only to the provider
 - [ ] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key)
 - [ ] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap)
 - [ ] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle)
 - [ ] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers
 - [ ] Warm editorial visual identity (warm palette, elegant serif headings, cinematic imagery) designed with UI/UX Pro Max
-- [ ] GTM surface: marketing landing pages per audience that explain the value and drive usage
+- [x] GTM surface: marketing landing pages per audience that explain the value and drive usage — shipped in Phase 2 (`/`, `/for-renters/`, `/for-investors/`, `/for-agents/`)
 
 **Renter portal**
 - [ ] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit"
@@ -128,4 +136,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-22 after Phase 1 completion*
+*Last updated: 2026-10-05 after Phase 2 completion*
