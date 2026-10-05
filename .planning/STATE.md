@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-04-PLAN.md
-last_updated: "2026-10-05T22:33:09.224Z"
+stopped_at: Completed 06-08-PLAN.md
+last_updated: "2026-10-05T22:45:09.000Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 85
+  completed_plans: 86
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 6 of 22 (wave 1 complete; next wave 2: 06-07..06-10)
+Plan: 7 of 22 (wave 1 complete; next wave 2: 06-07..06-10)
 
 ## Performance Metrics
 
@@ -131,6 +131,7 @@ Plan: 6 of 22 (wave 1 complete; next wave 2: 06-07..06-10)
 | Phase 06 P05 | 20min | 2 tasks | 5 files |
 | Phase 06 P06 | 35min | 2 tasks | 13 files |
 | Phase 06 P04 | 35min | 2 tasks | 14 files |
+| Phase 06 P08 | 15min | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -306,6 +307,7 @@ Recent decisions affecting current work:
 - [Phase 06]: renter/outreach.v1 registered with id 'renter/outreach.v1' v1 (stored promptId renter/outreach.v1@1); artifacts gain optional subjectId + listBySubject/countBySubject (07-04 signatures), no Dexie bump
 - [Phase 06]: 06-04: img-src is exactly 'self' + https://tile.openstreetmap.org in both CSP files (EXACT set); Phase 8 appends blob: to both
 - [Phase 06]: 06-04: PortalSwitcher marks a portal aria-current=true on its sub-pages (page stays exact-match); styled via aria-[current]:
+- [Phase 06]: 06-08: renter records extend SyncableSchema; changeStatus takes epoch ms but writes ISO updatedAt; search meta is a companion row sharing the Phase 4 savedSearches id; deletedAt null rejected (restore must delete the field)
 
 ### Pending Todos
 
@@ -328,7 +330,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T22:33:09.218Z
-Stopped at: Completed 06-04-PLAN.md
+Last session: 2026-10-05T22:45:08.995Z
+Stopped at: Completed 06-08-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
