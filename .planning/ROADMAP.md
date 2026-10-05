@@ -170,9 +170,9 @@ Plans:
 - [x] 04-06-PLAN.md — fixture guard rules + planted-PII proof, seeded fixture generator, drift check in verify/CI
 - [x] 04-07-PLAN.md — ESLint: ban spends in $effect, data layer only through $lib/data
 - [ ] 04-08-PLAN.md — web-browser Vitest project (Chromium + axe) spike, CI Chromium order
-- [ ] 04-09-PLAN.md — RentCast GET client (only fetch site) + zero-cost key probe
+- [x] 04-09-PLAN.md — RentCast GET client (only fetch site) + zero-cost key probe
 - [x] 04-10-PLAN.md — tolerant zod/mini schemas + mappers, proven on fixtures
-- [ ] 04-11-PLAN.md — transactional ledger reserve/settle, single-use grants, cache repo, cross-connection race proof
+- [x] 04-11-PLAN.md — transactional ledger reserve/settle, single-use grants, cache repo, cross-connection race proof
 - [ ] 04-12-PLAN.md — fixture fetch for every endpoint with date rebasing at load
 - [ ] 04-13-PLAN.md — live DataGateway: cache/dedupe/peek/by-id/cost + 60-calls-block-#41 and identical-repeat tests
 - [ ] 04-14-PLAN.md — ProvenanceChip/Row, CostLabel, NewSinceBadge, sample-chip helper
