@@ -47,9 +47,9 @@ created: 2026-10-04
 | 7-03-01 | 03 | 1 | INV-01..06 | unit (sub-nav current item) + check | `corepack pnpm vitest run --project web nav && corepack pnpm check && corepack pnpm lint` | ❌ W0 | ⬜ pending |
 | 7-03-02 | 03 | 1 | INV-01..06 | unit (banned-terms, CSP oracle) + build oracle | `corepack pnpm vitest run --project scripts banned-terms assert-csp && corepack pnpm banned && corepack pnpm build:root && corepack pnpm build:sub && corepack pnpm csp:assert` | ✅ extend | ⬜ pending |
 | 7-03-03 | 03 | 1 | INV-01..06 | E2E (route contract, ?query safety, routing/CSP/axe on 9 new routes) | `corepack pnpm --filter web exec playwright test tests/e2e/investor/routes routing csp a11y` | ❌ W0 (helpers.ts, routes.spec.ts) | ⬜ pending |
-| 7-04-01 | 04 | 1 | INV-06 | unit (panel gating merges post-check findings) | `corepack pnpm vitest run --project web panel-controller` | ✅ extend | ⬜ pending |
-| 7-04-02 | 04 | 1 | INV-06 | SSR (exits still 3; Number check group; gated exits) | `corepack pnpm vitest run --project web GenerationPanel DraftHistory && corepack pnpm check` | ✅ extend | ⬜ pending |
-| 7-04-03 | 04 | 1 | INV-06 | unit (artifact subjectId/meta, fixtureText streaming) | `corepack pnpm vitest run --project web artifacts fixture && corepack pnpm test:unit` | ✅ extend | ⬜ pending |
+| 7-04-01 | 04 | 1 | INV-06 | unit (createPostCheck returns Phase 5 bare `(text) => Finding[]`; gates via UNCHANGED Phase 5 runChecks/computeGate; groupFindings; artifact subjectId/meta + listBySubject/deleteBySubjectId; `grep -c "export type PostCheck = (text: string) => Finding\[\]"` panel-controller.ts == 1 and panel-controller.ts/.test.ts git-diff clean) | `corepack pnpm vitest run --project web post-check artifacts panel-controller` | ❌ W0 (post-check.test.ts) / ✅ extend (artifacts) | ⬜ pending |
+| 7-04-02 | 04 | 1 | INV-06 | unit + SSR (PanelState done sentence per group, subject passthrough; exits still 3; Number check group via checkGroups; gated exits; read-only bindables artifactId/draftText; no onstatechange) | `corepack pnpm vitest run --project web panel-state GenerationPanel fair-housing-ui draft-history && corepack pnpm check` | ✅ extend | ⬜ pending |
+| 7-04-03 | 04 | 1 | INV-06 | unit (PromptDef.sample → BuiltPrompt/LlmRequest fixtureText; Fixture streams it; live adapters never send it) | `corepack pnpm vitest run --project web fixture registry runner && corepack pnpm test:unit` | ✅ extend | ⬜ pending |
 | 7-05-01 | 05 | 2 | INV-01 | unit (expense model, defaults, definitions) | `corepack pnpm vitest run --project core expenses` | ❌ W0 | ⬜ pending |
 | 7-05-02 | 05 | 2 | INV-01 | unit (9 exact reference cases A-I, null guards) | `corepack pnpm vitest run --project core reference-cases analyze` | ❌ W0 | ⬜ pending |
 | 7-05-03 | 05 | 2 | INV-01 | property (no NaN, identities, financing-independent cap, monotonic NOI, all-cash, 1% boundary) | `corepack pnpm vitest run --project core properties` | ❌ W0 | ⬜ pending |
@@ -60,7 +60,7 @@ created: 2026-10-04
 | 7-08-01 | 08 | 4 | INV-06 | unit + property (FACTS, allowed set, format/extract round trip) | `corepack pnpm vitest run --project core memo-facts` | ❌ W0 | ⬜ pending |
 | 7-08-02 | 08 | 4 | INV-06 | unit + property (sample memo passes number/FH/advice checks for A-I and random deals) | `corepack pnpm vitest run --project core memo-sample memo-language` | ❌ W0 | ⬜ pending |
 | 7-08-03 | 08 | 4 | INV-06 | unit (analysis hash) | `corepack pnpm vitest run --project core analysis-hash` | ❌ W0 | ⬜ pending |
-| 7-09-01 | 09 | 3 | INV-03 | unit fake-indexeddb (deals repo, backup round trip, delete with memos) | `corepack pnpm vitest run --project web dealsRepo` | ❌ W0 | ⬜ pending |
+| 7-09-01 | 09 | 3 | INV-03 | unit fake-indexeddb (deals repo, backup round trip, delete with memos via 07-04 `deleteBySubjectId` in one transaction + rollback) | `corepack pnpm vitest run --project web dealsRepo` | ❌ W0 | ⬜ pending |
 | 7-09-02 | 09 | 3 | INV-05 | unit (watched-zip cap incl. concurrent, markets port peek = 0 spend) | `corepack pnpm vitest run --project web watchedZipsRepo markets-port` | ❌ W0 | ⬜ pending |
 | 7-09-03 | 09 | 3 | INV-02 | unit (investor port mapping, peek = 0 spend, canonical keys) | `corepack pnpm vitest run --project web investor-port` | ❌ W0 | ⬜ pending |
 | 7-10-01 | 10 | 3 | INV-01 | unit (form model, validation copy, masking, round trip) | `corepack pnpm vitest run --project web form-model` | ❌ W0 | ⬜ pending |
@@ -84,7 +84,7 @@ created: 2026-10-04
 | 7-16-02 | 16 | 5 | INV-03 | check + lint + banned | `corepack pnpm check && corepack pnpm lint && corepack pnpm banned` | ✅ | ⬜ pending |
 | 7-16-03 | 16 | 5 | INV-03 | E2E (save via UI, cap at 3, compare at 1280 and 375, remove, delete, axe) | `corepack pnpm --filter web exec playwright test tests/e2e/investor/deals` | ❌ W0 | ⬜ pending |
 | 7-17-01 | 17 | 5 | INV-06 | unit (FACTS-only prompt, no raw floats, sample passes) | `corepack pnpm vitest run --project web memo.v1` | ❌ W0 | ⬜ pending |
-| 7-17-02 | 17 | 5 | INV-06 | unit (number + advice post-checks, UI-SPEC copy) | `corepack pnpm vitest run --project web memo-checks` | ❌ W0 | ⬜ pending |
+| 7-17-02 | 17 | 5 | INV-06 | unit (createMemoPostChecks returns Phase 5 bare-function PostChecks gating via runChecks/computeGate; MEMO_CHECK_GROUPS UI-SPEC copy; memoGateReasons) | `corepack pnpm vitest run --project web memo-checks` | ❌ W0 | ⬜ pending |
 | 7-17-03 | 17 | 5 | INV-06 | E2E (keyless memo passes; planted number + FH gate exits and print link; edit clears; stale; FACTS-only body; axe) | `corepack pnpm --filter web exec playwright test tests/e2e/investor/memo` | ❌ W0 | ⬜ pending |
 | 7-18-01 | 18 | 6 | INV-04 | unit (buy-box form copy, Deep analyze = 2 calls, partial failure, cap) | `corepack pnpm vitest run --project web buybox-form deep-analyze` | ❌ W0 | ⬜ pending |
 | 7-18-02 | 18 | 6 | INV-04 | check + unit regression | `corepack pnpm check && corepack pnpm vitest run --project web buybox-form deep-analyze matches buyBoxRepo` | ✅ | ⬜ pending |
@@ -120,7 +120,7 @@ Wave 0 work is folded into the first task that needs it (every test file is crea
 - [ ] Shared fast-check arbitraries `packages/core/src/finance/arbitraries.ts` (extended with `dealArb` in 07-05) — 07-01 Task 1
 - [ ] Nine investor/print routes in `tests/e2e/routes.ts`, `scripts/assert-csp.mjs` EXPECTED_PAGES and `prerender.entries` — 07-03 Task 2
 - [ ] E2E helpers (request collector, RentCast/Anthropic mocks, mocked-key setup through Settings, print stub, axe/scroll helpers, `MOCK_ZIP`) — 07-03 Task 3
-- [ ] `GenerationPanel` `postChecks` + gate state, `FindingsSummary` groups, `DraftHistory` `subjectId`, artifact `subjectId`/`meta`, prompt `sample` → Fixture `fixtureText` — 07-04
+- [ ] `createPostCheck` factory returning Phase 5's bare `PostCheck` (Phase 5 `postChecks` prop and `panel-controller.ts` unchanged), `checkGroups` grouped `FindingsSummary` titles, gate state via Phase 5 bindable `canExit`/`blocked`/`findings` + additive read-only `artifactId`/`draftText` (no `onstatechange`), `DraftHistory` `subjectId`, artifact `subjectId`/`meta` + `listBySubject`/`deleteBySubjectId`, prompt `sample` → Fixture `fixtureText` — 07-04
 
 Cross-phase precondition: Phases 2, 3, 4 and 5 are executed before any web plan (07-03 Task 1 checks and stops with a blocker report otherwise). The core plans 07-01/02/05/06/07/08 have no cross-phase dependency except 07-08's Fair Housing test (Phase 5 core checker).
 
