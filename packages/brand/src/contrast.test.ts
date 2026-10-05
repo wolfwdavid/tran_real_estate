@@ -74,3 +74,41 @@ describe('themeVars', () => {
 		);
 	});
 });
+
+describe('Phase 3 shadcn alias tokens', () => {
+	const ALIASES = {
+		'card-foreground': 'foreground',
+		popover: 'card',
+		'popover-foreground': 'foreground',
+		muted: 'surface',
+		accent: 'surface',
+		'accent-foreground': 'foreground',
+		input: 'border-strong',
+		'destructive-foreground': 'primary-foreground'
+	} as const;
+
+	test('each alias reuses the hex of its Phase 2 source token (no new colors)', () => {
+		const color = tokens.color as Record<string, string>;
+		for (const [alias, source] of Object.entries(ALIASES)) {
+			expect(color[alias], alias).toBe(color[source]);
+		}
+	});
+
+	test('matches the Phase 3 UI-SPEC computed ratios', () => {
+		const c = tokens.color as Record<string, string>;
+		expect(round2(contrastRatio(c.white, c.destructive))).toBe(7.43);
+		expect(round2(contrastRatio(c['border-strong'], c.card))).toBe(4.35);
+		expect(round2(contrastRatio(c['destructive-foreground'], c.destructive))).toBe(7.43);
+	});
+
+	test('the shadcn pairs are in the frozen contrast matrix', () => {
+		const has = (fg: string, bg: string, min: number) =>
+			contrastPairs.some((p) => p.fg === fg && p.bg === bg && p.min === min);
+		expect(has('destructive-foreground', 'destructive', 4.5)).toBe(true);
+		expect(has('input', 'card', 3)).toBe(true);
+		expect(has('input', 'surface', 3)).toBe(true);
+		expect(has('input', 'background', 3)).toBe(true);
+		expect(has('primary', 'card', 3)).toBe(true);
+		expect(has('card', 'primary', 3)).toBe(true);
+	});
+});
