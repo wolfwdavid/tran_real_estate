@@ -1,6 +1,8 @@
 // Shared renter formatters (RENT-03): money, dates and relative times read the same on every
 // renter surface. Renter money has no cents. Dates are calendar dates, formatted in UTC.
 
+import { utcDayDiff } from './filters.js';
+
 const USD = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
@@ -26,7 +28,6 @@ const MONTH_YEAR = new Intl.DateTimeFormat('en-US', {
 
 /** Days at or under which relativeListed says "N days ago"; older dates are shown in full. */
 const RELATIVE_MAX_DAYS = 30;
-const DAY_MS = 86_400_000;
 
 const finite = (n: number | null | undefined): n is number =>
 	typeof n === 'number' && Number.isFinite(n);
@@ -38,17 +39,6 @@ function utcDay(iso: string | null | undefined): number | null {
 	if (!m) return null;
 	const t = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
 	return Number.isNaN(t) ? null : t;
-}
-
-/**
- * Whole UTC calendar days between the date part of iso and now (positive = past).
- * Must match 06-01's filters.ts utcDayDiff. TODO(06-07): unify with renter/filters.ts.
- */
-function utcDaysAgo(now: Date, iso: string): number | null {
-	const day = utcDay(iso);
-	if (day === null) return null;
-	const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-	return Math.round((today - day) / DAY_MS);
 }
 
 const dateFormatter = (f: Intl.DateTimeFormat) => (iso: string | null | undefined) => {
@@ -70,8 +60,8 @@ export const formatMonthYear = dateFormatter(MONTH_YEAR);
 /** "today" | "yesterday" | "N days ago" | "on Sep 1, 2026" */
 export function relativeListed(iso: string | null | undefined, now: Date): string | null {
 	if (!iso) return null;
-	const days = utcDaysAgo(now, iso);
-	if (days === null) return null;
+	const days = utcDayDiff(now, iso);
+	if (Number.isNaN(days)) return null;
 	if (days <= 0) return 'today';
 	if (days === 1) return 'yesterday';
 	if (days <= RELATIVE_MAX_DAYS) return `${days} days ago`;

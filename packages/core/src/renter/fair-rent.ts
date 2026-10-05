@@ -10,6 +10,8 @@
  * valuation.
  */
 
+import type { BedroomBucket, CompLike } from './types.js';
+
 /** UI-SPEC: a difference under 2% of the median reads "about the same as". */
 export const SAME_THRESHOLD = 0.02;
 /** UI-SPEC: a bedroom bucket with fewer than 10 listings gets the small-sample sentence. */
@@ -21,13 +23,8 @@ export const MAX_COMPS_SHOWN = 10;
 
 const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 
-// TODO(06-07): unify with renter/types.ts
-export interface BedroomBucket {
-	bedrooms: number;
-	medianRent?: number | null;
-	averageRent?: number | null;
-	totalListings?: number | null;
-}
+// Shared renter shapes live in types.ts; re-exported so the fair-rent subpath keeps them.
+export type { BedroomBucket, CompLike };
 
 /**
  * Picks the market-stats bucket for a listing's bedroom count.
@@ -85,13 +82,6 @@ export function compareToRange(
 
 export function estimateConfidence(compCount: number): 'low' | 'ok' {
 	return isNum(compCount) && compCount >= LOW_CONFIDENCE_COMPS ? 'ok' : 'low';
-}
-
-// TODO(06-07): unify with renter/types.ts
-export interface CompLike {
-	id?: string | null;
-	formattedAddress?: string | null;
-	distance?: number | null;
 }
 
 const normAddress = (a: string | null | undefined): string =>

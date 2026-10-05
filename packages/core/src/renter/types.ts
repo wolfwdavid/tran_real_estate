@@ -64,6 +64,21 @@ export interface RentalRowLike {
 	removedDate?: string | null;
 }
 
+/** One RentCast market-stats bedroom bucket (dataByBedrooms); used by the fair-rent check. */
+export interface BedroomBucket {
+	bedrooms: number;
+	medianRent?: number | null;
+	averageRent?: number | null;
+	totalListings?: number | null;
+}
+
+/** The fields of a RentCast rent-estimate comparable that the fair-rent check reads. */
+export interface CompLike {
+	id?: string | null;
+	formattedAddress?: string | null;
+	distance?: number | null;
+}
+
 export type LocationError = 'empty' | 'city-without-state' | 'bad-zip' | 'unrecognized';
 
 // Compile-time guard: a Phase 4 Listing must be usable wherever a RentalRowLike is expected.
