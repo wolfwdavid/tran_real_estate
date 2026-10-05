@@ -67,7 +67,7 @@ describe('fixtureProvider', () => {
 	});
 
 	it('falls back to the default output for an unknown or missing promptId', async () => {
-		for (const id of ['portal/unknown@3', undefined]) {
+		for (const id of ['portal/unknown@3', 'constructor', '__proto__', undefined]) {
 			const evs = await events(
 				fixtureProvider({ sleep: instant }).stream(req(id), new AbortController().signal)
 			);
