@@ -15,6 +15,9 @@ export default {
 			strict: true
 		}),
 		paths: { base },
+		// cache.addAll() in the service worker is all-or-nothing, and $service-worker `files`
+		// included /.nojekyll, which GitHub Pages never serves. Keep every dotfile out of the precache.
+		serviceWorker: { files: (filepath) => !/(^|[\\/])\./.test(filepath) },
 		prerender: { handleHttpError: 'fail', handleMissingId: 'fail', handleUnseenRoutes: 'fail' },
 		csp: {
 			mode: 'hash',

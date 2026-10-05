@@ -47,7 +47,8 @@ export const CARRIERS = [
 	'icons/icon-192.png',
 	'icons/icon-512.png',
 	'icons/icon-maskable-512.png',
-	'icons/apple-touch-icon-180.png'
+	'icons/apple-touch-icon-180.png',
+	'service-worker.js'
 ];
 
 // Linked from app.html (not the manifest); checked for its declared size alongside manifest icons.
