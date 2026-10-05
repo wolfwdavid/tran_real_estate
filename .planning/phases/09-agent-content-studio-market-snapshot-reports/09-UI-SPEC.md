@@ -248,7 +248,7 @@ Phase 3 `ConfirmDialog`, `LiveAnnouncer`, `SectionError`, `button`/`input`/`labe
 
 | Component | Additive prop / mode | Used by |
 |-----------|---------------------|---------|
-| `GenerationPanel` `[P5]` | `postChecks` `[P7]`, `footer` + per-exit `gate` `[P8 draft]` (already planned); **new:** `footerLabel?: string` (default Phase 8's "Added to the end of every follow-up"); **new:** `formatForExit?: (draft, footer) => string` (default `draft + "\n\n" + footer`); **new:** `sections?: SectionSpec[]` (see `PlatformCard`) | Listing, reel, social, snapshot notes |
+| `GenerationPanel` `[P5]` | Existing (Phase 5 plan 05-13, consumed by Phase 8 plan 08-25; reused as-is): `postChecks`, `tokens`, `emailFooter?: { text: string; label: string }` (Phase 9 supplies `label` = the disclosure label and `text` = the disclosure block; appended to every exit payload, never sent to the AI, never Fair Housing-checked), `exitDisabled?: Partial<Record<ExitKind, string>>` (per-exit disable reason; Phase 9 uses it for the profile gate), `onExit`, bindable `canExit`/`blocked`/`findings`. No `footer`, `footerLabel` or per-exit `gate` prop exists or is added. **new:** `formatForExit?: (draft: string, footerText: string) => string` (`footerText` = `emailFooter?.text ?? ''`; absent → Phase 5's `exitPayload`, i.e. `draft + "\n\n" + emailFooter.text`); **new:** `sections?: SectionSpec[]` (see `PlatformCard`; absent → default mode with exactly Phase 5's three exits) | Listing, reel, social, snapshot notes |
 | `PrintReport` `[P7]` | **new:** `preparedLine?: string` (default "Prepared {Mon D, YYYY} with Tran Real Estate Tools") | Snapshot print |
 | `ChartFigure` `[P7]` | `print` prop renders the title as `h2` Body 16/600 and uses a fixed 672 viewBox width | Snapshot print |
 | Disclosure composer `[P8 draft]` | **new:** `composeDisclosure(profile, { variant: 'email-footer' \| 'ad-inline' \| 'ad-block' \| 'print' })`; `missingFor(variant)` returns the missing field names | All studio tools |
@@ -279,10 +279,10 @@ Phase 3 `ConfirmDialog`, `LiveAnnouncer`, `SectionError`, `button`/`input`/`labe
 
 ### `GenerationPanel` per tool
 
-| Tool | `feature` | `promptId` | `title` / `headingLevel` | `generateLabel` | `containsClientData` | `footer` / `footerLabel` | `postChecks` | Exits |
+| Tool | `feature` | `promptId` | `title` / `headingLevel` | `generateLabel` | `containsClientData` | `emailFooter` (`text` / `label`) | `postChecks` | Exits |
 |------|-----------|-----------|--------------------------|-----------------|----------------------|--------------------------|--------------|-------|
 | Listing | `studio-listing` | `studio/listing.v1` | "Listing description" / 2 | **Write description** | false | `composeDisclosure(…, 'ad-block')` / "Added to the end of this description" | Number check "Number not in your facts" (block); unsupported features "Not in your facts" (warn); number words (warn) | Phase 5's three, `mailto.subject` "Listing description: {street or area}" |
-| Social | `studio-social` | `studio/social.v1` | "Post pack" / 2 | **Write post pack** | false | per section: `ad-inline` / "Added to the end of this post" | Number check "Number not in your brief" (block); number words (warn) | **`sections` mode**: one Copy per card, no panel-level exits |
+| Social | `studio-social` | `studio/social.v1` | "Post pack" / 2 | **Write post pack** | false | per section (`SectionSpec.emailFooter`): `ad-inline` / "Added to the end of this post" | Number check "Number not in your brief" (block); number words (warn) | **`sections` mode**: one Copy per card, no panel-level exits (default mode keeps exactly three); profile gate via `exitDisabled.copy` |
 | Reel | `studio-reel` | `studio/reel.v1` | "Reel script" / 2 | **Write reel script** | false | caption disclosure + checklist text (see Reel) / "Added to the end of the copied script" | Number check "Number you didn't provide" (block); results-beat rule (block); number words (warn); quote pattern (warn) | Phase 5's three, `formatForExit` = timecoded script, `mailto.subject` "Reel script" |
 | Snapshot notes | `studio-snapshot` | `studio/snapshot.v1` | "Market notes" / 3 | **Draft market notes** | false | none | Number check "Number not in this report" (block); number words (warn) | Phase 5's three, `mailto.subject` "Market notes: ZIP {zip}"; plus the step-4 save/print link outside the panel `[P7 pattern]` |
 
@@ -297,7 +297,7 @@ In sections mode the panel keeps its header row, sample notice, "What will be se
 Each card: `<article aria-labelledby="{id}-{key}-title">` on `card`, 1px `border`, `--radius-lg`, `--shadow-card`, padding 16px (24px from 640px), 16px stack gap.
 1. Header: `h3` platform name (Body 16/600) + constraint line (Label 14/400 muted, copy below).
 2. **Output box** (Phase 5 visuals: `background`, 1px `border`, `--radius-md`, padding 16px, min-height 160px, Body 16/400, `pre-wrap`, `tabindex="-1"`, `aria-label="{Platform} post"`). Read mode: `FairHousingText` over **body + hashtag block**. Empty: the card empty line. Edit mode: Phase 5 `textarea` labeled **Edit your {Platform} post** (body + hashtags).
-3. **Disclosure block** (Phase 8 footer visuals: `surface`, `--radius-md`, padding 16px, Body 16/400 `pre-wrap`, preceded by "Added to the end of this post" in Label 14/600 muted). Read-only, never sent to the AI, never checked by the Fair Housing checker, **never truncated**, always last in the copied text `[RES]`.
+3. **Disclosure block** (`SectionSpec.emailFooter`, same visuals as the panel's `emailFooter` preview `[P5/P8]`: `surface`, `--radius-md`, padding 16px, Body 16/400 `pre-wrap`, preceded by `emailFooter.label` "Added to the end of this post" in Label 14/600 muted). Read-only, never sent to the AI, never checked by the Fair Housing checker, **never truncated**, always last in the copied text `[RES]`.
 4. `CharacterCount` for the assembled text (`body + "\n\n" + tags + "\n\n" + disclosure`): copy below. A second line appears only when code dropped hashtags beyond the cap.
 5. **Edit post** / **Done editing** (outline, `Pencil`/`Check` 16px) `[P5]`. On Done editing, the trailing hashtag line is re-parsed; user-added tags past the cap **gate** Copy (they are never silently removed from the agent's own edit).
 6. Per-card `FindingsSummary` (Phase 5 anatomy, `h4` titles, groups Fair Housing then Number check) and Phase 5's acknowledgement checkbox when only Review findings remain.
@@ -331,7 +331,7 @@ Unit test: in `sections` mode each `data-testid="exits-{key}"` contains exactly 
 - Results beat with the placeholder: the cell/value shows the literal `[Add a real result you can document]` in Body 16/600 plus the placeholder note.
 - **B-roll list**: `h3` **B-roll shot list** (Body 16/600) + `<ol>` of every B-roll line in beat order, each prefixed by its time (tabular).
 - States: before a draft: one line, the at-a-glance empty copy. Parse failure: neutral panel (`surface`, `SearchX` 20px muted) with the reel parse copy; the raw text stays in the panel above and remains copyable.
-- **Copied text** (`formatForExit`): "REEL SCRIPT ({30|60} seconds)", then for each beat "{0:00 to 0:03} {BEAT}" + "Voiceover: …" + "Caption: …" + "B-roll: …", a blank line, "B-ROLL SHOT LIST" + numbered lines, then the footer (caption disclosure line + the checklist as plain text with "[ ]" boxes). The Fair Housing checker and number checks run on the model text only; the footer is fixed text `[P8 footer semantics]`.
+- **Copied text** (`formatForExit`): "REEL SCRIPT ({30|60} seconds)", then for each beat "{0:00 to 0:03} {BEAT}" + "Voiceover: …" + "Caption: …" + "B-roll: …", a blank line, "B-ROLL SHOT LIST" + numbered lines, then `emailFooter.text` (caption disclosure line + the checklist as plain text with "[ ]" boxes). The Fair Housing checker and number checks run on the model text only; `emailFooter.text` is fixed text `[P5 emailFooter semantics]`.
 
 ### `AiDisclosureChecklist` anatomy `[CTX]` `[RES §C, Code Examples]`
 
@@ -532,7 +532,7 @@ CONTEXT's working label is "Market information only — not a CMA or appraisal".
 - Tone descriptions: Warm "Friendly and inviting." · Concise "Short sentences, just the facts." · Luxury "Polished and detailed, without hype."
 - Length helper: "Short is about 75 words, Medium about 150, Long about 250."
 - Validation: "Choose For sale or For rent." · "Choose a property type." · "Enter the number of bedrooms, from 0 to 20." · "Enter the number of bathrooms, like 2 or 2.5." · "Enter a number, like 1450." · "Enter a year from 1700 to {current year}." · "Use 0 or more." · "Keep this under {max} characters."
-- Panel: title **Listing description**; run label **Write description**; footer label "Added to the end of this description"; mailto subject "Listing description: {street or area}" (fallback "Listing description").
+- Panel: title **Listing description**; run label **Write description**; `emailFooter.label` "Added to the end of this description"; mailto subject "Listing description: {street or area}" (fallback "Listing description").
 - Number check: category **Number not in your facts**; explanation "This number isn't in the facts you entered. Change it to match your facts, or remove it." Group titles: **Number check passed** / note "Every number matches the facts you entered." · **Number check: {n} to fix**.
 - Unsupported feature (Review): category **Not in your facts**; explanation "This mentions "{feature}", which isn't in your facts. Remove it, or add it to your facts if the home has it." Buttons **Edit it myself** · **Show in draft**.
 - Count line: "{w} words · {c} characters. With your disclosure: {d} characters." With a site limit: "{c} of {limit} characters for your listing site." Over: "{n} characters over your listing site's limit. Shorten the description, or leave the disclosure off if your site doesn't allow it there."
@@ -569,7 +569,7 @@ CONTEXT's working label is "Market information only — not a CMA or appraisal".
 - Results reminder (persistent note): "Only include results you can back up with records. Made-up or exaggerated results can break advertising rules, and Tran won't add any for you."
 - Empty-results notice: "You haven't added results, so the script will say [Add a real result you can document] in the results beat. Fill it in with a real result before you record."
 - Validation: "Describe the manual pain." · "Describe the before and after." · "Describe your mission." · "Add a call to action." · "Keep this under {max} characters."
-- Panel: title **Reel script**; run label **Write reel script**; footer label "Added to the end of the copied script"; mailto subject "Reel script".
+- Panel: title **Reel script**; run label **Write reel script**; `emailFooter.label` "Added to the end of the copied script"; mailto subject "Reel script".
 - Number check: category **Number you didn't provide**; explanation "This number isn't in what you typed. Scripts may only use results you supply. Change it or remove it."
 - Results-beat rule: category **Result you didn't provide**; explanation "You left Your results blank, so this beat must keep the placeholder [Add a real result you can document] and no numbers."
 - Quote finding (Review): category **Quote to confirm**; explanation "This reads like someone else's words. Use a client's words only if they're real and you have their permission."
@@ -689,7 +689,7 @@ npm additions in this phase: **none**. The `pnpm` dependency diff for Phase 9 is
 
 1. **Feature module `features/studio`** `[RES Pattern 1]`. Amend Phase 8's boundary test from "no `/agent/*` view imports the gateway" to "no `features/agent/**` module imports the gateway"; add "`features/studio/**` never imports `features/investor/**`, `features/agent/crm/**`, or `lib/leads/**`" and "`routes/(print)/print/snapshot` never imports `lib/data/**`".
 2. **`DataStatusBar` on `/agent/studio/snapshot/` only.** Narrows Phase 8's note 4.
-3. **`GenerationPanel` additive props:** `footerLabel`, `formatForExit`, and `sections` mode (`PlatformCard` per section, exactly one Copy exit each, no panel-level exits group), on top of Phase 7's `postChecks` and Phase 8's `footer` and per-exit `gate`. Phase 5's "exactly three exits" test stays green for the default mode and gains a sections-mode case.
+3. **`GenerationPanel` additive props:** `formatForExit` and `sections` mode (`PlatformCard` per section, exactly one Copy exit each, no panel-level exits group), on top of Phase 5's existing `postChecks`, `emailFooter: { text, label }` and `exitDisabled` (reused, never duplicated; there is no `footer`, `footerLabel` or `gate` prop). Phase 5's "exactly three exits" test stays green for the default mode and gains a sections-mode case.
 4. **`PrintReport` additive `preparedLine`**; `ChartFigure print` renders `h2` titles in Body 16/600 at a fixed 672 viewBox width; `.brand-band` is the only `print-color-adjust: exact` element.
 5. **Print route uses `?id=`** with a frozen Dexie `snapshots` record (backup-registered) and a built-in `?id=sample`. This supersedes the `?zip=` wording in the phase objective, following the research's 0-call print requirement.
 6. **Report label wording** (see Copywriting): no `NEGATED_ALLOW` is added; the grep stays allowlist-free per Phase 2; the studio grep scope and phrase additions are listed in Copywriting. E2E asserts this contract's label strings.
