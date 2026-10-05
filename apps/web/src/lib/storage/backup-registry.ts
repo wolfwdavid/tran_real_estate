@@ -3,6 +3,7 @@
 // Later phases call registerBackupTable() for each user-data table they add, and list local-only
 // tables in BACKUP_EXCLUDED_TABLES. Every TranDb table must be exactly one of the two.
 
+import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 
 export interface BackupTable {
@@ -23,7 +24,9 @@ export const BACKUP_EXCLUDED_TABLES: readonly string[] = Object.freeze([
 // always includes them, even when no data-layer module has loaded yet.
 const DEFAULT_TABLES: readonly BackupTable[] = [
 	{ name: 'prefs', label: 'Settings' },
-	...PHASE4_BACKUP_TABLES
+	...PHASE4_BACKUP_TABLES,
+	// Phase 5: AI drafts (aiArtifacts).
+	...AI_BACKUP_TABLES
 ];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));

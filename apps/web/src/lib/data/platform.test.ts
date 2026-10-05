@@ -124,10 +124,12 @@ describe('createDataDb / makeDb', () => {
 		expect(await b.dataPrefs.count()).toBe(0);
 	});
 
-	it('verno is the Phase 3 latest version + 1 and matches the highest declared version', async () => {
+	it('Phase 4 tables are version Phase 3 latest + 1; verno is the highest declared version', async () => {
 		const db = await open();
 		const versions = [...dbSource.matchAll(/\.version\((\d+)\)/g)].map((m) => Number(m[1]));
-		expect(db.verno).toBe(PHASE3_LATEST + 1);
+		expect(dbSource).toContain(`this.version(${PHASE3_LATEST + 1}).stores(PHASE4_STORES)`);
+		// Later phases append their own blocks (Phase 5: version 3, aiArtifacts).
+		expect(db.verno).toBeGreaterThanOrEqual(PHASE3_LATEST + 1);
 		expect(Math.max(...versions)).toBe(db.verno);
 	});
 

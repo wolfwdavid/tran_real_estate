@@ -11,6 +11,7 @@ import {
 	type SavedSearchRow,
 	type SearchSnapshotRow
 } from '$lib/data/tables';
+import { AI_STORES, type AiArtifact } from '$lib/ai/storage/tables';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -35,6 +36,8 @@ export class TranDb extends Dexie {
 	savedSearches!: Table<SavedSearchRow, string>;
 	searchSnapshots!: Table<SearchSnapshotRow, string>;
 	dataPrefs!: Table<DataPrefRow, string>;
+	// Phase 5 AI drafts (apps/web/src/lib/ai/storage/tables.ts).
+	aiArtifacts!: Table<AiArtifact, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
@@ -43,6 +46,8 @@ export class TranDb extends Dexie {
 		this.version(1).stores({ meta: 'key', prefs: 'id, key, updatedAt' });
 		// Phase 4: RentCast cache, call ledger, saved searches + snapshots, data prefs.
 		this.version(2).stores(PHASE4_STORES);
+		// Phase 5: stored AI generations ("AI drafts"). Adds one table; existing tables unchanged.
+		this.version(3).stores(AI_STORES);
 	}
 }
 

@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs';
+import Dexie from 'dexie';
 import { afterEach, describe, expect, it } from 'vitest';
+import { AI_STORES } from '$lib/ai/storage/tables';
 import { PHASE4_STORES } from '$lib/data/tables';
 import { freshIdb } from '$lib/storage/test-utils';
 import { StorageBlockedError, TranDb, _resetDb, getDb, openDb } from './db';
@@ -24,14 +26,49 @@ afterEach(() => {
 });
 
 describe('TranDb', () => {
-	it("opens as 'tran' with the Phase 3 tables plus the Phase 4 data tables at version 2", async () => {
+	it("opens as 'tran' with the Phase 3, Phase 4 data and Phase 5 AI tables at version 3", async () => {
 		const db = new TranDb(freshIdb());
 		await db.open();
 		expect(db.name).toBe('tran');
 		expect(db.tables.map((t) => t.name).sort()).toEqual(
-			['meta', 'prefs', ...Object.keys(PHASE4_STORES)].sort()
+			['meta', 'prefs', ...Object.keys(PHASE4_STORES), ...Object.keys(AI_STORES)].sort()
 		);
-		expect(db.verno).toBe(2);
+		expect(db.verno).toBe(3);
+		db.close();
+	});
+
+	it('version 3 adds aiArtifacts with its feature+createdAt index', async () => {
+		const db = new TranDb(freshIdb());
+		await db.open();
+		const t = db.table('aiArtifacts');
+		expect(t.schema.primKey.name).toBe('id');
+		expect(t.schema.indexes.map((i) => i.name).sort()).toEqual(
+			['[feature+createdAt]', 'feature', 'status', 'updatedAt'].sort()
+		);
+		db.close();
+	});
+
+	it('upgrades a version 2 database in place: existing rows kept, aiArtifacts added', async () => {
+		const idb = freshIdb();
+		class V2 extends Dexie {
+			constructor() {
+				super('tran', idb);
+				this.version(1).stores({ meta: 'key', prefs: 'id, key, updatedAt' });
+				this.version(2).stores(PHASE4_STORES);
+			}
+		}
+		const old = new V2();
+		await old.table('meta').put({ key: 'lastBackupAt', value: '2026-10-01T00:00:00.000Z' });
+		old.close();
+
+		const db = new TranDb(idb);
+		await db.open();
+		expect(db.verno).toBe(3);
+		expect(await db.meta.get('lastBackupAt')).toEqual({
+			key: 'lastBackupAt',
+			value: '2026-10-01T00:00:00.000Z'
+		});
+		expect(await db.aiArtifacts.count()).toBe(0);
 		db.close();
 	});
 

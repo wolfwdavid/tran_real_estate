@@ -5,11 +5,16 @@ import {
 	listBackupTables,
 	registerBackupTable
 } from './backup-registry';
+import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 import { TranDb } from './db';
 
-/** Built-in registrations: Phase 3 prefs, then the Phase 4 data tables. */
-const DEFAULTS = [{ name: 'prefs', label: 'Settings' }, ...PHASE4_BACKUP_TABLES];
+/** Built-in registrations: Phase 3 prefs, the Phase 4 data tables, then the Phase 5 AI drafts. */
+const DEFAULTS = [
+	{ name: 'prefs', label: 'Settings' },
+	...PHASE4_BACKUP_TABLES,
+	...AI_BACKUP_TABLES
+];
 const DEFAULT_NAMES = DEFAULTS.map((t) => t.name);
 
 afterEach(() => {
@@ -34,6 +39,7 @@ describe('backup registry', () => {
 		expect(listBackupTables()).toEqual([
 			{ name: 'prefs', label: 'Preferences' },
 			...PHASE4_BACKUP_TABLES,
+			...AI_BACKUP_TABLES,
 			{ name: 'notes', label: 'Notes' }
 		]);
 	});
@@ -59,6 +65,10 @@ describe('backup registry', () => {
 		expect(BACKUP_EXCLUDED_TABLES).toContain('meta');
 		expect(BACKUP_EXCLUDED_TABLES).toContain('apiCache');
 		expect(Object.isFrozen(BACKUP_EXCLUDED_TABLES)).toBe(true);
+	});
+
+	it("registers aiArtifacts as 'AI drafts' by default", () => {
+		expect(listBackupTables()).toContainEqual({ name: 'aiArtifacts', label: 'AI drafts' });
 	});
 
 	it('every TranDb table is registered XOR excluded', () => {

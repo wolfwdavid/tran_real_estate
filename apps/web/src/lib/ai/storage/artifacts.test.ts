@@ -68,7 +68,9 @@ const FINDING: Finding = {
 	]
 };
 
-const input = (o: Partial<Parameters<ReturnType<typeof createArtifactRepo>['create']>[0]> = {}) => ({
+const input = (
+	o: Partial<Parameters<ReturnType<typeof createArtifactRepo>['create']>[0]> = {}
+) => ({
 	feature: 'demo',
 	promptId: 'shared/demo@1',
 	provider: 'anthropic' as const,
@@ -114,7 +116,9 @@ afterEach(() => {
 describe('aiArtifacts table', () => {
 	it('declares the aiArtifacts store with the feature+createdAt index', () => {
 		expect(AI_ARTIFACTS_TABLE).toBe('aiArtifacts');
-		expect(AI_STORES).toEqual({ aiArtifacts: 'id, feature, [feature+createdAt], status, updatedAt' });
+		expect(AI_STORES).toEqual({
+			aiArtifacts: 'id, feature, [feature+createdAt], status, updatedAt'
+		});
 		expect(db.tables.map((t) => t.name)).toContain('aiArtifacts');
 	});
 
