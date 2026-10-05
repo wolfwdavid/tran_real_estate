@@ -369,8 +369,21 @@ describe('PWA carriers', () => {
 			'icons/icon-192.png',
 			'icons/icon-512.png',
 			'icons/icon-maskable-512.png',
-			'icons/apple-touch-icon-180.png'
+			'icons/apple-touch-icon-180.png',
+			'service-worker.js'
 		]);
+	});
+
+	test('a build missing service-worker.js is rejected', () => {
+		withTempBuild(
+			(dir) => {
+				writeFullBuild(dir);
+				rmSync(join(dir, 'service-worker.js'));
+			},
+			(dir) => {
+				expect(checkBuild(dir)).toContain('missing service-worker.js');
+			}
+		);
 	});
 
 	test.each(CARRIERS.filter((c) => c !== '.nojekyll' && c !== 'frame-guard.js'))(
