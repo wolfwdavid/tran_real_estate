@@ -21,7 +21,10 @@ describe('resolveMode', () => {
 	});
 
 	it('is pure: same input, same output, input untouched', () => {
-		const input = Object.freeze({ keyState: 'available' as const, preference: 'rentcast' as const });
+		const input = Object.freeze({
+			keyState: 'available' as const,
+			preference: 'rentcast' as const
+		});
 		expect(resolveMode(input)).toEqual(resolveMode(input));
 	});
 });
