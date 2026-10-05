@@ -33,6 +33,8 @@ export interface Listing {
 	kind: 'rental' | 'sale';
 	formattedAddress: string;
 	addressLine1: string | null;
+	/** Unit or suite line. Optional so hand-built rows stay valid; the mapper always sets it. */
+	addressLine2?: string | null;
 	city: string | null;
 	state: string | null;
 	zipCode: string;
@@ -43,6 +45,8 @@ export interface Listing {
 	bathrooms: number | null;
 	squareFootage: number | null;
 	yearBuilt: number | null;
+	/** Monthly HOA fee in whole dollars. Optional so hand-built rows stay valid; the mapper sets it. */
+	hoaFee?: number | null;
 	price: number;
 	status: 'Active' | 'Inactive' | 'Other';
 	listingType: string | null;

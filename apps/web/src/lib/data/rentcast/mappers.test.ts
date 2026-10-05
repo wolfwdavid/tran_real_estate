@@ -117,6 +117,15 @@ describe('mapListing', () => {
 		expect(l.agent).toBeNull();
 		expect(l.history).toEqual([]);
 		expect(l.propertyType).toBe('Other');
+		expect(l.addressLine2).toBeNull();
+		expect(l.hoaFee).toBeNull();
+	});
+
+	it('keeps the unit line and the monthly HOA fee for the listing detail (06-14)', () => {
+		const l = mapListing({ ...base(), addressLine2: 'Apt 4B', hoa: { fee: 155 } }, 'rental');
+		expect(l.addressLine2).toBe('Apt 4B');
+		expect(l.hoaFee).toBe(155);
+		expect(mapListing({ ...base(), hoa: null }, 'rental').hoaFee).toBeNull();
 	});
 });
 
