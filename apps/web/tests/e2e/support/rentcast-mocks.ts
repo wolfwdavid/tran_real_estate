@@ -43,7 +43,7 @@ function readFixture(name: string): unknown {
 
 /** The six committed fixture files, read once per worker (createFixtureFetch deep-copies). */
 let fixtureSet: FixtureSet | undefined;
-function fixtures(): FixtureSet {
+export function rentcastFixtures(): FixtureSet {
 	fixtureSet ??= {
 		meta: readFixture('meta'),
 		metros: readFixture('metros'),
@@ -100,7 +100,7 @@ export async function mockRentCast(
 	net: Net,
 	opts: MockRentCastOptions = {}
 ): Promise<void> {
-	const fixtureFetch = createFixtureFetch(fixtures(), Date.now);
+	const fixtureFetch = createFixtureFetch(rentcastFixtures(), Date.now);
 	const extra = opts.extraRows ?? [];
 
 	async function fromFixtures(url: URL): Promise<Result> {
