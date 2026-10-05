@@ -30,22 +30,32 @@ for (const route of [...ROUTES, NOT_FOUND]) {
 }
 
 test('prerendered HTML marks the current portal', async ({ page }) => {
-	const anchors = async (route: string) => {
+	// `scope` narrows the raw HTML to one landmark. Without it the footer's own portal links
+	// (which mark the current page too) would mask a broken header switcher on renter/investor/
+	// agent: the mutation check in 02-10 caught the bug only on settings/ until this was scoped.
+	const anchors = async (route: string, scope: 'Portals' | 'footer' | 'all') => {
 		const res = await page.request.get(route);
 		expect(res.status(), `status for ${JSON.stringify(route)}`).toBe(200);
-		const html = await res.text();
+		let html = await res.text();
+		if (scope === 'Portals')
+			html = html.match(/<nav\b[^>]*aria-label="Portals"[\s\S]*?<\/nav>/)?.[0] ?? '';
+		if (scope === 'footer') html = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? '';
+		expect(scope === 'all' || html.length > 0, `${scope} found in ${route}`).toBe(true);
 		return html.match(/<a\b[^>]*aria-current="page"[^>]*>/g) ?? [];
 	};
-	for (const route of [...APP_ROUTES, 'legal/privacy/']) {
-		const tags = await anchors(route);
-		const marks = new RegExp(`href="[^"]*${route}"`);
-		expect(
-			tags.some((t) => marks.test(t)),
-			`raw HTML of ${route} marks it current: ${JSON.stringify(tags)}`
-		).toBe(true);
+	const marked = (tags: string[], route: string) =>
+		tags.some((t) => new RegExp(`href="[^"]*${route}"`).test(t));
+
+	// The header switcher marks each app page (the inline list and the menu panel both do).
+	for (const route of APP_ROUTES) {
+		const tags = await anchors(route, 'Portals');
+		expect(marked(tags, route), `Portals nav in raw ${route}: ${JSON.stringify(tags)}`).toBe(true);
 	}
+	// The footer marks a legal page.
+	const legal = await anchors('legal/privacy/', 'footer');
+	expect(marked(legal, 'legal/privacy/'), JSON.stringify(legal)).toBe(true);
 	// Control: the landing page is no portal and no footer destination, so nothing is current.
-	expect(await anchors('')).toEqual([]);
+	expect(await anchors('', 'all')).toEqual([]);
 });
 
 for (const route of CHROME_ROUTES) {
@@ -121,7 +131,7 @@ const overflow = (page: Page) =>
 const inlineList = (page: Page) => portals(page).locator('ul:not(#portal-menu)');
 const hydrated = (page: Page) => expect(page.locator('nav[data-hydrated]')).toBeAttached();
 
-/** WCAG 1.4.12 text-spacing overrides. page.addStyleTag is refused by style-src-elem, so the
+/** WCAG 1.4.12 text-spacing overrides. an injected <style> element is refused by style-src-elem, so the
  *  sheet is constructed in the page and adopted (constructed sheets are not governed by CSP). */
 const applyTextSpacing = (page: Page) =>
 	page.evaluate(() => {
