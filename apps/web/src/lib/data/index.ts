@@ -13,6 +13,9 @@ export {
 	type RuntimeUsage
 } from './runtime.svelte';
 export { createPeekStore, type PeekStore } from './stores.svelte';
+export { checkSavedSearchesOnOpen, savedSearchRepo, type AlertsDeps } from './alerts';
+export type { SchedulerResult, ConfirmInput, LockPort } from './scheduler';
+export type { SavedSearchRepo, SavedSearchInput } from './saved-search-repo';
 export {
 	ReactiveSpendError,
 	type DataGateway,

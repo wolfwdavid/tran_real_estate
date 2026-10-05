@@ -73,6 +73,8 @@ export interface SchedulerDeps {
 	/** Asked only when more than 3 searches are due and at least one can run. */
 	confirm: (input: ConfirmInput) => Promise<boolean>;
 	lock?: LockPort;
+	/** Called before each planned search runs: i is 1-based, k is how many are planned. */
+	onProgress?: (i: number, k: number) => void;
 }
 
 const SCHEDULED: ReadonlySet<string> = new Set(['rental-listings', 'sale-listings']);
@@ -92,7 +94,13 @@ export async function runDueSearches(deps: SchedulerDeps): Promise<SchedulerResu
 	return result ?? { ran: [], waiting: [], failed: [], skipped: 'busy', newListings: 0, due: 0 };
 }
 
-async function pass({ gateway, repo, clock, confirm }: SchedulerDeps): Promise<SchedulerResult> {
+async function pass({
+	gateway,
+	repo,
+	clock,
+	confirm,
+	onProgress
+}: SchedulerDeps): Promise<SchedulerResult> {
 	const out: SchedulerResult = {
 		ran: [],
 		waiting: [],
@@ -149,6 +157,7 @@ async function pass({ gateway, repo, clock, confirm }: SchedulerDeps): Promise<S
 	for (const [i, s] of plan.run.entries()) {
 		// Another tab ran or is running this search: skip it, never run it twice.
 		if (!(await repo.claim(s.id))) continue;
+		onProgress?.(i + 1, plan.run.length);
 
 		let observed: ObservedItem[];
 		let truncated: boolean;

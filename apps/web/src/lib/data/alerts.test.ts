@@ -87,7 +87,7 @@ describe('checkSavedSearchesOnOpen', () => {
 	it('live with 5 due: asks once; declining spends nothing and reports declined', async () => {
 		const zips = ['74201', '74202', '74203', '74204', '74205'];
 		const { rt, calls, deps } = await setup('available', zips);
-		const confirm = vi.fn(async (_input: ConfirmInput) => false);
+		const confirm = vi.fn<(input: ConfirmInput) => Promise<boolean>>(async () => false);
 		const res = await checkSavedSearchesOnOpen(rt, confirm, deps);
 		expect(confirm).toHaveBeenCalledOnce();
 		const input = confirm.mock.calls[0]![0];
