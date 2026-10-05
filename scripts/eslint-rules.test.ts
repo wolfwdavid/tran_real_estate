@@ -296,3 +296,161 @@ export const vault = getVault;
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
 	});
 });
+
+// Phase 4: the budget guard holds only if (a) no reactive $effect ever spends a RentCast call and
+// (b) nothing outside lib/data reaches past the $lib/data port to the rentcast client, fixtures or
+// internal repos. Both live in shared arrays because flat config REPLACES rule options (Pitfall 6).
+const RENTER_ROUTE = `${WEB}/routes/(app)/renter/__lintfix__`;
+const EFFECT_MESSAGE = 'Never spend RentCast calls from $effect';
+
+const effectSvelte = (body: string) => `<script lang="ts">
+	declare const gateway: { get(r: unknown): unknown; peek(r: unknown): unknown; rentalListingById(id: string): Promise<unknown> };
+	declare const dataGateway: { refresh(r: unknown): Promise<unknown> };
+	const req = {};
+	const id = 'x';
+	${body}
+</script>
+
+<p>fixture</p>
+`;
+
+const importModule = (spec: string) => `import * as mod from '${spec}';
+
+export const used = mod;
+`;
+
+describe('Phase 4 data-layer boundaries (lintText, in memory)', () => {
+	beforeAll(() => {
+		expect(existsSync(resolve(repoRoot, RENTER_ROUTE))).toBe(false);
+		expect(existsSync(resolve(repoRoot, `${WEB}/lib/data/__lintfix__`))).toBe(false);
+		expect(existsSync(resolve(repoRoot, `${WEB}/lib/features/shared/data/__lintfix__`))).toBe(
+			false
+		);
+		expect(existsSync(resolve(repoRoot, `${WEB}/lib/features/shared/__lintfix__`))).toBe(false);
+	});
+
+	test('$effect(() => { gateway.get(req) }) is rejected with the spend message', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/effect-spend.svelte`,
+			effectSvelte('$effect(() => { gateway.get(req); });')
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-syntax');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain(EFFECT_MESSAGE);
+	});
+
+	test('$effect.pre(() => { scheduler.runDueSearches() }) in a .svelte.ts module is rejected', async () => {
+		const messages = await lint(
+			`${WEB}/lib/features/shared/__lintfix__/x.svelte.ts`,
+			`declare const scheduler: { runDueSearches(): Promise<void> };
+$effect.pre(() => {
+	void scheduler.runDueSearches();
+});
+`
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-syntax');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain(EFFECT_MESSAGE);
+	});
+
+	test('object names ending in gateway match case-insensitively (dataGateway.refresh)', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/effect-refresh.svelte`,
+			effectSvelte('$effect(() => { void dataGateway.refresh(req); });')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toHaveLength(1);
+	});
+
+	test('gateway.rentalListingById inside $effect is rejected', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/effect-by-id.svelte`,
+			effectSvelte('$effect(() => { void gateway.rentalListingById(id); });')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toHaveLength(1);
+	});
+
+	test('a spend in an event handler is allowed', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/handler-spend.svelte`,
+			effectSvelte('').replace(
+				'<p>fixture</p>',
+				'<button onclick={() => gateway.get(req)}>Search</button>'
+			)
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+
+	test('gateway.peek inside $effect is allowed (peek never spends)', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/effect-peek.svelte`,
+			effectSvelte('$effect(() => { void gateway.peek(req); });')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+
+	test.each([
+		'$lib/data/rentcast/client',
+		'$lib/data/fixtures/fixture-fetch',
+		'$lib/data/ledger-repo'
+	])('a renter route importing %s is rejected', async (spec) => {
+		const messages = await lint(`${RENTER_ROUTE}/data-import.ts`, importModule(spec));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
+	});
+
+	test('a renter route importing the $lib/data port is allowed', async () => {
+		const messages = await lint(`${RENTER_ROUTE}/data-import.ts`, importModule('$lib/data'));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('features/shared importing $lib/data/gateway is rejected; $lib/data is allowed', async () => {
+		const file = `${WEB}/lib/features/shared/data/__lintfix__/c.ts`;
+		const bad = await lint(file, importModule('$lib/data/gateway'));
+		expectNoParseErrors(bad);
+		expect(errorsFor(bad, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
+		const good = await lint(file, importModule('$lib/data'));
+		expect(errorsFor(good, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('inside lib/data the internals may import each other', async () => {
+		const messages = await lint(
+			`${WEB}/lib/data/__lintfix__/gateway-fixture.ts`,
+			`import * as a from './rentcast/client';
+import * as b from '$lib/data/rentcast/client';
+
+export const used = [a, b];
+`
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('regression: $effect spend and fetch both fire in one renter route', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/both.svelte`,
+			effectSvelte(`$effect(() => { gateway.get(req); });
+	async function ping() {
+		await fetch('https://x.test');
+	}
+	void ping;`)
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toHaveLength(2);
+	});
+
+	test('regression: the portal import boundary still fires alongside the data-port pattern', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/cross-import.ts`,
+			importModule('$lib/features/investor/x')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
+	});
+});
