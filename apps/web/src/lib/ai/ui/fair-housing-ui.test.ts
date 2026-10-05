@@ -2,6 +2,7 @@
 // `svelte/server`; assertions read the markup and the tag-stripped text. onMount never runs here.
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import type { Component } from 'svelte';
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
 import { checkFairHousing, type Finding, type FindingMember } from '@tran/core/fair-housing';
@@ -34,9 +35,10 @@ function fixture() {
 	return { findings, block, warn };
 }
 
-function html(component: Parameters<typeof render>[0], props: Record<string, unknown>): string {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	return render(component as any, { props }).body;
+// Loose props on purpose: the tests also pass hand-built findings and partial prop sets.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function html(component: Component<any>, props: Record<string, unknown>): string {
+	return render(component, { props }).body;
 }
 
 describe('fixture', () => {
