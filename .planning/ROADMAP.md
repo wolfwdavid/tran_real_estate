@@ -250,7 +250,7 @@ Plans:
 - [ ] 06-15-PLAN.md — Shortlist board with status tracking and notes + E2E
 - [ ] 06-16-PLAN.md — Listing cards, paginated list, List/Map tabs + E2E
 - [ ] 06-17-PLAN.md — Fair-rent check: ZIP median (Tier 1) + rent estimate (Tier 2) + E2E
-- [ ] 06-18-PLAN.md — AI outreach section via GenerationPanel (Fair Housing gated) + E2E
+- [x] 06-18-PLAN.md — AI outreach section via GenerationPanel (Fair Housing gated) + E2E
 - [ ] 06-19-PLAN.md — Lazy Leaflet + OSM map with supercluster, sample backdrop, selection + E2E
 - [ ] 06-20-PLAN.md — Saved searches with "N new since last visit" (page.clock 24h) + E2E
 - [ ] 06-21-PLAN.md — Map split view and list-map linking polish (cut line 1) + E2E
@@ -459,7 +459,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
-| 6. Renter Portal | 14/22 | In Progress|  |
+| 6. Renter Portal | 15/22 | In Progress|  |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
