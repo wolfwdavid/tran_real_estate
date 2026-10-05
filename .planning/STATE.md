@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-05-PLAN.md
-last_updated: "2026-10-05T02:26:18.068Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-10-05T02:26:19.014Z"
 progress:
   total_phases: 11
   completed_phases: 2
@@ -136,6 +136,7 @@ Recent decisions affecting current work:
 - [Phase 03]: 03-05: backup registry is include-only; BACKUP_EXCLUDED_TABLES (frozen ['meta']) lists local-only tables and every TranDb table must be registered XOR excluded
 - [Phase 03]: 03-05: openDb maps SecurityError/InvalidStateError/UnknownError/MissingAPIError (walking Dexie .inner) to StorageBlockedError
 - [Phase 03]: Backup parse order: JSON -> format -> schemaVersion (invalid/newer) -> migrate -> zod validate -> known tables; BackupError message === code
+- [Phase 03]: Merge: strictly newer updatedAt wins, local wins ties, incoming tombstone without local is skipped; replace never writes tombstones
 
 ### Pending Todos
 
@@ -158,7 +159,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T02:26:09.221Z
-Stopped at: Completed 03-05-PLAN.md
+Last session: 2026-10-05T02:26:19.005Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
