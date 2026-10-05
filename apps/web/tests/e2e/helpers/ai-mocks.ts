@@ -57,7 +57,8 @@ function chunks(text: string, n = 4): string[] {
 const data = (v: unknown) => `data: ${JSON.stringify(v)}\n\n`;
 const event = (name: string, v: unknown) => `event: ${name}\n${data(v)}`;
 
-export function anthropicSse(text: string, n = 4): string {
+/** `stopReason` 'refusal' is the provider's own content refusal (05-16 error state). */
+export function anthropicSse(text: string, n = 4, stopReason = 'end_turn'): string {
 	return sse([
 		event('message_start', { type: 'message_start', message: { usage: { input_tokens: 120 } } }),
 		...chunks(text, n).map((t) =>
@@ -69,7 +70,7 @@ export function anthropicSse(text: string, n = 4): string {
 		),
 		event('message_delta', {
 			type: 'message_delta',
-			delta: { stop_reason: 'end_turn' },
+			delta: { stop_reason: stopReason },
 			usage: { output_tokens: 42 }
 		}),
 		event('message_stop', { type: 'message_stop' })
@@ -109,17 +110,23 @@ export function openrouterSse(text: string, n = 4): string {
 
 // ---- Provider routes ----
 
+/** A non-200 generation answer (CORS-readable JSON), or a raw SSE body sent as is. */
+export type AiStreamAnswer = { status: number; body: unknown } | { rawSse: string };
+
 export interface AiMockOptions {
-	/** Generation answer for a keyed request: SSE text, or 'abort' (a CORS block / network failure). */
-	stream?: string | 'abort';
-	/** Status of the keyed models / key-check endpoint. Default 200. */
-	modelsStatus?: number;
+	/**
+	 * Generation answer for a keyed request: SSE text, 'abort' (a CORS block / network failure),
+	 * an error status with a JSON body, or a hand-built SSE body (05-16 error states).
+	 */
+	stream?: string | 'abort' | AiStreamAnswer;
+	/** Status of the keyed models / key-check endpoint, or 'abort' (unreachable). Default 200. */
+	modelsStatus?: number | 'abort';
 	/** Body for a non-200 models answer. */
 	modelsError?: unknown;
 	/** Model ids the models endpoint lists. */
 	models?: string[];
-	/** Status of the keyless canary on the generation endpoint. Default 401 (CORS-readable). */
-	canaryStatus?: number;
+	/** Status of the keyless canary, or 'abort' (generation endpoint blocked). Default 401. */
+	canaryStatus?: number | 'abort';
 }
 
 export interface AiCall {
@@ -159,9 +166,25 @@ async function routeProvider(
 					await route.abort('failed');
 					return;
 				}
+				if (typeof o.stream === 'object' && 'rawSse' in o.stream) {
+					await route.fulfill({ status: 200, headers: SSE, body: o.stream.rawSse });
+					return;
+				}
+				if (typeof o.stream === 'object') {
+					await route.fulfill({
+						status: o.stream.status,
+						headers: JSON_HEADERS,
+						body: JSON.stringify(o.stream.body)
+					});
+					return;
+				}
 				await route.fulfill({ status: 200, headers: SSE, body: bodies.stream(o.stream) });
 				return;
 			case 'canary':
+				if (o.canaryStatus === 'abort') {
+					await route.abort('failed');
+					return;
+				}
 				await route.fulfill({
 					status: o.canaryStatus ?? 401,
 					headers: JSON_HEADERS,
@@ -170,6 +193,10 @@ async function routeProvider(
 				return;
 			case 'models':
 			case 'key': {
+				if (o.modelsStatus === 'abort') {
+					await route.abort('failed');
+					return;
+				}
 				const status = o.modelsStatus ?? 200;
 				const body =
 					status === 200
