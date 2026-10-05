@@ -138,7 +138,7 @@ Plans:
 - [x] 03-07-PLAN.md — Passphrase lock: PBKDF2 600k + wrapped AES-GCM data key, persisted 5-attempt cooldown, cross-tab lock (wave 3)
 - [x] 03-08-PLAN.md — Backup service: key-free export + download, 25 MB preview, single-transaction merge/replace (wave 3)
 - [x] 03-09-PLAN.md — Allowlist-only service worker + offline/404/route-mock/manifest E2E on both bases (wave 3)
-- [ ] 03-10-PLAN.md — Settings shell: 8-slot section order, LiveAnnouncer, ConfirmDialog, SecretInput, forget-all, hydration, E2E helpers (wave 3)
+- [x] 03-10-PLAN.md — Settings shell: 8-slot section order, LiveAnnouncer, ConfirmDialog, SecretInput, forget-all, hydration, E2E helpers (wave 3)
 - [ ] 03-11-PLAN.md — API keys section: 5 provider cards, paste/show/save/last4/replace/remove, forget all + E2E (wave 4)
 - [ ] 03-13-PLAN.md — Backup and restore section: export, import preview, merge/replace confirm + fresh-profile E2E (wave 4)
 - [ ] 03-14-PLAN.md — Storage status + Install the app sections, iOS tip, persist/install stubs E2E (wave 4)
