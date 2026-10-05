@@ -33,6 +33,19 @@ const DATA_INTERNALS = {
 	message:
 		'Import the data layer only through $lib/data (the gateway port). Internals stay inside lib/data.'
 };
+// The Phase 3 global restriction lists, hoisted so the lib/ai block below can repeat them:
+// flat config REPLACES a rule's options per matching block, it never merges them.
+const GLOBAL_RESTRICTED_GLOBALS = [
+	{
+		name: 'confirm',
+		message: 'Use ConfirmDialog (03-UI-SPEC): window.confirm is not accessible.'
+	}
+];
+const GLOBAL_RESTRICTED_PROPERTIES = [
+	{ object: 'window', property: 'confirm', message: 'Use ConfirmDialog (03-UI-SPEC).' }
+];
+const NO_SEND = 'No sending from the AI layer (AI-04: a person sends, never the code).';
+const NO_NAV = 'No programmatic navigation from the AI layer (AI-04).';
 const forbid = (mods, message) => ({
 	group: mods.flatMap((m) => [`$lib/${m}`, `$lib/${m}/**`, `**/lib/${m}`, `**/lib/${m}/**`]),
 	message
@@ -70,17 +83,8 @@ export default defineConfig(
 		// Only sets these two rules; it never re-enables or overrides the fetch ban above.
 		files: [`${WEB}/**/*.{ts,js,svelte}`],
 		rules: {
-			'no-restricted-globals': [
-				'error',
-				{
-					name: 'confirm',
-					message: 'Use ConfirmDialog (03-UI-SPEC): window.confirm is not accessible.'
-				}
-			],
-			'no-restricted-properties': [
-				'error',
-				{ object: 'window', property: 'confirm', message: 'Use ConfirmDialog (03-UI-SPEC).' }
-			]
+			'no-restricted-globals': ['error', ...GLOBAL_RESTRICTED_GLOBALS],
+			'no-restricted-properties': ['error', ...GLOBAL_RESTRICTED_PROPERTIES]
 		}
 	},
 	{
@@ -145,6 +149,48 @@ export default defineConfig(
 			]
 		}
 	})),
+	{
+		// AI-04 "no auto-send" boundary. Deliberately uses rule names DISTINCT from
+		// no-restricted-syntax, which the providers folder turns off, so this block also binds
+		// lib/ai/providers/**. Every list repeats the earlier entries it would otherwise replace.
+		files: [`${WEB}/lib/ai/**`],
+		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						DATA_INTERNALS,
+						{
+							group: [
+								...forbid(['leads'], '').group,
+								'**/leads',
+								'**/leads/**',
+								'*web3forms*',
+								'**/*web3forms*'
+							],
+							message: 'AI modules must never import lead delivery (no auto-send).'
+						}
+					]
+				}
+			],
+			'no-restricted-globals': [
+				'error',
+				...GLOBAL_RESTRICTED_GLOBALS,
+				{ name: 'XMLHttpRequest', message: NO_SEND },
+				{ name: 'WebSocket', message: NO_SEND },
+				{ name: 'EventSource', message: NO_SEND },
+				{ name: 'open', message: NO_NAV }
+			],
+			'no-restricted-properties': [
+				'error',
+				...GLOBAL_RESTRICTED_PROPERTIES,
+				{ object: 'navigator', property: 'sendBeacon', message: NO_SEND },
+				{ object: 'window', property: 'open', message: NO_NAV },
+				{ object: 'location', property: 'assign', message: NO_NAV },
+				{ object: 'location', property: 'replace', message: NO_NAV }
+			]
+		}
+	},
 	{
 		files: [`${WEB}/lib/security/sanitize-html.svelte`],
 		rules: { 'svelte/no-at-html-tags': 'off' }

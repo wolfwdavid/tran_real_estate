@@ -469,7 +469,10 @@ describe('AI no-auto-send boundary (lintText, in memory)', () => {
 		for (const p of [PROVIDERS_FIX, `${AI}/__lintfix__`, `${AI}/ui/__lintfix__`]) {
 			expect(existsSync(resolve(repoRoot, p))).toBe(false);
 		}
-		const probe = await lint(`${WEB}/lib/__lintfix__/confirm.ts`, `export const ok = confirm('x');\n`);
+		const probe = await lint(
+			`${WEB}/lib/__lintfix__/confirm.ts`,
+			`export const ok = confirm('x');\n`
+		);
 		hasGlobalConfirmBan = errorsFor(probe, 'no-restricted-globals').length > 0;
 	});
 
