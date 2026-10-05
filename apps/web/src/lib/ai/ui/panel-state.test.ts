@@ -78,6 +78,8 @@ function memoryRepo() {
 		get: vi.fn(async (id: string) => rows.get(id)),
 		listByFeature: vi.fn(async () => []),
 		countByFeature: vi.fn(async () => 0),
+		listBySubject: vi.fn(async () => []),
+		countBySubject: vi.fn(async () => 0),
 		softDelete: vi.fn(async () => {})
 	};
 	return repo satisfies ArtifactRepo;
@@ -182,6 +184,16 @@ describe('streaming, Stop and sample output', () => {
 		expect(input.sample).toBe(false);
 		expect(state.artifactId).toBe('a1');
 		expect(state.gate.canExit).toBe(true);
+	});
+
+	test('subjectId is stored with the artifact when given, and absent otherwise', async () => {
+		const tagged = setup({ deps: { subjectId: 'L1' } });
+		await tagged.state.generate();
+		expect(tagged.repo.create.mock.calls[0]![0].subjectId).toBe('L1');
+
+		const plain = setup();
+		await plain.state.generate();
+		expect(plain.repo.create.mock.calls[0]![0]).not.toHaveProperty('subjectId');
 	});
 
 	test('connecting status line before the first token, then Writing…', async () => {

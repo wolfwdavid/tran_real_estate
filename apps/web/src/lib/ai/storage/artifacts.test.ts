@@ -3,7 +3,7 @@ import { BackupError, SyncableSchema, parseBackup } from '@tran/core';
 import type { Finding } from '@tran/core/fair-housing';
 import { fakeKey } from '../../../../tests/support/fake-keys';
 import { _resetBackupRegistry, listBackupTables } from '$lib/storage/backup-registry';
-import { buildBackupText } from '$lib/storage/backup';
+import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
 import { TranDb } from '$lib/storage/db';
 import { META, getMeta } from '$lib/storage/meta';
 import { freshIdb } from '$lib/storage/test-utils';
@@ -300,5 +300,115 @@ describe('backup export', () => {
 		);
 		expect(err).toBeInstanceOf(BackupError);
 		expect((err as BackupError).code).toBe('key-material');
+	});
+});
+
+describe('subjectId (Phase 6: per-listing draft history)', () => {
+	const outreach = (o: Parameters<typeof input>[0] = {}) =>
+		input({ feature: 'renter-outreach', promptId: 'renter/outreach.v1@1', text: 'Hello', ...o });
+
+	it('listBySubject returns only that subject, newest first; countBySubject matches', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(outreach({ subjectId: 'L1', text: 'first L1' }));
+		await repo.create(outreach({ subjectId: 'L2', text: 'only L2' }));
+		const c = await repo.create(outreach({ subjectId: 'L1', text: 'second L1' }));
+		await repo.create(input({ subjectId: 'L1', text: 'demo feature, same subject' }));
+
+		const l1 = await repo.listBySubject('renter-outreach', 'L1');
+		expect(l1.map((x) => x.id)).toEqual([c.id, a.id]);
+		expect(l1.every((x) => x.subjectId === 'L1')).toBe(true);
+		expect((await repo.listBySubject('renter-outreach', 'L2')).map((x) => x.text)).toEqual([
+			'only L2'
+		]);
+		expect(await repo.listBySubject('renter-outreach', 'L3')).toEqual([]);
+		expect(await repo.countBySubject('renter-outreach', 'L1')).toBe(2);
+		expect(await repo.countBySubject('renter-outreach', 'L2')).toBe(1);
+	});
+
+	it("a draft saved for 'L1' never appears for subjectId: 'L2'", async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		await repo.create(outreach({ subjectId: 'L1' }));
+		expect(await repo.listBySubject('renter-outreach', 'L2')).toEqual([]);
+		expect(await repo.countBySubject('renter-outreach', 'L2')).toBe(0);
+	});
+
+	it('listBySubject pages ten at a time and skips tombstones', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const made: AiArtifact[] = [];
+		for (let i = 0; i < 12; i++) {
+			made.push(await repo.create(outreach({ subjectId: 'L1', text: `d${i}` })));
+			await repo.create(outreach({ subjectId: 'L2', text: `other ${i}` }));
+		}
+		await repo.softDelete(made[11]!.id, new Date(T0 + 86_400_000));
+		const page1 = await repo.listBySubject('renter-outreach', 'L1');
+		expect(page1.map((x) => x.text)).toEqual(
+			made
+				.slice(1, 11)
+				.reverse()
+				.map((x) => x.text)
+		);
+		const page2 = await repo.listBySubject('renter-outreach', 'L1', { offset: 10 });
+		expect(page2.map((x) => x.text)).toEqual(['d0']);
+		expect(await repo.countBySubject('renter-outreach', 'L1')).toBe(11);
+	});
+
+	it('listByFeature still returns every draft of the feature (Phase 5 behavior unchanged)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		await repo.create(outreach({ subjectId: 'L1' }));
+		await repo.create(outreach({ subjectId: 'L2' }));
+		await repo.create(outreach());
+		expect(await repo.listByFeature('renter-outreach')).toHaveLength(3);
+		expect(await repo.countByFeature('renter-outreach')).toBe(3);
+	});
+
+	it('stores subjectId only when given; without it the stored keys are unchanged', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const withSubject = await repo.create(outreach({ subjectId: 'L1' }));
+		const stored = (await db.table(AI_ARTIFACTS_TABLE).get(withSubject.id)) as Record<
+			string,
+			unknown
+		>;
+		expect(Object.keys(stored).sort()).toEqual([...ARTIFACT_KEYS, 'subjectId'].sort());
+		expect(stored.subjectId).toBe('L1');
+
+		const without = await repo.create(outreach());
+		const bare = (await db.table(AI_ARTIFACTS_TABLE).get(without.id)) as Record<string, unknown>;
+		expect(Object.keys(bare).sort()).toEqual(ARTIFACT_KEYS);
+		expect(bare).not.toHaveProperty('subjectId');
+		const undef = await repo.create(outreach({ subjectId: undefined }));
+		expect(await db.table(AI_ARTIFACTS_TABLE).get(undef.id)).not.toHaveProperty('subjectId');
+	});
+
+	it('rejects a subjectId that is not a short opaque id (never inputs)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		for (const bad of ['', 'x'.repeat(201), 42 as unknown as string]) {
+			await expect(repo.create(outreach({ subjectId: bad }))).rejects.toThrow(
+				'artifact-subject-id'
+			);
+		}
+		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(0);
+	});
+
+	it('backup export then import keeps subjectId; a row without it still imports', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const tagged = await repo.create(outreach({ subjectId: 'L1' }));
+		const plain = await repo.create(input());
+		const out = await buildBackupText(db, { now: new Date(T0 + 3_600_000), knownSecrets: [] });
+
+		const target = new TranDb(freshIdb());
+		await target.open();
+		try {
+			const file = { name: 'backup.json', size: out.text.length, text: async () => out.text };
+			const preview = await previewImport(target, file);
+			await applyImport(target, preview, 'replace');
+			const restored = createArtifactRepo(target);
+			expect((await restored.get(tagged.id))?.subjectId).toBe('L1');
+			expect(await restored.get(plain.id)).toEqual(plain);
+			expect((await restored.listBySubject('renter-outreach', 'L1')).map((a) => a.id)).toEqual([
+				tagged.id
+			]);
+		} finally {
+			target.close();
+		}
 	});
 });

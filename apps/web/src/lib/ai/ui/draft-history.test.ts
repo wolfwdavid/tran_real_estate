@@ -79,6 +79,8 @@ const repo: ArtifactRepo = {
 	get: () => Promise.resolve(undefined),
 	listByFeature: () => Promise.resolve([]),
 	countByFeature: () => Promise.resolve(0),
+	listBySubject: () => Promise.resolve([]),
+	countBySubject: () => Promise.resolve(0),
 	softDelete: () => Promise.resolve()
 };
 

@@ -133,6 +133,11 @@ function memoryRepo(rows: AiArtifact[]): ArtifactRepo & { rows: AiArtifact[] } {
 		listByFeature: async (_f, o = {}) =>
 			live().slice(o.offset ?? 0, (o.offset ?? 0) + (o.limit ?? 10)),
 		countByFeature: async () => live().length,
+		listBySubject: async (_f, subjectId, o = {}) =>
+			live()
+				.filter((a) => a.subjectId === subjectId)
+				.slice(o.offset ?? 0, (o.offset ?? 0) + (o.limit ?? 10)),
+		countBySubject: async (_f, subjectId) => live().filter((a) => a.subjectId === subjectId).length,
 		async softDelete(id, at) {
 			const a = rows.find((x) => x.id === id);
 			if (a) a.deletedAt = at.toISOString();
@@ -210,6 +215,34 @@ describe('DraftHistory', () => {
 		await vi.waitFor(() => expect(container.querySelectorAll('li')).toHaveLength(2));
 		expect(repo.rows.find((a) => a.id === 'a3')?.deletedAt).toBeDefined();
 		expect(container.textContent).toContain('2 saved in this browser');
+	});
+
+	test('subjectId lists only that subject; switching subjects reloads; axe clean', async () => {
+		const rows = [
+			{ ...artifact('s1', '2026-10-03T15:00:00.000Z', 'draft'), subjectId: 'L1' },
+			{ ...artifact('s2', '2026-10-04T15:00:00.000Z', 'draft'), subjectId: 'L2' },
+			{ ...artifact('s3', '2026-10-05T15:00:00.000Z', 'sent'), subjectId: 'L1' },
+			artifact('s4', '2026-10-05T16:00:00.000Z', 'draft')
+		];
+		const repo = memoryRepo(rows);
+		const { container, rerender } = await render(DraftHistory, {
+			props: { feature: 'demo', repo, headingLevel: 3, onOpen: () => {}, subjectId: 'L1' }
+		});
+		await vi.waitFor(() => expect(container.querySelectorAll('li')).toHaveLength(2));
+		expect(container.textContent).toContain('Draft s3');
+		expect(container.textContent).toContain('Draft s1');
+		expect(container.textContent).not.toContain('Draft s2');
+		expect(container.textContent).not.toContain('Draft s4');
+		expect(container.textContent).toContain('2 saved in this browser');
+		expect(await axeViolations(container)).toEqual([]);
+
+		await rerender({ subjectId: 'L2' });
+		await vi.waitFor(() => expect(container.querySelectorAll('li')).toHaveLength(1));
+		expect(container.textContent).toContain('Draft s2');
+
+		await rerender({ subjectId: 'L9' });
+		await vi.waitFor(() => expect(container.querySelectorAll('li')).toHaveLength(0));
+		expect(container.textContent).toContain('No drafts yet.');
 	});
 
 	test('Show older drafts loads the next page', async () => {
