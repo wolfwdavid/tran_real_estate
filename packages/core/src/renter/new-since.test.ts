@@ -70,6 +70,22 @@ describe('filteredNewIds', () => {
 		};
 		const bounded = f({ priceMin: 1000, priceMax: 2500, beds: 2 });
 		expect(sorted(filteredNewIds(items, 1000, new Map(), bounded, NOW))).toEqual(['inBounds']);
+		// Bounds are inclusive; a null price fails any single bound.
+		const edges = {
+			atMin: item({ price: 1000 }),
+			atMax: item({ price: 2500 }),
+			noPrice: item({ price: null })
+		};
+		expect(sorted(filteredNewIds(edges, 1000, new Map(), bounded, NOW))).toEqual([
+			'atMax',
+			'atMin'
+		]);
+		expect(filteredNewIds(edges, 1000, new Map(), f({ priceMax: 3000 }), NOW).has('noPrice')).toBe(
+			false
+		);
+		expect(filteredNewIds(edges, 1000, new Map(), f({ priceMin: 0 }), NOW).has('noPrice')).toBe(
+			false
+		);
 		// With no price bounds every missing on-market row counts, a null price included.
 		expect(sorted(filteredNewIds(items, 1000, new Map(), DEFAULT_FILTERS, NOW))).toEqual([
 			'inBounds',

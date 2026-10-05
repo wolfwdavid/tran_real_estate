@@ -176,6 +176,10 @@ describe('resultsHeading', () => {
 		expect(resultsHeading({ total: 0, shown: 0, location: '78701' })).toBe('0 rentals in 78701');
 	});
 
+	test('the noun follows the total, not the shown count', () => {
+		expect(resultsHeading({ total: 5, shown: 1, location: 'X' })).toBe('1 of 5 rentals in X');
+	});
+
 	test('large counts use thousands separators', () => {
 		expect(resultsHeading({ total: 1200, shown: 1200, location: 'X' })).toBe('1,200 rentals in X');
 	});
