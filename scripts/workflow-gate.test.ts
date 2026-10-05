@@ -151,6 +151,14 @@ describe('quality matrix', () => {
 		expect([...idx].sort((a, b) => a - b)).toEqual(idx);
 	});
 
+	test('quality runs the fixture drift check after pnpm install (it needs Prettier)', () => {
+		const quality = job('quality');
+		const install = quality.indexOf('run: pnpm install --frozen-lockfile');
+		const fixtures = quality.indexOf('run: node scripts/gen-fixtures.mjs --check');
+		expect(install).toBeGreaterThan(-1);
+		expect(fixtures).toBeGreaterThan(install);
+	});
+
 	test('Playwright readiness probe targets the always-on attacker listener', () => {
 		// Each quality leg builds ONE target; the root listener never starts on the sub leg, so a
 		// root-URL probe would time out. The attacker listener always answers 200 (plan 01-05).
