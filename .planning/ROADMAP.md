@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation, Origin & Security Baseline** - Dedicated-origin static deploy with strict meta CSP, frame-bust, CI gate, and secret/PII blocking (completed 2026-09-22)
 - [x] **Phase 2: Brand System, Marketing & Legal Pages** - Warm-editorial accessible landing, per-audience pages, legal pages, and portal switcher (completed 2026-10-05)
-- [ ] **Phase 3: Local Platform: Storage, Key Vault & Backup** - Browser-only key vault (session / remember / passphrase), JSON backup, persistence status, PWA install
+- [x] **Phase 3: Local Platform: Storage, Key Vault & Backup** - Browser-only key vault (session / remember / passphrase), JSON backup, persistence status, PWA install (completed 2026-10-05)
 - [ ] **Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures** - Single metered, cached, hard-capped RentCast gateway plus synthetic sample data and check-on-open alerts engine
 - [ ] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path
 - [ ] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach
@@ -427,7 +427,7 @@ Plans:
   2. User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup.
   3. Extension permissions are limited to storage and zillow.com. Monitoring a browsing session shows zero network requests from the extension. The listing and popup show a "collects nothing, sends nothing" privacy notice and a "Not affiliated with or endorsed by Zillow Group" notice.
   4. User can install the extension from a GitHub Releases zip by following load-unpacked instructions, or from Microsoft Edge Add-ons (Firefox Add-ons optional).
-**Plans:** 12/12 plans complete
+**Plans:** 17/17 plans complete
 Plans:
 - [ ] 11-01-PLAN.md — Scaffold apps/extension (WXT 0.21.4), one-shot deps, test harness, contracts (selectors, copy, messages, settings)
 - [ ] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
@@ -456,7 +456,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 |-------|----------------|--------|-----------|
 | 1. Foundation, Origin & Security Baseline | 9/9 | Complete    | 2026-09-22 |
 | 2. Brand System, Marketing & Legal Pages | 0/TBD | Complete    | 2026-10-05 |
-| 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Not started | - |
+| 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 0/TBD | Not started | - |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 0/TBD | Not started | - |
 | 6. Renter Portal | 0/TBD | Not started | - |
