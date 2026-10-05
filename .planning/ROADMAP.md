@@ -136,7 +136,7 @@ Plans:
 - [x] 03-05-PLAN.md — Dexie data layer: TranDb, Syncable repos, meta, backup registry, persist()/estimate, liveQuery helper (wave 2)
 - [x] 03-06-PLAN.md — shadcn-svelte 1.6.1 init reconciled to Phase 2 tokens, 9 primitives, alias tokens, UI class guard (wave 2; needs Phase 2)
 - [ ] 03-07-PLAN.md — Passphrase lock: PBKDF2 600k + wrapped AES-GCM data key, persisted 5-attempt cooldown, cross-tab lock (wave 3)
-- [ ] 03-08-PLAN.md — Backup service: key-free export + download, 25 MB preview, single-transaction merge/replace (wave 3)
+- [x] 03-08-PLAN.md — Backup service: key-free export + download, 25 MB preview, single-transaction merge/replace (wave 3)
 - [x] 03-09-PLAN.md — Allowlist-only service worker + offline/404/route-mock/manifest E2E on both bases (wave 3)
 - [ ] 03-10-PLAN.md — Settings shell: 8-slot section order, LiveAnnouncer, ConfirmDialog, SecretInput, forget-all, hydration, E2E helpers (wave 3)
 - [ ] 03-11-PLAN.md — API keys section: 5 provider cards, paste/show/save/last4/replace/remove, forget all + E2E (wave 4)
