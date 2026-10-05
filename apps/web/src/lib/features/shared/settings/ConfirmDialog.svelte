@@ -20,6 +20,8 @@
 		cancelLabel: string;
 		onConfirm: () => Promise<void>;
 		onError?: (error: unknown) => void;
+		/** bits-ui close auto-focus hook: call `e.preventDefault()` and focus elsewhere to override. */
+		onCloseAutoFocus?: (e: Event) => void;
 		/** Render the caller's trigger Button and spread `props` onto it. */
 		trigger: Snippet<[{ props: Record<string, unknown> }]>;
 	}
@@ -33,6 +35,7 @@
 		cancelLabel,
 		onConfirm,
 		onError,
+		onCloseAutoFocus,
 		trigger
 	}: Props = $props();
 
@@ -65,6 +68,7 @@
 			e.preventDefault();
 			cancelEl?.focus();
 		}}
+		{onCloseAutoFocus}
 		escapeKeydownBehavior={busy ? 'ignore' : 'close'}
 		interactOutsideBehavior="ignore"
 	>
