@@ -8,7 +8,7 @@ import DataSourceChoice from './DataSourceChoice.svelte';
 type Source = 'rentcast' | 'sample';
 
 function props(keyState: 'none' | 'locked' | 'available', value: Source = 'rentcast') {
-	const onChange = vi.fn(async (_v: Source) => {});
+	const onChange = vi.fn<(v: Source) => Promise<void>>(async () => {});
 	return { props: { keyState, value, onChange }, onChange };
 }
 
