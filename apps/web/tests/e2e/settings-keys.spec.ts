@@ -253,11 +253,30 @@ test('Forget all in one tab clears every other open Tran tab', async ({ page, co
 	expect(await sessionBlob(page)).toBeNull();
 });
 
-test('no Test key button without a registered tester', async ({ page }) => {
+// Phase 5 registers the AI testers while Settings is mounted (asynchronously, in the AI drafting
+// section). An AI card's tester reads "Test connection", never "Test key". The remembered-key reload
+// covers the registration race: the card may render before its tester registers, and the
+// reactive registry (05-16) must still bring the button in.
+test('AI key cards offer Test connection, never Test key, including after a reload', async ({
+	page
+}) => {
 	await openSettings(page);
+	await page
+		.locator('#key-security')
+		.getByRole('radio', { name: 'Remember on this device', exact: true })
+		.click();
+	await expect(announcer(page)).toHaveText('Keys will be remembered on this device.');
 	await saveKey(page, 'Anthropic', fakeKey('anthropic', 'T'));
-	await expect(card(page, 'anthropic')).toContainText('Key ending in');
-	await expect(page.getByRole('button', { name: /Test key/ })).toHaveCount(0);
+	const anthropic = card(page, 'anthropic');
+	await expect(anthropic).toContainText('Key ending in');
+	await expect(page.locator('#ai-drafting[data-ai-ready="true"]')).toBeAttached();
+	await expect(anthropic.getByRole('button', { name: 'Test connection' })).toBeVisible();
+	await expect(anthropic.getByRole('button', { name: /Test key/ })).toHaveCount(0);
+
+	await page.reload();
+	await expect(anthropic).toContainText('Key ending in');
+	await expect(anthropic.getByRole('button', { name: 'Test connection' })).toBeVisible();
+	await expect(anthropic.getByRole('button', { name: /Test key/ })).toHaveCount(0);
 });
 
 test('empty state explains that keys are optional', async ({ page }) => {
