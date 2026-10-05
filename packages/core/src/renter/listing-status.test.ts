@@ -12,7 +12,9 @@ describe('listingStatus', () => {
 	});
 
 	it('treats exactly 7 days as recent and 8 days as stale', () => {
-		expect(listingStatus({ status: 'Active', lastSeenDate: '2026-10-08' }, NOW).kind).toBe('recent');
+		expect(listingStatus({ status: 'Active', lastSeenDate: '2026-10-08' }, NOW).kind).toBe(
+			'recent'
+		);
 		expect(listingStatus({ status: 'Active', lastSeenDate: '2026-10-07' }, NOW)).toEqual({
 			kind: 'stale',
 			lastSeen: '2026-10-07'
@@ -30,7 +32,10 @@ describe('listingStatus', () => {
 			kind: 'gone'
 		});
 		expect(
-			listingStatus({ status: 'Active', lastSeenDate: '2026-10-14', removedDate: '2026-10-14' }, NOW)
+			listingStatus(
+				{ status: 'Active', lastSeenDate: '2026-10-14', removedDate: '2026-10-14' },
+				NOW
+			)
 		).toEqual({ kind: 'gone' });
 	});
 

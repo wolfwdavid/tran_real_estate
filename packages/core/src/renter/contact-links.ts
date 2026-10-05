@@ -49,9 +49,7 @@ export function safeHttpUrl(raw: string | null | undefined): string | null {
 export type OutboundSearchId = 'google' | 'zillow' | 'apartments';
 
 /** "Search elsewhere" links: plain searches for the address, never data extraction. */
-export function outboundSearchLinks(
-	fullAddress: string
-): { id: OutboundSearchId; href: string }[] {
+export function outboundSearchLinks(fullAddress: string): { id: OutboundSearchId; href: string }[] {
 	const enc = encodeURIComponent(fullAddress);
 	return [
 		{ id: 'google', href: `https://www.google.com/search?q=${enc}` },
