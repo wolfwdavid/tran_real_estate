@@ -116,10 +116,7 @@ describe('redactPii: undeclared emails and phones', () => {
 	});
 
 	test('detects common US phone formats', () => {
-		const out = redactPii(
-			'Call 212-555-0148, +1 212 555 0149, (212)555-0150 or 212.555.0151.',
-			[]
-		);
+		const out = redactPii('Call 212-555-0148, +1 212 555 0149, (212)555-0150 or 212.555.0151.', []);
 		expect(out.text).toBe('Call {phone_1}, {phone_2}, {phone_3} or {phone_4}.');
 		expect(out.redactions.map((r) => r.token)).toEqual([
 			'phone_1',
@@ -142,7 +139,8 @@ describe('redactPii: undeclared emails and phones', () => {
 		'2024-2026',
 		'Unit 1234567',
 		'$2,450,000',
-		'Listed at $1,250,000.00 in 2025'
+		'Listed at $1,250,000.00 in 2025',
+		'Parcel 1234567890,12'
 	])('does not treat %j as a phone', (text) => {
 		expect(redactPii(text, [])).toEqual({ text, redactions: [] });
 	});
