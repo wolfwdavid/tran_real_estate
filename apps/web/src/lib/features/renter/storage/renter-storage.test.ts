@@ -1,9 +1,11 @@
 // Renter persistence (06-11, RENT-04/RENT-05): the shortlist and saved-search meta tables, their
 // repositories (tombstone restore, status history, notes cap) and backup coverage.
 // fake-indexeddb with a fresh IDBFactory per test and an injected clock (never fake timers).
+// liveCount (a Dexie liveQuery) is proven in real Chromium: renter-storage.browser.test.ts.
 import { readFileSync } from 'node:fs';
 import Dexie from 'dexie';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
+import type { Listing } from '@tran/core/listings';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { MAX_NOTES, shortlistItemSchema, type RentalFilters } from '@tran/core/renter';
 import { listBackupTables, _resetBackupRegistry } from '$lib/storage/backup-registry';
@@ -16,7 +18,7 @@ import {
 	RENTER_SHORTLIST_LABEL,
 	RENTER_SHORTLIST_TABLE
 } from './tables';
-import { createShortlistRepo, getShortlistRepo } from './shortlist-repo';
+import { createShortlistRepo, getShortlistRepo, type ShortlistRepo } from './shortlist-repo';
 import { createSearchMetaRepo, getSearchMetaRepo } from './search-meta-repo';
 
 const T0 = Date.parse('2026-10-15T12:00:00.000Z');
@@ -254,24 +256,6 @@ describe('shortlist repo', () => {
 		expect((await shortlist.liveAll()).map((i) => i.listingId).sort()).toEqual(['L1', 'L3']);
 		expect(await shortlist.count()).toBe(2);
 	});
-
-	it('liveCount emits the live count and follows writes', async () => {
-		const { shortlist } = setup();
-		const seen: number[] = [];
-		const sub = shortlist.liveCount().subscribe((n) => seen.push(n));
-		const until = async (n: number) => {
-			for (let i = 0; i < 100 && seen.at(-1) !== n; i++) await new Promise((r) => setTimeout(r, 5));
-		};
-		await until(0);
-		await shortlist.add(row('L1'), PROV);
-		await until(1);
-		await shortlist.remove('L1');
-		await until(0);
-		sub.unsubscribe();
-		expect(seen[0]).toBe(0);
-		expect(seen).toContain(1);
-		expect(seen.at(-1)).toBe(0);
-	});
 });
 
 describe('search meta repo', () => {
@@ -403,5 +387,11 @@ describe('app singletons', () => {
 	it('return one repo each, bound lazily (no database is opened by the call)', () => {
 		expect(getShortlistRepo()).toBe(getShortlistRepo());
 		expect(getSearchMetaRepo()).toBe(getSearchMetaRepo());
+	});
+});
+
+describe('types', () => {
+	it('add accepts a mapped Phase 4 Listing as-is', () => {
+		expectTypeOf<Listing>().toExtend<Parameters<ShortlistRepo['add']>[0]>();
 	});
 });

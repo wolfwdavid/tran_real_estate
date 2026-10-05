@@ -12,6 +12,7 @@ import {
 	type SearchSnapshotRow
 } from '$lib/data/tables';
 import { AI_STORES, type AiArtifact } from '$lib/ai/storage/tables';
+import type { RenterSearchMeta, ShortlistItem } from '@tran/core/renter';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -38,6 +39,9 @@ export class TranDb extends Dexie {
 	dataPrefs!: Table<DataPrefRow, string>;
 	// Phase 5 AI drafts (apps/web/src/lib/ai/storage/tables.ts).
 	aiArtifacts!: Table<AiArtifact, string>;
+	// Phase 6 renter shortlist + saved-search filters ($lib/features/renter/storage).
+	renterShortlist!: Table<ShortlistItem, string>;
+	renterSearchMeta!: Table<RenterSearchMeta, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
@@ -48,6 +52,12 @@ export class TranDb extends Dexie {
 		this.version(2).stores(PHASE4_STORES);
 		// Phase 5: stored AI generations ("AI drafts"). Adds one table; existing tables unchanged.
 		this.version(3).stores(AI_STORES);
+		// Phase 6: renter shortlist (one row per listing; tombstones keep the unique listingId, so a
+		// re-add restores the row) and the renter search meta (same id as the savedSearches row).
+		this.version(4).stores({
+			renterShortlist: 'id, &listingId, status, updatedAt, deletedAt',
+			renterSearchMeta: 'id, updatedAt, deletedAt'
+		});
 	}
 }
 

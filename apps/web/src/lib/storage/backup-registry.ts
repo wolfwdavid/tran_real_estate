@@ -5,6 +5,7 @@
 
 import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
+import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
 
 export interface BackupTable {
 	readonly name: string;
@@ -26,7 +27,9 @@ const DEFAULT_TABLES: readonly BackupTable[] = [
 	{ name: 'prefs', label: 'Settings' },
 	...PHASE4_BACKUP_TABLES,
 	// Phase 5: AI drafts (aiArtifacts).
-	...AI_BACKUP_TABLES
+	...AI_BACKUP_TABLES,
+	// Phase 6: 'Rental shortlist' (renterShortlist), 'Saved rental searches' (renterSearchMeta).
+	...RENTER_BACKUP_TABLES
 ];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));

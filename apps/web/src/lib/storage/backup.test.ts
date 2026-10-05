@@ -31,7 +31,7 @@ const NOW = new Date('2026-10-01T12:00:00.000Z');
 class TestDb extends TranDb {
 	constructor(options?: DbOptions) {
 		super(options);
-		this.version(4).stores({ notes: 'id, updatedAt' }); // after TranDb's latest (3)
+		this.version(5).stores({ notes: 'id, updatedAt' }); // after TranDb's latest (4)
 	}
 }
 

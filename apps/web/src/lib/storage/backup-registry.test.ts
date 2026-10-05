@@ -7,13 +7,15 @@ import {
 } from './backup-registry';
 import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_TABLES } from '$lib/data/tables';
+import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
 import { TranDb } from './db';
 
-/** Built-in registrations: Phase 3 prefs, the Phase 4 data tables, then the Phase 5 AI drafts. */
+/** Built-in registrations: Phase 3 prefs, Phase 4 data tables, Phase 5 AI drafts, Phase 6 renter. */
 const DEFAULTS = [
 	{ name: 'prefs', label: 'Settings' },
 	...PHASE4_BACKUP_TABLES,
-	...AI_BACKUP_TABLES
+	...AI_BACKUP_TABLES,
+	...RENTER_BACKUP_TABLES
 ];
 const DEFAULT_NAMES = DEFAULTS.map((t) => t.name);
 
@@ -40,6 +42,7 @@ describe('backup registry', () => {
 			{ name: 'prefs', label: 'Preferences' },
 			...PHASE4_BACKUP_TABLES,
 			...AI_BACKUP_TABLES,
+			...RENTER_BACKUP_TABLES,
 			{ name: 'notes', label: 'Notes' }
 		]);
 	});
