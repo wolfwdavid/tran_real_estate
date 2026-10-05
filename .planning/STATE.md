@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-10-05T02:18:22.618Z"
+stopped_at: Completed 03-05-PLAN.md
+last_updated: "2026-10-05T02:26:18.068Z"
 progress:
   total_phases: 11
   completed_phases: 2
   total_plans: 206
-  completed_plans: 22
+  completed_plans: 24
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 3 (Local Platform: Storage, Key Vault & Backup) — EXECUTING
-Plan: 2 of 17
+Plan: 4 of 17
 
 ## Performance Metrics
 
@@ -68,6 +68,8 @@ Plan: 2 of 17
 | Phase 02 P10 | 14min | 2 tasks | 1 files |
 | Phase 02 P12 | 11min | 2 tasks | 2 files |
 | Phase 03 P01 | 6min | 3 tasks | 15 files |
+| Phase 03 P05 | 12min | 2 tasks | 10 files |
+| Phase 03 P02 | 6min | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -131,6 +133,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Provider registry (@tran/core PROVIDERS) is the single source for hosts/labels/key URLs/header auth; host ⊆ CSP connect-src enforced by scripts/provider-hosts.test.ts
 - [Phase 03]: backupReminderDue returns {due:false} when neither lastBackupAt nor firstRecordAt exists
 - [Phase 03]: ESLint: later blocks setting no-restricted-globals/properties on apps/web/src must repeat the confirm entries (flat config replaces)
+- [Phase 03]: 03-05: backup registry is include-only; BACKUP_EXCLUDED_TABLES (frozen ['meta']) lists local-only tables and every TranDb table must be registered XOR excluded
+- [Phase 03]: 03-05: openDb maps SecurityError/InvalidStateError/UnknownError/MissingAPIError (walking Dexie .inner) to StorageBlockedError
+- [Phase 03]: Backup parse order: JSON -> format -> schemaVersion (invalid/newer) -> migrate -> zod validate -> known tables; BackupError message === code
 
 ### Pending Todos
 
@@ -153,7 +158,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T02:18:22.613Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-10-05T02:26:09.221Z
+Stopped at: Completed 03-05-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
