@@ -10,13 +10,13 @@ provider hosts, and the app refuses to render inside a third-party frame.
 
 This repository is a pnpm workspace:
 
-| Path             | What it is                                                                       |
-| ---------------- | -------------------------------------------------------------------------------- |
-| `apps/web`       | The SvelteKit app (adapter-static), its E2E specs, and Playwright config         |
-| `packages/core`  | Shared pure logic                                                                |
-| `packages/brand` | Design tokens (populated from Phase 2)                                           |
-| `scripts`        | Build, CSP assertion, Pages emulator, secret and real-data guards, workflow lint |
-| `docs`           | Owner runbooks such as the deploy checklist                                      |
+| Path             | What it is                                                                                                                              |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web`       | The SvelteKit app (adapter-static), its E2E specs, and Playwright config                                                                |
+| `packages/core`  | Shared pure logic                                                                                                                       |
+| `packages/brand` | Design tokens (colors, fonts, radii, shadows) and the WCAG contrast gate; mirrored in `apps/web/src/app.css` `@theme` and parity-tested |
+| `scripts`        | Build, CSP assertion, Pages emulator, secret and real-data guards, workflow lint                                                        |
+| `docs`           | Owner runbooks such as the deploy checklist                                                                                             |
 
 ## Prerequisites
 
@@ -69,26 +69,54 @@ corepack pnpm verify
 
 ## Commands
 
-| Command                        | What it does                                                                   |
-| ------------------------------ | ------------------------------------------------------------------------------ |
-| `corepack pnpm dev`            | Vite dev server for `apps/web`                                                 |
-| `corepack pnpm check`          | `svelte-kit sync` plus `svelte-check` and `tsc --noEmit` across the workspace  |
-| `corepack pnpm lint`           | Prettier check and ESLint (import boundaries, `fetch` and `{@html}` bans)      |
-| `corepack pnpm test:unit`      | Vitest across the `web`, `core`, and `scripts` projects                        |
-| `corepack pnpm build:root`     | Build for the root origin into `apps/web/build`                                |
-| `corepack pnpm build:sub`      | Build under `BASE_PATH=/tran_real_estate` into `apps/web/build-sub`            |
-| `corepack pnpm csp:assert`     | Assert the CSP contract on every page of both builds                           |
-| `corepack pnpm test:e2e`       | Playwright: routing, CSP violations, framing, and axe WCAG A/AA on both builds |
-| `corepack pnpm guard`          | Real-data and CoStar guard over every tracked file                             |
-| `corepack pnpm secrets:canary` | Prove the gitleaks config rejects the repository's canary pattern              |
-| `corepack pnpm secrets:scan`   | gitleaks over the full git history                                             |
-| `corepack pnpm lint:workflows` | actionlint over `.github/workflows`                                            |
-| `corepack pnpm verify`         | All of the above in order, as one gate                                         |
+| Command                        | What it does                                                                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `corepack pnpm dev`            | Vite dev server for `apps/web`                                                                                                              |
+| `corepack pnpm check`          | `svelte-kit sync` plus `svelte-check` and `tsc --noEmit` across the workspace                                                               |
+| `corepack pnpm lint`           | Prettier check and ESLint (import boundaries, `fetch` and `{@html}` bans)                                                                   |
+| `corepack pnpm banned`         | Banned marketing/legal terms check over routes, components and content                                                                      |
+| `corepack pnpm test:unit`      | Vitest across the `web`, `core`, `brand`, and `scripts` projects                                                                            |
+| `corepack pnpm build:root`     | Build for the root origin into `apps/web/build`                                                                                             |
+| `corepack pnpm build:sub`      | Build under `BASE_PATH=/tran_real_estate` into `apps/web/build-sub`                                                                         |
+| `corepack pnpm csp:assert`     | Assert the CSP contract on every page of both builds                                                                                        |
+| `corepack pnpm test:e2e`       | Playwright: routing, CSP, framing, layout (375px/640px, landmarks, footer legal links), marketing content, and axe WCAG A/AA on both builds |
+| `corepack pnpm guard`          | Real-data and CoStar guard over every tracked file                                                                                          |
+| `corepack pnpm secrets:canary` | Prove the gitleaks config rejects the repository's canary pattern                                                                           |
+| `corepack pnpm secrets:scan`   | gitleaks over the full git history                                                                                                          |
+| `corepack pnpm lint:workflows` | actionlint over `.github/workflows`                                                                                                         |
+| `corepack pnpm verify`         | All of the above in order, as one gate                                                                                                      |
 
-`verify` is `check`, `lint`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
-`guard`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in a little over a minute
-on a warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
+`verify` is `check`, `lint`, `banned`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
+`guard`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in under two minutes on a
+warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
 same steps, split across a hygiene job and a two-leg quality matrix (root and sub base paths).
+
+## Routes
+
+Every page is prerendered with a trailing slash. Thirteen pages ship today:
+
+| Route                   | Group                              |
+| ----------------------- | ---------------------------------- |
+| `/`                     | Marketing (landing)                |
+| `/for-renters/`         | Marketing                          |
+| `/for-investors/`       | Marketing                          |
+| `/for-agents/`          | Marketing                          |
+| `/legal/privacy/`       | Legal                              |
+| `/legal/terms/`         | Legal                              |
+| `/legal/fair-housing/`  | Legal                              |
+| `/legal/data-coverage/` | Legal                              |
+| `/renter/`              | App (placeholder until Phase 6)    |
+| `/investor/`            | App (placeholder until Phase 7)    |
+| `/agent/`               | App (placeholder until Phases 8-9) |
+| `/settings/`            | App (placeholder until Phase 3)    |
+| `/print/`               | Chrome-free print surface          |
+
+Adding or removing a page means updating two lists as well: `apps/web/tests/e2e/routes.ts`
+(a drift test fails if the build and the list disagree) and `EXPECTED_PAGES` in
+`scripts/assert-csp.mjs`.
+
+The fonts (Fraunces for headings, Inter for body text) are self-hosted through Fontsource, so
+the site makes no third-party requests.
 
 ## End-to-end ports
 
