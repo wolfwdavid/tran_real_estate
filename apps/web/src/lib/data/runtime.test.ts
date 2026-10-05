@@ -408,3 +408,37 @@ describe('cleanup', () => {
 		await expect(p).rejects.toMatchObject({ kind: 'BudgetCapReached', detail: 'dismissed' });
 	});
 });
+
+// ---------------------------------------------------------------------------------------------
+// Public port ($lib/data)
+// ---------------------------------------------------------------------------------------------
+
+describe('$lib/data public port', () => {
+	it('exports the runtime, peek store, sample metros and error helpers only', async () => {
+		const port: Record<string, unknown> = await import('./index');
+		for (const name of [
+			'createDataRuntime',
+			'setDataRuntime',
+			'getDataRuntime',
+			'createPeekStore',
+			'SAMPLE_METROS',
+			'isGatewayError',
+			'GatewayError'
+		]) {
+			expect(port[name], name).toBeDefined();
+		}
+		for (const name of [
+			'createRentCastClient',
+			'createFixtureFetch',
+			'createLedgerRepo',
+			'createCacheRepo',
+			'issueGrant',
+			'browserFetch',
+			'createDataGateway',
+			'createSampleGateway',
+			'getRentCastKey'
+		]) {
+			expect(port[name], name).toBeUndefined();
+		}
+	});
+});
