@@ -252,12 +252,7 @@ function buildListing(ctx, kind, metro, metroIndex, i, serial) {
 		const originalPrice = roundTo(price * (1.03 + rand.next() * 0.05), isSale ? 1000 : 25);
 		const changeDays = rand.int(1, listedDays - 1);
 		history[dayKey(listedDate)] = historyEvent(kind, originalPrice, listedDays, removedDays);
-		history[dayKey(isoDaysBefore(changeDays))] = historyEvent(
-			kind,
-			price,
-			listedDays,
-			removedDays
-		);
+		history[dayKey(isoDaysBefore(changeDays))] = historyEvent(kind, price, listedDays, removedDays);
 	} else {
 		history[dayKey(listedDate)] = historyEvent(kind, price, listedDays, removedDays);
 	}
@@ -313,6 +308,9 @@ function buildListings(ctx, kind, perMetro) {
 	});
 	return listings.sort(byLastSeenThenId);
 }
+
+const omitAreaCode = (metro) =>
+	Object.fromEntries(Object.entries(metro).filter(([key]) => key !== 'areaCode'));
 
 const metroOf = (listing) => METROS.find((m) => m.city === listing.city);
 
@@ -461,7 +459,7 @@ export function generateFixtureData() {
 	const estimates = buildEstimates(rand, rentals, sales);
 	const markets = buildMarkets(rand, rentals, sales);
 	return {
-		'metros.json': METROS.map(({ areaCode: _areaCode, ...metro }) => metro),
+		'metros.json': METROS.map((metro) => omitAreaCode(metro)),
 		'rentals.json': rentals,
 		'sales.json': sales,
 		'estimates.json': estimates,
