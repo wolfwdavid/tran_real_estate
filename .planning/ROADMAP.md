@@ -127,7 +127,25 @@ Plans:
   3. User can export all app data to a JSON file that is verified to contain no keys. The user can import it into a fresh browser profile after previewing what will be added, changed, or replaced.
   4. Settings shows whether the browser granted persistent storage, and a "last backup N days ago" reminder appears once a backup is overdue.
   5. User can install the app to their home screen or desktop as a PWA and launch it standalone. iOS users see an Add-to-Home-Screen tip.
-**Plans**: TBD
+**Plans**: 17 plans in 7 waves
+Plans:
+- [ ] 03-01-PLAN.md — Exact-pinned deps, core provider registry (hosts ⊆ CSP, header-only auth), Syncable + reminder math, test fakes, lint guardrails (wave 1)
+- [ ] 03-02-PLAN.md — Core backup: tran-backup-v1 envelope + error codes, migrations, merge/replace diff, key scan, filename (wave 2)
+- [ ] 03-03-PLAN.md — PWA manifest (relative URLs), brand-generated icons, beforeinstallprompt capture, CSP oracle carriers (wave 2)
+- [ ] 03-04-PLAN.md — Key vault core: WebCrypto, tran-secrets DB, session default / remember opt-in, forget-all broadcast, tester hook (wave 2)
+- [ ] 03-05-PLAN.md — Dexie data layer: TranDb, Syncable repos, meta, backup registry, persist()/estimate, liveQuery helper (wave 2)
+- [ ] 03-06-PLAN.md — shadcn-svelte 1.6.1 init reconciled to Phase 2 tokens, 9 primitives, alias tokens, UI class guard (wave 2; needs Phase 2)
+- [ ] 03-07-PLAN.md — Passphrase lock: PBKDF2 600k + wrapped AES-GCM data key, persisted 5-attempt cooldown, cross-tab lock (wave 3)
+- [ ] 03-08-PLAN.md — Backup service: key-free export + download, 25 MB preview, single-transaction merge/replace (wave 3)
+- [ ] 03-09-PLAN.md — Allowlist-only service worker + offline/404/route-mock/manifest E2E on both bases (wave 3)
+- [ ] 03-10-PLAN.md — Settings shell: 8-slot section order, LiveAnnouncer, ConfirmDialog, SecretInput, forget-all, hydration, E2E helpers (wave 3)
+- [ ] 03-11-PLAN.md — API keys section: 5 provider cards, paste/show/save/last4/replace/remove, forget all + E2E (wave 4)
+- [ ] 03-13-PLAN.md — Backup and restore section: export, import preview, merge/replace confirm + fresh-profile E2E (wave 4)
+- [ ] 03-14-PLAN.md — Storage status + Install the app sections, iOS tip, persist/install stubs E2E (wave 4)
+- [ ] 03-12-PLAN.md — Key security section: storage mode, passphrase lock/unlock/change/remove, cooldown + at-rest E2E (wave 5)
+- [ ] 03-15-PLAN.md — AppNotice (backup overdue / keys locked) in the (app) layout + clock-controlled E2E (wave 5)
+- [ ] 03-16-PLAN.md — Settings axe matrix (11 states × 2 bases), real-dialog CSP check, overlay paint, 375px, locked-notice E2E (wave 6)
+- [ ] 03-17-PLAN.md — Full verify, validation walk + mutation ledger, HUMAN-UAT device checklist, README, PLAT-01..06 complete (wave 7)
 **Research flag**: light. Covers Safari/WebKit 7-day eviction and `navigator.storage.persist()` on iOS 17+, plus service-worker/manifest behavior under a meta CSP on Pages.
 **UI hint**: yes (Settings / key vault / backup screens). Use `/gsd:ui-phase 3`.
 **Note**: Provider-specific "test key" behavior completes in Phase 4 (RentCast) and Phase 5 (AI providers). This phase delivers the paste/test/forget flow and the vault those tests plug into.
