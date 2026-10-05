@@ -21,10 +21,12 @@
 		"csp:assert": "node scripts/assert-csp.mjs apps/web/build && node scripts/assert-csp.mjs apps/web/build-sub",
 		"test:e2e": "pnpm --filter web exec playwright test",
 		"guard": "node scripts/guard-real-data.mjs --all",
+		"fixtures:check": "node scripts/gen-fixtures.mjs --check",
+		"fixtures:gen": "node scripts/gen-fixtures.mjs",
 		"secrets:canary": "node scripts/gitleaks-canary.mjs",
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
-		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
+		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",
