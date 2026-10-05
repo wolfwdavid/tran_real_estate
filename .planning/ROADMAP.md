@@ -142,7 +142,7 @@ Plans:
 - [x] 03-11-PLAN.md — API keys section: 5 provider cards, paste/show/save/last4/replace/remove, forget all + E2E (wave 4)
 - [x] 03-13-PLAN.md — Backup and restore section: export, import preview, merge/replace confirm + fresh-profile E2E (wave 4)
 - [x] 03-14-PLAN.md — Storage status + Install the app sections, iOS tip, persist/install stubs E2E (wave 4)
-- [ ] 03-12-PLAN.md — Key security section: storage mode, passphrase lock/unlock/change/remove, cooldown + at-rest E2E (wave 5)
+- [x] 03-12-PLAN.md — Key security section: storage mode, passphrase lock/unlock/change/remove, cooldown + at-rest E2E (wave 5)
 - [x] 03-15-PLAN.md — AppNotice (backup overdue / keys locked) in the (app) layout + clock-controlled E2E (wave 5)
 - [ ] 03-16-PLAN.md — Settings axe matrix (11 states × 2 bases), real-dialog CSP check, overlay paint, 375px, locked-notice E2E (wave 6)
 - [ ] 03-17-PLAN.md — Full verify, validation walk + mutation ledger, HUMAN-UAT device checklist, README, PLAT-01..06 complete (wave 7)
