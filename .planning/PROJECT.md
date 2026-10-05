@@ -28,14 +28,23 @@ Validated in Phase 2: Brand System, Marketing & Legal Pages (2026-10-05) — 5/5
 - ✓ BRND-04 — Privacy, Terms (not a brokerage; not investment, legal or tax advice), Fair Housing and Data-coverage pages reachable from every page's footer (Phase 2)
 - ✓ BRND-05 — Portals nav with prerendered `aria-current` on every app page; disclosure menu below 640px with keyboard/Escape behaviour (Phase 2)
 
+Validated in Phase 3: Local Platform: Storage, Key Vault & Backup (2026-10-05) — 6/6 must-haves verified against the codebase; `pnpm verify` green in one run (577 unit tests, 454 browser tests on both base paths, CSP oracle on 14+14 pages, `ui:guard`, banned-terms gate, secret and real-data scans, actionlint); 37/37 validation rows walked, 28-row mutation ledger. Nine real-device checks (Android/desktop install, iOS Add to Home Screen, Firefox persist prompt, Safari persistence, offline launch, real-key smoke) are parked in `03-HUMAN-UAT.md` until the org origin exists.
+
+- ✓ PLAT-01 — Settings API-keys section for RentCast, Anthropic, OpenAI, Gemini and OpenRouter from one provider registry (hosts ⊆ CSP `connect-src`, header auth only); "where your key goes" explanation; one-action forget-all broadcast to every open tab (Phase 3)
+- ✓ PLAT-02 — Session-only keys by default (`sessionStorage`); opt-in "remember on this device" migrates keys into the `tran-secrets` IndexedDB table and asks for persistent storage inside the click (Phase 3)
+- ✓ PLAT-03 — Passphrase lock with envelope encryption (per-tab DEK), 12-char minimum, 5-attempt cooldown doubling 30 s → 300 s persisted across reload, cross-tab lock, honest "what a passphrase does and does not do" callout (Phase 3)
+- ✓ PLAT-04 — JSON export over registered tables only with a raw + JSON-escaped key scan that refuses key-bearing data; import previews added/changed/replaced rows, merges newest-wins in one rw transaction, migrates older schema versions (Phase 3)
+- ✓ PLAT-05 — Storage section shows the persistence grant; app-wide `AppNotice` shows "last backup N days ago" once overdue (and "Your keys are locked" first when both apply), live-updating on export, snooze and import (Phase 3)
+- ✓ PLAT-06 — PWA manifest, allowlist-only precache service worker (same-origin GET, no runtime caching), pre-hydration `beforeinstallprompt` capture, Install section with iOS Add-to-Home-Screen tip (Phase 3)
+
 ### Active
 
 **Platform (shared)**
 - [x] One SvelteKit app, statically built for GitHub Pages under a dedicated free GitHub organization (own origin `tranrealestate.github.io`), with the landing page, audience pages, legal pages and branded portal placeholders — skeleton in Phase 1, real marketing surface in Phase 2
-- [ ] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini); keys stored only in that browser, sent only to the provider
+- [x] Bring-your-own-key settings: user pastes a RentCast API key and an LLM key (Claude / OpenAI / Gemini / OpenRouter); keys stored only in that browser, sent only to the provider — shipped in Phase 3 (key testing hook lands with each provider in Phases 4–5)
 - [ ] Demo mode with synthetic fixture data when no key is present, plus onboarding on getting a free RentCast key (never a bundled shared key)
 - [ ] Shared RentCast data layer: single gateway with IndexedDB cache, request dedupe, visible monthly call meter, and a default hard stop before the free 50-call limit (overage is $0.20/call with no provider-side cap)
-- [ ] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle)
+- [x] Local data durability: JSON export/import backup and persistent-storage request (Safari evicts after 7 days idle) — shipped in Phase 3
 - [ ] Deterministic Fair Housing copy checker gating all AI-generated housing text, plus not-financial-advice / not-a-brokerage disclaimers
 - [ ] Warm editorial visual identity (warm palette, elegant serif headings, cinematic imagery) designed with UI/UX Pro Max
 - [x] GTM surface: marketing landing pages per audience that explain the value and drive usage — shipped in Phase 2 (`/`, `/for-renters/`, `/for-investors/`, `/for-agents/`)
@@ -136,4 +145,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-05 after Phase 2 completion*
+*Last updated: 2026-10-05 after Phase 3 completion*
