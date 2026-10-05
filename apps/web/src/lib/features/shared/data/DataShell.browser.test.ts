@@ -119,6 +119,7 @@ async function world(
 	const db = createDataDb({ name: `shell-${crypto.randomUUID()}` });
 	teardown.push(() => db.delete());
 	const net = rentcast();
+	teardown.push(() => net.release()); // a failed test never leaves a call parked
 	const base = { db, clock, fetch: net.fetch, keys: keys(opts.keys ?? 'available') };
 
 	const seeder = createDataRuntime({ ...base, channel: null });

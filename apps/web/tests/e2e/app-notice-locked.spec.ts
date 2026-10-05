@@ -111,6 +111,8 @@ test('the locked notice shows on every portal page of a locked tab', async ({
 	for (const path of ['renter/', 'investor/', 'agent/']) {
 		await open(page, path);
 		await expect(lockedNotice(page), path).toBeVisible();
-		await expect(page.locator('main > :first-child')).toContainText(LOCKED);
+		// The Data source status bar is the first child of <main> (04-22); the notice is second.
+		await expect(page.locator('main > :first-child')).toHaveAttribute('aria-label', 'Data source');
+		await expect(page.locator('main > :nth-child(2)')).toContainText(LOCKED);
 	}
 });

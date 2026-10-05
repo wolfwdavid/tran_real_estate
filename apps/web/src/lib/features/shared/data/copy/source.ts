@@ -80,6 +80,9 @@ export const noKeyLink = (keyState: 'none' | 'locked'): SettingsLink =>
 export const sourceAnnouncement = (source: DataSource): string =>
 	source === 'sample' ? 'Showing sample data.' : 'Showing RentCast data.';
 
+/** Another tab saved a new cap (BroadcastChannel 'tran-data'). */
+export const CAP_CHANGED_ELSEWHERE = 'Your RentCast cap was changed in another Tran tab.';
+
 // DueSearchesDialog ------------------------------------------------------------------------------
 
 export const dueTitle = (due: number): string => `Check ${n(due)} saved searches for new listings?`;
