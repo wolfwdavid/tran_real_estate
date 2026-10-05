@@ -162,7 +162,7 @@ Plans:
   5. Testing a RentCast key in Settings reports valid / invalid / restricted without a billed call. User sees specific messages for invalid key, restricted key, rate limit, budget cap reached, and no results.
 **Plans**: 25 plans in 9 waves
 Plans:
-- [ ] 04-01-PLAN.md — Phase 3 gate, platform adapter, Phase 4 Dexie tables + backup registration, exact-pin deps, schema-registry test
+- [x] 04-01-PLAN.md — Phase 3 gate, platform adapter, Phase 4 Dexie tables + backup registration, exact-pin deps, schema-registry test
 - [x] 04-02-PLAN.md — core budget: UTC period, isBilled policy, usage summary, cap validation, meter states
 - [x] 04-03-PLAN.md — core request: endpoints (incl. rental listing by id), canonical key, TTLs, error taxonomy, zero-cost probe mapping
 - [x] 04-04-PLAN.md — core normalizeLocation, listings domain types, filterListings, fetch-wide + narrow request builders
