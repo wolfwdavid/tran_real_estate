@@ -194,3 +194,102 @@ describe('eslint architectural boundaries (lintText, in memory)', () => {
 		}
 	});
 });
+
+const serviceWorkerFetch = `/// <reference lib="webworker" />
+const sw = self as unknown as ServiceWorkerGlobalScope;
+sw.addEventListener('fetch', (event) => {
+	const req = event.request;
+	event.respondWith(fetch(req));
+});
+`;
+
+const siblingFetch = `export async function probe(): Promise<Response> {
+	return fetch('https://x.test');
+}
+`;
+
+const consoleLeak = `export function save(key: string): void {
+	console.log(key);
+}
+`;
+
+describe('Phase 3 guardrails', () => {
+	beforeAll(() => {
+		// These production paths are linted virtually; the vault fixture must never exist on disk.
+		expect(existsSync(resolve(repoRoot, `${WEB}/lib/storage/secrets/vault.ts`))).toBe(false);
+		expect(existsSync(resolve(repoRoot, `${WEB}/lib/pwa/install.ts`))).toBe(false);
+	});
+
+	test('the service worker may call fetch()', async () => {
+		const messages = await lint(`${WEB}/service-worker.ts`, serviceWorkerFetch);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+
+	test('a sibling of the service worker is still under the fetch ban', async () => {
+		const messages = await lint(`${WEB}/lib/pwa/install.ts`, siblingFetch);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toHaveLength(1);
+	});
+
+	test('bare confirm() is rejected and points at ConfirmDialog', async () => {
+		const messages = await lint(
+			`${WEB}/routes/(app)/settings/+page.svelte`,
+			`<script lang="ts">
+	function forget() {
+		if (confirm('x')) return true;
+		return false;
+	}
+</script>
+
+<button onclick={forget}>Forget</button>
+`
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-globals');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('ConfirmDialog');
+	});
+
+	test('window.confirm() is rejected', async () => {
+		const messages = await lint(
+			`${WEB}/lib/features/shared/settings/X.svelte`,
+			`<script lang="ts">
+	function forget() {
+		return window.confirm('x');
+	}
+</script>
+
+<button onclick={forget}>Forget</button>
+`
+		);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-properties');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('ConfirmDialog');
+	});
+
+	test('console.* is an error inside the key vault folder', async () => {
+		const messages = await lint(`${WEB}/lib/storage/secrets/vault.ts`, consoleLeak);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-console')).toHaveLength(1);
+	});
+
+	test('control: the same console call elsewhere in storage is not a no-console error', async () => {
+		const messages = await lint(`${WEB}/lib/storage/db.ts`, consoleLeak);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-console')).toEqual([]);
+	});
+
+	test('a marketing page importing the key vault is rejected', async () => {
+		const messages = await lint(
+			`${WEB}/routes/(marketing)/__lintfix__/vault-import.ts`,
+			`import { getVault } from '$lib/storage/secrets';
+
+export const vault = getVault;
+`
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
+	});
+});
