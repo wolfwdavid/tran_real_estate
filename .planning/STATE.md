@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-16-PLAN.md
-last_updated: "2026-10-05T22:14:22.141Z"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-10-05T22:22:11.190Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 79
+  completed_plans: 80
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-13)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 05 — AI Layer: Providers, Streaming & Fair Housing Guardrails
+**Current focus:** Phase 06 — Renter Portal
 
 ## Current Position
 
-Phase: 06
-Plan: Not started
+Phase: 06 (Renter Portal) — EXECUTING
+Plan: 2 of 22
 
 ## Performance Metrics
 
@@ -125,6 +125,7 @@ Plan: Not started
 | Phase 05 P13 | 45min | 3 tasks | 9 files |
 | Phase 05 P15 | 25min | 2 tasks | 8 files |
 | Phase 05 P16 | 28min | 3 tasks | 14 files |
+| Phase 06 P03 | 6min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -290,6 +291,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-16: Stop before any text uses a stopped-empty status (nothing saved), not the partial-draft line
 - [Phase 05]: 05-16: defaultPreferred falls back saved -> locked -> none so only-locked users see 'Your keys are locked', not 'No AI key yet'
 - [Phase 05]: 05-16: Phase 5 gate green (verify 318s, 2541 unit, 566 E2E); AI-01..04 complete; live-provider checks owner-gated in 05-HUMAN-UAT.md H1-H10
+- [Phase 06]: 06-03: listingStatus is gone only on explicit Inactive or removedDate; unknown status falls through to recency
+- [Phase 06]: 06-03: relativeListed shows N days ago up to 30 days, then full date
 
 ### Pending Todos
 
@@ -312,7 +315,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T22:07:35.333Z
-Stopped at: Completed 05-16-PLAN.md
+Last session: 2026-10-05T22:22:11.175Z
+Stopped at: Completed 06-03-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
