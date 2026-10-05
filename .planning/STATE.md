@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-14-PLAN.md
-last_updated: "2026-10-05T11:21:02.355Z"
+stopped_at: Completed 04-17-PLAN.md
+last_updated: "2026-10-05T11:29:17.099Z"
 progress:
   total_phases: 11
   completed_phases: 3
   total_plans: 206
-  completed_plans: 54
+  completed_plans: 55
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 16 of 25 (waves 1-3 complete; next wave 4: 04-17, 04-20)
+Plan: 17 of 25 (waves 1-3 complete; next wave 4: 04-17, 04-20)
 
 ## Performance Metrics
 
@@ -100,6 +100,7 @@ Plan: 16 of 25 (waves 1-3 complete; next wave 4: 04-17, 04-20)
 | Phase 04 P16 | 30min | 2 tasks | 6 files |
 | Phase 04 P15 | 10min | 3 tasks | 7 files |
 | Phase 04 P14 | 20min | 2 tasks | 11 files |
+| Phase 04 P17 | 12min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -218,6 +219,7 @@ Recent decisions affecting current work:
 - [Phase 04]: GatewayError 429 countdown effect is keyed only on the error object, so ticks never re-announce; retryInMs undefined falls back to backoffMs(0)
 - [Phase 04]: GatewayError Try again stays disabled while onTryAgain is pending (no double spend)
 - [Phase 04]: 04-14: provenance chips build their own class strings (twMerge drops text-label on Phase 3 Badge); relative time floors via formatDistanceStrict
+- [Phase 04]: 04-17: sample gateway is stateless (no apiCache, no ledger reserve) so sample rows can never surface as live; locked key resolves to sample/locked regardless of preference
 
 ### Pending Todos
 
@@ -240,7 +242,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T11:21:02.349Z
-Stopped at: Completed 04-14-PLAN.md
+Last session: 2026-10-05T11:29:17.093Z
+Stopped at: Completed 04-17-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
