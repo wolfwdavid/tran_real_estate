@@ -2,3 +2,4 @@
 // `@tran/core/renter/<module>`. Sibling renter plans append their own `export *` lines below.
 export * from './types.js';
 export * from './location.js';
+export * from './fair-rent.js';

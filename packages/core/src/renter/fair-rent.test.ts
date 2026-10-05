@@ -169,10 +169,10 @@ describe('displayComparables', () => {
 	});
 
 	it('does not treat missing ids/addresses as a match', () => {
-		const out = displayComparables(
-			[{ id: null, formattedAddress: null, distance: 1 }],
-			{ id: null, formattedAddress: null }
-		);
+		const out = displayComparables([{ id: null, formattedAddress: null, distance: 1 }], {
+			id: null,
+			formattedAddress: null
+		});
 		expect(out.rows).toHaveLength(1);
 		expect(out.subjectIncluded).toBe(false);
 	});
