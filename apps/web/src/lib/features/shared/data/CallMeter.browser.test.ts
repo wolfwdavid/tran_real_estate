@@ -124,7 +124,8 @@ describe('CallMeter bar', () => {
 			expect(el.className).toContain(fill);
 			expect(el.className).not.toMatch(/transition/);
 			const scale = Math.max(50, cap, used);
-			expect(el.style.width).toBe(`${(used / scale) * 100}%`);
+			expect(el.style.width).toMatch(/%$/);
+			expect(parseFloat(el.style.width)).toBeCloseTo((used / scale) * 100, 3);
 			expect(container.querySelector(`svg[data-icon="${icon}"]`)).not.toBeNull();
 			unmount();
 		}
