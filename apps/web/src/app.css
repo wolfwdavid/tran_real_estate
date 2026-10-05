@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'shadcn-svelte/tailwind.css';
+@import 'tw-animate-css';
 
 @theme {
 	--color-*: initial;
@@ -20,6 +22,14 @@
 	--color-destructive: #a1271f;
 	--color-deco-terracotta: #c8714e;
 	--color-deco-sage: #8fa386;
+	--color-card-foreground: #2b1d16;
+	--color-popover: #fffdf9;
+	--color-popover-foreground: #2b1d16;
+	--color-muted: #f2e9db;
+	--color-accent: #f2e9db;
+	--color-accent-foreground: #2b1d16;
+	--color-input: #8a7462;
+	--color-destructive-foreground: #ffffff;
 
 	--font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -95,6 +105,12 @@
 			animation-duration: 0ms !important;
 		}
 	}
+}
+
+@utility key-digits {
+	font-feature-settings:
+		'tnum' 1,
+		'zero' 1;
 }
 
 .app-root {

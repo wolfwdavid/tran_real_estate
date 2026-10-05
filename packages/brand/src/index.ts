@@ -22,7 +22,16 @@ export const tokens = {
 		ring: '#a4452a',
 		destructive: '#a1271f',
 		'deco-terracotta': '#c8714e',
-		'deco-sage': '#8fa386'
+		'deco-sage': '#8fa386',
+		// Phase 3 shadcn-svelte aliases: each reuses an existing Phase 2 hex (no new colors).
+		'card-foreground': '#2b1d16',
+		popover: '#fffdf9',
+		'popover-foreground': '#2b1d16',
+		muted: '#f2e9db',
+		accent: '#f2e9db',
+		'accent-foreground': '#2b1d16',
+		input: '#8a7462',
+		'destructive-foreground': '#ffffff'
 	},
 	font: {
 		display: "'Fraunces Variable', Georgia, 'Times New Roman', serif",
@@ -99,7 +108,15 @@ export const contrastPairs: readonly Pair[] = Object.freeze([
 	),
 	// Current-nav indicator.
 	{ fg: 'primary', bg: 'background', min: 3, kind: 'ui' },
-	{ fg: 'primary', bg: 'surface', min: 3, kind: 'ui' }
+	{ fg: 'primary', bg: 'surface', min: 3, kind: 'ui' },
+	// Phase 3 shadcn primitives: destructive fill label, input/radio/checkbox boundaries,
+	// checked radio dot / checkbox fill on card, and the check glyph on the fill.
+	{ fg: 'destructive-foreground', bg: 'destructive', min: 4.5, kind: 'text' },
+	{ fg: 'input', bg: 'card', min: 3, kind: 'ui' },
+	{ fg: 'input', bg: 'surface', min: 3, kind: 'ui' },
+	{ fg: 'input', bg: 'background', min: 3, kind: 'ui' },
+	{ fg: 'primary', bg: 'card', min: 3, kind: 'ui' },
+	{ fg: 'card', bg: 'primary', min: 3, kind: 'ui' }
 ] satisfies Pair[]);
 
 /** Pairs whose ratio falls below their minimum. Empty for the shipped matrix. */
