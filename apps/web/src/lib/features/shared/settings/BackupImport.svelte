@@ -41,7 +41,8 @@
 	};
 
 	let busy = $state(false);
-	let preview = $state<Preview | null>(null);
+	// Raw: a deep $state proxy would reach IndexedDB inside preview.incoming and fail structured clone.
+	let preview = $state.raw<Preview | null>(null);
 	let previewSeq = $state(0);
 	let failure = $state<{ title: string; body: string } | null>(null);
 	let failureSeq = $state(0);
