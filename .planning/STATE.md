@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-09-PLAN.md
-last_updated: "2026-10-05T11:02:16.244Z"
+stopped_at: Completed 04-11-PLAN.md
+last_updated: "2026-10-05T11:02:21.877Z"
 progress:
   total_phases: 11
   completed_phases: 3
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 04 (Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures) — EXECUTING
-Plan: 10 of 25
+Plan: 11 of 25
 
 ## Performance Metrics
 
@@ -93,6 +93,7 @@ Plan: 10 of 25
 | Phase 04 P01 | 25min | 2 tasks | 15 files |
 | Phase 04 P10 | 5min | 2 tasks | 4 files |
 | Phase 04 P09 | 6min | 2 tasks | 5 files |
+| Phase 04 P11 | 6min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -199,6 +200,8 @@ Recent decisions affecting current work:
 - [Phase 04]: RentCast schemas drop+count bad rows; SchemaMismatch only on wrong top-level shape or all rows bad; issues are path:code only
 - [Phase 04]: RentCast mappers are total over unknown input (num/str helpers); unknown propertyType/status -> Other
 - [Phase 04]: RentCast client: timeout covers fetch + body read; only a missing key throws, HTTP statuses return RawResult
+- [Phase 04]: Ledger reserve reads usage+cap and appends the pending row in ONE rw transaction over ledger+dataPrefs (mutation-proven across two connections)
+- [Phase 04]: Over-cap grants are WeakSet-registered in-memory objects: single-use, key-bound, consumed only when actually over the cap
 
 ### Pending Todos
 
@@ -221,7 +224,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T11:02:16.234Z
-Stopped at: Completed 04-09-PLAN.md
+Last session: 2026-10-05T11:02:21.871Z
+Stopped at: Completed 04-11-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
