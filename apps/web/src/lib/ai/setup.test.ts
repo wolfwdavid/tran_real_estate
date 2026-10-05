@@ -181,7 +181,7 @@ describe('registerAiTestKeys', () => {
 	it('registers exactly the four AI providers (never rentcast) and returns their unregisters', () => {
 		const offs = PROVIDER_ORDER.map(() => vi.fn());
 		let i = 0;
-		const register = vi.fn((_p: string, _fn: KeyTester) => offs[i++]!);
+		const register = vi.fn<(p: string, fn: KeyTester) => () => void>(() => offs[i++]!);
 		const result = registerAiTestKeys(register as unknown as typeof registerKeyTester, {
 			model: () => 'm'
 		});
