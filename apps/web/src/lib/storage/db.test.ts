@@ -26,7 +26,7 @@ afterEach(() => {
 });
 
 describe('TranDb', () => {
-	it("opens as 'tran' with the Phase 3, Phase 4 data, Phase 5 AI and Phase 6 renter tables at version 4", async () => {
+	it("opens as 'tran' with the Phase 3, Phase 4 data, Phase 5 AI, Phase 6 renter and Phase 7 investor tables at version 5", async () => {
 		const db = new TranDb(freshIdb());
 		await db.open();
 		expect(db.name).toBe('tran');
@@ -37,10 +37,14 @@ describe('TranDb', () => {
 				...Object.keys(PHASE4_STORES),
 				...Object.keys(AI_STORES),
 				'renterShortlist',
-				'renterSearchMeta'
+				'renterSearchMeta',
+				'deals',
+				'investorDraft',
+				'buyBoxes',
+				'watchedZips'
 			].sort()
 		);
-		expect(db.verno).toBe(4);
+		expect(db.verno).toBe(5);
 		db.close();
 	});
 
@@ -55,7 +59,7 @@ describe('TranDb', () => {
 		db.close();
 	});
 
-	it('upgrades a version 2 database in place: existing rows kept, aiArtifacts + renter tables added', async () => {
+	it('upgrades a version 2 database in place: existing rows kept, aiArtifacts, renter and investor tables added', async () => {
 		const idb = freshIdb();
 		class V2 extends Dexie {
 			constructor() {
@@ -70,7 +74,7 @@ describe('TranDb', () => {
 
 		const db = new TranDb(idb);
 		await db.open();
-		expect(db.verno).toBe(4);
+		expect(db.verno).toBe(5);
 		expect(await db.meta.get('lastBackupAt')).toEqual({
 			key: 'lastBackupAt',
 			value: '2026-10-01T00:00:00.000Z'
@@ -78,6 +82,8 @@ describe('TranDb', () => {
 		expect(await db.aiArtifacts.count()).toBe(0);
 		expect(await db.renterShortlist.count()).toBe(0);
 		expect(await db.renterSearchMeta.count()).toBe(0);
+		expect(await db.deals.count()).toBe(0);
+		expect(await db.watchedZips.count()).toBe(0);
 		db.close();
 	});
 

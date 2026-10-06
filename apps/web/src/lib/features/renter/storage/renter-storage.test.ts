@@ -80,7 +80,8 @@ describe('Dexie schema: renter tables', () => {
 		const renter = blocks.find((b) => b[2].includes(RENTER_SHORTLIST_TABLE));
 		expect(renter).toBeDefined();
 		const v = Number(renter![1]);
-		for (const b of blocks) if (b !== renter) expect(Number(b[1])).toBeLessThan(v);
+		// Append-only: every block declared before the renter block has a lower version.
+		for (const b of blocks.slice(0, blocks.indexOf(renter!))) expect(Number(b[1])).toBeLessThan(v);
 		expect(renter![2]).toContain(RENTER_SEARCH_META_TABLE);
 	});
 
