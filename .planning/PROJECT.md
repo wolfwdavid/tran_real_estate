@@ -63,6 +63,15 @@ Validated in Phase 6: Renter Portal (2026-10-06) — 8/8 must-haves verified aga
 - ✓ RENT-07 — Outreach draft from six Fair-Housing-safe inputs through the Phase 5 panel; a flagged phrase blocks every exit; the only outbound path is the renter's own email client (Phase 6)
 - ✓ RENT-08 — Zero-call affordability calculator at `/renter/affordability/` as an import-free shared component (Phase 6)
 
+Validated in Phase 7: Investor Portal (2026-10-06) — 6/6 must-haves verified against the codebase; `pnpm verify` green in one run (4140 unit tests, 1062 browser tests on both base paths, CSP oracle on 25+25 pages, nine hand-checked reference deals exact to the cent, secret and real-data scans, actionlint); 57/57 validation rows walked; a keyed investor demo journey spends exactly 6 RentCast calls. Thirteen owner-gated checks (I1–I13) and two copy sign-offs (S1–S2) are parked in `07-HUMAN-UAT.md`.
+
+- ✓ INV-01 — Pure integer-cents deal analyzer (NOI, cap rate, cash flow, cash-on-cash, DSCR, GRM, 1% rule, amortization, editable expense lines) matching nine reference cases exactly, with property-tested invariants; `/investor/analyze/` with live results and draft autosave (Phase 7)
+- ✓ INV-02 — Fully manual entry proven at zero calls; "Autofill rent/value estimate (1 call)" shows cost first, never overwrites typed values without confirmation, and tags filled fields with provenance (Phase 7)
+- ✓ INV-03 — Saved deals list with sort and confirmed delete; compare up to three deals with Highest/Lowest marks by color and icon, stacked at phone width (Phase 7)
+- ✓ INV-04 — Buy boxes over for-sale listings on Phase 4's saved-search scheduler (no second scheduler), new-since flags, zero-call quick metrics from ZIP median rent, "Load ZIP rents (1 call)" and "Deep analyze (2 calls)" (Phase 7)
+- ✓ INV-05 — Watch up to five ZIPs; rent-trend-by-bedroom and price-to-rent LayerChart dashboards with data-table alternatives and null months as gaps; a ZIP costs one call only when uncached (Phase 7)
+- ✓ INV-06 — `investor/memo.v1` receives only formatted analyzer facts and notes; a numeric post-check flags any number not in the analysis, an advice-language check blocks promises; chrome-free `/print/memo/` prints to PDF with the not-investment-advice disclaimer top and bottom (Phase 7)
+
 ### Active
 
 **Platform (shared)**
@@ -82,10 +91,10 @@ Validated in Phase 6: Renter Portal (2026-10-06) — 8/8 must-haves verified aga
 - [ ] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons
 
 **Investor portal**
-- [ ] Deal analyzer: cap rate, NOI, cash flow, cash-on-cash return, DSCR using rent estimates and comps
-- [ ] Deal-flow alerts: saved buy-box searches over for-sale listings, re-run on app open when stale
-- [ ] Market dashboards: rent trends, price-to-rent, and related market stats by zip
-- [ ] AI investment memo: one-click proposal/report generated from a deal analysis, exportable
+- [x] Deal analyzer: cap rate, NOI, cash flow, cash-on-cash return, DSCR using rent estimates and comps — shipped in Phase 7
+- [x] Deal-flow alerts: saved buy-box searches over for-sale listings, re-run on app open when stale — shipped in Phase 7
+- [x] Market dashboards: rent trends, price-to-rent, and related market stats by zip — shipped in Phase 7
+- [x] AI investment memo: one-click proposal/report generated from a deal analysis, exportable — shipped in Phase 7
 
 **Agent portal**
 - [ ] Lead capture + inbox: shareable inquiry form delivering to the agent's email via Web3Forms (free tier); agent imports leads into the app by pasting the email (free tiers have no read API)
@@ -171,4 +180,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-06 after Phase 6 completion*
+*Last updated: 2026-10-06 after Phase 7 completion*
