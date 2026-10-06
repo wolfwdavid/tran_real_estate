@@ -9,6 +9,10 @@
 	// Under the button: the GatewayError for a failed lookup (focus moves to its title) and the
 	// EstimateResult reference block. The fill rule lives in autofill.ts.
 	//
+	// 07-18: the shown estimate lives on the page state (s.estimates), so a Deep analyze handoff
+	// renders its estimates here at 0 calls, and a Deep analyze estimate that failed
+	// (s.estimateErrors) shows its GatewayError here until the next lookup.
+	//
 	// In flight the button is aria-disabled (not `disabled`): a disabled button drops focus, and
 	// focus must stay on the button after a lookup (07-UI-SPEC "Focus management"). run() ignores
 	// clicks while a lookup is running. The label wraps so 375px never scrolls sideways.
@@ -22,6 +26,7 @@
 	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
 	import { announce, Button } from '$lib/features/shared/data/platform-ui';
 	import type { CostEstimate, Estimate, InvestorDataPort } from '../data/investor-port';
+	import type { GatewayErrorKind } from '@tran/core/request';
 	import type { AnalyzerPageState } from './analyzer-page.svelte';
 	import EstimateResult from './EstimateResult.svelte';
 	import {
@@ -50,7 +55,12 @@
 	let root = $state<HTMLDivElement | null>(null);
 	let cost = $state<CostEstimate | null>(null);
 	let running = $state(false);
-	let estimate = $state<Estimate | null>(null);
+	const estimate = $derived<Estimate | null>(s.estimates[target] ?? null);
+	/** A failed Deep analyze estimate restored from the draft (07-18). */
+	const handoffError = $derived.by(() => {
+		const kind = s.estimateErrors[target];
+		return kind ? new GatewayErrorValue({ kind: kind as GatewayErrorKind }) : null;
+	});
 	let failure = $state<{ error: GatewayErrorValue; retry?: () => Promise<AutofillOutcome> } | null>(
 		null
 	);
@@ -102,7 +112,7 @@
 				return;
 			case 'ok': {
 				const e = outcome.estimate;
-				estimate = e;
+				s.estimates = { ...s.estimates, [target]: e };
 				const out = applyEstimate(s.form, s.sources, target, e);
 				const x = usd(Math.round(e.amountCents / 100) * 100);
 				if (out.kind === 'filled') {
@@ -126,6 +136,11 @@
 		if (running) return;
 		running = true;
 		failure = null;
+		if (s.estimateErrors[target]) {
+			const next = { ...s.estimateErrors };
+			delete next[target];
+			s.estimateErrors = next;
+		}
 		setBusy(true);
 		try {
 			await handle(await step());
@@ -194,6 +209,8 @@
 			onTryAgain={tryAgain}
 			onContinuePastCap={failure.retry ? continuePastCap : undefined}
 		/>
+	{:else if handoffError}
+		<GatewayError error={handoffError} onTryAgain={tryAgain} />
 	{/if}
 	{#if estimate}
 		<EstimateResult

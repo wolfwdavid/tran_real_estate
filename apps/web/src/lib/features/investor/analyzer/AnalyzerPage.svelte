@@ -159,7 +159,7 @@
 				const draft = await readDraft();
 				if (draft && draft.dealId === id) {
 					// Unsaved typing on this deal survives a reload.
-					s.load(draft.form, draft.sources);
+					s.loadDraft(draft);
 					s.dealId = id;
 					s.savedSnapshot = draft.savedSnapshot;
 					s.savedAt = deal.updatedAt;
@@ -172,7 +172,8 @@
 			}
 			const draft = await readDraft();
 			if (!draft || s.unsaved) return;
-			s.load(draft.form, draft.sources);
+			// A Deep analyze handoff (07-18) also restores its estimates and failed-estimate markers.
+			s.loadDraft(draft);
 			if (draft.dealId) {
 				const deal = await getDeal(draft.dealId);
 				if (deal) {

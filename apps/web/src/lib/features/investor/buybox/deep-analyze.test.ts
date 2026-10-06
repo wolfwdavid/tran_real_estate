@@ -64,7 +64,7 @@ function fakePort(o: FakeOpts = {}) {
 		order.push('value');
 		return (o.value ?? (async () => estimate(30_000_000, source)))();
 	});
-	const estimateCost = vi.fn(async (_req: InvestorRequest): Promise<CostEstimate> =>
+	const estimateCost = vi.fn<(req: InvestorRequest) => Promise<CostEstimate>>(async () =>
 		mode === 'sample' ? { calls: 0, reason: 'sample' } : { calls: 1, reason: 'network' }
 	);
 	const saleListings = vi.fn();
@@ -79,7 +79,7 @@ function fakePort(o: FakeOpts = {}) {
 }
 
 function deps(confirm = true) {
-	const writeDraft = vi.fn(async (_d: DraftInput) => undefined);
+	const writeDraft = vi.fn<(d: DraftInput) => Promise<void>>(async () => undefined);
 	const confirmCap = vi.fn(async () => confirm);
 	return { writeDraft, confirmCap };
 }

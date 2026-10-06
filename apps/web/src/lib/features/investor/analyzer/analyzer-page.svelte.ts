@@ -4,8 +4,9 @@
 // (startAutosave) hands the plain draft to the autosaver, which writes Dexie, never the network.
 import { analyze, type DealAnalysis } from '@tran/core/finance';
 import type { DealRecord, DealSources } from '../deals/schema';
+import type { ShownEstimates } from './autofill';
 import { dealSnapshot, EMPTY_SNAPSHOT } from './deal-data';
-import type { Autosaver, DraftInput } from './draftRepo';
+import type { AnalyzerDraft, Autosaver, DraftInput } from './draftRepo';
 import {
 	defaultForm,
 	inputsToForm,
@@ -30,6 +31,13 @@ export class AnalyzerPageState {
 	shownErrors: Partial<Record<FieldKey, FieldError>> = $state({});
 	/** False until the draft/deal restore finished, so the autosave never overwrites a draft. */
 	restored = $state(false);
+	/**
+	 * Estimates shown as EstimateResult under the autofill buttons (07-18: restored from a Deep
+	 * analyze draft at 0 calls; kept in the draft so a reload shows them again).
+	 */
+	estimates: ShownEstimates = $state({});
+	/** 07-18: a Deep analyze estimate that failed (gateway error kind), shown in its fieldset. */
+	estimateErrors: { rent?: string; value?: string } = $state({});
 
 	readonly parsed: ParsedForm = $derived(parseForm(this.form));
 	readonly analysis: DealAnalysis | null = $derived(
@@ -58,6 +66,19 @@ export class AnalyzerPageState {
 		this.form = form;
 		this.sources = sources;
 		this.shownErrors = {};
+		this.estimates = {};
+		this.estimateErrors = {};
+	}
+
+	/** Restore a working draft: form, sources, and the estimates a Deep analyze wrote (07-18). */
+	loadDraft(d: Pick<AnalyzerDraft, 'form' | 'sources' | 'estimates' | 'estimateErrors'>): void {
+		this.load(d.form, d.sources);
+		const e = (d.estimates ?? {}) as ShownEstimates;
+		this.estimates = {
+			...(e.rent ? { rent: e.rent } : {}),
+			...(e.value ? { value: e.value } : {})
+		};
+		this.estimateErrors = { ...(d.estimateErrors ?? {}) };
 	}
 
 	/** Open a saved deal: form from its inputs, snapshot so the badge reads Saved. */
@@ -89,7 +110,8 @@ export class AnalyzerPageState {
 			dealId: this.dealId,
 			form: $state.snapshot(this.form) as AnalyzerForm,
 			sources: $state.snapshot(this.sources) as DealSources,
-			savedSnapshot: this.savedSnapshot
+			savedSnapshot: this.savedSnapshot,
+			estimates: $state.snapshot(this.estimates) as ShownEstimates
 		};
 	}
 

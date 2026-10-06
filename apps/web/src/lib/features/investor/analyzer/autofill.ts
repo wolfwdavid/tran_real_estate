@@ -18,6 +18,9 @@ import { formatOnBlur, type AnalyzerForm } from './form-model';
 
 export type AutofillTarget = 'rent' | 'value';
 
+/** The estimates shown under the autofill buttons (07-18: also restored from a Deep analyze). */
+export type ShownEstimates = Partial<Record<AutofillTarget, Estimate>>;
+
 /** What the analyzer page gives its autofill controls. */
 export interface AutofillContext {
 	/** Autofill pressed with no address: show the Address error and focus Address. */
