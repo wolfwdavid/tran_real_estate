@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-18-PLAN.md
-last_updated: "2026-10-05T23:59:29.300Z"
+stopped_at: Completed 06-15-PLAN.md
+last_updated: "2026-10-06T00:04:15.440Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 94
+  completed_plans: 95
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 15 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
+Plan: 16 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 
 ## Performance Metrics
 
@@ -140,6 +140,7 @@ Plan: 15 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 | Phase 06 P13 | 40min | 2 tasks | 14 files |
 | Phase 06 P14 | 28min | 2 tasks | 21 files |
 | Phase 06 P18 | 25min | 2 tasks | 7 files |
+| Phase 06 P15 | 45min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -332,6 +333,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-14: core Listing gains optional addressLine2/hoaFee (mapper sets them); pass $state.snapshot() to Dexie repo writes
 - [Phase 06]: 06-18: GenerationPanel gains optional beforeGenerate?: () => boolean (host-form validation before a run; Stop never gated) — additive, available to Phases 7-9
 - [Phase 06]: 06-18: outreach recipient = validated agent email, else office email, else none (no-recipient note + bare mailto); Draft history rendered per listing via subjectId
+- [Phase 06]: 06-15: shortlist focus after a status move/removal is board-owned (child reports intent before the write; effect focuses once liveQuery items satisfy it)
+- [Phase 06]: 06-15: rent-change notice only when the cached row is newer than the snapshot (peekListingById, 0 calls)
 
 ### Pending Todos
 
@@ -354,7 +357,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-05T23:59:29.292Z
-Stopped at: Completed 06-18-PLAN.md
+Last session: 2026-10-06T00:04:15.430Z
+Stopped at: Completed 06-15-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
