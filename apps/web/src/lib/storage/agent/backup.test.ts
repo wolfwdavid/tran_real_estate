@@ -33,7 +33,7 @@ afterEach(() => {
 	_resetBackupRegistry();
 });
 
-const sync = (id: string) => ({
+const rowBase = (id: string) => ({
 	id,
 	ownerId: 'local' as const,
 	createdAt: T1,
@@ -43,7 +43,7 @@ const sync = (id: string) => ({
 
 function contact(notes = ''): Contact {
 	return {
-		...sync(CONTACT_ID),
+		...rowBase(CONTACT_ID),
 		name: 'Jordan Example',
 		email: 'jo@example.com',
 		emailNorm: 'jo@example.com',
@@ -62,7 +62,7 @@ function contact(notes = ''): Contact {
 }
 
 const task: Task = {
-	...sync('22222222-2222-4222-8222-222222222222'),
+	...rowBase('22222222-2222-4222-8222-222222222222'),
 	contactId: CONTACT_ID,
 	title: 'Call back',
 	dueDate: '2026-10-07',
@@ -72,7 +72,7 @@ const task: Task = {
 };
 
 const activity: Activity = {
-	...sync('33333333-3333-4333-8333-333333333333'),
+	...rowBase('33333333-3333-4333-8333-333333333333'),
 	contactId: CONTACT_ID,
 	type: 'added',
 	text: 'Added by hand',
