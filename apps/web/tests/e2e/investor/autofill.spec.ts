@@ -171,6 +171,46 @@ test('value estimate fills the purchase price and compares a typed price', async
 	await expectNoAxeViolations(page, 'autofill value estimate, table open');
 });
 
+/**
+ * Holds the sample-fixture chunk (the one carrying meta.json's "tran-fixtures" marker) until
+ * `release()`, so the data runtime starts only after the analyzer has rendered and the address
+ * has been typed: the late-runtime order that made the cost label go missing (07-21).
+ */
+async function holdSampleFixtures(page: Page): Promise<{ release(): void; held(): boolean }> {
+	let release!: () => void;
+	const gate = new Promise<void>((r) => (release = r));
+	let held = false;
+	await page.route(/\/_app\/immutable\/.+\.js$/, async (route) => {
+		const response = await route.fetch();
+		const body = await response.text();
+		if (body.includes('tran-fixtures')) {
+			held = true;
+			await gate;
+		}
+		await route.fulfill({ response, body });
+	});
+	return { release: () => release(), held: () => held };
+}
+
+test('the cost label appears when the data runtime starts after the analyzer', async ({
+	page
+}) => {
+	await blockRentCast(page);
+	const fixtures = await holdSampleFixtures(page);
+	await openAnalyzer(page);
+	await fillAddress(page);
+	expect(fixtures.held()).toBe(true);
+
+	fixtures.release();
+	// No hover and no focus on the button: the label must arrive on its own.
+	await expect(
+		page.getByRole('button', { name: 'Autofill rent estimate (0 calls · sample data)' })
+	).toBeVisible();
+	await expect(
+		page.getByRole('button', { name: 'Autofill value estimate (0 calls · sample data)' })
+	).toBeVisible();
+});
+
 test('keyless sample autofill spends nothing', async ({ page }) => {
 	const blocked = await blockRentCast(page);
 	const rcRequests = collectRequests(page, ['api.rentcast.io']);
