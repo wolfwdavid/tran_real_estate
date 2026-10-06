@@ -7,12 +7,14 @@
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import type { Finding } from '@tran/core/fair-housing';
 	import { segmentText } from './panel-controller';
+	import { groupCopyFor, markMember, type CheckGroupCopy } from './post-check';
 	import FindingPopover from './FindingPopover.svelte';
 
 	let {
 		text,
 		findings,
 		idPrefix,
+		checkGroups = [],
 		onApply,
 		onEdit,
 		openId = $bindable(null)
@@ -20,6 +22,8 @@
 		text: string;
 		findings: Finding[];
 		idPrefix: string;
+		/** Phase 7: a mark whose driving member belongs to a group uses that group's label prefix. */
+		checkGroups?: readonly CheckGroupCopy[];
 		onApply?: (findingId: string) => void;
 		onEdit?: (findingId: string) => void;
 		openId?: string | null;
@@ -31,6 +35,13 @@
 		block: 'Fair Housing problem, must fix: ',
 		warn: 'Fair Housing caution, review: '
 	} as const;
+
+	/** Hidden prefix from the member driving the mark (markMember); Phase 5 prefix for Fair Housing. */
+	function prefixFor(f: Finding): string {
+		const copy = groupCopyFor(markMember(f), checkGroups);
+		if (!copy) return PREFIX[f.severity];
+		return f.severity === 'block' ? `${copy.label}, must fix: ` : `${copy.label}, review: `;
+	}
 
 	// Classes are written out in full (no tailwind-merge) so the custom text-* sizes survive.
 	// [box-decoration-break:clone] keeps the fill and underline on every line of a wrapped phrase;
@@ -57,6 +68,7 @@
 				><FindingPopover
 					finding={f}
 					{idPrefix}
+					{checkGroups}
 					{onApply}
 					{onEdit}
 					bind:open={
@@ -72,7 +84,7 @@
 									aria-hidden="true"
 									class={ICON.block}
 								/>{:else}<TriangleAlert size={16} aria-hidden="true" class={ICON.warn} />{/if}<span
-								class="sr-only">{PREFIX[f.severity]}</span
+								class="sr-only">{prefixFor(f)}</span
 							>{f.phrase}</button
 						>{/snippet}</FindingPopover
 				></mark

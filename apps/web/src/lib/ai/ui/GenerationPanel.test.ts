@@ -8,6 +8,7 @@ import type { Finding, FindingMember } from '@tran/core/fair-housing';
 import { DEMO_INPUTS } from '../prompts/shared/demo.v1';
 import GenerationPanel from './GenerationPanel.svelte';
 import { PanelState, type PanelDeps, type PanelInitial } from './panel-state.svelte';
+import { numbersCopy, numbersStub } from './post-check.fixtures';
 
 const decode = (s: string) =>
 	s
@@ -214,6 +215,66 @@ describe('panel structure', () => {
 	test('the panel source has no HTML injection, clipboard, mailto literal or navigation', () => {
 		const s = readFileSync(new URL('./GenerationPanel.svelte', import.meta.url), 'utf8');
 		for (const banned of ['{@html', 'navigator.clipboard', 'mailto:', 'window.open', 'location.']) {
+			expect(s).not.toContain(banned);
+		}
+	});
+});
+
+describe('Phase 7 post-check groups (checkGroups)', () => {
+	const groupsProps = { postChecks: [numbersStub], checkGroups: [numbersCopy] };
+
+	test('a number finding renders its own group after Fair Housing and gates every exit', () => {
+		const state = makeState({ postChecks: [numbersStub] }, { text: 'Cash flow is 20%' });
+		const { html, controls } = panel(state, groupsProps);
+		const text = strip(html);
+		expect(text).toContain('Number check: 1 to fix');
+		// The popover body ("Category: …") is SSR-tested via FindingDetails; the row shows the label.
+		expect(text).toContain('“20%” Number not in your analysis');
+		expect(text).toContain('Number check, must fix: ');
+		expect(text).not.toContain('Fair Housing problem, must fix: ');
+		expect(text).not.toContain('Fair Housing check: 1 to fix');
+		const fh = text.indexOf('No Fair Housing problem phrases found');
+		expect(fh).toBeGreaterThan(-1);
+		expect(fh).toBeLessThan(text.indexOf('Number check: 1 to fix'));
+		expect(controls.map((c) => c.text)).toEqual(['Copy text', 'Open in email app', 'Mark as sent']);
+		for (const c of controls) expect(attr(c.open, 'aria-disabled')).toBe('true');
+		const a = controls.find((c) => c.tag === 'a')!;
+		expect(attr(a.open, 'href')).toBeNull();
+	});
+
+	test('post-check rows offer Show in draft and Edit it myself, never Remove phrase', () => {
+		const state = makeState({ postChecks: [numbersStub] }, { text: 'Cash flow is 20%' });
+		const text = strip(panel(state, groupsProps).html);
+		expect(text).toContain('Show in draft');
+		expect(text).toContain('Edit it myself');
+		expect(text).not.toContain('Remove phrase');
+		expect(text).not.toContain('Suggested fix: remove this phrase.');
+		expect(text).not.toContain('Based on:');
+	});
+
+	test('no number findings: the group shows its passed title and note', () => {
+		const state = makeState({ postChecks: [numbersStub] }, { text: 'Cash flow is fine.' });
+		const text = strip(panel(state, groupsProps).html);
+		expect(text).toContain('No Fair Housing problem phrases found');
+		expect(text).toContain('Number check passed');
+		expect(text).toContain('Every number in this memo matches a figure from your analysis.');
+	});
+
+	test('without checkGroups the same finding stays in the Fair Housing group (Phase 5)', () => {
+		const state = makeState({ postChecks: [numbersStub] }, { text: 'Cash flow is 20%' });
+		const text = strip(panel(state, { postChecks: [numbersStub] }).html);
+		expect(text).toContain('Fair Housing check: 1 to fix');
+		expect(text).toContain('Fair Housing problem, must fix: ');
+		expect(text).not.toContain('Number check');
+	});
+
+	test('the panel source exposes read-only bindables and no state callback', () => {
+		const s = readFileSync(new URL('./GenerationPanel.svelte', import.meta.url), 'utf8');
+		expect(s).toMatch(/artifactId = \$bindable\(null\)/);
+		expect(s).toMatch(/draftText = \$bindable\(''\)/);
+		expect(s).toContain('checkGroups');
+		// Split literals keep the repo-wide grep for these names at zero.
+		for (const banned of ['onstate' + 'change', 'PanelGate' + 'State', 'fetch(']) {
 			expect(s).not.toContain(banned);
 		}
 	});

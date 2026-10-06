@@ -3,17 +3,21 @@
 	// Pure markup so it is SSR-testable; FindingPopover supplies the bits-ui dialog around it.
 	import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import { STATE_SCOPE_NOTE, type Finding } from '@tran/core/fair-housing';
+	import { STATE_SCOPE_NOTE, type Finding, type FindingMember } from '@tran/core/fair-housing';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { groupCopyFor, type CheckGroupCopy } from './post-check';
 
 	let {
 		finding,
 		headingId,
+		checkGroups = [],
 		onApply,
 		onEdit
 	}: {
 		finding: Finding;
 		headingId: string;
+		/** Phase 7: members of a group with allowRemovePhrase false get no automatic fix. */
+		checkGroups?: readonly CheckGroupCopy[];
 		onApply?: () => void;
 		onEdit?: () => void;
 	} = $props();
@@ -23,6 +27,11 @@
 	// The primary action follows the first Must fix member (else the first member).
 	const primary = $derived(finding.members.find((m) => m.severity === 'block') ?? first);
 	const removes = $derived(primary?.alternative === '');
+	/** A member with no alternative whose group forbids "Remove phrase" offers no suggestion. */
+	const noFix = (m: FindingMember) =>
+		m.alternative === '' && groupCopyFor(m, checkGroups)?.allowRemovePhrase === false;
+	// No automatic action: "Edit it myself" becomes the primary (and the popover's focus target).
+	const canApply = $derived(!primary || !noFix(primary));
 </script>
 
 <div class="flex flex-col gap-2">
@@ -59,17 +68,23 @@
 					<span class="font-semibold">Suggested wording:</span>
 					“{member.alternative}”
 				</p>
-			{:else}
+			{:else if !noFix(member)}
 				<p class="text-body text-foreground">Suggested fix: remove this phrase.</p>
 			{/if}
-			<p class="text-label text-muted-foreground">Based on: {member.source}</p>
+			{#if member.source !== ''}
+				<p class="text-label text-muted-foreground">Based on: {member.source}</p>
+			{/if}
 		</div>
 	{/each}
 
 	<div class="flex flex-wrap gap-2 pt-2">
-		<Button data-finding-apply="" onclick={() => onApply?.()}>
-			{removes ? 'Remove phrase' : 'Use alternative'}
-		</Button>
-		<Button variant="outline" onclick={() => onEdit?.()}>Edit it myself</Button>
+		{#if canApply}
+			<Button data-finding-apply="" onclick={() => onApply?.()}>
+				{removes ? 'Remove phrase' : 'Use alternative'}
+			</Button>
+			<Button variant="outline" onclick={() => onEdit?.()}>Edit it myself</Button>
+		{:else}
+			<Button data-finding-apply="" onclick={() => onEdit?.()}>Edit it myself</Button>
+		{/if}
 	</div>
 </div>

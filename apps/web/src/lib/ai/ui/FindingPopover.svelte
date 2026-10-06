@@ -5,10 +5,12 @@
 	import type { Finding } from '@tran/core/fair-housing';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import FindingDetails from './FindingDetails.svelte';
+	import type { CheckGroupCopy } from './post-check';
 
 	let {
 		finding,
 		idPrefix,
+		checkGroups = [],
 		open = $bindable(false),
 		onApply,
 		onEdit,
@@ -16,6 +18,7 @@
 	}: {
 		finding: Finding;
 		idPrefix: string;
+		checkGroups?: readonly CheckGroupCopy[];
 		open?: boolean;
 		onApply?: (findingId: string) => void;
 		onEdit?: (findingId: string) => void;
@@ -57,6 +60,6 @@
 		aria-labelledby={headingId}
 		onOpenAutoFocus={focusPrimary}
 	>
-		<FindingDetails {finding} {headingId} onApply={apply} onEdit={edit} />
+		<FindingDetails {finding} {headingId} {checkGroups} onApply={apply} onEdit={edit} />
 	</Popover.Content></Popover.Root
 >

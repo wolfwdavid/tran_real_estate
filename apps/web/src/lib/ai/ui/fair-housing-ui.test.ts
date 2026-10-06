@@ -9,6 +9,8 @@ import { checkFairHousing, type Finding, type FindingMember } from '@tran/core/f
 import FairHousingText from './FairHousingText.svelte';
 import FindingDetails from './FindingDetails.svelte';
 import FindingsSummary from './FindingsSummary.svelte';
+import { runChecks } from './panel-controller';
+import { numbersCopy, numbersStub } from './post-check.fixtures';
 
 const TEXT = 'Perfect for young professionals. It is walking distance to church.';
 const BLOCK_PREFIX = 'Fair Housing problem, must fix: ';
@@ -273,5 +275,85 @@ describe('source rules', () => {
 		for (const f of files) {
 			expect(readFileSync(`${dir}/${f}`, 'utf8'), f).not.toContain('{@html');
 		}
+	});
+});
+
+describe('Phase 7 checkGroups (post-check findings)', () => {
+	const MIXED = 'No kids. Cash flow is 20%.';
+	const groups = [numbersCopy];
+
+	test('FindingDetails for a numbers member: no suggestion, no Based on, Edit it myself primary', () => {
+		const [f] = numbersStub('Cash flow is 20%');
+		const body = html(FindingDetails, { finding: f, headingId: 'n1', checkGroups: groups });
+		const out = strip(body);
+		expect(out).toContain('Must fix');
+		expect(out).toContain('Category: Number not in your analysis');
+		expect(out).toContain('This number does not match any figure from your analysis.');
+		expect(out).not.toContain('Suggested wording');
+		expect(out).not.toContain('Suggested fix: remove this phrase.');
+		expect(out).not.toContain('Based on');
+		expect(out).not.toContain('Remove phrase');
+		expect(count(body, /data-finding-apply/g)).toBe(1);
+		expect(
+			strip(/<button[^>]*data-finding-apply[^>]*>([\s\S]*?)<\/button>/.exec(body)![1]!).trim()
+		).toBe('Edit it myself');
+	});
+
+	test('FindingDetails without checkGroups keeps the Phase 5 remove action', () => {
+		const [f] = numbersStub('Cash flow is 20%');
+		const out = strip(html(FindingDetails, { finding: f, headingId: 'n2' }));
+		expect(out).toContain('Remove phrase');
+		expect(out).toContain('Suggested fix: remove this phrase.');
+	});
+
+	test('FindingsSummary: Fair Housing group first, then the number group, counted separately', () => {
+		const findings = runChecks(MIXED, [numbersStub]);
+		const out = strip(
+			html(FindingsSummary, { findings, idPrefix: 'p', headingLevel: 4, checkGroups: groups })
+		);
+		const fh = out.indexOf('Fair Housing check: 1 to fix');
+		const nums = out.indexOf('Number check: 1 to fix');
+		expect(fh).toBeGreaterThan(-1);
+		expect(nums).toBeGreaterThan(fh);
+		expect(out).not.toContain('Fair Housing check: 2 to fix');
+	});
+
+	test('FindingsSummary: a numbers-only finding never counts as Fair Housing', () => {
+		const findings = runChecks('Cash flow is 20%.', [numbersStub]);
+		const body = html(FindingsSummary, {
+			findings,
+			idPrefix: 'p',
+			headingLevel: 4,
+			checkGroups: groups
+		});
+		const out = strip(body);
+		expect(out).toContain('No Fair Housing problem phrases found');
+		expect(out).not.toContain('Fair Housing check: 1 to fix');
+		expect(out).toContain('Number check: 1 to fix');
+		expect(out).toContain('Show in draft');
+		expect(out).toContain('Edit it myself');
+		expect(out).not.toContain('Remove phrase');
+		expect(count(body, /id="p-findings-title"/g)).toBe(1);
+		expect(out).not.toContain(ACK);
+	});
+
+	test('FindingsSummary: with no number findings the group shows its passed copy', () => {
+		const out = strip(
+			html(FindingsSummary, { findings: [], idPrefix: 'p', headingLevel: 4, checkGroups: groups })
+		);
+		expect(out).toContain('No Fair Housing problem phrases found');
+		expect(out).toContain('Number check passed');
+		expect(out).toContain('Every number in this memo matches a figure from your analysis.');
+	});
+
+	test('FairHousingText: number marks use the group prefix, Fair Housing marks keep theirs', () => {
+		const findings = runChecks(MIXED, [numbersStub]);
+		const out = strip(
+			html(FairHousingText, { text: MIXED, findings, idPrefix: 'p', checkGroups: groups })
+		);
+		expect(out).toContain('Number check, must fix: 20%');
+		expect(out).toContain(`${BLOCK_PREFIX}No kids`);
+		const plain = strip(html(FairHousingText, { text: MIXED, findings, idPrefix: 'p' }));
+		expect(plain).toContain(`${BLOCK_PREFIX}20%`);
 	});
 });

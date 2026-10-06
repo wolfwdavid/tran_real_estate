@@ -12,6 +12,7 @@ import type { Selection } from '../setup';
 import type { ArtifactInput, ArtifactRepo } from '../storage/artifacts';
 import type { AiArtifact } from '../storage/tables';
 import { PanelState, type PanelDeps } from './panel-state.svelte';
+import { numbersCopy, numbersStub } from './post-check.fixtures';
 
 const abortError = () => new DOMException('Aborted', 'AbortError');
 
@@ -614,5 +615,58 @@ describe('Draft history open', () => {
 		expect(state.artifactStatus).toBe('sent');
 		expect(state.artifactId).toBe('old');
 		expect(said(announce)).toContain('Draft opened. 1 Fair Housing phrase to fix.');
+	});
+});
+
+describe('Phase 7 additive deps: checkGroups, artifactMeta', () => {
+	test('a post-check group adds its done sentence after the Fair Housing sentence', async () => {
+		const { state, announce } = setup({
+			script: { chunks: ['Cash flow ', 'is 20%.'] },
+			deps: { postChecks: [numbersStub], checkGroups: [numbersCopy] }
+		});
+		await state.generate();
+		expect(said(announce)).toContain(
+			'Draft ready. No Fair Housing problem phrases found. 1 number to fix.'
+		);
+		expect(state.gate.blocked).toBe(true);
+		for (const k of ['copy', 'email', 'marked-sent'] as const) {
+			expect(state.gate.exits[k].gated).toBe(true);
+		}
+	});
+
+	test('without checkGroups the post-check finding counts in the Phase 5 sentence', async () => {
+		const { state, announce } = setup({
+			script: { chunks: ['Cash flow is 20%.'] },
+			deps: { postChecks: [numbersStub] }
+		});
+		await state.generate();
+		expect(said(announce)).toContain('Draft ready. 1 Fair Housing phrase to fix.');
+	});
+
+	test('a passing group says so', async () => {
+		const { state, announce } = setup({
+			script: { chunks: ['Cash flow is fine.'] },
+			deps: { postChecks: [numbersStub], checkGroups: [numbersCopy] }
+		});
+		await state.generate();
+		expect(said(announce)).toContain(
+			'Draft ready. No Fair Housing problem phrases found. Every number matches your analysis.'
+		);
+	});
+
+	test('subjectId and artifactMeta reach repo.create; absent means no keys', async () => {
+		const tagged = setup({
+			deps: { subjectId: 'deal-1', artifactMeta: { analysisHash: 'abc12345' } }
+		});
+		await tagged.state.generate();
+		const input = tagged.repo.create.mock.calls[0]![0];
+		expect(input.subjectId).toBe('deal-1');
+		expect(input.meta).toEqual({ analysisHash: 'abc12345' });
+
+		const plain = setup();
+		await plain.state.generate();
+		const bare = plain.repo.create.mock.calls[0]![0];
+		expect(bare).not.toHaveProperty('subjectId');
+		expect(bare).not.toHaveProperty('meta');
 	});
 });

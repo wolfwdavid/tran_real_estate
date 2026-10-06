@@ -8,7 +8,8 @@
 	// and the email link loses its href while gated.
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
-	// onExit, subjectId and beforeGenerate (Phase 6), and the read-only bindables canExit / blocked / findings. `state` is the test/SSR seam
+	// onExit, subjectId and beforeGenerate (Phase 6), checkGroups and artifactMeta (Phase 7), and the
+	// read-only bindables canExit / blocked / findings / artifactId / draftText. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
 	import { onMount, tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
@@ -36,6 +37,7 @@
 	import GeminiDataDialog from './GeminiDataDialog.svelte';
 	import GenerationError from './GenerationError.svelte';
 	import type { ExitDisabled, ExitKind, PostCheck } from './panel-controller';
+	import type { CheckGroupCopy } from './post-check';
 	import { PanelState, type ExitEventPayload, type Resolved } from './panel-state.svelte';
 	import ProviderChip from './ProviderChip.svelte';
 
@@ -55,12 +57,16 @@
 		onExit,
 		subjectId,
 		beforeGenerate,
+		checkGroups = [],
+		artifactMeta,
 		// Read-only outputs: written by the $effect below, never read here.
 		/* eslint-disable no-useless-assignment */
 		canExit = $bindable(false),
 		blocked = $bindable(false),
 		findings = $bindable([]),
 		savedId = $bindable(null),
+		artifactId = $bindable(null),
+		draftText = $bindable(''),
 		/* eslint-enable no-useless-assignment */
 		state: provided
 	}: {
@@ -87,11 +93,23 @@
 		 * false to skip the run, e.g. after the host form showed its own field errors. Absent: runs.
 		 */
 		beforeGenerate?: () => boolean;
+		/**
+		 * Phase 7: presentational copy for post-check groups (titles, hidden mark prefixes, popover
+		 * variants, done sentence). Carries no check logic: gating stays postChecks + Phase 5's
+		 * controller. Absent: every finding shows in the Fair Housing group (Phase 5 behavior).
+		 */
+		checkGroups?: CheckGroupCopy[];
+		/** Phase 7: string metadata stored on each saved draft (e.g. the memo's analysisHash). */
+		artifactMeta?: Record<string, string>;
 		canExit?: boolean;
 		blocked?: boolean;
 		findings?: Finding[];
 		/** Read-only: the id of the stored draft shown in the panel (changes after each save/open). */
 		savedId?: string | null;
+		/** Read-only: mirrors the panel's stored draft id (Phase 7 hosts). */
+		artifactId?: string | null;
+		/** Read-only: mirrors the panel's current draft text (Phase 7 hosts). */
+		draftText?: string;
 		state?: PanelState;
 	} = $props();
 
@@ -155,6 +173,12 @@
 			get subjectId() {
 				return subjectId;
 			},
+			get checkGroups() {
+				return checkGroups;
+			},
+			get artifactMeta() {
+				return artifactMeta;
+			},
 			get repo() {
 				return repo;
 			},
@@ -179,6 +203,8 @@
 		blocked = st.gate.blocked;
 		findings = st.findings;
 		savedId = st.artifactId;
+		artifactId = st.artifactId;
+		draftText = st.text;
 	});
 
 	/**
@@ -504,6 +530,7 @@
 					text={st.text}
 					findings={st.findings}
 					idPrefix={id}
+					{checkGroups}
 					{onApply}
 					onEdit={onEditFinding}
 					bind:openId={openFindingId}
@@ -546,9 +573,11 @@
 			findings={st.findings}
 			idPrefix={id}
 			headingLevel={headingLevel === 2 ? 3 : 4}
+			{checkGroups}
 			bind:acknowledged={st.warnAck}
 			{onApply}
 			{onShow}
+			onEdit={onEditFinding}
 		/>
 	{/if}
 

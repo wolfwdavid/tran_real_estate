@@ -35,6 +35,7 @@ import {
 	type GateState,
 	type PostCheck
 } from './panel-controller';
+import { groupFindings, type CheckGroupCopy } from './post-check';
 
 export type PanelRunPhase = 'empty' | 'connecting' | 'streaming' | 'checking' | 'ready';
 
@@ -56,6 +57,10 @@ export type PanelDeps = {
 	onExit?: (kind: ExitKind, payload: ExitEventPayload) => void;
 	/** Opaque id stored on each saved artifact (Phase 6: the listing id) for Draft history filtering. */
 	subjectId?: string;
+	/** Phase 7: presentational copy for post-check groups (done sentences). Default []. */
+	checkGroups?: readonly CheckGroupCopy[];
+	/** Phase 7: string metadata stored on each saved artifact (e.g. the memo's analysisHash). */
+	artifactMeta?: Record<string, string>;
 	/** Live adapter or the keyless fixture, plus the selection that chose it. */
 	resolve: () => Promise<Resolved>;
 	/** null in SSR and in tests that don't persist. */
@@ -196,9 +201,16 @@ export class PanelState {
 		return runChecks(text, this.deps.postChecks);
 	}
 
+	/**
+	 * Fair Housing sentence from the Fair Housing group's own counts, then each post-check group's
+	 * done sentence. With no checkGroups this is exactly Phase 5's sentence.
+	 */
 	#sentence(findings: readonly Finding[]): string {
-		const block = findings.filter((f) => f.severity === 'block').length;
-		return findingsSentence(block, findings.length - block);
+		const [fh, ...rest] = groupFindings(findings, this.deps.checkGroups ?? []);
+		return [
+			findingsSentence(fh!.blockCount, fh!.warnCount),
+			...rest.map((g) => g.copy!.doneSentence(g.blockCount, g.warnCount))
+		].join(' ');
 	}
 
 	#containsClientData(): boolean {
@@ -381,7 +393,8 @@ export class PanelState {
 				inputHash: built.inputHash,
 				text: this.text,
 				findings,
-				...(this.deps.subjectId !== undefined ? { subjectId: this.deps.subjectId } : {})
+				...(this.deps.subjectId !== undefined ? { subjectId: this.deps.subjectId } : {}),
+				...(this.deps.artifactMeta !== undefined ? { meta: this.deps.artifactMeta } : {})
 			});
 			this.artifactId = a.id;
 			this.artifactStatus = a.status;
