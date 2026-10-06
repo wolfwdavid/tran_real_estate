@@ -315,7 +315,7 @@ Plans:
 - [ ] 08-05-PLAN.md - TRAN-LEAD v1 builder, tolerant parser and free-form extraction (wave 2)
 - [ ] 08-06-PLAN.md - Dedupe dry-run diff and inquiry link parameter contract (wave 2)
 - [ ] 08-07-PLAN.md - RFC 4180 CSV module and contacts column contract (wave 2)
-- [ ] 08-08-PLAN.md - State-aware disclosure composer and CAN-SPAM email footer (wave 2)
+- [x] 08-08-PLAN.md - State-aware disclosure composer and CAN-SPAM email footer (wave 2)
 - [ ] 08-09-PLAN.md - Stage transitions, due-today grouping and smart lists (wave 2)
 - [ ] 08-10-PLAN.md - Agent UI primitives, dropdown-menu copy-in and local dates (wave 2)
 - [ ] 08-11-PLAN.md - Agent shell: AgentNav, layout, skeleton routes and route lists (wave 2)
@@ -461,7 +461,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
-| 8. Agent Portal: Profile, Lead Intake & CRM | 4/26 | In Progress|  |
+| 8. Agent Portal: Profile, Lead Intake & CRM | 5/26 | In Progress|  |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
