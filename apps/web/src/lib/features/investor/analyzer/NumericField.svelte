@@ -24,6 +24,8 @@
 		chip?: Snippet;
 		onvalidate?: () => void;
 		ref?: HTMLInputElement | null;
+		/** Keep the label for assistive tech only (expense rows show the line name beside it). */
+		labelHidden?: boolean;
 	}
 
 	let {
@@ -39,7 +41,8 @@
 		error = null,
 		chip,
 		onvalidate,
-		ref = $bindable(null)
+		ref = $bindable(null),
+		labelHidden = false
 	}: Props = $props();
 
 	const helpId = $derived(`${id}-help`);
@@ -59,8 +62,12 @@
 </script>
 
 <div class="grid min-w-0 gap-2">
-	<div class="flex flex-wrap items-center justify-between gap-2">
-		<label for={id} class="text-base leading-[1.6] font-semibold text-foreground"
+	<div
+		class={labelHidden && !chip ? 'contents' : 'flex flex-wrap items-center justify-between gap-2'}
+	>
+		<label
+			for={id}
+			class={labelHidden ? 'sr-only' : 'text-base leading-[1.6] font-semibold text-foreground'}
 			>{label}{#if hiddenUnit}<span class="sr-only">{hiddenUnit}</span>{/if}</label
 		>
 		{#if chip}<span id={chipId} class="inline-flex">{@render chip()}</span>{/if}

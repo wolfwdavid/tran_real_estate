@@ -173,7 +173,8 @@ export function defaultForm(): AnalyzerForm {
 	};
 }
 
-function lineToForm(l: ExpenseLine): ExpenseLineForm {
+/** One core expense line as form strings. */
+export function lineToForm(l: ExpenseLine): ExpenseLineForm {
 	const { id, kind, name, unit } = l;
 	const amount =
 		l.unit === 'pct' ? DEFAULT_PCT_AMOUNT(l.bps) : l.cents === null ? '' : centsToText(l.cents);
@@ -187,14 +188,14 @@ const withCommas = (digits: string) => digits.replace(/\B(?=(\d{3})+(?!\d))/g, '
 const stripLeadingZeros = (digits: string) => digits.replace(/^0+(?=\d)/, '');
 
 /** 20000000 -> "200,000"; 123456 -> "1,234.56"; 4050 -> "40.50". */
-function centsToText(cents: number): string {
+export function centsToText(cents: number): string {
 	const whole = Math.trunc(cents / 100);
 	const frac = cents % 100;
 	return withCommas(String(whole)) + (frac === 0 ? '' : `.${String(frac).padStart(2, '0')}`);
 }
 
 /** 2500 -> "25"; 550 -> "5.5"; 125 -> "1.25". */
-function bpsToText(bps: number): string {
+export function bpsToText(bps: number): string {
 	const whole = Math.trunc(bps / 100);
 	const frac = String(bps % 100)
 		.padStart(2, '0')
@@ -299,6 +300,16 @@ function findLine(form: AnalyzerForm, key: FieldKey): ExpenseLineForm | undefine
 
 function parseLine(line: ExpenseLineForm): FieldParse<number> {
 	return line.unit === 'pct' ? percent(line.amount, 'pct-range') : money(line.amount);
+}
+
+/** A form line as a core ExpenseLine, or null when its amount doesn't parse. Blank -> null amount. */
+export function lineFromForm(line: ExpenseLineForm): ExpenseLine | null {
+	const r = parseLine(line);
+	if (!r.ok) return null;
+	const { id, kind, name } = line;
+	return line.unit === 'pct'
+		? { id, kind, name, unit: 'pct', bps: r.value }
+		: { id, kind, name, unit: 'usd', cents: r.value };
 }
 
 function parseField(form: AnalyzerForm, key: FieldKey): FieldParse<number> {
@@ -491,15 +502,17 @@ export function inputsToForm(d: {
 	};
 }
 
-const customCount = (form: AnalyzerForm) => form.expenses.filter((l) => l.kind === 'custom').length;
+type HasExpenses = Pick<AnalyzerForm, 'expenses'>;
+
+const customCount = (form: HasExpenses) => form.expenses.filter((l) => l.kind === 'custom').length;
 
 /** True when another custom line fits under MAX_CUSTOM_LINES. */
-export function canAddCustomLine(form: AnalyzerForm): boolean {
+export function canAddCustomLine(form: HasExpenses): boolean {
 	return customCount(form) < MAX_CUSTOM_LINES;
 }
 
 /** Appends a blank "$ per month" custom line; at the cap it returns the same form. */
-export function addCustomLine(form: AnalyzerForm): AnalyzerForm {
+export function addCustomLine<F extends HasExpenses>(form: F): F {
 	if (!canAddCustomLine(form)) return form;
 	const next = form.expenses.reduce((max, l) => {
 		const m = /^custom-(\d+)$/.exec(l.id);
@@ -516,7 +529,7 @@ export function addCustomLine(form: AnalyzerForm): AnalyzerForm {
 }
 
 /** Removes a custom line. Default lines can't be removed (returns the same form). */
-export function removeLine(form: AnalyzerForm, id: string): AnalyzerForm {
+export function removeLine<F extends HasExpenses>(form: F, id: string): F {
 	const line = form.expenses.find((l) => l.id === id);
 	if (!line || line.kind !== 'custom') return form;
 	return { ...form, expenses: form.expenses.filter((l) => l.id !== id) };

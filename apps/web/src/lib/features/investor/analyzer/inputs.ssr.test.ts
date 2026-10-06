@@ -7,6 +7,7 @@ import MoneyInput from './MoneyInput.svelte';
 import PercentInput from './PercentInput.svelte';
 import NumberInput from './NumberInput.svelte';
 import UnitToggle from './UnitToggle.svelte';
+import type { ExpenseLineForm } from './form-model';
 
 const clean = (body: string) => body.replace(/<!--[\s\S]*?-->/g, '');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -209,12 +210,11 @@ describe('ExpenseLines', async () => {
 		const { form, analysis } = sample();
 		form.expenses[4].amount = '200';
 		expect(text(renderLines({ form: form.expenses, analysis }))).toContain('= 10% of rent');
-		expect(
-			text(renderLines({ form: form.expenses, analysis: null, rentCents: null }))
-		).not.toContain('of rent =');
-		expect(text(renderLines({ form: form.expenses, analysis: null, rentCents: null }))).not.toMatch(
-			/= [\d.]+% of rent/
-		);
+		for (const rentCents of [null, 0]) {
+			const t = text(renderLines({ form: form.expenses, analysis: null, rentCents }));
+			expect(t).not.toMatch(/= \S*% of rent/);
+			expect(t).not.toContain('a month'); // no rent: percent lines have nothing to show either
+		}
 	});
 
 	test('no footer without an analysis', () => {
@@ -274,8 +274,13 @@ describe('ExpenseLines', async () => {
 describe('expense unit conversion (pure helper)', async () => {
 	const { convertLineUnit } = await import('./expense-lines');
 	const ctx = { rentCents: 200_000, gsiCents: 200_000, egiCents: 190_000 };
-	const line = (unit: 'pct' | 'usd', amount: string, id = 'maintenance', kind = 'maintenance') =>
-		({ id, kind, name: 'Maintenance', unit, amount }) as const;
+	const line = (unit: 'pct' | 'usd', amount: string): ExpenseLineForm => ({
+		id: 'maintenance',
+		kind: 'maintenance',
+		name: 'Maintenance',
+		unit,
+		amount
+	});
 
 	test('8% of $2,000 -> $160 a month, announced', () => {
 		const r = convertLineUnit({ ...line('pct', '8'), id: 'm', kind: 'maintenance' }, 'usd', ctx);
@@ -329,5 +334,31 @@ describe('expense unit conversion (pure helper)', async () => {
 			ctx
 		);
 		expect(r.message).toBe('This expense line changed to % of rent.');
+	});
+});
+
+describe('lineContext', async () => {
+	const { lineContext } = await import('./expense-lines');
+	const { analyze } = await import('@tran/core/finance');
+	const { defaultForm, parseForm } = await import('./form-model');
+
+	test('uses gross and collected income from the analysis', () => {
+		const form = { ...defaultForm(), price: '200,000', rent: '2,000', otherIncome: '100' };
+		const analysis = analyze(parseForm(form).inputs!);
+		// GSI = 2,100; vacancy 5% = 105; EGI = 1,995
+		expect(lineContext(analysis, 200_000)).toEqual({
+			rentCents: 200_000,
+			gsiCents: 210_000,
+			egiCents: 199_500
+		});
+	});
+
+	test('without an analysis, rent stands in for every base', () => {
+		expect(lineContext(null, 150_000)).toEqual({
+			rentCents: 150_000,
+			gsiCents: 150_000,
+			egiCents: 150_000
+		});
+		expect(lineContext(null, null)).toEqual({ rentCents: 0, gsiCents: 0, egiCents: 0 });
 	});
 });
