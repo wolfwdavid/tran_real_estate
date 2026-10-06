@@ -160,8 +160,12 @@
 				<p class="max-w-prose text-base leading-[1.6] text-foreground" data-watch-limit>
 					You're watching 5 ZIP codes, the most Tran tracks. Stop watching one to add another.
 				</p>
-			{:else}
-				<WatchZipForm {port} watched={zips} {onWatched} bind:input={zipInput} />
+			{:else if runtime.gateway}
+				<!-- Keyed on the gateway: the cost label is read for the active source, and a mode
+				     switch (rebuilt gateway) starts the form fresh instead of showing a stale cost. -->
+				{#key runtime.gateway}
+					<WatchZipForm {port} watched={zips} {onWatched} bind:input={zipInput} />
+				{/key}
 			{/if}
 
 			<p class="text-label text-muted-foreground tabular-nums" data-watch-count>
