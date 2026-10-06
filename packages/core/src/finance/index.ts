@@ -5,3 +5,5 @@ export * from './types.js';
 export * from './defaults.js';
 export * from './definitions.js';
 export * from './expenses.js';
+export * from './analyze.js';
+export * from './reference-cases.js';
