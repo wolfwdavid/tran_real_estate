@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-20-PLAN.md
-last_updated: "2026-10-06T11:33:39.062Z"
+stopped_at: "Completed 07-21-PLAN.md (Phase 7 gate: verify exit 0 in 600s, INV-01..06 complete)"
+last_updated: "2026-10-06T12:47:00.982Z"
 progress:
   total_phases: 11
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 206
-  completed_plans: 121
+  completed_plans: 122
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 07 (Investor Portal) — EXECUTING
-Plan: 20 of 21 (waves 1-7 complete; next wave 8: 07-21 phase gate)
+Plan: 21 of 21 (waves 1-7 complete; next wave 8: 07-21 phase gate)
 
 ## Performance Metrics
 
@@ -167,6 +167,7 @@ Plan: 20 of 21 (waves 1-7 complete; next wave 8: 07-21 phase gate)
 | Phase 07 P19 | 45min | 3 tasks | 9 files |
 | Phase 07 P18 | 75min | 3 tasks | 15 files |
 | Phase 07 P20 | 45min | 2 tasks | 12 files |
+| Phase 07 P21 | 95min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -397,6 +398,8 @@ Recent decisions affecting current work:
 - [Phase 07]: 07-18: deepAnalyze counts calls via free estimateCost before each spend; analyzer restores Deep analyze estimates from the draft and refreshes autofill cost labels via a form change event after restore
 - [Phase 07]: 07-20: overviewCounts takes injected sources (buy-box repo needs Svelte context); new matches = sum of cache-only newMatchCount, 0 calls
 - [Phase 07]: 07-20: sweep found + fixed 3 earlier-plan defects (print tables scroll region, buy-box cost buttons shrink, buy-box form gated on runtime.gateway); AutofillButton same race deferred to 07-21
+- [Phase 07]: 07-21: AutofillButton late-runtime race fixed at the root (render keyed on port.source() via the investor port)
+- [Phase 07]: 07-21: notes-only print re-check (07-19) and the unspecced save message (07-12) go to owner sign-off (07-HUMAN-UAT S1/S2), non-blocking
 
 ### Pending Todos
 
@@ -419,7 +422,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T11:33:39.056Z
-Stopped at: Completed 07-20-PLAN.md
+Last session: 2026-10-06T12:47:00.976Z
+Stopped at: Completed 07-21-PLAN.md (Phase 7 gate: verify exit 0 in 600s, INV-01..06 complete)
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

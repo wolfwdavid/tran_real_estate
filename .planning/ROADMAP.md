@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures** - Single metered, cached, hard-capped RentCast gateway plus synthetic sample data and check-on-open alerts engine (completed 2026-10-05)
 - [x] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path (completed 2026-10-05)
 - [x] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach (completed 2026-10-06)
-- [ ] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF
+- [x] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF (completed 2026-10-06)
 - [ ] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV
 - [ ] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF
 - [ ] **Phase 10: Launch Hardening & Go-to-Market** - First-run onboarding, waitlist/feedback, SEO calculator pages, first-party analytics, full launch audit
@@ -291,7 +291,7 @@ Plans:
 - [x] 07-18-PLAN.md — Buy boxes page, Load ZIP rents, Deep analyze (2 calls); E2E call counts (wave 6)
 - [x] 07-19-PLAN.md — (print) PrintReport shell + print.css, /print/memo/; E2E print media + PDF pages (wave 6)
 - [x] 07-20-PLAN.md — Investor overview + cross-route axe/CSP/375px sweep in both modes (wave 7)
-- [ ] 07-21-PLAN.md — Demo + budget E2E (keyless 0 calls, keyed exactly 6), validation walk, full verify (wave 8)
+- [x] 07-21-PLAN.md — Demo + budget E2E (keyless 0 calls, keyed exactly 6), validation walk, full verify (wave 8)
 **Research flag**: no (standard patterns)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 7`.
 **Note**: This phase establishes the `(print)` route + print-CSS pipeline and zip market-stats dashboards that Phase 9 reuses.
@@ -460,7 +460,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
-| 7. Investor Portal | 20/21 | In Progress|  |
+| 7. Investor Portal | 21/21 | Complete   | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
