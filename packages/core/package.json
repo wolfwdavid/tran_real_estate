@@ -4,6 +4,10 @@
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts",
+		"./finance": "./src/finance/index.ts",
+		"./format": "./src/format/index.ts",
+		"./numbers": "./src/numbers/index.ts",
+		"./markets": "./src/markets/index.ts",
 		"./*": "./src/*/index.ts",
 		"./renter/*": "./src/renter/*.ts"
 	},
@@ -11,6 +15,7 @@
 		"check": "tsc --noEmit"
 	},
 	"devDependencies": {
+		"fast-check": "4.10.2",
 		"typescript": "~6.0.3",
 		"vitest": "4.1.11"
 	},

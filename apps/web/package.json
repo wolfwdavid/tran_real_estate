@@ -45,6 +45,7 @@
 		"zod": "4.6.4"
 	},
 	"dependencies": {
+		"layerchart": "2.5.1",
 		"leaflet": "1.9.4",
 		"supercluster": "9.1.0"
 	}
