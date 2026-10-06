@@ -1,10 +1,13 @@
 <script lang="ts">
 	// 06-UI-SPEC "FairRentCheck" (RENT-06): how the asking rent compares, in two tiers. Tier 1 reads
-	// the ZIP median (0 calls when the ZIP's market stats are cached, always 0 in sample mode). The
-	// copy is a comparison only; it never judges the price.
+	// the ZIP median (0 calls when the ZIP's market stats are cached, always 0 in sample mode). Tier 2
+	// is RentCast's rent estimate (1 call, cost shown first; 0 when cached or sample). Each tier is
+	// self-contained, so Tier 2 can be cut without touching Tier 1. The copy is a comparison only; it
+	// never judges the price.
 	import type { Listing } from '@tran/core/listings';
 	import { getDataRuntime, type Provenance } from '$lib/data';
 	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import RentEstimateTier from './RentEstimateTier.svelte';
 	import ZipMedianTier from './ZipMedianTier.svelte';
 
 	let { row, provenance }: { row: Listing; provenance: Provenance } = $props();
@@ -34,4 +37,8 @@
 	</div>
 
 	<ZipMedianTier {row} />
+
+	<div class="border-t border-border pt-6">
+		<RentEstimateTier {row} />
+	</div>
 </section>

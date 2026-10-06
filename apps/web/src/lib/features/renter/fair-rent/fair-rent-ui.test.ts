@@ -3,7 +3,8 @@
 // as a neutral comparison with the right figures, and that no output judges the price.
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
-import type { MarketSide } from '@tran/core/listings';
+import type { Comparable, MarketSide, RentEstimate } from '@tran/core/listings';
+import RentEstimateResult from './RentEstimateResult.svelte';
 import ZipMedianResult from './ZipMedianResult.svelte';
 
 /** Words that would judge the price or imply a valuation; none may appear in rendered output. */
@@ -122,5 +123,137 @@ describe('ZipMedianResult', () => {
 			renderResult(2000, 2, side({ byBedrooms: [] }))
 		];
 		for (const out of outputs) expect(out).not.toMatch(JUDGMENT);
+	});
+});
+
+const SUBJECT = {
+	id: 'SAMPLE-74201-R900',
+	formattedAddress: '12 Fictional Ln, Harlow Springs, OK 74201',
+	price: 2000
+};
+
+function comp(i: number, distance: number | null, overrides: Partial<Comparable> = {}): Comparable {
+	return {
+		id: `C-${i}`,
+		formattedAddress: `${100 + i} Example St, Harlow Springs, OK 74201`,
+		price: 1800 + i * 10,
+		distance,
+		daysOld: 3,
+		correlation: 0.9,
+		bedrooms: 2,
+		bathrooms: 1,
+		squareFootage: 900 + i,
+		propertyType: 'Condo',
+		...overrides
+	};
+}
+
+function est(overrides: Partial<RentEstimate> = {}): RentEstimate {
+	return {
+		kind: 'rent',
+		estimate: 2080,
+		low: 1900,
+		high: 2260,
+		subjectAddress: SUBJECT.formattedAddress,
+		comparables: [comp(1, 0.4), comp(2, 0.2), comp(3, 1.1), comp(4, 0.9)],
+		...overrides
+	};
+}
+
+function renderEstimate(price: number, estimate: RentEstimate = est(), sample = false) {
+	const { body } = render(RentEstimateResult, {
+		props: { row: { ...SUBJECT, price }, estimate, sample }
+	});
+	return { html: body, out: text(body) };
+}
+
+describe('RentEstimateResult', () => {
+	it('shows the estimate, the likely range and a within-range sentence', () => {
+		const { out } = renderEstimate(2000);
+		expect(out).toContain('Estimate: $2,080 a month');
+		expect(out).toContain('Likely range: $1,900 to $2,260');
+		expect(out).toContain('The asking rent of $2,000 is within the estimated range.');
+		expect(out).toContain(
+			'Estimates can be wrong. Use them as one input when you talk to the listing contact.'
+		);
+		expect(out).not.toContain('Low confidence');
+	});
+
+	it('states the dollar distance above or below the range', () => {
+		expect(renderEstimate(2400).out).toContain(
+			'The asking rent of $2,400 is $140 above the estimated range.'
+		);
+		expect(renderEstimate(1750).out).toContain(
+			'The asking rent of $1,750 is $150 below the estimated range.'
+		);
+	});
+
+	it('renders the decorative range bar with both captions, hidden from assistive tech', () => {
+		const { html } = renderEstimate(2400);
+		expect(html).toMatch(/<div[^>]*aria-hidden="true"[^>]*data-rent-range-bar/);
+		const bar = text(html.slice(html.indexOf('data-rent-range-bar')));
+		expect(bar).toContain('Asking $2,400');
+		expect(bar).toContain('Estimate $2,080');
+	});
+
+	it('omits the range lines and bar when RentCast gives no range', () => {
+		const { out, html } = renderEstimate(2000, est({ low: null, high: null }));
+		expect(out).toContain('Estimate: $2,080 a month');
+		expect(out).not.toContain('Likely range');
+		expect(html).not.toContain('data-rent-range-bar');
+	});
+
+	it('shows the low-confidence badge for 2 comparables, and singular for 1', () => {
+		const two = renderEstimate(2000, est({ comparables: [comp(1, 0.5), comp(2, 0.3)] })).out;
+		expect(two).toContain('Low confidence: 2 comparables');
+		expect(two).toContain(
+			'RentCast found few similar rentals nearby, so this estimate could be well off.'
+		);
+		expect(renderEstimate(2000, est({ comparables: [comp(1, 0.5)] })).out).toContain(
+			'Low confidence: 1 comparable'
+		);
+	});
+
+	it('drops the subject listing before counting comparables', () => {
+		const withSubject = [
+			comp(1, 0.5),
+			comp(2, 0.3),
+			comp(0, 0, { id: SUBJECT.id, formattedAddress: SUBJECT.formattedAddress })
+		];
+		const { out } = renderEstimate(2000, est({ comparables: withSubject }));
+		expect(out).toContain('Low confidence: 2 comparables');
+		expect(out).not.toContain('12 Fictional Ln');
+	});
+
+	it('lists at most 10 comparables, nearest first, as text with formatted cells', () => {
+		const many = Array.from({ length: 14 }, (_, i) => comp(i + 1, (14 - i) / 10));
+		const { html, out } = renderEstimate(2000, est({ comparables: many }));
+		const distances = [...html.matchAll(/data-distance="([\d.]+)"/g)].map((m) => Number(m[1]));
+		expect(distances).toHaveLength(10);
+		expect(distances).toEqual([...distances].sort((a, b) => a - b));
+		expect(out).toContain('Similar rentals RentCast compared');
+		expect(out).toContain('Rental Rent Distance Size');
+		expect(out).toContain('114 Example St 2 bd · 1 ba $1,940 0.1 mi 914 sq ft');
+		expect(html).not.toMatch(/<a\b/);
+	});
+
+	it('replaces the table with a line when there are no comparables', () => {
+		const { out, html } = renderEstimate(2000, est({ comparables: [] }));
+		expect(out).toContain("RentCast didn't return comparable rentals for this estimate.");
+		expect(out).toContain('Low confidence: 0 comparables');
+		expect(html).not.toContain('<table');
+	});
+
+	it('puts the Sample chip in the comparables caption row in sample mode', () => {
+		const caption = (h: string) => text(h.slice(h.indexOf('<caption'), h.indexOf('</caption>')));
+		expect(caption(renderEstimate(2000, est(), true).html)).toContain('Sample data');
+		expect(caption(renderEstimate(2000, est(), false).html)).not.toContain('Sample data');
+	});
+
+	it('never judges the price in any state', () => {
+		for (const price of [1750, 2000, 2400]) {
+			expect(renderEstimate(price).out).not.toMatch(JUDGMENT);
+			expect(renderEstimate(price, est({ comparables: [comp(1, 0.2)] })).out).not.toMatch(JUDGMENT);
+		}
 	});
 });
