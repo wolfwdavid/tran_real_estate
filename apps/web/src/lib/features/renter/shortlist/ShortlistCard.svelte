@@ -3,14 +3,18 @@
 	// offline at 0 calls. The rent-change line compares the snapshot against the gateway's cached
 	// (or sample) row through peekListingById, which never spends. Removing an item that holds notes
 	// or a status past Saved asks first; the board moves focus once the card is gone.
-	import { tick, type Snippet } from 'svelte';
+	import { tick } from 'svelte';
 	import { resolve } from '$app/paths';
 	import History from '@lucide/svelte/icons/history';
 	import X from '@lucide/svelte/icons/x';
 	import type { Listing } from '@tran/core/listings';
 	import { formatMonthDay, formatRent, formatSqft } from '@tran/core/renter/format';
 	import { listingStatus } from '@tran/core/renter/listing-status';
-	import { needsRemoveConfirm, STATUS_LABELS, type ShortlistItem } from '@tran/core/renter/records';
+	import {
+		needsRemoveConfirm,
+		type ShortlistItem,
+		type ShortlistStatus
+	} from '@tran/core/renter/records';
 	import type { DataGateway, Provenance } from '$lib/data';
 	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
 	import { Button, ConfirmDialog, announce } from '$lib/features/shared/data/platform-ui';
@@ -19,6 +23,7 @@
 	import { streetLine as toStreetLine } from '../listing/address';
 	import { getShortlistRepo } from '../storage/shortlist-repo';
 	import NotesEditor from './NotesEditor.svelte';
+	import StatusSelect from './StatusSelect.svelte';
 
 	interface Props {
 		item: ShortlistItem;
@@ -28,11 +33,11 @@
 		onRemoving?: (listingId: string) => void;
 		/** Called when a removal failed, so the board drops its pending focus target. */
 		onRemoveFailed?: () => void;
-		/** The status area (the Status select); defaults to the plain meta line. */
-		status?: Snippet<[{ item: ShortlistItem; streetLine: string }]>;
+		/** Called before a status write, so the board can refocus the select after the move. */
+		onStatusChanging?: (listingId: string, status: ShortlistStatus) => void;
 	}
 
-	let { item, gateway = null, onRemoving, onRemoveFailed, status }: Props = $props();
+	let { item, gateway = null, onRemoving, onRemoveFailed, onStatusChanging }: Props = $props();
 
 	const listingId = $derived(item.listingId);
 	const enc = $derived(encodeURIComponent(item.listingId));
@@ -120,10 +125,6 @@
 	// Cards show the recency chip only when the listing is gone or has not been seen lately.
 	const showStatusChip = $derived(listingStatus(statusRow, new Date()).kind !== 'recent');
 
-	const statusMeta = $derived(
-		`${STATUS_LABELS[item.status]} ${formatMonthDay(new Date(item.statusChangedAt).toISOString()) ?? ''}`.trim()
-	);
-
 	// --- Remove ------------------------------------------------------------------------------
 	const confirmFirst = $derived(needsRemoveConfirm(item));
 	let confirmOpen = $state(false);
@@ -201,11 +202,7 @@
 		</p>
 	{/if}
 
-	{#if status}
-		{@render status({ item, streetLine: street })}
-	{:else}
-		<p class="text-label text-muted-foreground tabular-nums" data-status-meta>{statusMeta}</p>
-	{/if}
+	<StatusSelect {item} streetLine={street} {onStatusChanging} />
 
 	<NotesEditor listingId={item.listingId} notes={item.notes} streetLine={street} />
 

@@ -95,6 +95,25 @@ describe('ShortlistBoard', () => {
 		expect(h.match(/<article\b/g)).toHaveLength(3);
 		expect(text(h)).not.toContain('Your shortlist is empty');
 	});
+	it('renders five status sections in pipeline order with counts and empty lines', () => {
+		const items = [
+			item('S-1'),
+			item('S-2', { status: 'toured' }),
+			item('S-3', { status: 'toured' })
+		];
+		const h = html(render(ShortlistBoard, { props: { items } }).body);
+		const headings = [...h.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => text(m[1]));
+		expect(headings).toEqual([
+			'Saved (1)',
+			'Contacted (0)',
+			'Toured (2)',
+			'Applied (0)',
+			'Signed (0)'
+		]);
+		expect(h.match(/Nothing here yet\./g)).toHaveLength(3);
+		expect(h).toContain('xl:grid-cols-5');
+		expect(h.match(/<h2\b[^>]*tabindex="-1"/g)).toHaveLength(5);
+	});
 });
 
 describe('ShortlistCard', () => {
@@ -156,6 +175,21 @@ describe('ShortlistCard', () => {
 			}).body
 		);
 		expect(text(live)).not.toContain('Sample data');
+	});
+
+	it('has a labelled native Status select with the five statuses, and a badge with text', () => {
+		const h = html(
+			render(ShortlistCard, { props: { item: item('F-1', { status: 'applied' }) } }).body
+		);
+		const enc = encodeURIComponent('F-1');
+		expect(h).toMatch(new RegExp(`<label[^>]*for="status-${enc}"[^>]*>Status</label>`));
+		expect(h).toMatch(new RegExp(`<select[^>]*id="status-${enc}"`));
+		const options = [...h.matchAll(/<option\b[^>]*>([^<]*)<\/option>/g)].map((m) => m[1].trim());
+		expect(options).toEqual(['Saved', 'Contacted', 'Toured', 'Applied', 'Signed']);
+		expect(h).toMatch(/<option[^>]*value="applied"[^>]*selected/);
+		const badge = /<span[^>]*data-status-badge="applied"[^>]*>([\s\S]*?)<\/span>/.exec(h);
+		expect(badge && text(badge[1])).toBe('Applied');
+		expect(badge?.[1]).toContain('<svg');
 	});
 
 	it('names the remove button after the street line', () => {
