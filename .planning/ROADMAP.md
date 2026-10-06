@@ -308,7 +308,7 @@ Plans:
   4. Agent can generate an AI follow-up email draft that includes their postal address and an opt-out line, passes the Fair Housing checker, and is sent only via copy or their own email client. Agent can import contacts from CSV and export them to CSV.
   5. Demo-credible: every agent CRM route works fully on sample contacts with no keys, spends zero RentCast calls with a real key present, has all AI copy passing the Fair Housing checker, and passes axe checks.
 **Plans**: 26 plans (waves 1-8)
-- [ ] 08-01-PLAN.md - Core agent contracts, schemas, sample profile and normalization (wave 1)
+- [x] 08-01-PLAN.md - Core agent contracts, schemas, sample profile and normalization (wave 1)
 - [ ] 08-02-PLAN.md - Merged agent gateway ban, (public) boundary and transitive import-graph test (wave 1)
 - [x] 08-03-PLAN.md - CSP img-src blob: two-file change, oracle tests and banned-terms scope (wave 1)
 - [ ] 08-04-PLAN.md - Brand color contrast assessment and logo byte sniffing (wave 1)
@@ -461,7 +461,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
-| 8. Agent Portal: Profile, Lead Intake & CRM | 1/26 | In Progress|  |
+| 8. Agent Portal: Profile, Lead Intake & CRM | 2/26 | In Progress|  |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
