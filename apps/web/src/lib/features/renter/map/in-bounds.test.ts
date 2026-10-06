@@ -56,6 +56,13 @@ describe('rowsInBounds', () => {
 		expect(ids(rowsInBounds(rows, B))).toEqual(['ok']);
 	});
 
+	it('never reads a missing coordinate as 0 when the view contains 0', () => {
+		// null >= -1 is true in JavaScript (null coerces to 0): the finiteness guard must come first.
+		const zero: MapBounds = { west: -1, south: -1, east: 1, north: 1 };
+		const rows = [row('null-lat', null, 0.5), row('null-lng', 0.5, null), row('ok', 0.5, 0.5)];
+		expect(ids(rowsInBounds(rows, zero))).toEqual(['ok']);
+	});
+
 	it('does not mistake latitude for longitude', () => {
 		// lat/lng swapped: -96.5 is not a latitude in 30..31.
 		expect(rowsInBounds([row('swapped', -96.5, 30.5)], B)).toEqual([]);
