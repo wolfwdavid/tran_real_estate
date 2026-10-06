@@ -44,6 +44,8 @@ export interface SavedSearchRepo {
 	release(id: string): Promise<void>;
 	/** The user opened the results: lastSeenAt = now ("new since last visit" resets). */
 	markSeen(id: string): Promise<void>;
+	/** Renames a live row (the caller validates and trims; 06-20 renter saved searches). */
+	rename(id: string, name: string): Promise<void>;
 	snapshot(id: string): Promise<SearchSnapshotRow | undefined>;
 	/** Tombstone (Syncable deletedAt) so the deletion survives backup merges. */
 	remove(id: string): Promise<void>;
@@ -123,6 +125,8 @@ export function createSavedSearchRepo(db: DataDb, clock: () => number): SavedSea
 		release: (id) => patch(id, () => ({ claimedAt: null })),
 
 		markSeen: (id) => patch(id, (now) => ({ lastSeenAt: now })),
+
+		rename: (id, name) => patch(id, () => ({ name })),
 
 		snapshot: (id) => db.searchSnapshots.get(id),
 
