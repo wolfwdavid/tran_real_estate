@@ -31,12 +31,11 @@ export function listingByIdRequest(id: string): DataRequest {
 }
 
 /**
- * ZIP market statistics. Identical to Phase 7's watched-ZIP request so one 30-day cache entry
- * serves both portals: canonical key `markets?dataType=All&historyRange=24&zipCode=<zip>`.
+ * ZIP market statistics. The canonical builder lives in the shared markets port so the renter
+ * fair-rent tier, Phase 7 watched ZIPs and Phase 9 reports share one 30-day cache entry:
+ * `markets?dataType=All&historyRange=24&zipCode=<zip>`.
  */
-export function marketsRequest(zip: string): DataRequest {
-	return { endpoint: 'markets', params: { zipCode: zip, dataType: 'All', historyRange: 24 } };
-}
+export { marketStatsRequest as marketsRequest } from '$lib/features/shared/markets/markets-port';
 
 /** The listing facts a rent estimate is keyed on (a structural subset of the mapped Listing). */
 export interface RentEstimateSubject {
