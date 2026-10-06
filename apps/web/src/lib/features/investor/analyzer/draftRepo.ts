@@ -22,6 +22,11 @@ export interface AnalyzerDraft {
 	form: AnalyzerForm;
 	sources: DealSources;
 	estimates?: { rent?: unknown; value?: unknown };
+	/**
+	 * 07-18 Deep analyze: an estimate that failed, as its gateway error kind, so the analyzer shows
+	 * the GatewayError in the fieldset that failed.
+	 */
+	estimateErrors?: { rent?: string; value?: string };
 	/** dealSnapshot() captured at save/open; null when nothing has been saved. */
 	savedSnapshot: string | null;
 	/** ISO timestamp of the last write. */
@@ -67,6 +72,13 @@ export function createDraftRepo(db: TranDb, o: { now?: () => Date } = {}): Draft
 				updatedAt: row.updatedAt ?? ''
 			};
 			if (isObject(row.estimates)) draft.estimates = row.estimates;
+			if (isObject(row.estimateErrors)) {
+				const e = row.estimateErrors as Record<string, unknown>;
+				const out: { rent?: string; value?: string } = {};
+				if (typeof e.rent === 'string') out.rent = e.rent;
+				if (typeof e.value === 'string') out.value = e.value;
+				draft.estimateErrors = out;
+			}
 			return draft;
 		},
 
@@ -89,6 +101,7 @@ export function createDraftRepo(db: TranDb, o: { now?: () => Date } = {}): Draft
 					savedSnapshot: d.savedSnapshot
 				};
 				if (d.estimates !== undefined) row.estimates = d.estimates;
+				if (d.estimateErrors !== undefined) row.estimateErrors = d.estimateErrors;
 				await table().put(row);
 			});
 		},
