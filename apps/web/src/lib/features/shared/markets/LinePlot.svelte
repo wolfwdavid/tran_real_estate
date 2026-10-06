@@ -1,7 +1,7 @@
 <script lang="ts">
 	// The client-only LayerChart plot shared by ZipTrendChart and PriceToRentChart. Composed from
 	// primitives (Chart + Svg + Grid + Axis + Spline) so every element carries explicit Phase 2
-	// token classes; markers are our own layer. No tooltip, no motion, nothing focusable: the
+	// token classes; markers are our own layer. No hover popups, no motion, nothing focusable: the
 	// figure's summary and data table carry every value. LayerChart's <Chart> renders nothing on
 	// the server, so the SVG appears after hydration.
 	import { Axis, Chart, Grid, Spline, Svg } from 'layerchart';
