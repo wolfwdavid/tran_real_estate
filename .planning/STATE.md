@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-04-PLAN.md
-last_updated: "2026-10-06T12:58:10.976Z"
+stopped_at: Completed 08-02-PLAN.md
+last_updated: "2026-10-06T13:01:15.917Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 125
+  completed_plans: 126
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 3 of 26
+Plan: 4 of 26
 
 ## Performance Metrics
 
@@ -171,6 +171,7 @@ Plan: 3 of 26
 | Phase 08 P03 | 20min | 2 tasks | 6 files |
 | Phase 08 P01 | 25min | 2 tasks | 9 files |
 | Phase 08 P04 | 25min | 2 tasks | 6 files |
+| Phase 08 P02 | 25min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -407,6 +408,8 @@ Recent decisions affecting current work:
 - [Phase 08]: Core deep-path imports are @tran/core/agent/<file> and @tran/core/leads/<file> (explicit ./agent/* and ./leads/* exports); Phase 3 Syncable reused as SyncableFields
 - [Phase 08]: Non-ASCII in source must be written as backslash-u escapes via a String.fromCharCode(92) post-processor; tool input turns escapes into literal invisible chars
 - [Phase 08]: brand-color imported via @tran/brand/brand-color subpath (index re-export causes runtime cycle)
+- [Phase 08]: Agent gateway ban spread into the agent PORTALS.map entry; agent/studio + features/studio carve-out keeps cross-portal ban but allows the $lib/data port
+- [Phase 08]: tooling/import-graph.ts is the generic transitive boundary walker (Phase 5 lib/ai walker untouched)
 
 ### Pending Todos
 
@@ -429,7 +432,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T12:58:10.969Z
-Stopped at: Completed 08-04-PLAN.md
+Last session: 2026-10-06T13:01:15.911Z
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
