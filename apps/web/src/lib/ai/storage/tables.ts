@@ -46,4 +46,10 @@ export interface AiArtifact extends Syncable {
 	 * filtered in memory after the [feature+createdAt] range, so no Dexie version bump.
 	 */
 	subjectId?: string;
+	/**
+	 * Optional string metadata (Phase 7: the memo's analysisHash). At most 16 keys, values at most
+	 * 200 chars. Absent unless given. Never holds prompt inputs or key material (the backup key
+	 * scan still covers it).
+	 */
+	meta?: Record<string, string>;
 }

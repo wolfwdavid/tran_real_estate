@@ -141,6 +141,11 @@ function memoryRepo(rows: AiArtifact[]): ArtifactRepo & { rows: AiArtifact[] } {
 		async softDelete(id, at) {
 			const a = rows.find((x) => x.id === id);
 			if (a) a.deletedAt = at.toISOString();
+		},
+		async deleteBySubjectId(subjectId, at) {
+			const hit = live().filter((a) => a.subjectId === subjectId);
+			for (const a of hit) a.deletedAt = at.toISOString();
+			return hit.length;
 		}
 	};
 }

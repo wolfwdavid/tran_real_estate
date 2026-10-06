@@ -80,6 +80,7 @@ function memoryRepo() {
 		countByFeature: vi.fn(async () => 0),
 		listBySubject: vi.fn(async () => []),
 		countBySubject: vi.fn(async () => 0),
+		deleteBySubjectId: vi.fn(async () => 0),
 		softDelete: vi.fn(async () => {})
 	};
 	return repo satisfies ArtifactRepo;

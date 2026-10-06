@@ -48,6 +48,8 @@ export type ArtifactInput = {
 	findings: readonly Finding[];
 	/** Opaque id of what the draft is about (e.g. a listing id). Stored only when given. */
 	subjectId?: string;
+	/** Short string metadata (<= 16 keys, values <= 200 chars). Stored only when given. */
+	meta?: Readonly<Record<string, string>>;
 };
 
 export interface ArtifactRepo {
@@ -68,6 +70,11 @@ export interface ArtifactRepo {
 	): Promise<AiArtifact[]>;
 	countBySubject(feature: string, subjectId: string): Promise<number>;
 	softDelete(id: string, at: Date): Promise<void>;
+	/**
+	 * Tombstones (softDelete semantics) every live artifact with that subjectId, in any feature,
+	 * in one transaction. Returns how many were tombstoned (used by Phase 7 deleteDeal).
+	 */
+	deleteBySubjectId(subjectId: string, at: Date): Promise<number>;
 }
 
 export type ArtifactRepoOptions = { now?: () => Date; uuid?: () => string };
@@ -78,6 +85,18 @@ const SUBJECT_ID_MAX = 200;
 
 function isSubjectId(v: unknown): v is string {
 	return typeof v === 'string' && v.length > 0 && v.length <= SUBJECT_ID_MAX;
+}
+
+const META_MAX_KEYS = 16;
+const META_VALUE_MAX = 200;
+
+function isMeta(v: unknown): v is Record<string, string> {
+	if (typeof v !== 'object' || v === null || Array.isArray(v)) return false;
+	const entries = Object.entries(v);
+	return (
+		entries.length <= META_MAX_KEYS &&
+		entries.every(([, x]) => typeof x === 'string' && x.length <= META_VALUE_MAX)
+	);
 }
 
 export function toStoredFindings(findings: readonly Finding[]): StoredFinding[] {
@@ -120,6 +139,7 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 			if (i.subjectId !== undefined && !isSubjectId(i.subjectId)) {
 				throw new Error('artifact-subject-id');
 			}
+			if (i.meta !== undefined && !isMeta(i.meta)) throw new Error('artifact-meta');
 			const d = await getDb();
 			const t = d.table<AiArtifact, string>(AI_ARTIFACTS_TABLE);
 			const at = now();
@@ -137,7 +157,8 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 				findings: toStoredFindings(i.findings),
 				status: 'draft',
 				sentAt: null,
-				...(i.subjectId !== undefined ? { subjectId: i.subjectId } : {})
+				...(i.subjectId !== undefined ? { subjectId: i.subjectId } : {}),
+				...(i.meta !== undefined ? { meta: { ...i.meta } } : {})
 			};
 			await d.transaction('rw', [t, d.meta], async () => {
 				await t.add(artifact);
@@ -214,6 +235,20 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 
 		softDelete(id, at) {
 			return update(id, (a) => tombstone(a, at));
+		},
+
+		async deleteBySubjectId(subjectId, at) {
+			// subjectId is not indexed (no Dexie version bump): a filter scan over a small
+			// per-browser drafts table, inside one rw transaction.
+			const d = await getDb();
+			const t = d.table<AiArtifact, string>(AI_ARTIFACTS_TABLE);
+			return d.transaction('rw', t, () =>
+				t
+					.filter((a) => isLive(a) && a.subjectId === subjectId)
+					.modify((a, ref) => {
+						ref.value = tombstone(a, at);
+					})
+			);
 		}
 	};
 }
