@@ -49,14 +49,14 @@
 
 ### Renter Portal
 
-- [ ] **RENT-01**: Renter can search rentals in any US city or zip by price range, bedrooms, property type, and "listed within N days"
-- [ ] **RENT-02**: Renter can view search results as a sortable list and on a map
-- [ ] **RENT-03**: Renter can open a listing detail showing price history and the listing agent/office contact details
-- [ ] **RENT-04**: Renter can save searches and see "N new since last visit" when opening the app (each search re-runs at most once per 24 hours)
-- [ ] **RENT-05**: Renter can shortlist listings and track each one's status (Contacted, Toured, Applied, Signed)
-- [ ] **RENT-06**: Renter can compare a listing's asking rent to market rent (zip median by bedroom count, plus an optional rent estimate showing range and comparables)
-- [ ] **RENT-07**: Renter can generate an AI outreach draft to the listing agent that asks about availability, pets, fees, and lease terms
-- [ ] **RENT-08**: Renter can calculate affordable rent from their income without using any API calls
+- [x] **RENT-01**: Renter can search rentals in any US city or zip by price range, bedrooms, property type, and "listed within N days"
+- [x] **RENT-02**: Renter can view search results as a sortable list and on a map
+- [x] **RENT-03**: Renter can open a listing detail showing price history and the listing agent/office contact details
+- [x] **RENT-04**: Renter can save searches and see "N new since last visit" when opening the app (each search re-runs at most once per 24 hours)
+- [x] **RENT-05**: Renter can shortlist listings and track each one's status (Contacted, Toured, Applied, Signed)
+- [x] **RENT-06**: Renter can compare a listing's asking rent to market rent (zip median by bedroom count, plus an optional rent estimate showing range and comparables)
+- [x] **RENT-07**: Renter can generate an AI outreach draft to the listing agent that asks about availability, pets, fees, and lease terms
+- [x] **RENT-08**: Renter can calculate affordable rent from their income without using any API calls
 
 ### Investor Portal
 
@@ -175,14 +175,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AI-02 | Phase 5 | Complete |
 | AI-03 | Phase 5 | Complete |
 | AI-04 | Phase 5 | Complete |
-| RENT-01 | Phase 6 | Pending |
-| RENT-02 | Phase 6 | Pending |
-| RENT-03 | Phase 6 | Pending |
-| RENT-04 | Phase 6 | Pending |
-| RENT-05 | Phase 6 | Pending |
-| RENT-06 | Phase 6 | Pending |
-| RENT-07 | Phase 6 | Pending |
-| RENT-08 | Phase 6 | Pending |
+| RENT-01 | Phase 6 | Complete |
+| RENT-02 | Phase 6 | Complete |
+| RENT-03 | Phase 6 | Complete |
+| RENT-04 | Phase 6 | Complete |
+| RENT-05 | Phase 6 | Complete |
+| RENT-06 | Phase 6 | Complete |
+| RENT-07 | Phase 6 | Complete |
+| RENT-08 | Phase 6 | Complete |
 | INV-01 | Phase 7 | Pending |
 | INV-02 | Phase 7 | Pending |
 | INV-03 | Phase 7 | Pending |

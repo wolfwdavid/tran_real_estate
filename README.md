@@ -129,8 +129,11 @@ The browser component tests (`*.browser.test.ts`, the `web-browser` project) run
   30 days, no-result (404/400) answers 24 hours.
 - **Saved-search alerts.** Due saved searches are checked when the app opens, at most once per
   24 hours each, inside the cap; more than 3 due asks first.
-- **Backups.** The RentCast call history, saved searches, saved search results and data settings
-  are in backups; the response cache (`apiCache`) is deliberately excluded. A schema-registry test
+- **Backups.** The database is at Dexie schema version 4. Backups hold the settings, the RentCast
+  call history, saved searches, saved search results and data settings (Phase 4), AI drafts
+  (`aiArtifacts`, Phase 5), and the rental shortlist and saved rental searches
+  (`renterShortlist`, `renterSearchMeta`, Phase 6). The response cache (`apiCache`) and the
+  local-only `meta` table are deliberately excluded. A schema-registry test
   fails if a new table is neither registered nor excluded.
 - **Where the code lives:** `packages/core/src/{budget,request,listings,alerts}/` (pure rules),
   `apps/web/src/lib/data/` (gateway, ledger, cache, scheduler, runtime, RentCast client and
@@ -140,31 +143,65 @@ The browser component tests (`*.browser.test.ts`, the `web-browser` project) run
 
 ## Routes
 
-Every page is prerendered with a trailing slash. Thirteen pages ship today, plus the `404.html`
-fallback (14 HTML files per build, all checked by `csp:assert`):
+Every page is prerendered with a trailing slash. Sixteen pages ship today, plus the `404.html`
+fallback (17 HTML files per build, all checked by `csp:assert`):
 
-| Route                   | Group                                                             |
-| ----------------------- | ----------------------------------------------------------------- |
-| `/`                     | Marketing (landing)                                               |
-| `/for-renters/`         | Marketing                                                         |
-| `/for-investors/`       | Marketing                                                         |
-| `/for-agents/`          | Marketing                                                         |
-| `/legal/privacy/`       | Legal                                                             |
-| `/legal/terms/`         | Legal                                                             |
-| `/legal/fair-housing/`  | Legal                                                             |
-| `/legal/data-coverage/` | Legal                                                             |
-| `/renter/`              | App (placeholder until Phase 6)                                   |
-| `/investor/`            | App (placeholder until Phase 7)                                   |
-| `/agent/`               | App (placeholder until Phases 8-9)                                |
-| `/settings/`            | App: keys, RentCast usage, key security, backup, storage, install |
-| `/print/`               | Chrome-free print surface                                         |
+| Route                    | Group                                                             |
+| ------------------------ | ----------------------------------------------------------------- |
+| `/`                      | Marketing (landing)                                               |
+| `/for-renters/`          | Marketing                                                         |
+| `/for-investors/`        | Marketing                                                         |
+| `/for-agents/`           | Marketing                                                         |
+| `/legal/privacy/`        | Legal                                                             |
+| `/legal/terms/`          | Legal                                                             |
+| `/legal/fair-housing/`   | Legal                                                             |
+| `/legal/data-coverage/`  | Legal                                                             |
+| `/renter/`               | Renter: search, filters, list/map/split view, saved searches      |
+| `/renter/listing/`       | Renter: listing detail (`?id=`), fair-rent check, outreach draft  |
+| `/renter/shortlist/`     | Renter: shortlist with status and notes                           |
+| `/renter/affordability/` | Renter: affordability check (no data, no storage, no network)     |
+| `/investor/`             | App (placeholder until Phase 7)                                   |
+| `/agent/`                | App (placeholder until Phases 8-9)                                |
+| `/settings/`             | App: keys, RentCast usage, key security, backup, storage, install |
+| `/print/`                | Chrome-free print surface                                         |
 
 Adding or removing a page means updating two lists as well: `apps/web/tests/e2e/routes.ts`
 (a drift test fails if the build and the list disagree) and `EXPECTED_PAGES` in
 `scripts/assert-csp.mjs`.
 
-The fonts (Fraunces for headings, Inter for body text) are self-hosted through Fontsource, so
-the site makes no third-party requests.
+The fonts (Fraunces for headings, Inter for body text) are self-hosted through Fontsource. The
+only third-party hosts the app ever contacts are the providers the user brings a key for
+(RentCast and the AI providers) and, on the renter map in live mode only, OpenStreetMap tiles
+(`tile.openstreetmap.org`, with attribution). Sample mode draws the map with no tiles at all.
+
+## Renter portal (Phase 6)
+
+- **Search** (`/renter/`): every search needs a city and state or a ZIP. A live search is one
+  RentCast call (location + `status=Active` + `limit=500`); filters (rent, bedrooms, type, listed
+  within) and sort run locally on the cached rows and cost nothing, and the URL keeps them, so a
+  reload or a shared link spends nothing. A 500-row answer offers one explicit "Narrow" call,
+  never offset paging. List, Map (Leaflet + OpenStreetMap, loaded lazily) and, from 1024px, a
+  split list that follows the map view.
+- **Listing detail** (`/renter/listing/?id=`): resolved from the shortlist, then the cache, then
+  sample data; fetching by id is an explicit "(1 call)" button. Facts, price history (rent
+  changes, delistings and relistings), safe `tel:`/`mailto:` contact links, and look-up links.
+- **Fair-rent check:** the ZIP median comparison is free when the ZIP's market data is cached
+  (otherwise "Load {zip} rent data (1 call)"), and "Get rent estimate (1 call)" is the AVM. The
+  copy compares; it never judges a rent or calls it an appraisal.
+- **Outreach:** a form drafts a message to the listing contact through the Phase 5 AI panel
+  (sample output with no AI key). Every draft passes the Fair Housing checker, and it leaves only
+  through the renter's hands: Copy text, Open in email app, or Mark as sent.
+- **Shortlist** (`/renter/shortlist/`) with statuses and notes, and **saved searches** that re-run
+  at most once per 24 hours and badge what is new.
+- **Affordability** (`/renter/affordability/`): 25/30/40% of income, computed in the page; nothing
+  is stored or sent.
+- **Budget:** a whole renter journey (search, filters, map, detail, ZIP data, estimate, outreach,
+  shortlist, saved search, affordability) costs exactly 3 calls. Proven by
+  `apps/web/tests/e2e/renter-journey.spec.ts`; `renter-demo-credible.spec.ts` checks every renter
+  route in sample and live mode on both base paths for axe at 1280 and 375px, CSP, sample badges,
+  horizontal scroll and third-party requests.
+- **Owner checks** that need a real key, the deployed origin or real devices are in
+  `.planning/phases/06-renter-portal/06-HUMAN-UAT.md`.
 
 ## End-to-end ports
 
