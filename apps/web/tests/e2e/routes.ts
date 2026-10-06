@@ -29,8 +29,25 @@ export const INVESTOR_ROUTES = [
 	'investor/markets/',
 	'investor/market/'
 ] as const;
+/**
+ * The agent portal's sub-pages (Phase 8). `agent/` itself stays in APP_ROUTES. The contact detail
+ * reads ?id= in onMount, so it is a prerendered shell listed in svelte.config.js prerender.entries.
+ * The public `agent/inquire/` page (a separate route group) is added by its own plan.
+ */
+export const AGENT_ROUTES = [
+	'agent/today/',
+	'agent/pipeline/',
+	'agent/contacts/',
+	'agent/contact/',
+	'agent/import/',
+	'agent/profile/'
+] as const;
 /** Every page rendered by the (app) layout: the portals, their sub-pages and Settings. */
-export const PORTAL_ROUTES: readonly string[] = [...APP_ROUTES, ...INVESTOR_ROUTES];
+export const PORTAL_ROUTES: readonly string[] = [
+	...APP_ROUTES,
+	...INVESTOR_ROUTES,
+	...AGENT_ROUTES
+];
 export const PRINT = 'print/';
 /** The chrome-free `(print)` surfaces: no header, portal switcher or footer. */
 export const PRINT_ROUTES = [PRINT, 'print/memo/'] as const;
@@ -40,6 +57,7 @@ export const ROUTES: readonly string[] = [
 	...LEGAL_ROUTES,
 	...APP_ROUTES,
 	...INVESTOR_ROUTES,
+	...AGENT_ROUTES,
 	...PRINT_ROUTES
 ];
 /** Every route that renders the site header and footer (all but the chrome-free print surfaces). */

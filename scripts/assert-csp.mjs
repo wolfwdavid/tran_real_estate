@@ -50,6 +50,13 @@ export const EXPECTED_PAGES = [
 	'investor/markets/index.html',
 	'investor/market/index.html',
 	'print/memo/index.html',
+	// Phase 8 agent portal sub-pages.
+	'agent/today/index.html',
+	'agent/pipeline/index.html',
+	'agent/contacts/index.html',
+	'agent/contact/index.html',
+	'agent/import/index.html',
+	'agent/profile/index.html',
 	'404.html'
 ];
 

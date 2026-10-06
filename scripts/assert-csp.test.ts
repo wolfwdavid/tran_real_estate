@@ -435,6 +435,22 @@ describe('checkBuild over a temp directory', () => {
 		}
 		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
 	});
+
+	test('EXPECTED_PAGES pins the Phase 8 agent pages', () => {
+		for (const page of [
+			'agent/today/index.html',
+			'agent/pipeline/index.html',
+			'agent/contacts/index.html',
+			'agent/contact/index.html',
+			'agent/import/index.html',
+			'agent/profile/index.html'
+		]) {
+			expect(EXPECTED_PAGES).toContain(page);
+		}
+		// 24 pages + 404.html before Phase 8, plus the six agent sub-pages.
+		expect(EXPECTED_PAGES).toHaveLength(31);
+		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
+	});
 });
 
 describe('PWA carriers', () => {
