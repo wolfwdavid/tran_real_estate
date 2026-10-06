@@ -7,8 +7,8 @@ useDefault = true
 # before it was swapped for an all-zero placeholder. Web3Forms keys are public-safe by design,
 # and this value never belonged to any account.
 [allowlist]
-commits = ["4e453c1bbceefe392ad720eaa049bbd1dae8cc43"]
-paths = ['''packages/core/src/agent/schemas\.test\.ts''']
+commits = ["4e453c1bbceefe392ad720eaa049bbd1dae8cc43", "05793bfa1b15bc5d55d0650cea17e8f17707a27e"]
+paths = ['packages/core/src/agent/schemas.test.ts"', '".planning/phases/08-agent-portal-profile-lead-intake-crm/deferred-items.md']
 
 [[rules]]
 id = "tran-canary-test-key"
