@@ -10,7 +10,7 @@ import {
 	unescapeFormula
 } from './csv.js';
 
-const BOM = '﻿';
+const BOM = '\uFEFF';
 
 /** Characters that stress quoting, line endings and formula escaping. */
 const NASTY = ['"', ',', ';', '\r', '\n', '=', '+', '-', '@', "'", '\t', 'a', ' ', '\u{1F600}'];

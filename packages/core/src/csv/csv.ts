@@ -34,7 +34,7 @@ export const unescapeFormula = (v: string): string => (ESCAPED.test(v) ? v.slice
 export function toCsv(rows: readonly (readonly string[])[]): string {
 	const line = (r: readonly string[]) =>
 		r.map((v) => `"${escapeFormula(v).replace(/"/g, '""')}"`).join(',');
-	return '﻿' + rows.map(line).join('\r\n') + (rows.length ? '\r\n' : '');
+	return '\uFEFF' + rows.map(line).join('\r\n') + (rows.length ? '\r\n' : '');
 }
 
 const stripBom = (s: string): string => (s.charCodeAt(0) === 0xfeff ? s.slice(1) : s);
