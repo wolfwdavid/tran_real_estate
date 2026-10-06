@@ -320,7 +320,7 @@ Plans:
 - [x] 08-10-PLAN.md - Agent UI primitives, dropdown-menu copy-in and local dates (wave 2)
 - [x] 08-11-PLAN.md - Agent shell: AgentNav, layout, skeleton routes and route lists (wave 2)
 - [x] 08-12-PLAN.md - Dexie tables, profile and contacts repos, backup registration (wave 3)
-- [ ] 08-13-PLAN.md - Public inquiry page, Web3Forms sink and mocked E2E (wave 3)
+- [x] 08-13-PLAN.md - Public inquiry page, Web3Forms sink and mocked E2E (wave 3)
 - [x] 08-17-PLAN.md - ContactCard, DueBadge and SmartListFilter (wave 3)
 - [ ] 08-14-PLAN.md - Tasks repository and single-transaction import commit (wave 4)
 - [ ] 08-15-PLAN.md - Sample contacts, quick add with duplicates, empty state and notice (wave 4)
@@ -461,7 +461,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
-| 8. Agent Portal: Profile, Lead Intake & CRM | 13/26 | In Progress|  |
+| 8. Agent Portal: Profile, Lead Intake & CRM | 14/26 | In Progress|  |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
