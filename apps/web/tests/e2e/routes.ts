@@ -32,7 +32,6 @@ export const INVESTOR_ROUTES = [
 /**
  * The agent portal's sub-pages (Phase 8). `agent/` itself stays in APP_ROUTES. The contact detail
  * reads ?id= in onMount, so it is a prerendered shell listed in svelte.config.js prerender.entries.
- * The public `agent/inquire/` page (a separate route group) is added by its own plan.
  */
 export const AGENT_ROUTES = [
 	'agent/today/',
@@ -42,6 +41,13 @@ export const AGENT_ROUTES = [
 	'agent/import/',
 	'agent/profile/'
 ] as const;
+/**
+ * The chrome-free `(public)` pages seen by an agent's leads (08-13): their own header and footer,
+ * no site header, portal switcher or agent nav. The inquiry page reads its query in onMount.
+ */
+export const PUBLIC_ROUTES = ['agent/inquire/'] as const;
+export const isPublicRoute = (r: string): boolean =>
+	(PUBLIC_ROUTES as readonly string[]).includes(r);
 /** Every page rendered by the (app) layout: the portals, their sub-pages and Settings. */
 export const PORTAL_ROUTES: readonly string[] = [
 	...APP_ROUTES,
@@ -58,10 +64,13 @@ export const ROUTES: readonly string[] = [
 	...APP_ROUTES,
 	...INVESTOR_ROUTES,
 	...AGENT_ROUTES,
+	...PUBLIC_ROUTES,
 	...PRINT_ROUTES
 ];
-/** Every route that renders the site header and footer (all but the chrome-free print surfaces). */
-export const CHROME_ROUTES: readonly string[] = ROUTES.filter((r) => !isPrintRoute(r));
+/** Every route that renders the site header and footer (all but the chrome-free print and public pages). */
+export const CHROME_ROUTES: readonly string[] = ROUTES.filter(
+	(r) => !isPrintRoute(r) && !isPublicRoute(r)
+);
 export const NOT_FOUND = 'does-not-exist/deeper/';
 /** The only off-site hosts any page may link to (legal pages 02-08, Settings "Get a key" links 03-11). */
 export const EXTERNAL_HOSTS: readonly string[] = [

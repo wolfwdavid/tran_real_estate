@@ -57,6 +57,8 @@ export const EXPECTED_PAGES = [
 	'agent/contact/index.html',
 	'agent/import/index.html',
 	'agent/profile/index.html',
+	// Phase 8 public inquiry page (chrome-free (public) route group).
+	'agent/inquire/index.html',
 	'404.html'
 ];
 

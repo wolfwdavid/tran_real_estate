@@ -447,8 +447,9 @@ describe('checkBuild over a temp directory', () => {
 		]) {
 			expect(EXPECTED_PAGES).toContain(page);
 		}
-		// 24 pages + 404.html before Phase 8, plus the six agent sub-pages.
-		expect(EXPECTED_PAGES).toHaveLength(31);
+		expect(EXPECTED_PAGES).toContain('agent/inquire/index.html');
+		// 24 pages + 404.html before Phase 8, plus the six agent sub-pages and the public inquiry page.
+		expect(EXPECTED_PAGES).toHaveLength(32);
 		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
 	});
 });

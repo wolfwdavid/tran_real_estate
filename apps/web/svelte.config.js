@@ -30,7 +30,9 @@ export default {
 				'/investor/market/',
 				'/print/memo/',
 				// The agent contact detail (?id=) is linked only from client-rendered lists.
-				'/agent/contact/'
+				'/agent/contact/',
+				// The public inquiry page is reached only through shared links.
+				'/agent/inquire/'
 			],
 			handleHttpError: 'fail',
 			handleMissingId: 'fail',
