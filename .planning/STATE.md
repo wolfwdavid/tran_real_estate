@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 07 (Investor Portal) — EXECUTING
-Plan: 6 of 21 (wave 1 complete; next wave 2: 07-05, 07-06)
+Plan: 6 of 21 (waves 1-2 complete; next wave 3: 07-07, 07-09, 07-10, 07-11)
 
 ## Performance Metrics
 
