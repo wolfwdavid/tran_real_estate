@@ -70,7 +70,7 @@ const profile: AgentProfile = {
 	brandPrimary: '#1A2B3C',
 	brandAccent: '#abcdef',
 	logo: { base64: 'iVBORw0KGgo=', mime: 'image/png', width: 64, height: 64, bytes: 1024 },
-	web3formsAccessKey: '0f0f0f0f-1a2b-4c3d-8e9f-0123456789ab'
+	web3formsAccessKey: '00000000-0000-4000-8000-000000000000'
 };
 
 describe('agent schemas', () => {

@@ -3,6 +3,13 @@ title = "tran-real-estate gitleaks config"
 [extend]
 useDefault = true
 
+# One synthetic Web3Forms-shaped fixture key landed in commit 4e453c1 (agent schema tests)
+# before it was swapped for an all-zero placeholder. Web3Forms keys are public-safe by design,
+# and this value never belonged to any account.
+[allowlist]
+commits = ["4e453c1bbceefe392ad720eaa049bbd1dae8cc43"]
+paths = ['''packages/core/src/agent/schemas\.test\.ts''']
+
 [[rules]]
 id = "tran-canary-test-key"
 description = "Canary pattern proving the scanner blocks commits (never a real credential)"
