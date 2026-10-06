@@ -5,6 +5,8 @@ import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
 import type { Listing } from '@tran/core/listings';
 import { placeLine, streetLine } from './address';
+import { historyEvents } from '@tran/core/renter/history';
+import { toRawHistory } from './history';
 import ListingContact from './ListingContact.svelte';
 import ListingFacts from './ListingFacts.svelte';
 import ListingNotFound from './ListingNotFound.svelte';
@@ -68,6 +70,27 @@ describe('address lines', () => {
 		expect(streetLine(listing({ addressLine1: null }))).toBe('12 Fictional Ln');
 		expect(placeLine(listing())).toBe('Harlow Springs, OK 74201');
 		expect(placeLine(listing({ city: null }))).toBe('OK 74201');
+	});
+});
+
+describe('toRawHistory', () => {
+	it('rebuilds the date-keyed history with removedDate, so Delisted and Relisted show', () => {
+		const raw = toRawHistory([
+			{ date: '2026-07-01', event: 'Rental Listing', price: 1600, removedDate: '2026-07-20' },
+			{ date: '2026-08-15', event: 'Rental Listing', price: 1550, removedDate: null },
+			{ date: '2026-09-01', event: 'Rental Listing', price: 1500 }
+		]);
+		expect(raw).toEqual({
+			'2026-07-01': { event: 'Rental Listing', price: 1600, removedDate: '2026-07-20' },
+			'2026-08-15': { event: 'Rental Listing', price: 1550, removedDate: null },
+			'2026-09-01': { event: 'Rental Listing', price: 1500, removedDate: null }
+		});
+		expect(historyEvents(raw).map((e) => e.kind)).toEqual([
+			'rent-changed',
+			'relisted',
+			'delisted',
+			'listed'
+		]);
 	});
 });
 

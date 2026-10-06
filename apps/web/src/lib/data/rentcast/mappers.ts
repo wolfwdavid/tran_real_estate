@@ -62,7 +62,12 @@ function history(v: unknown): PriceEvent[] {
 		.sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
 		.map(([date, e]) => {
 			const ev = rec(e);
-			return { date, event: str(ev.event) ?? '', price: num(ev.price) };
+			return {
+				date,
+				event: str(ev.event) ?? '',
+				price: num(ev.price),
+				removedDate: str(ev.removedDate)
+			};
 		});
 }
 

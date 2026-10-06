@@ -88,9 +88,23 @@ describe('mapListing', () => {
 			'rental'
 		);
 		expect(l.history).toEqual([
-			{ date: '2026-09-01', event: 'Rental Listing', price: 1550 },
-			{ date: '2026-09-20', event: 'Rental Listing', price: 1500 }
+			{ date: '2026-09-01', event: 'Rental Listing', price: 1550, removedDate: null },
+			{ date: '2026-09-20', event: 'Rental Listing', price: 1500, removedDate: null }
 		]);
+	});
+
+	it("keeps each history entry's removedDate so a delisting can be shown", () => {
+		const l = mapListing(
+			{
+				...base(),
+				history: {
+					'2026-08-01': { event: 'Rental Listing', price: 1550, removedDate: '2026-08-20' },
+					'2026-09-10': { event: 'Rental Listing', price: 1500, removedDate: null }
+				}
+			},
+			'rental'
+		);
+		expect(l.history.map((e) => e.removedDate)).toEqual(['2026-08-20', null]);
 	});
 
 	it('builds formattedAddress from parts when missing', () => {

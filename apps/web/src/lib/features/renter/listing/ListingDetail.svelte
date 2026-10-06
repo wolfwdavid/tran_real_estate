@@ -8,6 +8,7 @@
 	import { resolve } from '$app/paths';
 	import type { Listing } from '@tran/core/listings';
 	import type { RawHistory } from '@tran/core/renter/history';
+	import { toRawHistory } from './history';
 	import type { GatewayError as GatewayErrorType, Provenance } from '$lib/data';
 	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
 	import PriceHistory from '$lib/features/shared/listings/PriceHistory.svelte';
@@ -43,9 +44,7 @@
 	const isSample = $derived(provenance.source === 'sample');
 
 	/** The mapped PriceEvent list back into RentCast's date-keyed shape for PriceHistory. */
-	const history = $derived<RawHistory>(
-		Object.fromEntries(row.history.map((e) => [e.date, { event: e.event, price: e.price }]))
-	);
+	const history = $derived<RawHistory>(toRawHistory(row.history));
 
 	const searchHref = resolve('/renter/');
 

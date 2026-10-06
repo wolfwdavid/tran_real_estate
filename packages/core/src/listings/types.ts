@@ -26,6 +26,11 @@ export interface PriceEvent {
 	date: string;
 	event: string;
 	price: number | null;
+	/**
+	 * When RentCast recorded this listing period as removed (YYYY-MM-DD or ISO), else null.
+	 * Optional so hand-built rows still type-check; the mapper always sets it.
+	 */
+	removedDate?: string | null;
 }
 
 export interface Listing {
