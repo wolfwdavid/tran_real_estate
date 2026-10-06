@@ -10,3 +10,5 @@ export * from './reference-cases.js';
 export * from './compare.js';
 export * from './quick-metrics.js';
 export * from './memo-facts.js';
+export * from './memo-sample.js';
+export * from './memo-language.js';
