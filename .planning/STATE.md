@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-05-PLAN.md
-last_updated: "2026-10-06T13:26:13.113Z"
+stopped_at: Completed 08-17-PLAN.md
+last_updated: "2026-10-06T13:37:30.180Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 133
+  completed_plans: 134
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 11 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
+Plan: 12 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
 
 ## Performance Metrics
 
@@ -179,6 +179,7 @@ Plan: 11 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
 | Phase 08 P10 | 20 min | 2 tasks | 30 files |
 | Phase 08 P11 | 35min | 2 tasks | 19 files |
 | Phase 08 P05 | 35min | 2 tasks | 6 files |
+| Phase 08 P17 | 15min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -424,6 +425,7 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-10: SampleChip lives in components/sample (not a ProvenanceChip re-export) so (public) routes can use it; dropdown-menu radio items close on select; badge-like spans with text-label skip cn() (tailwind-merge collision)
 - [Phase 08]: 08-11: AgentNav marks current by route id; Data source bar hidden on /agent/* except /agent/studio/; AGENT_ROUTES in ROUTES+PORTAL_ROUTES, CSP oracle pins 31 pages
 - [Phase 08]: TRAN-LEAD message lines starting with '>' get a two-space guard (quote stripping eats one space)
+- [Phase 08]: 08-17: CRM card links use resolve() directly (loads under Vitest); withParams returns '' when empty; phone search needs 3+ digits
 
 ### Pending Todos
 
@@ -446,7 +448,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T13:26:13.107Z
-Stopped at: Completed 08-05-PLAN.md
+Last session: 2026-10-06T13:37:30.175Z
+Stopped at: Completed 08-17-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
