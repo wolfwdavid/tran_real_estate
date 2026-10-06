@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-18-PLAN.md
-last_updated: "2026-10-06T10:45:30.328Z"
+stopped_at: Completed 07-20-PLAN.md
+last_updated: "2026-10-06T11:33:39.062Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 206
-  completed_plans: 120
+  completed_plans: 121
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 07 (Investor Portal) — EXECUTING
-Plan: 19 of 21 (waves 1-6 complete; next wave 7: 07-20)
+Plan: 20 of 21 (waves 1-6 complete; next wave 7: 07-20)
 
 ## Performance Metrics
 
@@ -166,6 +166,7 @@ Plan: 19 of 21 (waves 1-6 complete; next wave 7: 07-20)
 | Phase 07 P17 | 40min | 3 tasks | 9 files |
 | Phase 07 P19 | 45min | 3 tasks | 9 files |
 | Phase 07 P18 | 75min | 3 tasks | 15 files |
+| Phase 07 P20 | 45min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -394,6 +395,8 @@ Recent decisions affecting current work:
 - [Phase 07]: 07-17: memo prompt id investor/memo.v1 (FACTS + notes only); memo print link gated host-side from panel bindables + runChecks recheck
 - [Phase 07]: 07-19: print recheck uses empty notes (artifact meta holds no prompt inputs); memo citing a notes-only number is blocked at print
 - [Phase 07]: 07-18: deepAnalyze counts calls via free estimateCost before each spend; analyzer restores Deep analyze estimates from the draft and refreshes autofill cost labels via a form change event after restore
+- [Phase 07]: 07-20: overviewCounts takes injected sources (buy-box repo needs Svelte context); new matches = sum of cache-only newMatchCount, 0 calls
+- [Phase 07]: 07-20: sweep found + fixed 3 earlier-plan defects (print tables scroll region, buy-box cost buttons shrink, buy-box form gated on runtime.gateway); AutofillButton same race deferred to 07-21
 
 ### Pending Todos
 
@@ -416,7 +419,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T10:45:25.276Z
-Stopped at: Completed 07-18-PLAN.md
+Last session: 2026-10-06T11:33:39.056Z
+Stopped at: Completed 07-20-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

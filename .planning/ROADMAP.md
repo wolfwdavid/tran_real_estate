@@ -290,7 +290,7 @@ Plans:
 - [x] 07-17-PLAN.md — Memo prompt (FACTS only), number/advice post-checks, memo page; E2E gating (wave 5)
 - [x] 07-18-PLAN.md — Buy boxes page, Load ZIP rents, Deep analyze (2 calls); E2E call counts (wave 6)
 - [x] 07-19-PLAN.md — (print) PrintReport shell + print.css, /print/memo/; E2E print media + PDF pages (wave 6)
-- [ ] 07-20-PLAN.md — Investor overview + cross-route axe/CSP/375px sweep in both modes (wave 7)
+- [x] 07-20-PLAN.md — Investor overview + cross-route axe/CSP/375px sweep in both modes (wave 7)
 - [ ] 07-21-PLAN.md — Demo + budget E2E (keyless 0 calls, keyed exactly 6), validation walk, full verify (wave 8)
 **Research flag**: no (standard patterns)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 7`.
@@ -460,7 +460,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
-| 7. Investor Portal | 19/21 | In Progress|  |
+| 7. Investor Portal | 20/21 | In Progress|  |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
