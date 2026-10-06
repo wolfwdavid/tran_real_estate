@@ -64,7 +64,7 @@ describe('profile repo', () => {
 	});
 
 	it('cleans text fields', async () => {
-		const p = await saveProfile({ ...fullInput(), name: '  Avery ​Sample  ' }, T1);
+		const p = await saveProfile({ ...fullInput(), name: '  Avery \u200bSample  ' }, T1);
 		expect(p.name).toBe('Avery Sample');
 	});
 
