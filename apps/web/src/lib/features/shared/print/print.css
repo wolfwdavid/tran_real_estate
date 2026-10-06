@@ -1,0 +1,27 @@
+/*
+ * Shared print stylesheet (07-19, INV-06; Phase 9 reuses it). Imported ONLY by
+ * routes/(print)/+layout.svelte. Component-level print rules use Tailwind `print:` variants.
+ * No `size`: the user's paper default (Letter or A4) applies. No print-color-adjust: every printed
+ * state is carried by text, weight and rules, never by a fill. The page counter margin box works in
+ * Chrome 131+ and Safari 18.2+ (and suppresses the browser's URL header); Firefox ignores it.
+ */
+
+/* prettier-ignore */
+@page { margin: 0.75in; }
+
+/* prettier-ignore */
+@page { @bottom-center { content: "Page " counter(page) " of " counter(pages); font: 10.5pt var(--font-sans); } }
+
+/* prettier-ignore */
+@media print {
+  html, body { background: none; }
+  [data-print-hidden] { display: none !important; }
+  .print-sheet { max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; }
+  h1, h2, h3 { break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  figure, .print-keep, .print-disclaimer, tr { break-inside: avoid; }
+  table { break-inside: auto; }
+  thead { display: table-header-group; }
+  a { color: inherit; text-decoration: none; }
+  details > summary { display: none; }
+}
