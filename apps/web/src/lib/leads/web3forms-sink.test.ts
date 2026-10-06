@@ -17,9 +17,8 @@ const INPUT: InquiryPayload = {
 type FetchArgs = [string | URL | Request, RequestInit | undefined];
 
 function fakeFetch(body: unknown, status = 200) {
-	return vi.fn(
-		async (..._args: FetchArgs) =>
-			new Response(typeof body === 'string' ? body : JSON.stringify(body), { status })
+	return vi.fn<(...args: FetchArgs) => Promise<Response>>(
+		async () => new Response(typeof body === 'string' ? body : JSON.stringify(body), { status })
 	);
 }
 
