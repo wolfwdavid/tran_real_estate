@@ -82,6 +82,10 @@ describe('validateProfile', () => {
 
 	it('needs 10 digits in a phone number', () => {
 		expect(validateProfile(base({ phone: '555-0100' })).errors.phone).toBe(PHONE_ERROR);
+		expect(validateProfile(base({ phone: '555 555 010' })).errors.phone).toBe(PHONE_ERROR);
+		expect(validateProfile(base({ brokeragePhone: '555-0100' })).errors.brokeragePhone).toBe(
+			PHONE_ERROR
+		);
 		expect(validateProfile(base({ brokeragePhone: '555 555 010' })).errors.brokeragePhone).toBe(
 			PHONE_ERROR
 		);
