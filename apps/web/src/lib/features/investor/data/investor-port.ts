@@ -16,15 +16,23 @@ import type {
 } from '@tran/core/listings';
 import {
 	getDataRuntime,
+	savedSearchRepo,
 	type CostEstimate,
 	type DataRequest,
 	type DataRuntime,
 	type GatewayResult,
-	type Provenance
+	type Provenance,
+	type SavedSearchRepo
 } from '$lib/data';
 import type { PropertyType } from '../deals/schema';
 
 export type { CostEstimate, Provenance };
+/**
+ * The Phase 4 saved-search repository, re-exported so buy boxes (07-14) persist through Phase 4's
+ * alerts model without a second $lib/data runtime import under features/investor.
+ */
+export { savedSearchRepo };
+export type { SavedSearchRepo };
 
 /** Comparables requested with each AVM estimate (same as the renter fair-rent tier). */
 export const ESTIMATE_COMP_COUNT = 15;
