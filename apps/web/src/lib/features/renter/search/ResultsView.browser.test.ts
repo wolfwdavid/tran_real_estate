@@ -91,22 +91,26 @@ describe('ResultsView', () => {
 		const list = page.getByRole('tab', { name: 'List' });
 		const map = page.getByRole('tab', { name: 'Map' });
 		await expect.element(map).toHaveAttribute('tabindex', '-1');
-		expect(container.querySelector('[data-map-stub]')).toBeNull();
+		expect(container.querySelector('[data-map-tab]')).toBeNull();
 
 		(list.element() as HTMLElement).focus();
 		await userEvent.keyboard('{ArrowRight}');
 		await expect.element(map).toHaveAttribute('aria-selected', 'true');
 		await expect.element(map).toHaveFocus();
 		expect(search.view).toBe('map');
-		await expect.element(page.getByText('Loading map…')).toBeVisible();
+		const instructions = page.getByText('Drag, or use the arrow keys, to move the map.', {
+			exact: false
+		});
+		await expect.element(instructions).toBeVisible();
+		await expect.poll(() => container.querySelector('.leaflet-container')).not.toBeNull();
 		expect(await axeViolations(container)).toEqual([]);
 
 		await userEvent.keyboard('{ArrowLeft}');
 		await expect.element(list).toHaveAttribute('aria-selected', 'true');
 		expect(search.view).toBe('list');
-		// Kept mounted (hidden) so 06-19's map does not reload on the next visit.
-		expect(container.querySelector('[data-map-stub]')).not.toBeNull();
-		await expect.element(page.getByText('Loading map…')).not.toBeVisible();
+		// Kept mounted (hidden) so the map does not reload on the next visit.
+		expect(container.querySelectorAll('.leaflet-container')).toHaveLength(1);
+		await expect.element(instructions).not.toBeVisible();
 
 		await map.click();
 		expect(search.view).toBe('map');

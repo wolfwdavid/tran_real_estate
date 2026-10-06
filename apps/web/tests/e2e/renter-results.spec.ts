@@ -6,9 +6,9 @@ import { expectLiveMode, expectSampleMode, withRentCastKey } from './support/see
 
 // RENT-02 results end to end on both bases: honest, sample-badged cards that link to the detail
 // page, a local sort, local "Show 24 more" paging that moves focus, the filtered-empty state with
-// a free Clear filters, List | Map tabs kept in the URL (the Map panel is 06-19's stub here: no
-// tiles, no Leaflet), and a card shortlist toggle. None of it spends a RentCast call after the
-// one search.
+// a free Clear filters, List | Map tabs kept in the URL (the sample-mode map requests no tiles;
+// renter-map.spec.ts covers the map itself), and a card shortlist toggle. None of it spends a
+// RentCast call after the one search.
 
 test.use(RENTER_TEST_OPTIONS);
 
@@ -152,7 +152,7 @@ test('tabs: arrow keys move to Map, the URL keeps view=map, Back restores it, no
 	await expect(mapTab(page)).toHaveAttribute('aria-selected', 'true');
 	await expect(mapTab(page)).toBeFocused();
 	await expect(page).toHaveURL(/[?&]view=map(&|$)/);
-	await expect(page.getByText('Loading map…')).toBeVisible();
+	await expect(page.locator('.leaflet-container')).toBeVisible();
 	await expectNoViolations(page, 'renter/ map tab');
 
 	// Leave and come Back: the URL restores the Map tab (0 calls, cache only).
@@ -161,14 +161,15 @@ test('tabs: arrow keys move to Map, the URL keeps view=map, Back restores it, no
 	await page.goBack();
 	await expect(page).toHaveURL(/[?&]view=map(&|$)/);
 	await expect(mapTab(page)).toHaveAttribute('aria-selected', 'true');
-	await expect(page.getByText('Loading map…')).toBeVisible();
+	await expect(page.locator('.leaflet-container')).toBeVisible();
 
 	await listTab(page).click();
 	await expect(page).not.toHaveURL(/view=map/);
 	await expect(cards(page).first()).toBeVisible();
 
+	// Sample mode: the (now hidden) map drew on its plain backdrop, so no tile was requested.
 	expect(net.counts.tiles).toBeUndefined();
-	await expect(page.locator('.leaflet-container')).toHaveCount(0);
+	await expect(page.locator('.leaflet-container')).toBeHidden();
 	expect(rentcastCalls(net)).toBe(0);
 });
 
@@ -203,7 +204,7 @@ test('375px: the results list passes axe and never scrolls sideways', async ({ p
 	expect(spaced).toBeLessThanOrEqual(375);
 
 	await mapTab(page).click();
-	await expect(page.getByText('Loading map…')).toBeVisible();
+	await expect(page.locator('.leaflet-container')).toBeVisible();
 	await expectNoViolations(page, 'renter/ map tab at 375px');
 	expect(rentcastCalls(net)).toBe(0);
 });
