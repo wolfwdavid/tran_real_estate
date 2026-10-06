@@ -52,6 +52,17 @@ Validated in Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails (
 - ✓ AI-03 — Prompt inputs pass through `redactPii` with a "What will be sent" preview; a Gemini client-data dialog (Cancel default, session-only acknowledgement) plus an adapter-level `consent-required` guard; E2E proves cancel sends zero requests (Phase 5)
 - ✓ AI-04 — `GenerationPanel` exposes exactly Copy, Open in email (`mailto:`) and Mark as sent; enforced by an ESLint boundary for `lib/ai/**`, a TypeScript import-graph walk with a planted non-vacuity case, and a single-implementation assertion (`mailto:` and `navigator.clipboard` appear only in `exits.ts`) (Phase 5)
 
+Validated in Phase 6: Renter Portal (2026-10-06) — 8/8 must-haves verified against the codebase; `pnpm verify` green in one run (3180 unit tests, 774 browser tests on both base paths with a deny-all network harness, CSP oracle on 17+17 pages, scoped renter banned-terms gate, secret and real-data scans, actionlint); 44/44 validation rows walked; a full live-mode renter journey spends exactly 3 RentCast calls. Twelve owner-gated checks (R1–R12: real-key journey, real OSM tiles and attribution, the real 24-hour saved-search boundary, real AI key, real phones and screen readers) are parked in `06-HUMAN-UAT.md`.
+
+- ✓ RENT-01 — Search any US city or ZIP with one fetch-wide RentCast call; price, bedrooms, property type and "listed within N days" filter locally at 0 calls; URL state restores without spending; 500-row truncation offers one explicit "Narrow on RentCast (1 call)"; keyless sample search (Phase 6)
+- ✓ RENT-02 — Sortable list in pages of 24 and a lazily loaded Leaflet + OpenStreetMap map with clustering, keyboard-operable pins, desktop split view and list↔map linking; sample mode draws a backdrop with zero tile requests (Phase 6)
+- ✓ RENT-03 — Listing detail resolves at 0 calls from shortlist, cache or fixtures, with price/event history including Delisted/Relisted, sparkline, safe `tel:`/`mailto:` contact links and look-it-up-elsewhere links (Phase 6)
+- ✓ RENT-04 — Save/rename/delete up to 10 searches; "N new since last visit" counts only listings still matching the saved filters; re-runs ride Phase 4's once-per-24-hour scheduler, proven under a controlled clock (Phase 6)
+- ✓ RENT-05 — Shortlist board with Saved/Contacted/Toured/Applied/Signed status sections, explicit notes, confirmed removal and rent-change notices, all from stored snapshots at 0 calls (Phase 6)
+- ✓ RENT-06 — Fair-rent check: ZIP median by bedroom count (0 calls when cached) and an optional rent estimate with range, confidence and up to 10 comparables, each cost shown before the single call (Phase 6)
+- ✓ RENT-07 — Outreach draft from six Fair-Housing-safe inputs through the Phase 5 panel; a flagged phrase blocks every exit; the only outbound path is the renter's own email client (Phase 6)
+- ✓ RENT-08 — Zero-call affordability calculator at `/renter/affordability/` as an import-free shared component (Phase 6)
+
 ### Active
 
 **Platform (shared)**
@@ -65,9 +76,9 @@ Validated in Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails (
 - [x] GTM surface: marketing landing pages per audience that explain the value and drive usage — shipped in Phase 2 (`/`, `/for-renters/`, `/for-investors/`, `/for-agents/`)
 
 **Renter portal**
-- [ ] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit"
-- [ ] AI outreach drafts: draft an interest message to the listing agent (asking about availability, pets, amenities not in the data); human reviews and sends
-- [ ] Fair-rent check: compare a listing's asking rent against estimated market rent
+- [x] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit" — shipped in Phase 6
+- [x] AI outreach drafts: draft an interest message to the listing agent (asking about availability, pets, amenities not in the data); human reviews and sends — shipped in Phase 6
+- [x] Fair-rent check: compare a listing's asking rent against estimated market rent — shipped in Phase 6
 - [ ] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons
 
 **Investor portal**
@@ -160,4 +171,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-05 after Phase 5 completion*
+*Last updated: 2026-10-06 after Phase 6 completion*
