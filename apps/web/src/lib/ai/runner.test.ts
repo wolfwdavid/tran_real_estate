@@ -259,3 +259,24 @@ describe('runGeneration finish and errors', () => {
 		expect(updates.some((u) => u.type === 'first-token')).toBe(false);
 	});
 });
+
+describe('runGeneration fixtureText', () => {
+	it('copies prompt.fixtureText into the provider request; absent stays absent', async () => {
+		const seen: LlmRequest[] = [];
+		const p = provider('fixture', async function* (req) {
+			seen.push(req);
+			yield { type: 'text', text: 'ok' };
+		});
+		await collect(
+			runGeneration({
+				prompt: { ...PROMPT, fixtureText: 'Alpha beta gamma.' },
+				provider: p,
+				model: 'sample',
+				signal: new AbortController().signal
+			})
+		);
+		await run(p);
+		expect(seen[0]!.fixtureText).toBe('Alpha beta gamma.');
+		expect(seen[1]).not.toHaveProperty('fixtureText');
+	});
+});

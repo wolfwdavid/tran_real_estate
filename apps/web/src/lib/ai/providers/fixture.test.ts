@@ -184,3 +184,47 @@ describe('FIXTURE_OUTPUTS', () => {
 		}
 	});
 });
+
+describe('prompt-supplied sample text (fixtureText)', () => {
+	it('streams fixtureText exactly, word by word, instead of the canned output', async () => {
+		const p = fixtureProvider({ sleep: instant, random: () => 0 });
+		const out = await events(
+			p.stream(
+				{ ...req('shared/demo@1'), fixtureText: 'Alpha beta gamma.' },
+				new AbortController().signal
+			)
+		);
+		const texts = out.flatMap((e) => (e.type === 'text' ? [e.text] : []));
+		expect(texts).toEqual(['Alpha ', 'beta ', 'gamma.']);
+		expect(texts.join('')).toBe('Alpha beta gamma.');
+		expect(out.at(-1)).toEqual({ type: 'finish', reason: 'stop' });
+	});
+
+	it('an empty fixtureText falls back to the canned output', async () => {
+		const p = fixtureProvider({ sleep: instant, random: () => 0 });
+		const out = await events(
+			p.stream({ ...req('shared/demo@1'), fixtureText: '' }, new AbortController().signal)
+		);
+		expect(out.flatMap((e) => (e.type === 'text' ? [e.text] : [])).join('')).toBe(DEMO);
+	});
+
+	it('Stop keeps a strict prefix of fixtureText', async () => {
+		const ctrl = new AbortController();
+		const p = fixtureProvider({ sleep: (_ms, signal) => abortableSleep(5, signal) });
+		const seen: string[] = [];
+		const run = (async () => {
+			for await (const e of p.stream(
+				{ ...req(), fixtureText: 'Alpha beta gamma delta epsilon.' },
+				ctrl.signal
+			)) {
+				if (e.type === 'text') {
+					seen.push(e.text);
+					if (seen.length === 2) ctrl.abort();
+				}
+			}
+		})();
+		const err = await run.catch((e: unknown) => e);
+		expect(isAbort(err)).toBe(true);
+		expect(seen.join('')).toBe('Alpha beta ');
+	});
+});

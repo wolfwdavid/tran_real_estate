@@ -127,3 +127,25 @@ describe('buildPrompt', () => {
 		expect(getPrompt('shared/demo')).toBe(def);
 	});
 });
+
+describe('PromptDef.sample (fixture text)', () => {
+	const base: PromptDef<{ topic: string }> = {
+		id: 'test/sampled',
+		version: 1,
+		feature: 'test',
+		housingCopy: false,
+		containsClientData: false,
+		maxTokens: 2048,
+		build: (i) => ({ system: 'Summarize.', user: `Topic: ${i.topic}`, known: [] })
+	};
+
+	it('sets fixtureText from sample(inputs); inputHash ignores it', async () => {
+		registerPrompt({ ...base, sample: (i) => `Sample about ${i.topic}.` } as PromptDef);
+		const built = await buildPrompt('test/sampled', { topic: 'leases' });
+		expect(built.fixtureText).toBe('Sample about leases.');
+		registerPrompt({ ...base, version: 2 } as PromptDef);
+		const plain = await buildPrompt('test/sampled', { topic: 'leases' });
+		expect(plain).not.toHaveProperty('fixtureText');
+		expect(plain.inputHash).toBe(built.inputHash);
+	});
+});
