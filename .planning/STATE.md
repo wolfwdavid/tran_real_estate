@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-20-PLAN.md
-last_updated: "2026-10-06T00:35:29.232Z"
+stopped_at: Completed 06-19-PLAN.md
+last_updated: "2026-10-06T00:45:50.874Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 98
+  completed_plans: 99
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 19 of 22 (waves 1-5 complete, full E2E 714; next wave 6: 06-19, 06-20)
+Plan: 21 of 22 (waves 1-6 complete: 06-19 map + 06-20 saved searches; next wave 7: 06-21, then the 06-22 gate)
 
 ## Performance Metrics
 
@@ -144,6 +144,7 @@ Plan: 19 of 22 (waves 1-5 complete, full E2E 714; next wave 6: 06-19, 06-20)
 | Phase 06 P17 | 45min | 2 tasks | 17 files |
 | Phase 06 P16 | 35 min | 2 tasks | 15 files |
 | Phase 06 P20 | 50min | 2 tasks | 10 files |
+| Phase 06 P19 | 25min | 3 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -342,6 +343,9 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-17: GatewayError gains body override + actions={false}; MarketSide gains optional lastUpdatedDate (mapper sets it)
 - [Phase 06]: 06-16: ResultsView renders whenever rows exist so in-flight re-searches show skeletons; Map panel mounts on first selection and stays mounted (06-19 fills MapTab stub)
 - [Phase 06]: 06-20: renter saved search = Phase 4 row + baseline snapshot + same-id meta (compensating writes across DataDb/TranDb); Phase 4 repo gains rename(); View results via ?saved= marks seen after reading newIds
+- [Phase 06]: 06-19: map sizes follow reconciliation over UI-SPEC (pins 28px tall min-width 44, clusters 40px, supercluster radius 48/extent 256/maxZoom 19, map+tile maxZoom 18)
+- [Phase 06]: 06-19: map live/sample follows result provenance (rentcast = OSM tiles); sample draws a grid backdrop with zero third-party requests
+- [Phase 06]: 06-19: CspSafeTileLayer overrides Leaflet 1.9.4 _removeTile/_abortLoading to drop src instead of a data: GIF (img-src violation otherwise)
 
 ### Pending Todos
 
@@ -364,7 +368,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T00:35:29.224Z
-Stopped at: Completed 06-20-PLAN.md
+Last session: 2026-10-06T00:45:50.868Z
+Stopped at: Completed 06-19-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
