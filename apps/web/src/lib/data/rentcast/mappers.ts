@@ -165,7 +165,8 @@ function marketHistory(v: unknown, p: SidePrefix): MarketHistoryPoint[] {
 				month,
 				average: num(h[`average${p}`]),
 				median: num(h[`median${p}`]),
-				totalListings: num(h.totalListings)
+				totalListings: num(h.totalListings),
+				byBedrooms: breakdowns(h.dataByBedrooms, p)
 			};
 		});
 }

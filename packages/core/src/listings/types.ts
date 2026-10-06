@@ -113,6 +113,11 @@ export interface MarketHistoryPoint {
 	average: number | null;
 	median: number | null;
 	totalListings: number | null;
+	/**
+	 * This month's breakdown by bedroom count (RentCast `history[month].dataByBedrooms`), feeding
+	 * rent/price trends by bedroom. Optional so hand-built points stay valid; the mapper sets it.
+	 */
+	byBedrooms?: MarketBreakdown[];
 }
 
 export interface MarketSide {
