@@ -412,3 +412,91 @@ describe('subjectId (Phase 6: per-listing draft history)', () => {
 		}
 	});
 });
+
+describe('meta + deleteBySubjectId (Phase 7: deal-scoped memos)', () => {
+	const memo = (o: Parameters<typeof input>[0] = {}) =>
+		input({ feature: 'investor-memo', promptId: 'investor/memo.v1@1', text: 'Memo', ...o });
+
+	it('stores subjectId and meta; both read back', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(memo({ subjectId: 'deal-1', meta: { analysisHash: 'abc12345' } }));
+		const got = await repo.get(a.id);
+		expect(got?.subjectId).toBe('deal-1');
+		expect(got?.meta).toEqual({ analysisHash: 'abc12345' });
+		const stored = (await db.table(AI_ARTIFACTS_TABLE).get(a.id)) as Record<string, unknown>;
+		expect(Object.keys(stored).sort()).toEqual([...ARTIFACT_KEYS, 'meta', 'subjectId'].sort());
+	});
+
+	it('without meta the stored keys are unchanged; meta is copied, not aliased', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const bare = await repo.create(memo({ meta: undefined }));
+		expect(await db.table(AI_ARTIFACTS_TABLE).get(bare.id)).not.toHaveProperty('meta');
+		const m: Record<string, string> = { k: 'v' };
+		const a = await repo.create(memo({ meta: m }));
+		m.k = 'changed';
+		expect((await repo.get(a.id))?.meta).toEqual({ k: 'v' });
+	});
+
+	it('rejects meta with more than 16 keys, a value over 200 chars, or a non-string value', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const many = Object.fromEntries(Array.from({ length: 17 }, (_, i) => [`k${i}`, 'v']));
+		const sixteen = Object.fromEntries(Array.from({ length: 16 }, (_, i) => [`k${i}`, 'v']));
+		for (const bad of [
+			many,
+			{ k: 'x'.repeat(201) },
+			{ k: 1 as unknown as string },
+			['a'] as unknown as Record<string, string>
+		]) {
+			await expect(repo.create(memo({ meta: bad }))).rejects.toThrow('artifact-meta');
+		}
+		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(0);
+		await repo.create(memo({ meta: sixteen }));
+		await repo.create(memo({ meta: { k: 'x'.repeat(200) } }));
+		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(2);
+	});
+
+	it('backup export then import keeps meta; an older row without it still imports', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const tagged = await repo.create(memo({ subjectId: 'deal-1', meta: { analysisHash: 'abc' } }));
+		const plain = await repo.create(input());
+		const out = await buildBackupText(db, { now: new Date(T0 + 3_600_000), knownSecrets: [] });
+		const target = new TranDb(freshIdb());
+		await target.open();
+		try {
+			const file = { name: 'backup.json', size: out.text.length, text: async () => out.text };
+			await applyImport(target, await previewImport(target, file), 'replace');
+			const restored = createArtifactRepo(target);
+			expect(await restored.get(tagged.id)).toEqual(tagged);
+			expect(await restored.get(plain.id)).toEqual(plain);
+		} finally {
+			target.close();
+		}
+	});
+
+	it('deleteBySubjectId tombstones every live artifact of that subject across features', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const m1 = await repo.create(memo({ subjectId: 'deal-1' }));
+		const m2 = await repo.create(memo({ subjectId: 'deal-1' }));
+		const other = await repo.create(input({ subjectId: 'deal-1' }));
+		const d2 = await repo.create(memo({ subjectId: 'deal-2' }));
+		const none = await repo.create(memo());
+		const earlier = new Date(T0 + 1_000);
+		await repo.softDelete(m2.id, earlier);
+
+		const at = new Date(T0 + 86_400_000);
+		expect(await repo.deleteBySubjectId('deal-1', at)).toBe(2);
+		for (const id of [m1.id, other.id]) {
+			const dead = await repo.get(id);
+			expect(dead?.deletedAt).toBe(at.toISOString());
+			expect(dead?.updatedAt).toBe(at.toISOString());
+		}
+		// An earlier tombstone keeps its own timestamp.
+		expect((await repo.get(m2.id))?.deletedAt).toBe(earlier.toISOString());
+		// Other subjects and subject-less drafts are untouched.
+		expect(await repo.get(d2.id)).toEqual(d2);
+		expect(await repo.get(none.id)).toEqual(none);
+		expect(await repo.listBySubject('investor-memo', 'deal-1')).toEqual([]);
+		expect(await repo.countBySubject('investor-memo', 'deal-2')).toBe(1);
+		expect(await repo.deleteBySubjectId('deal-1', at)).toBe(0);
+	});
+});
