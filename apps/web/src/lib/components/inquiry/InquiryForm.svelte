@@ -127,6 +127,8 @@
 						body: `Nothing was sent. Please contact ${agentName} another way. What you typed is still here, so you can copy it.`
 					};
 		announce(`${failure.title}. ${failure.body}`);
+		// The button was disabled while sending; let it re-enable before focus returns to it.
+		await tick();
 		sendEl?.focus();
 	}
 
