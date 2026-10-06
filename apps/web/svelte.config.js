@@ -41,8 +41,9 @@ export default {
 				'script-src': ['self'],
 				'style-src': ['self'],
 				'style-src-attr': ['unsafe-inline'],
-				// Map tiles (Phase 6) only: no data or blob schemes, no a./b./c. tile subdomains.
-				'img-src': ['self', 'https://tile.openstreetmap.org'],
+				// Map tiles (Phase 6) plus same-origin blob object URLs for agent logos (Phase 8).
+				// Never the data scheme, never a./b./c. tile subdomains.
+				'img-src': ['self', 'https://tile.openstreetmap.org', 'blob:'],
 				'connect-src': [
 					'self',
 					'https://api.rentcast.io',

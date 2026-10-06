@@ -69,7 +69,7 @@ function policy(overrides: Directives = {}): string {
 		'script-src': `'self' ${sha256(BOOT)}`,
 		'style-src': "'self'",
 		'style-src-attr': "'unsafe-inline'",
-		'img-src': "'self' https://tile.openstreetmap.org",
+		'img-src': "'self' https://tile.openstreetmap.org blob:",
 		'base-uri': "'self'",
 		'form-action': "'self' https://api.web3forms.com",
 		...overrides
@@ -256,21 +256,52 @@ describe('checkHtml injected faults', () => {
 
 	test.each([
 		['removed', undefined],
-		['widened with data:', "'self' https://tile.openstreetmap.org data:"],
-		['widened with blob:', "'self' https://tile.openstreetmap.org blob:"],
-		['widened to any https: host', "'self' https:"],
-		['missing the OSM tile host', "'self'"],
-		['missing self', 'https://tile.openstreetmap.org'],
-		['an OSM tile subdomain', "'self' https://a.tile.openstreetmap.org"]
+		['widened with data:', "'self' https://tile.openstreetmap.org blob: data:"],
+		['widened to any https: host', "'self' https://tile.openstreetmap.org blob: https:"],
+		['missing blob:', "'self' https://tile.openstreetmap.org"],
+		['missing the OSM tile host', "'self' blob:"],
+		['missing self', 'https://tile.openstreetmap.org blob:'],
+		['an OSM tile subdomain', "'self' https://a.tile.openstreetmap.org blob:"]
 	])('Fault 10: img-src %s is rejected', (_name, value) => {
 		const errors = checkHtml('index.html', makePage({ directives: { 'img-src': value } }));
 		expect(errors.some((e) => e.includes('img-src'))).toBe(true);
 	});
 
 	test('Fault 10b: img-src order does not matter, but every token must be present', () => {
-		const reordered = "https://tile.openstreetmap.org 'self'";
+		const reordered = "blob: https://tile.openstreetmap.org 'self'";
 		expect(checkHtml('index.html', makePage({ directives: { 'img-src': reordered } }))).toEqual([]);
-		expect(EXACT['img-src']).toEqual(["'self'", 'https://tile.openstreetmap.org']);
+		expect(EXACT['img-src']).toEqual(["'self'", 'https://tile.openstreetmap.org', 'blob:']);
+	});
+
+	test('Fault 9a: img-src without blob: is rejected', () => {
+		const errors = checkHtml(
+			'index.html',
+			makePage({ directives: { 'img-src': "'self' https://tile.openstreetmap.org" } })
+		);
+		expect(errors.some((e) => /img-src/.test(e))).toBe(true);
+	});
+
+	test('Fault 9b: img-src with data: is rejected', () => {
+		const errors = checkHtml(
+			'index.html',
+			makePage({ directives: { 'img-src': "'self' https://tile.openstreetmap.org blob: data:" } })
+		);
+		expect(errors.some((e) => /img-src/.test(e))).toBe(true);
+	});
+
+	test('Fault 9c: img-src with an extra host is rejected', () => {
+		const errors = checkHtml(
+			'index.html',
+			makePage({
+				directives: { 'img-src': "'self' https://tile.openstreetmap.org blob: https://evil.test" }
+			})
+		);
+		expect(errors.some((e) => /img-src/.test(e))).toBe(true);
+	});
+
+	test('Fault 9d: a missing img-src directive is rejected', () => {
+		const errors = checkHtml('index.html', makePage({ directives: { 'img-src': undefined } }));
+		expect(errors.some((e) => /img-src/.test(e))).toBe(true);
 	});
 
 	test.each(['default-src', 'object-src', 'base-uri', 'form-action'])(
