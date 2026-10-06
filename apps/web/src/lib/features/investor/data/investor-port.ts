@@ -93,6 +93,12 @@ export type InvestorRequest =
 
 export interface InvestorDataPort {
 	mode(): 'sample' | 'live';
+	/**
+	 * The active data source's identity (the runtime's gateway), or null before the runtime has
+	 * started. It changes on every rebuild (a key or source change) and is reactive when read in a
+	 * Svelte template or effect, so a view can wait for it and re-key on it (07-21). Free.
+	 */
+	source(): object | null;
 	estimateCost(req: InvestorRequest): Promise<CostEstimate>;
 	rentEstimate(q: EstimateQuery): Promise<Estimate>;
 	valueEstimate(q: EstimateQuery): Promise<Estimate>;
@@ -242,6 +248,8 @@ export function createInvestorPort(runtime: InvestorRuntime): InvestorDataPort {
 			const source = runtime.gateway?.source ?? runtime.mode?.source;
 			return source === 'rentcast' ? 'live' : 'sample';
 		},
+
+		source: () => runtime.gateway ?? null,
 
 		estimateCost: async (req) => gateway().estimateCost(investorRequest(req)),
 

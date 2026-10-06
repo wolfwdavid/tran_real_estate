@@ -277,6 +277,23 @@ describe('createInvestorPort', () => {
 			DataRuntimeNotStartedError
 		);
 	});
+
+	it('source() is null before the runtime starts and the live gateway after, spending nothing', () => {
+		const runtime = { gateway: null, requestSpend: vi.fn(), mode: null } as {
+			gateway: unknown;
+			requestSpend: ReturnType<typeof vi.fn>;
+			mode: unknown;
+		};
+		const port = createInvestorPort(runtime as unknown as InvestorRuntime);
+		expect(port.source()).toBeNull();
+		const first = { source: 'sample' };
+		runtime.gateway = first;
+		expect(port.source()).toBe(first);
+		const rebuilt = { source: 'rentcast' };
+		runtime.gateway = rebuilt;
+		expect(port.source()).toBe(rebuilt);
+		expect(runtime.requestSpend).not.toHaveBeenCalled();
+	});
 });
 
 describe('boundary: only this adapter imports $lib/data at runtime', () => {
