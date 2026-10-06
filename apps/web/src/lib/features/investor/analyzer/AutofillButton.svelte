@@ -8,6 +8,10 @@
 	//
 	// Under the button: the GatewayError for a failed lookup (focus moves to its title) and the
 	// EstimateResult reference block. The fill rule lives in autofill.ts.
+	//
+	// In flight the button is aria-disabled (not `disabled`): a disabled button drops focus, and
+	// focus must stay on the button after a lookup (07-UI-SPEC "Focus management"). run() ignores
+	// clicks while a lookup is running. The label wraps so 375px never scrolls sideways.
 	import { onMount, tick } from 'svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Wand2 from '@lucide/svelte/icons/wand-sparkles';
@@ -167,7 +171,8 @@
 	<div>
 		<Button
 			variant="outline"
-			disabled={running}
+			aria-disabled={running ? 'true' : undefined}
+			class="h-auto min-h-11 py-2 text-left whitespace-normal"
 			{onclick}
 			onpointerenter={() => void refreshCost()}
 			onfocus={() => void refreshCost()}
