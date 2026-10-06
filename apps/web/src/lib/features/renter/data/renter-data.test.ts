@@ -8,6 +8,7 @@ import { applyFilters, DEFAULT_FILTERS, type RentalFilters } from '@tran/core/re
 import type { Listing } from '@tran/core/listings';
 import { createDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
 import { TranDb } from '$lib/storage/db';
+import { marketStatsRequest } from '$lib/features/shared/markets/markets-port';
 import { listingByIdRequest, marketsRequest, rentEstimateRequest, searchRequest } from './requests';
 
 const FILTERED: RentalFilters = {
@@ -73,6 +74,10 @@ describe('marketsRequest (Phase 7 parity)', () => {
 			endpoint: 'markets',
 			params: { zipCode: '74201', dataType: 'All', historyRange: 24 }
 		});
+	});
+
+	it('is the shared markets port builder itself (one cache entry for every portal)', () => {
+		expect(marketsRequest).toBe(marketStatsRequest);
 	});
 
 	it('has the canonical key Phase 7 caches under', () => {

@@ -4,10 +4,12 @@ import { describe, expect, it, vi } from 'vitest';
 import { canonicalKey, GatewayError, type DataRequest } from '@tran/core/request';
 import type { MarketStats } from '@tran/core/listings';
 import { rentTrendSeries } from '@tran/core/markets';
+// eslint-disable-next-line no-restricted-imports -- test-only: the committed synthetic fixtures prove the real mapper output
 import markets from '$lib/data/fixtures/markets.json';
+// eslint-disable-next-line no-restricted-imports -- test-only: maps the fixture exactly as the gateway does
 import { mapPayload } from '$lib/data/rentcast/mappers';
+// eslint-disable-next-line no-restricted-imports -- test-only: validates the fixture exactly as the gateway does
 import { parsePayload } from '$lib/data/rentcast/schemas';
-import { marketsRequest } from '$lib/features/renter/data/requests';
 import {
 	createMarketsPort,
 	DataRuntimeNotStartedError,
@@ -58,10 +60,6 @@ describe('marketStatsRequest (canonical, shared with the renter portal and Phase
 		expect(canonicalKey(marketStatsRequest('79999'))).toBe(
 			'markets?dataType=All&historyRange=24&zipCode=79999'
 		);
-	});
-
-	it('is the very request the renter fair-rent tier uses (one cache entry)', () => {
-		expect(marketsRequest).toBe(marketStatsRequest);
 	});
 });
 

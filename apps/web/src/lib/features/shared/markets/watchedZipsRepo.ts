@@ -10,8 +10,12 @@ import { newSyncable, tombstone } from '@tran/core';
 import { addWatchedZip, validateZip } from '@tran/core/markets';
 import { getDb, type TranDb } from '$lib/storage/db';
 import { live } from '$lib/storage/live.svelte';
-import { INVESTOR_RECORD_SCHEMA_VERSION } from '$lib/features/investor/deals/tables';
-import { watchedZipId, watchedZipRecordSchema, type WatchedZipRecord } from './watched-zip-record';
+import {
+	WATCHED_ZIP_SCHEMA_VERSION,
+	watchedZipId,
+	watchedZipRecordSchema,
+	type WatchedZipRecord
+} from './watched-zip-record';
 
 export interface WatchedZip {
 	zip: string;
@@ -65,7 +69,7 @@ export function createWatchedZipsRepo(
 						...newSyncable({
 							id,
 							now: new Date(now),
-							schemaVersion: INVESTOR_RECORD_SCHEMA_VERSION
+							schemaVersion: WATCHED_ZIP_SCHEMA_VERSION
 						}),
 						zip: r.zip,
 						addedAt: now

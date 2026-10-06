@@ -5,6 +5,9 @@
 import * as z from 'zod/mini';
 import type { Syncable } from '@tran/core';
 
+/** schemaVersion stamped on every watched-ZIP Syncable record. */
+export const WATCHED_ZIP_SCHEMA_VERSION = 1;
+
 export interface WatchedZipRecord extends Syncable {
 	zip: string;
 	/** Epoch milliseconds when the ZIP was (re)watched; the list is ordered by it. */
