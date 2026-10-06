@@ -188,6 +188,12 @@
 			// Storage unavailable: start with an empty analysis; typing still works.
 		} finally {
 			s.restored = true;
+			// A restore is a form change: the autofill buttons refresh their (free) cost labels from
+			// the form's own change listeners, so a Deep analyze handoff reads "(0 calls · cached)".
+			// Not bubbling, so no field-level handler runs.
+			void tick().then(() =>
+				document.getElementById('analyzer-form')?.dispatchEvent(new Event('change'))
+			);
 		}
 	}
 
