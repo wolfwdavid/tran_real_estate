@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-09-PLAN.md
-last_updated: "2026-10-06T13:15:22.825Z"
+stopped_at: Completed 08-07-PLAN.md
+last_updated: "2026-10-06T13:18:42.533Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 128
+  completed_plans: 129
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 6 of 26 (wave 1 complete; next wave 2: 08-05..08-11)
+Plan: 7 of 26 (wave 1 complete; next wave 2: 08-05..08-11)
 
 ## Performance Metrics
 
@@ -174,6 +174,7 @@ Plan: 6 of 26 (wave 1 complete; next wave 2: 08-05..08-11)
 | Phase 08 P02 | 25min | 2 tasks | 4 files |
 | Phase 08 P08 | 20min | 2 tasks | 6 files |
 | Phase 08 P09 | 15min | 2 tasks | 8 files |
+| Phase 08 P07 | 12min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -414,6 +415,7 @@ Recent decisions affecting current work:
 - [Phase 08]: tooling/import-graph.ts is the generic transitive boundary walker (Phase 5 lib/ai walker untouched)
 - [Phase 08]: 08-08: disclosure via @tran/core/disclosure barrel; StateRule.template (brokerage-first) + injectable rules option; NY sales-associate -> missing licenseType + ny-title warning
 - [Phase 08]: CRM rules import from @tran/core/crm barrel; due dates are local YYYY-MM-DD strings with injected today/localDate
+- [Phase 08]: 08-07: hand-written RFC 4180 CSV passed all edge cases (no papaparse); RowReason adds too-long; CSV opt-out import is conservative (non-no values count as opted out)
 
 ### Pending Todos
 
@@ -436,7 +438,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T13:15:22.813Z
-Stopped at: Completed 08-09-PLAN.md
+Last session: 2026-10-06T13:18:42.516Z
+Stopped at: Completed 08-07-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
