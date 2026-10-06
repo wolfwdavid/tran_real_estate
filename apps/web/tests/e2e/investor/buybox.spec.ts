@@ -268,6 +268,11 @@ test('app open checks a due buy box once; New badges; no second check', async ({
 	// App open: the Phase 4 scheduler checks the due box once.
 	await page.goto('investor/');
 	await expect.poll(() => rc.count(SALE)).toBe(1);
+	// The mock counts the request when it is sent; the check finishes only once the result is
+	// stored, which the overview shows. Leaving before that aborts the in-flight check (07-21).
+	await expect(page.locator('[data-overview-card="buyBoxes"] [data-overview-count]')).toHaveText(
+		/new match(es)? since your last visit/
+	);
 
 	await openBuyBoxes(page);
 	const c = card(page, 'Juniper');
