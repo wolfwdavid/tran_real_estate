@@ -169,13 +169,14 @@ describe('overviewCounts', () => {
 	it('sums new buy-box matches from the cache without spending', async () => {
 		const w = world();
 		const v = await w.buyBoxes.createBuyBox(box());
-		await w.buyBoxes.createBuyBox(box('Second box'));
+		const second = await w.buyBoxes.createBuyBox(box('Second box'));
 		w.clock.now = T0 + 1000;
 		await w.appOpen();
 		w.clock.now = T0 + 2000;
 		await w.buyBoxes.markSeen(v.id);
 
-		// A later on-open run brings one new listing: new for the seen box only.
+		// A later on-open run brings one new listing. The seen box has 1 new (s2); the box never
+		// opened still counts everything since it was created (s1 and s2).
 		w.setRows([
 			{ id: 's1', price: 250_000 },
 			{ id: 's2', price: 260_000 }
@@ -185,10 +186,10 @@ describe('overviewCounts', () => {
 
 		const before = w.spends();
 		expect(await w.buyBoxes.newMatchCount(v.id)).toBe(1);
+		expect(await w.buyBoxes.newMatchCount(second.id)).toBe(2);
 		const c = await overviewCounts(w.sources);
 		expect(c.buyBoxes).toBe(2);
-		// The never-seen box has no "last visit" yet, so it contributes 0 (Phase 4 rule).
-		expect(c.newMatches).toBe(1);
+		expect(c.newMatches).toBe(3);
 		expect(w.spends()).toEqual(before);
 	});
 
