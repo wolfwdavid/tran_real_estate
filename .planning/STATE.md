@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-04-PLAN.md
-last_updated: "2026-10-06T01:49:53.131Z"
+stopped_at: Completed 07-03-PLAN.md
+last_updated: "2026-10-06T01:56:36.674Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 206
-  completed_plans: 104
+  completed_plans: 105
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 07 (Investor Portal) — EXECUTING
-Plan: 4 of 21
+Plan: 5 of 21
 
 ## Performance Metrics
 
@@ -150,6 +150,7 @@ Plan: 4 of 21
 | Phase 07 P01 | 25min | 3 tasks | 11 files |
 | Phase 07 P02 | 25 min | 2 tasks | 6 files |
 | Phase 07 P04 | 35m | 3 tasks | 25 files |
+| Phase 07 P03 | 45 min | 3 tasks | 26 files |
 
 ## Accumulated Context
 
@@ -358,6 +359,8 @@ Recent decisions affecting current work:
 - [Phase 07]: 07-02: numeric post-check accounting-paren negatives only for unit-less numerals; markdown bullets pre-stripped; spelled-out words inside digit numerals never reported
 - [Phase 07]: 07-04: post-checks are bare PostCheck functions (createPostCheck) with labels baked into members; checkGroups is presentational only; panel-controller unchanged
 - [Phase 07]: 07-04: artifacts gain optional meta + deleteBySubjectId (filter scan, no Dexie bump); PromptDef.sample -> fixtureText streamed by the Fixture provider, never hashed or sent
+- [Phase 07]: PortalSubNav items are base-less pathnames resolved at render; current item from page.route.id (prerender-safe on both bases)
+- [Phase 07]: Investor no-advice phrases are a scoped banned list (INVESTOR_SCOPES); investor E2E MOCK_ZIP=74201 (fixture metro)
 
 ### Pending Todos
 
@@ -380,7 +383,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T01:49:53.125Z
-Stopped at: Completed 07-04-PLAN.md
+Last session: 2026-10-06T01:56:36.668Z
+Stopped at: Completed 07-03-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

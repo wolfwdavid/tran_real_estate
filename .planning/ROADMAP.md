@@ -273,7 +273,7 @@ Plans:
 Plans:
 - [x] 07-01-PLAN.md — Core money (exact mulBps), single formatter, amortization anchors; fast-check + layerchart installs (wave 1)
 - [x] 07-02-PLAN.md — Core numeric post-check in packages/core/src/numbers (tolerant matching, spelled-out warns) (wave 1)
-- [ ] 07-03-PLAN.md — Nine route stubs, shared PortalSubNav + NotFoundPanel, route registries, banned-terms scope, E2E helpers (wave 1)
+- [x] 07-03-PLAN.md — Nine route stubs, shared PortalSubNav + NotFoundPanel, route registries, banned-terms scope, E2E helpers (wave 1)
 - [x] 07-04-PLAN.md — GenerationPanel postChecks + gate state, grouped findings, DraftHistory subjectId, prompt sample text (wave 1)
 - [ ] 07-05-PLAN.md — analyze(), expense lines, defaults, definitions, 9 exact reference cases, fast-check invariants (wave 2)
 - [ ] 07-06-PLAN.md — Market series math (rent trend, price-to-rent), summaries, 5-ZIP watch rules (wave 2)
@@ -460,7 +460,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
-| 7. Investor Portal | 3/21 | In Progress|  |
+| 7. Investor Portal | 4/21 | In Progress|  |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
