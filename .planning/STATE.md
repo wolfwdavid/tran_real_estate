@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-17-PLAN.md
-last_updated: "2026-10-06T00:06:46.551Z"
+stopped_at: Completed 06-16-PLAN.md
+last_updated: "2026-10-06T00:09:48.462Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 96
+  completed_plans: 97
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 17 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
+Plan: 18 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 
 ## Performance Metrics
 
@@ -142,6 +142,7 @@ Plan: 17 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 | Phase 06 P18 | 25min | 2 tasks | 7 files |
 | Phase 06 P15 | 45min | 2 tasks | 14 files |
 | Phase 06 P17 | 45min | 2 tasks | 17 files |
+| Phase 06 P16 | 35 min | 2 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -338,6 +339,7 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-15: rent-change notice only when the cached row is newer than the snapshot (peekListingById, 0 calls)
 - [Phase 06]: 06-17: fair-rent tiers read with peek+estimateCost only and spend from their button via requestSpend; copy lives in presentational *Result components for SSR tests
 - [Phase 06]: 06-17: GatewayError gains body override + actions={false}; MarketSide gains optional lastUpdatedDate (mapper sets it)
+- [Phase 06]: 06-16: ResultsView renders whenever rows exist so in-flight re-searches show skeletons; Map panel mounts on first selection and stays mounted (06-19 fills MapTab stub)
 
 ### Pending Todos
 
@@ -360,7 +362,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T00:06:46.542Z
-Stopped at: Completed 06-17-PLAN.md
+Last session: 2026-10-06T00:09:48.456Z
+Stopped at: Completed 06-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
