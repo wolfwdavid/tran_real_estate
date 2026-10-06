@@ -52,7 +52,7 @@
 {/snippet}
 
 <div class="hidden md:block" data-compare-view="table">
-	<!-- svelte-ignore a11y_no_noninteractive_tabindex -- scrollable region must be keyboard reachable -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
 		class="overflow-x-auto rounded-lg border border-border bg-card shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 		tabindex="0"
