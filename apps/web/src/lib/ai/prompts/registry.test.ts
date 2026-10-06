@@ -140,7 +140,11 @@ describe('PromptDef.sample (fixture text)', () => {
 	};
 
 	it('sets fixtureText from sample(inputs); inputHash ignores it', async () => {
-		registerPrompt({ ...base, sample: (i) => `Sample about ${i.topic}.` } as PromptDef);
+		const sampled: PromptDef<{ topic: string }> = {
+			...base,
+			sample: (i) => `Sample about ${i.topic}.`
+		};
+		registerPrompt(sampled as PromptDef);
 		const built = await buildPrompt('test/sampled', { topic: 'leases' });
 		expect(built.fixtureText).toBe('Sample about leases.');
 		registerPrompt({ ...base, version: 2 } as PromptDef);

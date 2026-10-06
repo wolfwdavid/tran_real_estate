@@ -64,7 +64,8 @@ export async function* runGeneration(o: RunOptions): AsyncGenerator<RunUpdate> {
 		maxTokens: o.prompt.maxTokens,
 		containsClientData: o.prompt.containsClientData,
 		clientDataAck: o.clientDataAck,
-		promptId: o.prompt.promptId
+		promptId: o.prompt.promptId,
+		...(o.prompt.fixtureText !== undefined ? { fixtureText: o.prompt.fixtureText } : {})
 	};
 
 	let text = '';

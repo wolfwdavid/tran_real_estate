@@ -33,6 +33,8 @@ export async function buildPrompt(id: string, inputs: unknown): Promise<BuiltPro
 	const system = def.housingCopy ? `${HOUSING_COPY_GUARDRAIL.text}\n\n${b.system}` : b.system;
 	const { text: user, redactions } = redactPii(b.user, b.known);
 	const inputHash = await sha256Hex(`${system}\n\n${user}`);
+	// Fixture-provider sample only: not part of the sent payload, so not hashed.
+	const fixtureText = def.sample?.(inputs);
 	return {
 		id: def.id,
 		version: def.version,
@@ -43,7 +45,8 @@ export async function buildPrompt(id: string, inputs: unknown): Promise<BuiltPro
 		redactions,
 		containsClientData: def.containsClientData,
 		maxTokens: def.maxTokens,
-		inputHash
+		inputHash,
+		...(fixtureText !== undefined ? { fixtureText } : {})
 	};
 }
 

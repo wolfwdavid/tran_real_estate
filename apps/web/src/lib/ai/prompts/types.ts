@@ -15,6 +15,11 @@ export interface PromptDef<I = unknown> {
 	/** At least 2048: thinking tokens count against it on some providers. */
 	maxTokens: number;
 	build(inputs: I): PromptBuild;
+	/**
+	 * Optional deterministic sample output for the keyless Fixture provider (Phase 7: a memo that
+	 * passes its own numbers post-check). Pure; never sent to a live provider.
+	 */
+	sample?: (inputs: I) => string;
 }
 
 /** The exact payload that is sent. Raw inputs are never stored here. */
@@ -31,4 +36,6 @@ export type BuiltPrompt = {
 	maxTokens: number;
 	/** sha256 hex of `system + '\n\n' + user`, computed after redaction. */
 	inputHash: string;
+	/** PromptDef.sample(inputs), when the prompt has one. Fixture provider only; not hashed. */
+	fixtureText?: string;
 };

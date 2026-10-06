@@ -14,6 +14,8 @@ export type LlmRequest = {
 	clientDataAck?: boolean;
 	/** e.g. 'shared/demo@1'; used by the fixture provider only. */
 	promptId?: string;
+	/** Prompt-supplied sample text (PromptDef.sample); used by the fixture provider only. */
+	fixtureText?: string;
 };
 
 export type LlmEvent =

@@ -45,7 +45,11 @@ export function fixtureProvider(deps: FixtureDeps = {}): LlmProvider {
 		id: 'fixture',
 		async *stream(req: LlmRequest, signal: AbortSignal): AsyncGenerator<LlmEvent> {
 			if (signal.aborted) throw abortError();
-			const text = outputFor(outputs, req.promptId);
+			// A prompt-supplied sample (e.g. a deal-specific memo) wins over the canned outputs.
+			const text =
+				typeof req.fixtureText === 'string' && req.fixtureText !== ''
+					? req.fixtureText
+					: outputFor(outputs, req.promptId);
 			// Each part is a word plus its trailing whitespace; together with any leading
 			// whitespace they concatenate back to `text` exactly.
 			const leading = /^\s*/.exec(text)?.[0] ?? '';
