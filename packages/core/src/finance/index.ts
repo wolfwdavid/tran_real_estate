@@ -8,3 +8,4 @@ export * from './expenses.js';
 export * from './analyze.js';
 export * from './reference-cases.js';
 export * from './compare.js';
+export * from './quick-metrics.js';

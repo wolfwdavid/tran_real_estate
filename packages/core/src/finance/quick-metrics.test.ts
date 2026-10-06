@@ -118,6 +118,11 @@ describe('meetsTargets', () => {
 		expect(meetsTargets(q, { minCapRatePct: 4, minRentToPricePct: 0.7 })).toBe(false);
 	});
 
+	it('counts a value exactly at the target as meeting it', () => {
+		const exact = { minCapRatePct: q.estCapRatePct, minRentToPricePct: q.rentToPricePct };
+		expect(meetsTargets(q, exact)).toBe(true);
+	});
+
 	it('is null when a target is set but the metrics are unavailable', () => {
 		expect(meetsTargets(null, { minCapRatePct: 6, minRentToPricePct: null })).toBeNull();
 		const zero = quickMetrics({ priceCents: 0, bedrooms: 3 }, STATS) as QuickMetrics;
