@@ -20,6 +20,8 @@
 	import StartEmptyState from './StartEmptyState.svelte';
 	import TruncationNotice from './TruncationNotice.svelte';
 	import { createRenterSearch } from './search-state.svelte';
+	import { encodeSearchParams } from '@tran/core/renter';
+	import { getRenterSavedSearches } from '../saved/saved-searches';
 
 	const runtime = getDataRuntime();
 	const search = createRenterSearch({
@@ -38,10 +40,45 @@
 
 	onMount(() => {
 		peekedWith = untrack(() => runtime.gateway);
-		search.restoreFromUrl(page.url.searchParams).finally(() => {
+		restore().finally(() => {
 			restored = true;
 		});
 		return () => search.dispose();
+	});
+
+	/**
+	 * Restores the URL's search (peek only, 0 calls). `?saved={id}` is View results on a saved
+	 * search: read its "New" ids BEFORE marking it seen, restore its saved filters, and keep the
+	 * badges until the page is left. The URL mirror then drops `saved`, so a reload never re-marks.
+	 */
+	async function restore(): Promise<void> {
+		const savedId = page.url.searchParams.get('saved');
+		if (savedId && (await openSaved(savedId))) return;
+		await search.restoreFromUrl(page.url.searchParams);
+	}
+
+	/** The saved id already opened (each View results marks seen exactly once). */
+	let openedSaved: string | null = null;
+
+	async function openSaved(id: string): Promise<boolean> {
+		openedSaved = id;
+		const opened = await getRenterSavedSearches(() => runtime.gateway)
+			.openForResults(id)
+			.catch(() => null);
+		if (!opened) return false;
+		await search.restoreFromUrl(encodeSearchParams(opened.state));
+		search.newIds = opened.newIds;
+		return true;
+	}
+
+	// View results from this same page (a client navigation to /renter/?...&saved={id}) does not
+	// remount it, so a new `saved` id in the URL is opened here.
+	$effect(() => {
+		const id = page.url.searchParams.get('saved');
+		if (!id || !restored) return;
+		untrack(() => {
+			if (id !== openedSaved) void openSaved(id);
+		});
 	});
 
 	// A new gateway (runtime started, or the mode changed): re-read the cache for the current

@@ -105,6 +105,15 @@ const sameFilters = (a: RentalFilters, b: RentalFilters) =>
 const sameLocation = (a: RenterLocation, b: RenterLocation) =>
 	locationDisplay(a).toLowerCase() === locationDisplay(b).toLowerCase();
 
+/** Whether a saved search has this location and these filters (the "Saved search" state). */
+export function matchesSearch(
+	s: Pick<RenterSavedSearch, 'location' | 'filters'>,
+	location: RenterLocation,
+	filters: RentalFilters
+): boolean {
+	return sameLocation(s.location, location) && sameFilters(s.filters, filters);
+}
+
 export function createRenterSavedSearches(deps: RenterSavedSearchDeps) {
 	const { phase4, meta, clock } = deps;
 
@@ -275,9 +284,7 @@ export function createRenterSavedSearches(deps: RenterSavedSearchDeps) {
 			location: RenterLocation,
 			filters: RentalFilters
 		): Promise<RenterSavedSearch | undefined> {
-			return (await listRenter()).find(
-				(s) => sameLocation(s.location, location) && sameFilters(s.filters, filters)
-			);
+			return (await listRenter()).find((s) => matchesSearch(s, location, filters));
 		}
 	};
 }
