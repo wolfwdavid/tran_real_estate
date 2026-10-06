@@ -65,6 +65,14 @@ describe('parseFreeform', () => {
 		).toEqual({ name: '', email: 'quinn@example.com', phone: '' });
 	});
 
+	it('only reads a display name directly before <address>', () => {
+		expect(parseFreeform('From: Morgan Demo morgan@example.com')?.name).toBe('');
+	});
+
+	it('does not read other labels ending in name', () => {
+		expect(parseFreeform('Company name: Acme\njordan@example.com')?.name).toBe('');
+	});
+
 	it('prefers a labelled Name line over the display name', () => {
 		expect(
 			parseFreeform('From: Web Form <form@example.com>\nFull name: Jordan Example')?.name
