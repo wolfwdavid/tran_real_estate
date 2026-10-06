@@ -123,7 +123,12 @@ export const contrastPairs: readonly Pair[] = Object.freeze([
 	// TriangleAlert on its fill, and the streaming caret on the output box.
 	{ fg: 'destructive', bg: 'accent-surface', min: 3, kind: 'ui' },
 	{ fg: 'foreground', bg: 'surface', min: 3, kind: 'ui' },
-	{ fg: 'foreground', bg: 'background', min: 3, kind: 'ui' }
+	{ fg: 'foreground', bg: 'background', min: 3, kind: 'ui' },
+	// Phase 7 chart series strokes and markers on the figure's card (07-UI-SPEC contrast record).
+	// primary and border-strong on card are already above; axis tick text is in the text matrix.
+	{ fg: 'secondary', bg: 'card', min: 3, kind: 'ui' },
+	{ fg: 'foreground', bg: 'card', min: 3, kind: 'ui' },
+	{ fg: 'muted-foreground', bg: 'card', min: 3, kind: 'ui' }
 ] satisfies Pair[]);
 
 /** Pairs whose ratio falls below their minimum. Empty for the shipped matrix. */

@@ -116,3 +116,30 @@
 .app-root {
 	display: contents;
 }
+
+/*
+ * LayerChart token mapping (07-UI-SPEC "LayerChart token reconciliation"). Unlayered on purpose:
+ * LayerChart's own defaults sit in `@layer components` behind `:where()`, so these win. Only
+ * existing Phase 2 token variables are referenced; every chart primitive also gets explicit
+ * token classes, so nothing relies on LayerChart's default palette.
+ */
+.lc-root-container,
+.lc-tooltip-root {
+	--color-surface-content: var(--color-foreground);
+	--color-surface-100: var(--color-card);
+	--color-surface-200: var(--color-surface);
+	--lc-user-select: text;
+}
+
+/* UI-SPEC: tick labels are Label 14/400, never below 14px. */
+:where(.lc-axis-tick-label, .lc-axis-label) {
+	font-size: 0.875rem;
+	font-weight: 400;
+}
+
+@media print {
+	.lc-root-container svg {
+		max-width: 100%;
+		height: auto;
+	}
+}
