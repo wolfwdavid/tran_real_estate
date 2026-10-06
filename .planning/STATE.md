@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-15-PLAN.md
-last_updated: "2026-10-06T00:04:15.440Z"
+stopped_at: Completed 06-17-PLAN.md
+last_updated: "2026-10-06T00:06:46.551Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 95
+  completed_plans: 96
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 16 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
+Plan: 17 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 
 ## Performance Metrics
 
@@ -141,6 +141,7 @@ Plan: 16 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
 | Phase 06 P14 | 28min | 2 tasks | 21 files |
 | Phase 06 P18 | 25min | 2 tasks | 7 files |
 | Phase 06 P15 | 45min | 2 tasks | 14 files |
+| Phase 06 P17 | 45min | 2 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -335,6 +336,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-18: outreach recipient = validated agent email, else office email, else none (no-recipient note + bare mailto); Draft history rendered per listing via subjectId
 - [Phase 06]: 06-15: shortlist focus after a status move/removal is board-owned (child reports intent before the write; effect focuses once liveQuery items satisfy it)
 - [Phase 06]: 06-15: rent-change notice only when the cached row is newer than the snapshot (peekListingById, 0 calls)
+- [Phase 06]: 06-17: fair-rent tiers read with peek+estimateCost only and spend from their button via requestSpend; copy lives in presentational *Result components for SSR tests
+- [Phase 06]: 06-17: GatewayError gains body override + actions={false}; MarketSide gains optional lastUpdatedDate (mapper sets it)
 
 ### Pending Todos
 
@@ -357,7 +360,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T00:04:15.430Z
-Stopped at: Completed 06-15-PLAN.md
+Last session: 2026-10-06T00:06:46.542Z
+Stopped at: Completed 06-17-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
