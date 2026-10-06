@@ -12,3 +12,4 @@ export * from './quick-metrics.js';
 export * from './memo-facts.js';
 export * from './memo-sample.js';
 export * from './memo-language.js';
+export * from './analysis-hash.js';
