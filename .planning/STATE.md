@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-21-PLAN.md
-last_updated: "2026-10-06T01:09:04.885Z"
+stopped_at: Completed 06-22-PLAN.md
+last_updated: "2026-10-06T01:29:35.711Z"
 progress:
   total_phases: 11
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 206
-  completed_plans: 100
+  completed_plans: 101
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 21 of 22 (waves 1-7 complete; next wave 8: 06-22 phase gate)
+Plan: 22 of 22 (all waves complete; 06-22 gate passed, pnpm verify green 391 s; next: phase verification)
 
 ## Performance Metrics
 
@@ -146,6 +146,7 @@ Plan: 21 of 22 (waves 1-7 complete; next wave 8: 06-22 phase gate)
 | Phase 06 P20 | 50min | 2 tasks | 10 files |
 | Phase 06 P19 | 25min | 3 tasks | 14 files |
 | Phase 06 P21 | 35min | 2 tasks | 7 files |
+| Phase 06 P22 | 50min | 2 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -348,6 +349,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-19: map live/sample follows result provenance (rentcast = OSM tiles); sample draws a grid backdrop with zero third-party requests
 - [Phase 06]: 06-19: CspSafeTileLayer overrides Leaflet 1.9.4 _removeTile/_abortLoading to drop src instead of a data: GIF (img-src violation otherwise)
 - [Phase 06]: 06-21: split view list follows map bounds (pure rowsInBounds, inclusive edges); pin activation focuses the split-list card at >=1024px, the preview below; preview still shows co-located spot lists at lg
+- [Phase 06]: 06-22: price-history removedDate kept through the mapper (optional PriceEvent.removedDate + toRawHistory); overflow-x-auto wrappers are relative so sr-only cells cannot widen the page
+- [Phase 06]: 06-22: duplicate listing-card ids (list/split/preview) and tailwind-merge font-size collision deferred (deferred-items.md); renter live checks in 06-HUMAN-UAT (non-blocking)
 
 ### Pending Todos
 
@@ -370,7 +373,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T01:09:04.880Z
-Stopped at: Completed 06-21-PLAN.md
+Last session: 2026-10-06T01:29:35.704Z
+Stopped at: Completed 06-22-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

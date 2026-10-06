@@ -91,7 +91,7 @@ corepack pnpm verify
 | `corepack pnpm verify`         | All of the above in order, as one gate                                                                                               |
 
 `verify` is `check`, `lint`, `banned`, `ui:guard`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
-`guard`, `fixtures:check`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about four minutes on a
+`guard`, `fixtures:check`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about six and a half minutes on a
 warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
 same steps, split across a hygiene job and a two-leg quality matrix (root and sub base paths).
 

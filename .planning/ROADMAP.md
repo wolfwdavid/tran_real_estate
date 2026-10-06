@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Local Platform: Storage, Key Vault & Backup** - Browser-only key vault (session / remember / passphrase), JSON backup, persistence status, PWA install (completed 2026-10-05)
 - [x] **Phase 4: Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures** - Single metered, cached, hard-capped RentCast gateway plus synthetic sample data and check-on-open alerts engine (completed 2026-10-05)
 - [x] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path (completed 2026-10-05)
-- [ ] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach
+- [x] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach (completed 2026-10-06)
 - [ ] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF
 - [ ] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV
 - [ ] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF
@@ -254,7 +254,7 @@ Plans:
 - [x] 06-19-PLAN.md — Lazy Leaflet + OSM map with supercluster, sample backdrop, selection + E2E
 - [x] 06-20-PLAN.md — Saved searches with "N new since last visit" (page.clock 24h) + E2E
 - [x] 06-21-PLAN.md — Map split view and list-map linking polish (cut line 1) + E2E
-- [ ] 06-22-PLAN.md — Demo-credibility matrix, 3-call journey, validation close-out, pnpm verify
+- [x] 06-22-PLAN.md — Demo-credibility matrix, 3-call journey, validation close-out, pnpm verify
 **Research flag**: no (standard patterns). Verify the OSM tile usage policy and add the tile host to CSP `img-src` when the map ships.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 6`.
 **Cut line** (cut in this order if the phase overruns): (1) map clustering and visual polish; (2) RENT-05 status tracking, keeping the plain shortlist; (3) the optional rent-estimate tier of RENT-06, keeping the zero-call zip-median comparison.
@@ -459,7 +459,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 3. Local Platform: Storage, Key Vault & Backup | 0/TBD | Complete    | 2026-10-05 |
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
-| 6. Renter Portal | 21/22 | In Progress|  |
+| 6. Renter Portal | 22/22 | Complete   | 2026-10-06 |
 | 7. Investor Portal | 0/TBD | Not started | - |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
