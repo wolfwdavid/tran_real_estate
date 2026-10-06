@@ -6,9 +6,10 @@ const ZERO_WIDTH = /[\u200B-\u200D\uFEFF]/g;
 const QUOTE_MARKERS = /^(?:>\s?)+/;
 // C0 except \t and \n, DEL + C1, bidi embeddings/overrides, isolates, zero-width chars.
 // The control-character ranges are the point of this pattern: pasted lead text is untrusted.
-// eslint-disable-next-line no-control-regex -- stripping hostile control characters on purpose
+/* eslint-disable no-control-regex -- stripping hostile control characters on purpose */
 const HOSTILE =
 	/[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069\u200B-\u200D\uFEFF]/g;
+/* eslint-enable no-control-regex */
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NANP = /^[2-9]\d{2}[2-9]\d{6}$/;
 const EXTENSION = /\s*(?:x|ext\.?|extension|#)\s*\d+\s*$/i;
