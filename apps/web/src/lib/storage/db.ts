@@ -16,6 +16,8 @@ import type { RenterSearchMeta, ShortlistItem } from '@tran/core/renter';
 import { INVESTOR_STORES } from '$lib/features/investor/deals/tables';
 import type { DealRecord } from '$lib/features/investor/deals/schema';
 import type { WatchedZipRecord } from '$lib/features/shared/markets/watched-zip-record';
+import type { Activity, Contact, Task } from '@tran/core/agent/types';
+import { AGENT_STORES, type AgentProfileRow } from './agent/tables';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -50,6 +52,11 @@ export class TranDb extends Dexie {
 	investorDraft!: Table<Syncable, string>;
 	buyBoxes!: Table<Syncable, string>;
 	watchedZips!: Table<WatchedZipRecord, string>;
+	// Phase 8 agent CRM: contacts, tasks, activities and the singleton profile ($lib/storage/agent).
+	contacts!: Table<Contact, string>;
+	tasks!: Table<Task, string>;
+	activities!: Table<Activity, string>;
+	agentProfile!: Table<AgentProfileRow, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
@@ -68,6 +75,8 @@ export class TranDb extends Dexie {
 		});
 		// Phase 7: saved deals, the analyzer draft, buy boxes and watched ZIPs (one new block).
 		this.version(5).stores(INVESTOR_STORES);
+		// Phase 8: agent contacts, tasks, activities and profile (one new block, additive only).
+		this.version(6).stores(AGENT_STORES);
 	}
 }
 

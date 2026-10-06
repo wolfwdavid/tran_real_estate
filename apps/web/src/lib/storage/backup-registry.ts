@@ -7,6 +7,7 @@ import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
 import { INVESTOR_BACKUP_TABLES } from '$lib/features/investor/deals/tables';
+import { AGENT_BACKUP_TABLES } from './agent/backup';
 
 /** Any zod/mini schema satisfies this; the import preview rejects a file with a failing row. */
 export interface BackupRecordSchema {
@@ -18,6 +19,11 @@ export interface BackupTable {
 	readonly label: string;
 	/** Optional per-record validator applied to every incoming row of this table on import. */
 	readonly schema?: BackupRecordSchema;
+	/**
+	 * Dot paths inside each row that the export key scan skips (Phase 8: the agent logo bytes and
+	 * the public Web3Forms key). Paths only, never patterns; every other field is still scanned.
+	 */
+	readonly scanExemptPaths?: readonly string[];
 }
 
 /**
@@ -40,7 +46,10 @@ const DEFAULT_TABLES: readonly BackupTable[] = [
 	...RENTER_BACKUP_TABLES,
 	// Phase 7: 'Saved deals' (deals), 'Deal analyzer draft' (investorDraft), 'Buy boxes'
 	// (buyBoxes), 'Watched ZIP codes' (watchedZips), each with a record schema.
-	...INVESTOR_BACKUP_TABLES
+	...INVESTOR_BACKUP_TABLES,
+	// Phase 8: 'Contacts', 'Tasks', 'Activity', 'Agent profile' (each with a record schema; the
+	// profile also carries its two scan-exempt paths, see $lib/storage/agent/backup.ts).
+	...AGENT_BACKUP_TABLES
 ];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));
@@ -49,9 +58,12 @@ let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));
 export function registerBackupTable(t: BackupTable): void {
 	if (!t.name || !t.label) throw new Error('backup-table-invalid');
 	if (BACKUP_EXCLUDED_TABLES.includes(t.name)) throw new Error('backup-table-excluded');
-	const entry: BackupTable = Object.freeze(
-		t.schema ? { name: t.name, label: t.label, schema: t.schema } : { name: t.name, label: t.label }
-	);
+	const entry: BackupTable = Object.freeze({
+		name: t.name,
+		label: t.label,
+		...(t.schema ? { schema: t.schema } : {}),
+		...(t.scanExemptPaths ? { scanExemptPaths: Object.freeze([...t.scanExemptPaths]) } : {})
+	});
 	const i = tables.findIndex((x) => x.name === t.name);
 	if (i === -1) tables.push(entry);
 	else tables[i] = entry;

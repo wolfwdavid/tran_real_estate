@@ -51,6 +51,31 @@ async function readRegisteredTables(db: TranDb): Promise<Record<string, Syncable
 	return tables;
 }
 
+/** Copy of `row` with the value at a dot path blanked (missing or non-object parents: unchanged). */
+function blankPath(row: unknown, path: readonly string[]): unknown {
+	if (path.length === 0 || row === null || typeof row !== 'object' || Array.isArray(row))
+		return row;
+	const [head, ...rest] = path as [string, ...string[]];
+	if (!Object.hasOwn(row, head)) return row;
+	const value = (row as Record<string, unknown>)[head];
+	return { ...row, [head]: rest.length === 0 ? '' : blankPath(value, rest) };
+}
+
+/**
+ * The text the key scan reads: every registered table, with only the registry's declared
+ * scanExemptPaths blanked (Phase 8: the agent logo bytes and the public Web3Forms key).
+ */
+function scanText(tables: Record<string, Syncable[]>): string {
+	const view: Record<string, unknown[]> = {};
+	for (const t of listBackupTables()) {
+		const rows = tables[t.name] ?? [];
+		const paths = (t.scanExemptPaths ?? []).map((p) => p.split('.'));
+		view[t.name] =
+			paths.length === 0 ? rows : rows.map((r) => paths.reduce(blankPath, r as unknown));
+	}
+	return JSON.stringify(view, null, 2);
+}
+
 /**
  * Builds the backup JSON text. Throws BackupError('key-material') before any file can exist if the
  * text holds anything key-shaped or any exact known secret.
@@ -61,7 +86,7 @@ export async function buildBackupText(
 ): Promise<{ text: string; filename: string; counts: Record<string, number> }> {
 	const tables = await readRegisteredTables(db);
 	const text = JSON.stringify(buildEnvelope(tables, o.now), null, 2);
-	if (findKeyMaterial(text, scanForms(o.knownSecrets)).length > 0) {
+	if (findKeyMaterial(scanText(tables), scanForms(o.knownSecrets)).length > 0) {
 		throw new BackupError('key-material');
 	}
 	const counts: Record<string, number> = {};
