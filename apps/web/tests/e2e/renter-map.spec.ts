@@ -120,14 +120,16 @@ async function firstPin(page: Page) {
 	return pins(page).first();
 }
 
-/** Selects a pin with the keyboard and checks the preview, focus and announcement. */
+/** Selects a pin with the keyboard and checks the selected card, focus and announcement. */
 async function selectPin(page: Page) {
 	const pin = await firstPin(page);
 	const label = (await pin.getAttribute('aria-label')) ?? '';
 	expect(label).toMatch(/a month, /);
 	await pin.focus();
 	await page.keyboard.press('Enter');
-	const card = preview(page).locator('article[data-listing-card]');
+	// Below 1024px the card shows in the preview under the map; from 1024px it is the split
+	// list's card (06-21). Either way exactly one visible card is selected and its link has focus.
+	const card = page.locator('article[data-listing-card][aria-current="true"]:visible');
 	await expect(card).toBeVisible();
 	const linkId = await card.getAttribute('aria-labelledby');
 	await expect(page.locator(':focus')).toHaveAttribute('id', linkId!);
