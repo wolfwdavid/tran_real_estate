@@ -24,12 +24,14 @@ describe('createMemoPostChecks', () => {
 		for (const c of checks) expect(typeof c).toBe('function');
 	});
 
+	// 20% is case A's down payment, so the planted figure is 12% (not in the analysis).
 	it('numbers: flags a figure not in the analysis as Must fix, with no suggested fix', () => {
-		const text = 'Cash flow is $184 and growth is 20%.';
+		expect(numbers!('Down payment is 20%.')).toEqual([]);
+		const text = 'Cash flow is $184 and growth is 12%.';
 		const f = numbers!(text);
 		expect(f).toHaveLength(1);
 		expect(f[0]!.severity).toBe('block');
-		expect(text.slice(f[0]!.start, f[0]!.end)).toBe('20%');
+		expect(text.slice(f[0]!.start, f[0]!.end)).toBe('12%');
 		const m = f[0]!.members[0]!;
 		expect(m.checker).toBe('numbers');
 		expect(m.categoryLabel).toBe('Number not in your analysis');
@@ -71,7 +73,7 @@ describe('createMemoPostChecks', () => {
 
 	it('plugs into Phase 5 runChecks/computeGate: numbers + Fair Housing gate every exit', () => {
 		const text =
-			'Monthly cash flow is $184. Expect 20% growth next year. It is perfect for young professionals.';
+			'Monthly cash flow is $184. Expect 12% growth next year. It is perfect for young professionals.';
 		const findings = runChecks(text, createMemoPostChecks(allowed));
 		const checkers = findings.flatMap((f) => f.members.map((m) => m.checker));
 		expect(checkers).toContain('numbers');
@@ -124,14 +126,14 @@ describe('memoGateReasons', () => {
 	};
 
 	it('numbers block only', () => {
-		const g = gateFor('Monthly cash flow is $184. Expect 20% growth.');
+		const g = gateFor('Monthly cash flow is $184. Expect 12% growth.');
 		expect(memoGateReasons(g.findings, g.blocked, g.canExit)).toEqual([
 			'Fix the 1 number marked Must fix to copy, email, or print this memo.'
 		]);
 	});
 
 	it('Fair Housing block + numbers block', () => {
-		const text = 'Expect 20% growth. It is perfect for young professionals.';
+		const text = 'Expect 12% growth. It is perfect for young professionals.';
 		const g = gateFor(text);
 		const fhBlocks = checkFairHousing(text).filter((f) => f.severity === 'block').length;
 		expect(fhBlocks).toBeGreaterThan(0);
