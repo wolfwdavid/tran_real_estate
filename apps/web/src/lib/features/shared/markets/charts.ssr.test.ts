@@ -5,9 +5,12 @@ import type { Component } from 'svelte';
 import { createRawSnippet } from 'svelte';
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
+import type { MarketStatsInput, RentalMonth } from '@tran/core/markets';
 import ChartFigure from './ChartFigure.svelte';
+import PriceToRentChart from './PriceToRentChart.svelte';
 import SeriesMarker from './SeriesMarker.svelte';
 import { SERIES_STYLE } from './series-style';
+import ZipTrendChart from './ZipTrendChart.svelte';
 
 const decode = (s: string) =>
 	s
@@ -204,5 +207,151 @@ describe('SeriesMarker', () => {
 	test('uses token utilities only, never a raw color', () => {
 		for (const s of ['diamond', 'square', 'circle', 'triangle', 'ring'])
 			expect(svg(s)).not.toMatch(/#[0-9a-f]{3,6}|fill="(?!none)|stroke="/i);
+	});
+});
+
+// ---- ZipTrendChart / PriceToRentChart (Task 3) ----
+
+const MONTHS = Array.from({ length: 24 }, (_, i) => {
+	const t = Date.UTC(2024, 9 + i, 1);
+	const d = new Date(t);
+	return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+});
+
+/** 24 months: studio missing in month 3, 2-bed backed by 3 listings in month 1, no 1/3/4+ data. */
+function fixture(): MarketStatsInput {
+	const rental: Record<string, RentalMonth> = {};
+	const sale: Record<string, { medianPrice: number }> = {};
+	MONTHS.forEach((m, i) => {
+		const beds: RentalMonth['dataByBedrooms'] = [
+			{ bedrooms: 2, medianRent: 2400 + i * 10, totalListings: i === 1 ? 3 : 20 }
+		];
+		if (i !== 3) beds.unshift({ bedrooms: 0, medianRent: 1450 + i * 5, totalListings: 12 });
+		rental[m] = { medianRent: 2000 + i * 10, totalListings: 40, dataByBedrooms: beds };
+		sale[m] = { medianPrice: 400000 + i * 1000 };
+	});
+	return {
+		zipCode: '94110',
+		rentalData: { history: rental },
+		saleData: { history: sale }
+	};
+}
+
+describe('ZipTrendChart', () => {
+	const out = html(ZipTrendChart, {
+		zip: '94110',
+		stats: fixture(),
+		state: 'ready',
+		sample: true,
+		provenance
+	});
+	const text = strip(out);
+
+	test('titles the figure and names it by the core summary', () => {
+		expect(out).toMatch(/<h2[^>]*id="rent-trend-94110-title"[^>]*>Rent trend by bedroom count</);
+		expect(text).toContain('Median rent in ZIP 94110. Studio: $1,450 in Oct 2024');
+		expect(text).toMatch(/\(sample data\)/);
+		expect(out).toMatch(/<p[^>]*id="rent-trend-94110-summary"[^>]*>[^<]*\(sample data\)<\/p>/);
+	});
+
+	test('shows the time line and the listing-count caveat', () => {
+		expect(text).toContain('Monthly medians, Oct 2024 to Sep 2026');
+		expect(text).toContain(
+			'Medians come from listings RentCast saw each month. Months with fewer than 5 listings for a bedroom count are marked in the table.'
+		);
+	});
+
+	test('legends only the drawn series, in order', () => {
+		const ul = /<ul[^>]*aria-label="Legend"[^>]*>([\s\S]*?)<\/ul>/.exec(out)![1];
+		expect(strip(ul)).toBe('Studio 2 bedrooms');
+	});
+
+	test('tables every month with a column per drawn series', () => {
+		expect(out).toMatch(/<th[^>]*scope="col"[^>]*>Month<\/th>/);
+		expect(out).toMatch(/<th[^>]*scope="col"[^>]*>Studio<\/th>/);
+		expect(out).toMatch(/<th[^>]*scope="col"[^>]*>2 bedrooms<\/th>/);
+		expect(out).not.toMatch(/scope="col"[^>]*>1 bedroom</);
+		expect((out.match(/scope="row"/g) ?? []).length).toBe(24);
+		expect(out).toMatch(/>Oct 2024<\/th>\s*<td[^>]*>\$1,450<\/td>\s*<td[^>]*>\$2,400<\/td>/);
+		expect(out).toContain('$2,410 (few listings: 3)');
+		// The missing studio month is "No data", never $0.
+		expect(out).toMatch(/>Jan 2025<\/th>\s*<td[^>]*>No data<\/td>/);
+		expect(out).not.toContain('$0');
+	});
+
+	test('uses an h3 and drops Refresh in print', () => {
+		const p = html(ZipTrendChart, {
+			zip: '94110',
+			stats: fixture(),
+			state: 'ready',
+			sample: false,
+			provenance,
+			headingLevel: 3,
+			print: true
+		});
+		expect(p).toMatch(/<h3[^>]*>Rent trend by bedroom count</);
+		expect(p).not.toContain('<details');
+		expect(p).not.toContain('Refresh');
+		expect(strip(p)).not.toContain('(sample data)');
+	});
+
+	test('shows the empty state when no series has 2 points', () => {
+		const one: MarketStatsInput = {
+			zipCode: '94110',
+			rentalData: {
+				history: { '2026-09': { dataByBedrooms: [{ bedrooms: 1, medianRent: 1800 }] } }
+			}
+		};
+		const e = html(ZipTrendChart, { zip: '94110', stats: one, state: 'ready', sample: false });
+		expect(strip(e)).toContain('Not enough monthly data for this ZIP yet.');
+		expect(e).not.toContain('<table');
+		const none = html(ZipTrendChart, { zip: '94110', stats: null, state: 'ready', sample: false });
+		expect(strip(none)).toContain('Not enough monthly data for this ZIP yet.');
+	});
+
+	test('passes loading and error through', () => {
+		const l = html(ZipTrendChart, { zip: '94110', stats: null, state: 'loading', sample: false });
+		expect(strip(l)).toContain('Loading market data…');
+		const er = html(ZipTrendChart, {
+			zip: '94110',
+			stats: null,
+			state: 'error',
+			sample: false,
+			error: gatewayError
+		});
+		expect(er).toContain('data-gateway-error');
+		expect(er).toContain('Rent trend by bedroom count</h2>');
+	});
+});
+
+describe('PriceToRentChart', () => {
+	const out = html(PriceToRentChart, {
+		zip: '94110',
+		stats: fixture(),
+		state: 'ready',
+		sample: false
+	});
+	const text = strip(out);
+
+	test('titles, summarises and caveats the ratio', () => {
+		expect(out).toMatch(/<h2[^>]*id="price-to-rent-94110-title"[^>]*>Price-to-rent ratio</);
+		expect(text).toContain('Price-to-rent ratio in ZIP 94110: 16.7 in Oct 2024');
+		expect(text).toContain(
+			'Median sale price divided by a year of median rent. Sale and rent medians cover different sets of homes, so treat this as a rough market signal.'
+		);
+	});
+
+	test('has no legend and one-decimal table values', () => {
+		expect(out).not.toContain('aria-label="Legend"');
+		expect(out).toMatch(/<th[^>]*scope="col"[^>]*>Price-to-rent ratio<\/th>/);
+		expect(out).toMatch(/>Oct 2024<\/th>\s*<td[^>]*>16\.7<\/td>/);
+		expect((out.match(/scope="row"/g) ?? []).length).toBe(24);
+	});
+
+	test('shows the empty state without sale data', () => {
+		const s = fixture();
+		s.saleData = null;
+		const e = html(PriceToRentChart, { zip: '94110', stats: s, state: 'ready', sample: false });
+		expect(strip(e)).toContain('Not enough monthly data for this ZIP yet.');
 	});
 });
