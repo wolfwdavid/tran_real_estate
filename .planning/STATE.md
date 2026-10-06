@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-17-PLAN.md
-last_updated: "2026-10-06T13:37:30.180Z"
+stopped_at: Completed 08-12-PLAN.md
+last_updated: "2026-10-06T13:47:27.907Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 134
+  completed_plans: 135
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 12 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
+Plan: 13 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
 
 ## Performance Metrics
 
@@ -180,6 +180,7 @@ Plan: 12 of 26 (waves 1-2 complete; next wave 3: 08-12, 08-13, 08-17)
 | Phase 08 P11 | 35min | 2 tasks | 19 files |
 | Phase 08 P05 | 35min | 2 tasks | 6 files |
 | Phase 08 P17 | 15min | 2 tasks | 6 files |
+| Phase 08 P12 | 45min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -426,6 +427,8 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-11: AgentNav marks current by route id; Data source bar hidden on /agent/* except /agent/studio/; AGENT_ROUTES in ROUTES+PORTAL_ROUTES, CSP oracle pins 31 pages
 - [Phase 08]: TRAN-LEAD message lines starting with '>' get a two-space guard (quote stripping eats one space)
 - [Phase 08]: 08-17: CRM card links use resolve() directly (loads under Vitest); withParams returns '' when empty; phone search needs 3+ digits
+- [Phase 08]: 08-12: Dexie v6 = agent tables; profile row keyed by fixed uuid PROFILE_ROW_ID (envelope needs uuid ids), mapped to domain id 'profile'
+- [Phase 08]: 08-12: BackupTable.scanExemptPaths - export key scan skips only agentProfile logo.base64 + web3formsAccessKey by path
 
 ### Pending Todos
 
@@ -448,7 +451,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T13:37:30.175Z
-Stopped at: Completed 08-17-PLAN.md
+Last session: 2026-10-06T13:47:27.880Z
+Stopped at: Completed 08-12-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
