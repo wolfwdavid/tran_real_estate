@@ -15,6 +15,7 @@
 	import { replaceState } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import CircleDot from '@lucide/svelte/icons/circle-dot';
 	import Eraser from '@lucide/svelte/icons/eraser';
@@ -31,11 +32,13 @@
 	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
 	import { requestPersistence } from '$lib/storage/persistence';
 	import { createDeal, getDeal, updateDeal } from '../deals/dealsRepo';
-	import type { DealSources } from '../deals/schema';
+	import type { DealSources, FieldSourceKey } from '../deals/schema';
 	import { AnalyzerPageState } from './analyzer-page.svelte';
+	import { markEdited, type AutofillContext } from './autofill';
 	import { dealName, formToDealData } from './deal-data';
 	import { clearDraft, createAutosaver, readDraft, writeDraft } from './draftRepo';
 	import ExpenseLines from './ExpenseLines.svelte';
+	import FieldSource from './FieldSource.svelte';
 	import {
 		bpsToText,
 		centsToText,
@@ -52,9 +55,9 @@
 
 	interface Props {
 		/** 07-15: "Autofill value estimate" control, end of the Purchase fieldset. */
-		purchaseAutofill?: Snippet<[AnalyzerPageState]>;
+		purchaseAutofill?: Snippet<[AnalyzerPageState, AutofillContext]>;
 		/** 07-15: "Autofill rent estimate" control, end of the Income fieldset. */
-		incomeAutofill?: Snippet<[AnalyzerPageState]>;
+		incomeAutofill?: Snippet<[AnalyzerPageState, AutofillContext]>;
 	}
 
 	let { purchaseAutofill, incomeAutofill }: Props = $props();
@@ -75,6 +78,38 @@
 	/** The open deal's name as last saved (Clear analysis body). */
 	let savedName = $state('');
 	let now = $state(Date.now());
+	/** 07-15: set when autofill is pressed without an address; cleared by typing an address. */
+	let addressError = $state(false);
+	let addressEl = $state<HTMLInputElement | null>(null);
+
+	const autofillCtx: AutofillContext = {
+		addressMissing: () => {
+			addressError = true;
+			void tick().then(() => addressEl?.focus());
+		}
+	};
+
+	/** Input ids whose filled value carries a FieldSource chip (07-15). */
+	const SOURCE_KEYS: Record<string, FieldSourceKey> = {
+		rent: 'rent',
+		price: 'price',
+		address: 'address',
+		'property-type': 'propertyType',
+		bedrooms: 'bedrooms',
+		bathrooms: 'bathrooms',
+		'square-feet': 'squareFeet'
+	};
+
+	/** The user typed into a filled field: its chip becomes "Edited by you" (07-15). */
+	function onFormInput(e: Event) {
+		const id = (e.target as HTMLElement | null)?.id ?? '';
+		if (id === 'address' && addressError && s.form.address.trim() !== '') addressError = false;
+		const key = SOURCE_KEYS[id];
+		if (key) {
+			const next = markEdited(s.sources, key);
+			if (next !== s.sources) s.sources = next;
+		}
+	}
 
 	$effect(() => {
 		const id = setInterval(() => (now = Date.now()), 30_000);
@@ -216,6 +251,7 @@
 		autosaver.cancel();
 		await clearDraft();
 		s.reset();
+		addressError = false;
 		notFound = false;
 		justSaved = false;
 		saveFailed = false;
@@ -284,6 +320,9 @@
 		{ value: 'usd', label: '$' }
 	] as const;
 </script>
+
+{#snippet priceChip()}<FieldSource source={s.sources.price} />{/snippet}
+{#snippet rentChip()}<FieldSource source={s.sources.rent} />{/snippet}
 
 {#if notFound}
 	<div class="mt-8">
@@ -365,6 +404,7 @@
 			novalidate
 			class="grid min-w-0 scroll-mt-4 gap-8"
 			data-restored={s.restored ? 'true' : undefined}
+			oninput={onFormInput}
 			onsubmit={(e) => e.preventDefault()}
 		>
 			<fieldset class={fieldset}>
@@ -389,13 +429,21 @@
 						<label for="address" class={labelCls}>Address</label>
 						<input
 							id="address"
+							bind:this={addressEl}
 							bind:value={s.form.address}
 							type="text"
 							autocomplete="street-address"
-							aria-describedby="address-help"
-							class={textInput}
+							aria-invalid={addressError ? 'true' : undefined}
+							aria-describedby={addressError ? 'address-help address-error' : 'address-help'}
+							class="{textInput} {addressError ? 'border-destructive' : ''}"
 						/>
 						<p id="address-help" class={helperCls}>Needed only for autofill.</p>
+						{#if addressError}
+							<p id="address-error" class="flex items-center gap-1 text-label text-destructive">
+								<CircleAlert class="size-4 shrink-0" aria-hidden="true" />Enter the property address
+								to look up an estimate.
+							</p>
+						{/if}
 					</div>
 					<div class="grid min-w-0 gap-2">
 						<label for="property-type" class={labelCls}>Property type</label>
@@ -453,6 +501,7 @@
 						label="Purchase price"
 						bind:value={s.form.price}
 						error={err('price')}
+						chip={s.sources.price ? priceChip : undefined}
 						onvalidate={() => s.validate('price')}
 					/>
 					<div class="grid min-w-0 gap-2">
@@ -489,7 +538,9 @@
 						onvalidate={() => s.validate('repairs')}
 					/>
 				</div>
-				{#if purchaseAutofill}<div class="mt-4">{@render purchaseAutofill(s)}</div>{/if}
+				{#if purchaseAutofill}<div class="mt-4">
+						{@render purchaseAutofill(s, autofillCtx)}
+					</div>{/if}
 			</fieldset>
 
 			<fieldset class={fieldset}>
@@ -558,6 +609,7 @@
 						label="Monthly rent"
 						bind:value={s.form.rent}
 						error={err('rent')}
+						chip={s.sources.rent ? rentChip : undefined}
 						onvalidate={() => s.validate('rent')}
 					/>
 					<MoneyInput
@@ -569,7 +621,7 @@
 						onvalidate={() => s.validate('otherIncome')}
 					/>
 				</div>
-				{#if incomeAutofill}<div class="mt-4">{@render incomeAutofill(s)}</div>{/if}
+				{#if incomeAutofill}<div class="mt-4">{@render incomeAutofill(s, autofillCtx)}</div>{/if}
 			</fieldset>
 
 			<fieldset class={fieldset} aria-describedby="expense-note">

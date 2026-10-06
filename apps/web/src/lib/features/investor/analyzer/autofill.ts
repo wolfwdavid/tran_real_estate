@@ -18,6 +18,12 @@ import { formatOnBlur, type AnalyzerForm } from './form-model';
 
 export type AutofillTarget = 'rent' | 'value';
 
+/** What the analyzer page gives its autofill controls. */
+export interface AutofillContext {
+	/** Autofill pressed with no address: show the Address error and focus Address. */
+	addressMissing: () => void;
+}
+
 export type AutofillOutcome =
 	| { kind: 'ok'; estimate: Estimate }
 	| { kind: 'no-address' }

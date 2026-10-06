@@ -5,9 +5,9 @@
 	import { onMount } from 'svelte';
 	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
 	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import AnalyzerPage from '$lib/features/investor/analyzer/AnalyzerPage.svelte';
+	import AnalyzerForm from '$lib/features/investor/analyzer/AnalyzerForm.svelte';
 
-	let analyzer = $state<AnalyzerPage | null>(null);
+	let analyzer = $state<AnalyzerForm | null>(null);
 
 	onMount(() => {
 		void analyzer?.open(new URL(location.href).searchParams);
@@ -25,5 +25,5 @@
 <div class="mx-auto max-w-page px-6 pt-6 pb-12 md:px-8 md:pb-16">
 	<PortalSubNav label="Investor" items={INVESTOR_NAV} />
 	<h1 class="font-display text-display font-semibold">Analyze a deal</h1>
-	<AnalyzerPage bind:this={analyzer} />
+	<AnalyzerForm bind:this={analyzer} />
 </div>
