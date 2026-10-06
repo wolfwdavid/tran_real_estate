@@ -1,7 +1,17 @@
 <script lang="ts">
-	// /investor/analyze/ (INV-01, INV-02). Prerendered shell: a saved deal opens with ?id=, read in onMount by the analyzer (07-later plans).
+	// /investor/analyze/ (INV-01, INV-02, INV-03). Prerendered shell: the empty analyzer renders in
+	// the static HTML; a saved deal (?id=) or the sample link (?sample=1) is read in onMount from
+	// new URL(location.href), never from the prerendered page store.
+	import { onMount } from 'svelte';
 	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
 	import { INVESTOR_NAV } from '$lib/features/investor/nav';
+	import AnalyzerPage from '$lib/features/investor/analyzer/AnalyzerPage.svelte';
+
+	let analyzer = $state<AnalyzerPage | null>(null);
+
+	onMount(() => {
+		void analyzer?.open(new URL(location.href).searchParams);
+	});
 </script>
 
 <svelte:head>
@@ -15,5 +25,5 @@
 <div class="mx-auto max-w-page px-6 pt-6 pb-12 md:px-8 md:pb-16">
 	<PortalSubNav label="Investor" items={INVESTOR_NAV} />
 	<h1 class="font-display text-display font-semibold">Analyze a deal</h1>
-	<p class="mt-4 text-label text-muted-foreground">Loading your investor data…</p>
+	<AnalyzerPage bind:this={analyzer} />
 </div>
