@@ -108,7 +108,8 @@ describe('Dexie schema: Phase 7 tables', () => {
 
 	it('adds all four stores in ONE new version block, above every earlier block', () => {
 		const versions = [...dbSource.matchAll(/\.version\((\d+)\)/g)].map((m) => Number(m[1]));
-		expect(versions).toEqual([1, 2, 3, 4, 5]);
+		// Later phases append blocks above 5 (Phase 8 adds 6); the Phase 7 block stays number 5.
+		expect(versions.slice(0, 5)).toEqual([1, 2, 3, 4, 5]);
 		expect(dbSource).toMatch(/this\.version\(5\)\.stores\(INVESTOR_STORES\)/);
 		expect(Object.keys(INVESTOR_STORES)).toEqual([
 			'deals',
@@ -121,7 +122,7 @@ describe('Dexie schema: Phase 7 tables', () => {
 	it('opens with the v5 tables and their indexes', async () => {
 		const { db } = openDb();
 		await db.open();
-		expect(db.verno).toBe(5);
+		expect(db.verno).toBeGreaterThanOrEqual(5);
 		expect(db.deals.schema.indexes.map((i) => i.name).sort()).toEqual(['deletedAt', 'updatedAt']);
 		expect(db.watchedZips.schema.idxByName.zip.unique).toBe(true);
 		for (const t of ['investorDraft', 'buyBoxes'])
