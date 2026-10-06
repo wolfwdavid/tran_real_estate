@@ -140,7 +140,8 @@
 		</PrintReport>
 	</div>
 {:else}
-	{#if view === 'hydrating'}
+	{#if view !== 'blocked'}
+		<!-- The toolbar stays while hydrating and on not-found; the blocked panel carries its own link. -->
 		<div data-print-hidden class="border-b border-border print:hidden">
 			<div class="mx-auto max-w-page px-6 py-4">
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- backHref is built from resolve() -->
