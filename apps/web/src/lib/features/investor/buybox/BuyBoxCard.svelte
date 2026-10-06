@@ -130,7 +130,7 @@
 	<div class="flex flex-wrap gap-2">
 		<Button
 			variant="outline"
-			class="h-auto min-h-11 py-2 text-left whitespace-normal"
+			class="h-auto min-h-11 max-w-full shrink py-2 text-left whitespace-normal"
 			aria-disabled={checking ? 'true' : undefined}
 			onclick={onCheck}
 			onpointerenter={onCheckCostRefresh}

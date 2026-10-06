@@ -232,7 +232,19 @@
 	{:else}
 		<div class="mt-6 flex flex-col gap-6">
 			{#if formFor === 'new'}
-				<BuyBoxForm {repo} {investor} editing={null} {onSaved} onCancel={() => void cancelForm()} />
+				<!-- The form reads its free cost label on mount and on Location input, so it renders once
+					the data runtime has started and is re-keyed on a source switch (07-13 WatchZipForm rule). -->
+				{#if runtime.gateway}
+					{#key runtime.gateway}
+						<BuyBoxForm
+							{repo}
+							{investor}
+							editing={null}
+							{onSaved}
+							onCancel={() => void cancelForm()}
+						/>
+					{/key}
+				{/if}
 			{:else if boxes.length > 0}
 				<div>
 					<Button bind:ref={newButton} variant="outline" onclick={() => void openNew()}>
@@ -267,13 +279,17 @@
 					{#each boxes as box (box.id)}
 						<li>
 							{#if formFor === box.id}
-								<BuyBoxForm
-									{repo}
-									{investor}
-									editing={box}
-									{onSaved}
-									onCancel={() => void cancelForm()}
-								/>
+								{#if runtime.gateway}
+									{#key runtime.gateway}
+										<BuyBoxForm
+											{repo}
+											{investor}
+											editing={box}
+											{onSaved}
+											onCancel={() => void cancelForm()}
+										/>
+									{/key}
+								{/if}
 							{:else}
 								<BuyBoxCard
 									{box}

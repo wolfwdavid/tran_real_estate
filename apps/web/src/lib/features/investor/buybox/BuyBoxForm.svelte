@@ -281,7 +281,7 @@
 	<div class="flex flex-wrap items-center gap-2 sm:gap-4">
 		<Button
 			type="submit"
-			class="h-auto min-h-11 py-2 text-left whitespace-normal"
+			class="h-auto min-h-11 max-w-full shrink py-2 text-left whitespace-normal"
 			aria-disabled={saving ? 'true' : undefined}
 		>
 			{#if saving === 'check'}
