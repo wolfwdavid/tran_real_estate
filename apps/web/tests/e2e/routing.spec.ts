@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { ROUTES, PRINT, EXTERNAL_HOSTS } from './routes';
+import { ROUTES, EXTERNAL_HOSTS, isPrintRoute } from './routes';
 
 // FND-01 routing contract, proven against the real built output served with GitHub Pages
 // semantics (scripts/serve-pages.mjs). Every page.goto uses a RELATIVE path so the same spec
@@ -48,9 +48,9 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 				target: a.getAttribute('target')
 			}))
 		);
-		// The print surface deliberately carries no navigation (only the skip link), so the
-		// "at least one link" guard applies to every other route.
-		if (route !== PRINT) {
+		// The print surfaces deliberately carry no site navigation, so the "at least one link"
+		// guard applies to every other route.
+		if (!isPrintRoute(route)) {
 			expect(links.length, `links on ${JSON.stringify(route)}`).toBeGreaterThan(0);
 		}
 		const origin = new URL(page.url()).origin;

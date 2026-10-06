@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { ROUTES, CHROME_ROUTES, PRINT, NOT_FOUND, APP_ROUTES } from './routes';
+import { ROUTES, CHROME_ROUTES, NOT_FOUND, APP_ROUTES, isPrintRoute } from './routes';
 
 // Phase 2 chrome proof (BRND-01/03/04/05). The shared header (PortalSwitcher), footer and page
 // shells are exercised on every prerendered route plus the 404, under both base paths: landmark
@@ -21,7 +21,7 @@ for (const route of [...ROUTES, NOT_FOUND]) {
 	test(`landmarks on ${JSON.stringify(route)}`, async ({ page }) => {
 		await page.goto(route);
 		await expect(page.locator('h1')).toHaveCount(1);
-		const chrome = route === PRINT ? 0 : 1;
+		const chrome = isPrintRoute(route) ? 0 : 1;
 		await expect(page.getByRole('banner')).toHaveCount(chrome);
 		await expect(portals(page)).toHaveCount(chrome);
 		await expect(page.getByRole('main')).toHaveCount(1);
@@ -156,7 +156,7 @@ test.describe('375px', () => {
 			await page.goto(route);
 			await expect(page.locator('h1')).toBeVisible();
 			expect(await overflow(page)).toBeLessThanOrEqual(0);
-			if (route !== PRINT) {
+			if (!isPrintRoute(route)) {
 				await expect(page.getByRole('button', { name: 'Menu' })).toBeVisible();
 				await expect(inlineList(page)).toBeHidden();
 			}

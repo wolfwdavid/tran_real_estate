@@ -40,6 +40,15 @@ export const EXPECTED_PAGES = [
 	'legal/terms/index.html',
 	'legal/fair-housing/index.html',
 	'legal/data-coverage/index.html',
+	// Phase 7 investor portal sub-pages and the memo printout.
+	'investor/analyze/index.html',
+	'investor/deals/index.html',
+	'investor/compare/index.html',
+	'investor/memo/index.html',
+	'investor/buy-boxes/index.html',
+	'investor/markets/index.html',
+	'investor/market/index.html',
+	'print/memo/index.html',
 	'404.html'
 ];
 

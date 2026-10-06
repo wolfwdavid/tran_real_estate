@@ -36,7 +36,12 @@ export const SCOPE = [
 	// Phase 6 renter portal: the global list applies here too.
 	'apps/web/src/lib/features/renter',
 	'apps/web/src/lib/features/shared/listings',
-	'apps/web/src/lib/features/shared/affordability'
+	'apps/web/src/lib/features/shared/affordability',
+	// Phase 7 investor portal and the shared pieces it introduces (markets, print, portal sub-nav).
+	'apps/web/src/lib/features/investor',
+	'apps/web/src/lib/features/shared/markets',
+	'apps/web/src/lib/features/shared/print',
+	'apps/web/src/lib/features/shared/nav'
 ];
 
 /**
@@ -64,6 +69,38 @@ export const RENTER_BANNED = [
 	['valuation report', new RegExp(`\\b${words('valuation report')}s?\\b`, 'i')],
 	['appraised', /\bappraised\b/i]
 ];
+/**
+ * Phase 7 (07-UI-SPEC "Copywriting Contract"): investor copy never judges a deal or tells the
+ * reader what to buy, because Tran gives no investment advice. Scoped to the investor routes, the
+ * memo printout and the shared folders Phase 7 introduces; the global list applies there too.
+ */
+export const INVESTOR_SCOPES = [
+	'apps/web/src/routes/(app)/investor/',
+	'apps/web/src/routes/(print)/print/memo/',
+	'apps/web/src/lib/features/investor/',
+	'apps/web/src/lib/features/shared/markets/',
+	'apps/web/src/lib/features/shared/print/',
+	'apps/web/src/lib/features/shared/nav/'
+];
+
+/** @type {ReadonlyArray<readonly [string, RegExp]>} */
+export const INVESTOR_BANNED = [
+	['cash cow', new RegExp(`\\b${words('cash cow')}s?\\b`, 'i')],
+	["can't lose", /\bcan[’']?t\s+lose\b/i],
+	['no-brainer', /\bno[-\s]?brainers?\b/i],
+	['great deal', new RegExp(`\\b${words('great deal')}s?\\b`, 'i')],
+	['good deal', new RegExp(`\\b${words('good deal')}s?\\b`, 'i')],
+	['bad deal', new RegExp(`\\b${words('bad deal')}s?\\b`, 'i')],
+	['you should buy', new RegExp(`\\b${words('you should buy')}\\b`, 'i')],
+	['we recommend', new RegExp(`\\b${words('we recommend')}\\b`, 'i')]
+];
+
+/** Each path-scoped list with the folders it applies to (the global BANNED applies everywhere). */
+const SCOPED_LISTS = [
+	{ scopes: RENTER_SCOPES, list: RENTER_BANNED },
+	{ scopes: INVESTOR_SCOPES, list: INVESTOR_BANNED }
+];
+
 export const SCANNED_EXT = /\.(svelte|ts|js|md)$/i;
 export const EXCLUDED = /\.(test|spec)\.[tj]s$/i;
 
@@ -77,8 +114,11 @@ export function findBanned(file, text) {
 	const src = text ?? '';
 	/** @type {string[]} */
 	const hits = [];
-	const renter = RENTER_SCOPES.some((s) => file.startsWith(s));
-	for (const list of renter ? [BANNED, RENTER_BANNED] : [BANNED]) {
+	const lists = [BANNED];
+	for (const { scopes, list } of SCOPED_LISTS) {
+		if (scopes.some((s) => file.startsWith(s))) lists.push(list);
+	}
+	for (const list of lists) {
 		for (const [label, re] of list) {
 			// Clone with 'g' per call so callers never see a stale lastIndex.
 			const g = new RegExp(re.source, re.flags.includes('g') ? re.flags : re.flags + 'g');

@@ -388,6 +388,22 @@ describe('checkBuild over a temp directory', () => {
 			expect(EXPECTED_PAGES).toContain(page);
 		}
 	});
+
+	test('EXPECTED_PAGES pins the Phase 7 investor pages and the memo printout', () => {
+		for (const page of [
+			'investor/analyze/index.html',
+			'investor/deals/index.html',
+			'investor/compare/index.html',
+			'investor/memo/index.html',
+			'investor/buy-boxes/index.html',
+			'investor/markets/index.html',
+			'investor/market/index.html',
+			'print/memo/index.html'
+		]) {
+			expect(EXPECTED_PAGES).toContain(page);
+		}
+		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
+	});
 });
 
 describe('PWA carriers', () => {

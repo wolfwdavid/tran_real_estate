@@ -8,6 +8,8 @@ import { describe, expect, test } from 'vitest';
 import { collectFiles } from './banned-terms.mjs';
 import {
 	EXCLUDED,
+	INVESTOR_BANNED,
+	INVESTOR_SCOPES,
 	RENTER_BANNED,
 	RENTER_SCOPES,
 	SCANNED_EXT,
@@ -278,5 +280,101 @@ describe('Phase 6 renter-scoped phrases (06-UI-SPEC)', () => {
 				expect(r.status, rel).toBe(1);
 			});
 		}
+	});
+});
+
+describe('Phase 7 investor-scoped phrases (07-UI-SPEC Copywriting Contract)', () => {
+	const INVESTOR = 'apps/web/src/lib/features/investor/x.svelte';
+
+	const positives: Array<[string, string]> = [
+		['cash cow', 'This duplex is a cash cow.'],
+		["can't lose", 'At this price you can’t lose.'],
+		['no-brainer', 'Buying here is a no-brainer.'],
+		['great deal', 'A great deal for a starter rental.'],
+		['good deal', 'That looks like a good deal.'],
+		['bad deal', 'Skip it, it is a bad deal.'],
+		['you should buy', 'With these numbers you should buy it.'],
+		['we recommend', 'We recommend making an offer.']
+	];
+	test.each(positives)('flags %j in investor copy', (label, text) => {
+		const hits = findBanned(INVESTOR, `<p>${text}</p>\n`);
+		expect(hits.some((h) => h.includes(`banned term "${label}"`))).toBe(true);
+	});
+
+	test.each([
+		'Compare deals',
+		'Highest or Lowest marks the top figure in each row',
+		'Not investment, legal, or tax advice. Tran is software, not a brokerage.',
+		'Analyze a property, save the deals you want to revisit, and watch the ZIP codes you care about.'
+	])('accepts UI-SPEC investor copy %j', (text) => {
+		expect(findBanned(INVESTOR, text)).toEqual([]);
+	});
+
+	test('a phrase wrapped across lines is still caught', () => {
+		expect(findBanned(INVESTOR, '<p>\n\tWe\n\trecommend this one.\n</p>')).toHaveLength(1);
+	});
+
+	test('scoping: the same line outside investor scopes is not flagged', () => {
+		expect(findBanned(PAGE, '<p>We recommend making an offer.</p>')).toEqual([]);
+	});
+
+	test('the investor list carries all eight UI-SPEC phrases', () => {
+		expect(INVESTOR_BANNED.map(([label]) => label)).toEqual([
+			'cash cow',
+			"can't lose",
+			'no-brainer',
+			'great deal',
+			'good deal',
+			'bad deal',
+			'you should buy',
+			'we recommend'
+		]);
+	});
+
+	test('every investor scope applies the list, and SCOPE scans the four Phase 7 folders', () => {
+		for (const scope of INVESTOR_SCOPES) {
+			expect(findBanned(`${scope}x.svelte`, 'A no-brainer.'), scope).toHaveLength(1);
+		}
+		expect(INVESTOR_SCOPES).toEqual(
+			expect.arrayContaining([
+				'apps/web/src/routes/(app)/investor/',
+				'apps/web/src/routes/(print)/print/memo/'
+			])
+		);
+		expect(SCOPE).toEqual(
+			expect.arrayContaining([
+				'apps/web/src/lib/features/investor',
+				'apps/web/src/lib/features/shared/markets',
+				'apps/web/src/lib/features/shared/print',
+				'apps/web/src/lib/features/shared/nav'
+			])
+		);
+	});
+
+	test('the real scan includes investor feature code', () => {
+		expect(
+			collectFiles(REPO_ROOT).some((f) => f.startsWith('apps/web/src/lib/features/investor/'))
+		).toBe(true);
+	});
+
+	test('CLI fails on planted investor lines in every new folder and route', () => {
+		for (const rel of [
+			'apps/web/src/lib/features/investor/x.svelte',
+			'apps/web/src/lib/features/shared/markets/x.svelte',
+			'apps/web/src/lib/features/shared/print/x.svelte',
+			'apps/web/src/lib/features/shared/nav/x.svelte',
+			'apps/web/src/routes/(app)/investor/+page.svelte',
+			'apps/web/src/routes/(print)/print/memo/+page.svelte'
+		]) {
+			withTree({ [rel]: '<p>This one is a cash cow.</p>\n' }, (dir) => {
+				expect(collectFiles(dir)).toEqual([rel]);
+				const r = runCli(dir);
+				expect(r.status, rel).toBe(1);
+				expect(r.out).toContain('cash cow');
+			});
+		}
+		withTree({ [PAGE]: '<p>This one is a cash cow.</p>\n' }, (dir) => {
+			expect(runCli(dir).status).toBe(0);
+		});
 	});
 });

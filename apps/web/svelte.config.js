@@ -19,9 +19,17 @@ export default {
 		// included /.nojekyll, which GitHub Pages never serves. Keep every dotfile out of the precache.
 		serviceWorker: { files: (filepath) => !/(^|[\\/])\./.test(filepath) },
 		// /renter/listing/ is reached only through client-rendered links (?id= in onMount), so the
-		// crawler never sees it; list it explicitly so handleUnseenRoutes stays 'fail'.
+		// crawler never sees it; list it explicitly so handleUnseenRoutes stays 'fail'. The same
+		// holds for the investor query-param routes (?ids=, ?id=, ?zip=) and the memo printout.
 		prerender: {
-			entries: ['*', '/renter/listing/'],
+			entries: [
+				'*',
+				'/renter/listing/',
+				'/investor/compare/',
+				'/investor/memo/',
+				'/investor/market/',
+				'/print/memo/'
+			],
 			handleHttpError: 'fail',
 			handleMissingId: 'fail',
 			handleUnseenRoutes: 'fail'

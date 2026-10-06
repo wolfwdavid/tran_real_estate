@@ -15,15 +15,33 @@ export const RENTER_ROUTES = [
 	'renter/affordability/'
 ] as const;
 export const APP_ROUTES = [...RENTER_ROUTES, 'investor/', 'agent/', 'settings/'] as const;
+/**
+ * The investor portal's sub-pages (Phase 7). `investor/` itself stays in APP_ROUTES. Compare, memo
+ * and market take query params read in onMount (?ids=, ?id=, ?zip=), so they are prerendered
+ * shells listed in svelte.config.js prerender.entries.
+ */
+export const INVESTOR_ROUTES = [
+	'investor/analyze/',
+	'investor/deals/',
+	'investor/compare/',
+	'investor/memo/',
+	'investor/buy-boxes/',
+	'investor/markets/',
+	'investor/market/'
+] as const;
 export const PRINT = 'print/';
+/** The chrome-free `(print)` surfaces: no header, portal switcher or footer. */
+export const PRINT_ROUTES = [PRINT, 'print/memo/'] as const;
+export const isPrintRoute = (r: string): boolean => r.startsWith('print/');
 export const ROUTES: readonly string[] = [
 	...MARKETING_ROUTES,
 	...LEGAL_ROUTES,
 	...APP_ROUTES,
-	PRINT
+	...INVESTOR_ROUTES,
+	...PRINT_ROUTES
 ];
-/** Every route that renders the site header and footer (all but the chrome-free print surface). */
-export const CHROME_ROUTES: readonly string[] = ROUTES.filter((r) => r !== PRINT);
+/** Every route that renders the site header and footer (all but the chrome-free print surfaces). */
+export const CHROME_ROUTES: readonly string[] = ROUTES.filter((r) => !isPrintRoute(r));
 export const NOT_FOUND = 'does-not-exist/deeper/';
 /** The only off-site hosts any page may link to (legal pages 02-08, Settings "Get a key" links 03-11). */
 export const EXTERNAL_HOSTS: readonly string[] = [
