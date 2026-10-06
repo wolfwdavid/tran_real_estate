@@ -15,6 +15,7 @@
 	import SavedSearchesSection from '../saved/SavedSearchesSection.svelte';
 	import ActiveFilterChips from './ActiveFilterChips.svelte';
 	import ResultsHeader from './ResultsHeader.svelte';
+	import ResultsView from './ResultsView.svelte';
 	import SearchForm from './SearchForm.svelte';
 	import StartEmptyState from './StartEmptyState.svelte';
 	import TruncationNotice from './TruncationNotice.svelte';
@@ -97,7 +98,10 @@
 		>
 			<ResultsHeader {search} />
 			<TruncationNotice {search} {gateway} />
-			<!-- Result cards, tabs and the map: 06-16 / 06-19. -->
+			{#if search.rows.length > 0}
+				<!-- 06-16: List | Map tabs, cards and paging. The Map panel body is 06-19's MapTab. -->
+				<ResultsView {search} onFiltersCleared={() => form?.focusFilters()} />
+			{/if}
 		</section>
 	{:else}
 		<StartEmptyState {sample} onSample={trySample} />

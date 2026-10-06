@@ -65,7 +65,7 @@ test('keyless: empty state, then a free sample search with Sample data provenanc
 
 	await page.getByRole('button', { name: 'Try a sample search' }).click();
 	await expect(heading(page)).toHaveText(/^\d+ rentals? in /);
-	await expect(results(page).getByText('Sample data', { exact: true })).toBeVisible();
+	await expect(results(page).getByText('Sample data', { exact: true }).first()).toBeVisible();
 	await expect(searchButton(page)).toContainText('(0 calls · sample data)');
 	await expectNoViolations(page, 'renter/ sample results');
 	expect(rentcastCalls(net)).toBe(0);
