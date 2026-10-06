@@ -192,9 +192,7 @@ async function holdSampleFixtures(page: Page): Promise<{ release(): void; held()
 	return { release: () => release(), held: () => held };
 }
 
-test('the cost label appears when the data runtime starts after the analyzer', async ({
-	page
-}) => {
+test('the cost label appears when the data runtime starts after the analyzer', async ({ page }) => {
 	await blockRentCast(page);
 	const fixtures = await holdSampleFixtures(page);
 	await openAnalyzer(page);
