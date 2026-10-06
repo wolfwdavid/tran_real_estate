@@ -58,7 +58,7 @@ describe('routeIdToPath', () => {
 	});
 });
 
-const html = (props: Record<string, unknown>) =>
+const html = (props: { label: string; items: readonly SubNavItem[]; currentPath?: string }) =>
 	render(PortalSubNav, { props }).body.replace(/<!--[\s\S]*?-->/g, '');
 const links = (h: string) =>
 	[...h.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].map((m) => ({
