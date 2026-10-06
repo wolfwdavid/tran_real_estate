@@ -11,7 +11,14 @@
 	// Matched by route id (as PortalSwitcher does), not by comparing page.url.pathname with
 	// resolve('/settings/'): with relative paths, resolve() is relative during prerender, so the
 	// path comparison would render the bar into the prerendered Settings shell.
-	const showStatusBar = $derived(page.route.id !== '/(app)/settings');
+	// The agent portal hides it too (08-UI-SPEC Planner Note 4): the agent CRM spends no RentCast
+	// calls, so a meter or a "Sample data" bar would mislabel the agent's own contacts. A future
+	// /agent/studio/ (which does use RentCast) shows it again.
+	const isAgentCrm = (id: string | null) =>
+		id !== null &&
+		(id === '/(app)/agent' || id.startsWith('/(app)/agent/')) &&
+		!(id === '/(app)/agent/studio' || id.startsWith('/(app)/agent/studio/'));
+	const showStatusBar = $derived(page.route.id !== '/(app)/settings' && !isAgentCrm(page.route.id));
 </script>
 
 <SiteHeader showSettings={true} />

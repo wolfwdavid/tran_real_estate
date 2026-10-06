@@ -28,7 +28,9 @@ export default {
 				'/investor/compare/',
 				'/investor/memo/',
 				'/investor/market/',
-				'/print/memo/'
+				'/print/memo/',
+				// The agent contact detail (?id=) is linked only from client-rendered lists.
+				'/agent/contact/'
 			],
 			handleHttpError: 'fail',
 			handleMissingId: 'fail',

@@ -41,7 +41,7 @@ test.beforeEach(async ({ page }) => {
 	await blockRentCast(page);
 });
 
-for (const route of ['renter/', 'investor/', 'agent/']) {
+for (const route of ['renter/', 'investor/']) {
 	test(`keyless ${route}: "Sample data" leads <main>, links to the key, axe clean`, async ({
 		page
 	}) => {
@@ -61,7 +61,9 @@ for (const route of ['renter/', 'investor/', 'agent/']) {
 	});
 }
 
-for (const route of ['settings/', '']) {
+// The agent CRM spends no RentCast calls, so the bar is hidden on /agent/* (08-UI-SPEC Planner
+// Note 4); the agent sub-pages are covered by agent-shell.spec.ts.
+for (const route of ['settings/', '', 'agent/']) {
 	test(`no Data source bar on ${route || 'home'}`, async ({ page }) => {
 		await page.goto(route);
 		await expect(page.locator('main h1').first()).toBeVisible();

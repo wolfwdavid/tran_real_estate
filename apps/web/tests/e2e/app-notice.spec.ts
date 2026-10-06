@@ -49,8 +49,9 @@ test('never-backed-up notice at 8 days on every app page', async ({ page }) => {
 		await open(page, path);
 		await expect(notice(page), path).toBeVisible();
 		await expect(notice(page)).toContainText(NEVER);
-		// Portal pages lead with the Data source status bar (04-22); Settings hides it.
-		const slot = path === 'settings/' ? 1 : 2;
+		// Portal pages lead with the Data source status bar (04-22); Settings and the agent portal
+		// (08-UI-SPEC Planner Note 4) hide it.
+		const slot = path === 'settings/' || path === 'agent/' ? 1 : 2;
 		await expect(page.locator(`main > :nth-child(${slot})`)).toContainText(TITLE);
 		if (slot === 2) {
 			await expect(page.locator('main > :first-child')).toHaveAttribute(

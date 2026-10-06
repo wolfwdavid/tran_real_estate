@@ -40,7 +40,8 @@
 			body: "The agent tools are being built: a lead pipeline, follow-ups, and a content studio. Until they're ready, read what this portal will do.",
 			link: 'Read about the agent portal',
 			href: resolve('/for-agents/'),
-			docTitle: 'Agent portal — Tran Real Estate Tools',
+			// 08-UI-SPEC Routes: the agent home title uses the colon form of its sub-pages.
+			docTitle: 'Agent portal: Tran Real Estate Tools',
 			description:
 				'The agent portal of Tran Real Estate Tools is being built. Read what it will do: a lead pipeline, follow-ups, and a content studio.'
 		}

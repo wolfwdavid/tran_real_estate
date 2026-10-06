@@ -1,0 +1,82 @@
+// SSR structural tests for the agent sub-nav (08-11). svelte/server renders the component to a
+// string; $app/state is mocked because the Kit plugin is not loaded under Vitest.
+import { render } from 'svelte/server';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+
+const state = vi.hoisted(() => ({ page: { route: { id: '/(app)/agent' as string | null } } }));
+vi.mock('$app/state', () => state);
+
+const { default: AgentNav } = await import('./AgentNav.svelte');
+
+const html = (props: Record<string, unknown> = {}) =>
+	render(AgentNav, { props }).body.replace(/<!--[\s\S]*?-->/g, '');
+const links = (h: string) =>
+	[...h.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].map((m) => ({
+		attrs: m[1],
+		inner: m[2],
+		text: m[2].replace(/<[^>]+>/g, '').trim()
+	}));
+/** The accessible name: aria-hidden subtrees are dropped. */
+const accessibleName = (inner: string) =>
+	inner
+		.replace(/<span\b[^>]*aria-hidden="true"[^>]*>[\s\S]*?<\/span>/g, '')
+		.replace(/<[^>]+>/g, '')
+		.trim();
+
+describe('AgentNav', () => {
+	beforeEach(() => {
+		state.page.route.id = '/(app)/agent';
+	});
+
+	test('one Agent tools landmark with the five links in fixed order', () => {
+		const h = html();
+		expect(h.match(/<nav\b[^>]*aria-label="Agent tools"/g)).toHaveLength(1);
+		const ls = links(h);
+		expect(ls.map((l) => l.text)).toEqual(['Today', 'Pipeline', 'Contacts', 'Import', 'Profile']);
+		expect(ls.map((l) => /href="([^"]*)"/.exec(l.attrs)?.[1])).toEqual([
+			'/agent/today/',
+			'/agent/pipeline/',
+			'/agent/contacts/',
+			'/agent/import/',
+			'/agent/profile/'
+		]);
+		expect(h).not.toContain('Studio');
+	});
+
+	test.each([
+		['/(app)/agent/today', 'Today'],
+		['/(app)/agent/pipeline', 'Pipeline'],
+		['/(app)/agent/contacts', 'Contacts'],
+		['/(app)/agent/contact', 'Contacts'],
+		['/(app)/agent/import', 'Import'],
+		['/(app)/agent/profile', 'Profile']
+	])('route %s marks only %s as the current page', (id, label) => {
+		state.page.route.id = id;
+		const current = links(html()).filter((l) => l.attrs.includes('aria-current="page"'));
+		expect(current.map((l) => l.text)).toEqual([label]);
+	});
+
+	test.each(['/(app)/agent', '/(app)/settings', null])('no link is current on %s', (id) => {
+		state.page.route.id = id;
+		expect(html()).not.toContain('aria-current');
+	});
+
+	test('a due count renders a hidden-from-name pill and reads "Today, 3 tasks due"', () => {
+		const [today] = links(html({ dueCount: 3 }));
+		expect(today.inner).toMatch(/<span\b[^>]*aria-hidden="true"[^>]*>3<\/span>/);
+		expect(today.inner).toContain('bg-accent-surface');
+		expect(accessibleName(today.inner)).toBe('Today, 3 tasks due');
+	});
+
+	test('a single due task reads "Today, 1 task due"', () => {
+		const [today] = links(html({ dueCount: 1 }));
+		expect(accessibleName(today.inner)).toBe('Today, 1 task due');
+	});
+
+	test.each([undefined, 0, -2, 1.5])('dueCount %s renders no pill', (dueCount) => {
+		const h = html(dueCount === undefined ? {} : { dueCount });
+		expect(h).not.toContain('sr-only');
+		expect(h).not.toContain('aria-hidden');
+		expect(links(h)[0].text).toBe('Today');
+	});
+});

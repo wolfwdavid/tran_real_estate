@@ -112,7 +112,15 @@ test('the locked notice shows on every portal page of a locked tab', async ({
 		await open(page, path);
 		await expect(lockedNotice(page), path).toBeVisible();
 		// The Data source status bar is the first child of <main> (04-22); the notice is second.
-		await expect(page.locator('main > :first-child')).toHaveAttribute('aria-label', 'Data source');
-		await expect(page.locator('main > :nth-child(2)')).toContainText(LOCKED);
+		// The agent portal hides the bar (08-UI-SPEC Planner Note 4), so the notice leads there.
+		if (path === 'agent/') {
+			await expect(page.locator('main > :first-child')).toContainText(LOCKED);
+		} else {
+			await expect(page.locator('main > :first-child')).toHaveAttribute(
+				'aria-label',
+				'Data source'
+			);
+			await expect(page.locator('main > :nth-child(2)')).toContainText(LOCKED);
+		}
 	}
 });
