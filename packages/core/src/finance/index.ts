@@ -9,3 +9,4 @@ export * from './analyze.js';
 export * from './reference-cases.js';
 export * from './compare.js';
 export * from './quick-metrics.js';
+export * from './memo-facts.js';
