@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 22 of 22 (waves 1-7 complete; 06-21 split view done; next: 06-22 gate)
+Plan: 21 of 22 (waves 1-7 complete; next wave 8: 06-22 phase gate)
 
 ## Performance Metrics
 
