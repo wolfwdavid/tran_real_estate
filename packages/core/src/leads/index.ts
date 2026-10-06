@@ -2,3 +2,4 @@
 export * from './normalize.js';
 export * from './diff-leads.js';
 export * from './inquiry-params.js';
+export * from './lead-block.js';

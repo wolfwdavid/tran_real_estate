@@ -170,6 +170,20 @@ describe('parseLeadBlocks: mangled email fixtures', () => {
 		]);
 	});
 
+	it('ends a block without a terminator at the next header', () => {
+		const unterminated = CLEAN_BLOCK.replace('\nEND TRAN-LEAD', '');
+		expect(parseLeadBlocks(`${unterminated}\n${CLEAN_BLOCK}`)).toEqual([
+			{ ok: true, lead: CLEAN_LEAD },
+			{ ok: true, lead: CLEAN_LEAD }
+		]);
+	});
+
+	it('does not read "END TRAN-LEAD v2..." after a collapsed block as a new header', () => {
+		expect(parseLeadBlocks(`${CLEAN_BLOCK} v2 of the form, sent by Web3Forms`)).toEqual([
+			{ ok: true, lead: CLEAN_LEAD }
+		]);
+	});
+
 	it('returns no entries when there is no block', () => {
 		expect(parseLeadBlocks('Hi, can I see the condo?')).toEqual([]);
 		expect(parseLeadBlocks('')).toEqual([]);
@@ -218,8 +232,14 @@ describe('parseLeadBlocks: hostile visitor text', () => {
 	});
 
 	it('strips bidi controls from a hand-crafted block', () => {
-		const lead = okLead(CLEAN_BLOCK.replace('Jordan Example', 'Jordan \u202EExample'));
+		const lead = okLead(
+			CLEAN_BLOCK.replace('Jordan Example', 'Jordan \u202EExample').replace(
+				'Second line',
+				'Second\u2066 line\u0007'
+			)
+		);
 		expect(lead.name).toBe('Jordan Example');
+		expect(lead.message).toBe(CLEAN_LEAD.message);
 	});
 
 	it('reports a block with a missing key as invalid', () => {
