@@ -9,7 +9,9 @@
 		"./numbers": "./src/numbers/index.ts",
 		"./markets": "./src/markets/index.ts",
 		"./*": "./src/*/index.ts",
-		"./renter/*": "./src/renter/*.ts"
+		"./renter/*": "./src/renter/*.ts",
+		"./agent/*": "./src/agent/*.ts",
+		"./leads/*": "./src/leads/*.ts"
 	},
 	"scripts": {
 		"check": "tsc --noEmit"
