@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: "Completed 07-21-PLAN.md (Phase 7 gate: verify exit 0 in 600s, INV-01..06 complete)"
-last_updated: "2026-10-06T12:50:33.822Z"
+stopped_at: Completed 08-03-PLAN.md
+last_updated: "2026-10-06T12:56:07.417Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 122
+  completed_plans: 123
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-13)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 07 — Investor Portal
+**Current focus:** Phase 08 — Agent Portal: Profile, Lead Intake & CRM
 
 ## Current Position
 
-Phase: 08
-Plan: Not started
+Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
+Plan: 1 of 26
 
 ## Performance Metrics
 
@@ -168,6 +168,7 @@ Plan: Not started
 | Phase 07 P18 | 75min | 3 tasks | 15 files |
 | Phase 07 P20 | 45min | 2 tasks | 12 files |
 | Phase 07 P21 | 95min | 2 tasks | 11 files |
+| Phase 08 P03 | 20min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -400,6 +401,7 @@ Recent decisions affecting current work:
 - [Phase 07]: 07-20: sweep found + fixed 3 earlier-plan defects (print tables scroll region, buy-box cost buttons shrink, buy-box form gated on runtime.gateway); AutofillButton same race deferred to 07-21
 - [Phase 07]: 07-21: AutofillButton late-runtime race fixed at the root (render keyed on port.source() via the investor port)
 - [Phase 07]: 07-21: notes-only print re-check (07-19) and the unspecced save message (07-12) go to owner sign-off (07-HUMAN-UAT S1/S2), non-blocking
+- [Phase 08]: 08-03: img-src = self + OSM tile host + blob: (appended, data: still banned); agent-scoped banned list (sync, inbox connection, automatically sends, SMS consent, auto-reply)
 
 ### Pending Todos
 
@@ -422,7 +424,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T12:47:00.976Z
-Stopped at: Completed 07-21-PLAN.md (Phase 7 gate: verify exit 0 in 600s, INV-01..06 complete)
+Last session: 2026-10-06T12:56:07.409Z
+Stopped at: Completed 08-03-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
