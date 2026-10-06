@@ -60,12 +60,12 @@
 
 ### Investor Portal
 
-- [ ] **INV-01**: Investor can analyze a property for NOI, cap rate, monthly cash flow, cash-on-cash return, DSCR, GRM, and the 1% rule, with editable expense lines
-- [ ] **INV-02**: Investor can enter every number manually (zero API calls) or autofill rent and value estimates with the call cost shown first
-- [ ] **INV-03**: Investor can save analyzed deals and compare them side by side
-- [ ] **INV-04**: Investor can save buy-box searches over for-sale listings and see new matches with quick metrics when opening the app
-- [ ] **INV-05**: Investor can view market dashboards (rent trend, price-to-rent) for up to 5 watched zip codes
-- [ ] **INV-06**: Investor can generate an AI investment memo whose numbers all come from the analyzer, and print it to PDF with a not-investment-advice disclaimer
+- [x] **INV-01**: Investor can analyze a property for NOI, cap rate, monthly cash flow, cash-on-cash return, DSCR, GRM, and the 1% rule, with editable expense lines
+- [x] **INV-02**: Investor can enter every number manually (zero API calls) or autofill rent and value estimates with the call cost shown first
+- [x] **INV-03**: Investor can save analyzed deals and compare them side by side
+- [x] **INV-04**: Investor can save buy-box searches over for-sale listings and see new matches with quick metrics when opening the app
+- [x] **INV-05**: Investor can view market dashboards (rent trend, price-to-rent) for up to 5 watched zip codes
+- [x] **INV-06**: Investor can generate an AI investment memo whose numbers all come from the analyzer, and print it to PDF with a not-investment-advice disclaimer
 
 ### Agent Portal — CRM & Leads
 
@@ -183,12 +183,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RENT-06 | Phase 6 | Complete |
 | RENT-07 | Phase 6 | Complete |
 | RENT-08 | Phase 6 | Complete |
-| INV-01 | Phase 7 | Pending |
-| INV-02 | Phase 7 | Pending |
-| INV-03 | Phase 7 | Pending |
-| INV-04 | Phase 7 | Pending |
-| INV-05 | Phase 7 | Pending |
-| INV-06 | Phase 7 | Pending |
+| INV-01 | Phase 7 | Complete |
+| INV-02 | Phase 7 | Complete |
+| INV-03 | Phase 7 | Complete |
+| INV-04 | Phase 7 | Complete |
+| INV-05 | Phase 7 | Complete |
+| INV-06 | Phase 7 | Complete |
 | AGT-01 | Phase 8 | Pending |
 | AGT-02 | Phase 8 | Pending |
 | AGT-03 | Phase 8 | Pending |
@@ -216,4 +216,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-09-13*
-*Last updated: 2026-10-05 after Phase 5 gate (AI-01..04 complete by 05-16; live-provider checks deferred to 05-HUMAN-UAT.md)*
+*Last updated: 2026-10-06 after Phase 7 gate (INV-01..06 complete by 07-21; real-key, real-AI and real-device checks deferred to 07-HUMAN-UAT.md)*

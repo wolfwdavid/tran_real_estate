@@ -91,9 +91,10 @@ corepack pnpm verify
 | `corepack pnpm verify`         | All of the above in order, as one gate                                                                                               |
 
 `verify` is `check`, `lint`, `banned`, `ui:guard`, `test:unit`, `build:root`, `build:sub`, `csp:assert`, `test:e2e`,
-`guard`, `fixtures:check`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about six and a half minutes on a
-warm machine; the two builds and the two Playwright projects are the bulk of it. CI runs the
-same steps, split across a hygiene job and a two-leg quality matrix (root and sub base paths).
+`guard`, `fixtures:check`, `secrets:canary`, `secrets:scan`, `lint:workflows`. It runs in about
+ten minutes on a warm machine; the two Playwright projects (about 1,060 tests, seven and a half
+minutes) and the two builds are the bulk of it. CI runs the same steps, split across a hygiene
+job and a two-leg quality matrix (root and sub base paths).
 
 The browser component tests (`*.browser.test.ts`, the `web-browser` project) run inside
 `corepack pnpm test:unit` in real Chromium, so `test:unit` also needs
@@ -129,10 +130,11 @@ The browser component tests (`*.browser.test.ts`, the `web-browser` project) run
   30 days, no-result (404/400) answers 24 hours.
 - **Saved-search alerts.** Due saved searches are checked when the app opens, at most once per
   24 hours each, inside the cap; more than 3 due asks first.
-- **Backups.** The database is at Dexie schema version 4. Backups hold the settings, the RentCast
+- **Backups.** The database is at Dexie schema version 5. Backups hold the settings, the RentCast
   call history, saved searches, saved search results and data settings (Phase 4), AI drafts
-  (`aiArtifacts`, Phase 5), and the rental shortlist and saved rental searches
-  (`renterShortlist`, `renterSearchMeta`, Phase 6). The response cache (`apiCache`) and the
+  (`aiArtifacts`, Phase 5; investment memos included), the rental shortlist and saved rental
+  searches (`renterShortlist`, `renterSearchMeta`, Phase 6), and the investor tables (`deals`,
+  `investorDraft`, `buyBoxes`, `watchedZips`, Phase 7). The response cache (`apiCache`) and the
   local-only `meta` table are deliberately excluded. A schema-registry test
   fails if a new table is neither registered nor excluded.
 - **Where the code lives:** `packages/core/src/{budget,request,listings,alerts}/` (pure rules),
@@ -143,27 +145,35 @@ The browser component tests (`*.browser.test.ts`, the `web-browser` project) run
 
 ## Routes
 
-Every page is prerendered with a trailing slash. Sixteen pages ship today, plus the `404.html`
-fallback (17 HTML files per build, all checked by `csp:assert`):
+Every page is prerendered with a trailing slash. Twenty-four pages ship today, plus the `404.html`
+fallback (25 HTML files per build, all checked by `csp:assert`):
 
-| Route                    | Group                                                             |
-| ------------------------ | ----------------------------------------------------------------- |
-| `/`                      | Marketing (landing)                                               |
-| `/for-renters/`          | Marketing                                                         |
-| `/for-investors/`        | Marketing                                                         |
-| `/for-agents/`           | Marketing                                                         |
-| `/legal/privacy/`        | Legal                                                             |
-| `/legal/terms/`          | Legal                                                             |
-| `/legal/fair-housing/`   | Legal                                                             |
-| `/legal/data-coverage/`  | Legal                                                             |
-| `/renter/`               | Renter: search, filters, list/map/split view, saved searches      |
-| `/renter/listing/`       | Renter: listing detail (`?id=`), fair-rent check, outreach draft  |
-| `/renter/shortlist/`     | Renter: shortlist with status and notes                           |
-| `/renter/affordability/` | Renter: affordability check (no data, no storage, no network)     |
-| `/investor/`             | App (placeholder until Phase 7)                                   |
-| `/agent/`                | App (placeholder until Phases 8-9)                                |
-| `/settings/`             | App: keys, RentCast usage, key security, backup, storage, install |
-| `/print/`                | Chrome-free print surface                                         |
+| Route                    | Group                                                                |
+| ------------------------ | -------------------------------------------------------------------- |
+| `/`                      | Marketing (landing)                                                  |
+| `/for-renters/`          | Marketing                                                            |
+| `/for-investors/`        | Marketing                                                            |
+| `/for-agents/`           | Marketing                                                            |
+| `/legal/privacy/`        | Legal                                                                |
+| `/legal/terms/`          | Legal                                                                |
+| `/legal/fair-housing/`   | Legal                                                                |
+| `/legal/data-coverage/`  | Legal                                                                |
+| `/renter/`               | Renter: search, filters, list/map/split view, saved searches         |
+| `/renter/listing/`       | Renter: listing detail (`?id=`), fair-rent check, outreach draft     |
+| `/renter/shortlist/`     | Renter: shortlist with status and notes                              |
+| `/renter/affordability/` | Renter: affordability check (no data, no storage, no network)        |
+| `/investor/`             | Investor: overview (saved deals, new buy-box matches, watched ZIPs)  |
+| `/investor/analyze/`     | Investor: deal analyzer (`?id=` saved deal, `?sample=1`)             |
+| `/investor/deals/`       | Investor: saved deals, sort, select 2-3 to compare                   |
+| `/investor/compare/`     | Investor: side-by-side comparison (`?ids=`)                          |
+| `/investor/memo/`        | Investor: investment memo draft (`?id=`)                             |
+| `/investor/buy-boxes/`   | Investor: buy boxes over for-sale listings, quick metrics            |
+| `/investor/markets/`     | Investor: up to 5 watched ZIP codes                                  |
+| `/investor/market/`      | Investor: one ZIP's rent trend and price-to-rent dashboard (`?zip=`) |
+| `/agent/`                | App (placeholder until Phases 8-9)                                   |
+| `/settings/`             | App: keys, RentCast usage, key security, backup, storage, install    |
+| `/print/`                | Chrome-free print surface                                            |
+| `/print/memo/`           | Chrome-free memo printout (`?id=&memo=`), print or save as PDF       |
 
 Adding or removing a page means updating two lists as well: `apps/web/tests/e2e/routes.ts`
 (a drift test fails if the build and the list disagree) and `EXPECTED_PAGES` in
@@ -202,6 +212,41 @@ only third-party hosts the app ever contacts are the providers the user brings a
   horizontal scroll and third-party requests.
 - **Owner checks** that need a real key, the deployed origin or real devices are in
   `.planning/phases/06-renter-portal/06-HUMAN-UAT.md`.
+
+## Investor portal (Phase 7)
+
+- **Analyzer** (`/investor/analyze/`): NOI, cap rate, monthly cash flow, cash-on-cash, DSCR, GRM
+  and the 1% rule from numbers the user types, with editable expense lines. Typing never spends a
+  call. The math is exact integer cents in `packages/core/src/finance/`, checked against nine
+  hand-worked reference cases (A-I, `reference-cases.ts`) and property tests.
+- **Autofill:** "Autofill rent estimate (1 call)" and "Autofill value estimate (1 call)" show the
+  cost before the click, spend only on the click, read "(0 calls · cached)" afterwards, and never
+  overwrite a number the user typed. Every field shows where its value came from.
+- **Deals and compare** (`/investor/deals/`, `/investor/compare/?ids=`): save deals, then compare
+  2 or 3 in a table (stacked cards at 375px). "Highest" and "Lowest" marks are arithmetic, not a
+  recommendation.
+- **Buy boxes** (`/investor/buy-boxes/`): a saved for-sale search is checked with "Save and check
+  now (1 call)" or once a day on app open (the Phase 4 scheduler). Quick metrics are free when the
+  ZIP's market data is cached, otherwise "Load ZIP rents (1 call)"; "Deep analyze (2 calls)" opens
+  the analyzer with rent and value estimates.
+- **Markets** (`/investor/markets/`, `/investor/market/?zip=`): up to 5 watched ZIP codes
+  (1 call each, then cached for 30 days) with rent-trend and price-to-rent charts drawn by
+  LayerChart 2.5, loaded lazily, each with a data table alternative. The components live
+  in `apps/web/src/lib/features/shared/markets/` for the agent portal (Phase 8) to reuse.
+- **Memo and print** (`/investor/memo/?id=`, `/print/memo/`): the AI writes the words from a FACTS
+  block of analyzer figures; the numeric post-check in `packages/core/src/numbers/` (reusable by
+  Phase 9) flags any figure the analysis did not produce, and with the Fair Housing and advice
+  checks it gates every exit (Copy text, Open in email app, Mark as sent) and the print link. Without an AI key a sample memo streams instead.
+  The printout (`apps/web/src/lib/features/shared/print/`) carries the not-investment-advice
+  disclaimer at the top and the end and prints only on a click.
+- **Budget:** keyless, the whole journey runs on sample data with zero requests to RentCast or an
+  AI host; with a key it costs exactly 6 calls (2 autofill, 1 watched ZIP, 1 buy-box check,
+  2 Deep analyze). Proven by `apps/web/tests/e2e/investor/demo.spec.ts`; `sweep.spec.ts` checks
+  every investor route for axe at 1280 and 375px, CSP and calls in both modes. Run the investor
+  E2E subset after both builds with
+  `corepack pnpm --filter web exec playwright test tests/e2e/investor`.
+- **Owner checks** that need a real key, a real AI key, real devices or the deployed origin are in
+  `.planning/phases/07-investor-portal/07-HUMAN-UAT.md`.
 
 ## End-to-end ports
 
