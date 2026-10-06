@@ -374,7 +374,9 @@ function priceStats(rand, center, step, noun) {
 	};
 }
 
-function marketSide(rand, listings, side) {
+// `bedRand` is a separate stream for the per-month bedroom breakdown, so adding it left every
+// other generated value unchanged (the main stream draws exactly as before).
+function marketSide(rand, listings, side, bedRand) {
 	const isSale = side === 'sale';
 	const noun = isSale ? 'Price' : 'Rent';
 	const step = isSale ? 1000 : 5;
@@ -398,12 +400,23 @@ function marketSide(rand, listings, side) {
 		const trend = 0.92 + (0.08 * idx) / (MARKET_MONTHS - 1);
 		const seasonal = 1 + 0.015 * Math.sin((d.getUTCMonth() / 12) * 2 * Math.PI);
 		const key = d.toISOString().slice(0, 7);
-		history[key] = {
+		const monthCenter = center * trend * seasonal;
+		// Main-stream draws stay in their original order: stats, days on market, new, total.
+		const point = {
 			date: d.toISOString(),
-			...priceStats(rand, center * trend * seasonal, step, noun),
+			...priceStats(rand, monthCenter, step, noun),
 			averageDaysOnMarket: round2(isSale ? 30 + rand.next() * 40 : 18 + rand.next() * 25),
 			newListings: rand.int(isSale ? 10 : 20, isSale ? 45 : 70),
 			totalListings: rand.int(isSale ? 55 : 85, isSale ? 185 : 265)
+		};
+		const monthTotal = point.totalListings;
+		history[key] = {
+			...point,
+			dataByBedrooms: [0, 1, 2, 3, 4, 5].map((bedrooms) => ({
+				bedrooms,
+				...priceStats(bedRand, monthCenter * (0.6 + bedrooms * 0.16), step, noun),
+				totalListings: bedRand.int(2, Math.max(3, Math.round(monthTotal / 3)))
+			}))
 		};
 	});
 
@@ -432,6 +445,7 @@ function marketSide(rand, listings, side) {
 }
 
 function buildMarkets(rand, rentals, sales) {
+	const bedRand = createRandom(SEED ^ 0x5eedbed);
 	return METROS.flatMap((metro) =>
 		metro.zipCodes.map((zip) => ({
 			id: zip,
@@ -439,12 +453,14 @@ function buildMarkets(rand, rentals, sales) {
 			saleData: marketSide(
 				rand,
 				sales.filter((l) => l.zipCode === zip),
-				'sale'
+				'sale',
+				bedRand
 			),
 			rentalData: marketSide(
 				rand,
 				rentals.filter((l) => l.zipCode === zip),
-				'rental'
+				'rental',
+				bedRand
 			)
 		}))
 	);

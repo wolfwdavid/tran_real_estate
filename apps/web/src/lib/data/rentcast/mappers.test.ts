@@ -229,6 +229,41 @@ describe('mapPayload: markets', () => {
 		expect(sale?.history).toHaveLength(24);
 	});
 
+	it("keeps each history month's per-bedroom breakdown (rent trend by bedroom)", () => {
+		const out = mapPayload(validated('markets', fixture)) as MarketStats;
+		const months = Object.keys(fixture.rentalData.history).sort();
+		const first = months[0] as keyof typeof fixture.rentalData.history;
+		const raw = fixture.rentalData.history[first].dataByBedrooms;
+		const point = out.rental?.history[0];
+		expect(point?.month).toBe(first);
+		expect(point?.byBedrooms).toHaveLength(raw.length);
+		expect(point?.byBedrooms?.[2]).toEqual({
+			bedrooms: raw[2].bedrooms,
+			propertyType: null,
+			average: raw[2].averageRent,
+			median: raw[2].medianRent,
+			min: raw[2].minRent,
+			max: raw[2].maxRent,
+			totalListings: raw[2].totalListings
+		});
+		// Every month of both sides carries its own breakdown (sale uses the Price fields).
+		for (const h of out.rental?.history ?? []) expect(h.byBedrooms?.length).toBeGreaterThan(0);
+		const saleFirst = fixture.saleData.history[first as keyof typeof fixture.saleData.history];
+		expect(out.sale?.history[0].byBedrooms?.[0].median).toBe(
+			saleFirst.dataByBedrooms[0].medianPrice
+		);
+	});
+
+	it('maps a history month without dataByBedrooms to an empty breakdown', () => {
+		const out = mapPayload(
+			validated('markets', {
+				zipCode: '79999',
+				rentalData: { history: { '2026-09': { averageRent: 1500, medianRent: 1450 } } }
+			})
+		) as MarketStats;
+		expect(out.rental?.history[0].byBedrooms).toEqual([]);
+	});
+
 	it('sorts shuffled history by month ascending', () => {
 		const m = clone(fixture) as Record<string, unknown> & {
 			rentalData: { history: Record<string, unknown> };
