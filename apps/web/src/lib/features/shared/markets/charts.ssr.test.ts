@@ -90,7 +90,7 @@ describe('ChartFigure ready', () => {
 		expect(items[0]).toMatch(/<svg[^>]*aria-hidden="true"[^>]*width="32"[^>]*height="12"/);
 		expect(items[0]).toContain('stroke-dasharray="2 4"');
 		expect(items[0]).toContain('stroke-muted-foreground');
-		expect(strip(items[0])).toBe('Studio');
+		expect(strip(items[0] ?? '')).toBe('Studio');
 		expect(items[1]).not.toContain('stroke-dasharray');
 		expect(items[1]).toContain('stroke-primary');
 	});
