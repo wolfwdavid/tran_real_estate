@@ -55,7 +55,7 @@ const ok = <T>(value: T | null): ParseResult<T> => ({ ok: true, value });
 const fail = <T>(error: ParseError): ParseResult<T> => ({ ok: false, error });
 
 /** Leading ASCII hyphen-minus or the typographic minus (U+2212). */
-const NEGATIVE = /^[-−]/;
+const NEGATIVE = /^[-\u2212]/;
 const MONEY_NUMBER = /^(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?$/;
 const PLAIN_NUMBER = /^(\d+)(?:\.(\d+))?$/;
 
