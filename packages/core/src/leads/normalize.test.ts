@@ -10,17 +10,17 @@ import {
 	normPhoneUS
 } from './normalize.js';
 
-const HOSTILE = /[‪-‮⁦-⁩​-‍﻿]/;
+const HOSTILE = /[\u202A-\u202E\u2066-\u2069\u200B-\u200D\uFEFF]/;
 
 describe('normalizeText', () => {
 	it('unifies line endings', () => {
 		expect(normalizeText('a\r\nb\rc')).toBe('a\nb\nc');
 	});
 	it('turns non-breaking spaces into spaces', () => {
-		expect(normalizeText('a b c d')).toBe('a b c d');
+		expect(normalizeText('a\u00A0b\u2007c\u202Fd')).toBe('a b c d');
 	});
 	it('removes zero-width characters', () => {
-		expect(normalizeText('a​b‌c‍d﻿e')).toBe('abcde');
+		expect(normalizeText('a\u200Bb\u200Cc\u200Dd\uFEFFe')).toBe('abcde');
 	});
 	it('strips leading quote markers per line', () => {
 		expect(normalizeText('> > name: Jo\n>email: jo@example.com')).toBe(
@@ -28,19 +28,19 @@ describe('normalizeText', () => {
 		);
 	});
 	it('applies NFKC', () => {
-		expect(normalizeText('ｎａｍｅ')).toBe('name');
+		expect(normalizeText('\uFF4E\uFF41\uFF4D\uFF45')).toBe('name');
 	});
 });
 
 describe('cleanText', () => {
 	it('strips bidi overrides, zero-width chars and trims', () => {
-		expect(cleanText('‮evilJo​ ')).toBe('evilJo');
+		expect(cleanText('\u202EevilJo\u200B ')).toBe('evilJo');
 	});
 	it('strips C0 and C1 controls but keeps newline and tab', () => {
 		expect(cleanText('a\u0000b\u0007c\u001Bd\u007Fe\u0085f\u009Fg\nh\ti')).toBe('abcdefg\nh\ti');
 	});
 	it('strips isolates', () => {
-		expect(cleanText('⁦Jo⁩')).toBe('Jo');
+		expect(cleanText('\u2066Jo\u2069')).toBe('Jo');
 	});
 });
 
@@ -95,7 +95,7 @@ describe('firstName', () => {
 		expect(firstName('Jordan Example')).toBe('Jordan');
 		expect(firstName('  ')).toBe('');
 		expect(firstName('Cher')).toBe('Cher');
-		expect(firstName('‮ Jordan')).toBe('Jordan');
+		expect(firstName('\u202E Jordan')).toBe('Jordan');
 	});
 });
 
@@ -151,19 +151,19 @@ describe('properties', () => {
 
 	it('cleanText output never contains bidi or zero-width characters', () => {
 		const hostile = fc.constantFrom(
-			'‪',
-			'‫',
-			'‬',
-			'‭',
-			'‮',
-			'⁦',
-			'⁧',
-			'⁨',
-			'⁩',
-			'​',
-			'‌',
-			'‍',
-			'﻿'
+			'\u202A',
+			'\u202B',
+			'\u202C',
+			'\u202D',
+			'\u202E',
+			'\u2066',
+			'\u2067',
+			'\u2068',
+			'\u2069',
+			'\u200B',
+			'\u200C',
+			'\u200D',
+			'\uFEFF'
 		);
 		const mixed = fc.array(fc.oneof(anyString, hostile)).map((parts) => parts.join(''));
 		fc.assert(
