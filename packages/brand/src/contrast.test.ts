@@ -154,3 +154,17 @@ describe('Phase 5 contrast record', () => {
 		expect(round2(contrastRatio(c.destructive, c.card))).toBe(7.32);
 	});
 });
+
+describe('Phase 7 contrast record', () => {
+	const has = (fg: string, bg: string, min: number) =>
+		contrastPairs.some((p) => p.fg === fg && p.bg === bg && p.min >= min);
+
+	test('guards the Phase 7 chart series and axis pairs', () => {
+		for (const fg of ['primary', 'secondary', 'foreground', 'muted-foreground', 'border-strong'])
+			expect(
+				contrastPairs.some((p) => p.fg === fg && p.bg === 'card' && p.kind === 'ui' && p.min >= 3),
+				`${fg} series on card`
+			).toBe(true);
+		expect(has('muted-foreground', 'card', 4.5), 'axis ticks on card').toBe(true);
+	});
+});
