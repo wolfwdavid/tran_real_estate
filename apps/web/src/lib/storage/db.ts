@@ -13,6 +13,9 @@ import {
 } from '$lib/data/tables';
 import { AI_STORES, type AiArtifact } from '$lib/ai/storage/tables';
 import type { RenterSearchMeta, ShortlistItem } from '@tran/core/renter';
+import { INVESTOR_STORES } from '$lib/features/investor/deals/tables';
+import type { DealRecord } from '$lib/features/investor/deals/schema';
+import type { WatchedZipRecord } from '$lib/features/shared/markets/watched-zip-record';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -42,6 +45,11 @@ export class TranDb extends Dexie {
 	// Phase 6 renter shortlist + saved-search filters ($lib/features/renter/storage).
 	renterShortlist!: Table<ShortlistItem, string>;
 	renterSearchMeta!: Table<RenterSearchMeta, string>;
+	// Phase 7 investor deals, analyzer draft, buy boxes and watched ZIPs ($lib/features/investor/deals/tables).
+	deals!: Table<DealRecord, string>;
+	investorDraft!: Table<Syncable, string>;
+	buyBoxes!: Table<Syncable, string>;
+	watchedZips!: Table<WatchedZipRecord, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
@@ -58,6 +66,8 @@ export class TranDb extends Dexie {
 			renterShortlist: 'id, &listingId, status, updatedAt, deletedAt',
 			renterSearchMeta: 'id, updatedAt, deletedAt'
 		});
+		// Phase 7: saved deals, the analyzer draft, buy boxes and watched ZIPs (one new block).
+		this.version(5).stores(INVESTOR_STORES);
 	}
 }
 

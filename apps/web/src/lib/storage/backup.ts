@@ -146,6 +146,13 @@ export async function previewImport(db: TranDb, file: BackupFileLike): Promise<I
 	}
 	const { envelope, migratedFrom } = parseBackup(text, { registeredTables: names });
 	const incoming = envelope.tables as Record<string, Syncable[]>;
+	// Tables registered with a record schema (Phase 7+) reject the whole file on any invalid row,
+	// so a hand-edited backup can never write an impossible record (e.g. negative cents).
+	for (const t of tables) {
+		if (t.schema && (incoming[t.name] ?? []).some((r) => !t.schema!.safeParse(r).success)) {
+			throw new BackupError('invalid');
+		}
+	}
 	let local: Record<string, Syncable[]>;
 	try {
 		local = await readRegisteredTables(db);

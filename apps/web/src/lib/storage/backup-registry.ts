@@ -6,10 +6,18 @@
 import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
 import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
+import { INVESTOR_BACKUP_TABLES } from '$lib/features/investor/deals/tables';
+
+/** Any zod/mini schema satisfies this; the import preview rejects a file with a failing row. */
+export interface BackupRecordSchema {
+	safeParse(value: unknown): { success: boolean };
+}
 
 export interface BackupTable {
 	readonly name: string;
 	readonly label: string;
+	/** Optional per-record validator applied to every incoming row of this table on import. */
+	readonly schema?: BackupRecordSchema;
 }
 
 /**
@@ -29,7 +37,10 @@ const DEFAULT_TABLES: readonly BackupTable[] = [
 	// Phase 5: AI drafts (aiArtifacts).
 	...AI_BACKUP_TABLES,
 	// Phase 6: 'Rental shortlist' (renterShortlist), 'Saved rental searches' (renterSearchMeta).
-	...RENTER_BACKUP_TABLES
+	...RENTER_BACKUP_TABLES,
+	// Phase 7: 'Saved deals' (deals), 'Deal analyzer draft' (investorDraft), 'Buy boxes'
+	// (buyBoxes), 'Watched ZIP codes' (watchedZips), each with a record schema.
+	...INVESTOR_BACKUP_TABLES
 ];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));
@@ -38,7 +49,9 @@ let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));
 export function registerBackupTable(t: BackupTable): void {
 	if (!t.name || !t.label) throw new Error('backup-table-invalid');
 	if (BACKUP_EXCLUDED_TABLES.includes(t.name)) throw new Error('backup-table-excluded');
-	const entry = Object.freeze({ name: t.name, label: t.label });
+	const entry: BackupTable = Object.freeze(
+		t.schema ? { name: t.name, label: t.label, schema: t.schema } : { name: t.name, label: t.label }
+	);
 	const i = tables.findIndex((x) => x.name === t.name);
 	if (i === -1) tables.push(entry);
 	else tables[i] = entry;
