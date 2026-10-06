@@ -264,6 +264,19 @@ describe('diffLeads', () => {
 		expect(d.rows[0]?.lead.notes).toBe('First');
 	});
 
+	it('in-batch merge never copies a phone owned by a different earlier row', () => {
+		const d = diffLeads(
+			[
+				lead(1, { email: 'a@example.com' }),
+				lead(2, { phone: '555-555-0101', propertyOfInterest: 'y' }),
+				lead(3, { email: 'a@example.com', phone: '555-555-0101' })
+			],
+			[]
+		);
+		expect(kinds(d.rows)).toEqual(['new', 'new', 'same-as-row']);
+		expect(d.rows[0]?.lead.phone).toBe('');
+	});
+
 	it('does not mutate its inputs', () => {
 		const c = contact({ email: 'pat@example.com' });
 		const leads = [
