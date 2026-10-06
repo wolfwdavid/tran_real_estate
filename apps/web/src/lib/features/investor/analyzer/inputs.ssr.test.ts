@@ -157,3 +157,177 @@ describe('UnitToggle', () => {
 		expect(usdSeg.inner).toContain('<svg');
 	});
 });
+
+describe('ExpenseLines', async () => {
+	const { default: ExpenseLines } = await import('./ExpenseLines.svelte');
+	const { analyze } = await import('@tran/core/finance');
+	const { addCustomLine, defaultForm, parseForm } = await import('./form-model');
+
+	const sample = () => {
+		const form = { ...defaultForm(), price: '200,000', rent: '2,000' };
+		return { form, analysis: analyze(parseForm(form).inputs!) };
+	};
+	const renderLines = (props: Record<string, unknown>) =>
+		html(ExpenseLines, { errors: {}, rentCents: 200_000, ...props });
+	const text = (h: string) => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+	const groups = (h: string) => [...h.matchAll(/<div\b[^>]*role="group"[^>]*>/g)].map((m) => m[0]);
+
+	test('eight labelled row groups with the default names in order', () => {
+		const { form, analysis } = sample();
+		const h = renderLines({ form: form.expenses, analysis });
+		const gs = groups(h);
+		expect(gs).toHaveLength(8);
+		const names = gs.map((g) => {
+			const id = attr(g, 'aria-labelledby')!;
+			return new RegExp(`id="${id}"[^>]*>([^<]*)<`).exec(h)?.[1].trim();
+		});
+		expect(names).toEqual([
+			'Vacancy allowance',
+			'Property management',
+			'Maintenance',
+			'Capital reserves',
+			'Property tax',
+			'Insurance',
+			'HOA dues',
+			'Owner-paid utilities'
+		]);
+	});
+
+	test('fieldset note, computed lines and the totals footer', () => {
+		const { form, analysis } = sample();
+		const t = text(renderLines({ form: form.expenses, analysis }));
+		expect(t).toContain(
+			"Percent lines are starting assumptions. Change any of them to match the property. Tax and insurance stay blank until you enter them, because Tran won't guess them."
+		);
+		expect(t).toContain('= $100 a month'); // vacancy 5% of $2,000
+		expect(t).toContain('= $152 a month'); // management 8% of $1,900 collected
+		// 100 + 152 + 100 + 100 = $452 a month, x12 = $5,424
+		expect(t).toContain('Operating expenses: $452 a month · $5,424 a year');
+	});
+
+	test('"$ per month" rows show "% of rent" only when rent is entered', () => {
+		const { form, analysis } = sample();
+		form.expenses[4].amount = '200';
+		expect(text(renderLines({ form: form.expenses, analysis }))).toContain('= 10% of rent');
+		expect(
+			text(renderLines({ form: form.expenses, analysis: null, rentCents: null }))
+		).not.toContain('of rent =');
+		expect(text(renderLines({ form: form.expenses, analysis: null, rentCents: null }))).not.toMatch(
+			/= [\d.]+% of rent/
+		);
+	});
+
+	test('no footer without an analysis', () => {
+		const { form } = sample();
+		expect(text(renderLines({ form: form.expenses, analysis: null }))).not.toContain(
+			'Operating expenses:'
+		);
+	});
+
+	test('unit toggles: one per row with the "{Line} entered as" legend', () => {
+		const { form, analysis } = sample();
+		const h = renderLines({ form: form.expenses, analysis });
+		expect(h.match(/<fieldset\b/g)).toHaveLength(8);
+		expect(h).toContain('<legend class="sr-only">Property tax entered as</legend>');
+		expect(text(h)).toContain('% of rent');
+		expect(text(h)).toContain('$ per month');
+	});
+
+	test('default rows have no remove button; custom rows have a name input and remove', () => {
+		const { analysis } = sample();
+		let form = addCustomLine(defaultForm());
+		form = addCustomLine(form);
+		form.expenses[8].name = 'Lawn care';
+		const h = renderLines({ form: form.expenses, analysis });
+		const buttons = [...h.matchAll(/<button\b[^>]*>/g)].map((m) => m[0]);
+		const removes = buttons.filter((b) => /aria-label="Remove/.test(b));
+		expect(removes.map((b) => attr(b, 'aria-label'))).toEqual([
+			'Remove Lawn care',
+			'Remove this expense line'
+		]);
+		for (const b of removes) expect(b).toMatch(/size-11/);
+		expect(h.match(/>Expense name</g)).toHaveLength(2);
+		expect(text(h)).toContain('Add expense line');
+	});
+
+	test('the add button gives way to the cap note at 12 custom lines', () => {
+		let form = defaultForm();
+		for (let i = 0; i < 12; i++) form = addCustomLine(form);
+		const t = text(renderLines({ form: form.expenses, analysis: null }));
+		expect(t).not.toContain('Add expense line');
+		expect(t).toContain("You've added 12 custom lines, the most this form holds.");
+	});
+
+	test('a line error shows the verbatim copy on that line', () => {
+		const { form, analysis } = sample();
+		form.expenses[0].amount = '150';
+		const h = renderLines({
+			form: form.expenses,
+			analysis,
+			errors: { 'expense:vacancy': 'pct-range' }
+		});
+		expect(text(h)).toContain('Use a percent from 0 to 100.');
+		expect(h.match(/aria-invalid="true"/g)).toHaveLength(1);
+	});
+});
+
+describe('expense unit conversion (pure helper)', async () => {
+	const { convertLineUnit } = await import('./expense-lines');
+	const ctx = { rentCents: 200_000, gsiCents: 200_000, egiCents: 190_000 };
+	const line = (unit: 'pct' | 'usd', amount: string, id = 'maintenance', kind = 'maintenance') =>
+		({ id, kind, name: 'Maintenance', unit, amount }) as const;
+
+	test('8% of $2,000 -> $160 a month, announced', () => {
+		const r = convertLineUnit({ ...line('pct', '8'), id: 'm', kind: 'maintenance' }, 'usd', ctx);
+		expect(r.line).toMatchObject({ unit: 'usd', amount: '160' });
+		expect(r.message).toBe('Maintenance changed to $ per month. Still $160 a month.');
+	});
+
+	test('dollars back to percent keeps the monthly dollars', () => {
+		const r = convertLineUnit(line('usd', '160'), 'pct', ctx);
+		expect(r.line).toMatchObject({ unit: 'pct', amount: '8' });
+		expect(r.message).toBe('Maintenance changed to % of rent. Still $160 a month.');
+	});
+
+	test('management converts on collected income', () => {
+		const r = convertLineUnit(
+			{
+				id: 'management',
+				kind: 'management',
+				name: 'Property management',
+				unit: 'pct',
+				amount: '8'
+			},
+			'usd',
+			ctx
+		);
+		expect(r.line.amount).toBe('152');
+	});
+
+	test('zero base: amount blank and the short announcement', () => {
+		const r = convertLineUnit(line('usd', '160'), 'pct', {
+			rentCents: 0,
+			gsiCents: 0,
+			egiCents: 0
+		});
+		expect(r.line).toMatchObject({ unit: 'pct', amount: '' });
+		expect(r.message).toBe('Maintenance changed to % of rent.');
+	});
+
+	test('blank or invalid amounts switch unit and clear', () => {
+		expect(convertLineUnit(line('usd', ''), 'pct', ctx)).toEqual({
+			line: line('pct', ''),
+			message: 'Maintenance changed to % of rent.'
+		});
+		expect(convertLineUnit(line('usd', 'abc'), 'pct', ctx).line.amount).toBe('');
+	});
+
+	test('unnamed custom lines are announced as "This expense line"', () => {
+		const r = convertLineUnit(
+			{ id: 'custom-1', kind: 'custom', name: ' ', unit: 'usd', amount: '' },
+			'pct',
+			ctx
+		);
+		expect(r.message).toBe('This expense line changed to % of rent.');
+	});
+});
