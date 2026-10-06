@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 06-19-PLAN.md
-last_updated: "2026-10-06T00:45:50.874Z"
+stopped_at: Completed 06-21-PLAN.md
+last_updated: "2026-10-06T01:09:04.885Z"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 206
-  completed_plans: 99
+  completed_plans: 100
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 20 of 22 (waves 1-6 complete; next wave 7: 06-21)
+Plan: 22 of 22 (waves 1-7 complete; 06-21 split view done; next: 06-22 gate)
 
 ## Performance Metrics
 
@@ -145,6 +145,7 @@ Plan: 20 of 22 (waves 1-6 complete; next wave 7: 06-21)
 | Phase 06 P16 | 35 min | 2 tasks | 15 files |
 | Phase 06 P20 | 50min | 2 tasks | 10 files |
 | Phase 06 P19 | 25min | 3 tasks | 14 files |
+| Phase 06 P21 | 35min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -346,6 +347,7 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-19: map sizes follow reconciliation over UI-SPEC (pins 28px tall min-width 44, clusters 40px, supercluster radius 48/extent 256/maxZoom 19, map+tile maxZoom 18)
 - [Phase 06]: 06-19: map live/sample follows result provenance (rentcast = OSM tiles); sample draws a grid backdrop with zero third-party requests
 - [Phase 06]: 06-19: CspSafeTileLayer overrides Leaflet 1.9.4 _removeTile/_abortLoading to drop src instead of a data: GIF (img-src violation otherwise)
+- [Phase 06]: 06-21: split view list follows map bounds (pure rowsInBounds, inclusive edges); pin activation focuses the split-list card at >=1024px, the preview below; preview still shows co-located spot lists at lg
 
 ### Pending Todos
 
@@ -368,7 +370,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T00:45:50.868Z
-Stopped at: Completed 06-19-PLAN.md
+Last session: 2026-10-06T01:09:04.880Z
+Stopped at: Completed 06-21-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
