@@ -1,6 +1,6 @@
 /**
  * Agent logo validation (08-RESEARCH Pattern 8). Pure and DOM-free: works on `Uint8Array` and
- * strings only (core has no DOM lib, so no TextDecoder and no Blob).
+ * strings only (core has no DOM lib, so no text-decoder or file-object APIs).
  *
  * The file type is decided by content, never by `file.type` or the extension, so a renamed
  * HTML page or JPEG can never be stored as a logo.
@@ -28,7 +28,7 @@ const SVG_SNIFF_BYTES = 1024;
 const startsWithBytes = (bytes: Uint8Array, sig: readonly number[], at = 0) =>
 	bytes.length >= at + sig.length && sig.every((b, i) => bytes[at + i] === b);
 
-/** Latin-1 decode of `bytes[from, to)`: enough for ASCII markup, no TextDecoder needed. */
+/** Latin-1 decode of `bytes[from, to)`: enough for ASCII markup, no DOM decoder needed. */
 function asciiSlice(bytes: Uint8Array, from: number, to: number): string {
 	let s = '';
 	for (let i = from; i < Math.min(to, bytes.length); i++) s += String.fromCharCode(bytes[i]);
