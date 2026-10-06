@@ -28,6 +28,14 @@
 
 	type LeafletNS = typeof import('leaflet');
 
+	/** The visible view as plain numbers (renter/map/in-bounds.ts takes these; no Leaflet types). */
+	interface ViewBounds {
+		west: number;
+		south: number;
+		east: number;
+		north: number;
+	}
+
 	interface Props {
 		rows: readonly Listing[];
 		newIds?: ReadonlySet<string>;
@@ -42,6 +50,8 @@
 		onspot?: (rows: Listing[]) => void;
 		onhover?: (id: string | null) => void;
 		onready?: (count: number) => void;
+		/** After the first fit and on every moveend: the split list follows the view (06-21). */
+		onbounds?: (bounds: ViewBounds) => void;
 	}
 
 	let {
@@ -55,7 +65,8 @@
 		onselect,
 		onspot,
 		onhover,
-		onready
+		onready,
+		onbounds
 	}: Props = $props();
 
 	/** Single-result and maximum fit zoom (UI-SPEC "Viewport behaviour"). */
@@ -89,6 +100,17 @@
 			Math.min(180, b.getEast()),
 			Math.min(85, b.getNorth())
 		];
+	}
+
+	/** Hover is pointer-only (UI-SPEC "List <-> map linking": `@media (hover: hover)`). */
+	function hoverCapable(): boolean {
+		return matchMedia('(hover: hover)').matches;
+	}
+
+	function emitBounds(m: Leaflet.Map): void {
+		const [west, south, east, north] = bbox(m);
+		el?.setAttribute('data-zoom', String(m.getZoom()));
+		onbounds?.({ west, south, east, north });
 	}
 
 	function fit(): void {
@@ -195,11 +217,12 @@
 			onKeys(node, activate);
 			node?.addEventListener('focus', () => onhover?.(row.id));
 			node?.addEventListener('blur', () => onhover?.(null));
-			node?.addEventListener('pointerenter', (e) => {
-				if (e.pointerType === 'mouse') onhover?.(row.id);
+			node?.setAttribute('data-listing-pin', row.id);
+			node?.addEventListener('mouseenter', () => {
+				if (hoverCapable()) onhover?.(row.id);
 			});
-			node?.addEventListener('pointerleave', (e) => {
-				if (e.pointerType === 'mouse') onhover?.(null);
+			node?.addEventListener('mouseleave', () => {
+				if (hoverCapable()) onhover?.(null);
 			});
 		});
 		return marker;
@@ -312,7 +335,10 @@
 			layer = lib.layerGroup().addTo(m);
 			fit();
 			fittedKey = rows.length > 0 ? fitKey : null;
-			m.on('moveend', draw);
+			m.on('moveend', () => {
+				draw();
+				emitBounds(m);
+			});
 			// Wheel zoom only once the user has engaged with the map (UI-SPEC: no scroll hijack).
 			el.addEventListener('click', () => m.scrollWheelZoom.enable());
 			el.addEventListener('focusin', () => m.scrollWheelZoom.enable());
@@ -320,6 +346,7 @@
 				if (!el?.contains(e.relatedTarget as Node | null)) m.scrollWheelZoom.disable();
 			});
 			draw();
+			emitBounds(m);
 			ready = true;
 			onready?.(rows.length);
 		})();

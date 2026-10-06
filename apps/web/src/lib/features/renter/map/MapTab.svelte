@@ -16,7 +16,9 @@
 	import LazyMap from '$lib/features/shared/listings/map/LazyMap.svelte';
 	import { streetLine } from '../listing/address';
 	import type { RenterSearch } from '../search/search-state.svelte';
+	import type { MapBounds } from './in-bounds';
 	import SelectedListingPreview from './SelectedListingPreview.svelte';
+	import SplitList from './SplitList.svelte';
 
 	let { search }: { search: RenterSearch } = $props();
 
@@ -33,6 +35,14 @@
 
 	let spot = $state.raw<Listing[] | null>(null);
 	let focusToken = $state(0);
+	/** Pin activations at the split-view width: the split list scrolls to and focuses the card. */
+	let scrollToken = $state(0);
+	let bounds = $state.raw<MapBounds | null>(null);
+
+	/** The UI-SPEC split view starts at 1024px (Tailwind `lg`). */
+	function splitView(): boolean {
+		return matchMedia('(min-width: 1024px)').matches;
+	}
 	let afterMap = $state<HTMLElement | null>(null);
 
 	function onready(count: number): void {
@@ -46,7 +56,8 @@
 		if (!row) return;
 		spot = null;
 		search.select(id);
-		focusToken++;
+		if (splitView()) scrollToken++;
+		else focusToken++;
 		const rent = formatRent(row.price);
 		announce(`${streetLine(row)}, ${rent ? `${rent} a month` : 'rent not listed'}, selected.`);
 	}
@@ -92,42 +103,65 @@
 		>Skip the map</a
 	>
 
-	<section aria-labelledby="map-heading" class="flex flex-col gap-2">
-		<h3 id="map-heading" class="sr-only">Map of {rows.length} rentals</h3>
-		{#key mode}
-			<LazyMap
-				{rows}
-				newIds={search.newIds}
-				selectedId={search.selectedListingId}
-				highlightedId={search.hoveredListingId}
-				{mode}
-				{fitKey}
-				{active}
-				{onselect}
-				{onspot}
-				onhover={(id) => search.hover(id)}
-				{onready}
-				onShowList={() => search.setView('list')}
-			/>
-		{/key}
-		{#if mode === 'live'}
-			<p class="text-sm">
-				<a
-					href="https://www.openstreetmap.org/fixthemap"
-					class="inline-flex min-h-11 items-center gap-1 text-foreground underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-					>Report a map problem<ExternalLink size={14} aria-hidden="true" /></a
-				>
-			</p>
-		{/if}
-	</section>
+	<div
+		data-map-split
+		class="flex flex-col gap-4 lg:grid lg:grid-cols-[400px_1fr] lg:items-start lg:gap-8"
+	>
+		<div class="hidden lg:block">
+			<SplitList {search} {bounds} {scrollToken} />
+		</div>
+		<section aria-labelledby="map-heading" class="flex min-w-0 flex-col gap-2 lg:sticky lg:top-4">
+			<h3 id="map-heading" class="sr-only">Map of {rows.length} rentals</h3>
+			{#key mode}
+				<LazyMap
+					{rows}
+					newIds={search.newIds}
+					selectedId={search.selectedListingId}
+					highlightedId={search.hoveredListingId}
+					{mode}
+					{fitKey}
+					{active}
+					{onselect}
+					{onspot}
+					onhover={(id) => search.hover(id)}
+					{onready}
+					onbounds={(b) => (bounds = b)}
+					onShowList={() => search.setView('list')}
+				/>
+			{/key}
+			{#if mode === 'live'}
+				<p class="text-sm">
+					<a
+						href="https://www.openstreetmap.org/fixthemap"
+						class="inline-flex min-h-11 items-center gap-1 text-foreground underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+						>Report a map problem<ExternalLink size={14} aria-hidden="true" /></a
+					>
+				</p>
+			{/if}
+		</section>
+	</div>
 
 	<div id="after-map" bind:this={afterMap} tabindex="-1" class="flex flex-col gap-2 outline-none">
-		<SelectedListingPreview
-			row={selectedRow}
-			{spot}
-			provenance={search.provenance}
-			newIds={search.newIds}
-			{focusToken}
-		/>
+		<!-- From 1024px the split list shows the selection; a spot list still appears here. -->
+		<div class={spot ? 'contents' : 'contents lg:hidden'}>
+			<SelectedListingPreview
+				row={selectedRow}
+				{spot}
+				provenance={search.provenance}
+				newIds={search.newIds}
+				{focusToken}
+			/>
+		</div>
 	</div>
 </div>
+
+<style>
+	/* Split view (UI-SPEC): the sticky map fills the viewport height, minimum 480px. */
+	@media (min-width: 1024px) {
+		[data-map-split] :global(.tran-map),
+		[data-map-split] :global([data-map-loading]) {
+			height: calc(100dvh - 128px);
+			min-height: 480px;
+		}
+	}
+</style>
