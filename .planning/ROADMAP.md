@@ -286,7 +286,7 @@ Plans:
 - [x] 07-13-PLAN.md — Markets page + ZIP dashboard; E2E cap 5, cost labels, chart a11y/tokens/CSP (wave 4)
 - [x] 07-14-PLAN.md — Buy-box repo on Phase 4 saved searches/scheduler, local matches, 0-call quick metrics (wave 4) (completed 2026-10-05)
 - [x] 07-15-PLAN.md — Autofill rent/value with cost first and provenance chips; E2E (wave 5)
-- [ ] 07-16-PLAN.md — Saved deals list + side-by-side compare (table / stacked at 375px); E2E (wave 5)
+- [x] 07-16-PLAN.md — Saved deals list + side-by-side compare (table / stacked at 375px); E2E (wave 5)
 - [ ] 07-17-PLAN.md — Memo prompt (FACTS only), number/advice post-checks, memo page; E2E gating (wave 5)
 - [ ] 07-18-PLAN.md — Buy boxes page, Load ZIP rents, Deep analyze (2 calls); E2E call counts (wave 6)
 - [ ] 07-19-PLAN.md — (print) PrintReport shell + print.css, /print/memo/; E2E print media + PDF pages (wave 6)
@@ -460,7 +460,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
-| 7. Investor Portal | 15/21 | In Progress|  |
+| 7. Investor Portal | 16/21 | In Progress|  |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |

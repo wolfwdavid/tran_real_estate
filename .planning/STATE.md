@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 07-15-PLAN.md
-last_updated: "2026-10-06T03:40:49.721Z"
+stopped_at: Completed 07-16-PLAN.md
+last_updated: "2026-10-06T03:44:31.375Z"
 progress:
   total_phases: 11
   completed_phases: 6
   total_plans: 206
-  completed_plans: 116
+  completed_plans: 117
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 07 (Investor Portal) — EXECUTING
-Plan: 15 of 21 (waves 1-4 complete; next wave 5: 07-15, 07-16, 07-17)
+Plan: 16 of 21 (waves 1-4 complete; next wave 5: 07-15, 07-16, 07-17)
 
 ## Performance Metrics
 
@@ -162,6 +162,7 @@ Plan: 15 of 21 (waves 1-4 complete; next wave 5: 07-15, 07-16, 07-17)
 | Phase 07 P13 | 45min | 3 tasks | 8 files |
 | Phase 07 P12 | 45min | 3 tasks | 12 files |
 | Phase 07 P15 | 40min | 3 tasks | 9 files |
+| Phase 07 P16 | 50min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -386,6 +387,7 @@ Recent decisions affecting current work:
 - [Phase 07]: 07-13: market reads peek in both modes; Watch ZIP always via loadMarket (0 calls cached/sample, 1 new); watch form keyed on runtime.gateway
 - [Phase 07]: 07-12: analyzer working draft uses a fixed uuid-shaped DRAFT_ID (backup rows must be uuid Syncables), not 'current'
 - [Phase 07]: 07-15: autofill cap outcome mirrors market-load (runtime CapPrompt issues grants; retry re-runs runAutofill); AnalyzerForm wraps AnalyzerPage slots; autofill button aria-disabled in flight to keep focus
+- [Phase 07]: 07-16: compare checkbox is native input (aria-disabled + preventDefault at cap); remove-from-comparison focuses the shifted-in column's remove button else h1
 
 ### Pending Todos
 
@@ -408,7 +410,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T03:40:49.711Z
-Stopped at: Completed 07-15-PLAN.md
+Last session: 2026-10-06T03:44:31.364Z
+Stopped at: Completed 07-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
