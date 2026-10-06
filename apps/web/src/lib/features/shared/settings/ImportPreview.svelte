@@ -184,7 +184,7 @@
 			</div>
 		{:else}
 			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-			<div class="overflow-x-auto" tabindex="0" role="region" aria-label={caption}>
+			<div class="relative overflow-x-auto" tabindex="0" role="region" aria-label={caption}>
 				<table class="w-full min-w-[22rem] border-collapse text-body">
 					<caption class="mb-2 text-left text-label text-muted-foreground">{caption}</caption>
 					{#if mode === 'merge'}

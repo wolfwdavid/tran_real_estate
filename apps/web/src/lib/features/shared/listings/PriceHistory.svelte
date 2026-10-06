@@ -88,7 +88,7 @@
 		<Sparkline values={points} />
 
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-		<div class="overflow-x-auto" tabindex="0" role="region" aria-label={CAPTION}>
+		<div class="relative overflow-x-auto" tabindex="0" role="region" aria-label={CAPTION}>
 			<table class="w-full min-w-[22rem] border-collapse text-base leading-[1.6]">
 				<caption class="mb-2 text-left text-label text-muted-foreground">{CAPTION}</caption>
 				<thead>

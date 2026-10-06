@@ -36,7 +36,7 @@
 	</p>
 {:else}
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-	<div class="overflow-x-auto" tabindex="0" role="region" aria-label={CAPTION}>
+	<div class="relative overflow-x-auto" tabindex="0" role="region" aria-label={CAPTION}>
 		<table class="w-full min-w-[30rem] border-collapse text-base leading-[1.6]" data-comparables>
 			<caption class="mb-2 text-left text-label text-muted-foreground">
 				<span class="inline-flex flex-wrap items-center gap-2"
