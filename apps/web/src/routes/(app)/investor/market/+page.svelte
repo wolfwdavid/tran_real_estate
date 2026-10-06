@@ -1,6 +1,6 @@
 <script lang="ts">
 	// /investor/market/ (INV-05). Prerendered as "ZIP market"; the ZIP travels as ?zip= and is read
-	// only in onMount (page.url.searchParams throws while prerendering). The dashboard itself
+	// only in onMount (reading the query from page.url throws while prerendering). The dashboard itself
 	// arrives in a later plan.
 	import { onMount } from 'svelte';
 	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
