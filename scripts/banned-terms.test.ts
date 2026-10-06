@@ -7,6 +7,8 @@ import { dirname, join, relative, sep } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { collectFiles } from './banned-terms.mjs';
 import {
+	AGENT_BANNED,
+	AGENT_SCOPES,
 	EXCLUDED,
 	INVESTOR_BANNED,
 	INVESTOR_SCOPES,
@@ -374,6 +376,73 @@ describe('Phase 7 investor-scoped phrases (07-UI-SPEC Copywriting Contract)', ()
 			});
 		}
 		withTree({ [PAGE]: '<p>This one is a cash cow.</p>\n' }, (dir) => {
+			expect(runCli(dir).status).toBe(0);
+		});
+	});
+});
+
+describe('Phase 8 agent-scoped phrases (08-UI-SPEC voice rules)', () => {
+	const AGENT = 'apps/web/src/lib/features/agent/crm/x.svelte';
+
+	test.each([
+		['sync', 'We sync your leads.'],
+		['inbox connection', 'Set up an inbox connection.'],
+		['automatically sends', 'Tran automatically sends a reply.'],
+		['sms consent', 'I agree to SMS consent terms.'],
+		['auto-reply', 'Turn on auto-reply.']
+	])('flags %j in agent copy', (label, text) => {
+		const hits = findBanned(AGENT, `<p>${text}</p>\n`);
+		expect(hits.some((h) => h.includes(`"${label}"`))).toBe(true);
+	});
+
+	test.each([
+		'Copy the draft, then send it from your own email.',
+		'Saved on this device only.',
+		'async function load() {}'
+	])('accepts agent copy %j', (text) => {
+		expect(findBanned(AGENT, text)).toEqual([]);
+	});
+
+	test('scoping: agent phrases outside agent scopes are not flagged', () => {
+		expect(findBanned(PAGE, 'We sync your leads.')).toEqual([]);
+	});
+
+	test('every agent scope applies the list, and SCOPE scans the agent folders', () => {
+		for (const scope of AGENT_SCOPES) {
+			expect(findBanned(`${scope}x.svelte`, 'Turn on auto-reply.'), scope).toHaveLength(1);
+		}
+		expect(AGENT_BANNED.length).toBeGreaterThan(0);
+		expect(SCOPE).toEqual(
+			expect.arrayContaining(['apps/web/src/lib/features/agent', 'apps/web/src/lib/leads'])
+		);
+	});
+
+	test('CLI fails on global banned terms planted in features/agent and lib/leads', () => {
+		for (const [rel, text, needle] of [
+			['apps/web/src/lib/features/agent/crm/x.svelte', '<p>guaranteed results</p>\n', 'guarantee'],
+			['apps/web/src/lib/leads/x.ts', "export const t = 'we represent you';\n", 'we represent']
+		]) {
+			withTree({ [rel]: text }, (dir) => {
+				expect(collectFiles(dir)).toEqual([rel]);
+				const r = runCli(dir);
+				expect(r.status, rel).toBe(1);
+				expect(r.out).toContain(needle);
+			});
+		}
+	});
+
+	test('CLI fails on agent phrases in the agent routes and the public inquiry route', () => {
+		for (const rel of [
+			'apps/web/src/routes/(app)/agent/+page.svelte',
+			'apps/web/src/routes/(public)/agent/inquire/+page.svelte'
+		]) {
+			withTree({ [rel]: '<p>Tran automatically sends a reply.</p>\n' }, (dir) => {
+				const r = runCli(dir);
+				expect(r.status, rel).toBe(1);
+				expect(r.out).toContain('automatically sends');
+			});
+		}
+		withTree({ [PAGE]: '<p>Tran automatically sends a reply.</p>\n' }, (dir) => {
 			expect(runCli(dir).status).toBe(0);
 		});
 	});

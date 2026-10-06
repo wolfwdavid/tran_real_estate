@@ -28,6 +28,10 @@ export const BANNED = [
 	['thousands of', new RegExp(`\\b${words('thousands of')}\\b`, 'i')]
 ];
 
+// Phase 8: agent CRM and inquiry copy. Named once so SCOPE and AGENT_SCOPES cannot drift apart.
+const AGENT_FEATURES = 'apps/web/src/lib/features/agent';
+const LEADS = 'apps/web/src/lib/leads';
+
 /** Repo-relative folders whose copy is scanned. */
 export const SCOPE = [
 	'apps/web/src/routes',
@@ -41,7 +45,10 @@ export const SCOPE = [
 	'apps/web/src/lib/features/investor',
 	'apps/web/src/lib/features/shared/markets',
 	'apps/web/src/lib/features/shared/print',
-	'apps/web/src/lib/features/shared/nav'
+	'apps/web/src/lib/features/shared/nav',
+	// Phase 8: agent CRM and inquiry copy (the (public) inquiry route is already under routes).
+	AGENT_FEATURES,
+	LEADS
 ];
 
 /**
@@ -95,10 +102,33 @@ export const INVESTOR_BANNED = [
 	['we recommend', new RegExp(`\\b${words('we recommend')}\\b`, 'i')]
 ];
 
+/**
+ * Phase 8 (08-UI-SPEC voice rules): agent copy never claims Tran syncs a mailbox or sends
+ * anything on the agent's behalf (every send is human-in-the-loop) and carries no SMS/text consent
+ * language. Brokerage, appraisal and guarantee wording is already in the global list. Scoped to the
+ * agent routes, the public inquiry route, the agent feature folder and the leads library.
+ */
+export const AGENT_SCOPES = [
+	'apps/web/src/routes/(app)/agent/',
+	'apps/web/src/routes/(public)/',
+	`${AGENT_FEATURES}/`,
+	`${LEADS}/`
+];
+
+/** @type {ReadonlyArray<readonly [string, RegExp]>} */
+export const AGENT_BANNED = [
+	['sync', /\bsync(?:s|ed|ing)?\b/i],
+	['inbox connection', new RegExp(`\\b${words('inbox connection')}s?\\b`, 'i')],
+	['automatically sends', /\bautomatically\s+send(?:s|ing)?\b/i],
+	['sms consent', /\b(?:sms|text(?:\s+message)?)\s+consent\b/i],
+	['auto-reply', /\bauto[-\s]?repl(?:y|ies|ied)\b/i]
+];
+
 /** Each path-scoped list with the folders it applies to (the global BANNED applies everywhere). */
 const SCOPED_LISTS = [
 	{ scopes: RENTER_SCOPES, list: RENTER_BANNED },
-	{ scopes: INVESTOR_SCOPES, list: INVESTOR_BANNED }
+	{ scopes: INVESTOR_SCOPES, list: INVESTOR_BANNED },
+	{ scopes: AGENT_SCOPES, list: AGENT_BANNED }
 ];
 
 export const SCANNED_EXT = /\.(svelte|ts|js|md)$/i;

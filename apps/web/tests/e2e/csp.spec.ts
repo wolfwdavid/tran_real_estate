@@ -152,3 +152,47 @@ test('real Settings dialogs, radios and checkboxes run with zero CSP violations'
 	// bits-ui writes styles through the CSSOM only: no <style> elements were injected.
 	expect(await styleCount()).toBe(stylesBefore);
 });
+
+// Phase 8: the agent logo is an IndexedDB blob rendered through URL.createObjectURL, so the built
+// policy must allow img-src blob: (same-origin script is the only thing that can mint one).
+test('a same-origin blob: image (agent logo path) loads with zero CSP violations', async ({
+	page
+}) => {
+	await installCollector(page);
+	await page.goto('agent/');
+	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	const width = await page.evaluate(async () => {
+		const c = document.createElement('canvas');
+		c.width = 4;
+		c.height = 2;
+		const ctx = c.getContext('2d')!;
+		ctx.fillRect(0, 0, 4, 2);
+		const blob = await new Promise<Blob>((r) => c.toBlob((b) => r(b!), 'image/png'));
+		const url = URL.createObjectURL(blob);
+		const img = document.createElement('img');
+		img.alt = 'probe';
+		img.src = url;
+		document.body.append(img);
+		await img.decode();
+		const w = img.naturalWidth;
+		URL.revokeObjectURL(url);
+		img.remove();
+		return w;
+	});
+	expect(width).toBe(4);
+	expect(await violations(page)).toEqual([]);
+});
+
+// The widening is blob: only: a data: image is still refused by img-src.
+test('a data: image is still blocked by img-src', async ({ page }) => {
+	await installCollector(page);
+	await page.goto('agent/');
+	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await page.evaluate(() => {
+		const img = document.createElement('img');
+		img.alt = 'probe';
+		img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+		document.body.append(img);
+	});
+	await expect.poll(() => violations(page)).toContainEqual(expect.stringMatching(/^img-src/));
+});
