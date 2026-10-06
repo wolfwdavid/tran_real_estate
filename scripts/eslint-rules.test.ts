@@ -700,3 +700,72 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(2);
 	});
 });
+
+describe('agent and public boundaries (lintText, in memory)', () => {
+	const CRM = `${WEB}/lib/features/agent/crm/__lintfix__/x.ts`;
+	const PIPELINE = `${WEB}/routes/(app)/agent/pipeline/__lintfix__/+page.svelte`;
+	const STUDIO = `${WEB}/routes/(app)/agent/studio/snapshot/__lintfix__/+page.svelte`;
+	const INQUIRE = `${WEB}/routes/(public)/agent/inquire/__lintfix__/+page.svelte`;
+	const gatewayErrors = (messages: Message[]) =>
+		errorsFor(messages, 'no-restricted-imports').filter((m) =>
+			m.message.includes('RentCast gateway')
+		);
+
+	test('the agent CRM may not import the RentCast gateway', async () => {
+		const messages = await lint(CRM, importModule('$lib/data/rentcast/client'));
+		expectNoParseErrors(messages);
+		expect(gatewayErrors(messages)).toHaveLength(1);
+		const port = await lint(CRM, importModule('$lib/data'));
+		expectNoParseErrors(port);
+		expect(gatewayErrors(port)).toHaveLength(1);
+	});
+
+	test('the merged agent entry keeps the cross-portal ban', async () => {
+		const messages = await lint(CRM, importModule('$lib/features/renter/thing'));
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('features/agent and features/shared');
+	});
+
+	test('agent routes may not import the gateway either', async () => {
+		const messages = await lint(PIPELINE, svelteImports('$lib/data/x'));
+		expectNoParseErrors(messages);
+		expect(gatewayErrors(messages)).toHaveLength(1);
+	});
+
+	test('the agent/studio carve-out may use the gateway port but keeps the cross-portal ban', async () => {
+		const ok = await lint(STUDIO, svelteImports('$lib/data'));
+		expectNoParseErrors(ok);
+		expect(errorsFor(ok, 'no-restricted-imports')).toEqual([]);
+		const internals = await lint(STUDIO, svelteImports('$lib/data/x'));
+		expectNoParseErrors(internals);
+		expect(gatewayErrors(internals)).toEqual([]);
+		const cross = await lint(STUDIO, svelteImports('$lib/features/renter/x'));
+		expectNoParseErrors(cross);
+		const errors = errorsFor(cross, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('features/studio');
+	});
+
+	test.each([
+		'$lib/storage/db',
+		'$lib/features/agent/ui/StageBadge.svelte',
+		'$lib/ai/x',
+		'$lib/security/x',
+		'$lib/data'
+	])('the (public) inquiry page may not import %s', async (spec) => {
+		const messages = await lint(INQUIRE, svelteImports(spec));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
+	});
+
+	test('the (public) inquiry page may import lib/leads and @tran/core', async () => {
+		const messages = await lint(
+			INQUIRE,
+			svelteImports('$lib/leads/web3forms-sink', '@tran/core/leads/lead-block')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+});

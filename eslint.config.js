@@ -63,6 +63,12 @@ const SHARED_NO_PORTALS = forbid(
 	'Shared features must not import a portal folder.'
 );
 const restricted = (...patterns) => ['error', { patterns }];
+// Phase 8: the agent CRM spends zero RentCast calls (AGT-02/AGT-04). Bans the gateway port itself,
+// not only its internals. Phase 9's studio routes are carved out below.
+const AGENT_NO_GATEWAY = forbid(
+	['data'],
+	'The agent CRM never touches the RentCast gateway. Market data features live in features/studio (Phase 9).'
+);
 
 export default defineConfig(
 	{ ignores: ['**/build/', '**/build-sub/', '**/.svelte-kit/', '**/test-results/', '.planning/'] },
@@ -164,6 +170,9 @@ export default defineConfig(
 							PORTALS.filter((o) => o !== p).map((o) => `features/${o}`),
 							`The ${p} portal may import only features/${p} and features/shared.`
 						),
+						// Merged into the SAME entry as the cross-portal ban: a later agent-only block
+						// would replace these patterns instead of adding to them (flat config).
+						...(p === 'agent' ? [AGENT_NO_GATEWAY] : []),
 						DATA_INTERNALS,
 						MAP_LIBS
 					]
@@ -171,6 +180,36 @@ export default defineConfig(
 			]
 		}
 	})),
+	{
+		// Phase 9 Market Studio carve-out: the snapshot routes (and features/studio) legitimately
+		// read market data through the gateway port. This narrower, later entry REPLACES the agent
+		// entry's patterns for these files: the cross-portal ban stays, the gateway ban does not.
+		files: [`${WEB}/routes/(app)/agent/studio/**`, `${WEB}/lib/features/studio/**`],
+		rules: {
+			'no-restricted-imports': restricted(
+				forbid(
+					['features/renter', 'features/investor'],
+					'The agent portal may import only features/agent, features/studio and features/shared.'
+				),
+				DATA_INTERNALS,
+				MAP_LIBS
+			)
+		}
+	},
+	{
+		// The public inquiry page (/agent/inquire/) runs in a lead's browser with no app state:
+		// no Dexie, no vault, no AI, no data layer, no portal features.
+		files: [`${WEB}/routes/(public)/**`],
+		rules: {
+			'no-restricted-imports': restricted(
+				forbid(
+					['storage', 'ai', 'data', 'security', 'features'],
+					"The public inquiry page runs in a visitor's browser: it may import only lib/leads, lib/components and @tran/core."
+				),
+				MAP_LIBS
+			)
+		}
+	},
 	{
 		// features/shared is reused by every portal (and Phase 10 marketing): never a portal folder.
 		files: [`${WEB}/lib/features/shared/**`],
