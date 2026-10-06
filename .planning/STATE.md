@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 06 (Renter Portal) — EXECUTING
-Plan: 18 of 22 (waves 1-4 complete; next wave 5: 06-15..06-18)
+Plan: 18 of 22 (waves 1-5 complete, full E2E 714; next wave 6: 06-19, 06-20)
 
 ## Performance Metrics
 
