@@ -66,10 +66,11 @@
 		</div>
 	</dl>
 
+	{#if result}
+		<ProvenanceRow provenance={result.provenance} {onRefresh} />
+	{/if}
 	{#if error}
 		<GatewayError {error} actions={false} />
-	{:else if result}
-		<ProvenanceRow provenance={result.provenance} {onRefresh} />
 	{/if}
 
 	<div class="mt-auto flex flex-wrap items-center gap-2">
