@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { ROUTES, CHROME_ROUTES, NOT_FOUND, APP_ROUTES, isPrintRoute } from './routes';
+import { ROUTES, CHROME_ROUTES, NOT_FOUND, PORTAL_ROUTES, isPrintRoute } from './routes';
 
 // Phase 2 chrome proof (BRND-01/03/04/05). The shared header (PortalSwitcher), footer and page
 // shells are exercised on every prerendered route plus the 404, under both base paths: landmark
@@ -52,7 +52,7 @@ test('prerendered HTML marks the current portal', async ({ page }) => {
 
 	// The header switcher marks each app page (the inline list and the menu panel both do). A
 	// portal sub-page (renter/shortlist/) marks its portal root as the current section instead.
-	for (const route of APP_ROUTES) {
+	for (const route of PORTAL_ROUTES) {
 		const root = `${route.split('/')[0]}/`;
 		const tags = await anchors(route, 'Portals', route === root ? 'page' : 'true');
 		expect(marked(tags, root), `Portals nav in raw ${route}: ${JSON.stringify(tags)}`).toBe(true);
@@ -281,7 +281,7 @@ test.describe('640px', () => {
 				await expect(inline.getByRole('link', { name, exact: true })).toBeVisible();
 			}
 			const settings = inline.getByRole('link', { name: 'Settings', exact: true });
-			if ((APP_ROUTES as readonly string[]).includes(route)) await expect(settings).toBeVisible();
+			if (PORTAL_ROUTES.includes(route)) await expect(settings).toBeVisible();
 			else await expect(settings).toHaveCount(0);
 		});
 	}

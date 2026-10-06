@@ -29,6 +29,8 @@ export const INVESTOR_ROUTES = [
 	'investor/markets/',
 	'investor/market/'
 ] as const;
+/** Every page rendered by the (app) layout: the portals, their sub-pages and Settings. */
+export const PORTAL_ROUTES: readonly string[] = [...APP_ROUTES, ...INVESTOR_ROUTES];
 export const PRINT = 'print/';
 /** The chrome-free `(print)` surfaces: no header, portal switcher or footer. */
 export const PRINT_ROUTES = [PRINT, 'print/memo/'] as const;
