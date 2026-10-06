@@ -278,7 +278,7 @@ Plans:
 - [x] 07-05-PLAN.md — analyze(), expense lines, defaults, definitions, 9 exact reference cases, fast-check invariants (wave 2)
 - [x] 07-06-PLAN.md — Market series math (rent trend, price-to-rent), summaries, 5-ZIP watch rules (wave 2)
 - [x] 07-07-PLAN.md — Best-in-row comparison and zero-call quick metrics (wave 3)
-- [ ] 07-08-PLAN.md — Memo FACTS + allowed set, sample memo, analysis hash, advice-language check (wave 4)
+- [x] 07-08-PLAN.md — Memo FACTS + allowed set, sample memo, analysis hash, advice-language check (wave 4)
 - [x] 07-09-PLAN.md — Dexie tables + backup, deals and watched-ZIP repos, InvestorDataPort and MarketsPort (wave 3)
 - [x] 07-10-PLAN.md — Analyzer form model, money/percent inputs, unit toggle, expense-lines editor (wave 3)
 - [x] 07-11-PLAN.md — Shared accessible charts (ChartFigure, ZipTrendChart, PriceToRentChart) on LayerChart + token mapping (wave 3)
@@ -460,7 +460,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 4. Data Layer: RentCast Gateway, Budget Guard & Demo Fixtures | 25/25 | Complete    | 2026-10-05 |
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
-| 7. Investor Portal | 10/21 | In Progress|  |
+| 7. Investor Portal | 11/21 | In Progress|  |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 0/TBD | Not started | - |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
