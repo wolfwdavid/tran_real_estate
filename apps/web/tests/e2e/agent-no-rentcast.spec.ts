@@ -17,6 +17,15 @@ import {
 // feature, TCPA).
 
 const ROUTES = ['agent/', ...AGENT_ROUTES] as const;
+/**
+ * Full page loads in the walk below: every route twice, plus the sample-contacts load and the six
+ * single visits (contacts, pipeline, import, contact, profile, inquiry).
+ */
+const PAGE_LOADS = ROUTES.length * 2 + 7;
+/** Per-page budget used by the other route walks (09-09: about 2 s per page on one core). */
+const PER_PAGE_MS = 4_000;
+/** The keyless follow-up draft (its own 20 s wait) plus the import, profile and inquiry forms. */
+const FLOWS_MS = 40_000;
 const CONTACT = 'Jordan Example';
 const MOVED = 'Rowan Specimen';
 
@@ -58,8 +67,9 @@ async function expectNoSms(page: Page, label: string) {
 }
 
 test('every agent flow makes zero RentCast requests and offers no sms: links', async ({ page }) => {
-	// A long single-core walk (about 20 page loads plus a draft): triple the default timeout.
-	test.slow();
+	// A long walk (PAGE_LOADS page loads plus a draft): the budget scales with the pages walked, like
+	// the 09-09 route walks, instead of a fixed multiple of the default timeout.
+	test.setTimeout(PAGE_LOADS * PER_PAGE_MS + FLOWS_MS);
 	visited.length = 0;
 	const hits = await rentcastTripwire(page);
 	const posts = await mockWeb3Forms(page, 'ok');
