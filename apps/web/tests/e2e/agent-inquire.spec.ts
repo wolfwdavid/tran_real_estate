@@ -213,9 +213,17 @@ test.describe('375px', () => {
 		await open(page, VALID, 'Contact Sample Agent');
 		await check(page, 'valid');
 
+		// The axe pass above runs on a flowing page clock and can use up most of the 3-second gate
+		// on a slow machine. Freeze the clock, then re-open the page so its gate starts afresh at the
+		// frozen instant: the fill and the first send happen at zero elapsed time on any machine.
+		// axe schedules its own timers, so the clock flows again before the next check.
+		const now = await page.evaluate(() => Date.now());
+		await page.clock.pauseAt(now + 1000);
+		await open(page, VALID, 'Contact Sample Agent');
 		await fillForm(page);
 		await send(page);
 		await expect(page.locator('[data-inquiry-too-fast]')).toBeVisible();
+		await page.clock.resume();
 		await check(page, 'too-fast');
 
 		await page.clock.fastForward(3500);
