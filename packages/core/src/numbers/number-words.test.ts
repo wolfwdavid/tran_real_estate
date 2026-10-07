@@ -3,6 +3,8 @@ import { describe, expect, test } from 'vitest';
 import { checkNumbers, extractNumerals, findNumberWords } from './index.js';
 import { findNumberWords as direct } from './number-words.js';
 
+const E_ACUTE = String.fromCharCode(0xe9);
+
 function words(text: string): string[] {
 	return findNumberWords(text).map((h) => h.word);
 }
@@ -75,9 +77,9 @@ describe('findNumberWords', () => {
 	test('Unicode-boundary safe: ordinals and embedded words are not hits', () => {
 		expect(findNumberWords('the Seventeenth floor')).toEqual([]);
 		expect(findNumberWords('the eleventh hour')).toEqual([]);
-		expect(findNumberWords('preéleven')).toEqual([]);
-		expect(findNumberWords('étwenty')).toEqual([]);
-		expect(findNumberWords('twentyé')).toEqual([]);
+		expect(findNumberWords(`pr${E_ACUTE}eleven`)).toEqual([]);
+		expect(findNumberWords(`${E_ACUTE}twenty`)).toEqual([]);
+		expect(findNumberWords(`twenty${E_ACUTE}`)).toEqual([]);
 		expect(findNumberWords('percentage points')).toEqual([]);
 	});
 
