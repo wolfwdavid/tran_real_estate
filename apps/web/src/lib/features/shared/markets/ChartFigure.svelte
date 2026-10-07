@@ -1,6 +1,11 @@
 <script lang="ts" module>
 	export type ChartState = 'loading' | 'empty' | 'error' | 'ready';
 
+	/** Print plot width in viewBox units: the 816px sheet minus 2 x 72px margins (09 Pitfall 11). */
+	export const PRINT_VIEWBOX_WIDTH = 672;
+	/** Print plot height in viewBox units when the caller passes none (the 320px screen height). */
+	export const PRINT_VIEWBOX_HEIGHT = 320;
+
 	export const LOADING_TEXT = 'Loading market data…';
 	export const EMPTY_TEXT =
 		'Not enough monthly data for this ZIP yet. RentCast needs at least 2 months of listings to draw a trend.';
@@ -25,9 +30,16 @@
 		summary: string;
 		caveat: string;
 		table: ChartTable;
-		/** Print variant: table open (no <details>), provenance told to drop Refresh. */
+		/**
+		 * Print variant: table open (no <details>), provenance told to drop Refresh, title in Body
+		 * 16/600 (still an h2 unless headingLevel is 3), and the plot laid out in a fixed
+		 * 672-unit viewBox (height `height` or 320) that scales to the sheet width (Phase 9).
+		 */
 		print?: boolean;
-		/** Explicit plot size in px (print); otherwise 256px tall below 768px, 320px from 768px. */
+		/**
+		 * Explicit plot size in px; otherwise 256px tall below 768px, 320px from 768px. In print
+		 * only `height` applies, in viewBox units.
+		 */
 		width?: number;
 		height?: number;
 		provenance?: Snippet<[{ print: boolean }]>;
@@ -57,6 +69,7 @@
 	const summaryId = $derived(`${id}-summary`);
 	const ready = $derived(state === 'ready');
 	const sized = $derived(width !== undefined || height !== undefined);
+	const printHeight = $derived(height ?? PRINT_VIEWBOX_HEIGHT);
 </script>
 
 <figure
@@ -67,7 +80,9 @@
 	<svelte:element
 		this={headingLevel === 3 ? 'h3' : 'h2'}
 		id={titleId}
-		class="font-display text-heading font-semibold text-balance text-foreground"
+		class={print
+			? 'text-base leading-[1.6] font-semibold text-balance text-foreground'
+			: 'font-display text-heading font-semibold text-balance text-foreground'}
 		>{title}</svelte:element
 	>
 
@@ -92,13 +107,28 @@
 		{#if legend && legend.length > 0}
 			<ChartLegend items={legend} />
 		{/if}
-		<div
-			class="{sized ? '' : 'h-64 md:h-80'} relative w-full max-w-full"
-			style:width={width !== undefined ? `${width}px` : undefined}
-			style:height={height !== undefined ? `${height}px` : undefined}
-		>
-			{@render plot?.()}
-		</div>
+		{#if print}
+			<!-- The plot lays out at a fixed 672 x height box; the SVG scales it to the sheet width. -->
+			<svg
+				viewBox="0 0 {PRINT_VIEWBOX_WIDTH} {printHeight}"
+				class="block h-auto w-full max-w-full"
+				data-print-plot
+			>
+				<foreignObject x="0" y="0" width={PRINT_VIEWBOX_WIDTH} height={printHeight}>
+					<div class="relative h-full w-full">
+						{@render plot?.()}
+					</div>
+				</foreignObject>
+			</svg>
+		{:else}
+			<div
+				class="{sized ? '' : 'h-64 md:h-80'} relative w-full max-w-full"
+				style:width={width !== undefined ? `${width}px` : undefined}
+				style:height={height !== undefined ? `${height}px` : undefined}
+			>
+				{@render plot?.()}
+			</div>
+		{/if}
 		<p id={summaryId} class="text-base leading-[1.6] text-foreground">{summary}</p>
 		<p class="text-label text-muted-foreground">{caveat}</p>
 		{#if print}

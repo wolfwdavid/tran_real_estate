@@ -22,6 +22,7 @@
 		title,
 		subtitle,
 		preparedAt,
+		preparedLine,
 		sample,
 		provenance,
 		disclaimer,
@@ -36,6 +37,8 @@
 		title: string;
 		subtitle?: string;
 		preparedAt: Date;
+		/** Phase 9: replaces the prepared line (snapshot: "Prepared {date} by {agent}, {brokerage}"). */
+		preparedLine?: string;
 		sample: boolean;
 		provenance: string;
 		disclaimer: string;
@@ -48,6 +51,10 @@
 		footerNote?: Snippet;
 		children: Snippet;
 	} = $props();
+
+	const prepared = $derived(
+		preparedLine ?? `Prepared ${longDate(preparedAt)} with Tran Real Estate Tools`
+	);
 
 	async function print(): Promise<void> {
 		if (onprint) {
@@ -94,9 +101,7 @@
 		{#if subtitle}
 			<p class="mt-1 text-base leading-[1.6] text-muted-foreground">{subtitle}</p>
 		{/if}
-		<p class="mt-2 text-label text-muted-foreground">
-			Prepared {longDate(preparedAt)} with Tran Real Estate Tools
-		</p>
+		<p class="mt-2 text-label text-muted-foreground">{prepared}</p>
 		<p class="mt-2 text-label font-semibold text-foreground" data-print-disclaimer-short>
 			{disclaimer}
 		</p>
