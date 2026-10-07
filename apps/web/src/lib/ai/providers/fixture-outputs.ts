@@ -10,6 +10,9 @@ export const FIXTURE_OUTPUTS = {
 	// Phase 6 renter outreach (RENT-07): asks whether the home is open instead of claiming it is.
 	'renter/outreach.v1@1':
 		"Hello,\n\nI'm interested in the rental at the address in your listing and have a few questions before I apply.\n\n- Is the home open for a move-in around my preferred date? If not, what is the earliest move-in date?\n- What is your pet policy, and are there pet fees or pet rent?\n- What are the application fee and the security deposit?\n- What lease lengths do you offer, and what is included in the rent?\n\nThank you for your time. I look forward to hearing from you.\n\nBest regards,\n{your_name}",
+	// Phase 8 agent follow-up (AGT-06): no signature block; the footer is appended locally.
+	'agent/followup@1':
+		'Hi {client_first_name},\n\nThanks for reaching out about the home on your list. I would be glad to set up a showing at a time that works for you. Saturday morning and Sunday afternoon are both open right now.\n\nIf it helps, I can also send a few similar homes nearby so you can compare layouts and prices before we meet.\n\nWould either of those times work for you?',
 	default:
 		'Here is a short sample draft. It describes the home, its features, and the next steps, so you can see how drafting works before you add a key.'
 } as const satisfies Readonly<Record<string, string>>;
