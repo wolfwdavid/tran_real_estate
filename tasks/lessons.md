@@ -30,3 +30,11 @@
 - Rule: serialize build + Playwright across parallel executors with a two-stage handshake
   (implement and unit-verify, stop, then "run E2E" one at a time). It ran 14 plans with zero
   build collisions.
+
+## 2026-10-07: watchdog stalls during long gates
+
+- Rule: the session watchdog kills an agent after 600 s with no progress, and a single tool call
+  that runs close to 10 minutes counts as no progress. A Bash timeout of 600000 is therefore a
+  trap. Cap every call at 7 minutes (timeout 420000) and size Playwright chunks to about 5 minutes.
+- Rule: when a gate agent stalls, check `git log` and `git status` first, then resume the same agent
+  with the exact tree state; ask it to commit finished items one by one so a stall loses nothing.
