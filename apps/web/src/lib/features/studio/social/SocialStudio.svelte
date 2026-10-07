@@ -69,17 +69,15 @@
 	const sampleDisclosure = $derived(usingSample && !profileComplete);
 
 	// The disclosure appended to every post: the agent's own once the profile is complete, the
-	// sample agent's while the unedited sample brief is in the form. Otherwise every Copy is gated
-	// with the profile reason, and the block shows what the profile composes so far (or the
-	// sample agent's when there is no profile yet).
-	const disclosureProfile = $derived<ProfileInput>(
-		profileComplete && profile
-			? profile
-			: sampleDisclosure
-				? SAMPLE_AGENT_PROFILE
-				: (profile ?? SAMPLE_AGENT_PROFILE)
+	// sample agent's while the unedited sample brief is in the form. Otherwise none: every Copy is
+	// gated with the profile reason, and showing the sample agent's line under the agent's own
+	// brief would mislabel them (the 09-15 listing rule).
+	const disclosureProfile = $derived<ProfileInput | null>(
+		profileComplete ? profile : sampleDisclosure ? SAMPLE_AGENT_PROFILE : null
 	);
-	const disclosure = $derived(composeDisclosure(disclosureProfile, { variant: 'ad-inline' }).text);
+	const disclosure = $derived(
+		disclosureProfile ? composeDisclosure(disclosureProfile, { variant: 'ad-inline' }).text : ''
+	);
 
 	const errors = $derived(validateSocialForm(form));
 	const briefValid = $derived(errors.brief === undefined);

@@ -293,6 +293,8 @@ test('an incomplete profile gates every Copy once the brief is the agent own', a
 		await expect(
 			card(page, platform).getByText(new RegExp(`${PROFILE_REASON_END}$`))
 		).toBeVisible();
+		// No sample agent's disclosure under the agent's own brief.
+		await expect(card(page, platform).locator('[data-section-footer]')).toHaveCount(0);
 	}
 });
 
