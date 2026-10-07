@@ -2,7 +2,7 @@
 // zero RentCast calls and the public inquiry page touches no app internals. eslint.config.js bans
 // the DIRECT imports; this walks the whole graph so a shared barrel cannot smuggle lib/data in.
 // The planted control proves the walker reports a gateway two hops away (no vacuous green).
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { posix, resolve } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { importGraph, type GraphFs, walkFiles } from '../tooling/import-graph';
@@ -24,12 +24,33 @@ const agentEntries = [
 	...publicEntries
 ].filter(isSource);
 
+// The one lib/data module agent code may reach: the Phase 4 Dexie store schemas, which
+// lib/storage/db.ts needs to open the shared database that every agent repository uses. It is the
+// same single exemption eslint.config.js grants storage ("$lib/data/tables and nothing else from
+// lib/data"). It holds schema strings, row types and backup-registry constants only; the test
+// below proves it stays a leaf (no local imports, no network), so it can never become a path to
+// the RentCast gateway.
+const DATA_TABLES = posix.join(LIB, 'data/tables.ts');
+
 describe('agent and public import-graph boundaries', () => {
 	test('agent CRM, lib/leads and the public inquiry page never reach lib/data (transitively)', () => {
 		// Non-vacuity: routes/(app)/agent/+page.svelte exists from Phase 2 onwards.
 		expect(agentEntries.length).toBeGreaterThan(0);
-		const reached = [...importGraph(agentEntries, LIB)].filter(under(posix.join(LIB, 'data')));
+		const reached = [...importGraph(agentEntries, LIB)].filter(
+			(f) => under(posix.join(LIB, 'data'))(f) && f !== DATA_TABLES
+		);
 		expect(reached).toEqual([]);
+	});
+
+	test('the exempted store schema module is a leaf with no network access', () => {
+		expect(existsSync(DATA_TABLES)).toBe(true);
+		// Its whole local graph is itself: anything it imported would be walked into here.
+		expect([...importGraph([DATA_TABLES], LIB)]).toEqual([DATA_TABLES]);
+		const src = readFileSync(DATA_TABLES, 'utf8');
+		expect(src).not.toMatch(/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon/);
+		// Only type-level imports from workspace packages (they never import web code).
+		const imports = [...src.matchAll(/^import\b.*$/gm)].map((m) => m[0]);
+		expect(imports.every((l) => l.startsWith('import type '))).toBe(true);
 	});
 
 	test('the (public) route group either exists with sources or not at all', () => {
