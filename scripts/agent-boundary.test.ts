@@ -101,3 +101,38 @@ describe('agent and public import-graph boundaries', () => {
 		expect(svelte.has('/v/lib/data/rentcast/c.ts')).toBe(true);
 	});
 });
+
+// TCPA (RESEARCH, CAN-SPAM section): Tran has no SMS feature, so no agent CRM or public inquiry
+// source may build an sms: link. URL schemes are case-insensitive, so the match is too.
+const SMS_SCHEME = /\bsms:/i;
+const SMS_ROOTS = [
+	posix.join(LIB, 'features/agent'),
+	posix.join(LIB, 'leads'),
+	posix.join(LIB, 'components/inquiry'),
+	posix.join(WEB, 'routes/(app)/agent'),
+	PUBLIC_ROUTES
+];
+const filesWithSms = (files: readonly string[], read: (f: string) => string) =>
+	files.filter((f) => SMS_SCHEME.test(read(f)));
+
+describe('no SMS surface', () => {
+	test('no sms: links anywhere in the agent CRM or public inquiry sources', () => {
+		const files = SMS_ROOTS.flatMap((d) => walkFiles(d)).filter((f) => /\.(ts|js|svelte)$/.test(f));
+		// Non-vacuity: every root exists and holds sources.
+		for (const d of SMS_ROOTS) expect(files.some(under(d)), d).toBe(true);
+		expect(filesWithSms(files, (f) => readFileSync(f, 'utf8'))).toEqual([]);
+	});
+
+	test('planted control: the matcher reports an sms: href in any case', () => {
+		const planted = new Map<string, string>([
+			['/v/a.svelte', '<a href="sms:+15555550100">Text me</a>'],
+			['/v/b.ts', 'const href = `SMS:${phone}`;'],
+			['/v/c.svelte', '<a href="mailto:a@example.com">Email</a> <p>Texting is not offered.</p>'],
+			['/v/d.ts', "const label = 'smsCount: 0';"]
+		]);
+		expect(filesWithSms([...planted.keys()], (f) => planted.get(f) ?? '')).toEqual([
+			'/v/a.svelte',
+			'/v/b.ts'
+		]);
+	});
+});

@@ -87,3 +87,56 @@ test('export bytes are Excel-safe and injection-safe', async ({ page }) => {
 	await expect(announcer(page)).toHaveText(`Downloaded ${filename}.`);
 	await expect(page.locator('[data-csv-export-empty]')).toHaveCount(0);
 });
+
+test('export re-imports as Already in contacts (browser round trip)', async ({ page }) => {
+	// Three real contacts whose notes exercise the CSV escapes: quotes, commas and a line break in
+	// one, a formula trigger in another (exported with a neutralizing apostrophe, read back exactly).
+	await addLeadByHand(page, {
+		name: 'Avery Round',
+		email: 'avery.round@example.com',
+		notes: '"quoted", commas, and a\nnew line'
+	});
+	await addLeadByHand(page, {
+		name: 'Blake Round',
+		email: 'blake.round@example.com',
+		phone: '(555) 555-0150',
+		notes: '=SUM(1)'
+	});
+	await addLeadByHand(page, { name: 'Casey Round', phone: '(555) 555-0151', stage: 'Touring' });
+
+	const [dl] = await Promise.all([page.waitForEvent('download'), exportButton(page).click()]);
+	const path = await dl.path();
+	const text = readFileSync(path, 'utf8');
+	expect(text).toContain(`"'=SUM(1)"`);
+	// Quotes doubled, the line break kept inside the quoted cell.
+	expect(text).toMatch(/"""quoted"", commas, and a\r?\nnew line"/);
+	for (const name of ['Avery Round', 'Blake Round', 'Casey Round']) expect(text).toContain(name);
+
+	await page.goto('agent/import/');
+	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expect(page.getByRole('heading', { level: 1, name: 'Import leads' })).toBeVisible();
+	const csv = page.locator('#csv');
+	await csv.getByLabel('Choose CSV file').setInputFiles(path);
+	await csv.getByRole('button', { name: 'Check file' }).click();
+
+	const review = page.getByTestId('import-review');
+	await expect(
+		review.getByRole('heading', { level: 3, name: 'Review before adding' })
+	).toBeFocused();
+	const count = (term: string) =>
+		review
+			.locator('dt', { hasText: new RegExp(`^${term}$`) })
+			.locator('xpath=following-sibling::dd[1]');
+	await expect(count('Already in contacts')).toHaveText('3');
+	await expect(count('New')).toHaveText('0');
+	await expect(count('Updates')).toHaveText('0');
+	await expect(count("Can't import")).toHaveText('0');
+	await expect(announcer(page)).toHaveText(
+		'Checked. 0 new, 0 updates, 3 already in contacts. Review before adding.'
+	);
+	for (const name of ['Avery Round', 'Blake Round', 'Casey Round']) {
+		await expect(review.getByText(`Matches ${name}. Nothing new to add.`)).toBeVisible();
+	}
+	// Nothing is selectable: a duplicate row has no include checkbox.
+	await expect(review.getByRole('checkbox')).toHaveCount(0);
+});
