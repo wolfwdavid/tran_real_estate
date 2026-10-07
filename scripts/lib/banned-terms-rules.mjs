@@ -5,6 +5,7 @@
 // carry no fabricated testimonials or metrics. Word phrases match across any whitespace (Prettier
 // wraps long Svelte text at printWidth 100), case-insensitively, with explicit inflections.
 // Symbols are matched literally and as HTML entities. There is deliberately no allowlist.
+// Studio paths (Phase 9) also check STUDIO_BANNED; there is still no allowlist.
 
 /** @param {string} s */
 const words = (s) => s.trim().split(/\s+/).join('\\s+');
@@ -48,7 +49,9 @@ export const SCOPE = [
 	'apps/web/src/lib/features/shared/nav',
 	// Phase 8: agent CRM and inquiry copy (the (public) inquiry route is already under routes).
 	AGENT_FEATURES,
-	LEADS
+	LEADS,
+	// Phase 9: agent content studio (studio and snapshot routes are already under routes).
+	'apps/web/src/lib/features/studio'
 ];
 
 /**
@@ -124,11 +127,43 @@ export const AGENT_BANNED = [
 	['auto-reply', /\bauto[-\s]?repl(?:y|ies|ied)\b/i]
 ];
 
+/**
+ * Phase 9 (09-UI-SPEC Copywriting Contract): studio copy never offers a CMA or a valuation, never
+ * ranks the agent, and never steers buyers with neighborhood or household claims (Fair Housing).
+ * The required report labels are worded to pass as-is, so there is still no allowlist. Scoped to
+ * the studio feature folder, the studio routes and the snapshot printout. Prompt and lexicon data
+ * under lib/ai and packages/core are out of scope.
+ */
+export const STUDIO_SCOPE = [
+	'apps/web/src/lib/features/studio/',
+	'apps/web/src/routes/(app)/agent/studio/',
+	'apps/web/src/routes/(print)/print/snapshot/'
+];
+
+/** @type {ReadonlyArray<readonly [string, RegExp]>} */
+export const STUDIO_BANNED = [
+	// Case-sensitive on purpose: the acronym only.
+	['CMA', /\bCMAs?\b/],
+	['home is worth', /\bhomes?\s+(?:is|are)\s+worth\b/i],
+	['home value estimate', /\bhome\s+value\s+estimates?\b/i],
+	['free valuation', /\bfree\s+(?:home\s+)?valuations?\b/i],
+	['top producer', /\btop[-\s]producers?\b/i],
+	['#1 agent', /(?<![\w#])#1\s+agents?\b/i],
+	['number one agent', /\bnumber\s+one\s+agents?\b/i],
+	['record-breaking', /\brecord[-\s]breaking\b/i],
+	['family-friendly', /\bfamily[-\s]friendly\b/i],
+	['perfect for', new RegExp(`\\b${words('perfect for')}\\b`, 'i')],
+	['safe neighborhood', /\bsafe\s+neighbou?rhoods?\b/i],
+	['great schools', /\bgreat\s+schools?\b/i],
+	['exclusive community', /\bexclusive\s+communit(?:y|ies)\b/i]
+];
+
 /** Each path-scoped list with the folders it applies to (the global BANNED applies everywhere). */
 const SCOPED_LISTS = [
 	{ scopes: RENTER_SCOPES, list: RENTER_BANNED },
 	{ scopes: INVESTOR_SCOPES, list: INVESTOR_BANNED },
-	{ scopes: AGENT_SCOPES, list: AGENT_BANNED }
+	{ scopes: AGENT_SCOPES, list: AGENT_BANNED },
+	{ scopes: STUDIO_SCOPE, list: STUDIO_BANNED }
 ];
 
 export const SCANNED_EXT = /\.(svelte|ts|js|md)$/i;
