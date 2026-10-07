@@ -230,6 +230,29 @@ describe('ReelScriptView', () => {
 		expect(textOf(empty)).toContain('The beat table appears here once a script is written.');
 		expect(empty).not.toMatch(/<table/);
 	});
+
+	test('while streaming, partial text is not a parse failure; once the run ends it is', () => {
+		const full = sampleReel(SAMPLE_REEL_BEATS);
+		// A stream cut off inside the third beat: HOOK and MANUAL PAIN only, so it cannot parse yet.
+		const partial = full.slice(0, full.indexOf('BEFORE AND AFTER'));
+		expect(partial.trim()).not.toBe('');
+		expect(scriptView(partial, 30, true)).toEqual({ kind: 'empty' });
+		expect(scriptView(partial, 30, false)).toEqual({ kind: 'unparsed' });
+		expect(scriptView(partial, 30)).toEqual({ kind: 'unparsed' });
+
+		const streaming = html(ReelScriptView, { draft: partial, length: 30, streaming: true });
+		expect(textOf(streaming)).toContain('The beat table appears here once a script is written.');
+		expect(textOf(streaming)).not.toContain("Tran couldn't split this script into beats");
+		expect(streaming).toContain('data-reel-view-state="empty"');
+
+		const ended = html(ReelScriptView, { draft: partial, length: 30, streaming: false });
+		expect(textOf(ended)).toContain("Tran couldn't split this script into beats");
+		expect(ended).toContain('data-reel-view-state="unparsed"');
+
+		// Text that already parses mid-stream shows the beats; streaming never hides a valid script.
+		expect(scriptView(full, 30, true).kind).toBe('beats');
+		expect(html(ReelScriptView, { draft: full, length: 30, streaming: true })).toMatch(/<table/);
+	});
 });
 
 describe('AiDisclosureChecklist', () => {

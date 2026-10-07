@@ -127,6 +127,8 @@
 	let repo = $state<ArtifactRepo | null>(null);
 	let savedId = $state<string | null>(null);
 	let draftText = $state('');
+	/** True while the panel is connecting or streaming: the partial text is not judged as a script. */
+	let running = $state(false);
 	let refreshKey = $state(0);
 	let clearOpen = $state(false);
 	let clearedJustNow = false;
@@ -336,6 +338,7 @@
 				bind:this={panel}
 				bind:savedId
 				bind:draftText
+				bind:running
 				feature="studio-reel"
 				promptId="studio/reel.v1"
 				{inputs}
@@ -354,7 +357,7 @@
 			/>
 		</div>
 
-		<ReelScriptView draft={draftText} {length} />
+		<ReelScriptView draft={draftText} {length} streaming={running} />
 
 		<div class="flex max-w-reading min-w-0 flex-col gap-8">
 			<AiDisclosureChecklist />

@@ -16,7 +16,7 @@
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
 	// formatForExit (Phase 9), onExit, subjectId and beforeGenerate (Phase 6), checkGroups and artifactMeta (Phase 7), and the
-	// read-only bindables canExit / blocked / findings / artifactId / draftText.
+	// read-only bindables canExit / blocked / findings / artifactId / draftText / running.
 	//
 	// Phase 9 `sections` mode (09-UI-SPEC PlatformCard): the output box, findings summary, email
 	// footer and the three-exit group are replaced by one PlatformCard per section, each with
@@ -86,6 +86,7 @@
 		savedId = $bindable(null),
 		artifactId = $bindable(null),
 		draftText = $bindable(''),
+		running = $bindable(false),
 		/* eslint-enable no-useless-assignment */
 		state: provided
 	}: {
@@ -140,6 +141,11 @@
 		artifactId?: string | null;
 		/** Read-only: mirrors the panel's current draft text (Phase 7 hosts). */
 		draftText?: string;
+		/**
+		 * Read-only: true while a run is connecting or streaming (Phase 9 hosts that derive views from
+		 * draftText, so a partial stream is never judged as a finished draft).
+		 */
+		running?: boolean;
 		state?: PanelState;
 	} = $props();
 
@@ -238,6 +244,7 @@
 		savedId = st.artifactId;
 		artifactId = st.artifactId;
 		draftText = st.text;
+		running = st.running;
 	});
 
 	/**

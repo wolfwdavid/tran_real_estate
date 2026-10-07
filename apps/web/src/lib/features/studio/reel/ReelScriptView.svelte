@@ -34,11 +34,16 @@
 		| { kind: 'unparsed' }
 		| { kind: 'beats'; beats: TimedBeat[]; shots: string[] };
 
-	/** The view of the current draft text: times come only from REEL_TEMPLATES[length]. */
-	export function scriptView(draft: string, length: ReelLength): ScriptView {
+	/**
+	 * The view of the current draft text: times come only from REEL_TEMPLATES[length]. While the run
+	 * is still streaming, partial text that does not parse yet is not a parse failure: the view stays
+	 * on the empty line until the stream ends (or the text parses), so the "couldn't split" panel
+	 * only ever describes a finished draft.
+	 */
+	export function scriptView(draft: string, length: ReelLength, streaming = false): ScriptView {
 		if (draft.trim() === '') return { kind: 'empty' };
 		const parsed = parseReel(draft);
-		if (!parsed.ok) return { kind: 'unparsed' };
+		if (!parsed.ok) return streaming ? { kind: 'empty' } : { kind: 'unparsed' };
 		const beats = timeBeats(parsed.beats, length);
 		const shots = beats
 			.filter((b) => b.broll !== '')
@@ -55,9 +60,18 @@
 	import SearchX from '@lucide/svelte/icons/search-x';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 
-	let { draft, length }: { draft: string; length: ReelLength } = $props();
+	let {
+		draft,
+		length,
+		streaming = false
+	}: {
+		draft: string;
+		length: ReelLength;
+		/** True while the panel's run is connecting or streaming (GenerationPanel bind:running). */
+		streaming?: boolean;
+	} = $props();
 
-	const view = $derived(scriptView(draft, length));
+	const view = $derived(scriptView(draft, length, streaming));
 	const caption = $derived(
 		view.kind === 'beats' ? `${length}-second reel, ${view.beats.length} beats` : ''
 	);
