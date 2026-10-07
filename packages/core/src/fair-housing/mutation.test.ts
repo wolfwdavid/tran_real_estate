@@ -10,8 +10,8 @@ import type { LexiconEntry } from './types.js';
 const entries = LEXICON.map((e) => [e.id, e] as const);
 
 describe('leave-one-out', () => {
-	test('there are 41 entries to prove', () => {
-		expect(entries).toHaveLength(41);
+	test('there are 63 entries to prove', () => {
+		expect(entries).toHaveLength(63);
 	});
 
 	test.each(entries)('entry %s is load-bearing', (_id, entry) => {

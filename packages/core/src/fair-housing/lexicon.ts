@@ -55,6 +55,28 @@ const E_MARITAL = 'Many states protect renters from marital-status discriminatio
 const E_SOGI =
 	'Many states protect renters from discrimination based on sexual orientation or gender identity. Remove it.';
 
+// Phase 9 (content studio): listing-copy hot spots, hashtags and advertising claims.
+// An entry's `alternative` is pasted into the copy, so guidance lives in the
+// explanation and '' means "Remove phrase".
+const AD = 'NY 19 NYCRR 175.25(c)(10); NAR Code of Ethics Art. 12';
+const E_WHO =
+	'Describes who should live here rather than the home. Describe the space instead, such as three bedrooms and a fenced yard.';
+const E_WHO_AGE =
+	'Describes who should live here rather than the home, and many states protect renters by age. Describe the space instead, such as single-level living.';
+const E_TAG =
+	'Hashtags are part of the ad. This one describes who should live here rather than the home.';
+const E_STEER =
+	'Safety and school claims can steer buyers or renters. Name verifiable features instead, like streetlights or a gated entry.';
+const E_JOB =
+	'This limits who can apply by job or income source, which many states protect. Remove it and keep income rules to the screening policy.';
+const E_ROOM =
+	'This casts the space for one sex. Call it what it is, such as a bonus room or a studio.';
+const E_HOPA =
+	'Only qualified housing-for-older-persons communities may say this. Keep it only if the property qualifies; otherwise remove it.';
+const E_PROMISE = "Ads can't promise future value or returns. Remove the promise.";
+const E_SUPERLATIVE =
+	'Superlatives need proof you can show. Remove it, or state a fact you can document.';
+
 /** The Fair Housing lexicon. Each entry's examples are matched by it and by no other entry. */
 export const LEXICON: readonly LexiconEntry[] = [
 	// Familial status (federal)
@@ -159,10 +181,11 @@ export const LEXICON: readonly LexiconEntry[] = [
 	},
 	{
 		id: 'familial.family-friendly-area',
-		pattern: p`family friendly (?:neighborhood|community|area)`,
+		// Phase 9: block in an area context, hashtag form, plurals.
+		pattern: p`#?family(?: )?friendly(?: )?(?:neighborhoods?|communit(?:y|ies)|areas?)`,
 		category: 'familial-status',
 		scope: 'federal',
-		severity: 'warn',
+		severity: 'block',
 		alternative: 'near parks and playgrounds',
 		examples: ['family-friendly neighborhood'],
 		source: CFR,
@@ -260,7 +283,8 @@ export const LEXICON: readonly LexiconEntry[] = [
 	},
 	{
 		id: 'race.safe-area',
-		pattern: p`safe (?:neighborhood|community|area)`,
+		// Phase 9: plurals and streets. The hashtag form is race.safe-area-tag.
+		pattern: p`safe (?:neighborhoods?|communit(?:y|ies)|areas?|streets?)`,
 		category: 'race',
 		scope: 'federal',
 		severity: 'warn',
@@ -524,5 +548,275 @@ export const LEXICON: readonly LexiconEntry[] = [
 		examples: ['straight couples only'],
 		source: S_SOGI,
 		explanation: E_SOGI
+	},
+
+	// Phase 9: listing copy and hashtags (09-RESEARCH section E)
+	{
+		id: 'familial.families',
+		pattern: p`(?:perfect|ideal|great) for (?:families|kids|children)`,
+		category: 'familial-status',
+		scope: 'federal',
+		severity: 'block',
+		alternative: '',
+		examples: ['ideal for families'],
+		source: A_FAM,
+		explanation: E_WHO,
+		phase: 9
+	},
+	{
+		id: 'familial.mature',
+		pattern: p`mature (?:couples?|persons?|adults?|tenants?|individuals?)`,
+		category: 'familial-status',
+		scope: 'federal',
+		severity: 'block',
+		alternative: '',
+		examples: ['mature couple'],
+		source: A_FAM,
+		explanation: E_CHILD,
+		phase: 9
+	},
+	{
+		id: 'familial.family-friendly',
+		pattern: p`#?family(?: )?friendly(?!(?: )?(?:neighborhood|communit|area))`,
+		category: 'familial-status',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['family-friendly', '#FamilyFriendly'],
+		source: CFR,
+		explanation: E_WHO,
+		phase: 9
+	},
+	{
+		id: 'familial.family-home-tag',
+		pattern: p`#family(?:homes?|house)`,
+		category: 'familial-status',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '#JustListed',
+		examples: ['#FamilyHome'],
+		source: CFR,
+		explanation: E_TAG,
+		phase: 9
+	},
+	{
+		id: 'familial.kid-friendly',
+		pattern: p`#?kids?(?: )?friendly`,
+		category: 'familial-status',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['kid-friendly'],
+		source: CFR,
+		explanation: E_WHO,
+		phase: 9
+	},
+	{
+		id: 'origin.english-only',
+		pattern: p`english(?: speaking)? only`,
+		category: 'national-origin',
+		scope: 'federal',
+		severity: 'block',
+		alternative: '',
+		examples: ['English only'],
+		source: CFR,
+		explanation: E_LANG,
+		phase: 9
+	},
+	{
+		id: 'race.safe-area-tag',
+		pattern: p`#safe(?:neighborhoods?|communit(?:y|ies)|areas?|streets?)`,
+		category: 'race',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '#JustListed',
+		examples: ['#SafeNeighborhood'],
+		source: CFR,
+		explanation: E_STEER,
+		phase: 9
+	},
+	{
+		id: 'race.crime',
+		pattern: p`(?:low|no|zero) crime(?: rates?| areas?| neighborhoods?)?|crime free`,
+		category: 'race',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['low crime', 'crime-free'],
+		source: CFR,
+		explanation: E_STEER,
+		phase: 9
+	},
+	{
+		id: 'race.changing-area',
+		pattern: p`up and coming|gentrif(?:ying|ied)|transitional (?:neighborhoods?|areas?)`,
+		category: 'race',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['up-and-coming', 'gentrifying'],
+		source: HUD89,
+		explanation: E_CODE,
+		phase: 9
+	},
+	{
+		id: 'race.restricted',
+		pattern: p`(?:private|restricted) (?:neighborhoods?|communit(?:y|ies)|areas?)`,
+		category: 'race',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['private community', 'restricted community'],
+		source: HUD89,
+		explanation: E_CODE,
+		phase: 9
+	},
+	{
+		id: 'race.schools',
+		pattern: p`(?:great|good|best|excellent|top rated|highly rated|award winning) schools?`,
+		category: 'race',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['great schools', 'top-rated schools'],
+		source: CFR,
+		explanation: E_STEER,
+		phase: 9
+	},
+	{
+		id: 'sex.bachelor-pad',
+		pattern: p`bachelor(?:ette)? pads?`,
+		category: 'sex',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: '',
+		examples: ['bachelor pad'],
+		source: A_SEX,
+		explanation: E_ROOM,
+		phase: 9
+	},
+	{
+		id: 'sex.gendered-room',
+		pattern: p`man caves?|she sheds?`,
+		category: 'sex',
+		scope: 'federal',
+		severity: 'warn',
+		alternative: 'bonus room',
+		examples: ['man cave'],
+		source: A_SEX,
+		explanation: E_ROOM,
+		phase: 9
+	},
+	{
+		id: 'soi.professionals-only',
+		pattern: p`(?:professionals?|employed)(?: tenants?| renters?| applicants?)? only`,
+		category: 'source-of-income',
+		scope: 'state',
+		severity: 'block',
+		alternative: '',
+		examples: ['professionals only'],
+		source: S_SOI,
+		explanation: E_JOB,
+		phase: 9
+	},
+	{
+		id: 'age.retirees',
+		pattern: p`(?:perfect|ideal|great) for retirees?`,
+		category: 'age',
+		scope: 'state',
+		severity: 'block',
+		alternative: '',
+		examples: ['great for retirees'],
+		source: S_AGE,
+		explanation: E_WHO_AGE,
+		phase: 9
+	},
+	{
+		id: 'age.hopa',
+		pattern: p`(?:55|62)[+] (?:communit(?:y|ies)|living|housing)|senior (?:communit(?:y|ies)|living|housing|apartments?)|active adult(?: communit(?:y|ies)| living)?`,
+		category: 'age',
+		scope: 'state',
+		severity: 'warn',
+		alternative: '',
+		examples: ['55+ community', 'senior community', 'active adult community'],
+		source: HOPA,
+		explanation: E_HOPA,
+		phase: 9
+	},
+
+	// Phase 9: advertising claims (09-RESEARCH section A.5). Not a protected class.
+	{
+		id: 'ad.guarantee',
+		pattern: p`guaranteed? (?:to (?:appreciate|increase in value|rise in value)|returns?|profits?|appreciation|cash flow)`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'block',
+		alternative: '',
+		examples: ['guaranteed to appreciate', 'guaranteed return'],
+		source: AD,
+		explanation: E_PROMISE,
+		phase: 9
+	},
+	{
+		id: 'ad.cant-lose',
+		pattern: p`(?:can't|cannot|can not) lose`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'block',
+		alternative: '',
+		examples: ["can't lose"],
+		source: AD,
+		explanation: E_PROMISE,
+		phase: 9
+	},
+	{
+		// A value claim, not praise: "will appreciate" at a clause end or before
+		// "in value"; "buyers will appreciate the kitchen" stays clean.
+		id: 'ad.will-appreciate',
+		pattern: p`will (?:appreciate(?:(?= in value)|(?! [\p{L}\p{N}]))|(?:increase|rise|go up) in value)`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'block',
+		alternative: '',
+		examples: ['will appreciate', 'will appreciate in value'],
+		source: AD,
+		explanation: E_PROMISE,
+		phase: 9
+	},
+	{
+		id: 'ad.top-agent',
+		pattern: p`(?:#1|number one)(?: )?(?:agent|realtor|broker|team)s?`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'warn',
+		alternative: '',
+		examples: ['#1 agent'],
+		source: AD,
+		explanation: E_SUPERLATIVE,
+		phase: 9
+	},
+	{
+		id: 'ad.top-producer',
+		pattern: p`top (?:producers?|producing (?:agent|team)|selling (?:agent|team))`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'warn',
+		alternative: '',
+		examples: ['top producer'],
+		source: AD,
+		explanation: E_SUPERLATIVE,
+		phase: 9
+	},
+	{
+		id: 'ad.best-investment',
+		pattern: p`best investments?`,
+		category: 'advertising',
+		scope: 'other',
+		severity: 'warn',
+		alternative: '',
+		examples: ['best investment'],
+		source: AD,
+		explanation: E_SUPERLATIVE,
+		phase: 9
 	}
 ];

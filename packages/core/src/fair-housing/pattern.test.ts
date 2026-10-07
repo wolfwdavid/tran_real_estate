@@ -90,8 +90,8 @@ describe('assertSafePattern (ReDoS guard)', () => {
 });
 
 describe('types', () => {
-	test('CATEGORY_LABELS has the 11 UI-SPEC labels', () => {
-		expect(Object.keys(CATEGORY_LABELS)).toHaveLength(11);
+	test('CATEGORY_LABELS has the 11 UI-SPEC labels plus the Phase 9 advertising label', () => {
+		expect(Object.keys(CATEGORY_LABELS)).toHaveLength(12);
 		expect(Object.values(CATEGORY_LABELS)).toEqual([
 			'Race',
 			'Color',
@@ -103,7 +103,8 @@ describe('types', () => {
 			'Source of income',
 			'Age',
 			'Marital status',
-			'Sexual orientation or gender identity'
+			'Sexual orientation or gender identity',
+			'Advertising claim'
 		]);
 	});
 

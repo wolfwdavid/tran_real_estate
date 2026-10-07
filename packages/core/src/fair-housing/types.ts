@@ -1,6 +1,8 @@
 /**
  * Fair Housing checker types. Categories follow the FHA §3604(c) protected
- * classes, plus classes many states and cities add (tagged `scope: 'state'`).
+ * classes, plus classes many states and cities add (tagged `scope: 'state'`),
+ * plus the studio's `advertising` category for guarantee and superlative
+ * claims (not a protected class; tagged `scope: 'other'`).
  */
 export type Category =
 	| 'race'
@@ -13,7 +15,8 @@ export type Category =
 	| 'source-of-income'
 	| 'age'
 	| 'marital-status'
-	| 'sogi';
+	| 'sogi'
+	| 'advertising';
 
 export type Severity = 'block' | 'warn';
 
@@ -23,7 +26,8 @@ export interface LexiconEntry {
 	/** RegExp source authored with p``; the matcher adds boundaries and 'giu'. */
 	pattern: string;
 	category: Category;
-	scope: 'federal' | 'state';
+	/** 'other' is for non-Fair-Housing advertising rules (no state-law note in the UI). */
+	scope: 'federal' | 'state' | 'other';
 	severity: Severity;
 	/** Plain language, our own words. */
 	explanation: string;
@@ -33,6 +37,8 @@ export interface LexiconEntry {
 	source: string;
 	/** At least one; each MUST be matched by this entry and by no other entry. */
 	examples: string[];
+	/** Roadmap phase that added the entry; absent for the Phase 5 base lexicon. */
+	phase?: number;
 }
 
 export interface FindingMember {
@@ -78,7 +84,8 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 	'source-of-income': 'Source of income',
 	age: 'Age',
 	'marital-status': 'Marital status',
-	sogi: 'Sexual orientation or gender identity'
+	sogi: 'Sexual orientation or gender identity',
+	advertising: 'Advertising claim'
 };
 
 export const STATE_SCOPE_NOTE = 'Protected under many state and local laws.';

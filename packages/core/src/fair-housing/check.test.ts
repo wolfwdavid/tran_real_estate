@@ -16,8 +16,8 @@ describe('suite sizes (non-vacuous)', () => {
 	test('at least 30 bad and 30 neutral phrases', () => {
 		expect(BAD_PHRASES.length).toBeGreaterThanOrEqual(30);
 		expect(NEUTRAL_PHRASES.length).toBeGreaterThanOrEqual(30);
-		expect(BAD_PHRASES).toHaveLength(42);
-		expect(NEUTRAL_PHRASES).toHaveLength(40);
+		expect(BAD_PHRASES).toHaveLength(72);
+		expect(NEUTRAL_PHRASES).toHaveLength(50);
 	});
 
 	test('CONTEXT examples are covered by name', () => {
@@ -68,9 +68,9 @@ describe('neutral phrases pass', () => {
 });
 
 describe('lexicon shape', () => {
-	test('41 entries with unique ids', () => {
-		expect(LEXICON).toHaveLength(41);
-		expect(new Set(LEXICON.map((e) => e.id)).size).toBe(41);
+	test('63 entries with unique ids', () => {
+		expect(LEXICON).toHaveLength(63);
+		expect(new Set(LEXICON.map((e) => e.id)).size).toBe(63);
 	});
 
 	test.each(LEXICON.map((e) => [e.id, e] as const))('%s is well-formed', (_id, entry) => {
@@ -78,7 +78,13 @@ describe('lexicon shape', () => {
 		expect(entry.source.trim()).not.toBe('');
 		expect(entry.source).not.toContain('2024');
 		expect(entry.examples.length).toBeGreaterThanOrEqual(1);
-		expect(entry.scope).toBe(STATE_CATEGORIES.includes(entry.category) ? 'state' : 'federal');
+		const scope =
+			entry.category === 'advertising'
+				? 'other'
+				: STATE_CATEGORIES.includes(entry.category)
+					? 'state'
+					: 'federal';
+		expect(entry.scope).toBe(scope);
 	});
 
 	test.each(LEXICON.map((e) => [e.id, e] as const))('%s matches its own examples', (_id, entry) => {

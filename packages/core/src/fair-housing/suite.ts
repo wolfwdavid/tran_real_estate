@@ -79,7 +79,7 @@ export const BAD_PHRASES: readonly BadPhrase[] = [
 		text: 'family-friendly neighborhood',
 		entryId: 'familial.family-friendly-area',
 		category: 'familial-status',
-		severity: 'warn'
+		severity: 'block'
 	},
 	{ text: 'white neighborhood', entryId: 'race.racial-area', category: 'race', severity: 'block' },
 	{ text: 'white family home', entryId: 'race.white-family', category: 'race', severity: 'block' },
@@ -232,6 +232,187 @@ export const BAD_PHRASES: readonly BadPhrase[] = [
 		entryId: 'sogi.straight-only',
 		category: 'sogi',
 		severity: 'block'
+	},
+	// Phase 9: listing copy, hashtags and advertising claims
+	{
+		text: 'ideal for families',
+		entryId: 'familial.families',
+		category: 'familial-status',
+		severity: 'block'
+	},
+	{
+		text: 'mature couple',
+		entryId: 'familial.mature',
+		category: 'familial-status',
+		severity: 'block'
+	},
+	{
+		text: 'family-friendly',
+		entryId: 'familial.family-friendly',
+		category: 'familial-status',
+		severity: 'warn'
+	},
+	{
+		text: '#FamilyFriendly',
+		entryId: 'familial.family-friendly',
+		category: 'familial-status',
+		severity: 'warn'
+	},
+	{
+		text: '#FamilyHome',
+		entryId: 'familial.family-home-tag',
+		category: 'familial-status',
+		severity: 'warn'
+	},
+	{
+		text: 'kid-friendly',
+		entryId: 'familial.kid-friendly',
+		category: 'familial-status',
+		severity: 'warn'
+	},
+	{
+		text: 'English only',
+		entryId: 'origin.english-only',
+		category: 'national-origin',
+		severity: 'block'
+	},
+	{
+		text: '#SafeNeighborhood',
+		entryId: 'race.safe-area-tag',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'low crime',
+		entryId: 'race.crime',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'crime-free',
+		entryId: 'race.crime',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'up-and-coming',
+		entryId: 'race.changing-area',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'gentrifying',
+		entryId: 'race.changing-area',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'private community',
+		entryId: 'race.restricted',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'restricted community',
+		entryId: 'race.restricted',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'great schools',
+		entryId: 'race.schools',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'top-rated schools',
+		entryId: 'race.schools',
+		category: 'race',
+		severity: 'warn'
+	},
+	{
+		text: 'bachelor pad',
+		entryId: 'sex.bachelor-pad',
+		category: 'sex',
+		severity: 'warn'
+	},
+	{
+		text: 'man cave',
+		entryId: 'sex.gendered-room',
+		category: 'sex',
+		severity: 'warn'
+	},
+	{
+		text: 'professionals only',
+		entryId: 'soi.professionals-only',
+		category: 'source-of-income',
+		severity: 'block'
+	},
+	{
+		text: 'great for retirees',
+		entryId: 'age.retirees',
+		category: 'age',
+		severity: 'block'
+	},
+	{
+		text: '55+ community',
+		entryId: 'age.hopa',
+		category: 'age',
+		severity: 'warn'
+	},
+	{
+		text: 'senior community',
+		entryId: 'age.hopa',
+		category: 'age',
+		severity: 'warn'
+	},
+	{
+		text: 'active adult community',
+		entryId: 'age.hopa',
+		category: 'age',
+		severity: 'warn'
+	},
+	{
+		text: 'guaranteed to appreciate',
+		entryId: 'ad.guarantee',
+		category: 'advertising',
+		severity: 'block'
+	},
+	{
+		text: 'guaranteed return',
+		entryId: 'ad.guarantee',
+		category: 'advertising',
+		severity: 'block'
+	},
+	{
+		text: "can't lose",
+		entryId: 'ad.cant-lose',
+		category: 'advertising',
+		severity: 'block'
+	},
+	{
+		text: 'will appreciate in value',
+		entryId: 'ad.will-appreciate',
+		category: 'advertising',
+		severity: 'block'
+	},
+	{
+		text: '#1 agent',
+		entryId: 'ad.top-agent',
+		category: 'advertising',
+		severity: 'warn'
+	},
+	{
+		text: 'top producer',
+		entryId: 'ad.top-producer',
+		category: 'advertising',
+		severity: 'warn'
+	},
+	{
+		text: 'best investment',
+		entryId: 'ad.best-investment',
+		category: 'advertising',
+		severity: 'warn'
 	}
 ];
 
@@ -279,5 +460,16 @@ export const NEUTRAL_PHRASES: readonly string[] = [
 	'English garden',
 	'able to schedule tours on weekends',
 	'ideal for entertaining',
-	'great for a home office'
+	'great for a home office',
+	// Phase 9: listing safe-harbor phrases
+	'walk-in closet',
+	'walk to transit',
+	'quiet street',
+	'step-free entry',
+	'near Riverside Park',
+	'in-law suite',
+	'gated entry',
+	'Equal Housing Opportunity',
+	'single-family home',
+	'Buyers will appreciate the updated kitchen'
 ];
