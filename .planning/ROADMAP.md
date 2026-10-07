@@ -371,7 +371,7 @@ Plans:
 - [x] 09-17-PLAN.md — STU-04 snapshot builder steps 3-4, save gate, saved list + E2E (wave 6)
 - [x] 09-18-PLAN.md — STU-04 print route, brand band, labels, prominence, studio boundaries + print E2E (wave 6)
 - [x] 09-19-PLAN.md — social.v1 prompt + GenerationPanel sections mode with PlatformCard (wave 7)
-- [ ] 09-20-PLAN.md — STU-02 social post pack page + E2E (wave 8)
+- [x] 09-20-PLAN.md — STU-02 social post pack page + E2E (wave 8)
 - [x] 09-21-PLAN.md — reel.v1 prompt, results/quote checks, AI-disclosure checklist, copy formatter (wave 8)
 - [ ] 09-22-PLAN.md — STU-03 reel script page + E2E (wave 9)
 - [ ] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 20/23 | In Progress|  |
+| 9. Agent Content Studio & Market Snapshot Reports | 21/23 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
