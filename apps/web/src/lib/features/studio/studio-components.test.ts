@@ -11,6 +11,8 @@ import { checkFairHousing } from '@tran/core/fair-housing';
 import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
 import CharacterCount from './CharacterCount.svelte';
 import DisclosureStatus from './DisclosureStatus.svelte';
+import StudioHub, { draftsLine, snapshotsLine, STUDIO_LOADING } from './StudioHub.svelte';
+import StudioToolCard from './StudioToolCard.svelte';
 import InputFairHousingNote, {
 	INPUT_NOTE_DELAY_MS,
 	noteRows,
@@ -186,5 +188,91 @@ describe('CharacterCount', () => {
 	test('exactly at the limit is within', () => {
 		const h = html(CharacterCount, { length: 2200, limit: 2200, text: '2,200 of 2,200' });
 		expect(h).toContain('data-char-count="within"');
+	});
+});
+
+describe('StudioToolCard', () => {
+	test('one stretched link, h2 title, description, meta, decorative icon', async () => {
+		const { default: FileText } = await import('@lucide/svelte/icons/file-text');
+		const h = html(StudioToolCard, {
+			href: '/agent/studio/listing/',
+			title: 'Listing description',
+			description: 'A description.',
+			meta: '2 drafts saved',
+			linkText: 'Write a listing description',
+			icon: FileText
+		});
+		expect(h.match(/<a\b/g)).toHaveLength(1);
+		expect(h).toMatch(/<a\b[^>]*href="\/agent\/studio\/listing\/"/);
+		expect(h).toMatch(/<h2\b[^>]*>Listing description<\/h2>/);
+		expect(textOf(h)).toContain('2 drafts saved');
+		// Every svg (tool icon and arrow) is hidden from assistive tech.
+		const svgs = h.match(/<svg\b[^>]*>/g) ?? [];
+		expect(svgs.length).toBe(2);
+		for (const svg of svgs) expect(svg).toContain('aria-hidden="true"');
+		expect(h).toContain("after:content-['']");
+	});
+});
+
+describe('StudioHub', () => {
+	const h = html(StudioHub, {});
+	const t = textOf(h);
+
+	test('the four tool cards in order, with UI-SPEC copy', () => {
+		const titles = [...h.matchAll(/<h2\b[^>]*>([^<]*)<\/h2>/g)].map((m) => m[1].trim());
+		expect(titles).toEqual([
+			'Listing description',
+			'Social post pack',
+			'Reel script',
+			'Market Snapshot'
+		]);
+		for (const d of [
+			'Turn the facts you enter into a description in your tone, checked before you copy it.',
+			'One brief becomes an Instagram, Facebook, and LinkedIn post, each with your disclosure and a character count.',
+			'A short founder-story video script with timed beats, captions, a B-roll list, and an AI-disclosure checklist.',
+			'A branded market report for a ZIP code that you print or save as a PDF.'
+		])
+			expect(t).toContain(d);
+	});
+
+	test('static hrefs for the four tools and the sample report, in order', () => {
+		const hrefs = [...h.matchAll(/<a\b[^>]*href="([^"]*)"/g)].map((m) => m[1]);
+		expect(hrefs).toEqual([
+			'/agent/studio/listing/',
+			'/agent/studio/social/',
+			'/agent/studio/reel/',
+			'/agent/studio/snapshot/',
+			'/print/snapshot/?id=sample'
+		]);
+		expect(t).toContain('Preview a sample report');
+		for (const name of [
+			'Write a listing description',
+			'Write a post pack',
+			'Write a reel script',
+			'Build a Market Snapshot'
+		])
+			expect(t).toContain(name);
+	});
+
+	test('prerendered HTML: the lead, and the loading line in each meta slot and the disclosure slot', () => {
+		expect(t).toContain(
+			'Every draft is checked for Fair Housing problem phrases and gets your disclosure added.'
+		);
+		expect(STUDIO_LOADING).toBe(`Loading your studio${String.fromCharCode(0x2026)}`);
+		const metas = [...h.matchAll(/data-studio-tool-meta[^>]*>([^<]*)</g)].map((m) => m[1]);
+		expect(metas).toEqual(Array(4).fill(STUDIO_LOADING));
+		expect(h.split(STUDIO_LOADING)).toHaveLength(6);
+		expect(h).not.toContain('data-disclosure-status');
+		expect(h).not.toMatch(/<h1\b/);
+		expect(h).not.toMatch(/#[0-9A-Fa-f]{6}\b/);
+	});
+
+	test('meta lines: plural, singular, empty', () => {
+		expect(draftsLine(0)).toBe('No drafts yet');
+		expect(draftsLine(1)).toBe('1 draft saved');
+		expect(draftsLine(3)).toBe('3 drafts saved');
+		expect(snapshotsLine(0)).toBe('No snapshots yet');
+		expect(snapshotsLine(1)).toBe('1 snapshot saved');
+		expect(snapshotsLine(12)).toBe('12 snapshots saved');
 	});
 });
