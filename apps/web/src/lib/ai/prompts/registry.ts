@@ -10,6 +10,7 @@ import { investorMemoV1 } from './investor/memo.v1.js';
 import { renterOutreachV1 } from './renter/outreach.v1.js';
 import { demoV1 } from './shared/demo.v1.js';
 import { studioListingV1 } from './studio/listing.v1.js';
+import { studioReelV1 } from './studio/reel.v1.js';
 import { studioSnapshotV1 } from './studio/snapshot.v1.js';
 import { studioSocialV1 } from './studio/social.v1.js';
 import type { BuiltPrompt, PromptDef } from './types.js';
@@ -64,3 +65,5 @@ registerPrompt(studioListingV1 as PromptDef);
 registerPrompt(studioSnapshotV1 as PromptDef);
 // Phase 9: studio/social.v1 post pack (STU-02).
 registerPrompt(studioSocialV1 as PromptDef);
+// Phase 9: studio/reel.v1 founder-story reel script (STU-03).
+registerPrompt(studioReelV1 as PromptDef);
