@@ -24,9 +24,11 @@
 	import { useOpenTasks } from '$lib/storage/agent/tasks-live.svelte';
 	import { localDateOf, todayLocal } from '../dates';
 	import CsvExportButton from '../import/CsvExportButton.svelte';
+	import UndoStatus from '../ui/UndoStatus.svelte';
 	import ContactCard from './ContactCard.svelte';
 	import ContactsTable from './ContactsTable.svelte';
 	import SmartListFilter from './SmartListFilter.svelte';
+	import { takeFlash } from './flash.svelte';
 	import { filterContacts, readListParam, readQueryParam, withParams } from './list-state';
 
 	let {
@@ -48,14 +50,21 @@
 	const openTasks = useOpenTasks();
 	const today = todayLocal();
 
+	/** The status line's id after a redirect from a deleted contact ("Deleted {Name}."). */
+	const FLASH_ID = 'contacts-flash';
+
 	let q = $state('');
 	let list = $state<SmartList>('all');
 	let limit = $state(PAGE);
 	let root = $state<HTMLElement | null>(null);
+	let flash = $state<string | null>(null);
 
 	onMount(() => {
 		list = readListParam(page.url.search);
 		q = readQueryParam(page.url.search);
+		// UI-SPEC "Focus management": after Delete contact, focus lands on the result line here.
+		flash = takeFlash();
+		if (flash) void tick().then(() => document.getElementById(FLASH_ID)?.focus());
 	});
 
 	// Grouped into a plain record first; the Map itself is never mutated (it is replaced whenever
@@ -113,6 +122,7 @@
 </script>
 
 <div bind:this={root} class="mt-6 flex flex-col gap-6" data-contacts-view>
+	<UndoStatus id={FLASH_ID} message={flash} />
 	<div class="flex flex-col gap-4">
 		<div class="flex flex-wrap items-start justify-between gap-4">
 			<div class="relative w-full max-w-md">
