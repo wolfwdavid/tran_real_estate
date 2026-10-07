@@ -17,8 +17,11 @@ import GenerationPanel from './GenerationPanel.svelte';
 import { WARN_REASON, blockReason, type PostCheck } from './panel-controller';
 import { PanelState, type PanelDeps, type PanelInitial } from './panel-state.svelte';
 import {
+	COPIED_META_KEY,
 	PARSE_ERROR_BODY,
 	cardGate,
+	copiedNote,
+	withCopied,
 	cardPayload,
 	countLine,
 	packAnnouncement,
@@ -363,5 +366,24 @@ describe('disclosure-last property (Pitfall 2)', () => {
 			expect(a.length).toBe(a.text.length);
 			expect(a.over).toBe(Math.max(0, a.text.length - a.limit));
 		}
+	});
+});
+
+describe('copied platforms (Draft history row extra)', () => {
+	test('withCopied keeps card order and no repeats', () => {
+		expect(COPIED_META_KEY).toBe('copied');
+		expect(withCopied(undefined, 'linkedin')).toBe('linkedin');
+		expect(withCopied('linkedin', 'instagram')).toBe('instagram,linkedin');
+		expect(withCopied('instagram,linkedin', 'linkedin')).toBe('instagram,linkedin');
+		expect(withCopied('bogus', 'facebook')).toBe('facebook');
+	});
+
+	test('copiedNote: "Copied: Instagram, LinkedIn" or null', () => {
+		expect(copiedNote({ copied: 'instagram,linkedin' }, PLATFORM_LABELS)).toBe(
+			'Copied: Instagram, LinkedIn'
+		);
+		expect(copiedNote({ copied: '' }, PLATFORM_LABELS)).toBeNull();
+		expect(copiedNote(undefined, PLATFORM_LABELS)).toBeNull();
+		expect(copiedNote({ analysisHash: 'x' }, PLATFORM_LABELS)).toBeNull();
 	});
 });

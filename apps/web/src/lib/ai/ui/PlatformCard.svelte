@@ -119,6 +119,26 @@
 		}
 		return [...(ok.length > 0 ? ['Post pack ready.', ...ok] : []), ...failed].join(' ');
 	}
+
+	/** Artifact meta key holding the platforms copied from a pack ("instagram,linkedin"). */
+	export const COPIED_META_KEY = 'copied';
+	const SECTION_ORDER: readonly SectionKey[] = ['instagram', 'facebook', 'linkedin'];
+
+	/** The stored copied list with `key` added, in card order and without repeats. */
+	export function withCopied(prev: string | undefined, key: SectionKey): string {
+		const have = [...(prev ?? '').split(','), key];
+		return SECTION_ORDER.filter((k) => have.includes(k)).join(',');
+	}
+
+	/** Draft history row extra: "Copied: Instagram, LinkedIn", or null when nothing was copied. */
+	export function copiedNote(
+		meta: Readonly<Record<string, string>> | undefined,
+		labels: Readonly<Record<SectionKey, string>>
+	): string | null {
+		const keys = (meta?.[COPIED_META_KEY] ?? '').split(',');
+		const names = SECTION_ORDER.filter((k) => keys.includes(k)).map((k) => labels[k]);
+		return names.length > 0 ? `Copied: ${names.join(', ')}` : null;
+	}
 </script>
 
 <script lang="ts">

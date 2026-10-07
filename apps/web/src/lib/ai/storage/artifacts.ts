@@ -57,6 +57,12 @@ export interface ArtifactRepo {
 	updateText(id: string, text: string, findings: readonly Finding[]): Promise<void>;
 	/** 'sent' sets sentAt; any other status clears it. */
 	setStatus(id: string, status: ArtifactStatus, at: Date): Promise<void>;
+	/**
+	 * Merges string metadata into a stored draft (same limits as create: <= 16 keys, values <= 200
+	 * chars). Phase 9: the social pack records which platforms were copied. A missing id is a no-op.
+	 * Optional so lightweight test repos need not implement it.
+	 */
+	updateMeta?(id: string, patch: Readonly<Record<string, string>>): Promise<void>;
 	/** Includes tombstones. */
 	get(id: string): Promise<AiArtifact | undefined>;
 	/** Newest first, tombstones excluded, `limit` defaults to 10. */
@@ -178,6 +184,19 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 				findings: stored,
 				updatedAt: now().toISOString()
 			}));
+		},
+
+		async updateMeta(id, patch) {
+			if (!isMeta(patch)) throw new Error('artifact-meta');
+			const d = await getDb();
+			const t = d.table<AiArtifact, string>(AI_ARTIFACTS_TABLE);
+			await d.transaction('rw', t, async () => {
+				const existing = await t.get(id);
+				if (!existing) return;
+				const meta = { ...(existing.meta ?? {}), ...patch };
+				if (!isMeta(meta)) throw new Error('artifact-meta');
+				await t.put({ ...existing, meta, updatedAt: now().toISOString() });
+			});
 		},
 
 		setStatus(id, status, at) {

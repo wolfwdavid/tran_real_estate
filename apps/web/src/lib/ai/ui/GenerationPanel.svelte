@@ -50,7 +50,12 @@
 	import type { ExitDisabled, ExitKind, FormatForExit, PostCheck } from './panel-controller';
 	import type { CheckGroupCopy } from './post-check';
 	import { PanelState, type ExitEventPayload, type Resolved } from './panel-state.svelte';
-	import PlatformCard, { packAnnouncement } from './PlatformCard.svelte';
+	import PlatformCard, {
+		COPIED_META_KEY,
+		packAnnouncement,
+		withCopied,
+		type SectionKey
+	} from './PlatformCard.svelte';
 	import ProviderChip from './ProviderChip.svelte';
 
 	let {
@@ -410,13 +415,26 @@
 		wasRunning = running;
 	});
 
-	/** A card copied: the pack's Draft history row becomes Reviewed once, then the host hears it. */
-	async function onSectionCopied(text: string): Promise<void> {
+	/**
+	 * A card copied: the pack's Draft history row becomes Reviewed once and records the platform
+	 * ("Copied: Instagram, LinkedIn"), then the host hears it.
+	 */
+	async function onSectionCopied(key: SectionKey, text: string): Promise<void> {
 		const artifactId = st.artifactId;
+		const repo = st.deps.repo;
 		if (artifactId && st.artifactStatus === 'draft') {
 			st.artifactStatus = 'acknowledged';
 			const at = st.deps.now?.() ?? new Date();
-			await st.deps.repo?.setStatus(artifactId, 'acknowledged', at);
+			await repo?.setStatus(artifactId, 'acknowledged', at);
+		}
+		if (artifactId && repo?.updateMeta) {
+			try {
+				const stored = await repo.get(artifactId);
+				const copied = withCopied(stored?.meta?.[COPIED_META_KEY], key);
+				await repo.updateMeta(artifactId, { [COPIED_META_KEY]: copied });
+			} catch {
+				// The copy itself succeeded; a failed bookkeeping write only loses the row note.
+			}
 		}
 		onExit?.('copy', { text, artifactId });
 	}
@@ -584,7 +602,7 @@
 						exitDisabledReason={exitDisabled.copy ?? null}
 						clipboard={st.deps.clipboard}
 						announce={st.deps.announce}
-						onCopied={(_key, text) => void onSectionCopied(text)}
+						onCopied={(key, text) => void onSectionCopied(key, text)}
 					/>
 				{/each}
 			{/key}

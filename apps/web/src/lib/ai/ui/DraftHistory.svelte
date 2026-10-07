@@ -69,9 +69,20 @@
 		initial?: { artifacts: AiArtifact[]; count: number };
 		/** Only drafts saved with this subjectId (Phase 6: the current listing). Absent: all drafts. */
 		subjectId?: string;
+		/** Phase 9: an extra muted line per row (the social pack's "Copied: Instagram, LinkedIn"). */
+		rowNote?: (a: AiArtifact) => string | null;
 	}
 
-	let { feature, repo, headingLevel, onOpen, refreshKey = 0, initial, subjectId }: Props = $props();
+	let {
+		feature,
+		repo,
+		headingLevel,
+		onOpen,
+		refreshKey = 0,
+		initial,
+		subjectId,
+		rowNote
+	}: Props = $props();
 
 	const list = (o: { limit: number; offset: number }) =>
 		subjectId === undefined
@@ -212,6 +223,10 @@
 					</p>
 					{#if a.findings.length > 0}
 						<p class="text-label text-muted-foreground">{flagsLine(a.findings.length)}</p>
+					{/if}
+					{#if rowNote}
+						{@const note = rowNote(a)}
+						{#if note}<p class="text-label text-muted-foreground" data-row-note>{note}</p>{/if}
 					{/if}
 					<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
 						<Button

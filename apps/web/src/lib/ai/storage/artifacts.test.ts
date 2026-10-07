@@ -455,6 +455,27 @@ describe('meta + deleteBySubjectId (Phase 7: deal-scoped memos)', () => {
 		expect(await db.table(AI_ARTIFACTS_TABLE).count()).toBe(2);
 	});
 
+	it('updateMeta merges into stored meta, validates, and ignores a missing id (Phase 9)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const a = await repo.create(memo({ meta: { analysisHash: 'abc' } }));
+		await repo.updateMeta!(a.id, { copied: 'instagram' });
+		await repo.updateMeta!(a.id, { copied: 'instagram,linkedin' });
+		const got = await repo.get(a.id);
+		expect(got?.meta).toEqual({ analysisHash: 'abc', copied: 'instagram,linkedin' });
+		expect(got?.updatedAt).not.toBe(a.updatedAt);
+		expect(got?.text).toBe(a.text);
+		const bare = await repo.create(memo({ meta: undefined }));
+		await repo.updateMeta!(bare.id, { copied: 'facebook' });
+		expect((await repo.get(bare.id))?.meta).toEqual({ copied: 'facebook' });
+		await expect(repo.updateMeta!(a.id, { k: 'x'.repeat(201) })).rejects.toThrow('artifact-meta');
+		const full = await repo.create(
+			memo({ meta: Object.fromEntries(Array.from({ length: 16 }, (_, i) => [`k${i}`, 'v'])) })
+		);
+		await expect(repo.updateMeta!(full.id, { extra: 'v' })).rejects.toThrow('artifact-meta');
+		expect(Object.keys((await repo.get(full.id))?.meta ?? {})).toHaveLength(16);
+		await expect(repo.updateMeta!('missing', { copied: 'facebook' })).resolves.toBeUndefined();
+	});
+
 	it('backup export then import keeps meta; an older row without it still imports', async () => {
 		const repo = createArtifactRepo(db, { now: clock() });
 		const tagged = await repo.create(memo({ subjectId: 'deal-1', meta: { analysisHash: 'abc' } }));

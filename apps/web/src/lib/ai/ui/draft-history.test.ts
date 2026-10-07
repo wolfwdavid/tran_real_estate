@@ -199,6 +199,16 @@ describe('DraftHistory', () => {
 		expect(text(more)).toContain('14 saved in this browser');
 	});
 
+	test('rowNote adds one muted line to the rows it returns text for (Phase 9)', () => {
+		const body = html(DraftHistory, {
+			...props,
+			rowNote: (a: AiArtifact) => (a.id === 'a2' ? 'Copied: Instagram, LinkedIn' : null)
+		});
+		expect(count(body, /data-row-note/g)).toBe(1);
+		expect(text(body)).toContain('Copied: Instagram, LinkedIn');
+		expect(count(html(DraftHistory, props), /data-row-note/g)).toBe(0);
+	});
+
 	test('empty state', () => {
 		const body = html(DraftHistory, { ...base, initial: { artifacts: [], count: 0 } });
 		expect(text(body)).toContain(
