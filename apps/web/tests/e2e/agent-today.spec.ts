@@ -32,14 +32,9 @@ const group = (page: Page, key: string) => page.locator(`[data-group="${key}"]`)
 const rows = (scope: Locator) => scope.locator('li[data-task-id]');
 const titles = async (scope: Locator) =>
 	(await rows(scope).locator('label').allTextContents()).map((t) => t.trim());
-/**
- * The Today nav link with its count pill. UI-SPEC names it "Today, 5 tasks due"; browsers compute
- * "Today , 5 tasks due" because the visually hidden suffix (Tailwind sr-only, position: absolute)
- * counts as block-level in accessible-name computation and gets a space before it. The optional
- * space is accepted here; AgentNav (08-11) owns the markup (see deferred-items.md).
- */
+/** The Today nav link with its count pill: exactly the UI-SPEC name "Today, {n} tasks due". */
 const pill = (page: Page, n: number) =>
-	page.getByRole('link', { name: new RegExp(`^Today ?, ${n} tasks due$`) });
+	page.getByRole('link', { name: `Today, ${n} tasks due`, exact: true });
 
 async function openHome(page: Page) {
 	await page.goto('agent/');

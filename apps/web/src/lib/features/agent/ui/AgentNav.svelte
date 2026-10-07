@@ -24,9 +24,10 @@
 	const current = (ids: string[]) =>
 		page.route.id !== null && ids.includes(page.route.id) ? 'page' : undefined;
 	const showCount = $derived(Number.isInteger(dueCount) && dueCount > 0);
-	// Completes the link name: "Today, 3 tasks due". A variable, because Svelte trims leading
-	// whitespace in literal element text.
-	const dueSuffix = $derived(dueCount === 1 ? ', 1 task due' : `, ${dueCount} tasks due`);
+	// The link's full name, "Today, 3 tasks due", is an aria-label: a visually hidden span would be
+	// position: absolute, which accessible-name computation treats as a block and pads with a space
+	// ("Today , 3 tasks due"). The visible text "Today" starts the label, so WCAG 2.5.3 holds.
+	const dueLabel = $derived(dueCount === 1 ? 'Today, 1 task due' : `Today, ${dueCount} tasks due`);
 </script>
 
 <nav aria-label="Agent tools" class="border-b border-border">
@@ -36,11 +37,12 @@
 				<a
 					href={l.href}
 					aria-current={current(l.ids)}
+					aria-label={l.label === 'Today' && showCount ? dueLabel : undefined}
 					class="inline-flex min-h-11 items-center px-2 text-body text-foreground underline-offset-[6px] hover:underline aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-2 sm:px-4"
 					>{l.label}{#if l.label === 'Today' && showCount}<span
 							class="ml-1 rounded-full bg-accent-surface px-2 text-label font-semibold text-foreground tabular-nums"
 							aria-hidden="true">{dueCount}</span
-						><span class="sr-only">{dueSuffix}</span>{/if}</a
+						>{/if}</a
 				>
 			</li>
 		{/each}

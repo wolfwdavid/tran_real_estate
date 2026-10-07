@@ -16,9 +16,10 @@ const links = (h: string) =>
 		inner: m[2],
 		text: m[2].replace(/<[^>]+>/g, '').trim()
 	}));
-/** The accessible name: aria-hidden subtrees are dropped. */
-const accessibleName = (inner: string) =>
-	inner
+/** The accessible name: aria-label wins; otherwise the text with aria-hidden subtrees dropped. */
+const accessibleName = (l: { attrs: string; inner: string }) =>
+	/aria-label="([^"]*)"/.exec(l.attrs)?.[1] ??
+	l.inner
 		.replace(/<span\b[^>]*aria-hidden="true"[^>]*>[\s\S]*?<\/span>/g, '')
 		.replace(/<[^>]+>/g, '')
 		.trim();
@@ -62,21 +63,29 @@ describe('AgentNav', () => {
 	});
 
 	test('a due count renders a hidden-from-name pill and reads "Today, 3 tasks due"', () => {
-		const [today] = links(html({ dueCount: 3 }));
+		const [today, ...rest] = links(html({ dueCount: 3 }));
 		expect(today.inner).toMatch(/<span\b[^>]*aria-hidden="true"[^>]*>3<\/span>/);
 		expect(today.inner).toContain('bg-accent-surface');
-		expect(accessibleName(today.inner)).toBe('Today, 3 tasks due');
+		expect(today.attrs).toContain('aria-label="Today, 3 tasks due"');
+		expect(accessibleName(today)).toBe('Today, 3 tasks due');
+		// The label starts with the visible word (WCAG 2.5.3 label in name).
+		expect(accessibleName(today).startsWith('Today')).toBe(true);
+		// No visually hidden name fragment: being position: absolute, it would pad the computed
+		// name with a space ("Today , 3 tasks due").
+		expect(today.inner).not.toContain('sr-only');
+		for (const l of rest) expect(l.attrs).not.toContain('aria-label');
 	});
 
 	test('a single due task reads "Today, 1 task due"', () => {
 		const [today] = links(html({ dueCount: 1 }));
-		expect(accessibleName(today.inner)).toBe('Today, 1 task due');
+		expect(accessibleName(today)).toBe('Today, 1 task due');
 	});
 
 	test.each([undefined, 0, -2, 1.5])('dueCount %s renders no pill', (dueCount) => {
 		const h = html(dueCount === undefined ? {} : { dueCount });
 		expect(h).not.toContain('sr-only');
 		expect(h).not.toContain('aria-hidden');
+		expect(h).not.toContain('aria-label="Today');
 		expect(links(h)[0].text).toBe('Today');
 	});
 });
