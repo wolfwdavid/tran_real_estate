@@ -2,6 +2,7 @@
 	import { validateZip } from '@tran/core/markets';
 	import { buildSnapshotMetrics, snapshotFigureValues } from '@tran/core/studio';
 	import { isGatewayError, SAMPLE_METROS, type GatewayError as GatewayErrorType } from '$lib/data';
+	import type { Provenance } from '@tran/core/request';
 	import type { CostEstimate } from '$lib/features/shared/data/copy/provenance';
 	import { formatRelative } from '$lib/features/shared/data/relative-time';
 	import type { CostPreview, SnapshotData, ZipData } from './snapshot-data';
@@ -19,6 +20,11 @@
 
 	/** What onLoaded receives: the 09-14 ZipData plus the ZIP it belongs to. */
 	export type LoadedZip = ZipData & { zip: string };
+
+	/** The loaded ZIP's ProvenanceRow input: the gateway's source, fetch time and stale flag. */
+	export function loadedProvenance(r: Pick<ZipData, 'source' | 'fetchedAt' | 'stale'>): Provenance {
+		return { source: r.source, fetchedAt: Date.parse(r.fetchedAt), stale: r.stale };
+	}
 
 	/** The radio value of the last row. */
 	export const ANOTHER = 'another';
@@ -144,9 +150,19 @@
 		now?: number;
 		/** true while Load ZIP data is in flight (the owning step sets aria-busy from it too). */
 		busy?: boolean;
+		/** The ZIP to preselect (the builder's autosaved choice). Read once; nothing is loaded. */
+		initialZip?: string | null;
 	}
 
-	let { onLoaded, sampleMode, data, options, now, busy = $bindable(false) }: Props = $props();
+	let {
+		onLoaded,
+		sampleMode,
+		data,
+		options,
+		now,
+		busy = $bindable(false),
+		initialZip = null
+	}: Props = $props();
 
 	// Injected once at creation: the data path and the runtime never change for this component.
 	const runtime: PortRuntime | null = untrack(() => (data ? null : getDataRuntime()));
@@ -158,9 +174,20 @@
 	const errorId = `${uid}-error`;
 	const loadedHeadingId = `${uid}-loaded`;
 
+	// The autosaved ZIP: a matching sample row, else the typed input (a watched row once the list
+	// arrives). Preselecting is free; only Load ZIP data spends.
+	const startZip: string | null = untrack(() =>
+		initialZip && validateZip(initialZip).ok ? initialZip : null
+	);
+	const startIsSampleRow = untrack(
+		() => sampleMode && startZip !== null && SAMPLE_ZIP_OPTIONS.some((o) => o.zip === startZip)
+	);
+
 	let watchedRows = $state<ZipOption[]>([]);
-	let choice = $state<string | null>(null);
-	let typed = $state('');
+	let choice = $state<string | null>(
+		startIsSampleRow ? startZip : untrack(() => (startZip && !sampleMode ? ANOTHER : null))
+	);
+	let typed = $state(untrack(() => (startZip && !sampleMode ? startZip : '')));
 	let typedCost = $state<CostPreview | null>(null);
 	let fieldError = $state<string | null>(null);
 	let gatewayError = $state<GatewayErrorType | null>(null);
@@ -208,6 +235,8 @@
 
 	onMount(() => {
 		clock = Date.now();
+		// A preselected typed ZIP shows its free cost preview like a typed one.
+		if (typed !== '') onInput();
 	});
 
 	// Re-reads the free rows when the mode resolves to live (a key added mid-session). Reads only:
@@ -217,7 +246,14 @@
 		let stale = false;
 		void readWatchedRows()
 			.then((r) => {
-				if (!stale) watchedRows = r;
+				if (stale) return;
+				watchedRows = r;
+				if (
+					untrack(() => choice === ANOTHER && typed === startZip) &&
+					r.some((o) => o.zip === startZip)
+				) {
+					choice = startZip;
+				}
 			})
 			.catch(() => {
 				if (!stale) watchedRows = [];
@@ -302,6 +338,7 @@
 				zip: current.zip,
 				stats: r.data,
 				fetchedAt: new Date(r.provenance.fetchedAt).toISOString(),
+				stale: r.provenance.stale,
 				source: r.provenance.source,
 				placeName: current.placeName
 			});
@@ -341,11 +378,7 @@
 				{/if}
 			</div>
 			<ProvenanceRow
-				provenance={{
-					source: loaded.source,
-					fetchedAt: Date.parse(loaded.fetchedAt),
-					stale: false
-				}}
+				provenance={loadedProvenance(loaded)}
 				onRefresh={runtime && loaded.source === 'rentcast' ? refresh : undefined}
 				{now}
 			/>

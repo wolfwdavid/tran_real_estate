@@ -41,6 +41,8 @@ export interface ZipData {
 	stats: MarketStats;
 	/** ISO timestamp of the original fetch (a cache hit keeps the original time). */
 	fetchedAt: string;
+	/** The gateway's provenance flag: the cached entry is past its TTL (the chip says so). */
+	stale: boolean;
 	source: 'rentcast' | 'sample';
 	placeName: string | null;
 }
@@ -95,6 +97,7 @@ export function createSnapshotData(runtime: PortRuntime): SnapshotData {
 			return {
 				stats: r.data,
 				fetchedAt: iso(r.provenance.fetchedAt),
+				stale: r.provenance.stale,
 				source,
 				placeName: samplePlaceName(zip, source)
 			};

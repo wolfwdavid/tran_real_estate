@@ -37,6 +37,7 @@ import ZipPicker, {
 	chooseZip,
 	loadChosenZip,
 	loadedAnnouncement,
+	loadedProvenance,
 	SAMPLE_ZIP_OPTIONS,
 	toEstimate,
 	ZIP_INVALID,
@@ -349,6 +350,7 @@ describe('ZipPicker choice and load (pure)', () => {
 		const zipData = {
 			stats: SAMPLE_MARKET_STATS,
 			fetchedAt: SAMPLE_FETCHED_AT,
+			stale: false,
 			source: 'sample' as const,
 			placeName: 'Harlow Springs, OK'
 		};
@@ -376,12 +378,27 @@ describe('ZipPicker choice and load (pure)', () => {
 		await expect(loadChosenZip(data, '00199', '', true)).rejects.toThrow('boom');
 	});
 
+	test('the loaded provenance row shows the gateway stale flag (fresh and stale)', () => {
+		const at = '2026-09-01T12:00:00.000Z';
+		expect(loadedProvenance({ source: 'rentcast', fetchedAt: at, stale: false })).toEqual({
+			source: 'rentcast',
+			fetchedAt: Date.parse(at),
+			stale: false
+		});
+		expect(loadedProvenance({ source: 'rentcast', fetchedAt: at, stale: true })).toEqual({
+			source: 'rentcast',
+			fetchedAt: Date.parse(at),
+			stale: true
+		});
+	});
+
 	test('announcement and cost label mapping', () => {
 		const rent = snapshotFigureValues(SAMPLE_SNAPSHOT_RECORD.metrics).medianRent;
 		const base = {
 			zip: '74201',
 			stats: SAMPLE_MARKET_STATS,
 			fetchedAt: SAMPLE_FETCHED_AT,
+			stale: false,
 			placeName: null
 		};
 		expect(loadedAnnouncement({ ...base, source: 'sample' })).toBe(

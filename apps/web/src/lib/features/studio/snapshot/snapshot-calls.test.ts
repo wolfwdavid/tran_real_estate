@@ -89,6 +89,7 @@ describe('snapshot data with a RentCast key (live gateway)', () => {
 		expect(first.placeName).toBeNull();
 		expect(first.stats.zipCode).toBe(ZIP);
 		expect(first.fetchedAt).toBe(new Date(T0).toISOString());
+		expect(first.stale).toBe(false);
 
 		// A second snapshot for the same ZIP: cached, 0 calls.
 		expect(await data.snapshotZipCost(ZIP)).toEqual({ calls: 0, cached: true, sample: false });
@@ -223,12 +224,39 @@ describe('snapshot data without a key (sample mode)', () => {
 		expect(zip.source).toBe('sample');
 		expect(zip.stats.zipCode).toBe(SAMPLE_ZIP);
 		expect(zip.placeName).toBe('Harlow Springs, OK');
+		expect(zip.stale).toBe(false);
 		const summary = await data.loadListingsSummary(SAMPLE_ZIP, 'sale');
 		expect(summary.sample.total).toBeGreaterThan(0);
 
 		expect(calls).toHaveLength(0);
 		expect(globalFetch).not.toHaveBeenCalled();
 		expect(await billed(rt)).toBe(0);
+	});
+});
+
+describe('ZIP data provenance (the loaded ProvenanceRow)', () => {
+	const stub = (stale: boolean, fetchedAt: number): PortRuntime => ({
+		gateway: null,
+		requestSpend: (async () => ({
+			data: { zipCode: ZIP, sale: null, rental: null },
+			provenance: { source: 'rentcast', fetchedAt, stale },
+			truncated: false,
+			droppedRows: 0,
+			requestKey: 'k'
+		})) as unknown as PortRuntime['requestSpend']
+	});
+
+	it('passes a fresh cache entry through as fresh, with its fetch time', async () => {
+		const zip = await createSnapshotData(stub(false, T0)).loadZipData(ZIP);
+		expect(zip.stale).toBe(false);
+		expect(zip.fetchedAt).toBe(new Date(T0).toISOString());
+	});
+
+	it("passes the gateway's stale flag through, keeping the original fetch time", async () => {
+		const old = T0 - 40 * 24 * 60 * 60 * 1000;
+		const zip = await createSnapshotData(stub(true, old)).loadZipData(ZIP);
+		expect(zip.stale).toBe(true);
+		expect(zip.fetchedAt).toBe(new Date(old).toISOString());
 	});
 });
 
