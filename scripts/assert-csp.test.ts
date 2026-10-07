@@ -448,8 +448,23 @@ describe('checkBuild over a temp directory', () => {
 			expect(EXPECTED_PAGES).toContain(page);
 		}
 		expect(EXPECTED_PAGES).toContain('agent/inquire/index.html');
-		// 24 pages + 404.html before Phase 8, plus the six agent sub-pages and the public inquiry page.
-		expect(EXPECTED_PAGES).toHaveLength(32);
+		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
+	});
+
+	test('EXPECTED_PAGES pins the Phase 9 Studio pages and the snapshot printout', () => {
+		for (const page of [
+			'agent/studio/index.html',
+			'agent/studio/listing/index.html',
+			'agent/studio/social/index.html',
+			'agent/studio/reel/index.html',
+			'agent/studio/snapshot/index.html',
+			'print/snapshot/index.html'
+		]) {
+			expect(EXPECTED_PAGES).toContain(page);
+		}
+		// 32 entries after Phase 8 (24 pages + 404.html, six agent sub-pages, the inquiry page),
+		// plus the five Studio routes and the snapshot printout.
+		expect(EXPECTED_PAGES).toHaveLength(38);
 		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
 	});
 });
