@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
 	BRAND_FALLBACK,
 	FALLBACK_NAMES,
+	HEX_EXAMPLE,
 	assessBrandColor,
 	effectiveBrandColors,
 	normalizeHex
@@ -12,6 +13,10 @@ const WHITE = '#FFFFFF';
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
 describe('normalizeHex', () => {
+	test('the example shown to users is itself a valid, normalized color', () => {
+		expect(normalizeHex(HEX_EXAMPLE)).toBe(HEX_EXAMPLE);
+	});
+
 	test('accepts #rrggbb, bare rrggbb, #rgb and surrounding whitespace; uppercases', () => {
 		expect(normalizeHex('#a4452a')).toBe('#A4452A');
 		expect(normalizeHex('a4452a')).toBe('#A4452A');

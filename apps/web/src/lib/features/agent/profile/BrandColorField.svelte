@@ -10,6 +10,7 @@
 	import {
 		BRAND_FALLBACK,
 		FALLBACK_NAMES,
+		HEX_EXAMPLE,
 		assessBrandColor,
 		normalizeHex,
 		type BrandRole
@@ -44,7 +45,7 @@
 	const fallbackName = $derived(FALLBACK_NAMES[role]);
 	const roleTitle = $derived(role === 'primary' ? 'Primary' : 'Accent');
 	const ANNOUNCE_DEBOUNCE_MS = 500;
-	const HEX_ERROR = 'Use a 6-digit hex color, like #A4452A.';
+	const HEX_ERROR = `Use a 6-digit hex color, like ${HEX_EXAMPLE}.`;
 
 	const hexId = $derived(`profile-brand-${role}`);
 	const helpId = $derived(`${hexId}-help`);
@@ -148,7 +149,7 @@
 			autocomplete="off"
 			spellcheck={false}
 			maxlength={7}
-			placeholder="#A4452A"
+			placeholder={HEX_EXAMPLE}
 			aria-invalid={invalid ? 'true' : undefined}
 			aria-describedby={describedBy}
 			class="w-32 uppercase tabular-nums"

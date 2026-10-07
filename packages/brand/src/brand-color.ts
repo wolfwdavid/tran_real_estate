@@ -32,6 +32,13 @@ const TEXT_ON: Record<BrandRole, { against: 'white' | 'dark'; text: string }> = 
 const HEX6 = /^#?([0-9a-f]{6})$/i;
 const HEX3 = /^#?([0-9a-f]{3})$/i;
 
+/**
+ * The example shown to people typing a brand color (field placeholder and format error). Copy,
+ * not a theme color: it lives here, beside the format it illustrates, so components stay free of
+ * raw hex literals.
+ */
+export const HEX_EXAMPLE = '#A4452A';
+
 /** `#rgb` / `rgb` / `#rrggbb` / `rrggbb` (trimmed) → `#RRGGBB`; anything else → null. */
 export function normalizeHex(raw: string): string | null {
 	const s = raw.trim();
