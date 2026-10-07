@@ -132,7 +132,7 @@
 		{/if}
 	</header>
 
-	<div class="mt-6 flex flex-col gap-6">
+	<div class="mt-6 flex flex-col gap-6 print:gap-4">
 		{@render children()}
 
 		<section aria-labelledby="report-sources" data-print-sources>

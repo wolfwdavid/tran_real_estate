@@ -34,6 +34,25 @@ const bedrooms = (medians: readonly number[], counts: readonly number[]) =>
 		totalListings: counts[bedrooms]
 	}));
 
+/** Current rental medians and listing counts by bedroom count (Studio .. 4+). */
+const RENT_BY_BEDS = [1100, 1300, 1550, 1900, 2400] as const;
+const RENT_BED_COUNTS = [10, 30, 45, 25, 10] as const;
+/** The overall median the bedroom medians above belong to (the latest month). */
+const RENT_NOW = 1615;
+
+/**
+ * A rental month with its bedroom breakdown, so the sample rent trend draws one line per bedroom
+ * count (the Phase 7 chart reads history[month].dataByBedrooms). Each bedroom median moves by the
+ * same dollars as the overall median that month.
+ */
+const rentPoint = (month: string, median: number, totalListings: number): MarketHistoryPoint => ({
+	...point(month, median, totalListings),
+	byBedrooms: bedrooms(
+		RENT_BY_BEDS.map((m) => m - (RENT_NOW - median)),
+		RENT_BED_COUNTS
+	)
+});
+
 const RENTAL: MarketSide = {
 	average: 1620,
 	median: 1615,
@@ -45,33 +64,33 @@ const RENTAL: MarketSide = {
 	newListings: 30,
 	totalListings: 120,
 	lastUpdatedDate: '2026-09-30',
-	byBedrooms: bedrooms([1100, 1300, 1550, 1900, 2400], [10, 30, 45, 25, 10]),
+	byBedrooms: bedrooms(RENT_BY_BEDS, RENT_BED_COUNTS),
 	byPropertyType: [],
 	history: [
-		point('2024-10', 1500, 100),
-		point('2024-11', 1505, 100),
-		point('2024-12', 1510, 100),
-		point('2025-01', 1515, 100),
-		point('2025-02', 1520, 100),
-		point('2025-03', 1525, 100),
-		point('2025-04', 1530, 110),
-		point('2025-05', 1535, 110),
-		point('2025-06', 1540, 110),
-		point('2025-07', 1545, 110),
-		point('2025-08', 1550, 110),
-		point('2025-09', 1555, 110),
-		point('2025-10', 1560, 110),
-		point('2025-11', 1565, 110),
-		point('2025-12', 1570, 110),
-		point('2026-01', 1575, 110),
-		point('2026-02', 1580, 120),
-		point('2026-03', 1585, 120),
-		point('2026-04', 1590, 120),
-		point('2026-05', 1595, 120),
-		point('2026-06', 1600, 120),
-		point('2026-07', 1605, 120),
-		point('2026-08', 1610, 120),
-		point('2026-09', 1615, 120)
+		rentPoint('2024-10', 1500, 100),
+		rentPoint('2024-11', 1505, 100),
+		rentPoint('2024-12', 1510, 100),
+		rentPoint('2025-01', 1515, 100),
+		rentPoint('2025-02', 1520, 100),
+		rentPoint('2025-03', 1525, 100),
+		rentPoint('2025-04', 1530, 110),
+		rentPoint('2025-05', 1535, 110),
+		rentPoint('2025-06', 1540, 110),
+		rentPoint('2025-07', 1545, 110),
+		rentPoint('2025-08', 1550, 110),
+		rentPoint('2025-09', 1555, 110),
+		rentPoint('2025-10', 1560, 110),
+		rentPoint('2025-11', 1565, 110),
+		rentPoint('2025-12', 1570, 110),
+		rentPoint('2026-01', 1575, 110),
+		rentPoint('2026-02', 1580, 120),
+		rentPoint('2026-03', 1585, 120),
+		rentPoint('2026-04', 1590, 120),
+		rentPoint('2026-05', 1595, 120),
+		rentPoint('2026-06', 1600, 120),
+		rentPoint('2026-07', 1605, 120),
+		rentPoint('2026-08', 1610, 120),
+		rentPoint('2026-09', 1615, 120)
 	]
 };
 

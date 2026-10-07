@@ -45,7 +45,16 @@
 	// 09-05 and guarded again by the 09-11 snapshot privacy check, and it renders counts, ranges and
 	// medians by bedroom count. It has no link and no image, so a report never advertises another
 	// agent's listing.
-	let { sample, zip }: { sample: AggregatedSample; zip: string } = $props();
+	// print (09-18): a sheet cannot scroll, so in print the cells may wrap and padding tightens,
+	// keeping all five columns inside the page box instead of clipped by the scroll wrapper.
+	let {
+		sample,
+		zip,
+		print = false
+	}: { sample: AggregatedSample; zip: string; print?: boolean } = $props();
+
+	const pad = $derived(print ? 'px-2 py-1' : 'px-3 py-2');
+	const nowrap = $derived(print ? '' : 'whitespace-nowrap');
 
 	const caption = $derived(listingsSummaryCaption(sample, zip));
 	const rows = $derived(listingsSummaryRows(sample));
@@ -66,7 +75,7 @@
 				{#each LISTINGS_SUMMARY_COLUMNS as col, i (col)}
 					<th
 						scope="col"
-						class="border-b border-border px-3 py-2 font-semibold whitespace-nowrap {i === 0
+						class="border-b border-border {pad} font-semibold {nowrap} {i === 0
 							? 'text-left'
 							: 'text-right'}">{col}</th
 					>
@@ -76,9 +85,9 @@
 		<tbody>
 			{#each rows as row (row.label)}
 				<tr class="border-b border-border last:border-b-0">
-					<th scope="row" class="px-3 py-2 text-left font-normal whitespace-nowrap">{row.label}</th>
+					<th scope="row" class="{pad} text-left font-normal whitespace-nowrap">{row.label}</th>
 					{#each row.cells as cell, i (i)}
-						<td class="px-3 py-2 text-right whitespace-nowrap tabular-nums">{cell}</td>
+						<td class="{pad} text-right {nowrap} tabular-nums">{cell}</td>
 					{/each}
 				</tr>
 			{/each}

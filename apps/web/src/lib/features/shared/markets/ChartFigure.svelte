@@ -33,7 +33,10 @@
 		/**
 		 * Print variant: table open (no <details>), provenance told to drop Refresh, title in Body
 		 * 16/600 (still an h2 unless headingLevel is 3), and the plot laid out in a fixed
-		 * 672-unit viewBox (height `height` or 320) that scales to the sheet width (Phase 9).
+		 * 672-unit viewBox (height `height` or 320) that scales to the sheet width (Phase 9). In
+		 * print media the card chrome (padding, border, shadow) drops, the figure may break across
+		 * pages (the plot itself never splits) and the data table prints compact, so a figure with a
+		 * 24-month table fits the 672px page box and does not leave a near-empty page before it.
 		 */
 		print?: boolean;
 		/**
@@ -73,9 +76,12 @@
 </script>
 
 <figure
+	class:print-flow={print}
 	aria-labelledby={titleId}
 	aria-describedby={ready ? summaryId : undefined}
-	class="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-card sm:p-6"
+	class="flex flex-col gap-4 rounded-lg border border-border bg-card p-4 shadow-card sm:p-6 {print
+		? 'print:gap-2 print:rounded-none print:border-0 print:p-0 print:shadow-none'
+		: ''}"
 >
 	<svelte:element
 		this={headingLevel === 3 ? 'h3' : 'h2'}
@@ -111,7 +117,7 @@
 			<!-- The plot lays out at a fixed 672 x height box; the SVG scales it to the sheet width. -->
 			<svg
 				viewBox="0 0 {PRINT_VIEWBOX_WIDTH} {printHeight}"
-				class="block h-auto w-full max-w-full"
+				class="block h-auto w-full max-w-full break-inside-avoid"
 				data-print-plot
 			>
 				<foreignObject x="0" y="0" width={PRINT_VIEWBOX_WIDTH} height={printHeight}>
@@ -132,7 +138,7 @@
 		<p id={summaryId} class="text-base leading-[1.6] text-foreground">{summary}</p>
 		<p class="text-label text-muted-foreground">{caveat}</p>
 		{#if print}
-			<ChartDataTable {table} />
+			<ChartDataTable {table} print />
 		{:else}
 			<details class="group">
 				<summary
@@ -151,3 +157,22 @@
 		{/if}
 	{/if}
 </figure>
+
+<style>
+	/*
+	 * The shared print stylesheet keeps every figure on one page (break-inside: avoid). A print
+	 * variant figure carries an open data table that can be most of a page tall, so it may break
+	 * between table rows instead of leaving a near-empty page before it; the plot itself (an
+	 * atomic SVG) never splits and the title stays with it (h2 break-after: avoid). This rule is
+	 * unlayered on purpose: a Tailwind utility (cascade layer) cannot override print.css.
+	 */
+	@media print {
+		figure.print-flow {
+			break-inside: auto;
+		}
+		/* Title, provenance, time range and legend stay on the page with the plot. */
+		figure.print-flow > :global(:has(~ [data-print-plot])) {
+			break-after: avoid;
+		}
+	}
+</style>

@@ -84,6 +84,8 @@
 	const agentName = $derived(d.fullName.trim() || 'the agent');
 	const contactLines = $derived(printed?.contactLines ?? []);
 
+	/** Print plot height in viewBox units: shorter than the 320 default to keep the printout compact. */
+	const PRINT_PLOT_HEIGHT = 240;
 	const BEDROOM_COLUMNS = ['Bedrooms', 'Median rent', 'Listings counted'];
 	const DOM_COLUMNS = ['Median days on market', 'Active listings', 'New listings'];
 </script>
@@ -128,6 +130,7 @@
 					stats={record.series.rentTrend}
 					state="ready"
 					sample={record.sample}
+					height={PRINT_PLOT_HEIGHT}
 					print
 				/>
 			</section>
@@ -141,6 +144,7 @@
 					stats={record.series.priceToRent}
 					state="ready"
 					sample={record.sample}
+					height={PRINT_PLOT_HEIGHT}
 					print
 				/>
 			</section>
@@ -177,7 +181,7 @@
 				<h2 id="snap-listings" class="mb-3 text-base leading-[1.6] font-semibold">
 					Active listings summary
 				</h2>
-				<ListingsSummaryTable sample={record.listingsSample} zip={record.zip} />
+				<ListingsSummaryTable sample={record.listingsSample} zip={record.zip} print />
 			</section>
 		{/if}
 
@@ -244,11 +248,11 @@
 			<tr>
 				{#each columns as col, i (i)}
 					{#if col === ''}
-						<td class="border-b border-border px-3 py-2"></td>
+						<td class="border-b border-border px-3 py-2 print:py-1"></td>
 					{:else}
 						<th
 							scope="col"
-							class="border-b border-border px-3 py-2 font-semibold {i === 0
+							class="border-b border-border px-3 py-2 font-semibold print:py-1 {i === 0
 								? 'text-left'
 								: 'text-right'}">{col}</th
 						>
@@ -259,9 +263,9 @@
 		<tbody>
 			{#each rows as row (row.label)}
 				<tr class="border-b border-border last:border-b-0">
-					<th scope="row" class="px-3 py-2 text-left font-normal">{row.label}</th>
+					<th scope="row" class="px-3 py-2 text-left font-normal print:py-1">{row.label}</th>
 					{#each row.cells as cell, i (i)}
-						<td class="px-3 py-2 text-right tabular-nums">{cell}</td>
+						<td class="px-3 py-2 text-right tabular-nums print:py-1">{cell}</td>
 					{/each}
 				</tr>
 			{/each}

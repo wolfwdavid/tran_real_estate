@@ -5,6 +5,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
 import type { SnapshotRecord, SnapshotSectionKey } from '$lib/storage/studio/types';
+import { printBlocks, splitRows } from '$lib/features/shared/markets/ChartDataTable.svelte';
 import { SAMPLE_SNAPSHOT_RECORD } from '../fixtures/sample-snapshot';
 import BrandBand, { bandColors } from './BrandBand.svelte';
 import SnapshotReport from './SnapshotReport.svelte';
@@ -248,6 +249,9 @@ describe('SnapshotReport (sample record)', () => {
 		expect(html).toContain('--brand-accent-effective: #F6E3D8');
 		expect(html).toContain('data-print-plot');
 		expect(html).not.toContain('<details');
+		// Both sample charts have data to draw (the rent trend needs per-month bedroom rows).
+		expect(html.match(/data-print-plot/g)).toHaveLength(2);
+		expect(text).not.toContain('Not enough monthly data');
 	});
 });
 
@@ -282,5 +286,31 @@ describe('SnapshotReport options', () => {
 		expect(heads).toContain('Key figures');
 		expect(heads).toContain('Prepared by');
 		expect(textOf(html)).not.toContain('reviewed by Avery Sample');
+	});
+});
+
+describe('chart data tables in print', () => {
+	test('narrow tables split into side-by-side blocks, every month exactly once', () => {
+		expect([2, 3, 4, 5, 6].map(printBlocks)).toEqual([3, 2, 2, 1, 1]);
+		const months = Array.from({ length: 24 }, (_, i) => i);
+		for (const n of [1, 2, 3]) {
+			const blocks = splitRows(months, n);
+			expect(blocks).toHaveLength(n);
+			expect(blocks.flat()).toEqual(months);
+		}
+		expect(splitRows([1, 2, 3, 4, 5], 3)).toEqual([[1, 2], [3, 4], [5]]);
+		expect(splitRows([], 3)).toEqual([[]]);
+	});
+
+	test('the sample printout: price-to-rent 3-up, rent trend one block, no scroll-only table', () => {
+		const html = report(SAMPLE_SNAPSHOT_RECORD);
+		const p2r =
+			/<section[^>]*data-snap-section="priceToRent"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
+		expect(p2r.match(/<table/g)).toHaveLength(3);
+		expect(p2r).toContain('(part 3 of 3)');
+		const trend =
+			/<section[^>]*data-snap-section="rentTrend"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
+		expect(trend.match(/<table/g)).toHaveLength(1);
+		expect(trend).not.toContain('whitespace-nowrap tabular-nums');
 	});
 });
