@@ -134,10 +134,12 @@ const POST_TYPE_TAGS: Record<SocialPostType, string | null> = {
 	other: null
 };
 
+const APOSTROPHES = new RegExp(`['${String.fromCharCode(0x2019)}]`, 'g');
+
 /** Words -> PascalCase with apostrophes removed and all other non-alphanumerics as separators. */
 function pascal(text: string): string {
 	return text
-		.replace(/['’]/g, '')
+		.replace(APOSTROPHES, '')
 		.split(/[^A-Za-z0-9]+/)
 		.filter((w) => w !== '')
 		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
