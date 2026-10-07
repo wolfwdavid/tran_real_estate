@@ -78,3 +78,34 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
 	);
 	expect(overflow).toBeLessThanOrEqual(0);
 }
+
+// --- CRM seeding (08-15). Later plans import these; wave 5+ plans must not edit this file. ---
+
+/** The Phase 3 LiveAnnouncer: the one polite live region in the root layout. */
+export const announcer = (page: Page) =>
+	page.locator('[role="status"][aria-live="polite"]').first();
+
+/** From an empty CRM, loads the 12 sample contacts and waits for the Sample contacts notice. */
+export async function loadSampleContacts(page: Page): Promise<void> {
+	await page.goto('agent/contacts/');
+	await page.getByRole('button', { name: 'Load sample contacts' }).click();
+	await expect(page.getByRole('region', { name: 'Sample contacts' })).toBeVisible();
+}
+
+/** Adds one lead through the Add a lead dialog on /agent/contacts/ and waits for the announcement. */
+export async function addLeadByHand(
+	page: Page,
+	l: { name: string; email?: string; phone?: string; stage?: string }
+): Promise<void> {
+	await page.goto('agent/contacts/');
+	await page.getByRole('button', { name: 'Add a lead' }).first().click();
+	const dialog = page.getByRole('dialog', { name: 'Add a lead' });
+	await dialog.getByLabel('Name', { exact: true }).fill(l.name);
+	if (l.email !== undefined) await dialog.getByLabel('Email', { exact: true }).fill(l.email);
+	if (l.phone !== undefined) await dialog.getByLabel('Phone', { exact: true }).fill(l.phone);
+	if (l.stage !== undefined) {
+		await dialog.getByLabel('Stage', { exact: true }).selectOption({ label: l.stage });
+	}
+	await dialog.getByRole('button', { name: 'Add lead' }).click();
+	await expect(announcer(page)).toHaveText(`Added ${l.name} to ${l.stage ?? 'New'}.`);
+}
