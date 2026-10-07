@@ -8,6 +8,7 @@
 	import type { Snippet } from 'svelte';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Printer from '@lucide/svelte/icons/printer';
 	import { longDate } from '@tran/core/format';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
@@ -24,12 +25,14 @@
 		preparedAt,
 		preparedLine,
 		sample,
+		sampleSentence = SAMPLE_SENTENCE,
 		provenance,
 		disclaimer,
 		disclaimerFull,
 		backHref,
 		backLabel,
 		onprint,
+		preparing = false,
 		brand,
 		footerNote,
 		children
@@ -40,6 +43,8 @@
 		/** Phase 9: replaces the prepared line (snapshot: "Prepared {date} by {agent}, {brokerage}"). */
 		preparedLine?: string;
 		sample: boolean;
+		/** Phase 9: the header's sample sentence (the snapshot names its own made-up parts). */
+		sampleSentence?: string;
 		provenance: string;
 		disclaimer: string;
 		disclaimerFull: string;
@@ -47,6 +52,8 @@
 		backHref: string;
 		backLabel: string;
 		onprint?: () => void;
+		/** Phase 9: the print button is disabled and reads Preparing… until the caller is ready. */
+		preparing?: boolean;
 		brand?: Snippet;
 		footerNote?: Snippet;
 		children: Snippet;
@@ -81,9 +88,15 @@
 			data-print-button
 			class="{buttonVariants({ variant: 'default' })} w-full gap-2 sm:w-auto"
 			onclick={print}
+			disabled={preparing}
 		>
-			<Printer class="size-4" aria-hidden="true" />
-			Print or save as PDF
+			{#if preparing}
+				<LoaderCircle class="size-4 motion-safe:animate-spin" aria-hidden="true" />
+				Preparing…
+			{:else}
+				<Printer class="size-4" aria-hidden="true" />
+				Print or save as PDF
+			{/if}
 		</button>
 		<p class="text-label text-muted-foreground sm:basis-full">{PRINT_HELP}</p>
 	</div>
@@ -114,7 +127,7 @@
 					<FlaskConical class="size-3.5" aria-hidden="true" />
 					{CHIP_SAMPLE}
 				</span>
-				<p class="text-label text-foreground">{SAMPLE_SENTENCE}</p>
+				<p class="text-label text-foreground">{sampleSentence}</p>
 			</div>
 		{/if}
 	</header>
