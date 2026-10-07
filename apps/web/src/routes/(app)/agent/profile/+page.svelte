@@ -3,8 +3,8 @@
 	// disclosure" previews. The page prerenders with an empty form; the saved profile is read from
 	// IndexedDB after mount through the live view, so saved details survive a reload. The Logo and
 	// Brand colors fieldsets are rendered inside the form through its `extraFieldsets` snippet and
-	// write straight into the form draft (stored on Save profile). Plan 08-24 adds the inquiry share
-	// builder below the form.
+	// write straight into the form draft (stored on Save profile). "Your inquiry page" (the share
+	// link builder, AGT-02) sits below the form, outside it, and reads the SAVED profile.
 	import { onMount } from 'svelte';
 	import {
 		EMPTY_PROFILE_INPUT,
@@ -16,12 +16,18 @@
 	import DisclosurePreview from '$lib/features/agent/profile/DisclosurePreview.svelte';
 	import LogoUpload from '$lib/features/agent/profile/LogoUpload.svelte';
 	import ProfileForm from '$lib/features/agent/profile/ProfileForm.svelte';
+	import ShareLinkBuilder from '$lib/features/agent/profile/ShareLinkBuilder.svelte';
 	import { toProfileInput } from '$lib/features/agent/profile/profile-form';
 	import { useProfile, type LiveView } from '$lib/storage/agent/live.svelte';
 
 	let view = $state.raw<LiveView<AgentProfile | null> | null>(null);
 	onMount(() => {
 		view = useProfile();
+		// The home page's "Create your inquiry link" row links here with this hash. The section is in
+		// the prerendered HTML, so it exists before hydration; scroll once the page has mounted.
+		if (location.hash === '#inquiry-page') {
+			document.getElementById('inquiry-page')?.scrollIntoView();
+		}
 	});
 
 	const initial = $derived.by<ProfileInput>(() => {
@@ -68,6 +74,9 @@
 	<div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,640px)_352px] lg:items-start">
 		<div class="max-w-prose min-w-0">
 			<ProfileForm {initial} onchange={(d) => (draft = d)} extraFieldsets={brandFieldsets} />
+			<div class="mt-8">
+				<ShareLinkBuilder profile={view?.current ?? null} />
+			</div>
 		</div>
 		<aside class="flex min-w-0 flex-col gap-8 lg:sticky lg:top-6" aria-label="Previews">
 			<div class="rounded-lg border border-border bg-card p-6 shadow-card">

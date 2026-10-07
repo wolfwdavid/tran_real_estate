@@ -65,9 +65,9 @@ describe('shareLinkBlockers', () => {
 		expect(shareLinkBlockers(profile({ ...base, web3formsAccessKey: 'not-a-key' }))).toEqual([
 			'key'
 		]);
-		expect(shareLinkBlockers(profile({ ...base, web3formsAccessKey: KEY.slice(0, 35) }))).toEqual(
-			['key']
-		);
+		expect(shareLinkBlockers(profile({ ...base, web3formsAccessKey: KEY.slice(0, 35) }))).toEqual([
+			'key'
+		]);
 		expect(shareLinkBlockers(profile({ ...base, web3formsAccessKey: KEY }))).toEqual([]);
 		expect(shareLinkBlockers(profile({ ...base, web3formsAccessKey: KEY.toUpperCase() }))).toEqual(
 			[]

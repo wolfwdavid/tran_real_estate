@@ -50,13 +50,16 @@
 	let draft = $state<ProfileInput>(toProfileInput(initial));
 
 	// The saved profile arrives after mount (and again after each save). Adopt it as the baseline;
-	// replace the draft too unless the agent has already typed something.
+	// replace the draft too unless the agent has already typed something. The Web3Forms key has no
+	// field in this form (ShareLinkBuilder saves it on its own), so a typed draft still takes the
+	// stored key: otherwise Save profile would write the draft's stale key over a freshly saved one.
 	$effect(() => {
 		const next = toProfileInput(initial);
 		untrack(() => {
 			const typed = isDirty(saved, $state.snapshot(draft));
 			saved = next;
-			if (!typed) draft = toProfileInput(next);
+			if (typed) draft.web3formsAccessKey = next.web3formsAccessKey;
+			else draft = toProfileInput(next);
 		});
 	});
 
