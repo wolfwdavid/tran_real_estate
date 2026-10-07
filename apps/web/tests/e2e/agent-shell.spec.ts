@@ -8,11 +8,13 @@ import { AGENT_ROUTES } from './routes';
 
 type AgentRoute = (typeof AGENT_ROUTES)[number];
 
-const EXPECTED: Record<AgentRoute, { h1: string; current: string }> = {
+// The contact detail without ?id= hydrates into its not-found block (08-23); its page title stays
+// the generic "Contact".
+const EXPECTED: Record<AgentRoute, { h1: string; current: string; title?: string }> = {
 	'agent/today/': { h1: 'Today', current: 'Today' },
 	'agent/pipeline/': { h1: 'Pipeline', current: 'Pipeline' },
 	'agent/contacts/': { h1: 'Contacts', current: 'Contacts' },
-	'agent/contact/': { h1: 'Contact', current: 'Contacts' },
+	'agent/contact/': { h1: "This contact isn't here", current: 'Contacts', title: 'Contact' },
 	'agent/import/': { h1: 'Import leads', current: 'Import' },
 	'agent/profile/': { h1: 'Your profile', current: 'Profile' }
 };
@@ -30,7 +32,7 @@ test('the spec covers exactly the registered agent routes', () => {
 });
 
 for (const route of AGENT_ROUTES) {
-	const { h1, current } = EXPECTED[route];
+	const { h1, current, title = h1 } = EXPECTED[route];
 
 	test(`${route}: h1, title, Agent tools nav in order with ${current} current`, async ({
 		page
@@ -39,7 +41,7 @@ for (const route of AGENT_ROUTES) {
 		await expect(page.locator('html')).not.toHaveAttribute('hidden');
 		await expect(page.locator('h1')).toHaveCount(1);
 		await expect(page.locator('h1')).toHaveText(h1);
-		await expect(page).toHaveTitle(`${h1}: Agent portal · Tran Real Estate Tools`);
+		await expect(page).toHaveTitle(`${title}: Agent portal · Tran Real Estate Tools`);
 
 		const nav = agentNav(page);
 		await expect(nav).toBeVisible();
