@@ -19,9 +19,13 @@ import {
 	type Platform
 } from './disclosure-format.js';
 
-// Middle dot separator (U+00B7), escaped to keep this source ASCII.
-const SEP = ' · ';
-const HOUSE = '\u{1F3E1}';
+// Glyphs are built from code points to keep this source ASCII.
+const DOT = String.fromCharCode(0xb7);
+const SEP = ` ${DOT} `;
+const HOUSE = String.fromCodePoint(0x1f3e1);
+const LQ = String.fromCharCode(0x201c);
+const RQ = String.fromCharCode(0x201d);
+const APOS = String.fromCharCode(0x2019);
 
 const P: DisclosureProfile = {
 	fullName: 'Avery Sample',
@@ -73,9 +77,9 @@ describe('formatDisclosure', () => {
 	test('team name renders as "{Team} at {Brokerage}"', () => {
 		const team = { ...P, teamName: 'The Sample Team' };
 		expect(brokerageLine(team)).toBe('The Sample Team at Sample Realty');
-		expect(formatDisclosure(team, 'ad-inline').text.startsWith(`The Sample Team at Sample Realty${SEP}`)).toBe(
-			true
-		);
+		expect(
+			formatDisclosure(team, 'ad-inline').text.startsWith(`The Sample Team at Sample Realty${SEP}`)
+		).toBe(true);
 	});
 
 	test('blank team name falls back to the brokerage alone', () => {
@@ -100,7 +104,12 @@ describe('formatDisclosure', () => {
 			brokerageLine: 'Sample Realty',
 			agentLine: 'Avery Sample, Licensed Real Estate Salesperson',
 			licenseLine: 'License #10401234567 (NY)',
-			contactLines: ['Office (555) 555-0142', 'Mobile (555) 555-0187', 'avery@example.com', 'https://example.com']
+			contactLines: [
+				'Office (555) 555-0142',
+				'Mobile (555) 555-0187',
+				'avery@example.com',
+				'https://example.com'
+			]
 		});
 		expect(r.lines).toEqual([
 			'Sample Realty',
@@ -116,7 +125,11 @@ describe('formatDisclosure', () => {
 
 	test('print variant with one phone drops the label', () => {
 		const r = formatDisclosure({ ...P, phone: '' }, 'print');
-		expect(r.print?.contactLines).toEqual(['(555) 555-0142', 'avery@example.com', 'https://example.com']);
+		expect(r.print?.contactLines).toEqual([
+			'(555) 555-0142',
+			'avery@example.com',
+			'https://example.com'
+		]);
 		const m = formatDisclosure({ ...P, brokeragePhone: '' }, 'print');
 		expect(m.print?.contactLines[0]).toBe('(555) 555-0187');
 	});
@@ -126,11 +139,13 @@ describe('formatDisclosure', () => {
 		const t = formatDisclosure(sparse, 'ad-inline').text;
 		expect(t).toBe(`Sample Realty${SEP}Avery Sample${SEP}Lic. #10401234567 (NY)`);
 		expect(t.includes(`${SEP}${SEP}`)).toBe(false);
-		expect(t.includes(' ·  · ')).toBe(false);
-		expect(t.endsWith(' · ')).toBe(false);
-		expect(t.endsWith(' ·')).toBe(false);
+		expect(t.includes(` ${DOT}  ${DOT} `)).toBe(false);
+		expect(t.endsWith(SEP)).toBe(false);
+		expect(t.endsWith(` ${DOT}`)).toBe(false);
 		const noLic = formatDisclosure({ ...P, licenseNumber: '' }, 'ad-inline').text;
-		expect(noLic).toBe(`Sample Realty${SEP}Avery Sample, Licensed Real Estate Salesperson${SEP}(555) 555-0142`);
+		expect(noLic).toBe(
+			`Sample Realty${SEP}Avery Sample, Licensed Real Estate Salesperson${SEP}(555) 555-0142`
+		);
 		const noState = formatDisclosure({ ...P, licenseState: '' }, 'ad-block');
 		expect(noState.lines[2]).toBe('Lic. #10401234567');
 		const empty = formatDisclosure(
@@ -147,15 +162,18 @@ describe('formatDisclosure', () => {
 		expect(formatDisclosure(P, 'print').missing).toEqual([]);
 	});
 
-	test.each(['FL', 'NJ', 'OH', 'CA', 'NY', 'TX', 'ZZ'])('state %s: brokerage first, license with state', (st) => {
-		for (const teamName of [undefined, 'The Sample Team']) {
-			const prof = { ...P, licenseState: st, teamName };
-			const t = formatDisclosure(prof, 'ad-inline').text;
-			expect(t.startsWith(brokerageLine(prof))).toBe(true);
-			expect(t).toContain(`Lic. #${P.licenseNumber} (${st})`);
-			expect(t.indexOf('Sample Realty')).toBeLessThan(t.indexOf('Avery Sample'));
+	test.each(['FL', 'NJ', 'OH', 'CA', 'NY', 'TX', 'ZZ'])(
+		'state %s: brokerage first, license with state',
+		(st) => {
+			for (const teamName of [undefined, 'The Sample Team']) {
+				const prof = { ...P, licenseState: st, teamName };
+				const t = formatDisclosure(prof, 'ad-inline').text;
+				expect(t.startsWith(brokerageLine(prof))).toBe(true);
+				expect(t).toContain(`Lic. #${P.licenseNumber} (${st})`);
+				expect(t.indexOf('Sample Realty')).toBeLessThan(t.indexOf('Avery Sample'));
+			}
 		}
-	});
+	);
 });
 
 describe('missingFor', () => {
@@ -262,35 +280,38 @@ describe('assemblePost', () => {
 		expect(r.length).toBe(2 + 2 + 1);
 	});
 
-	test.each(PLATFORMS)('property: disclosure is always last and never truncated (%s)', (platform: Platform) => {
-		let s = 9;
-		const next = (): number => {
-			s = (s * 1664525 + 1013904223) >>> 0;
-			return s;
-		};
-		const alphabet = ['a', 'Z', ' ', '\n', '.', '7', HOUSE, '“', '”', '’', '#'];
-		const limit = PLATFORM_LIMITS[platform];
-		for (let i = 0; i < 500; i++) {
-			const len = next() % 70001;
-			const parts: string[] = [];
-			// Build in runs so long bodies stay cheap.
-			let built = 0;
-			while (built < len) {
-				const ch = alphabet[next() % alphabet.length] ?? 'a';
-				const run = ch.repeat(1 + (next() % 200));
-				parts.push(run);
-				built += run.length;
+	test.each(PLATFORMS)(
+		'property: disclosure is always last and never truncated (%s)',
+		(platform: Platform) => {
+			let s = 9;
+			const next = (): number => {
+				s = (s * 1664525 + 1013904223) >>> 0;
+				return s;
+			};
+			const alphabet = ['a', 'Z', ' ', '\n', '.', '7', HOUSE, LQ, RQ, APOS, '#'];
+			const limit = PLATFORM_LIMITS[platform];
+			for (let i = 0; i < 500; i++) {
+				const len = next() % 70001;
+				const parts: string[] = [];
+				// Build in runs so long bodies stay cheap.
+				let built = 0;
+				while (built < len) {
+					const ch = alphabet[next() % alphabet.length] ?? 'a';
+					const run = ch.repeat(1 + (next() % 200));
+					parts.push(run);
+					built += run.length;
+				}
+				const bodyText = parts.join('').slice(0, len);
+				const tagCount = next() % 10;
+				const tags = Array.from({ length: tagCount }, (_, k) => `#tag${k}`);
+				const r = assemblePost(platform, bodyText, tags, D);
+				expect(r.text.endsWith(D)).toBe(true);
+				expect(r.text.indexOf(D)).toBe(r.text.length - D.length);
+				expect(r.over > 0).toBe(r.text.length > limit);
+				expect(r.keptTags.length).toBe(Math.min(tagCount, HASHTAG_CAPS[platform]));
 			}
-			const bodyText = parts.join('').slice(0, len);
-			const tagCount = next() % 10;
-			const tags = Array.from({ length: tagCount }, (_, k) => `#tag${k}`);
-			const r = assemblePost(platform, bodyText, tags, D);
-			expect(r.text.endsWith(D)).toBe(true);
-			expect(r.text.indexOf(D)).toBe(r.text.length - D.length);
-			expect(r.over > 0).toBe(r.text.length > limit);
-			expect(r.keptTags.length).toBe(Math.min(tagCount, HASHTAG_CAPS[platform]));
 		}
-	});
+	);
 });
 
 describe('postBudget', () => {
