@@ -69,13 +69,13 @@
 
 ### Agent Portal — CRM & Leads
 
-- [ ] **AGT-01**: Agent can set up a profile (name, brokerage, license number, state, logo, brand colors, postal address) that automatically appends required disclosures to exports and generated content
-- [ ] **AGT-02**: Agent can publish a shareable inquiry page that emails new leads to them through their own Web3Forms key, with spam protection
-- [ ] **AGT-03**: Agent can import leads by pasting a lead email or adding them manually, with duplicate detection
-- [ ] **AGT-04**: Agent can move contacts through a drag-and-drop pipeline (New → Contacted → Touring → Offer → Closed)
-- [ ] **AGT-05**: Agent can create follow-up tasks and see a due-today queue when opening the app
-- [ ] **AGT-06**: Agent can generate AI follow-up email drafts that include CAN-SPAM elements (postal address, opt-out line)
-- [ ] **AGT-07**: Agent can import contacts from CSV and export contacts to CSV
+- [x] **AGT-01**: Agent can set up a profile (name, brokerage, license number, state, logo, brand colors, postal address) that automatically appends required disclosures to exports and generated content
+- [x] **AGT-02**: Agent can publish a shareable inquiry page that emails new leads to them through their own Web3Forms key, with spam protection
+- [x] **AGT-03**: Agent can import leads by pasting a lead email or adding them manually, with duplicate detection
+- [x] **AGT-04**: Agent can move contacts through a drag-and-drop pipeline (New → Contacted → Touring → Offer → Closed)
+- [x] **AGT-05**: Agent can create follow-up tasks and see a due-today queue when opening the app
+- [x] **AGT-06**: Agent can generate AI follow-up email drafts that include CAN-SPAM elements (postal address, opt-out line)
+- [x] **AGT-07**: Agent can import contacts from CSV and export contacts to CSV
 
 ### Agent Portal — Content Studio & Reports
 
@@ -189,13 +189,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INV-04 | Phase 7 | Complete |
 | INV-05 | Phase 7 | Complete |
 | INV-06 | Phase 7 | Complete |
-| AGT-01 | Phase 8 | Pending |
-| AGT-02 | Phase 8 | Pending |
-| AGT-03 | Phase 8 | Pending |
-| AGT-04 | Phase 8 | Pending |
-| AGT-05 | Phase 8 | Pending |
-| AGT-06 | Phase 8 | Pending |
-| AGT-07 | Phase 8 | Pending |
+| AGT-01 | Phase 8 | Complete |
+| AGT-02 | Phase 8 | Complete |
+| AGT-03 | Phase 8 | Complete |
+| AGT-04 | Phase 8 | Complete |
+| AGT-05 | Phase 8 | Complete |
+| AGT-06 | Phase 8 | Complete |
+| AGT-07 | Phase 8 | Complete |
 | STU-01 | Phase 9 | Pending |
 | STU-02 | Phase 9 | Pending |
 | STU-03 | Phase 9 | Pending |

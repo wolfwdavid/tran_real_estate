@@ -145,8 +145,8 @@ The browser component tests (`*.browser.test.ts`, the `web-browser` project) run
 
 ## Routes
 
-Every page is prerendered with a trailing slash. Twenty-four pages ship today, plus the `404.html`
-fallback (25 HTML files per build, all checked by `csp:assert`):
+Every page is prerendered with a trailing slash. Thirty-one pages ship today, plus the `404.html`
+fallback (32 HTML files per build, all checked by `csp:assert`):
 
 | Route                    | Group                                                                |
 | ------------------------ | -------------------------------------------------------------------- |
@@ -170,7 +170,14 @@ fallback (25 HTML files per build, all checked by `csp:assert`):
 | `/investor/buy-boxes/`   | Investor: buy boxes over for-sale listings, quick metrics            |
 | `/investor/markets/`     | Investor: up to 5 watched ZIP codes                                  |
 | `/investor/market/`      | Investor: one ZIP's rent trend and price-to-rent dashboard (`?zip=`) |
-| `/agent/`                | App (placeholder until Phases 8-9)                                   |
+| `/agent/`                | Agent: home with the due-today queue, pipeline summary, get set up   |
+| `/agent/today/`          | Agent: today's follow-up tasks (overdue, due today, upcoming)        |
+| `/agent/pipeline/`       | Agent: pipeline board New to Closed (drag or Move menu)              |
+| `/agent/contacts/`       | Agent: contacts list, search, smart lists, CSV export                |
+| `/agent/contact/`        | Agent: one contact (`?id=`): stage, tasks, notes, follow-up draft    |
+| `/agent/import/`         | Agent: paste a lead email or import a CSV, with duplicate review     |
+| `/agent/profile/`        | Agent: profile, disclosures, logo, colors, inquiry share link        |
+| `/agent/inquire/`        | Public, noindex inquiry form a lead fills in; posts to Web3Forms     |
 | `/settings/`             | App: keys, RentCast usage, key security, backup, storage, install    |
 | `/print/`                | Chrome-free print surface                                            |
 | `/print/memo/`           | Chrome-free memo printout (`?id=&memo=`), print or save as PDF       |
@@ -247,6 +254,27 @@ only third-party hosts the app ever contacts are the providers the user brings a
   `corepack pnpm --filter web exec playwright test tests/e2e/investor`.
 - **Owner checks** that need a real key, a real AI key, real devices or the deployed origin are in
   `.planning/phases/07-investor-portal/07-HUMAN-UAT.md`.
+
+## Agent portal (Phase 8)
+
+- **Local data only:** the agent CRM (`/agent/` and its sub-pages) keeps contacts, tasks,
+  activities and the profile in this browser's IndexedDB and makes zero RentCast calls, which
+  both an import-graph test (`scripts/agent-boundary.test.ts`) and a request tripwire across every
+  agent flow (`apps/web/tests/e2e/agent-no-rentcast.spec.ts`) prove. Twelve synthetic sample
+  contacts load with one click and can be removed again (with Undo).
+- **Leads in:** the public inquiry page (`/agent/inquire/`, noindex, none of the app's chrome)
+  posts each inquiry to the agent's own Web3Forms access key behind a honeypot and a 3-second
+  gate, with a `TRAN-LEAD v1` block that pastes back into **Import leads** exactly. The Web3Forms
+  access key is public by design, so it lives in the agent profile and its share link, not in the
+  key vault. Leads can also be pasted from any email, added by hand or imported from CSV, always
+  through a duplicate review.
+- **Work the leads:** a pipeline board (New, Contacted, Touring, Offer, Closed) with a keyboard
+  Move menu, follow-up tasks with a due-today queue on `/agent/`, and AI follow-up drafts that
+  carry the agent's postal address, an opt-out line and the state disclosure in every exit (Copy
+  text, Open in email app, Mark as sent). There is no SMS feature. Contacts export to CSV and the
+  export re-imports as "Already in contacts".
+- **Owner checks** that need a real Web3Forms key, real email clients or counsel are in
+  `.planning/phases/08-agent-portal-profile-lead-intake-crm/08-HUMAN-UAT.md`.
 
 ## End-to-end ports
 
