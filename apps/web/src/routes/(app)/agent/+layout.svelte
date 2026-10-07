@@ -26,7 +26,9 @@
 		if (!snapshot || restoring) return;
 		restoring = true;
 		try {
-			await restoreSampleContacts(snapshot);
+			// samplesState is deep $state, so `snapshot` is a Proxy; IndexedDB's structured clone
+			// refuses proxies (DataCloneError). Hand Dexie plain objects.
+			await restoreSampleContacts($state.snapshot(snapshot));
 			clearSamplesState();
 			announce('Sample contacts restored.');
 		} finally {
