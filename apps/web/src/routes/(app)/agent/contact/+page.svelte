@@ -19,9 +19,10 @@
 	import ContactNotes from '$lib/features/agent/contact/ContactNotes.svelte';
 	import ContactTasks from '$lib/features/agent/contact/ContactTasks.svelte';
 	import { todayLocal } from '$lib/features/agent/dates';
+	import FollowUpComposer from '$lib/features/agent/followup/FollowUpComposer.svelte';
 	import { createBoardState } from '$lib/features/agent/pipeline/board-state.svelte';
 	import { buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import { useActivities, useContact } from '$lib/storage/agent/live.svelte';
+	import { useActivities, useContact, useProfile } from '$lib/storage/agent/live.svelte';
 	import { useTasksFor } from '$lib/storage/agent/tasks-live.svelte';
 
 	/** undefined until the first navigation settles; null when the URL carries no id. */
@@ -32,6 +33,7 @@
 	let notFoundEl = $state<HTMLHeadingElement | null>(null);
 
 	const board = createBoardState();
+	const profile = useProfile();
 	const today = todayLocal();
 
 	afterNavigate(() => {
@@ -111,11 +113,23 @@
 				<div class="order-4">
 					<ContactNotes contact={c} />
 				</div>
-				<section id="follow-up" aria-labelledby="follow-up-title" class="order-5">
-					<!-- Plan 08-25 renders the FollowUpComposer under this heading. -->
+				<section
+					id="follow-up"
+					aria-labelledby="follow-up-title"
+					class="order-5 flex flex-col gap-4"
+				>
 					<h2 id="follow-up-title" class="font-display text-heading font-semibold text-foreground">
 						Follow-up email
 					</h2>
+					<!-- Waits for the profile so a real contact never flashes the prerequisite block. Keyed by
+					contact: a same-route navigation to another id starts a fresh draft form. -->
+					{#if profile.loaded}
+						{#key c.id}
+							<FollowUpComposer contact={c} profile={profile.current} />
+						{/key}
+					{:else}
+						<p class="text-label text-muted-foreground">Checking this browser&hellip;</p>
+					{/if}
 				</section>
 			</div>
 			<div class="contents lg:flex lg:flex-col lg:gap-12">

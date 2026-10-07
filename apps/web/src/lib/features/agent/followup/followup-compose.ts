@@ -53,8 +53,6 @@ export type FollowupState =
 			emailFooter: { text: string; label: string };
 			tokens: Record<string, string>;
 			exitDisabled: ExitDisabled;
-			/** "What will be sent" companion line naming the provider. */
-			sentNote: string;
 	  };
 
 const LIST = new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' });
@@ -64,7 +62,6 @@ const lower = (s: string): string => s.charAt(0).toLocaleLowerCase('en-US') + s.
 export function followupState(i: {
 	contact: Contact;
 	profile: ProfileInput | null;
-	providerLabel: string;
 }): FollowupState {
 	const { contact } = i;
 	const name = contact.name.trim();
@@ -94,8 +91,7 @@ export function followupState(i: {
 		exitDisabled:
 			contact.email.trim() === ''
 				? { email: `Add an email address for ${name} to open this in your email app.` }
-				: {},
-		sentNote: `Your signature, mailing address, opt-out line, and disclosure are added in this browser after the draft is written. They aren't sent to ${i.providerLabel}.`
+				: {}
 	};
 }
 

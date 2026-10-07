@@ -63,7 +63,7 @@ const PROFILE: ProfileInput = {
 const DRAFT = 'Hi Pat,\n\nThanks for reaching out.';
 
 function ready(c: Contact, p: ProfileInput | null) {
-	const st = followupState({ contact: c, profile: p, providerLabel: 'Anthropic' });
+	const st = followupState({ contact: c, profile: p });
 	if (st.kind !== 'ready') throw new Error(`expected ready, got ${st.kind}`);
 	return st;
 }
@@ -72,8 +72,7 @@ describe('followupState gates', () => {
 	it('opted-out contacts get no draft panel, with the CAN-SPAM message', () => {
 		const st = followupState({
 			contact: contact({ name: 'Emerson Draft', emailOptOutAt: NOW }),
-			profile: PROFILE,
-			providerLabel: 'Anthropic'
+			profile: PROFILE
 		});
 		expect(st).toEqual({
 			kind: 'opted-out',
@@ -87,17 +86,14 @@ describe('followupState gates', () => {
 			contact({ emailOptOutAt: NOW }),
 			contact({ emailOptOutAt: NOW, sample: true })
 		]) {
-			expect(followupState({ contact: c, profile: null, providerLabel: 'x' }).kind).toBe(
-				'opted-out'
-			);
+			expect(followupState({ contact: c, profile: null }).kind).toBe('opted-out');
 		}
 	});
 
 	it('a real contact with an incomplete profile is blocked with the missing labels', () => {
 		const st = followupState({
 			contact: contact(),
-			profile: { ...PROFILE, postal: { ...PROFILE.postal, zip: '' }, licenseNumber: '' },
-			providerLabel: 'Anthropic'
+			profile: { ...PROFILE, postal: { ...PROFILE.postal, zip: '' }, licenseNumber: '' }
 		});
 		expect(st.kind).toBe('profile-incomplete');
 		if (st.kind !== 'profile-incomplete') return;
@@ -106,7 +102,7 @@ describe('followupState gates', () => {
 	});
 
 	it('a real contact with no profile at all lists every draft prerequisite', () => {
-		const st = followupState({ contact: contact(), profile: null, providerLabel: 'Anthropic' });
+		const st = followupState({ contact: contact(), profile: null });
 		expect(st.kind).toBe('profile-incomplete');
 		if (st.kind !== 'profile-incomplete') return;
 		expect(st.missing).toContain('full name');
@@ -139,9 +135,6 @@ describe('followupState gates', () => {
 		expect(st.emailFooter.label).toBe('Added to the end of every follow-up');
 		expect(st.tokens).toEqual({ client_first_name: 'Pat', client_name: 'Pat Real' });
 		expect(st.exitDisabled).toEqual({});
-		expect(st.sentNote).toBe(
-			"Your signature, mailing address, opt-out line, and disclosure are added in this browser after the draft is written. They aren't sent to Anthropic."
-		);
 	});
 
 	it('a contact without an email gates only Open in email app', () => {
