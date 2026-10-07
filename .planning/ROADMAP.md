@@ -307,7 +307,7 @@ Plans:
   3. Agent can drag contacts through New → Contacted → Touring → Offer → Closed, create follow-up tasks, and see a due-today queue when opening the app.
   4. Agent can generate an AI follow-up email draft that includes their postal address and an opt-out line, passes the Fair Housing checker, and is sent only via copy or their own email client. Agent can import contacts from CSV and export them to CSV.
   5. Demo-credible: every agent CRM route works fully on sample contacts with no keys, spends zero RentCast calls with a real key present, has all AI copy passing the Fair Housing checker, and passes axe checks.
-**Plans**: 26 plans (waves 1-8)
+**Plans**: 27 plans (waves 1-8, plus gap closure 08-27)
 - [x] 08-01-PLAN.md - Core agent contracts, schemas, sample profile and normalization (wave 1)
 - [x] 08-02-PLAN.md - Merged agent gateway ban, (public) boundary and transitive import-graph test (wave 1)
 - [x] 08-03-PLAN.md - CSP img-src blob: two-file change, oracle tests and banned-terms scope (wave 1)
@@ -334,6 +334,7 @@ Plans:
 - [x] 08-24-PLAN.md - Inquiry share-link builder (wave 6)
 - [x] 08-25-PLAN.md - AI follow-up composer with CAN-SPAM footer (wave 7)
 - [x] 08-26-PLAN.md - Demo-credibility sweep, HUMAN-UAT and full verify (wave 8)
+- [ ] 08-27-PLAN.md - Gap closure: agent CRM routes skip the check-on-open saved-search run, live-key RentCast tripwire (SC5) (gap closure, wave 1)
 **Research flag**: YES. Needs `/gsd:research-phase`: Web3Forms free-tier limits, captcha and domain-restriction options, whether the `TRAN-LEAD v1` payload survives major email clients, and the Formspree fallback.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 8`.
 **Human action required**: The owner creates a free Web3Forms access key to verify end-to-end lead delivery.
