@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-07-PLAN.md
-last_updated: "2026-10-07T08:03:55.191Z"
+stopped_at: Completed 09-02-PLAN.md
+last_updated: "2026-10-07T08:04:32.538Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 150
+  completed_plans: 151
 ---
 
 # Project State
@@ -196,6 +196,7 @@ Plan: Not started
 | Phase 08 P26 | 160min | 3 tasks | 26 files |
 | Phase 08 P27 | 28min | 3 tasks | 5 files |
 | Phase 09 P07 | 6min | 2 tasks | 2 files |
+| Phase 09 P02 | 10 min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -500,6 +501,7 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-27: DataShell check-on-open is once per mount but gated by a runAlerts prop; the (app) layout passes !isAgentCrm(route), so a session opened on an agent CRM page defers the pass to the first non-agent route (SC5 with a live key)
 - [Phase 08]: 08-27: leaving for an agent CRM page while DueSearchesDialog still asks settles it as declined with no announcement; a confirmed pass runs to the end; the no-spend-in-$effect lint rule stays on (the effect only calls the latched startAlerts via untrack)
 - [Phase 09]: Studio banned-terms list wired as a fourth SCOPED_LISTS entry (STUDIO_SCOPE/STUDIO_BANNED); still no allowlist, UI-SPEC report labels pass verbatim
+- [Phase 09]: 09-02: Phase 7 number check already in packages/core/src/numbers (case a, no move); findNumberWords is per-word and skips scale words/percent after a digit numeral; allowedSet parses agent text with the same extractor the checker uses
 
 ### Pending Todos
 
@@ -522,7 +524,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T08:03:55.183Z
-Stopped at: Completed 09-07-PLAN.md
+Last session: 2026-10-07T08:04:32.531Z
+Stopped at: Completed 09-02-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
