@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-23-PLAN.md
-last_updated: "2026-10-07T03:17:56.802Z"
+stopped_at: Completed 08-24-PLAN.md
+last_updated: "2026-10-07T03:40:13.154Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 145
+  completed_plans: 146
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 23 of 26 (waves 1-5 complete; wave 6 executing: 08-23, 08-24; then 08-25, 08-26)
+Plan: 24 of 26 (waves 1-6 complete: 08-23, 08-24 done; 08-25 executing; then 08-26)
 
 ## Performance Metrics
 
@@ -191,6 +191,7 @@ Plan: 23 of 26 (waves 1-5 complete; wave 6 executing: 08-23, 08-24; then 08-25, 
 | Phase 08 P21 | 1h 45m | 3 tasks | 13 files |
 | Phase 08 P22 | 70min | 3 tasks | 9 files |
 | Phase 08 P23 | 25 min | 3 tasks | 11 files |
+| Phase 08 P24 | 42min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -479,6 +480,8 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-23: Delete contact keeps a leaving snapshot on screen until the redirect and does not await goto, so ConfirmDialog closes first
 - [Phase 08]: 08-23: phone links are href="tel:{digits}" (literal scheme prefix satisfies svelte/no-navigation-without-resolve)
 - [Phase 08]: 08-23: Save details writes only changed fields / a changed opt-out; a plain save announces Details saved.
+- [Phase 08]: 08-24: the inquiry share link is built from the SAVED profile (same data as the home Copy inquiry link); the UI-SPEC brokerage checkbox is dropped and a missing brokerage blocks the link
+- [Phase 08]: 08-24: ProfileForm carries the stored web3formsAccessKey into a dirty draft so Save profile never overwrites a key saved from the builder
 
 ### Pending Todos
 
@@ -501,7 +504,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T03:17:56.790Z
-Stopped at: Completed 08-23-PLAN.md
+Last session: 2026-10-07T03:39:51.932Z
+Stopped at: Completed 08-24-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
