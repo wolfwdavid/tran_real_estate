@@ -69,6 +69,10 @@ async function walkAgent(page: Page): Promise<void> {
 		await page.goto(route);
 		await settle(page);
 	}
+	// A pass started by the last full load would open its dialog (4+ due) within this window, and
+	// a modal dialog would block the client-side leg below: fail on the dialog itself instead.
+	await page.waitForTimeout(1500);
+	await expect(page.getByRole('alertdialog'), 'DueSearchesDialog on an agent page').toHaveCount(0);
 	const steps: [RegExp | string, RegExp][] = [
 		[/^Today/, /agent\/today\/$/],
 		['Pipeline', /agent\/pipeline\/$/],
