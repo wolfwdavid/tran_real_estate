@@ -379,6 +379,18 @@ describe('DataShell runAlerts gate (08-27, SC5)', () => {
 			)
 			.toBeVisible();
 		expect(w.net.calls).toHaveLength(0);
+		// Not now leaves the searches due, so only the once-per-mount latch keeps later toggles from
+		// asking again (the scheduler's own claim does not cover a declined pass).
+		await page.getByRole('button', { name: 'Not now' }).click();
+		await expect.element(page.getByRole('alertdialog')).not.toBeInTheDocument();
+		for (const runAlerts of [false, true, false, true]) {
+			await screen.rerender({ runAlerts });
+			await settle();
+		}
+		await settle();
+		expect(dialogShown()).toBe(false);
+		expect(announced().filter((m) => m === DUE_DECLINED)).toHaveLength(1);
+		expect(w.net.calls).toHaveLength(0);
 	});
 
 	test('leaving while asking withdraws the dialog unspent', async () => {
