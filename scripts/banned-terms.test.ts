@@ -16,6 +16,8 @@ import {
 	RENTER_SCOPES,
 	SCANNED_EXT,
 	SCOPE,
+	STUDIO_BANNED,
+	STUDIO_SCOPE,
 	findBanned
 } from './lib/banned-terms-rules.mjs';
 
@@ -445,5 +447,147 @@ describe('Phase 8 agent-scoped phrases (08-UI-SPEC voice rules)', () => {
 		withTree({ [PAGE]: '<p>Tran automatically sends a reply.</p>\n' }, (dir) => {
 			expect(runCli(dir).status).toBe(0);
 		});
+	});
+});
+
+describe('studio scope (Phase 9)', () => {
+	const STUDIO = 'apps/web/src/lib/features/studio/x.svelte';
+	const STUDIO_FIXTURE = 'apps/web/src/lib/features/studio/fixtures/sample-facts.ts';
+	const CLEAN_PAGE = '<p>Clean copy.</p>\n';
+
+	test.each([
+		['CMA', 'Get a free CMA today'],
+		['CMA', 'Order two CMAs'],
+		['home is worth', 'Find out what your home is worth'],
+		['home is worth', 'Homes are worth more here'],
+		['home value estimate', 'Get a home value estimate'],
+		['free valuation', 'Request a free valuation'],
+		['free valuation', 'Free home valuations'],
+		['top producer', 'Top producer in the county'],
+		['top producer', 'a top-producer agent'],
+		['#1 agent', 'The #1 agent in town'],
+		['number one agent', 'Your number one agent'],
+		['record-breaking', 'A record-breaking year'],
+		['record-breaking', 'record breaking sales'],
+		['family-friendly', 'A family-friendly street'],
+		['perfect for', 'Perfect for first-time buyers'],
+		['safe neighborhood', 'Located in a safe neighborhood'],
+		['safe neighborhood', 'safe neighbourhoods'],
+		['great schools', 'Close to great schools'],
+		['exclusive community', 'An exclusive community'],
+		['exclusive community', 'exclusive communities']
+	])('flags %j in studio copy (%j)', (label, text) => {
+		const hits = findBanned(STUDIO, `<p>${text}</p>\n`);
+		expect(hits.some((h) => h.includes(`banned term "${label}"`))).toBe(true);
+	});
+
+	test('the studio list carries all thirteen UI-SPEC phrases', () => {
+		expect(STUDIO_BANNED.map(([label]) => label)).toEqual([
+			'CMA',
+			'home is worth',
+			'home value estimate',
+			'free valuation',
+			'top producer',
+			'#1 agent',
+			'number one agent',
+			'record-breaking',
+			'family-friendly',
+			'perfect for',
+			'safe neighborhood',
+			'great schools',
+			'exclusive community'
+		]);
+	});
+
+	test('CMA is case-sensitive (lowercase "cma" is not an acronym)', () => {
+		expect(findBanned(STUDIO, 'dogma cma')).toEqual([]);
+	});
+
+	test('scoping: studio phrases are studio-only, global terms still hit everywhere', () => {
+		const studioHits = findBanned(STUDIO, 'Get a free CMA today');
+		expect(studioHits.some((h) => h.includes('banned term "CMA"'))).toBe(true);
+		expect(findBanned('apps/web/src/lib/components/x.svelte', 'Get a free CMA today')).toEqual([]);
+		expect(findBanned(STUDIO, 'guaranteed returns').length).toBeGreaterThanOrEqual(1);
+		expect(
+			findBanned('apps/web/src/lib/components/x.svelte', 'guaranteed returns').length
+		).toBeGreaterThanOrEqual(1);
+	});
+
+	test.each([
+		'Market information only. Not a comparative market analysis or a professional valuation of any property.',
+		'This report summarizes listing-based market statistics from RentCast as of Mar 5, 2026. It is market information only. It is not a comparative market analysis, a professional valuation of any property, or investment, legal, or tax advice. Figures are estimates from listings data, may not include every property, and can be wrong.',
+		"Any client quote is real and used with that client's permission. No made-up quotes or reviews.",
+		"Every result I mention is real, mine, and something I can show records for. I don't promise future profits or rising prices.",
+		"Check your disclosure against your state's and brokerage's advertising rules. This isn't legal advice.",
+		"Counts, price ranges, and medians by bedroom count. No addresses or photos, so the report never advertises another agent's listing.",
+		'Equal Housing Opportunity.',
+		'We are pledged to the letter and spirit of U.S. policy for the achievement of equal housing opportunity throughout the Nation.'
+	])('accepts UI-SPEC studio copy %j', (text) => {
+		expect(findBanned(STUDIO, text)).toEqual([]);
+	});
+
+	test('studio route paths apply the studio list too', () => {
+		for (const rel of [
+			'apps/web/src/routes/(app)/agent/studio/listing/+page.svelte',
+			'apps/web/src/routes/(print)/print/snapshot/+page.svelte'
+		]) {
+			const hits = findBanned(rel, '<p>perfect for families</p>');
+			expect(
+				hits.some((h) => h.includes('banned term "perfect for"')),
+				rel
+			).toBe(true);
+		}
+		expect(STUDIO_SCOPE).toEqual([
+			'apps/web/src/lib/features/studio/',
+			'apps/web/src/routes/(app)/agent/studio/',
+			'apps/web/src/routes/(print)/print/snapshot/'
+		]);
+	});
+
+	test('a phrase Prettier split across lines is still caught', () => {
+		const hits = findBanned(STUDIO, '<p>\n\t\tperfect\n\t\tfor families\n</p>');
+		expect(hits.some((h) => h.includes('"perfect for"'))).toBe(true);
+	});
+
+	test('CLI non-vacuity: a planted "free CMA" studio fixture fails, the same line elsewhere passes', () => {
+		const line = "export const x = 'Ask for a free CMA';\n";
+		withTree({ [STUDIO_FIXTURE]: line, [PAGE]: CLEAN_PAGE }, (dir) => {
+			const r = runCli(dir);
+			expect(r.status).toBe(1);
+			expect(r.out).toContain('CMA');
+			expect(r.out).toContain(STUDIO_FIXTURE);
+		});
+		withTree({ 'apps/web/src/lib/components/x.ts': line, [PAGE]: CLEAN_PAGE }, (dir) => {
+			const r = runCli(dir);
+			expect(r.status).toBe(0);
+		});
+	});
+
+	test('collectFiles walks the new features/studio SCOPE entry', () => {
+		const rel = 'apps/web/src/lib/features/studio/A.svelte';
+		withTree({ [rel]: CLEAN_PAGE }, (dir) => {
+			expect(collectFiles(dir)).toEqual([rel]);
+		});
+		expect(SCOPE).toEqual(expect.arrayContaining(['apps/web/src/lib/features/studio']));
+	});
+
+	test('lexicon and prompt files under lib/ai and packages/core stay out of scope', () => {
+		withTree(
+			{
+				'apps/web/src/lib/ai/prompts/studio/listing.ts': "export const p = 'perfect for';\n",
+				'packages/core/src/studio/lexicon.ts': "export const l = ['perfect for', 'free CMA'];\n",
+				[PAGE]: CLEAN_PAGE
+			},
+			(dir) => {
+				expect(collectFiles(dir)).toEqual([PAGE]);
+				const r = runCli(dir);
+				expect(r.status).toBe(0);
+			}
+		);
+	});
+
+	test('the rules module still exports no allowlist', async () => {
+		const mod = await import('./lib/banned-terms-rules.mjs');
+		expect(Object.keys(mod).filter((k) => /allow/i.test(k))).toEqual([]);
 	});
 });
