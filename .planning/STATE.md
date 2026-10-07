@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-18-PLAN.md
-last_updated: "2026-10-07T12:49:20.035Z"
+stopped_at: Completed 09-17-PLAN.md
+last_updated: "2026-10-07T13:14:46.223Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 166
+  completed_plans: 167
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 09
-Plan: 18 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
+Plan: 19 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
 
 ## Performance Metrics
 
@@ -212,6 +212,7 @@ Plan: 18 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
 | Phase 09 P16 | 16 min | 2 tasks | 5 files |
 | Phase 09 P15 | 24min | 2 tasks | 10 files |
 | Phase 09 P18 | 80min | 2 tasks | 12 files |
+| Phase 09 P17 | 130min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -546,6 +547,9 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-15: PanelState.preview() catches a prompt build() refusal (built = null) so a host form that is not valid yet raises no unhandled rejection
 - [Phase 09]: Phase 09-18: Market Snapshot full sample prints 6 Letter pages, not the plan's 1-4. Every section on, both 24-month chart tables open (UI-SPEC), Body 16 / Label 14 come to about 4.7 pages of content. The E2E budget is 6 for the sample and 1-2 for a three-section saved record; the owner should decide whether to accept this or condense the print tables
 - [Phase 09]: Phase 09-18: print overrides of print.css must be unlayered component styles, because Tailwind print: utilities live in a cascade layer and lose to the unlayered print.css. ChartFigure print figures may break between table rows; the plot never splits
+- [Phase 09]: 09-17: snapshot save gate input is assembled once (builderGateState) for the live reason line and the click-time recheck; notes status comes from the panel bindables
+- [Phase 09]: 09-17: record.sample = ZIP data is sample; the sample agent is frozen in only for sample data with an incomplete profile; live data with an incomplete profile is gated
+- [Phase 09]: 09-17: ZipData.stale carries the gateway provenance flag (always false on loads today: the live gateway refetches stale rows); Choose a different ZIP (onCleared) resets steps 2-4 and the notes panel
 
 ### Pending Todos
 
@@ -568,7 +572,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T12:48:56.603Z
-Stopped at: Completed 09-18-PLAN.md
+Last session: 2026-10-07T13:14:32.886Z
+Stopped at: Completed 09-17-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
