@@ -14,18 +14,22 @@
 	// The agent portal hides it too (08-UI-SPEC Planner Note 4): the agent CRM spends no RentCast
 	// calls, so a meter or a "Sample data" bar would mislabel the agent's own contacts. A future
 	// /agent/studio/ (which does use RentCast) shows it again.
+	// The agent CRM also skips the check-on-open saved-search run (08-27, SC5: zero RentCast calls
+	// with a real key present). A session opened on an agent page runs it on the first non-agent
+	// route; settings and /agent/studio/ keep it. isAgentCrm is the single predicate for both gates.
 	const isAgentCrm = (id: string | null) =>
 		id !== null &&
 		(id === '/(app)/agent' || id.startsWith('/(app)/agent/')) &&
 		!(id === '/(app)/agent/studio' || id.startsWith('/(app)/agent/studio/'));
 	const showStatusBar = $derived(page.route.id !== '/(app)/settings' && !isAgentCrm(page.route.id));
+	const runAlerts = $derived(!isAgentCrm(page.route.id));
 </script>
 
 <SiteHeader showSettings={true} />
 <main id="main-content" tabindex="-1">
 	<!-- DataShell renders the Data source status bar as the first child of <main>; AppNotice is the
 	     second (04-UI-SPEC Planner Note 2). -->
-	<DataShell {showStatusBar}>
+	<DataShell {showStatusBar} {runAlerts}>
 		<AppNotice />
 		{@render children()}
 	</DataShell>
