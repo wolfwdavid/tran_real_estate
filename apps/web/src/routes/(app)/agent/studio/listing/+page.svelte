@@ -1,10 +1,11 @@
 <script lang="ts">
 	// /agent/studio/listing/ (STU-01): the listing description writer.
-	// The prerendered skeleton (09-09): back link, h1 and the hydration line; the tool body
-	// mounts after hydration.
+	// The prerendered skeleton (09-09): back link, h1 and the hydration line. ListingStudio (09-15)
+	// shows "Loading your studio..." until its browser reads finish, then the tool body.
 	import { resolve } from '$app/paths';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import ListingStudio from '$lib/features/studio/listing/ListingStudio.svelte';
 </script>
 
 <svelte:head>
@@ -24,5 +25,5 @@
 		Studio
 	</a>
 	<h1 class="mt-6 font-display text-display font-semibold">Listing description</h1>
-	<p class="mt-4 text-label text-muted-foreground">Loading your studio&hellip;</p>
+	<ListingStudio />
 </div>

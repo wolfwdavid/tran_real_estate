@@ -225,7 +225,13 @@ export class PanelState {
 		const r = await this.deps.resolve();
 		this.selection = r.selection;
 		this.model = r.model;
-		this.built = await buildPrompt(this.deps.promptId, this.deps.inputs);
+		// A host form that is not valid yet (e.g. an empty listing facts form, whose prompt build()
+		// refuses it) has nothing to preview; generate() is guarded by the host's beforeGenerate.
+		try {
+			this.built = await buildPrompt(this.deps.promptId, this.deps.inputs);
+		} catch {
+			this.built = null;
+		}
 	}
 
 	/** Opens the Gemini dialog instead of running when the free-tier gate applies. */
