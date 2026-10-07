@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-18-PLAN.md
-last_updated: "2026-10-07T01:43:32.069Z"
+stopped_at: Completed 08-20-PLAN.md
+last_updated: "2026-10-07T01:57:48.550Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 141
+  completed_plans: 142
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 19 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
+Plan: 20 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
 
 ## Performance Metrics
 
@@ -187,6 +187,7 @@ Plan: 19 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-
 | Phase 08 P16 | 55min | 2 tasks | 6 files |
 | Phase 08 P19 | 55min | 3 tasks | 8 files |
 | Phase 08 P18 | 36 min | 3 tasks | 9 files |
+| Phase 08 P20 | 51min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -456,6 +457,10 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-18: Header Add a lead renders only while the list is absent (empty state keeps 2 buttons, populated page has exactly 1)
 - [Phase 08]: 08-18: 08-15's agent-entry placeholder assertion (focus to h1 after quick add) now asserts the new contact's link per the UI-SPEC focus table
 - [Phase 08]: 08-18: @tran/core/csv is imported from the barrel; core exports no csv/* subpath
+- [Phase 08]: 08-20: text holding any TRAN-LEAD block never falls back to free-form; only-newer-version blocks report mode none
+- [Phase 08]: 08-20: ImportReview is remounted per check via {#key}; rows/counts are $derived and the include set + free-form edits are captured once with untrack
+- [Phase 08]: 08-20: re-pasting an inquiry email with a message is an update that only logs the message (diffLeads semantics); Already in contacts proven with a message-less block
+- [Phase 08]: 08-20: axe E2E seeds contacts through one multi-block paste instead of addLeadByHand, which can click the contacts toolbar before the list hydrates
 
 ### Pending Todos
 
@@ -478,7 +483,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T01:43:32.062Z
-Stopped at: Completed 08-18-PLAN.md
+Last session: 2026-10-07T01:57:48.544Z
+Stopped at: Completed 08-20-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
