@@ -4,7 +4,7 @@
 // would run in the app's origin, which holds API keys.
 //
 // No data: URLs anywhere (the Phase 2 build oracle rejects them and img-src only allows blob:):
-// base64 goes through chunked btoa/atob, and previews mint object URLs (logo-url.ts).
+// base64 goes through chunked btoa/atob, and previews mint object URLs (features/shared/agent-profile/logo-url.ts).
 import {
 	LOGO_MAX_BYTES,
 	RASTER_LONG_SIDE,
@@ -49,12 +49,8 @@ export function bytesToBase64(bytes: Uint8Array): string {
 	return btoa(binary);
 }
 
-export function base64ToBytes(b64: string): Uint8Array<ArrayBuffer> {
-	const binary = atob(b64);
-	const out = new Uint8Array(binary.length);
-	for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i);
-	return out;
-}
+// The decoder lives with logoObjectUrl in features/shared/agent-profile (Studio reports use it too).
+export { base64ToBytes } from '$lib/features/shared/agent-profile/logo-url';
 
 /** Browser rasterizer: Blob -> object URL -> decoded <img> -> canvas -> PNG blob -> bytes. */
 async function rasterizeOnCanvas(

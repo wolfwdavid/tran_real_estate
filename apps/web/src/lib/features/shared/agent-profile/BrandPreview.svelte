@@ -3,7 +3,8 @@
 	// colors, so a failing color is already replaced by Tran's terracotta / sand here. The only
 	// inline style sets the two custom properties, and their values are always a validated
 	// #RRGGBB from effectiveBrandColors() or a Tran token; nothing else from user input reaches a
-	// style attribute. Phase 9 reports reuse the same function and logoObjectUrl().
+	// style attribute. Phase 9 reports reuse the same function and logoObjectUrl(). Lives in
+	// features/shared/agent-profile so the Studio can render it without importing the agent CRM folder.
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import { composeDisclosure } from '@tran/core/disclosure';
 	import { effectiveBrandColors } from '@tran/brand/brand-color';

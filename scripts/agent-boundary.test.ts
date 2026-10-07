@@ -10,19 +10,29 @@ import { importGraph, type GraphFs, walkFiles } from '../tooling/import-graph';
 const WEB = resolve(import.meta.dirname, '../apps/web/src').replace(/\\/g, '/');
 const LIB = posix.join(WEB, 'lib');
 const PUBLIC_ROUTES = posix.join(WEB, 'routes/(public)');
-// Phase 9's Market Studio legitimately reads market data through the gateway (CONTEXT amendment).
+// Phase 9's Content Studio (features/studio/** and routes/(app)/agent/studio/**) legitimately
+// reads market data through the gateway for the Market Snapshot (08-CONTEXT amendment), so it is
+// excluded from the agent entries. The invariant is scoped, not dropped: features/agent/** and
+// every non-studio /agent/* route still never reach lib/data.
 const STUDIO_ROUTES = posix.join(WEB, 'routes/(app)/agent/studio');
+
+/** True for a Content Studio source path (posix separators). */
+const isStudioPath = (f: string): boolean =>
+	f.includes('/lib/features/studio/') || f.includes('/routes/(app)/agent/studio/');
 
 const isSource = (f: string) => /\.(ts|js|svelte)$/.test(f) && !/\.(test|spec)\.[tj]s$/.test(f);
 const under = (dir: string) => (f: string) => f.startsWith(`${dir}/`);
 
 const publicEntries = walkFiles(PUBLIC_ROUTES).filter(isSource);
+const agentRouteFiles = walkFiles(posix.join(WEB, 'routes/(app)/agent')).filter(isSource);
 const agentEntries = [
 	...walkFiles(posix.join(LIB, 'features/agent')),
-	...walkFiles(posix.join(WEB, 'routes/(app)/agent')).filter((f) => !under(STUDIO_ROUTES)(f)),
+	...agentRouteFiles,
 	...walkFiles(posix.join(LIB, 'leads')),
 	...publicEntries
-].filter(isSource);
+]
+	.filter(isSource)
+	.filter((f) => !isStudioPath(f));
 
 // The one lib/data module agent code may reach: the Phase 4 Dexie store schemas, which
 // lib/storage/db.ts needs to open the shared database that every agent repository uses. It is the
@@ -72,6 +82,29 @@ describe('agent and public import-graph boundaries', () => {
 
 	test('studio routes are excluded from the agent entries', () => {
 		expect(agentEntries.filter((f) => f.includes('routes/(app)/agent/studio'))).toEqual([]);
+		expect(agentEntries.filter((f) => f.includes('features/studio'))).toEqual([]);
+		// Non-vacuity: the studio routes exist from 09-09 on, so the exclusion removes something.
+		const excluded = agentRouteFiles.filter(isStudioPath);
+		expect(excluded.length).toBeGreaterThan(0);
+		expect(excluded.every(under(STUDIO_ROUTES))).toBe(true);
+	});
+
+	test('isStudioPath matches only Content Studio sources', () => {
+		const yes = [
+			`${WEB}/routes/(app)/agent/studio/snapshot/+page.svelte`,
+			`${WEB}/routes/(app)/agent/studio/+page.svelte`,
+			`${LIB}/features/studio/snapshot/build.ts`
+		];
+		const no = [
+			`${WEB}/routes/(app)/agent/profile/+page.svelte`,
+			`${WEB}/routes/(app)/agent/+page.svelte`,
+			`${WEB}/routes/(app)/agent/studiox/+page.svelte`,
+			`${LIB}/features/agent/profile/ProfileForm.svelte`,
+			`${LIB}/features/agent/studio-notes.ts`,
+			`${LIB}/features/shared/agent-profile/index.ts`
+		];
+		for (const f of yes) expect(isStudioPath(f), f).toBe(true);
+		for (const f of no) expect(isStudioPath(f), f).toBe(false);
 	});
 
 	test('planted control: a gateway import two hops away is reported', () => {

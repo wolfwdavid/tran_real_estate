@@ -11,7 +11,7 @@
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { prepareLogo } from './logo-pipeline';
-	import { logoObjectUrl } from './logo-url';
+	import { logoObjectUrl } from '$lib/features/shared/agent-profile/logo-url';
 
 	interface Props {
 		logo: StoredLogo | null;

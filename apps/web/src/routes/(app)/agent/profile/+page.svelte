@@ -14,7 +14,7 @@
 		type ProfileInput
 	} from '@tran/core/agent/types';
 	import BrandColorField from '$lib/features/agent/profile/BrandColorField.svelte';
-	import BrandPreview from '$lib/features/agent/profile/BrandPreview.svelte';
+	import BrandPreview from '$lib/features/shared/agent-profile/BrandPreview.svelte';
 	import DisclosurePreview from '$lib/features/agent/profile/DisclosurePreview.svelte';
 	import LogoUpload from '$lib/features/agent/profile/LogoUpload.svelte';
 	import ProfileForm from '$lib/features/agent/profile/ProfileForm.svelte';
