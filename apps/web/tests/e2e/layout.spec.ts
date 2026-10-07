@@ -95,6 +95,8 @@ for (const route of CHROME_ROUTES) {
 }
 
 test('every route makes only same-origin requests and loads both brand fonts', async ({ page }) => {
+	// One test walks every route, so its budget grows with ROUTES (about 2 s a page on one core).
+	test.setTimeout(ROUTES.length * 4_000);
 	const urls: string[] = [];
 	page.on('request', (r) => urls.push(r.url()));
 	for (const route of ROUTES) {
