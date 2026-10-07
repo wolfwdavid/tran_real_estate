@@ -1,30 +1,17 @@
 ---
 phase: 08-agent-portal-profile-lead-intake-crm
-verified: 2026-10-07T07:15:00Z
-status: gaps_found
-score: 4/5 success criteria verified (SC5 partial); 7/7 requirements satisfied; 26/26 plans' artifacts and key links verified
-gaps:
-  - truth: "SC5: every agent CRM route spends zero RentCast calls with a real key present"
-    status: partial
-    reason: >
-      The agent CRM code never reaches the RentCast gateway (ESLint ban + transitive import-graph
-      test, both green). But every /agent/* page renders inside the (app) layout, whose DataShell
-      runs the Phase 4 check-on-open saved-search scheduler on mount regardless of route. With a
-      live RentCast key and 1-3 due renter saved searches, opening the app at /agent/ (bookmark,
-      PWA start, shared link) spends RentCast calls silently ("1-3 due run silently"), and with
-      4+ due the DueSearchesDialog opens on top of the agent page. The agent portal hides the
-      DataStatusBar, so the spend happens with no meter visible. The gate spec
-      (agent-no-rentcast.spec.ts) runs keyless with no saved searches, so it cannot see this.
-    artifacts:
-      - path: "apps/web/src/lib/features/shared/data/DataShell.svelte"
-        issue: "onMount (line ~120) calls checkSavedSearchesOnOpen unconditionally; only the status bar is gated by showStatusBar (line ~195)"
-      - path: "apps/web/src/routes/(app)/+layout.svelte"
-        issue: "isAgentCrm(route) is computed but only used to hide the status bar, not to skip the on-open alerts run"
-      - path: "apps/web/tests/e2e/agent-no-rentcast.spec.ts"
-        issue: "No key-present state: no live RentCast key and no due saved search are seeded before the tripwire walk"
-    missing:
-      - "Skip (or defer to the next non-agent route) the check-on-open saved-search run when the session starts on an agent CRM route, e.g. a runAlerts prop on DataShell driven by !isAgentCrm(page.route.id); or record an explicit owner decision that renter alerts may spend on agent pages and amend SC5"
-      - "Extend agent-no-rentcast (or add a spec) with a seeded live RentCast key plus a due saved search, open /agent/ first, and assert the tripwire stays empty"
+verified: 2026-10-07T07:52:37Z
+status: human_needed
+score: 5/5 success criteria verified; 7/7 requirements satisfied; 27/27 plans' artifacts and key links verified
+re_verification:
+  previous_status: gaps_found
+  previous_score: 4/5 (SC5 partial)
+  previous_report_commit: c1d34b9
+  gap_closure_plan: 08-27
+  gaps_closed:
+    - "SC5: every agent CRM route spends zero RentCast calls with a real key present"
+  gaps_remaining: []
+  regressions: []
 human_verification:
   - test: "UAT-1 Real delivery through the agent's own Web3Forms key"
     expected: "'Message sent'; email arrives with visitor fields, reply-to = visitor, subject 'New inquiry for {Name} from {Lead name}', sender 'Tran inquiry form'"
@@ -52,9 +39,38 @@ human_verification:
 # Phase 8: Agent Portal: Profile, Lead Intake & CRM Verification Report
 
 **Phase Goal:** An agent captures leads through their own inquiry page, works them through a pipeline, and never misses a follow-up, with required disclosures built in
-**Verified:** 2026-10-07T07:15:00Z
-**Status:** gaps_found (one partial gap on SC5; everything else verified; 7 owner UAT items pending)
-**Re-verification:** No (initial verification)
+**Verified:** 2026-10-07T07:52:37Z (initial 07:15:00Z, report c1d34b9)
+**Status:** human_needed (all 5 success criteria verified after the 08-27 gap closure; 7 owner UAT items pending)
+**Re-verification:** Yes, after gap closure (plan 08-27)
+
+## Re-verification (2026-10-07T07:52:37Z)
+
+**Gap under re-check:** SC5 partial. DataShell ran the check-on-open saved-search pass on every (app) route, so a live RentCast key plus due renter saved searches spent calls (or opened DueSearchesDialog) on `/agent/*`.
+
+**Code read (not the SUMMARY):**
+
+- `apps/web/src/routes/(app)/+layout.svelte`: `runAlerts = $derived(!isAgentCrm(page.route.id))` is passed to `<DataShell {showStatusBar} {runAlerts}>`. `isAgentCrm` is the same predicate that hides the status bar: true for `/(app)/agent` and `/(app)/agent/*`, false for `/(app)/agent/studio*` (Phase 9 keeps the pass by design), renter, investor, settings and null.
+- `apps/web/src/lib/features/shared/data/DataShell.svelte`: `runAlerts` prop (default `true`). `checkSavedSearchesOnOpen` is reached only from `startAlerts()`, which returns if `alertsClaimed || destroyed` and sets the latch synchronously. `boot()` calls it after `runtime.start()` resolves only if `untrack(() => runAlerts)`; a deferred `$effect` calls `untrack(startAlerts)` once `started && runAlerts`; a withdraw `$effect` closes a still-asking DueSearchesDialog and settles it as declined when `runAlerts` turns false. `runtime.start()` itself (read in `lib/data/runtime.svelte.ts`) only subscribes to keys, the broadcast channel and the ledger and builds the gateway; it makes no RentCast request. A full load of any `/agent/*` URL is a fresh mount that starts with `runAlerts` false, so it never runs a pass.
+- Only spend trigger: `checkSavedSearchesOnOpen` has exactly one call site in `src` (DataShell line 141), and DataShell is mounted only by the (app) layout (plus the test harness). The `(public)` (inquiry page) and `(print)` layouts mount no DataShell. Agent feature code and the six `/agent/*` routes import nothing from `lib/data` or `features/shared/markets` (grep clean; agent-boundary walker green). No other route or component can spend from DataShell on an agent page.
+- Renter/investor/settings: default `runAlerts = true` and `isAgentCrm` false, so the pass starts from `boot()` right after `start()` exactly as before. The pre-existing "DataShell check-on-open" tests (5 due dialog, Not now, 1-3 silent, at cap, sample mode) pass unchanged.
+
+**Commands run this session (single-core wrapper):**
+
+| Command | Result |
+|---|---|
+| vitest web-browser: `DataShell.browser.test.ts` + `rerender.browser.test.ts` | 2 files, 27/27 (includes the new "runAlerts gate (08-27, SC5)" describe: false + 2 due no fetch, false + 5 due no dialog, deferred start once, deferred 5-due asks, withdraw on leave unspent, flip before start resolves runs once) |
+| vitest `scripts/agent-boundary.test.ts` | 8/8 |
+| Playwright `agent-live-key` + `agent-no-rentcast`, `--workers=1`, root + sub | 6/6 passed (2.2 min) |
+| `corepack pnpm check` | 0 errors, 0 warnings (2510 files) |
+| `corepack pnpm banned` | passed (342 files) |
+
+Builds (`build/`, `build-sub/`, 03:37 local) postdate the last source commit (6860597, 03:26; 5386df6 at 03:33 is test-only). The agent-live-key spec saves a real-format key and seeds 2 or 5 due searches from the marketing home (no DataShell), full-loads every agent route, client-navigates the Agent tools nav, then asserts zero RentCast calls, no alertdialog, no Data source region, and `lastRunAt`/`claimedAt` still null. The first Renter arrival then makes exactly 2 calls, once per mount, and Back while the 5-due dialog asks withdraws it unspent. The 08-27 SUMMARY records both mutants (layout forced to `runAlerts={true}`; latch removed) going red; they were not re-run here.
+
+**Regression check:** `git diff c1d34b9` touches only DataShell, its harness and browser test, the (app) layout (5 lines) and the new spec, plus planning docs. No file under `packages/`, `lib/features/agent`, `lib/storage`, `lib/leads` or the agent routes changed, so the SC1-SC4 evidence below stands (quick existence and sanity check only, per re-verification mode).
+
+**Residual behavior (info, not a gap):** a pass authorized on a non-agent page (1-3 due running silently, or 4+ after "Check") keeps running if the user then moves to an agent page mid-run. That spend started on a renter, investor or settings page with the meter visible, so it is not an agent-page spend; 08-27 records it as intended.
+
+**Result:** gap closed, SC5 VERIFIED, no regressions.
 
 ## Method
 
@@ -74,13 +90,13 @@ human_verification:
 | 2 | Shareable inquiry page on the agent's own Web3Forms key with spam protection; paste or manual add creates a contact with duplicate detection | VERIFIED (delivery = human) | `(public)/agent/inquire/+page.svelte` reads URL params in onMount, text-only rendering, noindex + no-referrer; `InquiryForm` -> `evaluateGate` (honeypot drop-silently, 3000 ms too-fast) -> `submitInquiry` posts one JSON request to `https://api.web3forms.com/submit` with `tran_lead_v1` block, maps 429/5xx/captcha/rejected/network, redacts the key. `ShareLinkBuilder`/`share-link.ts` whitelist v,k,n,b(+optional) params. `PasteImport` -> `paste-to-leads` -> `lead-block`/`parse-freeform` -> `diff-leads` dry run -> `import-commit` single transaction. `QuickAddDialog` blocks duplicates by normalized email/phone. Real email arrival is UAT-1..3. |
 | 3 | Drag contacts New -> Contacted -> Touring -> Offer -> Closed; follow-up tasks; due-today queue on opening the app | VERIFIED | `StageColumn.svelte` native HTML5 DnD gated by `DRAG_MEDIA` (1280px, fine pointer), `readDraggedId` accepts only known ids, "Drop to move to {Stage}"; `MoveMenu` keyboard path; both go through `board-state.svelte.ts` `move()` -> `moveStage` (stage + activity in one `db.transaction('rw', ...)`, `applyMove`) with Undo and `announce`. Tasks: `tasks-repo.ts` on the `[status+dueDate]` compound index; `/agent/` renders `AgentHome` with compact `TodayQueue` first (`groupTasks`: Overdue, Due today, Coming up, Done today); AgentNav Today count pill via aria-label. |
 | 4 | AI follow-up draft with postal address and opt-out line, passes the Fair Housing checker, sent only via copy or own email client; CSV import and export | VERIFIED | `followup-prompt.ts` (housingCopy: true, client name/email/phone tokenized as known PII, footer never in the prompt); `followupState` gates opted-out and incomplete profiles; footer = postal address + `OPT_OUT_LINE` + ad-ID line for non-inquiry consent + disclosure; `computeGate` blocks all exits on block findings or unacknowledged warns; exits are only copy / mailto / mark-sent (logs activity, updates lastContactedAt). CSV: `packages/core/src/csv` (BOM, quote-all, CRLF, formula escaping, 5,000-row cap), `CsvImport` + `ColumnMapper` + `decode.ts` (windows-1252), `csv-export.ts` excludes samples. |
-| 5 | Demo-credible: works on sample contacts with no keys, **zero RentCast calls with a real key present**, AI copy passes the checker, axe passes | PARTIAL | Keyless: 12 sample contacts (new 4, contacted 3, touring 2, offer 2, closed 1), Fixture provider drafting, agent-a11y on both bases (per 08-26 run, 1490/1490 E2E), `agent-no-rentcast` re-run here: passed. Boundary: agent code never reaches `lib/data` (lint + walker, green). **But** with a real key the (app) layout's `DataShell` still runs the Phase 4 check-on-open saved-search scheduler on agent routes, spending RentCast calls (see Gaps). |
+| 5 | Demo-credible: works on sample contacts with no keys, **zero RentCast calls with a real key present**, AI copy passes the checker, axe passes | VERIFIED (re-verified after 08-27) | Keyless: 12 sample contacts (new 4, contacted 3, touring 2, offer 2, closed 1), Fixture provider drafting, agent-a11y on both bases (per 08-26 run, 1490/1490 E2E), `agent-no-rentcast` re-run here: passed. Boundary: agent code never reaches `lib/data` (lint + walker, green). Live key: the (app) layout passes `runAlerts = !isAgentCrm(route)` to DataShell, so the check-on-open pass never starts on agent CRM routes; `agent-live-key` (root + sub) proves zero calls and no dialog with 2 or 5 due searches (see Re-verification). |
 
-**Score:** 4/5 success criteria verified, 1 partial.
+**Score:** 5/5 success criteria verified.
 
 ### Plan must_haves
 
-All truths in the 26 plans' must_haves were traced to code or green tests. The only truth affected by the gap is 08-26 truth 2 ("Across every agent flow ... zero requests to api.rentcast.io"), which holds as tested (keyless) but not with a live key plus due saved searches.
+All truths in the 27 plans' must_haves were traced to code or green tests. 08-26 truth 2 ("Across every agent flow ... zero requests to api.rentcast.io"), partial in the initial report, now also holds with a live key plus due saved searches (08-27).
 
 ### Required Artifacts
 
@@ -90,7 +106,7 @@ All truths in the 26 plans' must_haves were traced to code or green tests. The o
 | `apps/web/src/lib/storage/agent/**` | VERIFIED | Dexie tables, contacts/tasks/profile repos, import-commit, backup registration (Contacts, Tasks, Activity, Agent profile) |
 | `apps/web/src/lib/features/agent/**` | VERIFIED | profile, crm, pipeline, import, tasks, contact, followup, home, ui; all wired from the six `/agent/*` routes |
 | `apps/web/src/lib/leads/**`, `lib/components/inquiry/**`, `routes/(public)/agent/inquire` | VERIFIED | Sink, URL params, gate, public page |
-| `apps/web/tests/e2e/agent-*.spec.ts` (15 specs + helpers) | VERIFIED | Only skips are `browserName !== 'chromium'` clipboard guards |
+| `apps/web/tests/e2e/agent-*.spec.ts` (16 specs incl. 08-27 `agent-live-key`, + helpers) | VERIFIED | Only skips are `browserName !== 'chromium'` clipboard guards |
 
 ### Key Link Verification (tool-reported failures, checked by hand)
 
@@ -105,6 +121,8 @@ All truths in the 26 plans' must_haves were traced to code or green tests. The o
 | StageBoard.svelte | announce() | WIRED | line 113; moves announce via board-state.svelte.ts |
 | LogoUpload.svelte | checkLogoFile / sniffLogo | WIRED (indirect) | via `prepareLogo` in `logo-pipeline.ts` line 136 |
 | ContactHeader.svelte | board-state move() | WIRED | `board.move(contact, value, { focus: false })` line 49 |
+| (app)/+layout.svelte | DataShell `runAlerts` | WIRED (08-27) | `runAlerts = $derived(!isAgentCrm(page.route.id))`, passed as `{runAlerts}` |
+| DataShell.svelte | checkSavedSearchesOnOpen | WIRED, gated (08-27) | only call site, inside the latched `startAlerts()`, reached from boot (if runAlerts) or the deferred effect |
 
 ### Requirements Coverage
 
@@ -125,7 +143,7 @@ No orphaned requirements: REQUIREMENTS.md maps exactly AGT-01..07 to Phase 8.
 | File | Line | Pattern | Severity | Impact |
 |---|---|---|---|---|
 | (scan of all Phase 8 source dirs) | - | TODO/FIXME/HACK/placeholder | none | Only hits are a comment about `\uXXXX` and `+1XXXXXXXXXX` in normalize.ts |
-| apps/web/src/lib/features/shared/data/DataShell.svelte | ~120-131 | Route-blind on-open spend | Warning (SC5) | See gap |
+| apps/web/src/lib/features/shared/data/DataShell.svelte | 136-187 | Route-blind on-open spend (initial report) | Resolved (08-27) | Gated by `runAlerts` and a once-per-mount latch |
 | (agent source) | - | `sms:` links | none | grep clean; E2E asserts none on every agent page |
 
 All five items in deferred-items.md are recorded as resolved by 08-26 and the fixes are present (AgentNav aria-label, normalize RegExp, boundary exemption limited to `lib/data/tables.ts`).
@@ -144,11 +162,9 @@ These are the owner items already listed in 08-HUMAN-UAT.md (not gaps):
 
 ### Gaps Summary
 
-One partial gap, on SC5 only. The agent CRM's own code is clean: it cannot import the RentCast gateway, and a keyless walk through every agent flow makes zero RentCast requests. The leak is app-wide, not in agent code. `routes/(app)/+layout.svelte` already computes `isAgentCrm(route)` but uses it only to hide the DataStatusBar. `DataShell` still runs `checkSavedSearchesOnOpen` on mount for every (app) route. So a user with a live RentCast key and due renter saved searches who opens the app at an `/agent/` URL spends up to 3 calls without being asked, with no meter on screen (or sees the DueSearchesDialog if 4 or more are due). The gate test misses this because it never seeds a key or a saved search.
-
-Fix options: gate the on-open run off agent CRM routes (a `runAlerts` prop driven by `!isAgentCrm`), plus a key-present tripwire test; or have the owner accept the cross-portal alerts behavior and amend SC5. All seven requirements are otherwise met.
+No gaps remain. The single initial gap (SC5 partial: DataShell's check-on-open saved-search pass spending RentCast calls on agent CRM routes with a live key) is closed by plan 08-27. The (app) layout drives a `runAlerts` prop from the same `isAgentCrm` predicate that hides the status bar, DataShell starts the pass only through a once-per-mount latch while `runAlerts` is true, and a live-key E2E proves zero calls and no dialog across every agent route on both bases while the first Renter arrival still checks once. Renter, investor and settings sessions behave as before. What is left is the 7 owner UAT items above (real Web3Forms delivery, mail clients, hCaptcha, quota, real email apps, counsel review), which need the owner.
 
 ---
 
-_Verified: 2026-10-07T07:15:00Z_
+_Verified: 2026-10-07T07:15:00Z (initial); re-verified 2026-10-07T07:52:37Z after 08-27_
 _Verifier: gsd-verifier_
