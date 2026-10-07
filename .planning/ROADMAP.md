@@ -365,7 +365,7 @@ Plans:
 - [x] 09-11-PLAN.md — Studio storage: studioDraft + snapshots tables, backup, autosave (wave 3)
 - [ ] 09-12-PLAN.md — DisclosureStatus, InputFairHousingNote, CharacterCount, Studio hub (wave 4)
 - [x] 09-13-PLAN.md — listing.v1 + snapshot.v1 prompts with input-built samples, studio post-checks (wave 3)
-- [ ] 09-14-PLAN.md — Snapshot data via shared market request (0/1/2 calls), frozen record builder, sample record (wave 4)
+- [x] 09-14-PLAN.md — Snapshot data via shared market request (0/1/2 calls), frozen record builder, sample record (wave 4)
 - [ ] 09-15-PLAN.md — STU-01 listing description page + keyless E2E (wave 5)
 - [ ] 09-16-PLAN.md — Snapshot ZIP picker, key figures, section toggles, aggregate listings table (wave 5)
 - [ ] 09-17-PLAN.md — STU-04 snapshot builder steps 3-4, save gate, saved list + E2E (wave 6)
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 12/23 | In Progress|  |
+| 9. Agent Content Studio & Market Snapshot Reports | 13/23 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
