@@ -100,10 +100,7 @@ describe('findUnsupportedFeatures', () => {
 			findUnsupportedFeatures('Steps from the waterfront.', facts({ nearby: ['Waterfront'] }))
 		).toEqual([]);
 		expect(
-			findUnsupportedFeatures(
-				'Water views from the waterfront.',
-				facts({ nearby: ['Waterfront'] })
-			)
+			findUnsupportedFeatures('Water views from the waterfront.', facts({ nearby: ['Waterfront'] }))
 		).toEqual([]);
 	});
 
@@ -159,7 +156,8 @@ describe('findUnsupportedFeatures', () => {
 	});
 
 	test('letters from other scripts count as word characters', () => {
-		expect(findUnsupportedFeatures('Cafépool and poolé', none)).toEqual([]);
+		const e = String.fromCharCode(0xe9);
+		expect(findUnsupportedFeatures(`Caf${e}pool and pool${e}`, none)).toEqual([]);
 	});
 
 	test('empty text gives no hits', () => {
