@@ -42,6 +42,26 @@ describe('cleanText', () => {
 	it('strips isolates', () => {
 		expect(cleanText('\u2066Jo\u2069')).toBe('Jo');
 	});
+	it('strips exactly the hostile set across the whole BMP (no more, no less)', () => {
+		// Tab (0x09) and newline (0x0a) sit outside every range: they are kept.
+		const hostile = (cp: number) =>
+			cp <= 0x08 ||
+			(cp >= 0x0b && cp <= 0x1f) ||
+			(cp >= 0x7f && cp <= 0x9f) ||
+			(cp >= 0x202a && cp <= 0x202e) ||
+			(cp >= 0x2066 && cp <= 0x2069) ||
+			(cp >= 0x200b && cp <= 0x200d) ||
+			cp === 0xfeff;
+		const wrong: string[] = [];
+		for (let cp = 0; cp <= 0xffff; cp++) {
+			if (cp >= 0xd800 && cp <= 0xdfff) continue; // lone surrogates are not characters
+			const ch = String.fromCharCode(cp);
+			// Compare against the NFKC form so characters that NFKC rewrites are judged fairly.
+			const kept = cleanText(`a${ch}b`) === `a${ch}b`.normalize('NFKC');
+			if (kept === hostile(cp)) wrong.push(cp.toString(16));
+		}
+		expect(wrong).toEqual([]);
+	});
 });
 
 describe('normEmail', () => {

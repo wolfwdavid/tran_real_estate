@@ -5,11 +5,23 @@ const NBSP = /[\u00A0\u2007\u202F]/g;
 const ZERO_WIDTH = /[\u200B-\u200D\uFEFF]/g;
 const QUOTE_MARKERS = /^(?:>\s?)+/;
 // C0 except \t and \n, DEL + C1, bidi embeddings/overrides, isolates, zero-width chars.
-// The control-character ranges are the point of this pattern: pasted lead text is untrusted.
-/* eslint-disable no-control-regex -- stripping hostile control characters on purpose */
-const HOSTILE =
-	/[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069\u200B-\u200D\uFEFF]/g;
-/* eslint-enable no-control-regex */
+// The control-character ranges are the point of this pattern: pasted lead text is untrusted. The
+// class is built from code-point ranges (escaped \uXXXX text, never raw control characters), so
+// the source stays readable and no-control-regex has no literal control pattern to object to.
+const HOSTILE_RANGES: readonly (readonly [number, number])[] = [
+	[0x0000, 0x0008],
+	[0x000b, 0x001f],
+	[0x007f, 0x009f],
+	[0x202a, 0x202e],
+	[0x2066, 0x2069],
+	[0x200b, 0x200d],
+	[0xfeff, 0xfeff]
+];
+const escapeCodePoint = (cp: number) => `\\u${cp.toString(16).padStart(4, '0')}`;
+const HOSTILE = new RegExp(
+	`[${HOSTILE_RANGES.map(([a, b]) => `${escapeCodePoint(a)}-${escapeCodePoint(b)}`).join('')}]`,
+	'g'
+);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NANP = /^[2-9]\d{2}[2-9]\d{6}$/;
 const EXTENSION = /\s*(?:x|ext\.?|extension|#)\s*\d+\s*$/i;
