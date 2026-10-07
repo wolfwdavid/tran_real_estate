@@ -332,7 +332,7 @@ Plans:
 - [x] 08-22-PLAN.md - Logo upload, brand colors and brand preview (wave 5)
 - [x] 08-23-PLAN.md - Contact detail: tasks, notes, activity, stage, delete (wave 6)
 - [x] 08-24-PLAN.md - Inquiry share-link builder (wave 6)
-- [ ] 08-25-PLAN.md - AI follow-up composer with CAN-SPAM footer (wave 7)
+- [x] 08-25-PLAN.md - AI follow-up composer with CAN-SPAM footer (wave 7)
 - [ ] 08-26-PLAN.md - Demo-credibility sweep, HUMAN-UAT and full verify (wave 8)
 **Research flag**: YES. Needs `/gsd:research-phase`: Web3Forms free-tier limits, captcha and domain-restriction options, whether the `TRAN-LEAD v1` payload survives major email clients, and the Formspree fallback.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 8`.
@@ -461,7 +461,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
-| 8. Agent Portal: Profile, Lead Intake & CRM | 24/26 | In Progress|  |
+| 8. Agent Portal: Profile, Lead Intake & CRM | 25/26 | In Progress|  |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
