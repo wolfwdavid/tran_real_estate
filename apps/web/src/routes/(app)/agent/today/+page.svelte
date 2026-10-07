@@ -1,6 +1,7 @@
 <script lang="ts">
-	// /agent/today/ (08-11 skeleton). Prerendered with the heading only; a later plan renders the
-	// browser-stored data behind the loading line.
+	// /agent/today/ (AGT-05): the full due-today queue. Prerendered with the heading and the loading
+	// line; the browser-stored tasks render after hydration.
+	import TodayQueue from '$lib/features/agent/tasks/TodayQueue.svelte';
 </script>
 
 <svelte:head>
@@ -13,5 +14,7 @@
 
 <div class="mx-auto max-w-page px-6 pb-12 md:px-8 md:pb-16">
 	<h1 class="font-display text-display font-semibold">Today</h1>
-	<p class="mt-4 text-label text-muted-foreground">Loading your contacts&hellip;</p>
+	<div class="mt-4 max-w-[640px]">
+		<TodayQueue variant="full" />
+	</div>
 </div>

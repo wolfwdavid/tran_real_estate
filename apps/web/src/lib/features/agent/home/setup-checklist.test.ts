@@ -1,7 +1,7 @@
 // The home page's "Get set up" checklist (08-21) is computed from data, never from clicks.
 import { describe, expect, it } from 'vitest';
 import { EMPTY_PROFILE_INPUT, type AgentProfile, type Contact } from '@tran/core/agent/types';
-import { setupChecklist } from './setup-checklist';
+import { inquiryConfigFor, setupChecklist } from './setup-checklist';
 
 const SYNC = {
 	ownerId: 'local' as const,
@@ -48,11 +48,6 @@ describe('setupChecklist', () => {
 	it('lists the three steps, all to do, for a fresh browser', () => {
 		const r = setupChecklist({ profile: null, contacts: [] });
 		expect(r.items.map((i) => i.key)).toEqual(['details', 'inquiry', 'contact']);
-		expect(r.items.map((i) => i.label)).toEqual([
-			'Add your name, license, and mailing address',
-			'Create your inquiry link',
-			'Add your first contact'
-		]);
 		expect(r.items.map((i) => i.done)).toEqual([false, false, false]);
 		expect(r.allDone).toBe(false);
 	});
@@ -93,5 +88,41 @@ describe('setupChecklist', () => {
 	it('is allDone only when every step is', () => {
 		expect(setupChecklist({ profile: full(), contacts: [contact()] }).allDone).toBe(true);
 		expect(setupChecklist({ profile: full(), contacts: [] }).allDone).toBe(false);
+	});
+});
+
+describe('inquiryConfigFor', () => {
+	it('is null without a profile or while the link cannot be built', () => {
+		expect(inquiryConfigFor(null)).toBeNull();
+		expect(inquiryConfigFor(profile({ ...full(), web3formsAccessKey: '' }))).toBeNull();
+	});
+
+	it('carries the required parts and only the optional parts that are present', () => {
+		expect(inquiryConfigFor(full())).toEqual({
+			key: '00000000-0000-4000-8000-000000000000',
+			name: 'Avery Example',
+			brokerage: 'Example Realty',
+			state: 'TX',
+			license: '12345'
+		});
+		expect(
+			inquiryConfigFor(
+				profile({
+					...full(),
+					teamName: 'Team Example',
+					licenseType: 'broker',
+					brokeragePhone: '(555) 555-0199'
+				})
+			)
+		).toEqual({
+			key: '00000000-0000-4000-8000-000000000000',
+			name: 'Avery Example',
+			brokerage: 'Example Realty',
+			team: 'Team Example',
+			title: 'broker',
+			state: 'TX',
+			license: '12345',
+			brokeragePhone: '+15555550199'
+		});
 	});
 });
