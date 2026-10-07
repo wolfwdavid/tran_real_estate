@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: unknown
 stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-10-07T08:08:55.734Z"
+last_updated: "2026-10-07T08:09:13.029Z"
 progress:
   total_phases: 11
   completed_phases: 8
@@ -513,6 +513,7 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-06: Reel times come only from REEL_TEMPLATES; checkResultsBeat returns [] without a RESULTS block (parseReel reports it) and flags each digit run in the results beat
 - [Phase 09]: Listing facts: closed 18-key whitelist; any unknown key fails the whole input (Unsupported fact.); now injected for the year bound
 - [Phase 09]: Unsupported-feature check: concept supported by chip mapping or any of its terms in agent free text; hits merged per concept, sorted by start
+- [Phase 09]: 09-06: Social sections holding only a hashtag line are empty (explicit error); IG tags come from INSTAGRAM HASHTAGS, else a trailing tag line
 
 ### Pending Todos
 
