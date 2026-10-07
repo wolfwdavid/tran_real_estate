@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-17-PLAN.md
-last_updated: "2026-10-07T13:14:46.223Z"
+stopped_at: Completed 09-19-PLAN.md
+last_updated: "2026-10-07T14:55:26.415Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 167
+  completed_plans: 168
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 09
-Plan: 19 of 23 (waves 1-6 complete: 09-01..09-18; next wave 7: 09-19)
+Plan: 20 of 23 (waves 1-6 complete: 09-01..09-18; wave 7 complete: 09-19; next wave 8: 09-20, 09-21)
 
 ## Performance Metrics
 
@@ -213,6 +213,7 @@ Plan: 19 of 23 (waves 1-6 complete: 09-01..09-18; next wave 7: 09-19)
 | Phase 09 P15 | 24min | 2 tasks | 10 files |
 | Phase 09 P18 | 80min | 2 tasks | 12 files |
 | Phase 09 P17 | 130min | 2 tasks | 10 files |
+| Phase 09 P19 | 95min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -550,6 +551,7 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-17: snapshot save gate input is assembled once (builderGateState) for the live reason line and the click-time recheck; notes status comes from the panel bindables
 - [Phase 09]: 09-17: record.sample = ZIP data is sample; the sample agent is frozen in only for sample data with an incomplete profile; live data with an incomplete profile is gated
 - [Phase 09]: 09-17: ZipData.stale carries the gateway provenance flag (always false on loads today: the live gateway refetches stale rows); Choose a different ZIP (onCleared) resets steps 2-4 and the notes panel
+- [Phase 09]: 09-19: GenerationPanel sections mode = one PlatformCard per SectionSpec with exactly one gated Copy exit each; SectionSpec/cardGate live in PlatformCard's module script and GenerationPanel re-exports type SectionSpec; hashtag-cap gate applies only to agent edits; cards keyed on artifactId and reset edits on a new stream; pack announcement replaces Phase 5's Draft ready; Draft history "Copied: {platforms}" deferred (needs ArtifactRepo.updateMeta + DraftHistory slot); social.v1 maxTokens 2048, disclosure used only for budgets, never sent
 
 ### Pending Todos
 
@@ -572,7 +574,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T13:14:32.886Z
-Stopped at: Completed 09-17-PLAN.md
+Last session: 2026-10-07T14:55:03.052Z
+Stopped at: Completed 09-19-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
