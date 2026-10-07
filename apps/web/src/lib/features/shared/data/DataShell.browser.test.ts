@@ -143,11 +143,15 @@ async function world(
 	return { db, net, channel, runtime };
 }
 
-async function mount(w: World, opts: { showStatusBar?: boolean; zip?: string } = {}) {
+async function mount(
+	w: World,
+	opts: { showStatusBar?: boolean; runAlerts?: boolean; zip?: string } = {}
+) {
 	const screen = await render(DataShellHarness, {
 		props: {
 			runtime: w.runtime,
 			showStatusBar: opts.showStatusBar ?? true,
+			...(opts.runAlerts === undefined ? {} : { runAlerts: opts.runAlerts }),
 			alerts: { db: w.db, clock },
 			request: rentals(opts.zip ?? '75001')
 		}
@@ -307,6 +311,104 @@ describe('DataShell check-on-open', () => {
 		expect(document.querySelector('[role="alertdialog"]')).toBeNull();
 		expect(w.net.calls).toHaveLength(0);
 		expect(announced()).toEqual([]);
+	});
+});
+
+describe('DataShell runAlerts gate (08-27, SC5)', () => {
+	const CHECKED_2 = 'Checked 2 saved searches. Nothing new.';
+	const dialogShown = () => document.querySelector('[role="alertdialog"]') !== null;
+	const checkedCount = (text: string) => announced().filter((m) => m === text).length;
+	/** The runtime has started once the live bar shows the meter. */
+	const started = async () => {
+		await expect.element(region()).toHaveTextContent('RentCast calls:');
+		await settle();
+		await settle();
+	};
+
+	test('runAlerts false, 2 due: no fetch, no announcement, searches stay due', async () => {
+		const w = await world({ cap: 40, searches: ZIPS.slice(0, 2) });
+		await mount(w, { runAlerts: false });
+		await started();
+		expect(w.net.calls).toHaveLength(0);
+		expect(announced().filter((m) => m.startsWith('Checked'))).toEqual([]);
+		expect(dialogShown()).toBe(false);
+		const rows = await savedSearchRepo({ db: w.db, clock }).list();
+		expect(rows).toHaveLength(2);
+		for (const row of rows) {
+			expect(row.lastRunAt).toBeNull();
+			expect(row.claimedAt).toBeNull();
+		}
+	});
+
+	test('runAlerts false, 5 due: no DueSearchesDialog', async () => {
+		const w = await world({ cap: 40, searches: ZIPS });
+		await mount(w, { runAlerts: false });
+		await started();
+		expect(dialogShown()).toBe(false);
+		expect(w.net.calls).toHaveLength(0);
+	});
+
+	test('deferred start: false -> true runs the pass once, later toggles run nothing', async () => {
+		const w = await world({ cap: 40, searches: ZIPS.slice(0, 2) });
+		const screen = await mount(w, { runAlerts: false });
+		await started();
+		expect(w.net.calls).toHaveLength(0);
+		await screen.rerender({ runAlerts: true });
+		await vi.waitFor(() => expect(announced()).toContain(CHECKED_2));
+		expect(w.net.calls).toHaveLength(2);
+		for (const runAlerts of [false, true, false, true, false]) {
+			await screen.rerender({ runAlerts });
+			await settle();
+		}
+		await settle();
+		expect(w.net.calls).toHaveLength(2);
+		expect(checkedCount(CHECKED_2)).toBe(1);
+	});
+
+	test('deferred start with 5 due asks as usual', async () => {
+		const w = await world({ cap: 40, searches: ZIPS });
+		const screen = await mount(w, { runAlerts: false });
+		await started();
+		expect(dialogShown()).toBe(false);
+		await screen.rerender({ runAlerts: true });
+		await expect
+			.element(
+				page
+					.getByRole('alertdialog')
+					.getByRole('heading', { name: 'Check 5 saved searches for new listings?' })
+			)
+			.toBeVisible();
+		expect(w.net.calls).toHaveLength(0);
+	});
+
+	test('leaving while asking withdraws the dialog unspent', async () => {
+		const w = await world({ cap: 40, searches: ZIPS });
+		const screen = await mount(w, { runAlerts: true });
+		const dialog = page.getByRole('alertdialog');
+		await expect
+			.element(dialog.getByRole('heading', { name: 'Check 5 saved searches for new listings?' }))
+			.toBeVisible();
+		await screen.rerender({ runAlerts: false });
+		await expect.element(dialog).not.toBeInTheDocument();
+		await settle();
+		expect(w.net.calls).toHaveLength(0);
+		expect(announced()).not.toContain(DUE_DECLINED);
+		await screen.rerender({ runAlerts: true });
+		await settle();
+		await settle();
+		expect(dialogShown()).toBe(false);
+		expect(w.net.calls).toHaveLength(0);
+	});
+
+	test('flip to true before start resolves runs exactly once', async () => {
+		const w = await world({ cap: 40, searches: ZIPS.slice(0, 2) });
+		const screen = await mount(w, { runAlerts: false });
+		await screen.rerender({ runAlerts: true });
+		await vi.waitFor(() => expect(announced()).toContain(CHECKED_2));
+		await settle();
+		await settle();
+		expect(w.net.calls).toHaveLength(2);
+		expect(checkedCount(CHECKED_2)).toBe(1);
 	});
 });
 

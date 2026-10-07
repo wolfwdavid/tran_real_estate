@@ -7,18 +7,20 @@
 	let {
 		runtime,
 		showStatusBar = true,
+		runAlerts = true,
 		alerts,
 		request
 	}: {
 		runtime: DataRuntime;
 		showStatusBar?: boolean;
+		runAlerts?: boolean;
 		alerts?: Partial<AlertsDeps>;
 		request: DataRequest;
 	} = $props();
 </script>
 
 <main id="main-content" tabindex="-1">
-	<DataShell {showStatusBar} {runtime} {alerts}>
+	<DataShell {showStatusBar} {runAlerts} {runtime} {alerts}>
 		<SpendProbe {request} />
 	</DataShell>
 </main>
