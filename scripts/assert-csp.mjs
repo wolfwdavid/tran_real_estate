@@ -59,6 +59,13 @@ export const EXPECTED_PAGES = [
 	'agent/profile/index.html',
 	// Phase 8 public inquiry page (chrome-free (public) route group).
 	'agent/inquire/index.html',
+	// Phase 9 agent Studio (hub and four tools) and the Market Snapshot printout.
+	'agent/studio/index.html',
+	'agent/studio/listing/index.html',
+	'agent/studio/social/index.html',
+	'agent/studio/reel/index.html',
+	'agent/studio/snapshot/index.html',
+	'print/snapshot/index.html',
 	'404.html'
 ];
 

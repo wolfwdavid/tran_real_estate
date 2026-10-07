@@ -32,7 +32,12 @@ export default {
 				// The agent contact detail (?id=) is linked only from client-rendered lists.
 				'/agent/contact/',
 				// The public inquiry page is reached only through shared links.
-				'/agent/inquire/'
+				'/agent/inquire/',
+				// The Studio hub and the snapshot printout (Phase 9) are also linked by static anchors
+				// (AgentNav Studio, the hub's "Preview a sample report"); listed so the crawler reaches
+				// them however later plans render those links (09-UI-SPEC Planner Note 11).
+				'/agent/studio/',
+				'/print/snapshot/'
 			],
 			handleHttpError: 'fail',
 			handleMissingId: 'fail',

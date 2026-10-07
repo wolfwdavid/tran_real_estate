@@ -42,6 +42,17 @@ export const AGENT_ROUTES = [
 	'agent/profile/'
 ] as const;
 /**
+ * The agent Studio (Phase 9): the hub and its four tools, all rendered by the (app) agent layout.
+ * Kept apart from AGENT_ROUTES (the CRM pages), which the Phase 8 CRM specs walk.
+ */
+export const STUDIO_ROUTES = [
+	'agent/studio/',
+	'agent/studio/listing/',
+	'agent/studio/social/',
+	'agent/studio/reel/',
+	'agent/studio/snapshot/'
+] as const;
+/**
  * The chrome-free `(public)` pages seen by an agent's leads (08-13): their own header and footer,
  * no site header, portal switcher or agent nav. The inquiry page reads its query in onMount.
  */
@@ -52,11 +63,14 @@ export const isPublicRoute = (r: string): boolean =>
 export const PORTAL_ROUTES: readonly string[] = [
 	...APP_ROUTES,
 	...INVESTOR_ROUTES,
-	...AGENT_ROUTES
+	...AGENT_ROUTES,
+	...STUDIO_ROUTES
 ];
 export const PRINT = 'print/';
+/** The Market Snapshot printout (Phase 9): reads ?id= in onMount; linked as ?id=sample from the hub. */
+export const PRINT_SNAPSHOT = 'print/snapshot/';
 /** The chrome-free `(print)` surfaces: no header, portal switcher or footer. */
-export const PRINT_ROUTES = [PRINT, 'print/memo/'] as const;
+export const PRINT_ROUTES = [PRINT, 'print/memo/', PRINT_SNAPSHOT] as const;
 export const isPrintRoute = (r: string): boolean => r.startsWith('print/');
 export const ROUTES: readonly string[] = [
 	...MARKETING_ROUTES,
@@ -64,6 +78,7 @@ export const ROUTES: readonly string[] = [
 	...APP_ROUTES,
 	...INVESTOR_ROUTES,
 	...AGENT_ROUTES,
+	...STUDIO_ROUTES,
 	...PUBLIC_ROUTES,
 	...PRINT_ROUTES
 ];

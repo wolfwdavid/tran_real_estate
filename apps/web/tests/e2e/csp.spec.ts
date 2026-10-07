@@ -29,6 +29,8 @@ async function installCollector(page: import('@playwright/test').Page) {
 const violations = (page: import('@playwright/test').Page) => page.evaluate(() => window.__csp);
 
 test('every route loads at top level with zero CSP violations', async ({ page }) => {
+	// One test walks every route, so its budget grows with ROUTES (about 2 s a page on one core).
+	test.setTimeout(ROUTES.length * 4_000);
 	await installCollector(page);
 	for (const route of ROUTES) {
 		const res = await page.goto(route);

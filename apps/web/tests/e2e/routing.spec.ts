@@ -6,7 +6,12 @@ import { ROUTES, EXTERNAL_HOSTS, isPrintRoute } from './routes';
 // runs under both the root base ('/') and the sub-path base ('/tran_real_estate/').
 const SUB_BASE = '/tran_real_estate/';
 
+// The two route walks below visit every page in one test, so their budget grows with ROUTES
+// (about 2 s a page on one core) instead of the 30 s default.
+const WALK_TIMEOUT = ROUTES.length * 4_000;
+
 test('every prerendered route responds 200 with a visible h1', async ({ page }) => {
+	test.setTimeout(WALK_TIMEOUT);
 	for (const route of ROUTES) {
 		const res = await page.goto(route);
 		expect(res?.status(), `status for ${JSON.stringify(route)}`).toBe(200);
@@ -38,6 +43,7 @@ test('unknown path returns HTTP 404 and renders the branded not-found page', asy
 test('every in-page link resolves to a trailing-slash path under the current base', async ({
 	page
 }, testInfo) => {
+	test.setTimeout(WALK_TIMEOUT);
 	for (const route of ROUTES) {
 		await page.goto(route);
 		// Prerendered hrefs are base-relative (./renter/, ../investor/), so resolve them against the
