@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-10-07T08:09:13.029Z"
+stopped_at: Completed 09-08-PLAN.md
+last_updated: "2026-10-07T08:17:52.678Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 155
+  completed_plans: 156
 ---
 
 # Project State
@@ -201,6 +201,7 @@ Plan: Not started
 | Phase 09 P05 | 9min | 2 tasks | 6 files |
 | Phase 09 P06 | 11min | 2 tasks | 4 files |
 | Phase 09 P03 | 10min | 2 tasks | 4 files |
+| Phase 09 P08 | 17min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -514,6 +515,8 @@ Recent decisions affecting current work:
 - [Phase 09]: Listing facts: closed 18-key whitelist; any unknown key fails the whole input (Unsupported fact.); now injected for the year bound
 - [Phase 09]: Unsupported-feature check: concept supported by chip mapping or any of its terms in agent free text; hits merged per concept, sorted by start
 - [Phase 09]: 09-06: Social sections holding only a hashtag line are empty (explicit error); IG tags come from INSTAGRAM HASHTAGS, else a trailing tag line
+- [Phase 09]: 09-08: studio panels use emailFooter (text,label) plus exitDisabled plus formatForExit(draft, footerText); formatForExit alone shapes every exit payload
+- [Phase 09]: 09-08: ChartFigure print is a Body 16/600 title (h2 default, explicit h3 kept) and a plot in an svg viewBox 0 0 672 H wrapping a 672xH foreignObject
 
 ### Pending Todos
 
@@ -536,7 +539,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T08:08:55.722Z
-Stopped at: Completed 09-03-PLAN.md
+Last session: 2026-10-07T08:17:52.670Z
+Stopped at: Completed 09-08-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
