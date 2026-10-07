@@ -354,10 +354,10 @@ Plans:
 Plans:
 - [x] 09-01-PLAN.md — Disclosure variants (ad-inline/ad-block/print), platform limits, disclosure-last assembly, state team/title warnings (wave 1)
 - [x] 09-02-PLAN.md — Number check exposed from @tran/core/numbers, number-word detector, allowed-number sets (wave 1)
-- [ ] 09-03-PLAN.md — Listing facts whitelist + validation, unsupported-feature check (wave 1)
+- [x] 09-03-PLAN.md — Listing facts whitelist + validation, unsupported-feature check (wave 1)
 - [ ] 09-04-PLAN.md — Fair Housing lexicon: listing hot spots, hashtag forms, advertising category, safe-harbor neutrals (wave 1)
-- [ ] 09-05-PLAN.md — Snapshot metrics, aggregate-only listings summary, shared figure formatting, allowed numbers (wave 1)
-- [ ] 09-06-PLAN.md — Social pack section parser + hashtags; reel parser, code-owned timing, results placeholder rule (wave 1)
+- [x] 09-05-PLAN.md — Snapshot metrics, aggregate-only listings summary, shared figure formatting, allowed numbers (wave 1)
+- [x] 09-06-PLAN.md — Social pack section parser + hashtags; reel parser, code-owned timing, results placeholder rule (wave 1)
 - [x] 09-07-PLAN.md — Banned-terms gate: studio scope + studio phrases, no allowlist, non-vacuity (wave 1)
 - [ ] 09-08-PLAN.md — GenerationPanel footerLabel/formatForExit, Fixture sample hook, PrintReport preparedLine, ChartFigure print sizing (wave 1)
 - [ ] 09-09-PLAN.md — Six prerendered studio/print routes, route lists, AgentNav Studio, snapshot-only DataStatusBar (wave 1)
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 3/23 | In Progress|  |
+| 9. Agent Content Studio & Market Snapshot Reports | 6/23 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
