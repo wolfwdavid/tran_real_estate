@@ -121,13 +121,14 @@ test('pointer drag at 1280px moves a card and shows the drop hint', async ({ pag
 	await expect(card.locator('..').locator('svg.lucide-grip-vertical')).toBeVisible();
 
 	// A manual drag, held mid-flight: the target column shows "Drop to move to Touring".
-	const from = await card.boundingBox();
-	const to = await section(page, 'Touring').boundingBox();
-	if (!from || !to) throw new Error('board not laid out');
 	// Let the freshly navigated page settle (fonts, hydration, the first live query) before a
 	// raw press: on a busy renderer the press-and-move that starts a native drag can be missed.
 	await page.evaluate(() => document.fonts.ready);
 	await page.waitForTimeout(300);
+	// Measure only after settling: raw mouse coordinates must match the layout being pressed.
+	const from = await card.boundingBox();
+	const to = await section(page, 'Touring').boundingBox();
+	if (!from || !to) throw new Error('board not laid out');
 	// Press on the card's top padding, then one move large enough to pass Chromium's drag
 	// threshold (so Playwright intercepts the drag), then glide over the target column.
 	await page.mouse.move(from.x + from.width / 2, from.y + 12);
