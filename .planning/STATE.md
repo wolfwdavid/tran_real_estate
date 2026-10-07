@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-12-PLAN.md
-last_updated: "2026-10-07T11:43:24.486Z"
+stopped_at: Completed 09-16-PLAN.md
+last_updated: "2026-10-07T11:49:03.152Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 163
+  completed_plans: 164
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 09
-Plan: 15 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
+Plan: 16 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
 
 ## Performance Metrics
 
@@ -209,6 +209,7 @@ Plan: 15 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
 | Phase 09 P11 | 16min | 2 tasks | 10 files |
 | Phase 09 P14 | 14 min | 2 tasks | 7 files |
 | Phase 09 P12 | 30min | 2 tasks | 7 files |
+| Phase 09 P16 | 16 min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -538,6 +539,7 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-14: snapshot data is createSnapshotData(runtime)/useSnapshotData() (runtime in Svelte context); loadZipData spends via requestSpend<MarketStats>(marketStatsRequest(zip)) so a dashboard-watched ZIP is a cache hit; listings summary uses buildListingsRequest and is reduced to aggregateListings in the module
 - [Phase 09]: 09-14: toMarketStatsInput moved to data-free features/shared/markets/market-input.ts (re-exported by markets-port) so the frozen record and SAMPLE_SNAPSHOT_RECORD build chart series without lib/data
 - [Phase 09]: 09-12: InputFairHousingNote debounces the shipped Phase 5 checkFairHousing (no useFairHousing store exists); hub draft counts read artifact features studio-listing/studio-social/studio-reel, so 09-15/17/21 must save under those ids
+- [Phase 09]: 09-16: Snapshot builder components take an optional data?: SnapshotData (default: runtime from Svelte context) and keep click logic in exported module functions (loadChosenZip, chooseZip, validateSections), so SSR tests prove nothing is read or spent; SnapshotKeyFigures values are snapshotFigureValues strings verbatim and ListingsSummaryTable renders only counts/ranges/medians (no link, no image); ZipPicker owns the loaded state, Refresh uses requestSpend(marketStatsRequest(zip), 'refresh'); SnapshotSectionToggles updates its bindable value by reassignment only.
 
 ### Pending Todos
 
@@ -560,7 +562,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T11:43:09.037Z
-Stopped at: Completed 09-12-PLAN.md
+Last session: 2026-10-07T11:48:46.210Z
+Stopped at: Completed 09-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
