@@ -352,7 +352,7 @@ Plans:
   5. Demo-credible: every studio and report route works fully on sample data with no keys, the Market Snapshot stays under the call budget with a real key, all AI copy passes the Fair Housing checker, and axe checks pass.
 **Plans**: 23 plans in 10 waves
 Plans:
-- [ ] 09-01-PLAN.md — Disclosure variants (ad-inline/ad-block/print), platform limits, disclosure-last assembly, state team/title warnings (wave 1)
+- [x] 09-01-PLAN.md — Disclosure variants (ad-inline/ad-block/print), platform limits, disclosure-last assembly, state team/title warnings (wave 1)
 - [x] 09-02-PLAN.md — Number check exposed from @tran/core/numbers, number-word detector, allowed-number sets (wave 1)
 - [ ] 09-03-PLAN.md — Listing facts whitelist + validation, unsupported-feature check (wave 1)
 - [ ] 09-04-PLAN.md — Fair Housing lexicon: listing hot spots, hashtag forms, advertising category, safe-harbor neutrals (wave 1)
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 2/23 | In Progress|  |
+| 9. Agent Content Studio & Market Snapshot Reports | 3/23 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
