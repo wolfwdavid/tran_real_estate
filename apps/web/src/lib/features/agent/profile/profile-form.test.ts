@@ -8,6 +8,7 @@ import {
 	ZIP_ERROR,
 	isDirty,
 	normalizeWebsite,
+	toProfileInput,
 	validateProfile
 } from './profile-form';
 
@@ -162,5 +163,21 @@ describe('isDirty', () => {
 		expect(isDirty(base({ logo }), base({ logo: { ...logo } }))).toBe(false);
 		expect(isDirty(base({ logo }), base({ logo: { ...logo, base64: 'AAAB' } }))).toBe(true);
 		expect(isDirty(base({ logo }), base())).toBe(true);
+	});
+});
+
+describe('toProfileInput', () => {
+	it('drops Syncable fields and copies nested objects', () => {
+		const saved = {
+			...base({ name: 'Sample Agent', postal: { ...EMPTY_PROFILE_INPUT.postal, zip: '12345' } }),
+			ownerId: 'local',
+			createdAt: '2026-01-01T00:00:00.000Z',
+			updatedAt: '2026-01-01T00:00:00.000Z',
+			schemaVersion: 1
+		};
+		const input = toProfileInput(saved);
+		expect(Object.keys(input).sort()).toEqual(Object.keys(EMPTY_PROFILE_INPUT).sort());
+		expect(input.postal).not.toBe(saved.postal);
+		expect(isDirty(base({ name: 'Sample Agent', postal: saved.postal }), input)).toBe(false);
 	});
 });

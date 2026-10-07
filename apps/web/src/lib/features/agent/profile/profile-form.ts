@@ -1,7 +1,7 @@
 // Profile form rules (AGT-01): pure validation, website normalization and dirty tracking for the
 // /agent/profile/ form. No field is required to save; missing items only gate drafts and the share
 // link. Copy is the UI-SPEC "Profile" copy, verbatim.
-import type { ProfileInput } from '@tran/core/agent/types';
+import type { AgentProfile, ProfileInput } from '@tran/core/agent/types';
 import { normEmail } from '@tran/core/leads/normalize';
 
 /** Every input id on the form, in DOM order (focus goes to the first invalid one). */
@@ -99,4 +99,28 @@ export function isDirty(saved: ProfileInput, current: ProfileInput): boolean {
 		}
 	}
 	return false;
+}
+
+/** The editable fields of a saved profile as a fresh plain object (Syncable fields dropped). */
+export function toProfileInput(p: AgentProfile | ProfileInput): ProfileInput {
+	return {
+		id: 'profile',
+		name: p.name,
+		brokerage: p.brokerage,
+		teamName: p.teamName,
+		licenseType: p.licenseType,
+		licenseNumber: p.licenseNumber,
+		licenseState: p.licenseState,
+		brokerageLicenseNumber: p.brokerageLicenseNumber,
+		brokeragePhone: p.brokeragePhone,
+		phone: p.phone,
+		email: p.email,
+		website: p.website,
+		iabsUrl: p.iabsUrl,
+		postal: { ...p.postal },
+		brandPrimary: p.brandPrimary,
+		brandAccent: p.brandAccent,
+		logo: p.logo ? { ...p.logo } : null,
+		web3formsAccessKey: p.web3formsAccessKey
+	};
 }
