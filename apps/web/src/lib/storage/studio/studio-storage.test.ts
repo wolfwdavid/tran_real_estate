@@ -14,6 +14,7 @@ import {
 	getSnapshot,
 	listSnapshots
 } from './snapshots-repo';
+import { createStudioAutosave } from './autosave.svelte';
 import { clearStudioDraft, getStudioDraft, putStudioDraft } from './studio-draft-repo';
 import {
 	STUDIO_DRAFT_IDS,
@@ -359,5 +360,126 @@ describe('studio backup registration', () => {
 		await expect(
 			previewImport(target, { name: 'b.json', size: body.length, text: async () => body })
 		).rejects.toThrow();
+	});
+});
+
+/** A hand-driven clock: setTimer queues, advance(ms) fires what is due (no Vitest fake timers). */
+function manualClock() {
+	let now = 0;
+	let seq = 0;
+	const timers = new Map<number, { at: number; fn: () => void }>();
+	return {
+		setTimer: (fn: () => void, ms: number) => {
+			const h = ++seq;
+			timers.set(h, { at: now + ms, fn });
+			return h;
+		},
+		clearTimer: (h: unknown) => {
+			timers.delete(h as number);
+		},
+		advance(ms: number) {
+			now += ms;
+			for (const [h, t] of [...timers].sort((a, b) => a[1].at - b[1].at)) {
+				if (t.at <= now) {
+					timers.delete(h);
+					t.fn();
+				}
+			}
+		},
+		get pending() {
+			return timers.size;
+		}
+	};
+}
+
+const settle = () => new Promise((r) => setTimeout(r, 0));
+
+describe('studio form autosave', () => {
+	it('three schedule() calls 100 ms apart write once, 500 ms after the last, with the last data', async () => {
+		const clock = manualClock();
+		const writes: [string, unknown][] = [];
+		const auto = createStudioAutosave('listing', undefined, {
+			...clock,
+			write: async (tool, data) => {
+				writes.push([tool, data]);
+			}
+		});
+		auto.schedule({ v: 1 });
+		clock.advance(100);
+		auto.schedule({ v: 2 });
+		clock.advance(100);
+		auto.schedule({ v: 3 });
+		clock.advance(499);
+		await settle();
+		expect(writes).toEqual([]);
+		clock.advance(1);
+		await settle();
+		expect(writes).toEqual([['listing', { v: 3 }]]);
+		clock.advance(5000);
+		await settle();
+		expect(writes).toHaveLength(1);
+	});
+
+	it('snapshots the data at schedule time, so a later mutation does not change the pending write', async () => {
+		const clock = manualClock();
+		const writes: unknown[] = [];
+		const auto = createStudioAutosave('social', 500, {
+			...clock,
+			write: async (_t, data) => {
+				writes.push(data);
+			}
+		});
+		const form = { brief: 'Open house', tags: ['a'] };
+		auto.schedule(form);
+		form.tags.push('b');
+		await auto.flush();
+		expect(writes).toEqual([{ brief: 'Open house', tags: ['a'] }]);
+	});
+
+	it('flush() writes immediately through the repository; load() returns it', async () => {
+		const clock = manualClock();
+		const auto = createStudioAutosave('reel', 500, clock);
+		expect(await auto.load()).toBeNull();
+		auto.schedule({ beats: ['hook'] });
+		await auto.flush();
+		expect(clock.pending).toBe(0);
+		expect(await auto.load()).toEqual({ beats: ['hook'] });
+		expect((await getStudioDraft('reel'))?.data).toEqual({ beats: ['hook'] });
+		await auto.flush(); // nothing pending: no second write
+		expect(await getStudioDraft('listing')).toBeNull();
+	});
+
+	it('destroy() cancels a pending write and ignores later schedules', async () => {
+		const clock = manualClock();
+		const writes: unknown[] = [];
+		const auto = createStudioAutosave('snapshot', 500, {
+			...clock,
+			write: async (_t, data) => {
+				writes.push(data);
+			}
+		});
+		auto.schedule({ zip: '00501' });
+		auto.destroy();
+		clock.advance(1000);
+		auto.schedule({ zip: '00502' });
+		clock.advance(1000);
+		await auto.flush();
+		await settle();
+		expect(writes).toEqual([]);
+		expect(clock.pending).toBe(0);
+	});
+
+	it('a failed write is reported to onError, never thrown', async () => {
+		const errors: unknown[] = [];
+		const auto = createStudioAutosave('listing', 500, {
+			...manualClock(),
+			write: async () => {
+				throw new Error('quota');
+			},
+			onError: (e) => errors.push(e)
+		});
+		auto.schedule({ a: 1 });
+		await expect(auto.flush()).resolves.toBeUndefined();
+		expect(errors).toHaveLength(1);
 	});
 });
