@@ -178,7 +178,13 @@ describe('buildHashtagCandidates', () => {
 				propertyType: 'Condo',
 				postType: 'open-house'
 			})
-		).toEqual(['#OpenHouse', '#HarlowSpringsRealEstate', '#HarlowSprings', '#Condo', '#RealEstate']);
+		).toEqual([
+			'#OpenHouse',
+			'#HarlowSpringsRealEstate',
+			'#HarlowSprings',
+			'#Condo',
+			'#RealEstate'
+		]);
 	});
 
 	test('maps post types', () => {
@@ -187,9 +193,7 @@ describe('buildHashtagCandidates', () => {
 		expect(buildHashtagCandidates({ ...base, postType: 'price-change' })[0]).toBe(
 			'#PriceImprovement'
 		);
-		expect(buildHashtagCandidates({ ...base, postType: 'market-update' })[0]).toBe(
-			'#MarketUpdate'
-		);
+		expect(buildHashtagCandidates({ ...base, postType: 'market-update' })[0]).toBe('#MarketUpdate');
 		expect(buildHashtagCandidates({ ...base, postType: 'other' })).toEqual(['#RealEstate']);
 	});
 
@@ -200,9 +204,12 @@ describe('buildHashtagCandidates', () => {
 		expect(
 			buildHashtagCandidates({ cityOrArea: '', propertyType: 'Multi-family', postType: 'other' })
 		).toEqual(['#MultiFamily', '#RealEstate']);
-		expect(
-			buildHashtagCandidates({ cityOrArea: "St. Mary's", postType: 'just-listed' })
-		).toEqual(['#JustListed', '#StMarysRealEstate', '#StMarys', '#RealEstate']);
+		expect(buildHashtagCandidates({ cityOrArea: "St. Mary's", postType: 'just-listed' })).toEqual([
+			'#JustListed',
+			'#StMarysRealEstate',
+			'#StMarys',
+			'#RealEstate'
+		]);
 	});
 
 	test('an empty city gives no city tags', () => {
