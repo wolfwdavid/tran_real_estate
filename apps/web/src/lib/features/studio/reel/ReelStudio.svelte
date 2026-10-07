@@ -1,7 +1,11 @@
 <script lang="ts" module>
 	import type { CheckGroupCopy } from '$lib/ai/ui/post-check';
 	import { STUDIO_CHECKERS } from '../post-checks';
+	import type { ProfileInput } from '@tran/core/agent/types';
+	import { composeDisclosure } from '@tran/core/disclosure';
+	import { SAMPLE_AGENT_PROFILE, isProfileComplete } from '$lib/features/shared/agent-profile';
 	import { REEL_CHECKERS } from './reel-checks';
+	import { reelFooter } from './reel-export';
 
 	const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
@@ -49,6 +53,30 @@
 			doneSentence: (b, w) => (b + w === 0 ? '' : `${plural(b + w, 'quote', 'quotes')} to confirm.`)
 		}
 	];
+
+	export const REEL_FOOTER_LABEL = 'Added to the end of the copied script';
+
+	/**
+	 * The panel's emailFooter: the caption disclosure plus the checklist. The agent's own
+	 * disclosure once the profile is complete; the Avery Sample one only while unedited sample
+	 * beats are in the form; otherwise none (it would mislabel the agent), and the host gates
+	 * every exit with the profile reason.
+	 */
+	export function reelEmailFooter(
+		profile: ProfileInput | null,
+		usingSampleBeats: boolean
+	): { text: string; label: string } | undefined {
+		const who = isProfileComplete(profile, 'ad-inline')
+			? profile
+			: usingSampleBeats
+				? SAMPLE_AGENT_PROFILE
+				: null;
+		if (!who) return undefined;
+		return {
+			text: reelFooter(composeDisclosure(who, { variant: 'ad-inline' }).text),
+			label: REEL_FOOTER_LABEL
+		};
+	}
 </script>
 
 <script lang="ts">
@@ -66,8 +94,6 @@
 	import Eraser from '@lucide/svelte/icons/eraser';
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import type { ProfileInput } from '@tran/core/agent/types';
-	import { composeDisclosure } from '@tran/core/disclosure';
 	import { DISCLOSURE_FIELD_LABELS, missingFor, type ReelLength } from '@tran/core/studio';
 	import type { ReelInputs } from '$lib/ai/prompts/studio/reel.v1';
 	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
@@ -75,12 +101,7 @@
 	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
 	import type { ExitDisabled } from '$lib/ai/ui/panel-controller';
 	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import {
-		SAMPLE_AGENT_PROFILE,
-		isProfileComplete,
-		loadAgentProfile,
-		toDisclosureProfile
-	} from '$lib/features/shared/agent-profile';
+	import { loadAgentProfile, toDisclosureProfile } from '$lib/features/shared/agent-profile';
 	import { announce, Button, ConfirmDialog } from '$lib/features/shared/data/platform-ui';
 	import type { StudioAutosave } from '$lib/storage/studio/autosave.svelte';
 	import DisclosureStatus from '../DisclosureStatus.svelte';
@@ -95,10 +116,8 @@
 		type ReelForm
 	} from './ReelBeatsForm.svelte';
 	import { quotePostCheck, resultsBeatPostCheck } from './reel-checks';
-	import { formatReelForExit, reelFooter } from './reel-export';
+	import { formatReelForExit } from './reel-export';
 	import ReelScriptView from './ReelScriptView.svelte';
-
-	const FOOTER_LABEL = 'Added to the end of the copied script';
 
 	let form = $state<ReelForm>(emptyReelForm());
 	let profile = $state<ProfileInput | null>(null);
@@ -146,15 +165,9 @@
 		quotePostCheck()
 	]);
 
-	// The caption disclosure: the agent's own once the profile is complete, otherwise the sample
-	// agent's (shown with sample beats; with the agent's own beats every exit is gated anyway).
-	const footerProfile = $derived<ProfileInput>(
-		profileComplete && profile ? profile : SAMPLE_AGENT_PROFILE
-	);
-	const emailFooter = $derived({
-		text: reelFooter(composeDisclosure(footerProfile, { variant: 'ad-inline' }).text),
-		label: FOOTER_LABEL
-	});
+	// The caption disclosure and checklist (none with the agent's own beats and an incomplete
+	// profile: the exits are gated then).
+	const emailFooter = $derived(reelEmailFooter(profile, usingSampleBeats));
 	const formatForExit = (d: string, f: string) => formatReelForExit(d, f, length);
 
 	const NO_PROFILE = {

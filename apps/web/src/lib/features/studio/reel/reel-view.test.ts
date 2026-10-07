@@ -21,6 +21,10 @@ import ReelBeatsForm, {
 	type ReelForm
 } from './ReelBeatsForm.svelte';
 import ReelScriptView, { scriptView } from './ReelScriptView.svelte';
+import { REEL_FOOTER_LABEL, reelEmailFooter } from './ReelStudio.svelte';
+import type { ProfileInput } from '@tran/core/agent/types';
+import { composeDisclosure } from '@tran/core/disclosure';
+import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
 
 const MID = String.fromCharCode(0xb7);
 
@@ -245,5 +249,34 @@ describe('AiDisclosureChecklist', () => {
 	test('checkbox state is local: the component imports no storage', () => {
 		const src = readFileSync(resolve(import.meta.dirname, 'AiDisclosureChecklist.svelte'), 'utf8');
 		expect(src).not.toMatch(/storage|Dexie|localStorage/);
+	});
+});
+
+describe('reel footer (ReelStudio emailFooter)', () => {
+	const own = { ...SAMPLE_AGENT_PROFILE, name: 'Jordan Rivera' } as ProfileInput;
+	const incomplete = { ...own, licenseNumber: '' } as ProfileInput;
+
+	test("a complete profile: the agent's own ad-inline disclosure, then the checklist", () => {
+		const f = reelEmailFooter(own, false);
+		expect(f?.label).toBe(REEL_FOOTER_LABEL);
+		expect(f?.label).toBe('Added to the end of the copied script');
+		expect(f?.text).toContain(composeDisclosure(own, { variant: 'ad-inline' }).text);
+		expect(f?.text).toContain('Jordan Rivera');
+		expect(f?.text).toContain('BEFORE YOU POST THIS VIDEO');
+		expect(f?.text.endsWith(REEL_CHECKLIST_FOOTNOTE)).toBe(true);
+	});
+
+	test('sample beats with an incomplete profile: the Avery Sample disclosure', () => {
+		for (const p of [null, incomplete]) {
+			const f = reelEmailFooter(p, true);
+			expect(f?.text).toContain(
+				composeDisclosure(SAMPLE_AGENT_PROFILE, { variant: 'ad-inline' }).text
+			);
+		}
+	});
+
+	test("the agent's own beats with an incomplete profile: no disclosure at all", () => {
+		expect(reelEmailFooter(null, false)).toBeUndefined();
+		expect(reelEmailFooter(incomplete, false)).toBeUndefined();
 	});
 });
