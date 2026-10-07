@@ -141,6 +141,8 @@
 
 	interface Props {
 		onLoaded: (r: LoadedZip) => void;
+		/** "Choose a different ZIP": the loaded data is no longer the report's (owners reset). */
+		onCleared?: () => void;
 		sampleMode: boolean;
 		/** The snapshot data path; defaults to the app's data runtime (Svelte context). */
 		data?: SnapshotData;
@@ -156,6 +158,7 @@
 
 	let {
 		onLoaded,
+		onCleared,
 		sampleMode,
 		data,
 		options,
@@ -354,6 +357,7 @@
 		loaded = null;
 		gatewayError = null;
 		focusPicker = true;
+		onCleared?.();
 	}
 
 	const loadedMetrics = $derived(loaded ? buildSnapshotMetrics(loaded.stats) : null);

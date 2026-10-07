@@ -82,8 +82,11 @@
 	import { numberPostCheck, numberWordsPostCheck } from '../post-checks';
 	import { buildSnapshotRecord } from './build-record';
 	import {
+		builderGateState,
 		choicesData,
+		CLEARED_ZIP,
 		defaultInclude,
+		emptyPanelOutputs,
 		missingLabels,
 		notesGateFields,
 		notesSummary,
@@ -100,7 +103,6 @@
 	} from './snapshot-data';
 	import SnapshotList from './SnapshotList.svelte';
 	import SnapshotSectionToggles, {
-		DATA_SECTION_KEYS,
 		type LoadedListings,
 		type SnapshotIncludeValue
 	} from './SnapshotSectionToggles.svelte';
@@ -159,7 +161,6 @@
 	const sampleMode = $derived(runtime.mode?.source !== 'rentcast');
 	const metrics = $derived(loaded ? buildSnapshotMetrics(loaded.stats) : null);
 	const notesOn = $derived(include.sections.includes('marketNotes'));
-	const dataSections = $derived(include.sections.filter((k) => DATA_SECTION_KEYS.includes(k)));
 	const listingsIncluded = $derived(
 		include.listingsKind !== null &&
 			listings !== null &&
@@ -199,14 +200,14 @@
 	);
 	const notes = $derived(notesGateFields({ draftText, canExit, findings }));
 	const gateReason = $derived(
-		saveGateReason({
-			hasData: loaded !== null,
-			dataSections: dataSections.length,
-			notesOn,
-			...notes,
-			profileMissing,
-			live
-		})
+		saveGateReason(
+			builderGateState({
+				loaded,
+				sections: include.sections,
+				panel: { draftText, canExit, findings },
+				profileMissing
+			})
+		)
 	);
 	const shownReason = $derived(gateReason ?? urgentReason);
 	const asOfText = $derived(loaded ? longDate(Date.parse(loaded.fetchedAt)) : '');
@@ -282,6 +283,18 @@
 		saveFailed = false;
 	}
 
+	/**
+	 * "Choose a different ZIP": the old ZIP's figures leave steps 2-4 at once (the notes panel and
+	 * its draft unmount with them), so a save can never pair one ZIP's numbers with another's
+	 * label. The gate falls back to its no-data reason.
+	 */
+	function onZipCleared(): void {
+		({ loaded, zipSpend, listings, listingsSpend } = CLEARED_ZIP);
+		({ draftText, canExit, blocked, findings, artifactId } = emptyPanelOutputs());
+		urgentReason = null;
+		saveFailed = false;
+	}
+
 	function onListings(s: LoadedListings | null): void {
 		listings = s;
 		if (s === null) listingsSpend = null;
@@ -327,20 +340,15 @@
 		// The panel rechecks 300 ms after typing stops: check the text as it is right now.
 		const text = draftText;
 		const fresh = notesOn ? runChecks(text, postChecks) : [];
-		const freshGate = notesGateFields({
-			draftText: text,
-			canExit: canExit && !fresh.some((f) => f.severity === 'block'),
-			findings: fresh
-		});
-		if (notesOn && freshGate.mustFix > 0) {
-			const reason = saveGateReason({
-				hasData: true,
-				dataSections: dataSections.length,
-				notesOn,
-				...freshGate,
-				profileMissing,
-				live
-			});
+		if (notesOn && fresh.some((f) => f.severity === 'block')) {
+			const reason = saveGateReason(
+				builderGateState({
+					loaded,
+					sections: include.sections,
+					panel: { draftText: text, canExit: false, findings: fresh },
+					profileMissing
+				})
+			);
 			if (reason) {
 				urgentReason = reason;
 				await tick();
@@ -402,6 +410,7 @@
 		{#if modeReady && restored}
 			<ZipPicker
 				onLoaded={onZipLoaded}
+				onCleared={onZipCleared}
 				{sampleMode}
 				{initialZip}
 				bind:busy={() => zipBusy, setZipBusy}

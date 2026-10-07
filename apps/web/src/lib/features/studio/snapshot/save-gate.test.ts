@@ -6,6 +6,9 @@ import type { Finding } from '@tran/core/fair-housing';
 import type { SnapshotRecord } from '$lib/storage/studio/types';
 import { SAMPLE_SNAPSHOT_RECORD } from '../fixtures/sample-snapshot';
 import {
+	builderGateState,
+	CLEARED_ZIP,
+	emptyPanelOutputs,
 	choicesData,
 	defaultInclude,
 	notesSummary,
@@ -135,6 +138,66 @@ describe('notesGateFields (the panel bindables)', () => {
 			notesGateFields({ draftText: 'Rent', canExit: true, findings: [finding('warn')] })
 				.unackedReview
 		).toBe(false);
+	});
+});
+
+describe('builder gate state and "Choose a different ZIP"', () => {
+	const ready = { draftText: 'Median rent is $1,500.', canExit: true, findings: [] };
+	const sections = defaultInclude().sections;
+
+	test('loaded ZIP with drafted notes and a complete profile: Save allowed', () => {
+		expect(
+			saveGateReason(
+				builderGateState({
+					loaded: { source: 'rentcast' },
+					sections,
+					panel: ready,
+					profileMissing: []
+				})
+			)
+		).toBeNull();
+	});
+
+	test('the cleared state drops the ZIP data, the summary and the spends, and gates Save', () => {
+		expect(CLEARED_ZIP).toEqual({
+			loaded: null,
+			zipSpend: null,
+			listings: null,
+			listingsSpend: null
+		});
+		expect(Object.isFrozen(CLEARED_ZIP)).toBe(true);
+		expect(emptyPanelOutputs()).toEqual({
+			draftText: '',
+			canExit: false,
+			blocked: false,
+			findings: [],
+			artifactId: null
+		});
+		const cleared = builderGateState({
+			loaded: CLEARED_ZIP.loaded,
+			sections,
+			panel: emptyPanelOutputs(),
+			profileMissing: []
+		});
+		expect(cleared.hasData).toBe(false);
+		expect(cleared.notesStatus).toBe('none');
+		expect(saveGateReason(cleared)).toBe(R.noData);
+	});
+
+	test('a draft left over from the old ZIP can never open the gate without ZIP data', () => {
+		expect(
+			saveGateReason(builderGateState({ loaded: null, sections, panel: ready, profileMissing: [] }))
+		).toBe(R.noData);
+	});
+
+	test('sections and live/sample map onto the gate', () => {
+		const s = builderGateState({
+			loaded: { source: 'sample' },
+			sections: ['marketNotes'],
+			panel: ready,
+			profileMissing: ['brokerage']
+		});
+		expect(s).toMatchObject({ hasData: true, dataSections: 0, notesOn: true, live: false });
 	});
 });
 

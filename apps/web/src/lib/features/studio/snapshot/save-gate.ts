@@ -8,7 +8,11 @@ import { DISCLOSURE_FIELD_LABELS, type DisclosureField } from '@tran/core/studio
 import { formatCost } from '$lib/features/shared/data/copy/provenance';
 import { SNAPSHOT_SECTION_KEYS, type SnapshotSectionKey } from '$lib/storage/studio/types';
 import type { ListingsKind } from './snapshot-data';
-import { DEFAULT_INCLUDE, type SnapshotIncludeValue } from './SnapshotSectionToggles.svelte';
+import {
+	DATA_SECTION_KEYS,
+	DEFAULT_INCLUDE,
+	type SnapshotIncludeValue
+} from './SnapshotSectionToggles.svelte';
 
 export type NotesStatus = 'none' | 'streaming' | 'ready';
 
@@ -74,6 +78,52 @@ export function notesGateFields(panel: {
 		notesStatus,
 		mustFix,
 		unackedReview: !panel.canExit && mustFix === 0 && review
+	};
+}
+
+/** The notes panel's read-only outputs the builder mirrors (GenerationPanel bindables). */
+export interface NotesPanelOutputs {
+	draftText: string;
+	canExit: boolean;
+	blocked: boolean;
+	findings: Finding[];
+	artifactId: string | null;
+}
+
+/** No draft: the panel's outputs before a run (and after the ZIP is cleared). */
+export const emptyPanelOutputs = (): NotesPanelOutputs => ({
+	draftText: '',
+	canExit: false,
+	blocked: false,
+	findings: [],
+	artifactId: null
+});
+
+/**
+ * Steps 2-4 after "Choose a different ZIP": no ZIP data, no listings summary, nothing spent.
+ * The notes panel unmounts with the data, so its outputs reset too (emptyPanelOutputs).
+ */
+export const CLEARED_ZIP = Object.freeze({
+	loaded: null,
+	zipSpend: null,
+	listings: null,
+	listingsSpend: null
+});
+
+/** The builder's state mapped onto the gate (the single place it is assembled). */
+export function builderGateState(i: {
+	loaded: { source: 'rentcast' | 'sample' } | null;
+	sections: readonly SnapshotSectionKey[];
+	panel: Pick<NotesPanelOutputs, 'draftText' | 'canExit' | 'findings'>;
+	profileMissing: string[];
+}): SaveGateState {
+	return {
+		hasData: i.loaded !== null,
+		dataSections: i.sections.filter((k) => DATA_SECTION_KEYS.includes(k)).length,
+		notesOn: i.sections.includes('marketNotes'),
+		...notesGateFields(i.panel),
+		profileMissing: i.profileMissing,
+		live: i.loaded?.source === 'rentcast'
 	};
 }
 
