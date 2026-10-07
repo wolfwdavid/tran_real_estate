@@ -303,9 +303,7 @@ describe('checkResultsBeat', () => {
 
 	test('a results beat without the placeholder is placeholder-missing', () => {
 		const specs = SPECS.map((s) =>
-			s.label === 'RESULTS'
-				? { ...s, vo: 'We helped many families.', caption: 'Many families' }
-				: s
+			s.label === 'RESULTS' ? { ...s, vo: 'We helped many families.', caption: 'Many families' } : s
 		);
 		const v = checkResultsBeat(script(specs), true);
 		expect(v.map((x) => x.reason)).toEqual(['placeholder-missing']);
