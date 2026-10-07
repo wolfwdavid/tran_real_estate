@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { test, expect, type Page } from '@playwright/test';
-import { announcer, loadSampleContacts, rentcastTripwire } from './agent-helpers';
+import { addLeadByHand, announcer, loadSampleContacts, rentcastTripwire } from './agent-helpers';
 
 // CSV export (08-18, AGT-07 export half) on the real built site, both bases: with only samples
 // nothing downloads and the empty line is shown and announced; with a real contact the download's
@@ -20,18 +20,6 @@ const SAMPLE_EMAILS = [
 ];
 
 const exportButton = (page: Page) => page.getByRole('button', { name: 'Export contacts (CSV)' });
-
-/** Adds one lead with notes through Add a lead (the shared helper has no notes field). */
-async function addLeadWithNotes(page: Page, l: { name: string; email: string; notes: string }) {
-	await page.goto('agent/contacts/');
-	await page.getByRole('button', { name: 'Add a lead' }).first().click();
-	const dialog = page.getByRole('dialog', { name: 'Add a lead' });
-	await dialog.getByLabel('Name', { exact: true }).fill(l.name);
-	await dialog.getByLabel('Email', { exact: true }).fill(l.email);
-	await dialog.getByLabel('Notes', { exact: true }).fill(l.notes);
-	await dialog.getByRole('button', { name: 'Add lead' }).click();
-	await expect(announcer(page)).toHaveText(`Added ${l.name} to New.`);
-}
 
 let rentcastHits: string[];
 
@@ -67,7 +55,7 @@ test('export with only samples downloads nothing', async ({ page }) => {
 test('export bytes are Excel-safe and injection-safe', async ({ page }) => {
 	// Samples present but excluded; one real contact with a formula in its notes.
 	await loadSampleContacts(page);
-	await addLeadWithNotes(page, {
+	await addLeadByHand(page, {
 		name: 'Jordan Real',
 		email: 'jordan.real@example.com',
 		notes: '=HYPERLINK("http://evil.test","x")'

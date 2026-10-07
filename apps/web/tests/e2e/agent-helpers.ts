@@ -79,7 +79,7 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
 	expect(overflow).toBeLessThanOrEqual(0);
 }
 
-// --- CRM seeding (08-15). Later plans import these; wave 5+ plans must not edit this file. ---
+// --- CRM seeding (08-15; addLeadByHand hydration wait and notes added by the 08-26 gate). ---
 
 /** The Phase 3 LiveAnnouncer: the one polite live region in the root layout. */
 export const announcer = (page: Page) =>
@@ -92,20 +92,36 @@ export async function loadSampleContacts(page: Page): Promise<void> {
 	await expect(page.getByRole('region', { name: 'Sample contacts' })).toBeVisible();
 }
 
+/**
+ * Opens /agent/contacts/ and waits until it is interactive. The prerendered page shows the header
+ * "Add a lead" button and the "Loading your contacts..." line; the line goes away only after
+ * hydration, once the live query has decided between the empty state and the list. Clicking
+ * before that either does nothing (no handler yet) or hits the header button just as the list
+ * replaces it, so the dialog never opens.
+ */
+export async function openContactsReady(page: Page): Promise<void> {
+	await page.goto('agent/contacts/');
+	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expect(page.getByText('Loading your contacts')).toHaveCount(0);
+	await expect(page.getByRole('button', { name: 'Add a lead' }).first()).toBeVisible();
+}
+
 /** Adds one lead through the Add a lead dialog on /agent/contacts/ and waits for the announcement. */
 export async function addLeadByHand(
 	page: Page,
-	l: { name: string; email?: string; phone?: string; stage?: string }
+	l: { name: string; email?: string; phone?: string; stage?: string; notes?: string }
 ): Promise<void> {
-	await page.goto('agent/contacts/');
+	await openContactsReady(page);
 	await page.getByRole('button', { name: 'Add a lead' }).first().click();
 	const dialog = page.getByRole('dialog', { name: 'Add a lead' });
+	await expect(dialog).toBeVisible();
 	await dialog.getByLabel('Name', { exact: true }).fill(l.name);
 	if (l.email !== undefined) await dialog.getByLabel('Email', { exact: true }).fill(l.email);
 	if (l.phone !== undefined) await dialog.getByLabel('Phone', { exact: true }).fill(l.phone);
 	if (l.stage !== undefined) {
 		await dialog.getByLabel('Stage', { exact: true }).selectOption({ label: l.stage });
 	}
+	if (l.notes !== undefined) await dialog.getByLabel('Notes', { exact: true }).fill(l.notes);
 	await dialog.getByRole('button', { name: 'Add lead' }).click();
 	await expect(announcer(page)).toHaveText(`Added ${l.name} to ${l.stage ?? 'New'}.`);
 }
