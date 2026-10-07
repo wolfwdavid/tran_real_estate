@@ -1,3 +1,10 @@
+<script module lang="ts">
+	import type { SectionSpec as PlatformSectionSpec } from './PlatformCard.svelte';
+
+	/** One platform section of a `sections` run (09-19); hosts build these (09-20 social). */
+	export type SectionSpec = PlatformSectionSpec;
+</script>
+
 <script lang="ts">
 	// 05-UI-SPEC "GenerationPanel": the one panel every generator in Phases 6-9 uses. A thin view
 	// over PanelState (panel-state.svelte.ts), where every rule lives and is unit-tested.
@@ -9,7 +16,11 @@
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
 	// formatForExit (Phase 9), onExit, subjectId and beforeGenerate (Phase 6), checkGroups and artifactMeta (Phase 7), and the
-	// read-only bindables canExit / blocked / findings / artifactId / draftText. `state` is the test/SSR seam
+	// read-only bindables canExit / blocked / findings / artifactId / draftText.
+	//
+	// Phase 9 `sections` mode (09-UI-SPEC PlatformCard): the output box, findings summary, email
+	// footer and the three-exit group are replaced by one PlatformCard per section, each with
+	// exactly one Copy exit. Without `sections` the panel renders exactly as before. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
 	import { onMount, tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
@@ -31,7 +42,7 @@
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { hostFor } from '../models';
 	import type { AiArtifact, ArtifactRepo } from '../storage/artifacts';
-	import { sampleNotice } from './ai-copy';
+	import { sampleNotice, statusCopy } from './ai-copy';
 	import FairHousingText from './FairHousingText.svelte';
 	import FindingsSummary from './FindingsSummary.svelte';
 	import GeminiDataDialog from './GeminiDataDialog.svelte';
@@ -39,6 +50,7 @@
 	import type { ExitDisabled, ExitKind, FormatForExit, PostCheck } from './panel-controller';
 	import type { CheckGroupCopy } from './post-check';
 	import { PanelState, type ExitEventPayload, type Resolved } from './panel-state.svelte';
+	import PlatformCard, { packAnnouncement } from './PlatformCard.svelte';
 	import ProviderChip from './ProviderChip.svelte';
 
 	let {
@@ -60,6 +72,7 @@
 		beforeGenerate,
 		checkGroups = [],
 		artifactMeta,
+		sections,
 		// Read-only outputs: written by the $effect below, never read here.
 		/* eslint-disable no-useless-assignment */
 		canExit = $bindable(false),
@@ -107,6 +120,12 @@
 		checkGroups?: CheckGroupCopy[];
 		/** Phase 7: string metadata stored on each saved draft (e.g. the memo's analysisHash). */
 		artifactMeta?: Record<string, string>;
+		/**
+		 * Phase 9 sections mode: one PlatformCard per section (fixed order), each with its own checks,
+		 * count, disclosure block and one Copy exit. `exitDisabled.copy` gates every card's Copy.
+		 * Absent: default mode with the three Phase 5 exits.
+		 */
+		sections?: SectionSpec[];
 		canExit?: boolean;
 		blocked?: boolean;
 		findings?: Finding[];
@@ -371,12 +390,44 @@
 		if (gate.exits['marked-sent'].gated) focusFindingsTitle();
 		await st.markSent();
 	}
+
+	// Sections mode (Phase 9). One announcement when a run ends cleanly: the pack summary replaces
+	// Phase 5's "Draft ready." sentence, which only describes the whole pack text.
+	const DONE_LINE = statusCopy('done', { providerLabel: '' }).line;
+	let wasRunning = false;
+	$effect(() => {
+		const running = st.running;
+		if (
+			wasRunning &&
+			!running &&
+			sections &&
+			st.error === null &&
+			st.statusLine === DONE_LINE &&
+			st.text !== ''
+		) {
+			st.deps.announce(packAnnouncement(sections, st.text));
+		}
+		wasRunning = running;
+	});
+
+	/** A card copied: the pack's Draft history row becomes Reviewed once, then the host hears it. */
+	async function onSectionCopied(text: string): Promise<void> {
+		const artifactId = st.artifactId;
+		if (artifactId && st.artifactStatus === 'draft') {
+			st.artifactStatus = 'acknowledged';
+			const at = st.deps.now?.() ?? new Date();
+			await st.deps.repo?.setStatus(artifactId, 'acknowledged', at);
+		}
+		onExit?.('copy', { text, artifactId });
+	}
 </script>
 
 <section
 	aria-labelledby={titleId}
 	aria-busy={st.running ? 'true' : undefined}
-	class="flex max-w-160 flex-col gap-6 rounded-lg border border-border bg-card p-4 shadow-card sm:p-6"
+	class="flex {sections
+		? 'w-full'
+		: 'max-w-160'} flex-col gap-6 rounded-lg border border-border bg-card p-4 shadow-card sm:p-6"
 >
 	<!-- 1. Header row -->
 	<div class="flex flex-wrap items-center justify-between gap-2">
@@ -426,6 +477,11 @@
 					<p>
 						Sent to {st.providerLabel} at <code>{hostFor(sel.id)}</code>, using
 						<code>{st.model}</code>.
+					</p>
+				{/if}
+				{#if sections}
+					<p>
+						Your disclosure is added in this browser after the draft is written. It isn't sent to {st.providerLabel}.
 					</p>
 				{/if}
 			{/if}
@@ -487,7 +543,7 @@
 					<PenLine size={16} aria-hidden="true" />{generateLabel}
 				{/if}
 			</Button>
-			{#if st.hasDraft && !st.running}
+			{#if st.hasDraft && !st.running && !sections}
 				<Button bind:ref={editEl} variant="outline" onclick={toggleEdit} class="w-full sm:w-auto">
 					{#if st.editing}
 						<Check size={16} aria-hidden="true" />Done editing
@@ -512,8 +568,28 @@
 		</p>
 	{/if}
 
-	<!-- 6. Output box: not a live region -->
-	{#if st.editing}
+	<!-- 6. Output box: not a live region. Sections mode: one PlatformCard per section instead. -->
+	{#if sections}
+		<div class="grid grid-cols-1 gap-6 xl:grid-cols-3" data-platform-cards="">
+			{#key st.artifactId}
+				{#each sections as spec (spec.key)}
+					<PlatformCard
+						{spec}
+						fullText={st.text}
+						streaming={st.running}
+						hasDraft={st.hasDraft}
+						idPrefix={id}
+						headingLevel={headingLevel === 2 ? 3 : 4}
+						{checkGroups}
+						exitDisabledReason={exitDisabled.copy ?? null}
+						clipboard={st.deps.clipboard}
+						announce={st.deps.announce}
+						onCopied={(_key, text) => void onSectionCopied(text)}
+					/>
+				{/each}
+			{/key}
+		</div>
+	{:else if st.editing}
 		<div class="flex flex-col gap-2">
 			<label for={`${id}-edit`} class="text-base font-semibold text-foreground"
 				>Edit your draft</label
@@ -557,7 +633,7 @@
 	{/if}
 
 	<!-- 7. Email footer preview (outside the exits group) -->
-	{#if emailFooter}
+	{#if emailFooter && !sections}
 		<p class="text-label whitespace-pre-wrap text-muted-foreground">
 			{emailFooter.label}: {emailFooter.text}
 		</p>
@@ -579,7 +655,7 @@
 	{/if}
 
 	<!-- 10. Fair Housing findings -->
-	{#if st.hasDraft && !st.running}
+	{#if st.hasDraft && !st.running && !sections}
 		<FindingsSummary
 			findings={st.findings}
 			idPrefix={id}
@@ -593,68 +669,68 @@
 	{/if}
 
 	<!-- 11. Long mailto note -->
-	{#if st.hasDraft && st.mailto.long}
+	{#if st.hasDraft && st.mailto.long && !sections}
 		<p id={longId} class="flex items-start gap-2 text-label text-foreground">
 			<TriangleAlert size={16} aria-hidden="true" class="mt-0.5 shrink-0" />This draft is long, so
 			some email apps may cut it off. If it arrives incomplete, use Copy text instead.
 		</p>
 	{/if}
 
-	<!-- 12. Exits: exactly three -->
-	<div class="flex flex-col gap-2">
-		<div
-			role="group"
-			aria-label="Use this draft"
-			data-testid="generation-exits"
-			class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-4"
-		>
-			<Button
-				variant={st.hasDraft ? 'default' : 'outline'}
-				aria-disabled={gate.exits.copy.gated ? 'true' : undefined}
-				aria-describedby={describedBy('copy')}
-				onclick={onCopy}
-				class="w-full sm:w-auto {GATED}"><Copy size={16} aria-hidden="true" />Copy text</Button
+	<!-- 12. Exits: exactly three (sections mode: one per card instead) -->
+	{#if !sections}<div class="flex flex-col gap-2">
+			<div
+				role="group"
+				aria-label="Use this draft"
+				data-testid="generation-exits"
+				class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-4"
 			>
-			<!-- eslint-disable svelte/no-navigation-without-resolve -- an email-app link built by exits.ts buildMailto, not app navigation -->
-			<a
-				href={gate.exits.email.gated ? undefined : st.mailto.href}
-				role={gate.exits.email.gated ? 'link' : undefined}
-				tabindex={gate.exits.email.gated ? 0 : undefined}
-				aria-disabled={gate.exits.email.gated ? 'true' : undefined}
-				aria-describedby={describedBy('email')}
-				onclick={onEmail}
-				onkeydown={onEmailKey}
-				class={buttonVariants({ variant: 'outline', class: `w-full sm:w-auto ${GATED}` })}
-				><Mail size={16} aria-hidden="true" />Open in email app</a
-			>
-			<!-- eslint-enable svelte/no-navigation-without-resolve -->
-			<Button
-				variant="ghost"
-				aria-disabled={gate.exits['marked-sent'].gated ? 'true' : undefined}
-				aria-pressed={sent ? 'true' : undefined}
-				aria-describedby={describedBy('marked-sent')}
-				onclick={onMarkSent}
-				class="w-full sm:w-auto {GATED}"
-				><MailCheck size={16} aria-hidden="true" />{sent
-					? 'Marked as sent'
-					: 'Mark as sent'}</Button
-			>
-		</div>
-		{#each reasons as r (r.id)}
-			<p id={r.id} class="flex items-start gap-2 text-label text-foreground">
-				{#if r.tone === 'warn'}
-					<TriangleAlert size={16} aria-hidden="true" class="mt-0.5 shrink-0" />
-				{:else}
-					<CircleAlert size={16} aria-hidden="true" class="mt-0.5 shrink-0 text-destructive" />
-				{/if}
-				{r.text}
+				<Button
+					variant={st.hasDraft ? 'default' : 'outline'}
+					aria-disabled={gate.exits.copy.gated ? 'true' : undefined}
+					aria-describedby={describedBy('copy')}
+					onclick={onCopy}
+					class="w-full sm:w-auto {GATED}"><Copy size={16} aria-hidden="true" />Copy text</Button
+				>
+				<!-- eslint-disable svelte/no-navigation-without-resolve -- an email-app link built by exits.ts buildMailto, not app navigation -->
+				<a
+					href={gate.exits.email.gated ? undefined : st.mailto.href}
+					role={gate.exits.email.gated ? 'link' : undefined}
+					tabindex={gate.exits.email.gated ? 0 : undefined}
+					aria-disabled={gate.exits.email.gated ? 'true' : undefined}
+					aria-describedby={describedBy('email')}
+					onclick={onEmail}
+					onkeydown={onEmailKey}
+					class={buttonVariants({ variant: 'outline', class: `w-full sm:w-auto ${GATED}` })}
+					><Mail size={16} aria-hidden="true" />Open in email app</a
+				>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
+				<Button
+					variant="ghost"
+					aria-disabled={gate.exits['marked-sent'].gated ? 'true' : undefined}
+					aria-pressed={sent ? 'true' : undefined}
+					aria-describedby={describedBy('marked-sent')}
+					onclick={onMarkSent}
+					class="w-full sm:w-auto {GATED}"
+					><MailCheck size={16} aria-hidden="true" />{sent
+						? 'Marked as sent'
+						: 'Mark as sent'}</Button
+				>
+			</div>
+			{#each reasons as r (r.id)}
+				<p id={r.id} class="flex items-start gap-2 text-label text-foreground">
+					{#if r.tone === 'warn'}
+						<TriangleAlert size={16} aria-hidden="true" class="mt-0.5 shrink-0" />
+					{:else}
+						<CircleAlert size={16} aria-hidden="true" class="mt-0.5 shrink-0 text-destructive" />
+					{/if}
+					{r.text}
+				</p>
+			{/each}
+			<p id={helperId} class="text-label text-muted-foreground">
+				Tran never sends anything for you. Copy the text or open it in your email app, then send it
+				yourself. Mark as sent only updates Draft history in this browser.
 			</p>
-		{/each}
-		<p id={helperId} class="text-label text-muted-foreground">
-			Tran never sends anything for you. Copy the text or open it in your email app, then send it
-			yourself. Mark as sent only updates Draft history in this browser.
-		</p>
-	</div>
+		</div>{/if}
 </section>
 
 <!-- Caller-owned dialog, outside every state branch. -->
