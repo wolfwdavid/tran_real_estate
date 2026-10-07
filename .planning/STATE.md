@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-15-PLAN.md
-last_updated: "2026-10-07T00:51:02.309Z"
+stopped_at: Completed 08-16-PLAN.md
+last_updated: "2026-10-07T00:59:09.271Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 138
+  completed_plans: 139
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 16 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
+Plan: 17 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
 
 ## Performance Metrics
 
@@ -184,6 +184,7 @@ Plan: 16 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
 | Phase 08 P13 | 45min | 3 tasks | 16 files |
 | Phase 08 P14 | 40min | 2 tasks | 5 files |
 | Phase 08 P15 | 35min | 3 tasks | 13 files |
+| Phase 08 P16 | 55min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -440,6 +441,9 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-14: AGT-03/05/07 left open (storage layer only); Phase 8 convention is to close AGT ids at the 08-26 gate, so requirements mark-complete was not run
 - [Phase 08]: 08-15: Undo of sample removal passes a plain Svelte state snapshot to Dexie because IndexedDB structured clone rejects deep-state proxies (DataCloneError)
 - [Phase 08]: 08-15: SampleContactsNotice is a div with role=region, not section role=region (Svelte flags the redundant role); the Remove status uses the real snapshot count
+- [Phase 08]: 08-16: IABS helper reworded to avoid the banned phrase brokerage services; the IABS form title is rendered only by the core composer for TX
+- [Phase 08]: 08-16: ProfileForm adopts a changing initial profile as its dirty baseline and replaces the draft only while untouched; Saved. is session state and the stored cleanText copy replaces the draft after each save
+- [Phase 08]: 08-16: AGT-01 left open (details + disclosure done; logo, colors and share link follow in 08-22/08-24), closes at the 08-26 gate
 
 ### Pending Todos
 
@@ -462,7 +466,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T00:51:02.301Z
-Stopped at: Completed 08-15-PLAN.md
+Last session: 2026-10-07T00:59:09.265Z
+Stopped at: Completed 08-16-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
