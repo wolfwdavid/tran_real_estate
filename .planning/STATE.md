@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-13-PLAN.md
-last_updated: "2026-10-06T13:49:35.082Z"
+stopped_at: Completed 08-14-PLAN.md
+last_updated: "2026-10-07T00:24:56.078Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 136
+  completed_plans: 137
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 14 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
+Plan: 15 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
 
 ## Performance Metrics
 
@@ -182,6 +182,7 @@ Plan: 14 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
 | Phase 08 P17 | 15min | 2 tasks | 6 files |
 | Phase 08 P12 | 45min | 2 tasks | 14 files |
 | Phase 08 P13 | 45min | 3 tasks | 16 files |
+| Phase 08 P14 | 40min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -431,6 +432,11 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-12: Dexie v6 = agent tables; profile row keyed by fixed uuid PROFILE_ROW_ID (envelope needs uuid ids), mapped to domain id 'profile'
 - [Phase 08]: 08-12: BackupTable.scanExemptPaths - export key scan skips only agentProfile logo.base64 + web3formsAccessKey by path
 - [Phase 08]: 08-13: (public) inquiry page renders its own ui/alert failure panel (SectionError is under lib/features, outside the public import boundary); routes.ts exports PUBLIC_ROUTES/isPublicRoute
+- [Phase 08]: 08-14: inquiry preview ellipsis is ASCII '...' because cleanText NFKC-folds U+2026 into three full stops before the activity text is stored (Phase 8 source stays ASCII-only)
+- [Phase 08]: 08-14: commitImport is ONE rw transaction over contacts + activities + meta (META.firstRecordAt set atomically, as addContact does); any throw aborts and surfaces as ImportCommitError
+- [Phase 08]: 08-14: import updates re-read the target inside the transaction and fill only still-blank fields; a target deleted between review and commit counts as skipped, two updates for one contact chain on the in-memory row
+- [Phase 08]: 08-14: tasks use status 'open' | 'done' strings + the [status+dueDate] compound index (never a boolean done field); completeTask no-ops when already done, reopenTask tombstones only the latest live task_done activity
+- [Phase 08]: 08-14: AGT-03/05/07 left open (storage layer only); Phase 8 convention is to close AGT ids at the 08-26 gate, so requirements mark-complete was not run
 
 ### Pending Todos
 
@@ -453,7 +459,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-06T13:49:35.072Z
-Stopped at: Completed 08-13-PLAN.md
+Last session: 2026-10-07T00:24:24.861Z
+Stopped at: Completed 08-14-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
