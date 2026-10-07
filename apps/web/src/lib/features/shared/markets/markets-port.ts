@@ -9,7 +9,7 @@
 // handler. It goes through runtime.requestSpend, so the over-cap confirm prompt (CapPrompt)
 // applies; the port never issues over-cap grants itself.
 import type { MarketStatsInput } from '@tran/core/markets';
-import type { MarketBreakdown, MarketSide, MarketStats } from '@tran/core/listings';
+import type { MarketStats } from '@tran/core/listings';
 import {
 	getDataRuntime,
 	type CostEstimate,
@@ -17,8 +17,10 @@ import {
 	type DataRuntime,
 	type Provenance
 } from '$lib/data';
+import { toMarketStatsInput } from './market-input';
 
 export type { CostEstimate, Provenance };
+export { toMarketStatsInput };
 
 /** Months of history every market-stats request asks for (canonical; shared with Phase 9). */
 export const MARKET_HISTORY_MONTHS = 24;
@@ -53,52 +55,6 @@ export class DataRuntimeNotStartedError extends Error {
 		super('data-runtime-not-started');
 		this.name = 'DataRuntimeNotStartedError';
 	}
-}
-
-const bedroomStats = (rows: readonly MarketBreakdown[] | undefined, side: 'rent' | 'price') =>
-	(rows ?? [])
-		.filter((b): b is MarketBreakdown & { bedrooms: number } => b.bedrooms !== null)
-		.map((b) =>
-			side === 'rent'
-				? { bedrooms: b.bedrooms, medianRent: b.median, totalListings: b.totalListings }
-				: { bedrooms: b.bedrooms, medianPrice: b.median, totalListings: b.totalListings }
-		);
-
-function rentalInput(s: MarketSide | null): MarketStatsInput['rentalData'] {
-	if (!s) return null;
-	return {
-		medianRent: s.median,
-		totalListings: s.totalListings,
-		lastUpdatedDate: s.lastUpdatedDate ?? null,
-		dataByBedrooms: bedroomStats(s.byBedrooms, 'rent'),
-		history: Object.fromEntries(
-			s.history.map((h) => [
-				h.month,
-				{
-					medianRent: h.median,
-					totalListings: h.totalListings,
-					dataByBedrooms: bedroomStats(h.byBedrooms, 'rent')
-				}
-			])
-		)
-	};
-}
-
-function saleInput(s: MarketSide | null): MarketStatsInput['saleData'] {
-	if (!s) return null;
-	return {
-		medianPrice: s.median,
-		totalListings: s.totalListings,
-		lastUpdatedDate: s.lastUpdatedDate ?? null,
-		history: Object.fromEntries(
-			s.history.map((h) => [h.month, { medianPrice: h.median, totalListings: h.totalListings }])
-		)
-	};
-}
-
-/** Phase 4 domain MarketStats -> the core series input (dollars stay dollars). */
-export function toMarketStatsInput(m: MarketStats): MarketStatsInput {
-	return { zipCode: m.zipCode, rentalData: rentalInput(m.rental), saleData: saleInput(m.sale) };
 }
 
 export function createMarketsPort(runtime: PortRuntime): MarketsPort {
