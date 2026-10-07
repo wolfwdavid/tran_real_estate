@@ -237,8 +237,27 @@ describe('sections mode SSR (STU-02)', () => {
 		}
 	});
 
-	test('before a run every card shows the empty line and a gated Copy', () => {
+	test('before a run the cards row is not rendered; the panel empty line covers it', () => {
 		const html = panel(makeState());
+		expect(html).not.toContain('data-platform-cards=');
+		expect(html).not.toContain('data-platform-card=');
+		expect(html).not.toMatch(/<article\b/);
+		expect(html).not.toContain('Copy Instagram post');
+		const empty = /<p\b[^>]*data-platform-cards-empty[^>]*>([\s\S]*?)<\/p>/.exec(html);
+		expect(empty, 'the panel empty line').toBeTruthy();
+		expect(strip(empty![1]!)).toBe(
+			'Your Instagram, Facebook, and LinkedIn posts will appear here. Nothing leaves this page until you copy a post.'
+		);
+		// Exactly one empty line: no card repeats it.
+		expect(strip(html).split('Nothing leaves this page until you copy a post.')).toHaveLength(2);
+	});
+
+	test('once a run starts all three cards render, each with its empty line and a gated Copy', () => {
+		const st = makeState();
+		st.phase = 'connecting';
+		const html = panel(st);
+		expect(html).not.toContain('data-platform-cards-empty');
+		expect([...html.matchAll(/data-platform-card="(\w+)"/g)].map((m) => m[1])).toEqual(KEYS);
 		for (const key of KEYS) {
 			const c = card(html, key);
 			expect(strip(c)).toContain(

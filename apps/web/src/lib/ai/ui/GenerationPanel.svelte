@@ -51,6 +51,7 @@
 	import type { CheckGroupCopy } from './post-check';
 	import { PanelState, type ExitEventPayload, type Resolved } from './panel-state.svelte';
 	import PlatformCard, {
+		CARD_EMPTY_LINE,
 		COPIED_META_KEY,
 		packAnnouncement,
 		withCopied,
@@ -593,8 +594,17 @@
 		</p>
 	{/if}
 
-	<!-- 6. Output box: not a live region. Sections mode: one PlatformCard per section instead. -->
-	{#if sections}
+	<!-- 6. Output box: not a live region. Sections mode: one PlatformCard per section instead.
+	     Before the first run the cards row is not rendered: the panel's empty line covers it, and all
+	     cards render (each with its empty line) once a run starts (09-UI-SPEC Social post pack). -->
+	{#if sections && !st.hasDraft && !st.running}
+		<p
+			class="min-h-40 rounded-md border border-border bg-background p-4 text-base leading-[1.6] text-muted-foreground"
+			data-platform-cards-empty=""
+		>
+			{CARD_EMPTY_LINE}
+		</p>
+	{:else if sections}
 		<div class="grid grid-cols-1 gap-6 xl:grid-cols-3" data-platform-cards="">
 			{#key st.artifactId}
 				{#each sections as spec (spec.key)}
