@@ -35,6 +35,7 @@
 
 	const uid = $props.id();
 	const checkboxId = `${uid}-check`;
+	const labelId = `${uid}-label`;
 	const done = $derived(task.status === 'done');
 	let pending = $state(false);
 
@@ -67,6 +68,7 @@
 			<Checkbox
 				id={checkboxId}
 				data-task-checkbox
+				aria-labelledby={labelId}
 				checked={done}
 				disabled={pending}
 				onCheckedChange={toggle}
@@ -75,6 +77,7 @@
 		<div class="flex min-w-0 flex-1 flex-col gap-1">
 			<div class="flex min-h-11 flex-wrap items-center gap-x-2">
 				<label
+					id={labelId}
 					for={checkboxId}
 					class="cursor-pointer text-body text-foreground {done ? 'line-through' : ''}"
 					>{task.title}</label

@@ -86,7 +86,7 @@
 				(f.targetId &&
 					root.querySelector<HTMLElement>(`[data-task-id="${f.targetId}"] [data-task-checkbox]`)) ||
 				root.querySelector<HTMLElement>(`[data-group="${f.group}"] [data-group-heading]`) ||
-				root.querySelector<HTMLElement>('[data-queue-empty]');
+				root.querySelector<HTMLElement>('[data-queue-empty-focus]');
 			el?.focus();
 		});
 	});
@@ -126,7 +126,9 @@
 			<div data-queue-empty class="mt-8 flex items-start gap-3 rounded-lg bg-secondary-surface p-4">
 				<CircleCheck size={20} class="mt-0.5 shrink-0 text-secondary" aria-hidden="true" />
 				<div class="flex flex-col gap-2">
-					<h2 id="{uid}-empty" tabindex="-1" class={headingClass}>Nothing due today</h2>
+					<h2 id="{uid}-empty" tabindex="-1" data-queue-empty-focus class={headingClass}>
+						Nothing due today
+					</h2>
 					<p class="text-body text-foreground">
 						You're caught up. Add a task from any contact to plan your next follow-up.
 					</p>
@@ -181,7 +183,12 @@
 			</details>
 		{/if}
 	{:else if dueNow === 0}
-		<p data-queue-empty tabindex="-1" class="mt-4 text-body text-muted-foreground">
+		<p
+			data-queue-empty
+			data-queue-empty-focus
+			tabindex="-1"
+			class="mt-4 text-body text-muted-foreground"
+		>
 			Nothing due today. You're caught up. Add a task from any contact to plan your next follow-up.
 		</p>
 	{:else}
