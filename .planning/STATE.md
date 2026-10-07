@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-20-PLAN.md
-last_updated: "2026-10-07T01:57:48.550Z"
+stopped_at: Completed 08-21-PLAN.md
+last_updated: "2026-10-07T02:43:52.924Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 142
+  completed_plans: 143
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 20 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
+Plan: 21 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
 
 ## Performance Metrics
 
@@ -188,6 +188,7 @@ Plan: 20 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-
 | Phase 08 P19 | 55min | 3 tasks | 8 files |
 | Phase 08 P18 | 36 min | 3 tasks | 9 files |
 | Phase 08 P20 | 51min | 3 tasks | 10 files |
+| Phase 08 P21 | 1h 45m | 3 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -461,6 +462,12 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-20: ImportReview is remounted per check via {#key}; rows/counts are $derived and the include set + free-form edits are captured once with untrack
 - [Phase 08]: 08-20: re-pasting an inquiry email with a message is an update that only logs the message (diffLeads semantics); Already in contacts proven with a message-less block
 - [Phase 08]: 08-20: axe E2E seeds contacts through one multi-block paste instead of addLeadByHand, which can click the contacts toolbar before the list hydrates
+- [Phase 08]: 08-21: the empty-CRM home hides Quick actions (CrmEmptyState already offers Add a lead and Import leads); Get set up stays
+- [Phase 08]: 08-21: Get set up row copy lives in AgentHome.svelte (SETUP_LABELS); setupChecklist returns keys + done only
+- [Phase 08]: 08-21: the full Today queue renders both Overdue and Due today sections while either has tasks (an emptied group keeps its heading as the focus target); both empty -> the Nothing due today panel takes focus; Done today <details> only when n > 0
+- [Phase 08]: 08-21: the E2E's due-today order assumes Dexie returns equal-createdAt rows in primary-key order (sample ids ascend in fixture order); confirmed on both bases
+- [Phase 08]: 08-21: the Today pill is matched with /^Today ?, n tasks due$/ because browsers compute "Today , 5 tasks due" from AgentNav's sr-only suffix; the AgentNav fix is in deferred-items.md (08-11's file)
+- [Phase 08]: 08-21: inquiryConfigFor(profile) lives in setup-checklist.ts so the home's Copy inquiry link and the 08-24 share builder derive the same InquiryConfig
 
 ### Pending Todos
 
@@ -483,7 +490,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T01:57:48.544Z
-Stopped at: Completed 08-20-PLAN.md
+Last session: 2026-10-07T02:43:52.901Z
+Stopped at: Completed 08-21-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
