@@ -29,19 +29,26 @@ describe('AgentNav', () => {
 		state.page.route.id = '/(app)/agent';
 	});
 
-	test('one Agent tools landmark with the five links in fixed order', () => {
+	test('one Agent tools landmark with the six links in fixed order, Studio last', () => {
 		const h = html();
 		expect(h.match(/<nav\b[^>]*aria-label="Agent tools"/g)).toHaveLength(1);
 		const ls = links(h);
-		expect(ls.map((l) => l.text)).toEqual(['Today', 'Pipeline', 'Contacts', 'Import', 'Profile']);
+		expect(ls.map((l) => l.text)).toEqual([
+			'Today',
+			'Pipeline',
+			'Contacts',
+			'Import',
+			'Profile',
+			'Studio'
+		]);
 		expect(ls.map((l) => /href="([^"]*)"/.exec(l.attrs)?.[1])).toEqual([
 			'/agent/today/',
 			'/agent/pipeline/',
 			'/agent/contacts/',
 			'/agent/import/',
-			'/agent/profile/'
+			'/agent/profile/',
+			'/agent/studio/'
 		]);
-		expect(h).not.toContain('Studio');
 	});
 
 	test.each([
@@ -50,17 +57,26 @@ describe('AgentNav', () => {
 		['/(app)/agent/contacts', 'Contacts'],
 		['/(app)/agent/contact', 'Contacts'],
 		['/(app)/agent/import', 'Import'],
-		['/(app)/agent/profile', 'Profile']
+		['/(app)/agent/profile', 'Profile'],
+		['/(app)/agent/studio', 'Studio'],
+		['/(app)/agent/studio/listing', 'Studio'],
+		['/(app)/agent/studio/social', 'Studio'],
+		['/(app)/agent/studio/reel', 'Studio'],
+		['/(app)/agent/studio/snapshot', 'Studio']
 	])('route %s marks only %s as the current page', (id, label) => {
 		state.page.route.id = id;
 		const current = links(html()).filter((l) => l.attrs.includes('aria-current="page"'));
 		expect(current.map((l) => l.text)).toEqual([label]);
 	});
 
-	test.each(['/(app)/agent', '/(app)/settings', null])('no link is current on %s', (id) => {
-		state.page.route.id = id;
-		expect(html()).not.toContain('aria-current');
-	});
+	// '/(app)/agent/studiox' pins the Studio prefix match to the hub and its own children.
+	test.each(['/(app)/agent', '/(app)/settings', '/(app)/agent/studiox', null])(
+		'no link is current on %s',
+		(id) => {
+			state.page.route.id = id;
+			expect(html()).not.toContain('aria-current');
+		}
+	);
 
 	test('a due count renders a hidden-from-name pill and reads "Today, 3 tasks due"', () => {
 		const [today, ...rest] = links(html({ dueCount: 3 }));

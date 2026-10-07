@@ -6,6 +6,8 @@
 	// write straight into the form draft (stored on Save profile). "Your inquiry page" (the share
 	// link builder, AGT-02) sits below the form, outside it, and reads the SAVED profile.
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
+	import ChartColumn from '@lucide/svelte/icons/chart-column';
 	import {
 		EMPTY_PROFILE_INPUT,
 		type AgentProfile,
@@ -19,6 +21,7 @@
 	import ShareLinkBuilder from '$lib/features/agent/profile/ShareLinkBuilder.svelte';
 	import { toProfileInput } from '$lib/features/agent/profile/profile-form';
 	import { useProfile, type LiveView } from '$lib/storage/agent/live.svelte';
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
 
 	let view = $state.raw<LiveView<AgentProfile | null> | null>(null);
 	onMount(() => {
@@ -81,6 +84,14 @@
 		<aside class="flex min-w-0 flex-col gap-8 lg:sticky lg:top-6" aria-label="Previews">
 			<div class="rounded-lg border border-border bg-card p-6 shadow-card">
 				<BrandPreview profile={draft} />
+				<!-- The Studio's branded report starts from these details (09-UI-SPEC Planner Note 8). -->
+				<a
+					href={resolve('/agent/studio/snapshot/')}
+					class={buttonVariants({ variant: 'outline', class: 'mt-4 w-full gap-2 sm:w-auto' })}
+				>
+					<ChartColumn size={16} aria-hidden="true" />
+					Create Market Snapshot
+				</a>
 			</div>
 			<div class="rounded-lg border border-border bg-card p-6 shadow-card">
 				<DisclosurePreview profile={draft} />

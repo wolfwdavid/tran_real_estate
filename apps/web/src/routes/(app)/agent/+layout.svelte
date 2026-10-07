@@ -2,9 +2,12 @@
 	// The agent portal layout (08-UI-SPEC "(app) agent layout"): AgentNav, then the Sample contacts
 	// notice (or, right after a removal, its Undo line), then the page. It sits inside the (app)
 	// layout's <main>, after the AppNotice slot; the Data source status bar is hidden on /agent/*
-	// because the agent CRM spends no RentCast calls. The Today count pill reads the live open tasks
-	// (overdue or due today, local date).
+	// because the agent CRM spends no RentCast calls (the (app) layout shows it again on
+	// /agent/studio/snapshot/ only). The Sample contacts notice is about contacts, so the Studio
+	// routes skip it (09-UI-SPEC "(app) agent layout additions"). The Today count pill reads the
+	// live open tasks (overdue or due today, local date).
 	import { afterNavigate } from '$app/navigation';
+	import { page } from '$app/state';
 	import SampleContactsNotice from '$lib/features/agent/crm/SampleContactsNotice.svelte';
 	import { todayLocal } from '$lib/features/agent/dates';
 	import { restoreSampleContacts } from '$lib/features/agent/samples/samples';
@@ -22,6 +25,10 @@
 
 	const tasks = useOpenTasks();
 	const due = $derived(dueCount(tasks.current ?? [], todayLocal()));
+	const inStudio = $derived(
+		page.route.id === '/(app)/agent/studio' ||
+			(page.route.id?.startsWith('/(app)/agent/studio/') ?? false)
+	);
 
 	// An Undo never outlives the page it was offered on.
 	afterNavigate(() => clearSamplesState());
@@ -49,7 +56,7 @@
 	<div class="mt-6 empty:hidden">
 		{#if samplesState.status !== null}
 			<UndoStatus message={samplesState.status} onundo={undoRemove} />
-		{:else}
+		{:else if !inStudio}
 			<SampleContactsNotice />
 		{/if}
 	</div>

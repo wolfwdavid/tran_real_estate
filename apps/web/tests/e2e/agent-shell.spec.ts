@@ -4,7 +4,7 @@ import { AGENT_ROUTES } from './routes';
 // The agent portal shell (08-11; 08-UI-SPEC "Routes", "(app) agent layout", "AgentNav") on the
 // real built site, both bases: every agent sub-page renders its h1 and title, the Agent tools nav
 // in fixed order with the current page marked, no Data source bar, and no horizontal scroll at
-// 375px.
+// 375px. Phase 9 appends Studio to the nav (its own routes are covered by studio-shell.spec.ts).
 
 type AgentRoute = (typeof AGENT_ROUTES)[number];
 
@@ -19,7 +19,7 @@ const EXPECTED: Record<AgentRoute, { h1: string; current: string; title?: string
 	'agent/profile/': { h1: 'Your profile', current: 'Profile' }
 };
 
-const NAV_ORDER = ['Today', 'Pipeline', 'Contacts', 'Import', 'Profile'];
+const NAV_ORDER = ['Today', 'Pipeline', 'Contacts', 'Import', 'Profile', 'Studio'];
 
 const agentNav = (page: Page) => page.getByRole('navigation', { name: 'Agent tools' });
 
@@ -50,7 +50,6 @@ for (const route of AGENT_ROUTES) {
 		await expect(marked).toHaveCount(1);
 		await expect(marked).toHaveAttribute('aria-current', 'page');
 		await expect(marked).toHaveText(current);
-		await expect(nav).not.toContainText('Studio');
 
 		// The agent CRM spends no RentCast calls: no Data source bar (08-UI-SPEC Planner Note 4).
 		await expect(page.getByRole('region', { name: 'Data source' })).toHaveCount(0);
@@ -65,7 +64,7 @@ for (const route of AGENT_ROUTES) {
 			.getByRole('link')
 			.evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href));
 		expect(hrefs).toEqual(
-			['today', 'pipeline', 'contacts', 'import', 'profile'].map(
+			['today', 'pipeline', 'contacts', 'import', 'profile', 'studio'].map(
 				(s) => new URL(`agent/${s}/`, baseURL).href
 			)
 		);
@@ -80,7 +79,6 @@ test('agent/: the home shows the Agent tools nav with no current item', async ({
 	await expect(nav).toBeVisible();
 	expect(await navTexts(page)).toEqual(NAV_ORDER);
 	await expect(nav.locator('[aria-current]')).toHaveCount(0);
-	await expect(nav).not.toContainText('Studio');
 });
 
 test('the nav marks the next page current after a client-side navigation', async ({ page }) => {
@@ -105,7 +103,7 @@ test.describe('375px', () => {
 			const tops = await agentNav(page)
 				.getByRole('link')
 				.evaluateAll((as) => as.map((a) => Math.round(a.getBoundingClientRect().top)));
-			expect(tops).toHaveLength(5);
+			expect(tops).toHaveLength(6);
 			expect(new Set(tops).size).toBe(2);
 			expect(tops).toEqual([...tops].sort((a, b) => a - b));
 			for (const link of await agentNav(page).getByRole('link').all()) {

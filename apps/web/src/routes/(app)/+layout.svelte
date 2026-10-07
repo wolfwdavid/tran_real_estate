@@ -12,16 +12,22 @@
 	// resolve('/settings/'): with relative paths, resolve() is relative during prerender, so the
 	// path comparison would render the bar into the prerendered Settings shell.
 	// The agent portal hides it too (08-UI-SPEC Planner Note 4): the agent CRM spends no RentCast
-	// calls, so a meter or a "Sample data" bar would mislabel the agent's own contacts. A future
-	// /agent/studio/ (which does use RentCast) shows it again.
+	// calls, so a meter or a "Sample data" bar would mislabel the agent's own contacts. In the Studio
+	// (09-UI-SPEC Planner Note 2) only /agent/studio/snapshot/ spends RentCast calls, so the bar
+	// shows there and nowhere else: the hub, listing, social and reel work from the agent's facts.
 	// The agent CRM also skips the check-on-open saved-search run (08-27, SC5: zero RentCast calls
 	// with a real key present). A session opened on an agent page runs it on the first non-agent
-	// route; settings and /agent/studio/ keep it. isAgentCrm is the single predicate for both gates.
+	// route; settings and every /agent/studio/ route keep it. isAgentCrm is the single predicate for
+	// the alerts gate; the status bar additionally narrows the Studio to its snapshot route.
+	const isAgentStudio = (id: string | null) =>
+		id !== null && (id === '/(app)/agent/studio' || id.startsWith('/(app)/agent/studio/'));
 	const isAgentCrm = (id: string | null) =>
-		id !== null &&
-		(id === '/(app)/agent' || id.startsWith('/(app)/agent/')) &&
-		!(id === '/(app)/agent/studio' || id.startsWith('/(app)/agent/studio/'));
-	const showStatusBar = $derived(page.route.id !== '/(app)/settings' && !isAgentCrm(page.route.id));
+		id !== null && (id === '/(app)/agent' || id.startsWith('/(app)/agent/')) && !isAgentStudio(id);
+	const showStatusBar = $derived(
+		page.route.id !== '/(app)/settings' &&
+			!isAgentCrm(page.route.id) &&
+			(!isAgentStudio(page.route.id) || page.route.id === '/(app)/agent/studio/snapshot')
+	);
 	const runAlerts = $derived(!isAgentCrm(page.route.id));
 </script>
 
