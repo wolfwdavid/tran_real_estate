@@ -127,13 +127,14 @@ test('quick add validates, adds, and blocks duplicates', async ({ page, baseURL 
 	await expect(dialog.getByText('Enter a phone number with area code.')).toBeVisible();
 	await expect(dialog.getByLabel('Email', { exact: true })).toBeFocused();
 
-	// A valid lead saves, closes the dialog, announces, and moves focus to the page h1.
+	// A valid lead saves, closes the dialog, announces, and moves focus to the new contact's link
+	// in the list (08-18; the h1 is the fallback when the current filter hides the contact).
 	await dialog.getByLabel('Email', { exact: true }).fill('avery.example@example.com');
 	await dialog.getByLabel('Phone', { exact: true }).fill('');
 	await dialog.getByRole('button', { name: 'Add lead' }).click();
 	await expect(announcer(page)).toHaveText('Added Avery Example to New.');
 	await expect(addDialog(page)).toHaveCount(0);
-	await expect(page.getByRole('heading', { level: 1, name: 'Contacts' })).toBeFocused();
+	await expect(page.getByRole('link', { name: 'Avery Example' })).toBeFocused();
 	await expect(page.getByRole('heading', { level: 2, name: 'No contacts yet' })).toHaveCount(0);
 
 	// Same email, different case and trailing space: blocked until the agent chooses.
