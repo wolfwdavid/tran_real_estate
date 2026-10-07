@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-09-PLAN.md
-last_updated: "2026-10-07T10:32:04.510Z"
+stopped_at: Completed 09-10-PLAN.md
+last_updated: "2026-10-07T10:55:37.601Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 158
+  completed_plans: 159
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 09
-Plan: 10 of 23 (wave 1 complete: 09-01..09-09; next wave 2: 09-10)
+Plan: 11 of 23 (waves 1-2 complete: 09-01..09-10; next wave 3)
 
 ## Performance Metrics
 
@@ -204,6 +204,7 @@ Plan: 10 of 23 (wave 1 complete: 09-01..09-09; next wave 2: 09-10)
 | Phase 09 P08 | 17min | 2 tasks | 9 files |
 | Phase 09 P04 | 25min | 2 tasks | 7 files |
 | Phase 09 P09 | 2h05m | 2 tasks | 20 files |
+| Phase 09 P10 | 22min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -523,6 +524,9 @@ Recent decisions affecting current work:
 - [Phase 09]: Lexicon entries added after Phase 5 carry phase: N and get their own leave-one-out; will appreciate blocks only at a clause end or before in value
 - [Phase 09]: Studio data bar gate: route-id match shows DataStatusBar on /agent/studio/snapshot/ only; runAlerts stays !isAgentCrm so every Studio route keeps the check-on-open pass
 - [Phase 09]: STUDIO_ROUTES kept separate from AGENT_ROUTES (joins ROUTES and PORTAL_ROUTES); print/snapshot/ joins PRINT_ROUTES; route-walk E2E budgets scale with ROUTES.length
+- [Phase 09]: composeDisclosure(p, { variant }) maps Phase 8 profiles via toDisclosureProfileCore (fixed NY-safe license labels, Phase 8 phone formatting) and returns missing in Phase 8 ProfileField names; string-context output unchanged
+- [Phase 09]: Studio reads profile, brand colors, BrandPreview, logoObjectUrl and SAMPLE_AGENT_PROFILE only via features/shared/agent-profile; sample agent stays single-sourced in the core fixture; logo-url moved with BrandPreview
+- [Phase 09]: Phase 8 agent-boundary test excludes isStudioPath (features/studio, routes/(app)/agent/studio) with non-vacuity and unit cases; tables.ts leaf exemption, planted control and sms: check unchanged
 
 ### Pending Todos
 
@@ -545,7 +549,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T10:32:04.488Z
-Stopped at: Completed 09-09-PLAN.md
+Last session: 2026-10-07T10:55:15.457Z
+Stopped at: Completed 09-10-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
