@@ -3,7 +3,8 @@ import { isAbort } from '@tran/core/ai';
 import { checkFairHousing } from '@tran/core/fair-housing';
 import { redactPii } from '@tran/core/privacy';
 import type { LlmEvent, LlmRequest } from '../ports.js';
-import type { BuiltPrompt } from '../prompts/types.js';
+import { buildPrompt, registerPrompt } from '../prompts/registry.js';
+import type { BuiltPrompt, PromptDef } from '../prompts/types.js';
 import { runGeneration, type RunUpdate } from '../runner.js';
 import { FIXTURE_OUTPUTS } from './fixture-outputs.js';
 import { fixtureProvider } from './fixture.js';
@@ -226,5 +227,47 @@ describe('prompt-supplied sample text (fixtureText)', () => {
 		const err = await run.catch((e: unknown) => e);
 		expect(isAbort(err)).toBe(true);
 		expect(seen.join('')).toBe('Alpha beta ');
+	});
+});
+
+describe('PromptDef.sample hook end to end (registry -> runner -> fixture)', () => {
+	const plain: PromptDef<{ name: string }> = {
+		id: 'test/fixture-plain',
+		version: 1,
+		feature: 'test',
+		housingCopy: false,
+		containsClientData: false,
+		maxTokens: 2048,
+		build: (i) => ({ system: 'Describe.', user: `Name: ${i.name}`, known: [] })
+	};
+	const sampled: PromptDef<{ name: string }> = {
+		...plain,
+		id: 'test/fixture-sample',
+		sample: (input) => 'Sample for ' + input.name
+	};
+	registerPrompt(sampled as PromptDef);
+	registerPrompt(plain as PromptDef);
+
+	async function streamed(id: string, inputs: unknown): Promise<string> {
+		const prompt = await buildPrompt(id, inputs);
+		let text = '';
+		for await (const u of runGeneration({
+			prompt,
+			provider: fixtureProvider({ sleep: instant, random: () => 0 }),
+			model: 'sample',
+			signal: new AbortController().signal,
+			flushMs: 0
+		})) {
+			if (u.type === 'done') text = u.result.text;
+		}
+		return text;
+	}
+
+	it('streams prompt.sample(input) built from the actual inputs', async () => {
+		expect(await streamed('test/fixture-sample', { name: 'Oak' })).toBe('Sample for Oak');
+	});
+
+	it('a prompt without sample streams the existing canned text unchanged', async () => {
+		expect(await streamed('test/fixture-plain', { name: 'Oak' })).toBe(FIXTURE_OUTPUTS.default);
 	});
 });

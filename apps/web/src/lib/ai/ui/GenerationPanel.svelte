@@ -8,7 +8,7 @@
 	// and the email link loses its href while gated.
 	//
 	// Cross-phase props (coordinator contract): postChecks, tokens, emailFooter, exitDisabled,
-	// onExit, subjectId and beforeGenerate (Phase 6), checkGroups and artifactMeta (Phase 7), and the
+	// formatForExit (Phase 9), onExit, subjectId and beforeGenerate (Phase 6), checkGroups and artifactMeta (Phase 7), and the
 	// read-only bindables canExit / blocked / findings / artifactId / draftText. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
 	import { onMount, tick } from 'svelte';
@@ -36,7 +36,7 @@
 	import FindingsSummary from './FindingsSummary.svelte';
 	import GeminiDataDialog from './GeminiDataDialog.svelte';
 	import GenerationError from './GenerationError.svelte';
-	import type { ExitDisabled, ExitKind, PostCheck } from './panel-controller';
+	import type { ExitDisabled, ExitKind, FormatForExit, PostCheck } from './panel-controller';
 	import type { CheckGroupCopy } from './post-check';
 	import { PanelState, type ExitEventPayload, type Resolved } from './panel-state.svelte';
 	import ProviderChip from './ProviderChip.svelte';
@@ -53,6 +53,7 @@
 		postChecks = [],
 		tokens = {},
 		emailFooter,
+		formatForExit,
 		exitDisabled = {},
 		onExit,
 		subjectId,
@@ -81,6 +82,11 @@
 		postChecks?: PostCheck[];
 		tokens?: Record<string, string>;
 		emailFooter?: { text: string; label: string };
+		/**
+		 * Phase 9: shapes the Copy text, email body and Mark as sent payloads as
+		 * formatForExit(draft, emailFooter?.text ?? ''). Absent: draft plus emailFooter (Phase 5/8).
+		 */
+		formatForExit?: FormatForExit;
 		exitDisabled?: ExitDisabled;
 		onExit?: (kind: ExitKind, payload: ExitEventPayload) => void;
 		/**
@@ -160,6 +166,9 @@
 			},
 			get emailFooter() {
 				return emailFooter;
+			},
+			get formatForExit() {
+				return formatForExit;
 			},
 			get exitDisabled() {
 				return exitDisabled;
@@ -549,7 +558,9 @@
 
 	<!-- 7. Email footer preview (outside the exits group) -->
 	{#if emailFooter}
-		<p class="text-label text-muted-foreground">{emailFooter.label}: {emailFooter.text}</p>
+		<p class="text-label whitespace-pre-wrap text-muted-foreground">
+			{emailFooter.label}: {emailFooter.text}
+		</p>
 	{/if}
 
 	<!-- 8. Usage line -->

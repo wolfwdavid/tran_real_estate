@@ -300,6 +300,14 @@ describe('payloads', () => {
 		);
 		expect(exitPayload('Body', { text: '', label: 'Footer' })).toBe('Body');
 	});
+
+	it('formatForExit (Phase 9) shapes the payload; absent keeps Phase 5 behavior', () => {
+		const fmt = (d: string, f: string) => `${d}|${f}`;
+		expect(exitPayload('Hi', { text: 'FOOT', label: 'L' })).toBe('Hi\n\nFOOT');
+		expect(exitPayload('Hi', undefined)).toBe('Hi');
+		expect(exitPayload('Hi', { text: 'FOOT', label: 'L' }, fmt)).toBe('Hi|FOOT');
+		expect(exitPayload('Hi', undefined, fmt)).toBe('Hi|');
+	});
 });
 
 describe('segmentText', () => {

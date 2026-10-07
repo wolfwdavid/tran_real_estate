@@ -3,7 +3,7 @@
 // three controls, in order, and nothing else in the panel may carry a mailto: href.
 import { readFileSync } from 'node:fs';
 import { render } from 'svelte/server';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import type { Finding, FindingMember } from '@tran/core/fair-housing';
 import { DEMO_INPUTS } from '../prompts/shared/demo.v1';
 import GenerationPanel from './GenerationPanel.svelte';
@@ -277,5 +277,50 @@ describe('Phase 7 post-check groups (checkGroups)', () => {
 		for (const banned of ['onstate' + 'change', 'PanelGate' + 'State', 'fetch(']) {
 			expect(s).not.toContain(banned);
 		}
+	});
+});
+
+describe('Phase 9 additive exit formatting (formatForExit over emailFooter)', () => {
+	const footer = { text: 'FOOT', label: 'Added to the end of this description' };
+	const fmt = (d: string, f: string) => `${d}|${f}`;
+
+	test('the existing emailFooter preview shows a caller-supplied label and text', () => {
+		const state = makeState({ emailFooter: footer }, { text: 'Hi' });
+		const { html, exits, controls } = panel(state, { emailFooter: footer });
+		const text = strip(html);
+		expect(text).toContain('Added to the end of this description');
+		expect(text).toContain('FOOT');
+		expect(strip(exits)).not.toContain('Added to the end of this description');
+		expect(controls.map((c) => c.text)).toEqual(['Copy text', 'Open in email app', 'Mark as sent']);
+		expect(html).toMatch(/<p class="[^"]*whitespace-pre-wrap[^"]*">[^<]*Added to the end/);
+	});
+
+	test('with formatForExit, copy, the mailto body and Mark as sent all use it', async () => {
+		const writeText = vi.fn<(t: string) => Promise<void>>(async () => {});
+		const onExit = vi.fn();
+		const state = makeState(
+			{ emailFooter: footer, formatForExit: fmt, clipboard: { writeText }, onExit },
+			{ text: 'Hi' }
+		);
+		expect(await state.copy()).toBe(true);
+		expect(writeText).toHaveBeenCalledWith('Hi|FOOT');
+		expect(state.mailto.href).toContain('body=Hi%7CFOOT');
+		const { controls } = panel(state, { emailFooter: footer, formatForExit: fmt });
+		expect(decode(attr(controls[1]!.open, 'href')!)).toContain('body=Hi%7CFOOT');
+		await state.markSent();
+		expect(onExit).toHaveBeenCalledWith('marked-sent', { text: 'Hi|FOOT', artifactId: null });
+	});
+
+	test('without formatForExit the payload stays draft plus footer (Phase 5/8)', async () => {
+		const writeText = vi.fn<(t: string) => Promise<void>>(async () => {});
+		const state = makeState({ emailFooter: footer, clipboard: { writeText } }, { text: 'Hi' });
+		await state.copy();
+		expect(writeText).toHaveBeenCalledWith('Hi\n\nFOOT');
+		expect(state.mailto.href).toContain('body=Hi%0D%0A%0D%0AFOOT');
+	});
+
+	test('the panel forwards formatForExit to its own PanelState', () => {
+		const s = readFileSync(new URL('./GenerationPanel.svelte', import.meta.url), 'utf8');
+		expect(s).toMatch(/get formatForExit\(\) \{\s*return formatForExit;/);
 	});
 });

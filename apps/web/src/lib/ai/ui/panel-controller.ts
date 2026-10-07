@@ -153,8 +153,20 @@ export function displayText(raw: string, tokens?: Readonly<Record<string, string
 	return tokens && Object.keys(tokens).length > 0 ? restorePii(raw, tokens) : raw;
 }
 
-/** Text handed to an exit: the draft plus an optional email footer (Phase 8 `emailFooter`). */
-export function exitPayload(text: string, emailFooter?: { text: string; label: string }): string {
+/** Shapes the exit payload from the draft and the footer text (Phase 9 studio tools). */
+export type FormatForExit = (draft: string, footerText: string) => string;
+
+/**
+ * Text handed to an exit: the draft plus an optional email footer (Phase 8 `emailFooter`).
+ * With `formatForExit` (Phase 9), the formatter alone shapes the payload from the draft and
+ * `emailFooter?.text ?? ''`; without it the Phase 5/8 behavior is unchanged.
+ */
+export function exitPayload(
+	text: string,
+	emailFooter?: { text: string; label: string },
+	formatForExit?: FormatForExit
+): string {
+	if (formatForExit) return formatForExit(text, emailFooter?.text ?? '');
 	return emailFooter?.text ? `${text}\n\n${emailFooter.text}` : text;
 }
 

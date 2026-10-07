@@ -32,6 +32,7 @@ import {
 	usageLine,
 	type ExitDisabled,
 	type ExitKind,
+	type FormatForExit,
 	type GateState,
 	type PostCheck
 } from './panel-controller';
@@ -52,6 +53,8 @@ export type PanelDeps = {
 	postChecks?: PostCheck[];
 	tokens?: Record<string, string>;
 	emailFooter?: { text: string; label: string };
+	/** Phase 9: shapes every exit payload from (draft, emailFooter?.text ?? ""). Absent: unchanged. */
+	formatForExit?: FormatForExit;
 	exitDisabled?: ExitDisabled;
 	mailto?: { to?: string; subject?: string };
 	onExit?: (kind: ExitKind, payload: ExitEventPayload) => void;
@@ -135,7 +138,7 @@ export class PanelState {
 		const m = buildMailto({
 			to: this.deps.mailto?.to,
 			subject: this.deps.mailto?.subject,
-			body: exitPayload(this.text, this.deps.emailFooter)
+			body: exitPayload(this.text, this.deps.emailFooter, this.deps.formatForExit)
 		});
 		return { href: m.href, long: m.long };
 	});
@@ -448,7 +451,7 @@ export class PanelState {
 	}
 
 	#payload(): string {
-		return exitPayload(this.text, this.deps.emailFooter);
+		return exitPayload(this.text, this.deps.emailFooter, this.deps.formatForExit);
 	}
 
 	async #reviewed(): Promise<void> {
