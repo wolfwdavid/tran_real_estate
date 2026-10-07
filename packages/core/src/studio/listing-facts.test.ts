@@ -279,9 +279,8 @@ describe('listingFreeText', () => {
 	});
 
 	test('skips empty and whitespace-only fields', () => {
-		expect(listingFreeText(valid({ otherFeatures: '', nearbyPlaces: '  ', lotSize: undefined }))).toEqual([
-			'Sunny corner unit.',
-			'Maple Street'
-		]);
+		expect(
+			listingFreeText(valid({ otherFeatures: '', nearbyPlaces: '  ', lotSize: undefined }))
+		).toEqual(['Sunny corner unit.', 'Maple Street']);
 	});
 });
