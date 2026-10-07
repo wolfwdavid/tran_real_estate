@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-19-PLAN.md
-last_updated: "2026-10-07T01:34:55.427Z"
+stopped_at: Completed 08-18-PLAN.md
+last_updated: "2026-10-07T01:43:32.069Z"
 progress:
   total_phases: 11
   completed_phases: 7
   total_plans: 206
-  completed_plans: 140
+  completed_plans: 141
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 18 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
+Plan: 19 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
 
 ## Performance Metrics
 
@@ -186,6 +186,7 @@ Plan: 18 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-
 | Phase 08 P15 | 35min | 3 tasks | 13 files |
 | Phase 08 P16 | 55min | 2 tasks | 6 files |
 | Phase 08 P19 | 55min | 3 tasks | 8 files |
+| Phase 08 P18 | 36 min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -449,6 +450,12 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-19: focus after a board move is a FocusRequest settled by an $effect over the live contacts list, never a bare tick(), because the Dexie liveQuery re-render is asynchronous and the keyed each destroys the card's old element
 - [Phase 08]: 08-19: the source column is not a drop target and a drop carrying anything but a known contact id is ignored
 - [Phase 08]: 08-19: the pointer-drag E2E drops on the column heading (always in view): Playwright's dragTo scrolls its target into view after the press, and a column taller than the viewport shifted the page under the held pointer
+- [Phase 08]: 08-18: Export reads listContacts() at click time (plain records, current count) rather than a $state proxy
+- [Phase 08]: 08-18: Smart-list counts cover all live contacts; caption and 'Showing ...' announcement use the filtered rows; search no-match wins over list no-match
+- [Phase 08]: 08-18: Only one of table / cards is in the DOM (svelte/reactivity MediaQuery at 1024px) so the shared contact-{id}-name link id is never duplicated
+- [Phase 08]: 08-18: Header Add a lead renders only while the list is absent (empty state keeps 2 buttons, populated page has exactly 1)
+- [Phase 08]: 08-18: 08-15's agent-entry placeholder assertion (focus to h1 after quick add) now asserts the new contact's link per the UI-SPEC focus table
+- [Phase 08]: 08-18: @tran/core/csv is imported from the barrel; core exports no csv/* subpath
 
 ### Pending Todos
 
@@ -471,7 +478,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T01:34:55.417Z
-Stopped at: Completed 08-19-PLAN.md
+Last session: 2026-10-07T01:43:32.062Z
+Stopped at: Completed 08-18-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
