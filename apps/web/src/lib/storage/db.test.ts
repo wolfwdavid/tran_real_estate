@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { AI_STORES } from '$lib/ai/storage/tables';
 import { PHASE4_STORES } from '$lib/data/tables';
 import { AGENT_STORES } from './agent/tables';
+import { STUDIO_STORES } from './studio/tables';
 import { INVESTOR_STORES } from '$lib/features/investor/deals/tables';
 import { freshIdb } from '$lib/storage/test-utils';
 import { StorageBlockedError, TranDb, _resetDb, getDb, openDb } from './db';
@@ -28,7 +29,7 @@ afterEach(() => {
 });
 
 describe('TranDb', () => {
-	it("opens as 'tran' with the Phase 3, Phase 4 data, Phase 5 AI, Phase 6 renter, Phase 7 investor and Phase 8 agent tables at version 6", async () => {
+	it("opens as 'tran' with the Phase 3, Phase 4 data, Phase 5 AI, Phase 6 renter, Phase 7 investor, Phase 8 agent and Phase 9 studio tables at version 7", async () => {
 		const db = new TranDb(freshIdb());
 		await db.open();
 		expect(db.name).toBe('tran');
@@ -44,10 +45,11 @@ describe('TranDb', () => {
 				'investorDraft',
 				'buyBoxes',
 				'watchedZips',
-				...Object.keys(AGENT_STORES)
+				...Object.keys(AGENT_STORES),
+				...Object.keys(STUDIO_STORES)
 			].sort()
 		);
-		expect(db.verno).toBe(6);
+		expect(db.verno).toBe(7);
 		db.close();
 	});
 
@@ -77,7 +79,7 @@ describe('TranDb', () => {
 
 		const db = new TranDb(idb);
 		await db.open();
-		expect(db.verno).toBe(6);
+		expect(db.verno).toBe(7);
 		expect(await db.meta.get('lastBackupAt')).toEqual({
 			key: 'lastBackupAt',
 			value: '2026-10-01T00:00:00.000Z'
@@ -111,7 +113,7 @@ describe('TranDb', () => {
 
 		const db = new TranDb(idb);
 		await db.open();
-		expect(db.verno).toBe(6);
+		expect(db.verno).toBe(7);
 		expect(await db.deals.get('d1')).toEqual({ id: 'd1', updatedAt: '2026-10-01T00:00:00.000Z' });
 		const idx = (name: string) =>
 			db
@@ -149,6 +151,35 @@ describe('TranDb', () => {
 
 	it('never constructs the database at module scope', () => {
 		expect(dbSource).not.toMatch(/^(const|let) .*= (getDb|new TranDb)\(/m);
+	});
+
+	it('upgrades a version 6 database in place: agent rows kept, studio tables added empty', async () => {
+		const idb = freshIdb();
+		class V6 extends Dexie {
+			constructor() {
+				super('tran', idb);
+				this.version(1).stores({ meta: 'key', prefs: 'id, key, updatedAt' });
+				this.version(2).stores(PHASE4_STORES);
+				this.version(3).stores(AI_STORES);
+				this.version(4).stores({
+					renterShortlist: 'id, &listingId, status, updatedAt, deletedAt',
+					renterSearchMeta: 'id, updatedAt, deletedAt'
+				});
+				this.version(5).stores(INVESTOR_STORES);
+				this.version(6).stores(AGENT_STORES);
+			}
+		}
+		const old = new V6();
+		await old.table('contacts').put({ id: 'c1', stage: 'new' });
+		old.close();
+
+		const db = new TranDb(idb);
+		await db.open();
+		expect(db.verno).toBe(7);
+		expect(await db.contacts.get('c1')).toEqual({ id: 'c1', stage: 'new' });
+		expect(await db.studioDraft.count()).toBe(0);
+		expect(await db.snapshots.count()).toBe(0);
+		db.close();
 	});
 });
 

@@ -8,6 +8,7 @@ import { PHASE4_BACKUP_EXCLUDED, PHASE4_BACKUP_TABLES } from '$lib/data/tables';
 import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
 import { INVESTOR_BACKUP_TABLES } from '$lib/features/investor/deals/tables';
 import { AGENT_BACKUP_TABLES } from './agent/backup';
+import { STUDIO_BACKUP_TABLES } from './studio/tables';
 
 /** Any zod/mini schema satisfies this; the import preview rejects a file with a failing row. */
 export interface BackupRecordSchema {
@@ -49,7 +50,10 @@ const DEFAULT_TABLES: readonly BackupTable[] = [
 	...INVESTOR_BACKUP_TABLES,
 	// Phase 8: 'Contacts', 'Tasks', 'Activity', 'Agent profile' (each with a record schema; the
 	// profile also carries its two scan-exempt paths, see $lib/storage/agent/backup.ts).
-	...AGENT_BACKUP_TABLES
+	...AGENT_BACKUP_TABLES,
+	// Phase 9: 'Studio forms' (studioDraft) and 'Market Snapshots' (snapshots), each with a record
+	// schema (snapshots also re-run the aggregate-only privacy guard on import).
+	...STUDIO_BACKUP_TABLES
 ];
 
 let tables: BackupTable[] = DEFAULT_TABLES.map((t) => ({ ...t }));

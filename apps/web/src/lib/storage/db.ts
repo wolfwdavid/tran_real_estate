@@ -18,6 +18,8 @@ import type { DealRecord } from '$lib/features/investor/deals/schema';
 import type { WatchedZipRecord } from '$lib/features/shared/markets/watched-zip-record';
 import type { Activity, Contact, Task } from '@tran/core/agent/types';
 import { AGENT_STORES, type AgentProfileRow } from './agent/tables';
+import { STUDIO_STORES, type SnapshotRow, type StudioDraftRow } from './studio/tables';
+import type { StudioTool } from './studio/types';
 
 /** LOCAL-ONLY bookkeeping (lastBackupAt, snooze, firstRecordAt). Never exported in a backup. */
 export interface MetaRow {
@@ -57,6 +59,9 @@ export class TranDb extends Dexie {
 	tasks!: Table<Task, string>;
 	activities!: Table<Activity, string>;
 	agentProfile!: Table<AgentProfileRow, string>;
+	// Phase 9 Content Studio: one autosaved form per tool and frozen Market Snapshots ($lib/storage/studio).
+	studioDraft!: Table<StudioDraftRow, StudioTool>;
+	snapshots!: Table<SnapshotRow, string>;
 
 	constructor(options?: DbOptions, name = 'tran') {
 		super(name, options);
@@ -77,6 +82,8 @@ export class TranDb extends Dexie {
 		this.version(5).stores(INVESTOR_STORES);
 		// Phase 8: agent contacts, tasks, activities and profile (one new block, additive only).
 		this.version(6).stores(AGENT_STORES);
+		// Phase 9: studio forms and Market Snapshots (one new block, additive only).
+		this.version(7).stores(STUDIO_STORES);
 	}
 }
 
