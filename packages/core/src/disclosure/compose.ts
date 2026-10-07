@@ -5,8 +5,19 @@
 //   with a team: {Team} at {Brokerage} . ...
 // (the separator is a middle dot, U+00B7, written as an escape to keep this source ASCII).
 // Output is plain text, never HTML.
-import type { ProfileInput } from '../agent/types.js';
+//
+// Phase 9: an object second argument `{ variant }` serves the Content Studio formats
+// (ad-inline / ad-block / print) by delegating to studio/disclosure-format.ts. The string
+// context form is unchanged.
+import type { LicenseType, ProfileInput } from '../agent/types.js';
 import { formatPhoneUS, normPhoneUS } from '../leads/normalize.js';
+import {
+	formatDisclosure,
+	type DisclosureField,
+	type DisclosureProfile,
+	type DisclosureVariant,
+	type PrintDisclosure
+} from '../studio/disclosure-format.js';
 import {
 	PROFILE_FIELDS,
 	PROFILE_FIELD_LABELS,
@@ -61,12 +72,68 @@ const ordered = (fields: Iterable<ProfileField>): ProfileField[] => {
 	return PROFILE_FIELDS.filter((f) => set.has(f));
 };
 
+/** Studio license-type labels (NY-safe titles; free-text values pass through unchanged). */
+const STUDIO_LICENSE_LABELS: Readonly<Record<LicenseType, string>> = Object.freeze({
+	salesperson: 'Licensed Real Estate Salesperson',
+	'associate-broker': 'Licensed Associate Real Estate Broker',
+	broker: 'Licensed Real Estate Broker',
+	'sales-associate': 'Sales Associate'
+});
+
+const formatPhone = (raw: string): string => {
+	const t = raw.trim();
+	return t === '' ? '' : formatPhoneUS(normPhoneUS(t) ?? t);
+};
+
+/** Maps a Phase 8 profile onto the studio formatter's input (field names, label, phones). */
+export function toDisclosureProfileCore(p: ProfileInput): DisclosureProfile {
+	const type = p.licenseType as string;
+	return {
+		fullName: p.name.trim(),
+		brokerage: p.brokerage.trim(),
+		licenseType:
+			type in STUDIO_LICENSE_LABELS ? STUDIO_LICENSE_LABELS[type as LicenseType] : type.trim(),
+		licenseNumber: p.licenseNumber.trim(),
+		licenseState: p.licenseState.trim().toUpperCase(),
+		brokeragePhone: formatPhone(p.brokeragePhone),
+		teamName: p.teamName.trim(),
+		phone: formatPhone(p.phone),
+		email: p.email.trim(),
+		website: p.website.trim()
+	};
+}
+
+const PHASE8_FIELD: Readonly<Record<DisclosureField, ProfileField>> = Object.freeze({
+	fullName: 'name',
+	brokerage: 'brokerage',
+	licenseType: 'licenseType',
+	licenseNumber: 'licenseNumber',
+	licenseState: 'licenseState',
+	brokeragePhone: 'brokeragePhone'
+});
+
+export interface StudioDisclosureRequest {
+	variant: DisclosureVariant;
+}
+
+export type StudioDisclosureResult = DisclosureResult & { print?: PrintDisclosure };
+
 export function composeDisclosure(
 	p: ProfileInput,
-	ctx: DisclosureContext = 'email',
+	ctx?: DisclosureContext,
+	opts?: DisclosureOptions
+): DisclosureResult;
+export function composeDisclosure(
+	p: ProfileInput,
+	req: StudioDisclosureRequest,
+	opts?: DisclosureOptions
+): StudioDisclosureResult;
+export function composeDisclosure(
+	p: ProfileInput,
+	ctx: DisclosureContext | StudioDisclosureRequest = 'email',
 	opts: DisclosureOptions = {}
-): DisclosureResult {
-	void ctx; // reserved for Phase 9 variants
+): StudioDisclosureResult {
+	if (typeof ctx === 'object') return composeStudio(p, ctx.variant, opts);
 	const rule = ruleFor(p.licenseState, opts.rules ?? STATE_RULES);
 	const ph = opts.placeholders === true;
 	const present = presentFields(p);
@@ -107,6 +174,27 @@ export function composeDisclosure(
 		.join(DISCLOSURE_SEPARATOR);
 	const lines = [...(main ? [main] : []), ...rule.extraLines(p)];
 	return { lines, text: lines.join('\n'), missing, warnings, rule: rule.id };
+}
+
+function composeStudio(
+	p: ProfileInput,
+	variant: DisclosureVariant,
+	opts: DisclosureOptions
+): StudioDisclosureResult {
+	const rule = ruleFor(p.licenseState, opts.rules ?? STATE_RULES);
+	const warnings: string[] = [];
+	if (p.licenseType !== '' && rule.titles[p.licenseType] === null && rule.id === 'NY')
+		warnings.push('ny-title');
+	const f = formatDisclosure(toDisclosureProfileCore(p), variant);
+	const missing = ordered(f.missing.map((m) => PHASE8_FIELD[m]));
+	return {
+		lines: f.lines,
+		text: f.text,
+		missing,
+		warnings,
+		rule: rule.id,
+		...(f.print ? { print: f.print } : {})
+	};
 }
 
 /** Fields an agent must fill before follow-up emails can be drafted (UI-SPEC prerequisites). */

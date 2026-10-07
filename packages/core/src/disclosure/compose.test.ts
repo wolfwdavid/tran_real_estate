@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
+import { SAMPLE_AGENT_PROFILE } from '../agent/fixtures/sample-profile.js';
 import { EMPTY_PROFILE_INPUT, type ProfileInput } from '../agent/types.js';
-import { composeDisclosure, missingForDrafts } from './compose.js';
+import { formatDisclosure } from '../studio/disclosure-format.js';
+import { composeDisclosure, missingForDrafts, toDisclosureProfileCore } from './compose.js';
 import {
 	GENERIC_RULE,
 	PROFILE_FIELD_LABELS,
@@ -297,5 +299,105 @@ describe('missingForDrafts and labels', () => {
 			postal: 'Mailing address',
 			email: 'Email'
 		});
+	});
+});
+
+describe('composeDisclosure: studio variants (object form)', () => {
+	it('ad-inline delegates to the studio formatter', () => {
+		const p = SAMPLE_AGENT_PROFILE;
+		const r = composeDisclosure(p, { variant: 'ad-inline' });
+		expect(r.text).toBe(formatDisclosure(toDisclosureProfileCore(p), 'ad-inline').text);
+		expect(r.text).toBe(
+			`Sample Realty${SEP}Avery Sample, Licensed Real Estate Salesperson${SEP}Lic. #SAMPLE-0001 (TX)${SEP}(555) 555-0100`
+		);
+		expect(r.missing).toEqual([]);
+		expect(r.rule).toBe('TX');
+		expect(r.print).toBeUndefined();
+	});
+
+	it('ad-block puts each part on its own line', () => {
+		const r = composeDisclosure(SAMPLE_AGENT_PROFILE, { variant: 'ad-block' });
+		expect(r.lines).toEqual([
+			'Sample Realty',
+			'Avery Sample, Licensed Real Estate Salesperson',
+			'Lic. #SAMPLE-0001 (TX)',
+			'(555) 555-0100'
+		]);
+		expect(r.text).toBe(r.lines.join('\n'));
+	});
+
+	it('print returns the structured print parts', () => {
+		const r = composeDisclosure(SAMPLE_AGENT_PROFILE, { variant: 'print' });
+		expect(r.print).toBeDefined();
+		expect(r.print!.licenseLine).toBe('License #SAMPLE-0001 (TX)');
+		expect(r.print!.brokerageLine).toBe('Sample Realty');
+		expect(r.print!.contactLines).toEqual([
+			'Office (555) 555-0100',
+			'Mobile (555) 555-0199',
+			'avery@example.com',
+			'https://example.com'
+		]);
+	});
+
+	it('a NY profile without a brokerage phone reports brokeragePhone (Phase 8 field names)', () => {
+		const r = composeDisclosure(profile({ ...FULL, licenseState: 'NY', brokeragePhone: '' }), {
+			variant: 'ad-inline'
+		});
+		expect(r.missing).toContain('brokeragePhone');
+		const empty = composeDisclosure(profile({ licenseState: 'NY' }), { variant: 'ad-block' });
+		expect(empty.missing).toEqual([
+			'name',
+			'brokerage',
+			'licenseType',
+			'licenseNumber',
+			'brokeragePhone'
+		]);
+	});
+
+	it('the team variant reads "{Team} at {Brokerage}"', () => {
+		const r = composeDisclosure(
+			profile({ ...FULL, licenseState: 'WA', teamName: 'The Sample Team' }),
+			{
+				variant: 'ad-inline'
+			}
+		);
+		expect(r.text.startsWith(`The Sample Team at Example Realty${SEP}`)).toBe(true);
+	});
+
+	it('the string context still returns the Phase 8 output', () => {
+		const p = profile({ ...FULL, licenseState: 'WA' });
+		expect(composeDisclosure(p, 'email')).toEqual(composeDisclosure(p));
+		expect(composeDisclosure(p, 'print').lines[0]).toBe(
+			`Example Realty${SEP}Sample Agent, Real Estate Salesperson${SEP}Lic. #12345 (WA)${SEP}(555) 555-0100`
+		);
+		expect('print' in composeDisclosure(p, 'print')).toBe(false);
+	});
+});
+
+describe('toDisclosureProfileCore', () => {
+	it('maps Phase 8 field names and license-type enum values to studio labels', () => {
+		const cases = [
+			['salesperson', 'Licensed Real Estate Salesperson'],
+			['associate-broker', 'Licensed Associate Real Estate Broker'],
+			['broker', 'Licensed Real Estate Broker'],
+			['sales-associate', 'Sales Associate'],
+			['', '']
+		] as const;
+		for (const [type, label] of cases) {
+			const d = toDisclosureProfileCore(
+				profile({ ...FULL, licenseType: type, licenseState: 'wa' })
+			);
+			expect(d.licenseType).toBe(label);
+			expect(d.fullName).toBe('Sample Agent');
+			expect(d.licenseState).toBe('WA');
+		}
+	});
+
+	it('formats phones like the Phase 8 composer and keeps unparseable ones as typed', () => {
+		const d = toDisclosureProfileCore(
+			profile({ ...FULL, brokeragePhone: '555.555.0100', phone: 'ext 12' })
+		);
+		expect(d.brokeragePhone).toBe('(555) 555-0100');
+		expect(d.phone).toBe('ext 12');
 	});
 });
