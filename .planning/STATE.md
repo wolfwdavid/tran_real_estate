@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-06-PLAN.md
-last_updated: "2026-10-07T08:08:40.890Z"
+stopped_at: Completed 09-03-PLAN.md
+last_updated: "2026-10-07T08:08:55.734Z"
 progress:
   total_phases: 11
   completed_phases: 8
@@ -200,6 +200,7 @@ Plan: Not started
 | Phase 09 P01 | 9 min | 2 tasks | 4 files |
 | Phase 09 P05 | 9min | 2 tasks | 6 files |
 | Phase 09 P06 | 11min | 2 tasks | 4 files |
+| Phase 09 P03 | 10min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -509,6 +510,9 @@ Recent decisions affecting current work:
 - [Phase 09]: Team-name and NY license-title rules are warnings only (no hard block); per-state word matching uses Unicode-aware boundaries
 - [Phase 09]: Snapshot metrics take the Phase 4 domain MarketStats; DOM is the RentCast median (new optional MarketSide.medianDaysOnMarket), never the mean
 - [Phase 09]: Snapshot figures, prompt facts and the allowed-number set share @tran/core/format; listings summary is aggregate-only with whitelisted keys
+- [Phase 09]: 09-06: Reel times come only from REEL_TEMPLATES; checkResultsBeat returns [] without a RESULTS block (parseReel reports it) and flags each digit run in the results beat
+- [Phase 09]: Listing facts: closed 18-key whitelist; any unknown key fails the whole input (Unsupported fact.); now injected for the year bound
+- [Phase 09]: Unsupported-feature check: concept supported by chip mapping or any of its terms in agent free text; hits merged per concept, sorted by start
 
 ### Pending Todos
 
@@ -531,7 +535,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T08:08:40.882Z
-Stopped at: Completed 09-06-PLAN.md
+Last session: 2026-10-07T08:08:55.722Z
+Stopped at: Completed 09-03-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
