@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { Listing, MarketBreakdown, MarketHistoryPoint, MarketSide, MarketStats } from '../listings/types.js';
+import type {
+	Listing,
+	MarketBreakdown,
+	MarketHistoryPoint,
+	MarketSide,
+	MarketStats
+} from '../listings/types.js';
 import {
 	AGGREGATED_SAMPLE_KEYS,
 	BEDROOM_AGGREGATE_KEYS,

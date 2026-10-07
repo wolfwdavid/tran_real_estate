@@ -127,6 +127,11 @@ export interface MarketSide {
 	max: number | null;
 	averagePerSquareFoot: number | null;
 	averageDaysOnMarket: number | null;
+	/**
+	 * RentCast `medianDaysOnMarket`. Optional so hand-built values stay valid; the mapper sets it.
+	 * The Market Snapshot labels its figure "Median days on market", so it reads this, not the mean.
+	 */
+	medianDaysOnMarket?: number | null;
 	newListings: number | null;
 	totalListings: number | null;
 	byBedrooms: MarketBreakdown[];

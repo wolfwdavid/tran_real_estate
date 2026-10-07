@@ -180,6 +180,7 @@ function marketSide(v: unknown, p: SidePrefix): MarketSide | null {
 		max: num(v[`max${p}`]),
 		averagePerSquareFoot: num(v[`average${p}PerSquareFoot`]),
 		averageDaysOnMarket: num(v.averageDaysOnMarket),
+		medianDaysOnMarket: num(v.medianDaysOnMarket),
 		newListings: num(v.newListings),
 		totalListings: num(v.totalListings),
 		byBedrooms: breakdowns(v.dataByBedrooms, p),
