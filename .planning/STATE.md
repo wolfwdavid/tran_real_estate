@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 17 of 26 (waves 1-3 complete; next wave 4: 08-14, 08-15, 08-16)
+Plan: 17 of 26 (waves 1-4 complete; next wave 5: 08-18, 08-19, 08-20, 08-21, 08-22)
 
 ## Performance Metrics
 
