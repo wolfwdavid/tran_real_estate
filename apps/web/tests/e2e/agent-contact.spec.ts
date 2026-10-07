@@ -139,7 +139,7 @@ test('tasks: add with quick-set, complete, delete with undo', async ({ page }) =
 
 	// Add with Tomorrow: the quick-set changes the date only, Add task submits.
 	await page.getByLabel('Task', { exact: true }).fill(TASK);
-	const due = page.getByLabel('Due');
+	const due = page.getByLabel('Due', { exact: true });
 	const before = await due.inputValue();
 	await page.getByRole('button', { name: 'Tomorrow' }).click();
 	await expect(due).not.toHaveValue(before);
