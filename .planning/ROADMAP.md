@@ -358,7 +358,7 @@ Plans:
 - [ ] 09-04-PLAN.md — Fair Housing lexicon: listing hot spots, hashtag forms, advertising category, safe-harbor neutrals (wave 1)
 - [ ] 09-05-PLAN.md — Snapshot metrics, aggregate-only listings summary, shared figure formatting, allowed numbers (wave 1)
 - [ ] 09-06-PLAN.md — Social pack section parser + hashtags; reel parser, code-owned timing, results placeholder rule (wave 1)
-- [ ] 09-07-PLAN.md — Banned-terms gate: studio scope + studio phrases, no allowlist, non-vacuity (wave 1)
+- [x] 09-07-PLAN.md — Banned-terms gate: studio scope + studio phrases, no allowlist, non-vacuity (wave 1)
 - [ ] 09-08-PLAN.md — GenerationPanel footerLabel/formatForExit, Fixture sample hook, PrintReport preparedLine, ChartFigure print sizing (wave 1)
 - [ ] 09-09-PLAN.md — Six prerendered studio/print routes, route lists, AgentNav Studio, snapshot-only DataStatusBar (wave 1)
 - [ ] 09-10-PLAN.md — @tran/core/studio barrel, composer variant overload, shared agent-profile module, Phase 8 boundary scope (wave 2)
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
+| 9. Agent Content Studio & Market Snapshot Reports | 1/23 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
