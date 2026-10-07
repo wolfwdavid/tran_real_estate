@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-04-PLAN.md
-last_updated: "2026-10-07T08:19:21.081Z"
+stopped_at: Completed 09-09-PLAN.md
+last_updated: "2026-10-07T10:32:04.510Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 157
+  completed_plans: 158
 ---
 
 # Project State
@@ -203,6 +203,7 @@ Plan: Not started
 | Phase 09 P03 | 10min | 2 tasks | 4 files |
 | Phase 09 P08 | 17min | 2 tasks | 9 files |
 | Phase 09 P04 | 25min | 2 tasks | 7 files |
+| Phase 09 P09 | 2h05m | 2 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -520,6 +521,8 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-08: ChartFigure print is a Body 16/600 title (h2 default, explicit h3 kept) and a plot in an svg viewBox 0 0 672 H wrapping a 672xH foreignObject
 - [Phase 09]: Fair Housing advertising category uses scope other (no state-law note); entry alternatives are pasted into copy, so guidance lives in explanations and alternative is replacement wording or empty (Remove phrase)
 - [Phase 09]: Lexicon entries added after Phase 5 carry phase: N and get their own leave-one-out; will appreciate blocks only at a clause end or before in value
+- [Phase 09]: Studio data bar gate: route-id match shows DataStatusBar on /agent/studio/snapshot/ only; runAlerts stays !isAgentCrm so every Studio route keeps the check-on-open pass
+- [Phase 09]: STUDIO_ROUTES kept separate from AGENT_ROUTES (joins ROUTES and PORTAL_ROUTES); print/snapshot/ joins PRINT_ROUTES; route-walk E2E budgets scale with ROUTES.length
 
 ### Pending Todos
 
@@ -542,7 +545,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T08:19:12.818Z
-Stopped at: Completed 09-04-PLAN.md
+Last session: 2026-10-07T10:32:04.488Z
+Stopped at: Completed 09-09-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
