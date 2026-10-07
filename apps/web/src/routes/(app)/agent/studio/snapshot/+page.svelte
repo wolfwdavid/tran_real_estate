@@ -1,10 +1,24 @@
 <script lang="ts">
 	// /agent/studio/snapshot/ (STU-04): the Market Snapshot builder and the saved snapshots.
-	// The prerendered skeleton (09-09): back link, h1 and the hydration line; the tool body
-	// mounts after hydration.
+	// The prerendered skeleton (09-09): back link, h1 and the hydration line. The builder (gateway,
+	// Dexie, LayerChart via the key figures and the AI runner) loads by dynamic import after
+	// hydration, so the prerendered page carries none of them.
+	import { onMount, type Component } from 'svelte';
 	import { resolve } from '$app/paths';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
+
+	let Builder = $state<Component | null>(null);
+
+	onMount(() => {
+		let alive = true;
+		void import('$lib/features/studio/snapshot/SnapshotBuilder.svelte').then((m) => {
+			if (alive) Builder = m.default;
+		});
+		return () => {
+			alive = false;
+		};
+	});
 </script>
 
 <svelte:head>
@@ -24,5 +38,11 @@
 		Studio
 	</a>
 	<h1 class="mt-6 font-display text-display font-semibold">Market Snapshot</h1>
-	<p class="mt-4 text-label text-muted-foreground">Loading your studio&hellip;</p>
+	{#if Builder}
+		<div class="mt-4">
+			<Builder />
+		</div>
+	{:else}
+		<p class="mt-4 text-label text-muted-foreground">Loading your studio&hellip;</p>
+	{/if}
 </div>
