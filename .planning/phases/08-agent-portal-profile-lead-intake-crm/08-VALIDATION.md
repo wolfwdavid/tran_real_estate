@@ -99,8 +99,8 @@ created: 2026-10-04
 | 8-25-02 | 25 | 7 | AGT-06 | build + graph | `pnpm build:root && vitest run --project scripts agent-boundary` | n/a | ✅ green (c3725ee) |
 | 8-25-03 | 25 | 7 | AGT-06, AGT-01 | E2E (Fixture provider draft, footer in Copy/mailto/Mark as sent, opt-out, no-email gate, incomplete profile, zero AI/RentCast requests) | `playwright test agent-followup` | ✅ created | ✅ green (d00eec4) |
 | 8-26-01 | 26 | 8 | all | E2E sweep (axe + 375 on every agent route empty/samples, RentCast tripwire across all flows, CSV browser round trip, no sms:) | `playwright test agent-` · `vitest run --project scripts agent-boundary` | ✅ created | ✅ green (7ea8cf3) |
-| 8-26-02 | 26 | 8 | all | docs (HUMAN-UAT, validation, requirements) | `pnpm lint && pnpm guard && pnpm secrets:scan` | n/a | ✅ green (docs(08-26) commit) |
-| 8-26-03 | 26 | 8 | all | full gate | `corepack pnpm verify` | ✅ | ⬜ pending (08-26 Task 3) |
+| 8-26-02 | 26 | 8 | all | docs (HUMAN-UAT, validation, requirements) | `pnpm lint && pnpm guard && pnpm secrets:scan` | n/a | ✅ green (5a2a59a) |
+| 8-26-03 | 26 | 8 | all | full gate | `corepack pnpm verify` | ✅ | ✅ green (verify run step by step 2026-10-07, every step exit 0; fixes 70253af, cbb6a26, e8b048e, bab386d, 98a321a, 8b18958, ff96d70, 177dbea, e73167b, 42aa447) |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

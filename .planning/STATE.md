@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 08-25-PLAN.md
-last_updated: "2026-10-07T04:11:43.488Z"
+stopped_at: Completed 08-26-PLAN.md
+last_updated: "2026-10-07T06:58:22.804Z"
 progress:
   total_phases: 11
-  completed_phases: 7
+  completed_phases: 8
   total_plans: 206
-  completed_plans: 147
+  completed_plans: 148
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 08 (Agent Portal: Profile, Lead Intake & CRM) — EXECUTING
-Plan: 25 of 26 (waves 1-7 complete: 08-23, 08-24, 08-25 done; next 08-26 gate)
+Plan: 26 of 26 (all waves complete; 08-26 gate done, verify green step by step; next: phase verification)
 
 ## Performance Metrics
 
@@ -193,6 +193,7 @@ Plan: 25 of 26 (waves 1-7 complete: 08-23, 08-24, 08-25 done; next 08-26 gate)
 | Phase 08 P23 | 25 min | 3 tasks | 11 files |
 | Phase 08 P24 | 42min | 3 tasks | 7 files |
 | Phase 08 P25 | 37 min | 3 tasks | 7 files |
+| Phase 08 P26 | 160min | 3 tasks | 26 files |
 
 ## Accumulated Context
 
@@ -489,6 +490,11 @@ Recent decisions affecting current work:
 - [Phase 08]: 08-25: follow-up prompt id is 'agent/followup' (fixture key agent/followup@1) per the plan, not the UI-SPEC's agent/followup.v1; it registers itself from the feature module
 - [Phase 08]: 08-25: missing profile items are lower-cased field labels joined with Intl.ListFormat ('Missing: license number and mailing address.')
 - [Phase 08]: 08-25: the contact page mounts the composer only after useProfile() loads, keyed by contact id (no prerequisite flash, fresh form on same-route navigation)
+- [Phase 08]: Agent boundary test exempts exactly lib/data/tables.ts (same exemption eslint grants storage) and proves it stays a leaf: no local imports, no network, type-only imports
+- [Phase 08]: AgentNav Today pill: full name is an aria-label on the link (Today, N tasks due), not an sr-only span, so the computed name has no stray space
+- [Phase 08]: Pipeline board renders only after both contacts and open tasks load, so cards never re-sort under a press
+- [Phase 08]: The untestable-until-v2 backup migration E2E placeholder became an SSR test of ImportPreview; no skipped tests remain in verify
+- [Phase 08]: Brand color example hex (HEX_EXAMPLE) lives in @tran/brand/brand-color so components keep no raw hex
 
 ### Pending Todos
 
@@ -511,7 +517,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T04:11:26.408Z
-Stopped at: Completed 08-25-PLAN.md
+Last session: 2026-10-07T06:58:22.795Z
+Stopped at: Completed 08-26-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.

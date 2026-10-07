@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: AI Layer: Providers, Streaming & Fair Housing Guardrails** - BYOK streaming across four providers with a deterministic Fair Housing checker and no auto-send path (completed 2026-10-05)
 - [x] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach (completed 2026-10-06)
 - [x] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF (completed 2026-10-06)
-- [ ] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV
+- [x] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV (completed 2026-10-07)
 - [ ] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF
 - [ ] **Phase 10: Launch Hardening & Go-to-Market** - First-run onboarding, waitlist/feedback, SEO calculator pages, first-party analytics, full launch audit
 - [ ] **Phase 11: Zillow Sponsored Listing Filter Extension** - Hide-only MV3 extension with zero network, distributed via GitHub Releases + Edge Add-ons
@@ -333,7 +333,7 @@ Plans:
 - [x] 08-23-PLAN.md - Contact detail: tasks, notes, activity, stage, delete (wave 6)
 - [x] 08-24-PLAN.md - Inquiry share-link builder (wave 6)
 - [x] 08-25-PLAN.md - AI follow-up composer with CAN-SPAM footer (wave 7)
-- [ ] 08-26-PLAN.md - Demo-credibility sweep, HUMAN-UAT and full verify (wave 8)
+- [x] 08-26-PLAN.md - Demo-credibility sweep, HUMAN-UAT and full verify (wave 8)
 **Research flag**: YES. Needs `/gsd:research-phase`: Web3Forms free-tier limits, captcha and domain-restriction options, whether the `TRAN-LEAD v1` payload survives major email clients, and the Formspree fallback.
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 8`.
 **Human action required**: The owner creates a free Web3Forms access key to verify end-to-end lead delivery.
@@ -461,7 +461,7 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 5. AI Layer: Providers, Streaming & Fair Housing Guardrails | 16/16 | Complete    | 2026-10-05 |
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
-| 8. Agent Portal: Profile, Lead Intake & CRM | 25/26 | In Progress|  |
+| 8. Agent Portal: Profile, Lead Intake & CRM | 26/26 | Complete   | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 0/23 | Planned | - |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
