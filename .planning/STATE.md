@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-13)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 08 — Agent Portal: Profile, Lead Intake & CRM
+**Current focus:** Phase 09 — Agent Content Studio & Market Snapshot Reports
 
 ## Current Position
 
 Phase: 09
-Plan: Not started
+Plan: 10 of 23 (wave 1 complete: 09-01..09-09; next wave 2: 09-10)
 
 ## Performance Metrics
 
