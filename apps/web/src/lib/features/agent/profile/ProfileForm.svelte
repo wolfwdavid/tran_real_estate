@@ -35,8 +35,11 @@
 		initial: ProfileInput;
 		/** Called with a plain copy of the draft after every change (feeds the live previews). */
 		onchange?: (draft: ProfileInput) => void;
-		/** Extra <fieldset> panels rendered inside the form, before the save row (plan 08-22). */
-		extraFieldsets?: Snippet;
+		/**
+		 * Extra <fieldset> panels rendered inside the form, before the save row (plan 08-22). The
+		 * snippet receives the live draft so its fields write straight into it.
+		 */
+		extraFieldsets?: Snippet<[ProfileInput]>;
 	}
 
 	let { initial, onchange, extraFieldsets }: Props = $props();
@@ -326,7 +329,7 @@
 		</div>
 	</fieldset>
 
-	{@render extraFieldsets?.()}
+	{@render extraFieldsets?.(draft)}
 
 	{#if failure}
 		{#key failureSeq}
