@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 09-20-PLAN.md
-last_updated: "2026-10-07T15:36:25.785Z"
+stopped_at: Completed 09-22-PLAN.md
+last_updated: "2026-10-07T16:00:21.763Z"
 progress:
   total_phases: 11
   completed_phases: 8
   total_plans: 207
-  completed_plans: 170
+  completed_plans: 171
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 09
-Plan: 22 of 23 (waves 1-7 complete: 09-01..09-19; wave 8: 09-20 and 09-21 complete; 09-22 in progress; next: 09-23)
+Plan: 23 of 23 (waves 1-9 complete: 09-01..09-22; next: 09-23)
 
 ## Performance Metrics
 
@@ -216,6 +216,7 @@ Plan: 22 of 23 (waves 1-7 complete: 09-01..09-19; wave 8: 09-20 and 09-21 comple
 | Phase 09 P19 | 95min | 2 tasks | 7 files |
 | Phase 09 P21 | 13 min | 2 tasks | 7 files |
 | Phase 09 P20 | 35min | 2 tasks | 16 files |
+| Phase 09 P22 | 45min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -556,6 +557,8 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-19: GenerationPanel sections mode = one PlatformCard per SectionSpec with exactly one gated Copy exit each; SectionSpec/cardGate live in PlatformCard's module script and GenerationPanel re-exports type SectionSpec; hashtag-cap gate applies only to agent edits; cards keyed on artifactId and reset edits on a new stream; pack announcement replaces Phase 5's Draft ready; Draft history "Copied: {platforms}" deferred (needs ArtifactRepo.updateMeta + DraftHistory slot); social.v1 maxTokens 2048, disclosure used only for budgets, never sent
 - [Phase 09]: 09-21: studio/reel.v1 uses maxTokens 2048 (PromptDef contract) and feature 'studio-reel' (asserted equal to STUDIO_DRAFT_FEATURES.reel); resultsBeatPostCheck reports digit runs first and the whole RESULTS beat only when no digits but the placeholder is missing; checker ids 'results-beat' (block) and 'quotes' (warn); checklist section sign built from 0xa7 to keep .ts ASCII-only
 - [Phase 09]: 09-20: the social tool saves packs under exactly 'studio-social' (hub count proven in E2E); disclosure = agent's ad-inline once the profile is complete, Avery Sample for the unedited sample brief, otherwise none (Copy gated); 'Copied: {platforms}' implemented via optional ArtifactRepo.updateMeta + meta.copied + DraftHistory rowNote
+- [Phase 09]: 09-22: reel footer carries no disclosure with the agent's own beats and an incomplete profile (exits gated with the profile reason); the Avery Sample disclosure only for the sample beats, matched with or without results and ignoring the length
+- [Phase 09]: 09-22: the reel script view and copy keep the length captured at run start; drafts reopened from history use the form length
 
 ### Pending Todos
 
@@ -578,7 +581,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-07T15:36:12.359Z
-Stopped at: Completed 09-20-PLAN.md
+Last session: 2026-10-07T16:00:11.625Z
+Stopped at: Completed 09-22-PLAN.md
 Resume file: None
 Next: run `/gsd:autonomous` (re-presents the three Phase 2 grey areas from the resume file), then `/gsd:ui-phase 2` with UI/UX Pro Max before `/gsd:plan-phase 2`. Run `corepack pnpm verify` once first to confirm the machine is still green. Still no remote and no push by design.
