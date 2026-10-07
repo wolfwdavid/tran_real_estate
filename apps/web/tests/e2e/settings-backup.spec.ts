@@ -181,10 +181,11 @@ test('wrong files are rejected and the input resets', async ({ page }) => {
 	await expect(page.getByText('Nothing to back up yet.', { exact: false })).toBeVisible();
 });
 
-// Phase 3 ships BACKUP_SCHEMA_VERSION 1, so no older backup version exists to migrate from. The
-// migration path is covered by packages/core/src/backup/migrations.test.ts; enable this once a
-// version-2 schema adds migrations[1].
-test.fixme('older backup shows the migration line', async () => {});
+// The "older backup" migration line cannot be reached on the built site yet: BACKUP_SCHEMA_VERSION
+// is 1, so no older backup file exists. The line itself is proven by an SSR test
+// (apps/web/src/lib/features/shared/settings/import-preview.test.ts) and the migration steps by
+// packages/core/src/backup/migrations.test.ts, which fails if the version is bumped without a
+// migrations[n] step. Add an E2E here with the version-2 schema, importing a real version-1 file.
 
 test('export refuses a key-bearing pref', async ({ page }) => {
 	await openSettings(page);
