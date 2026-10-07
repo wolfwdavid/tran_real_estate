@@ -75,8 +75,7 @@ describe('setupChecklist', () => {
 				.items[1].done
 		).toBe(false);
 		expect(
-			setupChecklist({ profile: profile({ ...full(), brokerage: '' }), contacts: [] }).items[1]
-				.done
+			setupChecklist({ profile: profile({ ...full(), brokerage: '' }), contacts: [] }).items[1].done
 		).toBe(false);
 	});
 
@@ -86,8 +85,8 @@ describe('setupChecklist', () => {
 			setupChecklist({ profile: null, contacts: [contact({ sample: true })] }).items[2].done
 		).toBe(false);
 		expect(
-			setupChecklist({ profile: null, contacts: [contact({ deletedAt: SYNC.updatedAt })] })
-				.items[2].done
+			setupChecklist({ profile: null, contacts: [contact({ deletedAt: SYNC.updatedAt })] }).items[2]
+				.done
 		).toBe(false);
 	});
 

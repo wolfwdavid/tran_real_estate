@@ -3,7 +3,13 @@
 import { describe, expect, it } from 'vitest';
 import type { Task } from '@tran/core/agent/types';
 import type { TaskGroups } from '@tran/core/crm';
-import { compactQueue, dueCount, nextFocusTarget, taskCountLabel, taskErrorMessage } from './task-ui';
+import {
+	compactQueue,
+	dueCount,
+	nextFocusTarget,
+	taskCountLabel,
+	taskErrorMessage
+} from './task-ui';
 
 const TODAY = '2026-10-06';
 
