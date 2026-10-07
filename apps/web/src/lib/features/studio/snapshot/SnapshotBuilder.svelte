@@ -500,9 +500,9 @@
 					{notesSummary(notesOn, notes.notesStatus === 'ready')}
 				</dd>
 			</dl>
-		{:else}
-			<p class={muted}>{STEP_EMPTY}</p>
 		{/if}
+		<!-- Before step 1 has data the gate's reason line is the step's empty line ("Load a ZIP
+		     code's data first."), so it is not shown twice. -->
 		<div class="flex flex-col gap-2">
 			<div>
 				<Button
