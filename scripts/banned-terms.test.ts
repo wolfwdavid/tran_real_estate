@@ -181,6 +181,19 @@ describe('real scope coverage', () => {
 			expect(f).not.toMatch(EXCLUDED);
 		}
 	});
+
+	test('real scope includes studio UI files', () => {
+		// Phase 9 gate (09-23): the gate's real scope reaches the Studio feature folder, its routes
+		// and the snapshot printout, and the real repo passes it.
+		const files = collectFiles(REPO_ROOT);
+		expect(files.some((f) => f.startsWith('apps/web/src/lib/features/studio/'))).toBe(true);
+		expect(files.some((f) => f.startsWith('apps/web/src/routes/(app)/agent/studio/'))).toBe(true);
+		expect(files.some((f) => f.startsWith('apps/web/src/routes/(print)/print/snapshot/'))).toBe(
+			true
+		);
+		const r = runCli(REPO_ROOT);
+		expect(r.status, r.out).toBe(0);
+	});
 });
 
 describe('Phase 6 renter-scoped phrases (06-UI-SPEC)', () => {
