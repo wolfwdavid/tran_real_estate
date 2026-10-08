@@ -134,7 +134,10 @@ describe('rerender: the count is non-vacuous (mutant view spends inside $effect)
 			await screen.rerender({ tick: i, request: rentals(zip(i)) });
 		await settle();
 		await expect.element(screen.getByTestId('blocked')).toHaveTextContent('false');
-		expect(calls.length).toBeGreaterThan(0);
-		expect(await ledgerRows()).toBeGreaterThan(0);
+		// The mutant's spends are async (a Dexie cache read, then the fetch spy, then the ledger
+		// write): poll for them instead of trusting the fixed 100 ms settle, which a loaded single
+		// core can outrun (the spend then lands after teardown closed the database).
+		await expect.poll(() => calls.length).toBeGreaterThan(0);
+		await expect.poll(() => ledgerRows()).toBeGreaterThan(0);
 	});
 });
