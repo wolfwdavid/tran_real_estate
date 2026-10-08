@@ -29,8 +29,32 @@
 		window.print();
 	}
 
-	/** Enables the print button once fonts are loaded and the logo (if any) has decoded. */
+	/**
+	 * Resolves once every stylesheet link in the document has loaded (or failed). After a
+	 * client-side navigation (Save and open print view) the report can render before this route's
+	 * stylesheet arrives; printing then would drop the brand band and the brand-colored title.
+	 */
+	function stylesheetsReady(): Promise<void> {
+		const pending = [
+			...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')
+		].filter((link) => link.sheet === null);
+		return Promise.all(
+			pending.map(
+				(link) =>
+					new Promise<void>((done) => {
+						link.addEventListener('load', () => done(), { once: true });
+						link.addEventListener('error', () => done(), { once: true });
+					})
+			)
+		).then(() => undefined);
+	}
+
+	/**
+	 * Enables the print button once the route's styles and fonts are loaded and the logo (if any)
+	 * has decoded.
+	 */
 	async function settle(isDisposed: () => boolean): Promise<void> {
+		await stylesheetsReady();
 		await document.fonts.ready;
 		await tick();
 		const img = document.querySelector<HTMLImageElement>('[data-brand-logo]');

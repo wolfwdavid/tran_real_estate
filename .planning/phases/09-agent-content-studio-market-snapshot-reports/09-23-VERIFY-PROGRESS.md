@@ -26,3 +26,33 @@ Wall seconds include any host suspend while the step ran.
       in-flight module fetch exactly this way. Recorded as a host-suspend transient, not a code fault.
   - web-browser, second run (before the fix): exit 0, 83 s (32 files, 244 tests)
   - web-browser, after the fix: exit 0, 84 s (32 files, 244 tests)
+- build:root: exit 0, 41 s
+- build:sub: exit 0, 43 s
+- csp:assert: exit 0, 3 s (38 pages per base)
+- test:e2e, Playwright --workers=1 in chunks (spec files, one project per chunk):
+  - a11y [root] (e2e.a11y.spec): exit 0, 187 s: 77 passed (3.1m) 
+  - agent-1 [root] (agent-a11y agent-contact.spec agent-contacts agent-csv agent-entry): exit 0, 273 s: 60 passed (4.5m) 
+  - agent-2 [root] (agent-followup agent-import agent-inquire): exit 0, 154 s: 33 passed (2.5m) 
+  - agent-3 [root] (agent-live-key agent-no-rentcast agent-pipeline agent-profile agent-share-link): exit 0, 183 s: 30 passed (3.0m) 
+  - agent-4 [root] (agent-shell agent-today ai-a11y): exit 0, 203 s: 55 passed (3.4m) 
+  - ai-app [root] (ai-drafting ai-guardrails app-notice csp.spec data-status framing): exit 0, 182 s: 37 passed (2.9m) 
+  - inv-1 [root] (investor.analyze investor.autofill investor.buybox investor.deals): exit 0, 118 s: 28 passed (1.9m) 
+  - inv-2 [root] (investor.demo investor.markets investor.memo investor.overview investor.print investor.routes investor.sweep): exit 0, 307 s: 47 passed (5.1m) 
+  - layout-a [root] (layout.spec -g 'no horizontal scroll'): exit 0, 99 s: 71 passed (1.6m) 
+  - layout-b [root] (layout.spec --grep-invert 'no horizontal scroll'): exit 0, 193 s: 150 passed (3.2m) 
+  - mkt-pwa [root] (marketing pwa renter-affordability renter-demo-credible renter-fair-rent): exit 0, 175 s: 78 passed (2.9m) 
+  - renter-1 [root] (renter-harness renter-journey renter-listing renter-map.spec renter-map-split): exit 0, 114 s: 33 passed (1.9m) 
+  - renter-2 [root] (renter-outreach renter-results renter-saved renter-search renter-shortlist routes-drift routing): exit 0, 163 s: 31 passed (2.7m) 
+  - settings-1 [root] (settings-a11y settings-backup settings-data settings-install): exit 0, 148 s: 34 passed (2.4m) 
+  - settings-2 [root] (settings-keys settings-security settings-shell settings-storage): exit 0, 133 s: 36 passed (2.2m) 
+  - studio-1 [root] (snapshot-builder snapshot-print studio-listing studio-reel): exit 0, 184 s: 23 passed (3.0m) 
+  - studio-2 [root] (studio-shell studio-social studio-keyless): exit 1, 195 s: 1 failed 33 passed (3.2m) 
+  - studio-2-rerun [root] (studio-shell studio-social studio-keyless): exit 0, 194 s: 34 passed (3.2m) 
+  - studio-1-rerun [root] (snapshot-builder snapshot-print studio-listing studio-reel): exit 0, 175 s: 23 passed (2.9m) 
+    - studio-2 failure root cause: `studio-keyless` "brand colors" read the print band's colors
+      right after Save navigated client-side to /print/snapshot/. The trace shows the route's
+      stylesheet (43.*.css, 456 ms) still loading while the report was rendered and the print
+      button already enabled, so the band had no background and the title the default color. A real
+      gap: printing in that window would drop the brand styling. Fixed in the route: "Preparing…"
+      now also waits for every stylesheet link to load. build:root rebuilt (exit 0, 41 s); studio-1
+      and studio-2 re-run on root, green.
