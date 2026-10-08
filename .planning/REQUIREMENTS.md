@@ -79,10 +79,10 @@
 
 ### Agent Portal — Content Studio & Reports
 
-- [ ] **STU-01**: Agent can generate a listing description from facts they enter, checked by the Fair Housing checker
-- [ ] **STU-02**: Agent can generate an Instagram, Facebook, and LinkedIn post pack with their brokerage disclosure appended
-- [ ] **STU-03**: Agent can generate a founder-story reel script (hook → manual pain → before/after → results → mission → call to action) with timed beats, captions, B-roll list, and an AI-disclosure checklist
-- [ ] **STU-04**: Agent can create a branded Market Snapshot report for a zip code and print it to PDF, labeled as not a CMA or appraisal
+- [x] **STU-01**: Agent can generate a listing description from facts they enter, checked by the Fair Housing checker
+- [x] **STU-02**: Agent can generate an Instagram, Facebook, and LinkedIn post pack with their brokerage disclosure appended
+- [x] **STU-03**: Agent can generate a founder-story reel script (hook → manual pain → before/after → results → mission → call to action) with timed beats, captions, B-roll list, and an AI-disclosure checklist
+- [x] **STU-04**: Agent can create a branded Market Snapshot report for a zip code and print it to PDF, labeled as not a CMA or appraisal
 
 ### Zillow Sponsored Listing Filter Extension
 
@@ -196,10 +196,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AGT-05 | Phase 8 | Complete |
 | AGT-06 | Phase 8 | Complete |
 | AGT-07 | Phase 8 | Complete |
-| STU-01 | Phase 9 | Pending |
-| STU-02 | Phase 9 | Pending |
-| STU-03 | Phase 9 | Pending |
-| STU-04 | Phase 9 | Pending |
+| STU-01 | Phase 9 | Complete |
+| STU-02 | Phase 9 | Complete |
+| STU-03 | Phase 9 | Complete |
+| STU-04 | Phase 9 | Complete |
 | EXT-01 | Phase 11 | Pending |
 | EXT-02 | Phase 11 | Pending |
 | EXT-03 | Phase 11 | Pending |

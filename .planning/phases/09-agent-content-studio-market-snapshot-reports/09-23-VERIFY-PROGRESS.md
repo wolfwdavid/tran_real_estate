@@ -105,3 +105,17 @@ Wall seconds include any host suspend while the step ran.
       5 s check then raced the new stream. writeScript now waits for the panel's aria-busy (this
       run started) before waiting for it to finish.
     - Both re-checked: renter-map + studio-reel on sub (18 passed) and root (18 passed).
+  - a11y-final-build [root] (e2e.a11y.spec): exit 0, 207 s: 77 passed (3.4m) 
+  - a11y [root] re-run on the final builds (after the print and analyzer fixes): exit 0, 207 s, 77 passed
+- Playwright totals on the final code (each chunk's last green run): root 857 passed, sub 853 passed
+  (framing.spec is root-only by config), 0 failed, 0 skipped, 0 flaky.
+- guard: exit 0, 5 s (1593 files)
+- fixtures:check: exit 0, 3 s (6 files)
+- secrets:canary: exit 0, 3 s
+- secrets:scan: exit 0, 9 s (971 commits, no leaks)
+- lint:workflows: exit 0, 3 s
+- Re-run after the fixes changed source: check exit 0 (52 s, 2615 files, 0 errors, 0 warnings);
+  lint exit 0 (188 s); vitest web exit 0 (330 s, 160 files, 2405 tests); banned exit 0 (384 files);
+  ui:guard exit 0 (79 files); vitest web-browser exit 0 (95 s, 32 files, 244 tests). The e2e chunks touching the fixes were re-run above.
+
+Result: every verify step green on the final tree.
