@@ -1,9 +1,9 @@
 ---
 phase: 9
 slug: agent-content-studio-market-snapshot-reports
-status: planned
+status: in_progress
 nyquist_compliant: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-10-04
 ---
 
@@ -40,52 +40,52 @@ created: 2026-10-04
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 9-01-01 | 01 | 1 | STU-01, STU-02, STU-04 | unit + property | `corepack pnpm vitest run --project core disclosure-format` | ❌ W0 (created by task) | ⬜ pending |
-| 9-01-02 | 01 | 1 | STU-02 | unit | `corepack pnpm vitest run --project core studio` (team-name) | ❌ W0 | ⬜ pending |
-| 9-02-01 | 02 | 1 | STU-01, STU-02, STU-03 | unit (regression) | `corepack pnpm vitest run --project core && corepack pnpm vitest run --project web` | ✅ Phase 7 tests | ⬜ pending |
-| 9-02-02 | 02 | 1 | STU-01, STU-02, STU-03 | unit | `corepack pnpm vitest run --project core numbers allowed-numbers` | ❌ W0 | ⬜ pending |
-| 9-03-01 | 03 | 1 | STU-01 | unit | `corepack pnpm vitest run --project core listing-facts` | ❌ W0 | ⬜ pending |
-| 9-03-02 | 03 | 1 | STU-01 | unit | `corepack pnpm vitest run --project core studio` (unsupported-claims) | ❌ W0 | ⬜ pending |
-| 9-04-01 | 04 | 1 | STU-01, STU-02 | unit (RED) | `corepack pnpm vitest run --project core listing-additions` (must fail) | ❌ W0 | ⬜ pending |
-| 9-04-02 | 04 | 1 | STU-01, STU-02 | unit + leave-one-out | `corepack pnpm vitest run --project core fair-housing` | ❌ W0 | ⬜ pending |
-| 9-05-01 | 05 | 1 | STU-04 | unit | `corepack pnpm vitest run --project core snapshot-metrics` | ❌ W0 | ⬜ pending |
-| 9-05-02 | 05 | 1 | STU-04 | unit | `corepack pnpm vitest run --project core studio` (snapshot-facts) | ❌ W0 | ⬜ pending |
-| 9-06-01 | 06 | 1 | STU-02 | unit | `corepack pnpm vitest run --project core social-sections` | ❌ W0 | ⬜ pending |
-| 9-06-02 | 06 | 1 | STU-03 | unit | `corepack pnpm vitest run --project core studio` (reel) | ❌ W0 | ⬜ pending |
-| 9-07-01 | 07 | 1 | STU-01..04 | unit (RED) | `corepack pnpm vitest run --project scripts banned-terms` (must fail) | ✅ extends Phase 2 file | ⬜ pending |
-| 9-07-02 | 07 | 1 | STU-01..04 | unit + CLI non-vacuity | `corepack pnpm vitest run --project scripts banned-terms && corepack pnpm banned` | ✅ | ⬜ pending |
-| 9-08-01 | 08 | 1 | STU-01 | unit (SSR) | `corepack pnpm vitest run --project web apps/web/src/lib/ai` | ✅ extends Phase 5 tests | ⬜ pending |
-| 9-08-02 | 08 | 1 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web shared` | ❌ W0 (PrintReport.test.ts) | ⬜ pending |
-| 9-09-01 | 09 | 1 | STU-01..04 | build + e2e | `corepack pnpm build:root && corepack pnpm build:sub && corepack pnpm csp:assert && corepack pnpm --filter web exec playwright test routing csp a11y routes-drift` | ✅ modify | ⬜ pending |
-| 9-09-02 | 09 | 1 | STU-04 | e2e | `corepack pnpm build:root && corepack pnpm --filter web exec playwright test agent routing --project=root` | ✅ Phase 8 specs | ⬜ pending |
-| 9-10-01 | 10 | 2 | STU-01..04 | unit | `corepack pnpm vitest run --project core` | ❌ W0 (barrel.test.ts) | ⬜ pending |
-| 9-10-02 | 10 | 2 | STU-04 | unit (import graph) | `corepack pnpm vitest run --project scripts agent-boundary && corepack pnpm vitest run --project web && corepack pnpm guard` | ✅ modify Phase 8 test | ⬜ pending |
-| 9-11-01 | 11 | 3 | STU-01, STU-04 | unit (fake-indexeddb) | `corepack pnpm vitest run --project web studio-storage schema-registry` | ❌ W0 | ⬜ pending |
-| 9-11-02 | 11 | 3 | STU-01 | unit (fake timers) | `corepack pnpm vitest run --project web studio-storage` | ❌ W0 | ⬜ pending |
-| 9-12-01 | 12 | 4 | STU-01, STU-04 | unit (SSR) | `corepack pnpm vitest run --project web studio-components && corepack pnpm banned` | ❌ W0 | ⬜ pending |
-| 9-12-02 | 12 | 4 | STU-01, STU-04 | unit + e2e | `corepack pnpm build:root && corepack pnpm --filter web exec playwright test routing a11y --project=root` | ✅ | ⬜ pending |
-| 9-13-01 | 13 | 3 | STU-01, STU-04 | unit | `corepack pnpm vitest run --project web post-checks` | ❌ W0 | ⬜ pending |
-| 9-13-02 | 13 | 3 | STU-01, STU-04 | unit (zero-findings samples, planted $2,450) | `corepack pnpm vitest run --project web prompts/studio post-checks` | ❌ W0 | ⬜ pending |
-| 9-14-01 | 14 | 4 | STU-04 | unit (call count 0/1/2) | `corepack pnpm vitest run --project web snapshot-calls` | ❌ W0 | ⬜ pending |
-| 9-14-02 | 14 | 4 | STU-04 | unit + guard | `corepack pnpm vitest run --project web build-record && corepack pnpm guard` | ❌ W0 | ⬜ pending |
-| 9-15-01 | 15 | 5 | STU-01 | unit | `corepack pnpm vitest run --project web listing-count` | ❌ W0 | ⬜ pending |
-| 9-15-02 | 15 | 5 | STU-01 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-listing` | ❌ W0 | ⬜ pending |
-| 9-16-01 | 16 | 5 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-components` | ❌ W0 | ⬜ pending |
-| 9-16-02 | 16 | 5 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-components` | ❌ W0 | ⬜ pending |
-| 9-17-01 | 17 | 6 | STU-04 | unit | `corepack pnpm vitest run --project web save-gate snapshot-components` | ❌ W0 | ⬜ pending |
-| 9-17-02 | 17 | 6 | STU-04 | e2e + axe (budget 0/1/2) | `corepack pnpm --filter web exec playwright test snapshot-builder` | ❌ W0 | ⬜ pending |
-| 9-18-01 | 18 | 6 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-report` | ❌ W0 | ⬜ pending |
-| 9-18-02 | 18 | 6 | STU-04 | unit (import graph) + e2e print media + axe | `corepack pnpm vitest run --project web boundaries && corepack pnpm --filter web exec playwright test snapshot-print` | ❌ W0 | ⬜ pending |
-| 9-19-01 | 19 | 7 | STU-02 | unit | `corepack pnpm vitest run --project web social.v1` | ❌ W0 | ⬜ pending |
-| 9-19-02 | 19 | 7 | STU-02 | unit (SSR exit count + property) | `corepack pnpm vitest run --project web apps/web/src/lib/ai` | ❌ W0 | ⬜ pending |
-| 9-20-01 | 20 | 8 | STU-02 | unit | `corepack pnpm vitest run --project web social-sections-spec` | ❌ W0 | ⬜ pending |
-| 9-20-02 | 20 | 8 | STU-02 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-social` | ❌ W0 | ⬜ pending |
-| 9-21-01 | 21 | 8 | STU-03 | unit | `corepack pnpm vitest run --project web reel-checks && corepack pnpm banned` | ❌ W0 | ⬜ pending |
-| 9-21-02 | 21 | 8 | STU-03 | unit (zero-findings samples) | `corepack pnpm vitest run --project web reel` | ❌ W0 | ⬜ pending |
-| 9-22-01 | 22 | 9 | STU-03 | unit (SSR) | `corepack pnpm vitest run --project web reel-view` | ❌ W0 | ⬜ pending |
-| 9-22-02 | 22 | 9 | STU-03 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-reel` | ❌ W0 | ⬜ pending |
-| 9-23-01 | 23 | 10 | STU-01..04 | e2e (keyless, no-network, axe matrix) + scripts | `corepack pnpm --filter web exec playwright test studio-keyless && corepack pnpm vitest run --project scripts banned-terms` | ❌ W0 | ⬜ pending |
-| 9-23-02 | 23 | 10 | STU-01..04 | full gate | `corepack pnpm verify` | ✅ | ⬜ pending |
+| 9-01-01 | 01 | 1 | STU-01, STU-02, STU-04 | unit + property | `corepack pnpm vitest run --project core disclosure-format` | ✅ | ✅ green |
+| 9-01-02 | 01 | 1 | STU-02 | unit | `corepack pnpm vitest run --project core studio` (team-name) | ✅ | ✅ green |
+| 9-02-01 | 02 | 1 | STU-01, STU-02, STU-03 | unit (regression) | `corepack pnpm vitest run --project core && corepack pnpm vitest run --project web` | ✅ | ✅ green |
+| 9-02-02 | 02 | 1 | STU-01, STU-02, STU-03 | unit | `corepack pnpm vitest run --project core numbers allowed-numbers` | ✅ | ✅ green |
+| 9-03-01 | 03 | 1 | STU-01 | unit | `corepack pnpm vitest run --project core listing-facts` | ✅ | ✅ green |
+| 9-03-02 | 03 | 1 | STU-01 | unit | `corepack pnpm vitest run --project core studio` (unsupported-claims) | ✅ | ✅ green |
+| 9-04-01 | 04 | 1 | STU-01, STU-02 | unit (RED) | `corepack pnpm vitest run --project core listing-additions` (must fail) | ✅ | ✅ green |
+| 9-04-02 | 04 | 1 | STU-01, STU-02 | unit + leave-one-out | `corepack pnpm vitest run --project core fair-housing` | ✅ | ✅ green |
+| 9-05-01 | 05 | 1 | STU-04 | unit | `corepack pnpm vitest run --project core snapshot-metrics` | ✅ | ✅ green |
+| 9-05-02 | 05 | 1 | STU-04 | unit | `corepack pnpm vitest run --project core studio` (snapshot-facts) | ✅ | ✅ green |
+| 9-06-01 | 06 | 1 | STU-02 | unit | `corepack pnpm vitest run --project core social-sections` | ✅ | ✅ green |
+| 9-06-02 | 06 | 1 | STU-03 | unit | `corepack pnpm vitest run --project core studio` (reel) | ✅ | ✅ green |
+| 9-07-01 | 07 | 1 | STU-01..04 | unit (RED) | `corepack pnpm vitest run --project scripts banned-terms` (must fail) | ✅ | ✅ green |
+| 9-07-02 | 07 | 1 | STU-01..04 | unit + CLI non-vacuity | `corepack pnpm vitest run --project scripts banned-terms && corepack pnpm banned` | ✅ | ✅ green |
+| 9-08-01 | 08 | 1 | STU-01 | unit (SSR) | `corepack pnpm vitest run --project web apps/web/src/lib/ai` | ✅ | ✅ green |
+| 9-08-02 | 08 | 1 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web shared` | ✅ | ✅ green |
+| 9-09-01 | 09 | 1 | STU-01..04 | build + e2e | `corepack pnpm build:root && corepack pnpm build:sub && corepack pnpm csp:assert && corepack pnpm --filter web exec playwright test routing csp a11y routes-drift` | ✅ | ✅ green |
+| 9-09-02 | 09 | 1 | STU-04 | e2e | `corepack pnpm build:root && corepack pnpm --filter web exec playwright test agent routing --project=root` | ✅ | ✅ green |
+| 9-10-01 | 10 | 2 | STU-01..04 | unit | `corepack pnpm vitest run --project core` | ✅ | ✅ green |
+| 9-10-02 | 10 | 2 | STU-04 | unit (import graph) | `corepack pnpm vitest run --project scripts agent-boundary && corepack pnpm vitest run --project web && corepack pnpm guard` | ✅ | ✅ green |
+| 9-11-01 | 11 | 3 | STU-01, STU-04 | unit (fake-indexeddb) | `corepack pnpm vitest run --project web studio-storage schema-registry` | ✅ | ✅ green |
+| 9-11-02 | 11 | 3 | STU-01 | unit (fake timers) | `corepack pnpm vitest run --project web studio-storage` | ✅ | ✅ green |
+| 9-12-01 | 12 | 4 | STU-01, STU-04 | unit (SSR) | `corepack pnpm vitest run --project web studio-components && corepack pnpm banned` | ✅ | ✅ green |
+| 9-12-02 | 12 | 4 | STU-01, STU-04 | unit + e2e | `corepack pnpm build:root && corepack pnpm --filter web exec playwright test routing a11y --project=root` | ✅ | ✅ green |
+| 9-13-01 | 13 | 3 | STU-01, STU-04 | unit | `corepack pnpm vitest run --project web post-checks` | ✅ | ✅ green |
+| 9-13-02 | 13 | 3 | STU-01, STU-04 | unit (zero-findings samples, planted $2,450) | `corepack pnpm vitest run --project web prompts/studio post-checks` | ✅ | ✅ green |
+| 9-14-01 | 14 | 4 | STU-04 | unit (call count 0/1/2) | `corepack pnpm vitest run --project web snapshot-calls` | ✅ | ✅ green |
+| 9-14-02 | 14 | 4 | STU-04 | unit + guard | `corepack pnpm vitest run --project web build-record && corepack pnpm guard` | ✅ | ✅ green |
+| 9-15-01 | 15 | 5 | STU-01 | unit | `corepack pnpm vitest run --project web listing-count` | ✅ | ✅ green |
+| 9-15-02 | 15 | 5 | STU-01 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-listing` | ✅ | ✅ green |
+| 9-16-01 | 16 | 5 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-components` | ✅ | ✅ green |
+| 9-16-02 | 16 | 5 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-components` | ✅ | ✅ green |
+| 9-17-01 | 17 | 6 | STU-04 | unit | `corepack pnpm vitest run --project web save-gate snapshot-components` | ✅ | ✅ green |
+| 9-17-02 | 17 | 6 | STU-04 | e2e + axe (budget 0/1/2) | `corepack pnpm --filter web exec playwright test snapshot-builder` | ✅ | ✅ green |
+| 9-18-01 | 18 | 6 | STU-04 | unit (SSR) | `corepack pnpm vitest run --project web snapshot-report` | ✅ | ✅ green |
+| 9-18-02 | 18 | 6 | STU-04 | unit (import graph) + e2e print media + axe | `corepack pnpm vitest run --project web boundaries && corepack pnpm --filter web exec playwright test snapshot-print` | ✅ | ✅ green |
+| 9-19-01 | 19 | 7 | STU-02 | unit | `corepack pnpm vitest run --project web social.v1` | ✅ | ✅ green |
+| 9-19-02 | 19 | 7 | STU-02 | unit (SSR exit count + property) | `corepack pnpm vitest run --project web apps/web/src/lib/ai` | ✅ | ✅ green |
+| 9-20-01 | 20 | 8 | STU-02 | unit | `corepack pnpm vitest run --project web social-sections-spec` | ✅ | ✅ green |
+| 9-20-02 | 20 | 8 | STU-02 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-social` | ✅ | ✅ green |
+| 9-21-01 | 21 | 8 | STU-03 | unit | `corepack pnpm vitest run --project web reel-checks && corepack pnpm banned` | ✅ | ✅ green |
+| 9-21-02 | 21 | 8 | STU-03 | unit (zero-findings samples) | `corepack pnpm vitest run --project web reel` | ✅ | ✅ green |
+| 9-22-01 | 22 | 9 | STU-03 | unit (SSR) | `corepack pnpm vitest run --project web reel-view` | ✅ | ✅ green |
+| 9-22-02 | 22 | 9 | STU-03 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-reel` | ✅ | ✅ green |
+| 9-23-01 | 23 | 10 | STU-01..04 | e2e (keyless, no-network, axe matrix) + scripts | `corepack pnpm --filter web exec playwright test studio-keyless && corepack pnpm vitest run --project scripts banned-terms` | ✅ | ✅ green |
+| 9-23-02 | 23 | 10 | STU-01..04 | full gate | `corepack pnpm verify` | ✅ | ⬜ pending (step-by-step verify in progress) |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -105,12 +105,12 @@ created: 2026-10-04
 
 Wave 0 is folded into each TDD plan's RED step (tests are written first in the same plan). Infrastructure prerequisites:
 
-- [ ] `packages/core/src/numbers/` exposes the Phase 7 extractor/matcher (09-02 Task 1)
-- [ ] `@tran/core/studio` barrel (09-10 Task 1)
-- [ ] Phase 8 profile fields `licenseType`, `teamName`, `brokeragePhone` present (09-10 contingency if not)
-- [ ] `apps/web/tests/e2e/routes.ts` STUDIO_ROUTES + EXPECTED_PAGES (09-09)
-- [ ] Import-graph helper `tooling/import-graph.ts` from Phase 8 reused by 09-10 and 09-18
-- [ ] No framework install needed: Vitest, Playwright, axe and fake-indexeddb already present (no new dependency is allowed this phase; 09-23 checks the diff)
+- [x] `packages/core/src/numbers/` exposes the Phase 7 extractor/matcher (09-02 Task 1)
+- [x] `@tran/core/studio` barrel (09-10 Task 1)
+- [x] Phase 8 profile fields `licenseType`, `teamName`, `brokeragePhone` present (09-10 contingency if not)
+- [x] `apps/web/tests/e2e/routes.ts` STUDIO_ROUTES + EXPECTED_PAGES (09-09)
+- [x] Import-graph helper `tooling/import-graph.ts` from Phase 8 reused by 09-10 and 09-18
+- [x] No framework install needed: Vitest, Playwright, axe and fake-indexeddb already present (no new dependency is allowed this phase; 09-23 checks the diff)
 
 ---
 
@@ -133,4 +133,4 @@ Wave 0 is folded into each TDD plan's RED step (tests are written first in the s
 - [x] Feedback latency < 30 s for unit tasks
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** planned 2026-10-04 (09-23 records final approval after `corepack pnpm verify`)
+**Approval:** pending the 09-23 step-by-step `corepack pnpm verify` (see 09-23-VERIFY-PROGRESS.md)
