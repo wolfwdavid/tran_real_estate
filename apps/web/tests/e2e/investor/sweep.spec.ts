@@ -357,7 +357,12 @@ async function sweep(page: Page, s: Seeded, mode: 'keyless' | 'mocked'): Promise
 
 			await page.setViewportSize({ width: 375, height: 812 });
 			await applyTextSpacing(page);
-			expect(await overflowCulprits(page), `elements past 375px on ${label}`).toEqual([]);
+			// LayerChart re-lays out its SVG from a ResizeObserver after the viewport change, so the
+			// first frame can still hold gridlines sized for 1280px: wait for the re-layout, then the
+			// same no-overflow assertion must hold.
+			await expect
+				.poll(() => overflowCulprits(page), { message: `elements past 375px on ${label}` })
+				.toEqual([]);
 			await expectNoHorizontalScroll(page);
 			await expectNoAxeViolations(page, `${label} at 375px with text spacing`);
 			expect(await unbadgedSampleBlocks(page), `unbadged sample blocks on ${label} at 375`).toBe(0);

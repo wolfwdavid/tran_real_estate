@@ -56,3 +56,29 @@ Wall seconds include any host suspend while the step ran.
       gap: printing in that window would drop the brand styling. Fixed in the route: "Preparing…"
       now also waits for every stylesheet link to load. build:root rebuilt (exit 0, 41 s); studio-1
       and studio-2 re-run on root, green.
+- build:sub rebuilt after the print fix: build-sub-2 exit=0 secs=38
+  - a11y [sub] (e2e.a11y.spec): exit 0, 148 s: 77 passed (2.4m) 
+  - agent-1 [sub] (agent-a11y agent-contact.spec agent-contacts agent-csv agent-entry): exit 0, 214 s: 60 passed (3.5m) 
+  - agent-2 [sub] (agent-followup agent-import agent-inquire): exit 0, 134 s: 33 passed (2.2m) 
+  - agent-3 [sub] (agent-live-key agent-no-rentcast agent-pipeline agent-profile agent-share-link): exit 0, 159 s: 30 passed (2.6m) 
+  - agent-4 [sub] (agent-shell agent-today ai-a11y): exit 0, 191 s: 55 passed (3.1m) 
+  - ai-app [sub] (ai-drafting ai-guardrails app-notice csp.spec data-status framing): exit 0, 152 s: 33 passed (2.5m) 
+  - inv-1 [sub] (investor.analyze investor.autofill investor.buybox investor.deals): exit 0, 101 s: 28 passed (1.6m) 
+  - inv-2a [sub] (investor.demo investor.markets investor.memo): exit 0, 128 s: 15 passed (2.1m) 
+  - inv-2b [sub] (investor.overview investor.print investor.routes investor.sweep): exit 1, 133 s: 1 failed 31 passed (2.2m) 
+  - inv-2b-rerun [sub] (investor.overview investor.print investor.routes investor.sweep): exit 1, 103 s: 1 failed 31 passed (1.7m) 
+  - inv-2b-rerun2 [sub] (investor.overview investor.print investor.routes investor.sweep): exit 0, 134 s: 32 passed (2.2m) 
+  - inv-analyzer-recheck [root] (investor.analyze investor.deals investor.sweep investor.memo): exit 0, 167 s: 21 passed (2.8m) 
+  - inv-analyzer-recheck [sub] (investor.analyze investor.deals): exit 0, 43 s: 14 passed (41.8s) 
+    - inv-2b [sub] failures (Phase 7 investor/sweep.spec), two root causes found:
+      1. "market dashboard (mocked)": 8 SVG gridlines at right=1031 px right after the viewport
+         changed to 375 px. LayerChart re-lays out from a ResizeObserver, so the first frame still
+         held 1280 px gridlines. The spec now polls the same no-overflow assertion until the
+         re-layout lands (sweep.spec.ts).
+      2. keyless seed: "Save as a new deal" did nothing. The analyzer writes ?id= into the URL before
+         `await autosaver.flush()`, so the test's next click arrived while `saving` was still true
+         and save() silently ignored it. Product fix: "Save as a new deal" carries
+         aria-disabled while a save is finishing, like Save (AnalyzerPage.svelte), so the control
+         says it is busy and Playwright waits for it.
+      build:root (31 s) and build:sub (34 s) rebuilt; inv-2b [sub] re-run green; analyzer, deals,
+      sweep and memo re-run on root (21 passed) and analyzer + deals on sub (14 passed).

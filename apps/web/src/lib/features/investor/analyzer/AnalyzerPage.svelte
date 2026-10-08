@@ -352,7 +352,12 @@
 			{saving ? 'Saving…' : s.dealId && s.unsaved ? 'Save changes' : 'Save deal'}
 		</Button>
 		{#if s.dealId}
-			<Button variant="outline" onclick={() => save(true)}>Save as a new deal</Button>
+			<!-- Marked busy like Save while a save finishes: save() ignores clicks until then. -->
+			<Button
+				variant="outline"
+				onclick={() => save(true)}
+				aria-disabled={saving ? 'true' : undefined}>Save as a new deal</Button
+			>
 			{#if !s.unsaved}
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus the deal's ?id= -->
 				<a
