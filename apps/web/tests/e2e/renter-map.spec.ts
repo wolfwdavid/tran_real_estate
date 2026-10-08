@@ -264,6 +264,9 @@ test('co-located units: one cluster that lists the rentals at this spot', async 
 	}));
 	await liveSearch(page, net, extraRows);
 	await minInput(page).fill('4300');
+	// The filter result is announced after a debounce (FILTER_ANNOUNCE_MS). Let it land first, or
+	// on a slow run it arrives after the spot list opens and replaces that announcement.
+	await expect(announcer(page)).toHaveText('Showing 5 of 15 rentals.');
 	await openMap(page);
 	const cluster = page.getByRole('button', { name: '5 rentals here. Zoom in to see them.' });
 	await expect(cluster).toBeVisible();

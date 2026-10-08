@@ -82,3 +82,26 @@ Wall seconds include any host suspend while the step ran.
          says it is busy and Playwright waits for it.
       build:root (31 s) and build:sub (34 s) rebuilt; inv-2b [sub] re-run green; analyzer, deals,
       sweep and memo re-run on root (21 passed) and analyzer + deals on sub (14 passed).
+  - layout-a [sub] (layout.spec -g 'no horizontal scroll'): exit 0, 71 s: 71 passed (1.2m) 
+  - layout-b [sub] (layout.spec --grep-invert 'no horizontal scroll'): exit 0, 160 s: 150 passed (2.6m) 
+  - mkt-pwa [sub] (marketing pwa renter-affordability renter-demo-credible renter-fair-rent): exit 0, 153 s: 78 passed (2.5m) 
+  - renter-1 [sub] (renter-harness renter-journey renter-listing renter-map.spec renter-map-split): exit 1, 93 s: 1 failed 32 passed (1.5m) 
+  - renter-2 [sub] (renter-outreach renter-results renter-saved renter-search renter-shortlist routes-drift routing): exit 0, 147 s: 31 passed (2.4m) 
+  - settings-1 [sub] (settings-a11y settings-backup settings-data settings-install): exit 0, 126 s: 34 passed (2.1m) 
+  - settings-2 [sub] (settings-keys settings-security settings-shell settings-storage): exit 0, 98 s: 36 passed (1.6m) 
+  - studio-1 [sub] (snapshot-builder snapshot-print studio-listing studio-reel): exit 1, 175 s: 1 failed 22 passed (2.9m) 
+  - studio-2 [sub] (studio-shell studio-social studio-keyless): exit 0, 224 s: 34 passed (3.7m) 
+  - renter-map-recheck [sub] (renter-map.spec studio-reel): exit 0, 153 s: 18 passed (2.5m) 
+  - renter-map-recheck [root] (renter-map.spec studio-reel): exit 0, 156 s: 18 passed (2.6m) 
+    - renter-1 [sub] failure (Phase 6 renter-map "co-located units"): the live region read
+      "Showing 5 of 15 rentals." instead of "5 rentals at this spot.". Root cause: the price filter
+      announces its result after a debounce (FILTER_ANNOUNCE_MS); on a slow run it landed after the
+      spot list opened and replaced that announcement. The spec now waits for the filter
+      announcement before opening the map; the spot assertion is unchanged.
+    - studio-1 [sub] failure (09-22 studio-reel axe at 1280px): after "Generate again" the beat
+      view still showed its empty line. Root cause: the spec's writeScript returned at once on a
+      second run, because the panel resolves the provider and builds the prompt before the run
+      starts, so the previous run's "Draft ready." was still visible and no Stop existed yet; the
+      5 s check then raced the new stream. writeScript now waits for the panel's aria-busy (this
+      run started) before waiting for it to finish.
+    - Both re-checked: renter-map + studio-reel on sub (18 passed) and root (18 passed).

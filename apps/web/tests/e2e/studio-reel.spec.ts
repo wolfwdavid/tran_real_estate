@@ -91,6 +91,10 @@ async function writeScript(page: Page): Promise<void> {
 	await panel(page)
 		.getByRole('button', { name: /^(Write reel script|Generate again)$/ })
 		.click();
+	// The panel resolves the provider and builds the prompt before the run starts; until then the
+	// previous run's "Draft ready." is still shown and no Stop exists. Wait for this run to start
+	// (the keyless sample streams for several seconds), so the checks below see this run's end.
+	await expect(panel(page)).toHaveAttribute('aria-busy', 'true', { timeout: 30_000 });
 	await expect(panel(page).getByRole('button', { name: 'Stop', exact: true })).toHaveCount(0, {
 		timeout: 30_000
 	});
