@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Renter Portal** - Nationwide rental search, map, saved-search alerts, shortlist, fair-rent check, affordability, AI agent outreach (completed 2026-10-06)
 - [x] **Phase 7: Investor Portal** - Deal analyzer, manual/autofill modes, deal compare, buy-box alerts, watched-zip dashboards, AI memo to PDF (completed 2026-10-06)
 - [x] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV (completed 2026-10-07)
-- [ ] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF
+- [x] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF (completed 2026-10-08)
 - [ ] **Phase 10: Launch Hardening & Go-to-Market** - First-run onboarding, waitlist/feedback, SEO calculator pages, first-party analytics, full launch audit
 - [ ] **Phase 11: Zillow Sponsored Listing Filter Extension** - Hide-only MV3 extension with zero network, distributed via GitHub Releases + Edge Add-ons
 
@@ -374,7 +374,7 @@ Plans:
 - [x] 09-20-PLAN.md — STU-02 social post pack page + E2E (wave 8)
 - [x] 09-21-PLAN.md — reel.v1 prompt, results/quote checks, AI-disclosure checklist, copy formatter (wave 8)
 - [x] 09-22-PLAN.md — STU-03 reel script page + E2E (wave 9)
-- [ ] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
+- [x] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
 **Research flag**: light (state license-law ad disclosure requirements, NY AI advertising disclosure checklist)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 9`.
 **Cut line** (cut in this order): ship STU-01 (listing descriptions) and STU-04 (Market Snapshot) first. If the phase overruns, cut (1) STU-03 reel script generator, then (2) STU-02 social post pack.
@@ -463,6 +463,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 22/23 | In Progress|  |
+| 9. Agent Content Studio & Market Snapshot Reports | 23/23 | Complete   | 2026-10-08 |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
