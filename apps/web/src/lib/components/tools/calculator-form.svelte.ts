@@ -10,7 +10,7 @@ import {
 	toolMoney,
 	validateToolField,
 	type FieldError
-} from '@tran/core/finance';
+} from '@tran/core/finance/tool-inputs';
 import { SHARED_TOOL_COPY, TOOLS, type ToolField } from '$lib/content/tools';
 
 const V = SHARED_TOOL_COPY.validation;

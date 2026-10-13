@@ -11,7 +11,8 @@
 		"./*": "./src/*/index.ts",
 		"./renter/*": "./src/renter/*.ts",
 		"./agent/*": "./src/agent/*.ts",
-		"./leads/*": "./src/leads/*.ts"
+		"./leads/*": "./src/leads/*.ts",
+		"./finance/*": "./src/finance/*.ts"
 	},
 	"scripts": {
 		"check": "tsc --noEmit"

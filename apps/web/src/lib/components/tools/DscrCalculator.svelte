@@ -2,7 +2,8 @@
 	// DSCR calculator (GTM-03). All math is @tran/core dscrCalc; zero network. A $0 loan is valid
 	// and shows the not-applicable state. The interpretation line is plain arithmetic (covers or
 	// doesn't cover), never a verdict on the property.
-	import { dscrCalc, toolMoney, toolRatio, type DscrInput } from '@tran/core/finance';
+	import { dscrCalc, type DscrInput } from '@tran/core/finance/calculators';
+	import { toolMoney, toolRatio } from '@tran/core/finance/tool-inputs';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import { TOOLS } from '$lib/content/tools';
 	import CalculatorShell from './CalculatorShell.svelte';

@@ -2,7 +2,8 @@
 	// Cash-on-cash return calculator (GTM-03). All math is @tran/core cashOnCashCalc; zero network.
 	// Negative values keep the U+2212 minus from toolMoney and add the word "(negative)", so the
 	// sign never depends on color.
-	import { cashOnCashCalc, toolMoney, toolPercent, type CashOnCashInput } from '@tran/core/finance';
+	import { cashOnCashCalc, type CashOnCashInput } from '@tran/core/finance/calculators';
+	import { toolMoney, toolPercent } from '@tran/core/finance/tool-inputs';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import { TOOLS } from '$lib/content/tools';
 	import CalculatorShell from './CalculatorShell.svelte';
