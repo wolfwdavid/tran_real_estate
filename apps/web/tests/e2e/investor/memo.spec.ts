@@ -132,6 +132,33 @@ test('a planted number and a Fair Housing phrase gate every exit and the print l
 	await expect(copyButton(page)).not.toHaveAttribute('aria-disabled', 'true');
 	await expect(printLink(page)).toHaveAttribute('href', /\/print\/memo\/\?id=.+&memo=.+/);
 	await expect(page.getByText(NUMBER_REASON, { exact: true })).toHaveCount(0);
+
+	// Inside the recheck window the Print link carries no href (a middle-click cannot open an
+	// unchecked memo); a pointerdown runs the check and restores it. One evaluate = deterministic,
+	// far inside the 300 ms window.
+	await panel(page).getByRole('button', { name: 'Edit draft' }).click();
+	const memoBox = panel(page).getByLabel('Edit your draft');
+	const link = await printLink(page).elementHandle();
+	const probe = await memoBox.evaluate(async (box, a) => {
+		const ta = box as HTMLTextAreaElement;
+		ta.value = 'Monthly cash flow is $184. Sunny.';
+		ta.dispatchEvent(new Event('input', { bubbles: true }));
+		await new Promise((r) => setTimeout(r, 0));
+		const pending = (a as HTMLAnchorElement).getAttribute('href');
+		a!.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 1 }));
+		return { pending, settled: (a as HTMLAnchorElement).getAttribute('href') };
+	}, link);
+	expect(probe.pending).toBeNull();
+	expect(probe.settled).toMatch(/\/print\/memo\/\?id=.+&memo=.+/);
+
+	// A Review phrase typed while still editing gates Print at once, not after the 300 ms recheck.
+	await memoBox.fill('Monthly cash flow is $184. Walking distance to church.');
+	await printLink(page).focus();
+	await page.keyboard.press('Enter');
+	await expect(page.locator('[id$="-findings-title"]').first()).toBeFocused();
+	await expect(page).not.toHaveURL(/\/print\/memo\//);
+	await expect(printLink(page)).toHaveAttribute('aria-disabled', 'true');
+	await expect(printLink(page)).not.toHaveAttribute('href');
 });
 
 test('a memo drafted before the deal changed shows the stale note', async ({ page }) => {

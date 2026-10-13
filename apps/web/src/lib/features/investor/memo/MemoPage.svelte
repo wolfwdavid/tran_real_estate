@@ -5,7 +5,7 @@
 	// sits outside the panel's exits group and follows the same gate through the read-only
 	// bindables (canExit / blocked / findings / artifactId / draftText); just before navigating it
 	// re-runs the checks on the current text, saves it and marks the draft Reviewed.
-	import { onMount, tick, untrack } from 'svelte';
+	import { flushSync, onMount, tick, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import Info from '@lucide/svelte/icons/info';
@@ -53,6 +53,7 @@
 	let findings = $state<Finding[]>([]);
 	let artifactId = $state<string | null>(null);
 	let draftText = $state('');
+	let checkPending = $state(false);
 
 	const overLimit = $derived(notes.length > NOTES_MAX);
 	const facts = $derived(deal ? memoFactsForDeal(deal, overLimit ? '' : notes) : null);
@@ -83,6 +84,8 @@
 		deal ? `${resolve('/print/memo/')}?id=${encodeURIComponent(deal.id)}` : ''
 	);
 	const printEnabled = $derived(canExit && artifactId !== null && printHref !== null);
+	// No href while the panel has an unchecked edit: a middle-click or new-tab open skips onPrint.
+	const printLive = $derived(printEnabled && !checkPending);
 	// No reason line while there is no finished draft (Phase 5 shows none then either).
 	const printReasons = $derived(
 		printEnabled || !artifactId || draftText === ''
@@ -146,8 +149,17 @@
 		if (reason) announce(reason);
 	}
 
+	/** Runs the memo panel's pending edit recheck and writes the result to the DOM before the
+	 *  gate is read or focus moves (the findings title node may be replaced). */
+	function settlePrint(): void {
+		panel?.flushChecks();
+		flushSync();
+	}
+
 	async function onPrint(e: MouseEvent | KeyboardEvent): Promise<void> {
 		e.preventDefault();
+		// Read printEnabled and findings for the text as it is right now, not 300 ms ago.
+		settlePrint();
 		if (!printEnabled || !printHref || !artifactId || !repo) {
 			focusFindings(printReasons[0]);
 			return;
@@ -167,8 +179,11 @@
 	}
 
 	function onPrintKey(e: KeyboardEvent): void {
-		// A gated link has no href, so Enter would do nothing natively.
-		if (e.key === 'Enter' && !printEnabled) void onPrint(e);
+		if (e.key !== 'Enter') return;
+		settlePrint();
+		// A link without an href ignores Enter natively, so run the gated path here. With a live
+		// href the native click follows and onPrint handles it (do not call onPrint twice).
+		if (!printLive) void onPrint(e);
 	}
 
 	async function onOpen(a: AiArtifact): Promise<void> {
@@ -300,6 +315,7 @@
 				bind:findings
 				bind:artifactId
 				bind:draftText
+				bind:checkPending
 				feature={FEATURE}
 				promptId="investor/memo.v1"
 				title="Memo draft"
@@ -334,11 +350,12 @@
 			<div class="flex flex-col gap-2">
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- printHref is built from resolve() -->
 				<a
-					href={printEnabled ? printHref : undefined}
-					role={printEnabled ? undefined : 'link'}
-					tabindex={printEnabled ? undefined : 0}
+					href={printLive ? printHref : undefined}
+					role={printLive ? undefined : 'link'}
+					tabindex={printLive ? undefined : 0}
 					aria-disabled={printEnabled ? undefined : 'true'}
 					aria-describedby={printReasons.length > 0 ? 'memo-print-reasons' : undefined}
+					onpointerdown={settlePrint}
 					onclick={onPrint}
 					onkeydown={onPrintKey}
 					class="{buttonVariants({

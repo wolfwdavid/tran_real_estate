@@ -10,7 +10,7 @@ created: 2026-10-04
 # Phase 9 — Validation Strategy
 
 > Per-phase validation contract for feedback sampling during execution.
-> Every task in plans 09-01 … 09-24 (09-24 is the verifier gap closure) carries an `<automated>` verify command. Plan 09-23 flips row statuses and sets `wave_0_complete: true` after the final `corepack pnpm verify`.
+> Every task in plans 09-01 … 09-25 (09-24 and 09-25 are the verifier gap closure) carries an `<automated>` verify command. Plan 09-23 flips row statuses and sets `wave_0_complete: true` after the final `corepack pnpm verify`.
 
 ---
 
@@ -89,6 +89,8 @@ created: 2026-10-04
 | 9-24-01 | 24 | 1 | STU-01, STU-03 | unit (gap: stale-gate exits) | `corepack pnpm vitest run --project web apps/web/src/lib/ai/ui/panel-state.test.ts` | ✅ | ✅ green |
 | 9-24-02 | 24 | 1 | STU-01, STU-03 | browser (gap: panel exits + email href) | `corepack pnpm vitest run --project web-browser apps/web/src/lib/ai/ui/GenerationPanel.browser.test.ts` | ✅ | ✅ green |
 | 9-24-03 | 24 | 1 | STU-02 | browser (gap: card Copy) | `corepack pnpm vitest run --project web-browser apps/web/src/lib/ai/ui/PlatformCard.browser.test.ts` | ✅ | ✅ green |
+| 9-25-01 | 25 | 2 | STU-04 | e2e (gap: Save inside recheck window) | `corepack pnpm --filter web exec playwright test snapshot-builder --project root` | ✅ | ✅ green |
+| 9-25-02 | 25 | 2 | STU-04 (same pattern on the Phase 7 INV-06 memo print exit) | e2e (gap: memo Print inside recheck window, no href while pending) | `corepack pnpm --filter web exec playwright test investor/memo --project root` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
