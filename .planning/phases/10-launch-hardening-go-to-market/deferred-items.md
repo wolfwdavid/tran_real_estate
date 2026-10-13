@@ -26,3 +26,46 @@
 - **(10-15 run) More load flakes in the sharded full E2E, all passed in isolation:**
   `investor/buybox.spec.ts:217` (root and sub, toHaveCount) and `renter-saved.spec.ts:83` (root,
   toBeVisible). Also re-confirmed the `agent-inquire.spec.ts:48` duplicate-noindex failure above.
+
+## Inter-wave fix (after wave 6)
+
+- **RESOLVED: duplicate robots noindex on /agent/inquire/** (commit 50a2fbc). Removed the page-level
+  `<meta name="robots" content="noindex" />`; the `(public)` group layout is the single source. Title,
+  referrer and description stay on the page. Built `agent/inquire/index.html` now has 1 noindex in
+  both `build/` and `build-sub/`. `playwright agent-inquire.spec.ts seo.spec.ts --project=root
+  --project=sub`: 54 passed.
+- **RESOLVED: tool pages over 60 KB gz on `build-configured/`** (commit f4ef7bb). Budget not raised.
+  - Beacon: the root layout makes one lazy `import('$lib/analytics/boot')` inside the existing
+    build-time gate, started from `afterNavigate` (after hydration). `boot.ts` holds the referrer/width
+    logic and reads the defines directly, because the old dynamic `import('$lib/site')` made the
+    bundler split `site.ts` into its own preloaded chunk. `boot.test.ts` pins the config to `$lib/site`
+    and checks that only the first load sends the referrer. This alone took configured from
+    60.3/60.5/60.5 to 59.9/60.1/60.0, which was still over.
+  - Second lever: inline Lucide `menu`/`x` SVGs in `PortalSwitcher.svelte` instead of `@lucide/svelte`
+    imports. Those two imports pulled Lucide's shared Icon runtime (~1.7 KB gz) into every tool page.
+    I measured 10-13's chunk-group lever first, grouping core money/format/amortization/tool-inputs
+    on build-configured: −0.25 KB on tool pages, but +0.4 KB on 15 portal routes. So I did not apply
+    it. Across all prerendered pages the icon change is −1716 B on calculator pages, −265 B on most
+    others, and at most +43 B anywhere (settings/).
+  - `node scripts/assert-budget.mjs <dir> --require-tools`, initial JS KB gz, before -> after:
+
+    | Route | build/ | build-sub/ | build-configured/ |
+    | --- | --- | --- | --- |
+    | tools/ | 51.8 -> 51.6 | 51.8 -> 51.6 | 52.3 -> 51.7 |
+    | tools/cap-rate/ | 59.8 -> 58.1 | 59.8 -> 58.2 | 60.3 -> 58.3 |
+    | tools/cash-on-cash/ | 59.9 -> 58.3 | 59.9 -> 58.3 | 60.5 -> 58.4 |
+    | tools/dscr/ | 59.9 -> 58.3 | 59.9 -> 58.3 | 60.5 -> 58.4 |
+    | index (report) | 57.9 -> 57.9 | 57.9 -> 58.0 | 58.5 -> 58.1 |
+
+    All three runs print "Budget assertion passed: 4 gated route(s) within 60 KB". That leaves about
+    1.6 KB of headroom on the configured build for 10-14.
+  - Privacy/behaviour: `api/send` appears in 0 files of `build/` and `build-sub/`. In
+    `build-configured/` it appears in 1 lazy chunk, which no HTML page preloads. Results:
+    - `csp:assert`: passed for 42 pages × 3 targets.
+    - `playwright analytics.configured harness.configured --project=configured`: 9 passed.
+    - `playwright third-party layout agent-inquire --project=root --project=sub`: 520 passed (layout
+      covers the Menu/Close toggle).
+    - Mutation check: with `boot.pageview` made a no-op, the analytics spec failed 2 and passed 3.
+      After restoring it and rebuilding, it passed 9.
+  - `pnpm check`: 0 errors, 0 warnings. `pnpm lint`: exit 0. `banned` and `ui:guard`: passed.
+    `vitest run apps/web/src/lib/analytics`: 61 passed.
