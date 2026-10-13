@@ -13,7 +13,11 @@ const capRate: OgCard = {
 	mark: 'investor'
 };
 
-/** The six real cards (UI-SPEC "OG Share Cards"); content ships in lib/content/tools.ts (plan 10-10). */
+/**
+ * The six real cards (UI-SPEC "OG Share Cards"); content ships in lib/content/tools.ts (plan 10-10),
+ * which must use these exact line breaks. "Cash-on-cash return" on one 80px line is ~800px wide and
+ * runs into the mark disc, so that title breaks as "Cash-on-cash" / "return calculator".
+ */
 const FIXTURES: Record<string, OgCard> = {
 	affordability: {
 		eyebrow: 'FREE CALCULATOR',
@@ -24,7 +28,7 @@ const FIXTURES: Record<string, OgCard> = {
 	'cap-rate': capRate,
 	'cash-on-cash': {
 		eyebrow: 'FREE CALCULATOR',
-		titleLines: ['Cash-on-cash return', 'calculator'],
+		titleLines: ['Cash-on-cash', 'return calculator'],
 		subline: TOOL_SUBLINE,
 		mark: 'investor'
 	},
