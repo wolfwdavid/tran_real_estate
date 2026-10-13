@@ -176,6 +176,7 @@ function axeSpecs(failKeyed?: { route: string; project: string; error: string })
 		}
 	}
 	for (const t of [
+		'axe reports no WCAG A/AA violations at 375px on ""',
 		'axe on the guide at step 0',
 		'axe on each calculator in the example state',
 		'axe on the waitlist form in the error state',
@@ -190,7 +191,9 @@ function axeSpecs(failKeyed?: { route: string; project: string; error: string })
 function evidenceFixtures() {
 	const e2e: PwSpec[] = [];
 	const unit: UnitCase[] = [];
-	for (const entry of Object.values(PITFALLS_EVIDENCE) as any[]) {
+	for (const entry of Object.values(PITFALLS_EVIDENCE) as {
+		evidence?: { type: string; match: string }[];
+	}[]) {
 		for (const ev of entry.evidence ?? []) {
 			const isFile = /\.(test|spec)\.ts$/.test(ev.match);
 			if (ev.type === 'e2e') {
@@ -217,7 +220,7 @@ const DISCLAIMER_SPECS: PwSpec[] = [
 	{ file: 'disclaimers.spec.ts', title: 'disclaimer: deal analyzer' }
 ];
 
-function baseData(over: Record<string, unknown> = {}): any {
+function baseData(over: Record<string, unknown> = {}) {
 	const ev = evidenceFixtures();
 	return {
 		header: {
@@ -233,8 +236,8 @@ function baseData(over: Record<string, unknown> = {}): any {
 		commands: { ...ALL_COMMANDS },
 		csp: {
 			targets: [
-				{ target: 'root', dir: 'apps/web/build', errors: [], pages: 40 },
-				{ target: 'sub', dir: 'apps/web/build-sub', errors: [], pages: 40 }
+				{ target: 'root', dir: 'apps/web/build', errors: [] as string[], pages: 40 },
+				{ target: 'sub', dir: 'apps/web/build-sub', errors: [] as string[], pages: 40 }
 			],
 			pages: [
 				{
@@ -249,7 +252,7 @@ function baseData(over: Record<string, unknown> = {}): any {
 			]
 		},
 		seo: {
-			targets: [{ target: 'root', dir: 'apps/web/build', errors: [], urls: 14 }],
+			targets: [{ target: 'root', dir: 'apps/web/build', errors: [] as string[], urls: 14 }],
 			sitemap: ['https://tranrealestate.github.io/', 'https://tranrealestate.github.io/tools/'],
 			robots: 'User-agent: *\nAllow: /\nSitemap: https://tranrealestate.github.io/sitemap.xml',
 			og: [{ file: 'og/default.png', bytes: 51200, width: 1200, height: 630 }]
@@ -266,14 +269,14 @@ function baseData(over: Record<string, unknown> = {}): any {
 					result: 'PASS'
 				}))
 			],
-			errors: []
+			errors: [] as string[]
 		},
 		cls: [
 			{ route: '', viewport: '375x812', state: 'first-visit', cls: 0.01 },
 			{ route: '', viewport: '1280x800', state: 'first-visit', cls: 0.02 },
 			{ route: '', viewport: '375x812', state: 'returning', cls: 0 }
 		],
-		banned: { files: 120, hits: [] },
+		banned: { files: 120, hits: [] as string[] },
 		deps: { exitCode: 0, summary: '0 vulnerabilities found', exceptions: AUDIT_EXCEPTIONS },
 		pitfalls: parsePitfallsChecklist(PITFALLS_MD),
 		disclaimers: [
@@ -495,7 +498,7 @@ describe('renderAudit', () => {
 		expect(summary(noCls)['Performance budget'].result).toBe('FAIL');
 		const missing = baseData();
 		missing.budget.rows = missing.budget.rows.filter(
-			(r: any) => r.route !== 'tools/dscr/index.html'
+			(r: { route: string }) => r.route !== 'tools/dscr/index.html'
 		);
 		expect(summary(renderAudit(missing))['Performance budget'].result).toBe('FAIL');
 	});
@@ -543,7 +546,7 @@ describe('a11yMatrix', () => {
 	test('route x keyless/keyed x root/sub with PASS/FAIL and violation text', () => {
 		const error = 'axe violations on "":\nregion (moderate): x\nlabel (critical): y';
 		const m = a11yMatrix(pwReport(axeSpecs({ route: '', project: 'root', error })));
-		expect(m.rows.map((r: any) => r.route)).toEqual(['', 'tools/']);
+		expect(m.rows.map((r: { route: string }) => r.route)).toEqual(['', 'tools/']);
 		const landing = m.rows[0];
 		expect(landing.cells['keyless/root'].status).toBe('PASS');
 		expect(landing.cells['keyed/root'].status).toBe('FAIL');

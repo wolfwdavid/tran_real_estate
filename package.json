@@ -28,6 +28,7 @@
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
 		"audit:deps": "pnpm audit --audit-level low",
+		"audit:launch": "node scripts/launch-audit.mjs --write",
 		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
 	},
 	"devDependencies": {
