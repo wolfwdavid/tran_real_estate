@@ -6,9 +6,10 @@
 // still never echoed back in a returned detail string.
 //
 // Spam: the client-side honeypot and 3-second gate run BEFORE this function (inquiry-gate.ts);
-// a tripped honeypot never reaches here. The botcheck field is deliberately omitted from the
-// body: Web3Forms calls its honeypot deprecated and its handling of a false value is
-// undocumented. Web3Forms' server-side spam check is the real protection.
+// a tripped honeypot never reaches here. The inquiry body deliberately omits the botcheck field
+// (Web3Forms calls its honeypot deprecated and its handling of a false value is
+// undocumented); the site's own forms send botcheck: false per the Phase 10 UI-SPEC. Web3Forms'
+// server-side spam check is the real protection.
 import { buildLeadBlock } from '@tran/core/leads/lead-block';
 
 export const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
@@ -73,6 +74,18 @@ export async function submitInquiry(
 		})
 	};
 
+	return postWeb3Forms(body, fetchImpl);
+}
+
+/**
+ * The single Web3Forms POST and its response mapping, shared by the agent inquiry form and the
+ * site's own waitlist/feedback forms (owner-forms.ts). The body is sent verbatim as JSON.
+ */
+export async function postWeb3Forms(
+	body: Record<string, unknown>,
+	fetchImpl: typeof fetch = fetch
+): Promise<SinkResult> {
+	const key = typeof body.access_key === 'string' ? body.access_key : '';
 	let res: Response;
 	try {
 		res = await fetchImpl(WEB3FORMS_ENDPOINT, {
@@ -87,7 +100,7 @@ export async function submitInquiry(
 
 	const json: unknown = await res.json().catch(() => null);
 	// The message sits top-level in the AJAX example and under json.body?.message in the reference.
-	const message = redact(readMessage(json), input.key);
+	const message = redact(readMessage(json), key);
 	const success =
 		typeof json === 'object' && json !== null && (json as { success?: unknown }).success === true;
 
