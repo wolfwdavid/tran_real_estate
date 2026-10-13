@@ -6,8 +6,16 @@
 		title,
 		docTitle,
 		description,
+		updated = '4 October 2026',
 		children
-	}: { title: string; docTitle: string; description: string; children: Snippet } = $props();
+	}: {
+		title: string;
+		docTitle: string;
+		description: string;
+		/** "Last updated" date, D Month YYYY. */
+		updated?: string;
+		children: Snippet;
+	} = $props();
 
 	// Verbatim UI-SPEC notice line, kept on one line so it stays searchable.
 	const notice =
@@ -19,7 +27,7 @@
 <article class="legal mx-auto max-w-page px-6 py-12 md:px-8 md:py-16">
 	<div class="max-w-reading">
 		<h1 class="font-display text-display font-semibold">{title}</h1>
-		<p class="mt-4 text-label font-semibold text-muted-foreground">Last updated: 4 October 2026</p>
+		<p class="mt-4 text-label font-semibold text-muted-foreground">Last updated: {updated}</p>
 		<p class="mt-4 text-muted-foreground">{notice}</p>
 		{@render children()}
 	</div>

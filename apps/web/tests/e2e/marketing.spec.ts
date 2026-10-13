@@ -38,7 +38,12 @@ const DATA_COVERAGE = [
 	'No CoStar or LoopNet data',
 	'They are not professional valuations of a property and can be wrong.'
 ];
-const LAST_UPDATED = 'Last updated: 4 October 2026';
+const LAST_UPDATED: Record<string, string> = {
+	'legal/privacy/': 'Last updated: 13 October 2026',
+	'legal/terms/': 'Last updated: 4 October 2026',
+	'legal/fair-housing/': 'Last updated: 4 October 2026',
+	'legal/data-coverage/': 'Last updated: 4 October 2026'
+};
 
 /** The pathname a link's href resolves to from the current page. */
 async function resolvedPath(page: Page, link: ReturnType<Page['getByRole']>): Promise<string> {
@@ -134,15 +139,10 @@ test('privacy policy says there is no Tran server holding user data', async ({ p
 	await expect(page.locator('main')).toContainText('no server that stores your data');
 });
 
-for (const route of [
-	'legal/privacy/',
-	'legal/terms/',
-	'legal/fair-housing/',
-	'legal/data-coverage/'
-]) {
+for (const route of Object.keys(LAST_UPDATED)) {
 	test(`legal page ${route} shows its last-updated date`, async ({ page }) => {
 		await page.goto(route);
-		await expect(page.locator('main')).toContainText(LAST_UPDATED);
+		await expect(page.locator('main')).toContainText(LAST_UPDATED[route]);
 	});
 }
 
