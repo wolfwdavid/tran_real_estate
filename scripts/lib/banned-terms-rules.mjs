@@ -51,7 +51,10 @@ export const SCOPE = [
 	AGENT_FEATURES,
 	LEADS,
 	// Phase 9: agent content studio (studio and snapshot routes are already under routes).
-	'apps/web/src/lib/features/studio'
+	'apps/web/src/lib/features/studio',
+	// Phase 10: SEO titles/descriptions and JSON-LD copy. Tools, onboarding, forms and content
+	// copy live under lib/components and lib/content (above); shared/affordability is above too.
+	'apps/web/src/lib/seo'
 ];
 
 /**
