@@ -72,6 +72,23 @@ Validated in Phase 7: Investor Portal (2026-10-06) — 6/6 must-haves verified a
 - ✓ INV-05 — Watch up to five ZIPs; rent-trend-by-bedroom and price-to-rent LayerChart dashboards with data-table alternatives and null months as gaps; a ZIP costs one call only when uncached (Phase 7)
 - ✓ INV-06 — `investor/memo.v1` receives only formatted analyzer facts and notes; a numeric post-check flags any number not in the analysis, an advice-language check blocks promises; chrome-free `/print/memo/` prints to PDF with the not-investment-advice disclaimer top and bottom (Phase 7)
 
+Validated in Phase 8: Agent Portal: Profile, Lead Intake & CRM (2026-10-07) — 5/5 success criteria and 7/7 requirements verified against the codebase; artifacts and key links of all 27 plans verified. Seven owner-gated checks (real Web3Forms delivery, paste-back from real mail clients and more) are parked in `08-HUMAN-UAT.md`.
+
+- ✓ AGT-01 — Agent profile (name, brokerage, license number, state, logo, brand colors, postal address) automatically appends the required disclosures to exports and generated content (Phase 8)
+- ✓ AGT-02 — Shareable inquiry page emails new leads through the agent's own Web3Forms key, with spam protection (Phase 8)
+- ✓ AGT-03 — Lead import by pasting a lead email or manual entry, with duplicate detection (Phase 8)
+- ✓ AGT-04 — Drag-and-drop pipeline New → Contacted → Touring → Offer → Closed (Phase 8)
+- ✓ AGT-05 — Follow-up tasks with a due-today queue on opening the app (Phase 8)
+- ✓ AGT-06 — AI follow-up email drafts with CAN-SPAM elements (postal address, opt-out line) (Phase 8)
+- ✓ AGT-07 — Contact CSV import and export (Phase 8)
+
+Validated in Phase 9: Agent Content Studio & Market Snapshot Reports (2026-10-13) — 10/10 must-haves verified after one gap-closure round (09-24/09-25: every studio and host exit (Copy, email, Mark as sent, social-card Copy, Snapshot Save, memo Print) flushes a pending edit recheck before reading the Fair Housing gate; the original stale-gate probe is now refused and mutation-checked). Full unit suite 5851/5852 (one isolated-pass load flake), svelte-check, lint and guards clean. Eight owner/counsel checks (UAT-1..8: real-key prints in three browsers, real social composers, NY/CA disclosure read-through, owner decisions) are parked in `09-HUMAN-UAT.md`.
+
+- ✓ STU-01 — Listing description from agent-entered facts, gated by the Fair Housing checker (Phase 9)
+- ✓ STU-02 — Instagram, Facebook and LinkedIn post pack with the brokerage disclosure appended (Phase 9)
+- ✓ STU-03 — Founder-story reel script (hook → manual pain → before/after → results → mission → CTA) with timed beats, captions, B-roll list and an AI-disclosure checklist (Phase 9)
+- ✓ STU-04 — Branded Market Snapshot report for a ZIP code that prints to PDF, labeled not a CMA or appraisal (Phase 9)
+
 ### Active
 
 **Platform (shared)**
@@ -97,10 +114,10 @@ Validated in Phase 7: Investor Portal (2026-10-06) — 6/6 must-haves verified a
 - [x] AI investment memo: one-click proposal/report generated from a deal analysis, exportable — shipped in Phase 7
 
 **Agent portal**
-- [ ] Lead capture + inbox: shareable inquiry form delivering to the agent's email via Web3Forms (free tier); agent imports leads into the app by pasting the email (free tiers have no read API)
-- [ ] AI content studio: generate listing descriptions, social posts, and founder-story video scripts
-- [ ] Client CRM + follow-ups: track leads locally with AI follow-up reminders and drafted messages
-- [ ] Market reports: branded market reports (no demographic/school/crime data) agents can export and send to clients
+- [x] Lead capture + inbox: shareable inquiry form delivering to the agent's email via Web3Forms (free tier); agent imports leads into the app by pasting the email (free tiers have no read API) — shipped in Phase 8
+- [x] AI content studio: generate listing descriptions, social posts, and founder-story video scripts — shipped in Phase 9
+- [x] Client CRM + follow-ups: track leads locally with AI follow-up reminders and drafted messages — shipped in Phase 8
+- [x] Market reports: branded market reports (no demographic/school/crime data) agents can export and send to clients — shipped in Phase 9 (Market Snapshot)
 
 ### Out of Scope
 
@@ -180,4 +197,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-06 after Phase 7 completion*
+*Last updated: 2026-10-13 after Phase 9 completion*
