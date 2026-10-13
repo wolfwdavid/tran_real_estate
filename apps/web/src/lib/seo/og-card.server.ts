@@ -66,6 +66,19 @@ const WORDMARK_BASELINE = H - BAR - PAD; // 538: 80px above the bottom bar
 const DISC = { cx: 960, cy: 300, r: 160 };
 const MARK = 192;
 
+/**
+ * The landing hero's two tints, scaled to the canvas: radial-gradient(60% 55% at 88% 8%) and
+ * radial-gradient(45% 40% at 4% 92%), each transparent from 70% of its radius. Kept this tight on
+ * purpose: smooth gradient area is what dominates the PNG size budget.
+ */
+const tint = (cx: number, cy: number, rx: number, ry: number) =>
+	`translate(${px(cx * W)} ${px(cy * H)}) scale(${px(rx * W * 0.7)} ${px(ry * H * 0.7)})`;
+function px(n: number): number {
+	return Math.round(n * 10) / 10;
+}
+const TINT_TR = tint(0.88, 0.08, 0.6, 0.55);
+const TINT_BL = tint(0.04, 0.92, 0.45, 0.4);
+
 const esc = (s: string) => s.replace(/[<>&"]/g, (ch) => `&#${ch.charCodeAt(0)};`);
 
 export function ogCardSvg(card: OgCard): string {
@@ -83,10 +96,10 @@ export function ogCardSvg(card: OgCard): string {
 		`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`,
 		'<defs>',
 		`<clipPath id="canvas"><rect width="${W}" height="${H}"/></clipPath>`,
-		`<radialGradient id="tint-tr" gradientUnits="userSpaceOnUse" cx="1100" cy="0" r="640">`,
+		`<radialGradient id="tint-tr" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="${TINT_TR}">`,
 		`<stop offset="0" stop-color="${c['accent-surface']}"/><stop offset="1" stop-color="${c['accent-surface']}" stop-opacity="0"/>`,
 		'</radialGradient>',
-		`<radialGradient id="tint-bl" gradientUnits="userSpaceOnUse" cx="0" cy="${H}" r="560">`,
+		`<radialGradient id="tint-bl" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1" gradientTransform="${TINT_BL}">`,
 		`<stop offset="0" stop-color="${c['secondary-surface']}"/><stop offset="1" stop-color="${c['secondary-surface']}" stop-opacity="0"/>`,
 		'</radialGradient>',
 		'</defs>',

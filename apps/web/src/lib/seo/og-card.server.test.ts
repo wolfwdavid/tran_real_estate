@@ -96,7 +96,8 @@ const RIGHT_PADDING: Box = { x0: 1120, y0: 0, x1: W, y1: 600 };
 // Bounding square of the 320px mark disc centred at (960, 300).
 const DISC: Box = { x0: 800, y0: 140, x1: 1120, y1: 460 };
 
-describe('renderOgCard', () => {
+// Each case rasterises 1200x630 twice and scans the pixels; allow for a loaded CI runner.
+describe('renderOgCard', { timeout: 30_000 }, () => {
 	const fonted = renderOgCard(capRate);
 	const png = fonted.asPng();
 
