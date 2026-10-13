@@ -2,7 +2,7 @@
 // bring-your-own-key provider. Phases 3-5 (vault, key cards, data and AI adapters) read from here.
 //
 // Invariants:
-// - Every `host` must stay inside the CSP connect-src allowlist (apps/web/svelte.config.js and
+// - Every `host` must stay inside the CSP connect-src allowlist (apps/web/src/lib/csp-policy.js and
 //   scripts/assert-csp.mjs). scripts/provider-hosts.test.ts fails if they drift apart.
 // - Keys travel ONLY in the `auth.header` request header. Never put a key in a URL query parameter,
 //   a log line, an error message, or a backup file.
