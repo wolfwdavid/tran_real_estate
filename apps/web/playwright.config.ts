@@ -18,6 +18,7 @@ if (process.platform === 'win32') {
 const ROOT = Number(process.env.E2E_PORT_ROOT ?? 4273);
 const SUB = Number(process.env.E2E_PORT_SUB ?? 4274);
 const ATTACKER = Number(process.env.E2E_PORT_ATTACKER ?? 4275);
+const CONFIGURED = Number(process.env.E2E_PORT_CONFIGURED ?? 4276);
 
 export default defineConfig({
 	testDir: 'tests/e2e',
@@ -40,6 +41,7 @@ export default defineConfig({
 			E2E_PORT_ROOT: String(ROOT),
 			E2E_PORT_SUB: String(SUB),
 			E2E_PORT_ATTACKER: String(ATTACKER),
+			E2E_PORT_CONFIGURED: String(CONFIGURED),
 			// On Windows Playwright cannot signal the server it spawned through cmd.exe; the server
 			// instead exits when its stdin closes, which happens the moment Playwright tears it down.
 			SERVE_PAGES_EXIT_ON_STDIN_END: '1'
@@ -49,12 +51,23 @@ export default defineConfig({
 		timeout: 30_000
 	},
 	// Trailing-slash baseURLs so relative page.goto('renter/') resolves under both bases.
+	// *.configured.spec.ts files run ONLY against the configured build (test owner settings: form
+	// key, analytics host + website id, contact email); every other spec runs on root and sub.
 	projects: [
-		{ name: 'root', use: { baseURL: `http://127.0.0.1:${ROOT}/` } },
+		{
+			name: 'root',
+			use: { baseURL: `http://127.0.0.1:${ROOT}/` },
+			testIgnore: /\.configured\.spec\.ts$/
+		},
 		{
 			name: 'sub',
 			use: { baseURL: `http://127.0.0.1:${SUB}/tran_real_estate/` },
-			testIgnore: /framing\.spec/
+			testIgnore: [/framing\.spec/, /\.configured\.spec\.ts$/]
+		},
+		{
+			name: 'configured',
+			use: { baseURL: `http://127.0.0.1:${CONFIGURED}/` },
+			testMatch: /\.configured\.spec\.ts$/
 		}
 	]
 });
