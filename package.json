@@ -18,7 +18,8 @@
 		"test:unit": "vitest run",
 		"build:root": "node scripts/build-web.mjs root",
 		"build:sub": "node scripts/build-web.mjs sub",
-		"csp:assert": "node scripts/assert-csp.mjs apps/web/build && node scripts/assert-csp.mjs apps/web/build-sub",
+		"build:configured": "node scripts/build-web.mjs configured",
+		"csp:assert": "node scripts/assert-csp.mjs apps/web/build --target root && node scripts/assert-csp.mjs apps/web/build-sub --target sub && node scripts/assert-csp.mjs apps/web/build-configured --target configured",
 		"test:e2e": "pnpm --filter web exec playwright test",
 		"guard": "node scripts/guard-real-data.mjs --all",
 		"fixtures:check": "node scripts/gen-fixtures.mjs --check",
@@ -27,7 +28,7 @@
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
 		"audit:deps": "pnpm audit --audit-level low",
-		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
+		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm test:e2e && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",

@@ -84,7 +84,16 @@ const AGENT_NO_GATEWAY = forbid(
 );
 
 export default defineConfig(
-	{ ignores: ['**/build/', '**/build-sub/', '**/.svelte-kit/', '**/test-results/', '.planning/'] },
+	{
+		ignores: [
+			'**/build/',
+			'**/build-sub/',
+			'**/build-configured/',
+			'**/.svelte-kit/',
+			'**/test-results/',
+			'.planning/'
+		]
+	},
 	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs.recommended,

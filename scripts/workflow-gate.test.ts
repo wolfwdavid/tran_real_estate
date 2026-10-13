@@ -4,6 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
+import { OWNER_KEYS, targetEnv } from './lib/build-targets.mjs';
 
 const WORKFLOW = join(import.meta.dirname, '../.github/workflows/ci.yml');
 const PLAYWRIGHT_CONFIG = join(import.meta.dirname, '../apps/web/playwright.config.ts');
@@ -122,19 +123,50 @@ describe('supply chain', () => {
 });
 
 describe('quality matrix', () => {
-	test('matrix includes both root and sub targets', () => {
+	test('matrix lists the root, sub and configured targets with their build dirs', () => {
 		const quality = job('quality');
-		expect(quality).toContain('- target: root');
-		expect(quality).toContain('- target: sub');
-		expect(quality).toContain('base_path: /tran_real_estate');
-		expect(quality).toContain('build_dir: build-sub');
+		expect(quality).toContain('- target: root\n            build_dir: build\n');
+		expect(quality).toContain('- target: sub\n            build_dir: build-sub\n');
+		expect(quality).toContain('- target: configured\n            build_dir: build-configured\n');
+		// build-targets.mjs owns BASE_PATH; the matrix must not carry a second copy.
+		expect(quality).not.toContain('base_path');
 	});
 
-	test('BASE_PATH and BUILD_DIR come from the matrix and E2E runs the matching project', () => {
+	test('the Build step runs the build-targets script for the matrix target', () => {
 		const quality = job('quality');
-		expect(quality).toContain('BASE_PATH: ${{ matrix.base_path }}');
-		expect(quality).toContain('BUILD_DIR: ${{ matrix.build_dir }}');
-		expect(quality).toContain('node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }}');
+		expect(quality).toContain('run: pnpm run build:${{ matrix.target }}');
+		expect(quality).not.toContain('BASE_PATH:');
+		expect(quality).not.toContain('BUILD_DIR:');
+	});
+
+	test('build-targets.mjs maps each target to its BASE_PATH and BUILD_DIR', () => {
+		const pick = (name: string) => {
+			const t = targetEnv(name, {});
+			return [t.BASE_PATH, t.BUILD_DIR];
+		};
+		expect(pick('root')).toEqual(['', 'build']);
+		expect(pick('sub')).toEqual(['/tran_real_estate', 'build-sub']);
+		expect(pick('configured')).toEqual(['', 'build-configured']);
+	});
+
+	test('owner variables reach only the root leg, in every env block', () => {
+		const quality = job('quality');
+		const blocks = count(quality, '\n        env:\n');
+		expect(blocks).toBe(3); // Build, CSP oracle, E2E
+		for (const name of OWNER_KEYS) {
+			const gated = `${name}: \${{ matrix.target == 'root' && vars.${name} || '' }}`;
+			expect(count(quality, gated), name).toBe(blocks);
+			// No other use of the variable anywhere in the workflow.
+			expect(count(text, `vars.${name}`), name).toBe(blocks);
+		}
+		expect(count(quality, 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}')).toBe(blocks);
+	});
+
+	test('the CSP oracle and E2E run for the matching target', () => {
+		const quality = job('quality');
+		expect(quality).toContain(
+			'run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}'
+		);
 		expect(quality).toContain('playwright test --project=${{ matrix.target }}');
 	});
 
@@ -144,7 +176,7 @@ describe('quality matrix', () => {
 			'run: pnpm check',
 			'run: pnpm lint',
 			'run: pnpm test:unit',
-			'run: pnpm --filter web build'
+			'run: pnpm run build:${{ matrix.target }}'
 		];
 		const idx = order.map((s) => quality.indexOf(s));
 		for (const i of idx) expect(i).toBeGreaterThan(-1);

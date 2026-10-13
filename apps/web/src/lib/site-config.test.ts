@@ -27,13 +27,17 @@ describe('resolveSiteOrigin', () => {
 		expect(DEFAULT_SITE_ORIGIN).toBe('https://tranrealestate.github.io');
 	});
 
+	test('treats an empty value as unset (CI expands an unset repository variable to empty)', () => {
+		expect(resolveSiteOrigin({ PUBLIC_SITE_URL: '' })).toBe(DEFAULT_SITE_ORIGIN);
+	});
+
 	test('accepts an https origin', () => {
 		expect(resolveSiteOrigin({ PUBLIC_SITE_URL: 'https://example.org' })).toBe(
 			'https://example.org'
 		);
 	});
 
-	test.each(['http://x.org', 'https://x.org/', 'https://x.org/path', '', 'javascript:alert(1)'])(
+	test.each(['http://x.org', 'https://x.org/', 'https://x.org/path', 'javascript:alert(1)'])(
 		'rejects %j with a named error',
 		(value) => {
 			expect(() => resolveSiteOrigin({ PUBLIC_SITE_URL: value })).toThrow(/PUBLIC_SITE_URL/);

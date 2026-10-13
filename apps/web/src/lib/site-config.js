@@ -12,12 +12,13 @@ const EMAIL = /^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i;
 export const DEFAULT_SITE_ORIGIN = 'https://tranrealestate.github.io';
 
 /**
- * The site origin from PUBLIC_SITE_URL: an https origin with no path or trailing slash.
+ * The site origin from PUBLIC_SITE_URL: an https origin with no path or trailing slash. Empty means
+ * unset (CI expands an unset repository variable to ''), like every other owner setting.
  * @param {Record<string, string | undefined>} [env]
  * @returns {string}
  */
 export function resolveSiteOrigin(env = process.env) {
-	const o = env.PUBLIC_SITE_URL ?? DEFAULT_SITE_ORIGIN;
+	const o = env.PUBLIC_SITE_URL || DEFAULT_SITE_ORIGIN;
 	if (!ORIGIN.test(o)) {
 		throw new Error(
 			`PUBLIC_SITE_URL must be an https origin with no path or trailing slash (got ${JSON.stringify(o)})`

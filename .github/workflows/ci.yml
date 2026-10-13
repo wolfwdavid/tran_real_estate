@@ -55,11 +55,11 @@ jobs:
       matrix:
         include:
           - target: root
-            base_path: ''
             build_dir: build
           - target: sub
-            base_path: /tran_real_estate
             build_dir: build-sub
+          - target: configured
+            build_dir: build-configured
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -84,14 +84,34 @@ jobs:
       - run: pnpm lint
       - run: node scripts/gen-fixtures.mjs --check
       - run: pnpm test:unit
+      # Deploy what you test: the owner's repository variables reach ONLY the root leg (the deploy
+      # build). An unset variable expands to '', which site-config treats as unset. BASE_PATH and
+      # BUILD_DIR come from scripts/lib/build-targets.mjs; the configured target overrides every
+      # owner setting with test values there.
       - name: Build
-        run: pnpm --filter web build
+        run: pnpm run build:${{ matrix.target }}
         env:
-          BASE_PATH: ${{ matrix.base_path }}
-          BUILD_DIR: ${{ matrix.build_dir }}
-      - run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }}
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
+          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
+          PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
+          PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
+      - name: CSP oracle
+        run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
+          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
+          PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
+          PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
       - name: E2E + axe
         run: pnpm --filter web exec playwright test --project=${{ matrix.target }}
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
+          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
+          PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
+          PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
       - name: Upload Pages artifact
         if: matrix.target == 'root' && github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

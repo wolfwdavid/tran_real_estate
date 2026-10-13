@@ -5,6 +5,7 @@ CLAUDE.md
 .github/
 **/build/
 **/build-sub/
+**/build-configured/
 **/.svelte-kit/
 test-results/
 playwright-report/

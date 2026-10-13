@@ -9,6 +9,7 @@ data/costar/
 *.log
 .DS_Store
 build-sub/
+build-configured/
 test-results/
 playwright-report/
 .tools/
