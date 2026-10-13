@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 10 (launch-hardening-go-to-market) — EXECUTING
-Plan: 17 of 23 summarized (waves 1-6 done); next: inter-wave fix (duplicate noindex + configured-build budget), then wave 7 (10-14)
+Plan: 17 of 23 summarized (waves 1-6 done + inter-wave fix 50a2fbc/f4ef7bb); next: wave 7 (10-14)
 
 ## Performance Metrics
 
