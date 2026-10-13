@@ -13,9 +13,9 @@ describe('serializeJsonLd', () => {
 	});
 
 	test('escapes U+2028 and U+2029 and still round-trips', () => {
-		const input = { text: 'line sep para' };
+		const input = { text: 'line\u2028sep\u2029para' };
 		const out = serializeJsonLd(input);
-		expect(out).not.toMatch(/[  ]/);
+		expect(out).not.toMatch(/[\u2028\u2029]/);
 		expect(out).toContain('\\u2028');
 		expect(out).toContain('\\u2029');
 		expect(JSON.parse(out)).toStrictEqual(input);
