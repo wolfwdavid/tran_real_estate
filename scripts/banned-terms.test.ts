@@ -604,3 +604,27 @@ describe('studio scope (Phase 9)', () => {
 		expect(Object.keys(mod).filter((k) => /allow/i.test(k))).toEqual([]);
 	});
 });
+
+describe('Phase 10 scope (10-UI-SPEC Planner Note 9)', () => {
+	test('SCOPE covers lib/seo and the shared affordability folder', () => {
+		expect(SCOPE).toEqual(
+			expect.arrayContaining([
+				'apps/web/src/lib/seo',
+				'apps/web/src/lib/features/shared/affordability',
+				'apps/web/src/routes',
+				'apps/web/src/lib/components',
+				'apps/web/src/lib/content'
+			])
+		);
+	});
+
+	test('collectFiles really scans lib/seo (one hit for a banned word)', () => {
+		const rel = 'apps/web/src/lib/seo/x.ts';
+		withTree({ [rel]: "export const d = 'Results guaranteed.';\n" }, (dir) => {
+			expect(collectFiles(dir)).toEqual([rel]);
+			const r = runCli(dir);
+			expect(r.status).toBe(1);
+			expect(r.out).toContain('guarantee');
+		});
+	});
+});
