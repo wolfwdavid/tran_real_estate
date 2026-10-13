@@ -128,7 +128,12 @@ describe('buildPageview', () => {
 	});
 
 	test('omits the referrer key when there is no external referrer', () => {
-		const { payload } = buildPageview({ pathname: '/renter/', hostname: HOST }, '', 1280, WEBSITE_ID);
+		const { payload } = buildPageview(
+			{ pathname: '/renter/', hostname: HOST },
+			'',
+			1280,
+			WEBSITE_ID
+		);
 		expect('referrer' in payload).toBe(false);
 		const self = buildPageview(
 			{ pathname: '/renter/', hostname: HOST },
@@ -150,32 +155,50 @@ describe('buildPageview', () => {
 		expect(Object.keys(body)).toEqual(['type', 'payload']);
 		const allowed = ['website', 'hostname', 'url', 'referrer', 'screen', 'data'];
 		for (const key of Object.keys(body.payload)) expect(allowed).toContain(key);
-		for (const banned of ['ip', 'userAgent', 'id', 'language', 'title', 'timestamp', 'tag', 'name']) {
+		for (const banned of [
+			'ip',
+			'userAgent',
+			'id',
+			'language',
+			'title',
+			'timestamp',
+			'tag',
+			'name'
+		]) {
 			expect(banned in body.payload).toBe(false);
 		}
 		expect(Object.keys(body.payload.data)).toEqual(['portal']);
 	});
 
-	test.each(['/agent/inquire/?k=00000000-0000-4000-8000-000000000000&n=A', '/investor/analyze/?id=abc#x'])(
-		'never leaks a query or fragment: %s',
-		(href) => {
-			const u = new URL(href, `https://${HOST}`);
-			const { payload } = buildPageview(
-				{ pathname: u.pathname, hostname: u.hostname },
-				'',
-				1280,
-				WEBSITE_ID
-			);
-			expect(payload.url).not.toMatch(/[?#]/);
-		}
-	);
+	test.each([
+		'/agent/inquire/?k=00000000-0000-4000-8000-000000000000&n=A',
+		'/investor/analyze/?id=abc#x'
+	])('never leaks a query or fragment: %s', (href) => {
+		const u = new URL(href, `https://${HOST}`);
+		const { payload } = buildPageview(
+			{ pathname: u.pathname, hostname: u.hostname },
+			'',
+			1280,
+			WEBSITE_ID
+		);
+		expect(payload.url).not.toMatch(/[?#]/);
+	});
 
 	test.each([
-		['/tran_real_estate/agent/inquire/?k=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'https://a.example.com/x?token=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'],
+		[
+			'/tran_real_estate/agent/inquire/?k=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+			'https://a.example.com/x?token=BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+		],
 		['/tran_real_estate/renter/#frag', 'https://user:secret@b.example.org/p#q'],
 		['/tran_real_estate/', '']
 	])('value hygiene for %s with referrer %s', (pathname, referrer) => {
-		const { payload } = buildPageview({ pathname, hostname: HOST }, referrer, 700, WEBSITE_ID, BASE);
+		const { payload } = buildPageview(
+			{ pathname, hostname: HOST },
+			referrer,
+			700,
+			WEBSITE_ID,
+			BASE
+		);
 		const values = [
 			payload.hostname,
 			payload.url,

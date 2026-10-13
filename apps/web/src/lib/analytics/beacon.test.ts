@@ -13,7 +13,8 @@ let fake: typeof fetch;
 beforeEach(() => {
 	calls = [];
 	fake = ((u: string, i: RequestInit) => (
-		calls.push([u, i]), Promise.resolve(new Response())
+		calls.push([u, i]),
+		Promise.resolve(new Response())
 	)) as unknown as typeof fetch;
 });
 
@@ -86,11 +87,14 @@ test('tracker without a host sends nothing', () => {
 });
 
 test('tracker with a host but no website id sends nothing', () => {
-	createTracker({ host: HOST, websiteId: '', base: '', fetchImpl: fake, nav: {}, win: {} }).pageview(
-		new URL(`${SITE}/renter/`),
-		'',
-		1280
-	);
+	createTracker({
+		host: HOST,
+		websiteId: '',
+		base: '',
+		fetchImpl: fake,
+		nav: {},
+		win: {}
+	}).pageview(new URL(`${SITE}/renter/`), '', 1280);
 	expect(calls).toHaveLength(0);
 });
 
@@ -141,11 +145,14 @@ test('configured and allowed tracker sends the buildPageview body', () => {
 });
 
 test('tracker strips the query string from the page URL', () => {
-	createTracker({ host: HOST, websiteId: WEBSITE_ID, base: '', fetchImpl: fake, nav: {}, win: {} }).pageview(
-		new URL(`${SITE}/renter/?id=1`),
-		'',
-		1280
-	);
+	createTracker({
+		host: HOST,
+		websiteId: WEBSITE_ID,
+		base: '',
+		fetchImpl: fake,
+		nav: {},
+		win: {}
+	}).pageview(new URL(`${SITE}/renter/?id=1`), '', 1280);
 	expect(calls).toHaveLength(1);
 	expect(JSON.parse(calls[0][1].body as string).payload.url).toBe('/renter/');
 });
