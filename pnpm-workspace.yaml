@@ -4,3 +4,6 @@ packages:
 allowBuilds:
   simple-git-hooks: false
 engineStrict: true
+audit:
+  ignore:
+    - GHSA-pxg6-pf52-xh8x # cookie <0.7 via @sveltejs/kit 2.x server runtime; not in the static bundle. Re-check on Kit upgrade.
