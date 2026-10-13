@@ -1,7 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { pricingAt } from '@tran/core/ai';
+import { buildCsp } from '../csp-policy.js';
 import {
 	PROVIDERS,
 	PROVIDER_LABELS,
@@ -103,10 +102,11 @@ describe('pricingFor', () => {
 });
 
 describe('CSP coverage', () => {
-	it('every registry host is listed in svelte.config.js connect-src', () => {
-		const cfg = readFileSync(resolve(import.meta.dirname, '../../../svelte.config.js'), 'utf8');
+	// svelte.config.js builds its policy with buildCsp (src/lib/csp-policy.js), the single source.
+	it('every registry host is listed in the CSP connect-src', () => {
+		const connect = buildCsp().directives['connect-src'];
 		for (const id of PROVIDER_ORDER) {
-			expect(cfg, id).toContain(`'https://${PROVIDERS[id].host}'`);
+			expect(connect, id).toContain(`https://${PROVIDERS[id].host}`);
 		}
 	});
 });

@@ -5,7 +5,7 @@
  * models return 400 (RESEARCH Anti-Patterns). A user-overridden model with no row gets no
  * extras and no cost estimate.
  *
- * Every `host` must appear in the CSP connect-src (apps/web/svelte.config.js); models.test.ts
+ * Every `host` must appear in the CSP connect-src (apps/web/src/lib/csp-policy.js); models.test.ts
  * enforces it.
  */
 import type { AiProviderId, LiveProviderId, PricingRow } from '@tran/core/ai';

@@ -1,8 +1,12 @@
 // The CSP builder must reproduce the pre-Phase-10 policy byte-for-byte when no analytics host is
 // configured, and add exactly one connect-src origin when one is (10-RESEARCH Pattern 11).
 import { describe, expect, test } from 'vitest';
-import { CONNECT } from '../../../../scripts/assert-csp.mjs';
 import { buildCsp } from './csp-policy.js';
+
+// Loaded through a computed URL so svelte-check (checkJs) does not type-check the untyped Node
+// oracle as part of the web project; the oracle is type-free plain JS by design.
+const ORACLE = new URL('../../../../scripts/assert-csp.mjs', import.meta.url).href;
+const { CONNECT } = (await import(/* @vite-ignore */ ORACLE)) as { CONNECT: string[] };
 
 // The kit.csp literal that svelte.config.js carried before Phase 10, copied verbatim.
 const PRE_PHASE_10 = {
@@ -42,7 +46,7 @@ describe('buildCsp', () => {
 
 	test('connect-src matches the independent oracle literal as a set', () => {
 		const ours = buildCsp().directives['connect-src'];
-		const oracle = (CONNECT as string[]).map(unquote);
+		const oracle = CONNECT.map(unquote);
 		expect([...ours].sort()).toEqual([...oracle].sort());
 	});
 
