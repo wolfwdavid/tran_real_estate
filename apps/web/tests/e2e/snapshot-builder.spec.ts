@@ -188,6 +188,21 @@ test('keyless: sample ZIP, notes with a planted number gate Save, then save open
 	await expect(stepSection(page, 4).locator('[data-cost-notes]')).toHaveText('Drafted');
 	await expectNoAxeViolations(page, 'snapshot Save enabled');
 
+	// A Review phrase typed while still editing gates Save at once, not after the 300 ms recheck.
+	await notesPanel(page).getByRole('button', { name: 'Edit draft' }).click();
+	const notesBox = notesPanel(page).getByLabel('Edit your draft');
+	const cleanNotes = await notesBox.inputValue();
+	await notesBox.fill(`${cleanNotes} Walking distance to church.`);
+	await activateGated(page);
+	await expect(saveReason(page)).toBeFocused();
+	// Match a stable substring only: for a Review-only gate the current wording reads "Fix the 0
+	// items marked Must fix..." (a tracked follow-up), so do not lock it in here.
+	await expect(saveReason(page)).toContainText('in the market notes');
+	await expect(page).toHaveURL(/\/agent\/studio\/snapshot\/$/);
+	await notesBox.fill(cleanNotes);
+	await notesPanel(page).getByRole('button', { name: 'Done editing' }).click();
+	await expect(saveButton(page)).not.toHaveAttribute('aria-disabled', 'true');
+
 	await page.setViewportSize({ width: 375, height: 812 });
 	await expectNoHorizontalScroll(page);
 

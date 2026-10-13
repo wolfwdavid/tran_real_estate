@@ -51,7 +51,7 @@
 	// figures, with the number check gating them. Step 4 saves one frozen record (0 calls) and
 	// opens the print view; it is gated by saveGateReason. The choices autosave (never the data).
 	// Browser only: the route mounts this after hydration (Dexie, the gateway and the AI runner).
-	import { onMount, tick, untrack } from 'svelte';
+	import { flushSync, onMount, tick, untrack } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import Info from '@lucide/svelte/icons/info';
@@ -333,6 +333,10 @@
 
 	async function save(): Promise<void> {
 		if (saving) return;
+		// Run the notes panel's pending edit recheck so gateReason reads findings (and the Review
+		// acknowledgement) for the text as it is right now, not 300 ms ago.
+		panel?.flushChecks();
+		flushSync();
 		if (gateReason || !loaded) {
 			refuse(gateReason ?? STEP_EMPTY);
 			return;
