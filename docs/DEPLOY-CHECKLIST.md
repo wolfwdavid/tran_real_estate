@@ -95,12 +95,67 @@ against a GitHub Pages emulator under both base paths.
    so the canary would be accepted and prove nothing. Never merge or keep the probe branch, and
    never use a live credential.
 
+## Step 8: Launch services (Phase 10)
+
+Each service below is optional and switched on by a repository variable. Nothing here blocks
+local work: with no variables set, the site builds, tests and deploys with usage counting off, the
+waitlist and feedback forms in their "isn't open yet" state, and no contact address. Add variables
+in the repository under Settings → Secrets and variables → Actions → **Variables** (not Secrets:
+every value here ends up in the public page source by design). Only the root deploy build reads
+them; the sub-path and test builds ignore them.
+
+1. **Umami usage counts (analytics, optional).**
+   1. Create a free Umami Cloud account (or self-host Umami) and add the website
+      `tranrealestate.github.io`.
+   2. Copy the collection host and the website ID (a UUID) from the site's tracking code in the
+      Umami dashboard. Take the exact host from that code, for example `https://cloud.umami.is`;
+      do not guess it.
+   3. In Umami's settings, confirm that IP addresses are not stored. Record the answer in
+      `docs/LAUNCH-AUDIT.md`, section "Human UAT". The privacy page tells visitors the counter
+      receives their IP address like any web request, so do not turn counting on until this is
+      confirmed.
+   4. Add the variables `PUBLIC_ANALYTICS_HOST` (the https origin, no path) and
+      `PUBLIC_ANALYTICS_WEBSITE_ID`. Set both or neither: the build fails on a half pair. The
+      host is added to the Content-Security-Policy `connect-src` automatically, and
+      `pnpm csp:assert` checks it.
+   5. Deploy. The privacy page now shows the "Usage counts" text that lists what each page view
+      sends, and names the counter host.
+   6. From the live origin, in a normal browser with Global Privacy Control (GPC) and Do Not Track
+      off, open two different pages. Confirm two pageviews in the Umami dashboard.
+   7. Repeat in a browser with GPC on (Brave, or the Firefox setting "Tell websites not to sell or
+      share my data"). Confirm that no new pageviews arrive.
+   8. **Apply the cut line** if no pageviews arrive from the deployed origin: remove both
+      variables and redeploy. The beacon becomes a no-op and the privacy page switches back to "Tran doesn't
+      count visits right now". Then move GTM-04 to v2 in `.planning/REQUIREMENTS.md` and record
+      the decision in `.planning/PROJECT.md` under Key Decisions.
+   9. Read the counts as a lower bound: ad and tracker blockers may block analytics hosts.
+2. **Web3Forms (waitlist and feedback forms).**
+   1. Create a free Web3Forms access key with the owner's inbox as the destination.
+   2. Keep captcha OFF in the Web3Forms dashboard. The site's CSP cannot load captcha scripts;
+      Tran uses a hidden trap field and a 3-second check instead.
+   3. Add the variable `PUBLIC_WEB3FORMS_KEY` (the access key is public by design).
+   4. Deploy, then from the live origin submit one waitlist entry on `/for-renters/` and one
+      message on `/feedback/`. Confirm both emails arrive, with the subjects "Tran waitlist:
+      Renter" and "Tran feedback: …" (the topic you picked).
+3. **Contact email (optional).** Add `PUBLIC_CONTACT_EMAIL` to turn on the mailto fallbacks on the
+   forms. Leave it unset and the forms show "check back later" text instead of an address.
+4. **Search Console.** Add a property for `https://tranrealestate.github.io/` in Google Search
+   Console, verify it, and submit `https://tranrealestate.github.io/sitemap.xml`.
+5. **Share cards.** Paste `https://tranrealestate.github.io/tools/cap-rate/` into a link-preview
+   debugger (LinkedIn Post Inspector or the Facebook Sharing Debugger). Confirm the card image and
+   title.
+6. **Dependabot.** Under Settings → Code security, enable Dependabot alerts and Dependabot security
+   updates. `pnpm audit` in CI remains the authoritative gate.
+7. **Record the results** in `docs/LAUNCH-AUDIT.md`, section "Human UAT (deferred)", and in
+   `.planning/phases/10-launch-hardening-go-to-market/10-HUMAN-UAT.md`, including the Umami
+   IP-storage answer and the analytics cut-line decision (kept or cut).
+
 ## Later phases
 
 - **Phase 4** adds the owner's endpoint-restricted RentCast key for billing verification. It is
   entered in the browser, never committed.
 - **Phase 8** adds the owner's free Web3Forms access key for lead-delivery verification. Same
   rule: browser only, never committed.
-- **Phase 10** adds the first-party analytics beacon host to `connect-src`. That host must be
-  added to `apps/web/svelte.config.js` and to the allowlist in `scripts/assert-csp.mjs` in the
-  same commit, because `pnpm csp:assert` fails the build when the two disagree.
+- **Phase 10** services (analytics host, Web3Forms key, contact email) are switched on by
+  repository variables, see Step 8. The analytics host reaches `connect-src` through the build
+  and `pnpm csp:assert` checks it; no source edit is needed.
