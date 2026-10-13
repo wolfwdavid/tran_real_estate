@@ -395,13 +395,13 @@ Plans:
 
 Plans:
 - [x] 10-01-PLAN.md — Wave 0 gate + Phase 2-9 contract map; validated site-config (PUBLIC_* optional), SITE_URL define, prerender.origin
-- [ ] 10-02-PLAN.md — Host-aware CSP builder; build targets root/sub/configured; CSP oracle JSON-LD exemption + optional analytics host
-- [ ] 10-03-PLAN.md — Lint boundaries (lib/analytics fetch allowlist, marketing-safe imports) + banned-terms scope
-- [ ] 10-04-PLAN.md — Full pnpm audit clean with reviewed exceptions; Dependabot npm; supply-chain test
+- [x] 10-02-PLAN.md — Host-aware CSP builder; build targets root/sub/configured; CSP oracle JSON-LD exemption + optional analytics host
+- [x] 10-03-PLAN.md — Lint boundaries (lib/analytics fetch allowlist, marketing-safe imports) + banned-terms scope
+- [x] 10-04-PLAN.md — Full pnpm audit clean with reviewed exceptions; Dependabot npm; supply-chain test
 - [ ] 10-05-PLAN.md — E2E harness: configured build/project, MIME types, beacon collector, siteEnv, CI configured leg
 - [ ] 10-06-PLAN.md — Analytics beacon modules (payload whitelist, GPC/DNT, no-cors transport) test-first
 - [ ] 10-07-PLAN.md — SEO libs: JSON-LD serializer, canonical paths, WOFF->SFNT + resvg share-card renderer
-- [ ] 10-08-PLAN.md — Core finance calculators (cap rate, cash-on-cash, DSCR) + input parsing/formatting
+- [x] 10-08-PLAN.md — Core finance calculators (cap rate, cash-on-cash, DSCR) + input parsing/formatting
 - [ ] 10-09-PLAN.md — SEO and JS-budget build oracles with mutation tests
 - [ ] 10-10-PLAN.md — Calculator content module, SeoHead, sitemap/robots and six OG endpoints
 - [ ] 10-11-PLAN.md — SeoHead on marketing pages, noindex elsewhere, SEO E2E
@@ -466,5 +466,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
-| 10. Launch Hardening & Go-to-Market | 1/23 | In Progress|  |
+| 10. Launch Hardening & Go-to-Market | 5/23 | In Progress|  |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
