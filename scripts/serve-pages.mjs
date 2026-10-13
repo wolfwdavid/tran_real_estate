@@ -15,8 +15,11 @@
 //     GET  /                the page that frames the root origin three ways (framing spec)
 //     POST /api/send        an Umami-shaped first-party analytics collector (the configured
 //                           build's analytics host); records each beacon body and headers
+//                           (incl. `userAgent`). The record is shared by every worker, so specs
+//                           tag their user agent and filter on it rather than wiping the record.
 //     GET  /__beacons       the recorded beacons as JSON
-//     POST /__beacons/reset empties the record
+//     POST /__beacons/reset empties the record; `?ua=<tag>` removes only entries whose user agent
+//                           contains <tag>
 //
 // The root, sub and configured listeners start only when their build directory exists. The
 // attacker listener always starts and answers GET / with 200, which is why Playwright's readiness
@@ -132,6 +135,7 @@ http
 					cookie: req.headers.cookie ?? null,
 					referer: req.headers.referer ?? null,
 					origin: req.headers.origin ?? null,
+					userAgent: req.headers['user-agent'] ?? null,
 					at: Date.now()
 				});
 				res.writeHead(200);
@@ -140,7 +144,11 @@ http
 			return;
 		}
 		if (url.pathname === '/api/send' && req.method === 'OPTIONS') {
-			beacons.push({ preflight: true, at: Date.now() });
+			beacons.push({
+				preflight: true,
+				userAgent: req.headers['user-agent'] ?? null,
+				at: Date.now()
+			});
 			res.writeHead(204);
 			return res.end();
 		}
@@ -149,7 +157,13 @@ http
 			return res.end(JSON.stringify(beacons));
 		}
 		if (url.pathname === '/__beacons/reset' && req.method === 'POST') {
-			beacons.length = 0;
+			const tag = url.searchParams.get('ua');
+			if (tag) {
+				const keep = beacons.filter((b) => !String(b.userAgent ?? '').includes(tag));
+				beacons.splice(0, beacons.length, ...keep);
+			} else {
+				beacons.length = 0;
+			}
 			res.writeHead(204);
 			return res.end();
 		}
