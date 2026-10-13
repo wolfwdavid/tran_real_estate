@@ -3,6 +3,8 @@
 	// built in; otherwise a coming-soon panel with no fields. Submit order: validate, then the
 	// honeypot/timing gate, then ONE request to https://api.web3forms.com/submit carrying only the
 	// email, the portal and fixed labels. Success lives in memory only: nothing is stored.
+	// The email input deliberately has no `name`: a submit before hydration falls back to a native
+	// GET to the same page, and without a name the address never lands in the URL or history.
 	import { onMount, tick } from 'svelte';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
@@ -53,7 +55,13 @@
 	let buttonEl = $state<HTMLButtonElement | null>(null);
 	let successTitle = $state<HTMLParagraphElement | null>(null);
 
-	onMount(() => (mountedAt = Date.now()));
+	// Hydration marker: the prerendered form is inert until this is set (specs wait on it).
+	let ready = $state(false);
+
+	onMount(() => {
+		mountedAt = Date.now();
+		ready = true;
+	});
 
 	function onblur() {
 		// Validate on blur only once something was typed, so tabbing past is not an error.
@@ -130,6 +138,7 @@
 					<form
 						novalidate
 						onsubmit={submit}
+						data-ready={ready ? '' : undefined}
 						aria-busy={sending}
 						aria-label={copy.heading(portal)}
 						class="grid max-w-[480px] gap-2"
@@ -160,7 +169,6 @@
 								bind:value={email}
 								{onblur}
 								type="email"
-								name="email"
 								autocomplete="email"
 								inputmode="email"
 								autocapitalize="off"
