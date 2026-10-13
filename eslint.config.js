@@ -79,6 +79,18 @@ export default defineConfig(
 	...svelte.configs.prettier,
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node } } },
 	{
+		// Phase 10 build-time constants (apps/web/vite.config.ts define), read only through $lib/site.
+		languageOptions: {
+			globals: {
+				__SITE_URL__: 'readonly',
+				__ANALYTICS_HOST__: 'readonly',
+				__ANALYTICS_WEBSITE_ID__: 'readonly',
+				__WEB3FORMS_KEY__: 'readonly',
+				__CONTACT_EMAIL__: 'readonly'
+			}
+		}
+	},
+	{
 		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
 			parserOptions: { projectService: true, extraFileExtensions: ['.svelte'], parser: ts.parser }

@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
 import { resolveBasePath, resolveBuildDir } from './src/lib/base-path.js';
+import { resolveSiteOrigin } from './src/lib/site-config.js';
 
 const base = resolveBasePath();
 const out = resolveBuildDir();
@@ -22,6 +23,9 @@ export default {
 		// crawler never sees it; list it explicitly so handleUnseenRoutes stays 'fail'. The same
 		// holds for the investor query-param routes (?ids=, ?id=, ?zip=) and the memo printout.
 		prerender: {
+			// Absolute og:image/og:url/canonical links on the site origin are crawled like relative ones,
+			// so a missing share card fails the build (10-RESEARCH Pattern 3).
+			origin: resolveSiteOrigin(),
 			entries: [
 				'*',
 				'/renter/listing/',
