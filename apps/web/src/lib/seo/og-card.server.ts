@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import { tokens } from '@tran/brand';
+import type { OgCard } from '../content/tools.js';
 import { CONTOUR_PATHS, OG_MARKS } from './og-marks.js';
 import { woffToSfnt } from './woff.server.js';
 
@@ -13,12 +14,8 @@ import { woffToSfnt } from './woff.server.js';
  * own fonts: `loadSystemFonts: false` keeps Windows and CI identical, and a missing font throws
  * instead of silently rendering a text-less card.
  */
-export interface OgCard {
-	eyebrow: string;
-	titleLines: readonly string[];
-	subline: string;
-	mark: 'renter' | 'investor' | null;
-}
+// The card shape is defined once, next to the copy that fills it.
+export type { OgCard };
 
 /** nameID 1 of each static Fontsource file (asserted in woff.server.test.ts). */
 export const OG_FONT_FAMILY = {

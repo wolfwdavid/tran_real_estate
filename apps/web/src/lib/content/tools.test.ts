@@ -1,12 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { findBanned } from '../../../../../scripts/lib/banned-terms-rules.mjs';
 import * as content from './tools';
-import { DEFAULT_OG, SHARED_TOOL_COPY, TOOLS, TOOLS_HUB, TOOL_SLUGS, type ToolContent } from './tools';
+import {
+	DEFAULT_OG,
+	SHARED_TOOL_COPY,
+	TOOLS,
+	TOOLS_HUB,
+	TOOL_SLUGS,
+	type ToolContent
+} from './tools';
 
 /** Collects every string value in a nested object/array (functions are rendered with a sample arg). */
 function collectStrings(value: unknown, out: string[] = []): string[] {
 	if (typeof value === 'string') out.push(value);
-	else if (typeof value === 'function') out.push(String((value as (s: string) => string)('Sample')));
+	else if (typeof value === 'function')
+		out.push(String((value as (s: string) => string)('Sample')));
 	else if (Array.isArray(value)) for (const v of value) collectStrings(v, out);
 	else if (value && typeof value === 'object')
 		for (const v of Object.values(value)) collectStrings(v, out);
@@ -53,13 +61,27 @@ describe('tool content', () => {
 		const examples = (slug: 'cap-rate' | 'cash-on-cash' | 'dscr') =>
 			TOOLS[slug].fields.map((f) => f.example);
 		expect(examples('cap-rate')).toEqual(['250,000', '2,000', '0', '5', '600']);
-		expect(examples('cash-on-cash')).toEqual(['250,000', '25', '7,500', '7', '30', '2,000', '5', '600']);
+		expect(examples('cash-on-cash')).toEqual([
+			'250,000',
+			'25',
+			'7,500',
+			'7',
+			'30',
+			'2,000',
+			'5',
+			'600'
+		]);
 		expect(examples('dscr')).toEqual(['2,000', '5', '600', '187,500', '7', '30']);
 		expect(TOOLS.affordability.fields).toEqual([]);
 	});
 
 	it('pairs each field kind with its accessible unit suffix and adornment', () => {
-		const suffix = { money: ', in dollars', percent: ', as a percent', rate: ', as a percent', years: ', in years' };
+		const suffix = {
+			money: ', in dollars',
+			percent: ', as a percent',
+			rate: ', as a percent',
+			years: ', in years'
+		};
 		const adornment = { money: '$', percent: '%', rate: '%', years: 'years' };
 		for (const t of tools)
 			for (const f of t.fields) {
@@ -70,7 +92,9 @@ describe('tool content', () => {
 		expect(price.positive).toBe(true);
 		const loan = TOOLS.dscr.fields.find((f) => f.id === 'loanAmount');
 		expect(loan?.positive).not.toBe(true);
-		expect(TOOLS['cap-rate'].fields.find((f) => !f.required)?.label).toBe('Other monthly income (optional)');
+		expect(TOOLS['cap-rate'].fields.find((f) => !f.required)?.label).toBe(
+			'Other monthly income (optional)'
+		);
 	});
 
 	it('marks the cards: renter for affordability, investor for the rest and the hub, none for the default', () => {
