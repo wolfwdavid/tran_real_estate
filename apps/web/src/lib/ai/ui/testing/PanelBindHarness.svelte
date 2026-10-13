@@ -5,8 +5,9 @@
 	import GenerationPanel from '../GenerationPanel.svelte';
 	import type { PanelState } from '../panel-state.svelte';
 
+	// `state` is renamed locally: a binding named `state` would shadow the $state rune.
 	let {
-		state,
+		state: panelState,
 		...rest
 	}: { state: PanelState } & Omit<ComponentProps<typeof GenerationPanel>, 'state'> = $props();
 
@@ -18,5 +19,5 @@
 	}
 </script>
 
-<GenerationPanel bind:this={panel} bind:checkPending {...rest} {state} />
+<GenerationPanel bind:this={panel} bind:checkPending {...rest} state={panelState} />
 <output data-testid="pending">{String(checkPending)}</output>

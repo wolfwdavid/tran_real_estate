@@ -22,7 +22,7 @@
 	// footer and the three-exit group are replaced by one PlatformCard per section, each with
 	// exactly one Copy exit. Without `sections` the panel renders exactly as before. `state` is the test/SSR seam
 	// and the Draft history wiring; when absent the panel builds its own PanelState with live deps.
-	import { onMount, tick } from 'svelte';
+	import { flushSync, onMount, tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
@@ -88,6 +88,7 @@
 		artifactId = $bindable(null),
 		draftText = $bindable(''),
 		running = $bindable(false),
+		checkPending = $bindable(false),
 		/* eslint-enable no-useless-assignment */
 		state: provided
 	}: {
@@ -147,6 +148,11 @@
 		 * draftText, so a partial stream is never judged as a finished draft).
 		 */
 		running?: boolean;
+		/**
+		 * Read-only: true while an edit recheck is pending (findings may not match draftText yet).
+		 * Hosts withhold their own exit hrefs while true.
+		 */
+		checkPending?: boolean;
 		state?: PanelState;
 	} = $props();
 
@@ -246,6 +252,7 @@
 		artifactId = st.artifactId;
 		draftText = st.text;
 		running = st.running;
+		checkPending = st.checkPending;
 	});
 
 	/**
@@ -261,6 +268,11 @@
 	/** Re-reads the provider selection (chip + "What will be sent") after a Settings change. */
 	export function refreshProvider(): void {
 		if (!st.running) void st.preview();
+	}
+
+	/** Runs a pending edit recheck now. Hosts call it (then flushSync) before their own exit reads the bindables. */
+	export function flushChecks(): void {
+		st.flushChecks();
 	}
 
 	const titleId = `${id}-title`;
@@ -377,7 +389,22 @@
 		s?.addRange(range);
 	}
 
+	/**
+	 * Runs a pending edit recheck and writes the result to the DOM before the caller reads the gate
+	 * or moves focus. flushSync matters twice: the email href must be restored or removed before the
+	 * browser's post-dispatch link activation, and FindingsSummary swaps the branch holding
+	 * `-findings-title` when findings go 0 -> N, so focusing before the flush would focus a node
+	 * that is about to be removed (focus falls to body).
+	 */
+	function settle(): void {
+		if (st.checkPending) {
+			st.flushChecks();
+			flushSync();
+		}
+	}
+
 	async function onCopy(): Promise<void> {
+		settle();
 		if (gate.exits.copy.gated) {
 			focusFindingsTitle();
 			await st.copy(); // announces the reason, does nothing else
@@ -387,19 +414,30 @@
 	}
 
 	function onEmail(e: MouseEvent | KeyboardEvent): void {
+		// A click may arrive with no pointerdown/keydown first (assistive tech, el.click()) while a
+		// recheck is pending. Settle here too: the browser decides whether to follow the link only
+		// after this handler, so the href settle writes is the one that opens (or not).
+		settle();
 		if (gate.exits.email.gated) {
 			e.preventDefault();
 			focusFindingsTitle();
+			st.emailClicked(); // announces the reason, does nothing else
+			return;
 		}
+		// The text is checked and the href is live: the browser follows it after this handler.
 		st.emailClicked();
 	}
 
 	function onEmailKey(e: KeyboardEvent): void {
-		// A gated link has no href, so Enter would do nothing natively.
-		if (e.key === 'Enter' && gate.exits.email.gated) onEmail(e);
+		if (e.key !== 'Enter') return;
+		settle();
+		// A link without an href ignores Enter natively, so run the gated path here. With an href
+		// the native click follows and onEmail records it (do not call onEmail twice).
+		if (!st.emailHref) onEmail(e);
 	}
 
 	async function onMarkSent(): Promise<void> {
+		settle();
 		if (gate.exits['marked-sent'].gated) focusFindingsTitle();
 		await st.markSent();
 	}
@@ -619,6 +657,7 @@
 						exitDisabledReason={exitDisabled.copy ?? null}
 						clipboard={st.deps.clipboard}
 						announce={st.deps.announce}
+						recheckMs={st.deps.recheckMs}
 						onCopied={(key, text) => void onSectionCopied(key, text)}
 					/>
 				{/each}
@@ -728,11 +767,12 @@
 				>
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- an email-app link built by exits.ts buildMailto, not app navigation -->
 				<a
-					href={gate.exits.email.gated ? undefined : st.mailto.href}
-					role={gate.exits.email.gated ? 'link' : undefined}
-					tabindex={gate.exits.email.gated ? 0 : undefined}
+					href={st.emailHref}
+					role={st.emailHref ? undefined : 'link'}
+					tabindex={st.emailHref ? undefined : 0}
 					aria-disabled={gate.exits.email.gated ? 'true' : undefined}
 					aria-describedby={describedBy('email')}
+					onpointerdown={settle}
 					onclick={onEmail}
 					onkeydown={onEmailKey}
 					class={buttonVariants({ variant: 'outline', class: `w-full sm:w-auto ${GATED}` })}
