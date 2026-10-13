@@ -403,7 +403,7 @@ Plans:
 - [x] 10-07-PLAN.md — SEO libs: JSON-LD serializer, canonical paths, WOFF->SFNT + resvg share-card renderer
 - [x] 10-08-PLAN.md — Core finance calculators (cap rate, cash-on-cash, DSCR) + input parsing/formatting
 - [x] 10-09-PLAN.md — SEO and JS-budget build oracles with mutation tests
-- [ ] 10-10-PLAN.md — Calculator content module, SeoHead, sitemap/robots and six OG endpoints
+- [x] 10-10-PLAN.md — Calculator content module, SeoHead, sitemap/robots and six OG endpoints
 - [ ] 10-11-PLAN.md — SeoHead on marketing pages, noindex elsewhere, SEO E2E
 - [ ] 10-12-PLAN.md — Calculator components (shell, fields, three calculators)
 - [ ] 10-13-PLAN.md — ToolPage frame, /tools/ hub and three calculator pages
@@ -415,7 +415,7 @@ Plans:
 - [ ] 10-19-PLAN.md — Beacon wiring, privacy Usage counts, owner go-live steps, beacon/third-party E2E
 - [ ] 10-20-PLAN.md — Onboarding, setup and CLS E2E
 - [ ] 10-21-PLAN.md — Keyed-state axe on every route, disclaimer audit, final route lists
-- [ ] 10-22-PLAN.md — Launch-audit generator + PITFALLS evidence map
+- [x] 10-22-PLAN.md — Launch-audit generator + PITFALLS evidence map
 - [ ] 10-23-PLAN.md — Compose verify/CI, generate docs/LAUNCH-AUDIT.md, HUMAN-UAT, validation sign-off
 **Research flag**: light (verify Umami collection-API CORS from the deployed origin)
 **UI hint**: yes (onboarding tour, SEO tool pages, waitlist/feedback). Use `/gsd:ui-phase 10`.
@@ -466,5 +466,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
-| 10. Launch Hardening & Go-to-Market | 9/23 | In Progress|  |
+| 10. Launch Hardening & Go-to-Market | 11/23 | In Progress|  |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
