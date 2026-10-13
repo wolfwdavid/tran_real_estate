@@ -1,5 +1,7 @@
-// The ONLY source file that names the Phase 10 build-time globals (vite.config.ts `define`, values
-// validated in site-config.js). Everything else imports these constants.
+// The canonical reader of the Phase 10 build-time globals (vite.config.ts `define`, values
+// validated in site-config.js). Everything else imports these constants. Two budget-driven
+// exceptions read the analytics defines directly: the root layout's compile-time gate and the lazy
+// lib/analytics/boot.ts (its test pins it to the values here).
 
 /** Absolute site URL: validated origin + base path, e.g. https://tranrealestate.github.io (+ /tran_real_estate on the sub build). Use for canonical, og:*, JSON-LD url, sitemap, robots. NEVER build absolute URLs from $app/paths base (relative during prerender) or page.url. */
 export const SITE_URL: string = __SITE_URL__;

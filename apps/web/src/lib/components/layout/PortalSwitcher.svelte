@@ -4,8 +4,10 @@
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import Menu from '@lucide/svelte/icons/menu';
-	import X from '@lucide/svelte/icons/x';
+	// The Menu / Close icons are inline copies of Lucide `menu` and `x` (ISC licence, @lucide/svelte
+	// 1.45.0 path data), not @lucide/svelte imports. This header is on every marketing page, and the
+	// two imports alone pulled Lucide's shared Icon runtime (~1.7 KB gz) into the initial JS of the
+	// budget-gated tool pages, which use no other @lucide/svelte icon (see ToolIcon.svelte).
 
 	let { showSettings = false }: { showSettings?: boolean } = $props();
 
@@ -90,10 +92,29 @@
 		aria-controls="portal-menu"
 		onclick={() => (open = !open)}
 	>
-		{#if open}<X size={20} aria-hidden="true" />Close{:else}<Menu
-				size={20}
-				aria-hidden="true"
-			/>Menu{/if}
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="20"
+			height="20"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class={['lucide', open ? 'lucide-x' : 'lucide-menu']}
+			aria-hidden="true"
+			focusable="false"
+		>
+			{#if open}
+				<path d="M18 6 6 18" />
+				<path d="m6 6 12 12" />
+			{:else}
+				<path d="M4 5h16" />
+				<path d="M4 12h16" />
+				<path d="M4 19h16" />
+			{/if}
+		</svg>{open ? 'Close' : 'Menu'}
 	</button>
 
 	<ul id="portal-menu" class="-mx-6 basis-full bg-surface sm:hidden md:-mx-8" hidden={!open}>
