@@ -9,7 +9,7 @@
 	import { resolve } from '$app/paths';
 	import X from '@lucide/svelte/icons/x';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { GUIDE_COPY as G } from '$lib/content/onboarding';
+	import { GUIDE_INTRO_COPY as G } from '$lib/content/onboarding-guide';
 	import PortalTile from './PortalTile.svelte';
 	import { BTN } from './guide-buttons';
 	import {

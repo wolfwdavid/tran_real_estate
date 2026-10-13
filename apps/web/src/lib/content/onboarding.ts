@@ -1,6 +1,10 @@
 // Onboarding copy (UI-SPEC "Landing: hero change and Get started guide", "/setup/rentcast/",
-// "Settings: Getting started", "Live-region announcements"). Verbatim; every string lives here once.
-// Marketing-safe: imports nothing.
+// "Settings: Getting started", "Live-region announcements"). Verbatim; every string lives once,
+// here or in ./onboarding-guide (the landing-initial subset, re-exported below).
+// Marketing-safe: imports only its sibling content module.
+import { GUIDE_INTRO_COPY } from './onboarding-guide';
+
+export { GUIDE_INTRO_COPY };
 
 export type OnboardingPortalName = 'renter' | 'investor' | 'agent';
 
@@ -15,30 +19,9 @@ const SAMPLE_OR_LIVE: TourStep = {
 	body: "Sample data is made up, uses no calls, and needs no key. It's the quickest way to look around. Live data comes from RentCast with your own free key, which includes 50 calls a month. Tran stops at a cap you set, 40 to start, and asks before each extra call."
 };
 
+/** Full guide copy: the landing-initial strings plus the tour controls (loaded with the tour). */
 export const GUIDE_COPY = {
-	eyebrow: 'Get started',
-	heading: 'Get started',
-	lead: "Where do you want to start? Pick a portal and we'll show you around in three short steps. You can close this guide at any time.",
-	helper: 'No account needed. Everything you save stays in this browser.',
-	hide: 'Hide this guide',
-	hidden: 'Guide hidden. You can show it again from Settings or here.',
-	tiles: {
-		renter: {
-			title: 'Renter',
-			description: "Find rentals and see what's new each time you come back.",
-			action: 'Start the tour'
-		},
-		investor: {
-			title: 'Investor',
-			description: 'Run the numbers on a property before you spend a weekend on it.',
-			action: 'Start the tour'
-		},
-		agent: {
-			title: 'Agent',
-			description: 'Keep leads, follow-ups, and listing content in one place.',
-			action: 'Start the tour'
-		}
-	},
+	...GUIDE_INTRO_COPY,
 	buttons: {
 		changePortal: 'Change portal',
 		back: 'Back',
@@ -50,13 +33,7 @@ export const GUIDE_COPY = {
 	},
 	tourHeader: { renter: 'Renter tour', investor: 'Investor tour', agent: 'Agent tour' },
 	progress: (n: number) => `Step ${n} of 3`,
-	step3Helper: 'You can switch between sample and live data any time in Settings.',
-	compact: {
-		text: 'New here, or want a refresher?',
-		show: 'Show me around',
-		open: (p: OnboardingPortalName) => `Open ${p} portal`
-	},
-	heroCta: 'Show me around'
+	step3Helper: 'You can switch between sample and live data any time in Settings.'
 } as const;
 
 /** Three steps per portal; renter and investor share step 3. */
