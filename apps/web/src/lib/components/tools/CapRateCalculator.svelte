@@ -3,14 +3,14 @@
 	import { capRateCalc, type CapRateInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolPercent } from '@tran/core/finance/tool-inputs';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { TOOLS } from '$lib/content/tools';
+	import { capRate } from '$lib/content/tools/cap-rate';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';
 	import ResultRows from './ResultRows.svelte';
 	import { createCalculatorForm, fillAnnouncement, markNegative } from './calculator-form.svelte';
 
-	const content = TOOLS['cap-rate'];
+	const content = capRate;
 	const form = createCalculatorForm(content.fields, { announce, summary: () => summary });
 
 	const result = $derived(

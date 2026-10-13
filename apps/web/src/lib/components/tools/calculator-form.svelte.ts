@@ -11,7 +11,7 @@ import {
 	validateToolField,
 	type FieldError
 } from '@tran/core/finance/tool-inputs';
-import { SHARED_TOOL_COPY, TOOLS, type ToolField } from '$lib/content/tools';
+import { NEGATIVE_SUFFIX, SHARED_TOOL_COPY, type ToolField } from '$lib/content/tools/shared';
 
 const V = SHARED_TOOL_COPY.validation;
 const ANNOUNCE_DELAY_MS = 750;
@@ -66,7 +66,7 @@ export function fillAnnouncement(template: string, x: string, y: string): string
 }
 
 const MINUS = '−';
-const NEGATIVE = TOOLS['cash-on-cash'].negativeSuffix ?? '(negative)';
+const NEGATIVE = NEGATIVE_SUFFIX;
 
 /** "−$53" -> "−$53 (negative)": the sign never depends on color (Accessibility Contract). */
 export function markNegative(text: string): string {

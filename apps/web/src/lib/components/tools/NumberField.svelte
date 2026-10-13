@@ -2,8 +2,8 @@
 	// 10-UI-SPEC "CalculatorShell" field: label (unit in the accessible name), 48px input group with
 	// an aria-hidden adornment, optional helper and a text + icon error slot linked by
 	// aria-describedby. Plain elements only, no headless primitives.
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import type { ToolField } from '$lib/content/tools';
+	import ToolIcon from './ToolIcon.svelte';
+	import type { ToolField } from '$lib/content/tools/shared';
 
 	interface Props {
 		field: ToolField;
@@ -62,7 +62,7 @@
 	{/if}
 	<p id="{id}-error" class="flex items-center gap-1 text-label text-destructive">
 		{#if error}
-			<CircleAlert class="size-4 shrink-0" aria-hidden="true" />
+			<ToolIcon name="circle-alert" class="size-4 shrink-0" />
 			{error}
 		{/if}
 	</p>

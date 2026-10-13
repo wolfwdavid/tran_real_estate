@@ -3,8 +3,8 @@
 	// grid from 1024px. Enter only re-validates (results are live). The results section is a
 	// labelled section, NOT a live region: the form announces one debounced summary instead.
 	import type { Snippet } from 'svelte';
-	import CalculatorIcon from '@lucide/svelte/icons/calculator';
-	import { SHARED_TOOL_COPY as C, type ToolField } from '$lib/content/tools';
+	import ToolIcon from './ToolIcon.svelte';
+	import { SHARED_TOOL_COPY as C, type ToolField } from '$lib/content/tools/shared';
 	import type { CalculatorForm } from './calculator-form.svelte';
 	import NumberField from './NumberField.svelte';
 
@@ -67,7 +67,7 @@
 					class="{button} border border-border-strong"
 					onclick={() => form.fill()}
 				>
-					<CalculatorIcon class="size-4" aria-hidden="true" />
+					<ToolIcon name="calculator" class="size-4" />
 					{C.fillExample}
 				</button>
 				<button type="button" class={button} onclick={onclear}>{C.clear}</button>

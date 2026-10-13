@@ -4,21 +4,19 @@
 	// visible FAQ and the FAQPage JSON-LD read the same `tool.faq`, so they cannot drift.
 	import type { Snippet } from 'svelte';
 	import { resolve } from '$app/paths';
-	import ServerOff from '@lucide/svelte/icons/server-off';
-	import Info from '@lucide/svelte/icons/info';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
 	import SeoHead from '$lib/seo/SeoHead.svelte';
 	import { faqPage, webApplication } from '$lib/seo/jsonld';
 	import { SITE_URL } from '$lib/site';
 	import {
 		AFFORDABILITY_READY,
 		SHARED_TOOL_COPY as C,
+		TOOL_NAMES,
 		TOOL_SLUGS,
-		TOOLS,
 		type ToolContent,
 		type ToolSlug
-	} from '$lib/content/tools';
+	} from '$lib/content/tools/shared';
 	import Breadcrumb from './Breadcrumb.svelte';
+	import ToolIcon from './ToolIcon.svelte';
 
 	let { tool, children }: { tool: ToolContent; children: Snippet } = $props();
 
@@ -40,6 +38,11 @@
 		'cash-on-cash': resolve('/tools/cash-on-cash/'),
 		dscr: resolve('/tools/dscr/')
 	};
+
+	// ButtonLink's classes, inlined: ButtonLink and its Lucide arrow are two extra chunks on a
+	// calculator page, and the tool-page budget (60 KB gz) has no room for them (10-13).
+	const cta =
+		'inline-flex min-h-12 cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-md px-6 text-body font-semibold transition-colors duration-150 ease-out motion-safe:active:translate-y-px';
 
 	const primaryHref = $derived(primaryHrefs[tool.goFurther.primary.path]);
 	const sampleHref = $derived(sampleHrefs[tool.goFurther.sample.path]);
@@ -69,7 +72,7 @@
 		<h1 class="font-display text-display font-semibold [text-wrap:balance]">{tool.h1}</h1>
 		<p class="max-w-reading text-body">{tool.lead}</p>
 		<p class="flex gap-1 text-label text-muted-foreground">
-			<ServerOff size={16} class="mt-0.5 shrink-0" aria-hidden="true" />
+			<ToolIcon name="server-off" size={16} class="mt-0.5 shrink-0" />
 			<span>{C.privacy}</span>
 		</p>
 	</header>
@@ -80,7 +83,7 @@
 		aria-labelledby="disclaimer-title"
 		class="flex max-w-reading gap-3 rounded-lg border-l-4 border-secondary bg-secondary-surface p-4 sm:p-6"
 	>
-		<Info size={20} class="mt-0.5 shrink-0 text-secondary" aria-hidden="true" />
+		<ToolIcon name="info" size={20} class="mt-0.5 shrink-0 text-secondary" />
 		<div class="space-y-1">
 			<p id="disclaimer-title" class="font-semibold">General guidelines, not financial advice</p>
 			<p>{C.disclaimerBody}</p>
@@ -117,10 +120,18 @@
 		</h2>
 		<p class="max-w-reading text-body">{tool.goFurther.body}</p>
 		<div class="flex flex-wrap gap-4 pt-2">
-			<ButtonLink href={primaryHref} variant="primary" arrow
-				>{tool.goFurther.primary.label}</ButtonLink
+			<!-- eslint-disable svelte/no-navigation-without-resolve -- both hrefs are resolve() output -->
+			<a
+				href={primaryHref}
+				class={[cta, 'bg-primary text-primary-foreground hover:bg-primary-hover']}
+				>{tool.goFurther.primary.label}<ToolIcon name="arrow-right" size={16} /></a
 			>
-			<ButtonLink href={sampleHref} variant="secondary">Try sample data</ButtonLink>
+			<a
+				href={sampleHref}
+				class={[cta, 'border border-border-strong text-foreground hover:bg-surface']}
+				>Try sample data</a
+			>
+			<!-- eslint-enable svelte/no-navigation-without-resolve -->
 		</div>
 	</div>
 </section>
@@ -137,7 +148,7 @@
 				<a
 					href={toolHrefs[slug]}
 					class="inline-flex min-h-11 items-center text-primary underline decoration-1 underline-offset-[3px]"
-					>{TOOLS[slug].name}</a
+					>{TOOL_NAMES[slug]}</a
 				>
 			</li>
 		{/each}

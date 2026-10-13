@@ -5,14 +5,14 @@
 	import { dscrCalc, type DscrInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolRatio } from '@tran/core/finance/tool-inputs';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { TOOLS } from '$lib/content/tools';
+	import { dscr as dscrContent } from '$lib/content/tools/dscr';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';
 	import ResultRows from './ResultRows.svelte';
 	import { createCalculatorForm, fillAnnouncement, markNegative } from './calculator-form.svelte';
 
-	const content = TOOLS.dscr;
+	const content = dscrContent;
 	const form = createCalculatorForm(content.fields, { announce, summary: () => summary });
 
 	const result = $derived(

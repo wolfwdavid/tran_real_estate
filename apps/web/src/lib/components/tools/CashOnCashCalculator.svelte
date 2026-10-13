@@ -5,14 +5,14 @@
 	import { cashOnCashCalc, type CashOnCashInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolPercent } from '@tran/core/finance/tool-inputs';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { TOOLS } from '$lib/content/tools';
+	import { cashOnCash } from '$lib/content/tools/cash-on-cash';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';
 	import ResultRows from './ResultRows.svelte';
 	import { createCalculatorForm, fillAnnouncement, markNegative } from './calculator-form.svelte';
 
-	const content = TOOLS['cash-on-cash'];
+	const content = cashOnCash;
 	const NO_CASH = 'With no cash invested, there is no cash-on-cash return to show.';
 	const form = createCalculatorForm(content.fields, { announce, summary: () => summary });
 
