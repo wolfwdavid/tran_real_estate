@@ -394,7 +394,7 @@ Plans:
 **Plans**: 23 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Wave 0 gate + Phase 2-9 contract map; validated site-config (PUBLIC_* optional), SITE_URL define, prerender.origin
+- [x] 10-01-PLAN.md — Wave 0 gate + Phase 2-9 contract map; validated site-config (PUBLIC_* optional), SITE_URL define, prerender.origin
 - [ ] 10-02-PLAN.md — Host-aware CSP builder; build targets root/sub/configured; CSP oracle JSON-LD exemption + optional analytics host
 - [ ] 10-03-PLAN.md — Lint boundaries (lib/analytics fetch allowlist, marketing-safe imports) + banned-terms scope
 - [ ] 10-04-PLAN.md — Full pnpm audit clean with reviewed exceptions; Dependabot npm; supply-chain test
@@ -466,5 +466,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
-| 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
+| 10. Launch Hardening & Go-to-Market | 1/23 | In Progress|  |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
