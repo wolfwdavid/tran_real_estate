@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
 	import SeoHead from '$lib/seo/SeoHead.svelte';
+	import WaitlistForm from '$lib/components/forms/WaitlistForm.svelte';
+	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '$lib/site';
 	import type { Audience, FeatureIcon } from '$lib/content/audiences';
 	import Search from '@lucide/svelte/icons/search';
 	import Bell from '@lucide/svelte/icons/bell';
@@ -18,7 +20,8 @@
 
 	let { audience }: { audience: Audience } = $props();
 
-	// Typed literal paths keep resolve() checked. Both CTAs open the portal until sample mode ships.
+	// Typed literal paths keep resolve() checked. "Try sample data" adds ?source=sample, which the
+	// (app) layout turns into sample mode (UI-SPEC Planner Note 3).
 	const portalHref = {
 		renter: resolve('/renter/'),
 		investor: resolve('/investor/'),
@@ -52,7 +55,7 @@
 	<p class="mt-4 max-w-reading text-body">{audience.lead}</p>
 	<div class="mt-8 flex flex-col gap-2 sm:flex-row sm:gap-4">
 		<ButtonLink {href} variant="primary" arrow>{audience.openLabel}</ButtonLink>
-		<ButtonLink {href} variant="secondary">Try sample data</ButtonLink>
+		<ButtonLink href={`${href}?source=sample`} variant="secondary">Try sample data</ButtonLink>
 	</div>
 </section>
 
@@ -82,6 +85,12 @@
 		</ul>
 	</div>
 </section>
+
+<WaitlistForm
+	portal={audience.portal}
+	accessKey={WEB3FORMS_KEY || undefined}
+	contactEmail={CONTACT_EMAIL || undefined}
+/>
 
 <section aria-labelledby="closing-heading" class="mt-12 bg-surface py-12 md:mt-16 md:py-16">
 	<div class="mx-auto max-w-page px-6 md:px-8">
