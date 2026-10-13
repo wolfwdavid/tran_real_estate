@@ -599,6 +599,125 @@ describe('exits (AI-04) and onExit', () => {
 	});
 });
 
+describe('exits inside the recheck window (edit mode, before the debounced recheck runs)', () => {
+	const BLOCK = 'Perfect for young professionals.';
+	const BLOCK_REASON = 'Fix the 1 phrase marked Must fix to copy or email this draft.';
+	const CLEAN_EDIT = 'Bright two-bedroom near the park.';
+
+	test('copy runs the pending recheck first and refuses a Must-fix edit', async () => {
+		const { state, clipboard, onExit, announce } = setup({ deps: { recheckMs: 300 } });
+		await state.generate();
+		vi.useFakeTimers();
+		try {
+			state.setText(BLOCK);
+			expect(state.checkPending).toBe(true);
+			expect(await state.copy()).toBe(false);
+			expect(clipboard.writeText).not.toHaveBeenCalled();
+			expect(onExit).not.toHaveBeenCalled();
+			expect(state.checkPending).toBe(false);
+			expect(state.findings).toHaveLength(1);
+			expect(state.findings[0]!.severity).toBe('block');
+			expect(said(announce).at(-1)).toBe(BLOCK_REASON);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('markSent runs the pending recheck first and does not mark a Must-fix edit sent', async () => {
+		const { state, repo, onExit } = setup({ deps: { recheckMs: 300 } });
+		await state.generate();
+		vi.useFakeTimers();
+		try {
+			state.setText(BLOCK);
+			await state.markSent();
+			expect(repo.setStatus).not.toHaveBeenCalledWith('a1', 'sent', expect.anything());
+			expect(state.artifactStatus).toBe('draft');
+			expect(state.sentAt).toBeNull();
+			expect(onExit).not.toHaveBeenCalled();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('the email link has no href while pending and emailClicked refuses a Must-fix edit', async () => {
+		const { state, onExit } = setup({
+			deps: { recheckMs: 300, mailto: { to: 'agent@example.com' } }
+		});
+		await state.generate();
+		vi.useFakeTimers();
+		try {
+			state.setText(BLOCK);
+			expect(state.emailHref).toBeUndefined();
+			expect(state.emailClicked()).toBe(false);
+			expect(onExit).not.toHaveBeenCalled();
+			expect(state.checkPending).toBe(false);
+			expect(state.emailHref).toBeUndefined();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('a clean edit gets its email href back once the recheck runs', async () => {
+		const { state } = setup({ deps: { recheckMs: 300, mailto: { to: 'agent@example.com' } } });
+		await state.generate();
+		vi.useFakeTimers();
+		try {
+			state.setText(CLEAN_EDIT);
+			expect(state.emailHref).toBeUndefined();
+			vi.advanceTimersByTime(300);
+			expect(state.checkPending).toBe(false);
+			expect(state.emailHref).toBe(state.mailto.href);
+			expect(state.emailHref).toContain(encodeURIComponent('near the park'));
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('a clean edit copied inside the window copies the current text', async () => {
+		const { state, clipboard } = setup({ deps: { recheckMs: 300 } });
+		await state.generate();
+		vi.useFakeTimers();
+		try {
+			state.setText(CLEAN_EDIT);
+			expect(await state.copy()).toBe(true);
+			expect(clipboard.writeText).toHaveBeenCalledWith(CLEAN_EDIT);
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('a new Review phrase voids the acknowledgement before the exit reads the gate', async () => {
+		const { state, clipboard, announce } = setup({
+			script: { chunks: ['Walking distance to church.'] },
+			deps: { recheckMs: 300 }
+		});
+		await state.generate();
+		state.warnAck = true;
+		expect(state.gate.canExit).toBe(true);
+		vi.useFakeTimers();
+		try {
+			state.setText('Near the synagogue. Great light.');
+			expect(await state.copy()).toBe(false);
+			expect(state.warnAck).toBe(false);
+			expect(said(announce).at(-1)).toBe(
+				'Review the flagged phrases and check the box above to continue.'
+			);
+			expect(clipboard.writeText).not.toHaveBeenCalled();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
+
+	test('flushChecks does nothing when no recheck is pending', async () => {
+		const { state, repo } = setup({ deps: { recheckMs: 300 } });
+		await state.generate();
+		const before = state.findings;
+		state.flushChecks();
+		expect(state.findings).toBe(before);
+		expect(repo.updateText).not.toHaveBeenCalled();
+	});
+});
+
 describe('Draft history open', () => {
 	test('re-runs the current checker and keeps the stored status', () => {
 		const { state, announce } = setup();
