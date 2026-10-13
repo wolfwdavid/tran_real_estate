@@ -11,12 +11,13 @@ const restrictedSyntax = [
 	{
 		selector: "CallExpression[callee.name='fetch']",
 		message:
-			'fetch is allowed only in adapter folders (lib/data/rentcast, lib/ai/providers, lib/leads).'
+			'fetch is allowed only in adapter folders (lib/data/rentcast, lib/ai/providers, lib/leads, lib/analytics).'
 	},
 	{
 		selector:
 			"CallExpression[callee.type='MemberExpression'][callee.property.name='fetch'][callee.object.name=/^(window|globalThis|self)$/]",
-		message: 'fetch is allowed only in adapter folders.'
+		message:
+			'fetch is allowed only in adapter folders (lib/data/rentcast, lib/ai/providers, lib/leads, lib/analytics).'
 	},
 	{
 		// Layer 1 of the "10 re-renders spend 0" defense: a reactive effect must never spend a call.
@@ -65,6 +66,18 @@ const SHARED_NO_PORTALS = forbid(
 const restricted = (...patterns) => ['error', { patterns }];
 // Phase 8: the agent CRM spends zero RentCast calls (AGT-02/AGT-04). Bans the gateway port itself,
 // not only its internals. Phase 9's studio routes are carved out below.
+// Phase 10 (RESEARCH Pitfall 9): modules that marketing routes import. They must not drag storage,
+// AI, data or a portal feature into a marketing page. Includes the Phase 6 affordability folder.
+const MARKETING_SAFE = [
+	`${WEB}/lib/components/tools/**`,
+	`${WEB}/lib/components/onboarding/**`,
+	`${WEB}/lib/components/forms/**`,
+	`${WEB}/lib/seo/**`,
+	`${WEB}/lib/analytics/**`,
+	`${WEB}/lib/content/**`,
+	`${WEB}/lib/features/shared/affordability/**`
+];
+const MARKETING_FORBIDDEN = ['storage', 'ai', 'data', ...PORTAL_FOLDERS];
 const AGENT_NO_GATEWAY = forbid(
 	['data'],
 	'The agent CRM never touches the RentCast gateway. Market data features live in features/studio (Phase 9).'
@@ -101,7 +114,13 @@ export default defineConfig(
 		rules: { 'no-restricted-syntax': ['error', ...restrictedSyntax] }
 	},
 	{
-		files: [`${WEB}/lib/data/rentcast/**`, `${WEB}/lib/ai/providers/**`, `${WEB}/lib/leads/**`],
+		// Phase 10: lib/analytics holds the first-party beacon, the only new fetch (RESEARCH Pattern 10).
+		files: [
+			`${WEB}/lib/data/rentcast/**`,
+			`${WEB}/lib/ai/providers/**`,
+			`${WEB}/lib/leads/**`,
+			`${WEB}/lib/analytics/**`
+		],
 		rules: { 'no-restricted-syntax': 'off' }
 	},
 	{
@@ -162,8 +181,8 @@ export default defineConfig(
 				{
 					patterns: [
 						forbid(
-							['storage', 'ai', 'data'],
-							'Marketing routes must not import storage, AI, or data modules.'
+							MARKETING_FORBIDDEN,
+							'Marketing routes must not import storage, AI, data, or portal features.'
 						),
 						MAP_LIBS
 					]
@@ -228,14 +247,17 @@ export default defineConfig(
 		rules: { 'no-restricted-imports': restricted(SHARED_NO_PORTALS, DATA_INTERNALS, MAP_LIBS) }
 	},
 	{
-		files: [`${WEB}/lib/features/shared/affordability/**`],
+		// Phase 10 marketing-safe boundary (folds in the Phase 6 affordability block). Placed after
+		// the per-portal and features/shared entries so it is the last no-restricted-imports entry
+		// for these files; it repeats MAP_LIBS (flat config replaces options). forbid(['data'])
+		// already covers DATA_INTERNALS.
+		files: MARKETING_SAFE,
 		rules: {
 			'no-restricted-imports': restricted(
 				forbid(
-					['storage', 'data', 'ai', ...PORTAL_FOLDERS],
-					'The affordability calculator is reused on a marketing page: core and UI primitives only.'
+					MARKETING_FORBIDDEN,
+					'Marketing-safe modules (calculators, onboarding, forms, SEO, analytics, content) are reused on a marketing page: they must not import storage, AI, data, or portal features.'
 				),
-				DATA_INTERNALS,
 				MAP_LIBS
 			)
 		}
