@@ -1,6 +1,19 @@
 // Single source of truth for every prerendered page. routes-drift.spec.ts fails if the build
 // gains or loses an index.html that is not listed here.
-export const MARKETING_ROUTES = ['', 'for-renters/', 'for-investors/', 'for-agents/'] as const;
+/** The free calculator pages (Phase 10, GTM-03): the hub and one page per tool. */
+export const TOOL_ROUTES = [
+	'tools/',
+	'tools/cap-rate/',
+	'tools/cash-on-cash/',
+	'tools/dscr/'
+] as const;
+export const MARKETING_ROUTES = [
+	'',
+	'for-renters/',
+	'for-investors/',
+	'for-agents/',
+	...TOOL_ROUTES
+] as const;
 export const LEGAL_ROUTES = [
 	'legal/privacy/',
 	'legal/terms/',
