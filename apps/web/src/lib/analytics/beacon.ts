@@ -1,7 +1,7 @@
 /**
  * First-party analytics transport (GTM-04, RESEARCH Pattern 10). The ONLY fetch in lib/analytics.
  *
- * One CORS-simple POST to Umami's `{host}/api/send`: a string body (text/plain, no custom headers),
+ * One CORS-simple POST to Umami's `{host}/api/send`: a string body (text/plain, nothing custom set),
  * mode no-cors so no preflight runs, no cookies, no Referer header, never cached, keepalive so it
  * survives navigation. No host or no website id means nothing is ever sent; GPC/DNT means the same.
  * `globalThis.fetch` is resolved lazily inside `send`, so importing this module touches no network.
