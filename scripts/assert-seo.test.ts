@@ -68,7 +68,11 @@ function head({ path, title, description, image }: Head): string {
 const page = (headHtml: string, body: string) =>
 	`<!doctype html>\n<html lang="en">\n\t<head>\n\t\t${headHtml}\n\t</head>\n\t<body>${body}</body>\n</html>\n`;
 
-const QUESTIONS = ['What is a cap rate?', 'Is a higher cap rate better?', 'Does this include debt & taxes?'];
+const QUESTIONS = [
+	'What is a cap rate?',
+	'Is a higher cap rate better?',
+	'Does this include debt & taxes?'
+];
 
 const LD = JSON.stringify([
 	{
@@ -203,7 +207,9 @@ describe('checkSeo sitemap rules', () => {
 
 	test('a loc not under the site URL is reported', () => {
 		expectFault(
-			run((f) => edit(f, 'sitemap.xml', `${SITE}/tools/cap-rate/`, 'https://evil.example/tools/cap-rate/')),
+			run((f) =>
+				edit(f, 'sitemap.xml', `${SITE}/tools/cap-rate/`, 'https://evil.example/tools/cap-rate/')
+			),
 			/^sitemap\.xml: .*evil\.example.*not under/
 		);
 	});
@@ -258,7 +264,10 @@ describe('checkSeo sitemap rules', () => {
 
 	test('fewer sitemap URLs than minUrls is reported (non-vacuity)', () => {
 		expect(run(() => {}, { minUrls: 2 })).toEqual([]);
-		expectFault(run(() => {}, { minUrls: 14 }), /^sitemap\.xml: 2 URLs, expected at least 14/);
+		expectFault(
+			run(() => {}, { minUrls: 14 }),
+			/^sitemap\.xml: 2 URLs, expected at least 14/
+		);
 	});
 });
 
@@ -358,9 +367,7 @@ describe('checkSeo head tag rules', () => {
 
 	test('a twitter:card other than summary_large_image is reported', () => {
 		expectFault(
-			run((f) =>
-				edit(f, 'index.html', 'content="summary_large_image"', 'content="summary"')
-			),
+			run((f) => edit(f, 'index.html', 'content="summary_large_image"', 'content="summary"')),
 			/^index\.html: twitter:card is "summary", expected "summary_large_image"/
 		);
 	});
@@ -402,7 +409,12 @@ describe('checkSeo JSON-LD rules on tool pages', () => {
 	test('a tools page without ld+json is reported', () => {
 		expectFault(
 			run((f) =>
-				edit(f, 'tools/cap-rate/index.html', /<script type="application\/ld\+json">[\s\S]*?<\/script>/, '')
+				edit(
+					f,
+					'tools/cap-rate/index.html',
+					/<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+					''
+				)
 			),
 			/^tools\/cap-rate\/index\.html: no application\/ld\+json block/
 		);
@@ -432,7 +444,12 @@ describe('checkSeo JSON-LD rules on tool pages', () => {
 	test('ld+json carrying a review is reported', () => {
 		expectFault(
 			run((f) =>
-				edit(f, 'tools/cap-rate/index.html', '"applicationCategory"', '"review":[],"applicationCategory"')
+				edit(
+					f,
+					'tools/cap-rate/index.html',
+					'"applicationCategory"',
+					'"review":[],"applicationCategory"'
+				)
 			),
 			/^tools\/cap-rate\/index\.html: ld\+json must not carry aggregateRating or review/
 		);
@@ -441,7 +458,12 @@ describe('checkSeo JSON-LD rules on tool pages', () => {
 	test('FAQPage questions differing from the visible h3 list are reported', () => {
 		expectFault(
 			run((f) =>
-				edit(f, 'tools/cap-rate/index.html', '<h3><!---->Is a higher cap rate better?</h3>', '<h3>Is a higher cap rate always better?</h3>')
+				edit(
+					f,
+					'tools/cap-rate/index.html',
+					'<h3><!---->Is a higher cap rate better?</h3>',
+					'<h3>Is a higher cap rate always better?</h3>'
+				)
 			),
 			/^tools\/cap-rate\/index\.html: FAQPage questions .* differ from the visible FAQ/
 		);
@@ -458,7 +480,9 @@ describe('checkSeo JSON-LD rules on tool pages', () => {
 describe('checkSeo URL hygiene on every HTML file', () => {
 	test("'..' inside an absolute URL attribute is reported", () => {
 		expectFault(
-			run((f) => edit(f, '404.html', '<main>', `<main><a href="${SITE}/tools/../legal/terms/">x</a>`)),
+			run((f) =>
+				edit(f, '404.html', '<main>', `<main><a href="${SITE}/tools/../legal/terms/">x</a>`)
+			),
 			/^404\.html: '\.\.' inside an absolute URL/
 		);
 	});
@@ -466,7 +490,12 @@ describe('checkSeo URL hygiene on every HTML file', () => {
 	test('a third-party script src is reported', () => {
 		expectFault(
 			run((f) =>
-				edit(f, 'index.html', '</main>', '<script src="https://cdn.example.org/x.js"></script></main>')
+				edit(
+					f,
+					'index.html',
+					'</main>',
+					'<script src="https://cdn.example.org/x.js"></script></main>'
+				)
 			),
 			/^index\.html: third-party script src https:\/\/cdn\.example\.org\/x\.js/
 		);
@@ -474,7 +503,9 @@ describe('checkSeo URL hygiene on every HTML file', () => {
 
 	test('a protocol-relative script src is reported', () => {
 		expectFault(
-			run((f) => edit(f, 'index.html', '</main>', '<script src="//cdn.example.org/x.js"></script></main>')),
+			run((f) =>
+				edit(f, 'index.html', '</main>', '<script src="//cdn.example.org/x.js"></script></main>')
+			),
 			/^index\.html: third-party script src \/\/cdn\.example\.org\/x\.js/
 		);
 	});
