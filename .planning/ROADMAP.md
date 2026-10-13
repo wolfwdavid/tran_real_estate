@@ -375,7 +375,7 @@ Plans:
 - [x] 09-21-PLAN.md — reel.v1 prompt, results/quote checks, AI-disclosure checklist, copy formatter (wave 8)
 - [x] 09-22-PLAN.md — STU-03 reel script page + E2E (wave 9)
 - [x] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
-- [ ] 09-24-PLAN.md — Gap closure: PanelState/GenerationPanel/PlatformCard exits flush the pending edit recheck; email link href-less while pending (gap wave 1)
+- [x] 09-24-PLAN.md — Gap closure: PanelState/GenerationPanel/PlatformCard exits flush the pending edit recheck; email link href-less while pending (gap wave 1)
 - [ ] 09-25-PLAN.md — Gap closure: Snapshot Save and memo Print flush the panel recheck before reading the gate (gap wave 2)
 **Research flag**: light (state license-law ad disclosure requirements, NY AI advertising disclosure checklist)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 9`.
@@ -465,6 +465,6 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 6. Renter Portal | 22/22 | Complete    | 2026-10-06 |
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
-| 9. Agent Content Studio & Market Snapshot Reports | 23/23 | Complete   | 2026-10-08 |
+| 9. Agent Content Studio & Market Snapshot Reports | 24/25 | In Progress|  |
 | 10. Launch Hardening & Go-to-Market | 0/23 | Planned | - |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
