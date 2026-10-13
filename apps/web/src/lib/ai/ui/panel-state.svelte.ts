@@ -5,7 +5,8 @@
 // Rules this file keeps:
 // - The provider only ever receives the BuiltPrompt (post-redaction). `tokens` are restored
 //   locally for display, checks and exits, never sent.
-// - The only exits are exits.ts copyText / buildMailto / markSent, and each re-checks the gate.
+// - The only exits are exits.ts copyText / buildMailto / markSent; each first flushes a pending
+//   edit recheck (flushChecks), then re-checks the gate.
 // - The Gemini acknowledgement lives in sessionStorage through gemini-gate.ts, nowhere else.
 // - Announcements never carry key material, raw inputs or draft text (the applied alternative
 //   phrase is the one UI-SPEC exception).
@@ -120,6 +121,8 @@ export class PanelState {
 	selection = $state.raw<Selection | null>(null);
 	model = $state('');
 	sentAt = $state.raw<Date | null>(null);
+	/** True from an edit until its recheck runs: findings may not match text yet. */
+	checkPending = $state(false);
 
 	#gate = $derived.by(() =>
 		computeGate({
@@ -170,6 +173,11 @@ export class PanelState {
 
 	get mailto(): { href: string; long: boolean } {
 		return this.#mailto;
+	}
+
+	/** The email link href: none while gated or while an edit recheck is pending (no unchecked text can open). */
+	get emailHref(): string | undefined {
+		return this.checkPending || this.gate.exits.email.gated ? undefined : this.#mailto.href;
 	}
 
 	get running(): boolean {
@@ -308,6 +316,7 @@ export class PanelState {
 		const providerLabel = this.providerLabel;
 
 		clearTimeout(this.#recheckTimer);
+		this.checkPending = false;
 		this.text = '';
 		this.findings = [];
 		this.warnAck = false;
@@ -432,12 +441,14 @@ export class PanelState {
 	/** Edit mode: updates the text and rechecks after `recheckMs` without typing. */
 	setText(next: string): void {
 		this.text = next;
+		this.checkPending = true;
 		clearTimeout(this.#recheckTimer);
 		this.#recheckTimer = setTimeout(() => this.recheckNow(), this.deps.recheckMs ?? 300);
 	}
 
 	recheckNow(): void {
 		clearTimeout(this.#recheckTimer);
+		this.checkPending = false;
 		const prev = this.findings;
 		const next = this.#check(this.text);
 		this.findings = next;
@@ -446,6 +457,11 @@ export class PanelState {
 		if (this.artifactId && this.deps.repo) {
 			void this.deps.repo.updateText(this.artifactId, this.text, next);
 		}
+	}
+
+	/** Runs a pending edit recheck now so an exit gates on the current text. Every exit calls it first. */
+	flushChecks(): void {
+		if (this.checkPending) this.recheckNow();
 	}
 
 	/** True (and announces the reason) when the exit is gated. */
@@ -468,6 +484,7 @@ export class PanelState {
 
 	/** Copy text. Resolves false when the browser refused (the view then selects the text). */
 	async copy(): Promise<boolean> {
+		this.flushChecks();
 		if (this.#gated('copy')) return false;
 		const text = this.#payload();
 		const ok = await copyText(text, this.deps.clipboard);
@@ -485,6 +502,7 @@ export class PanelState {
 	 * itself). Returns false when gated so the view can cancel the navigation.
 	 */
 	emailClicked(): boolean {
+		this.flushChecks();
 		if (this.#gated('email')) return false;
 		const s = statusCopy('emailed', { providerLabel: this.providerLabel });
 		this.statusLine = s.line;
@@ -500,6 +518,7 @@ export class PanelState {
 
 	/** A local Draft history note, never a delivery. Pressing it again does nothing. */
 	async markSent(): Promise<void> {
+		this.flushChecks();
 		if (this.#gated('marked-sent')) return;
 		if (this.artifactStatus === 'sent' || this.#marking) return;
 		this.#marking = true;
@@ -527,6 +546,7 @@ export class PanelState {
 	open(artifact: AiArtifact): void {
 		this.stop();
 		clearTimeout(this.#recheckTimer);
+		this.checkPending = false;
 		this.text = artifact.text;
 		this.findings = this.#check(artifact.text);
 		this.warnAck = false;
