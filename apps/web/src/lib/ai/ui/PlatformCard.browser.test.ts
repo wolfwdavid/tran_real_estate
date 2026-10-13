@@ -18,7 +18,7 @@ import type { LlmEvent, LlmProvider } from '../ports';
 import { sampleSocialPack, type SocialPackInputs } from '../prompts/studio/social.v1';
 import GenerationPanel from './GenerationPanel.svelte';
 import { PanelState } from './panel-state.svelte';
-import type { SectionSpec } from './PlatformCard.svelte';
+import PlatformCard, { cardPayload, type SectionSpec } from './PlatformCard.svelte';
 
 const DISCLOSURE = 'Sample Realty, Avery Sample, Lic. #SAMPLE-0000 (NY)';
 const INPUTS: SocialPackInputs = {
@@ -169,5 +169,59 @@ describe('GenerationPanel sections mode in the browser', () => {
 		expect(buttonNamed('Copy Instagram post')!.getAttribute('aria-disabled')).toBeNull();
 
 		expect(await axe(container)).toEqual([]);
+	});
+});
+
+describe('PlatformCard Copy inside the recheck window', () => {
+	/** One Instagram card in edit mode whose recheck never fires on its own (60 s debounce). */
+	async function editCard() {
+		const writes: string[] = [];
+		const copied: string[] = [];
+		const announced: string[] = [];
+		await render(PlatformCard, {
+			props: {
+				spec: spec('instagram'),
+				fullText: sampleSocialPack(INPUTS),
+				streaming: false,
+				hasDraft: true,
+				idPrefix: 'gap',
+				recheckMs: 60_000,
+				announce: (m: string) => void announced.push(m),
+				clipboard: { writeText: async (t: string) => void writes.push(t) },
+				onCopied: (_k: Platform, t: string) => void copied.push(t)
+			}
+		});
+		buttonNamed('Edit post')!.click();
+		const area = await vi.waitFor(() => {
+			const el = document.querySelector<HTMLTextAreaElement>('textarea');
+			expect(el).toBeTruthy();
+			return el!;
+		});
+		area.focus();
+		area.setSelectionRange(0, 0);
+		return { area, writes, copied, announced };
+	}
+
+	test('a Must-fix phrase copied before the recheck copies nothing and focuses the reason', async () => {
+		const { writes, copied, announced } = await editCard();
+		await userEvent.keyboard('Perfect for young professionals. ');
+		buttonNamed('Copy Instagram post')!.click();
+		expect(writes).toEqual([]);
+		expect(copied).toEqual([]);
+		await vi.waitFor(() => expect(document.activeElement?.id).toBe('gap-instagram-reason'));
+		const reason = 'Fix the 1 phrase marked Must fix to copy or email this draft.';
+		expect(document.getElementById('gap-instagram-reason')!.textContent?.trim()).toBe(reason);
+		expect(announced.at(-1)).toBe(reason);
+		expect(buttonNamed('Copy Instagram post')!.getAttribute('aria-disabled')).toBe('true');
+		expect(writes).toEqual([]);
+	});
+
+	test('a clean edit copied before the recheck copies exactly the checked text', async () => {
+		const { area, writes } = await editCard();
+		await userEvent.keyboard('Sunny day. ');
+		buttonNamed('Copy Instagram post')!.click();
+		await vi.waitFor(() => expect(writes).toHaveLength(1));
+		expect(writes[0]).toBe(cardPayload(spec('instagram'), area.value));
+		expect(writes[0]!.startsWith('Sunny day. ')).toBe(true);
 	});
 });
