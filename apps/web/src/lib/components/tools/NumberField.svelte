@@ -12,9 +12,12 @@
 		value: string;
 		error: string | null;
 		onblur: () => void;
+		/** Enter only re-runs validation. The form has several text fields and no submit button, so
+		 * browsers never submit it implicitly; the field reports Enter instead. */
+		onenter: () => void;
 	}
 
-	let { field, id, value = $bindable(''), error, onblur }: Props = $props();
+	let { field, id, value = $bindable(''), error, onblur, onenter }: Props = $props();
 
 	const leading = $derived(field.adornment === '$');
 	const describedBy = $derived(field.helper ? `${id}-help ${id}-error` : `${id}-error`);
@@ -36,6 +39,12 @@
 			{id}
 			bind:value
 			{onblur}
+			onkeydown={(e) => {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					onenter();
+				}
+			}}
 			name={field.id}
 			type="text"
 			inputmode={field.kind === 'years' ? 'numeric' : 'decimal'}

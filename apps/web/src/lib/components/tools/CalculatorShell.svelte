@@ -23,10 +23,14 @@
 		if (fieldId) document.getElementById(inputId(fieldId))?.focus();
 	};
 
-	function onsubmit(e: SubmitEvent) {
-		e.preventDefault();
+	function validate() {
 		const bad = form.submit();
 		if (bad) focusInput(bad);
+	}
+
+	function onsubmit(e: SubmitEvent) {
+		e.preventDefault();
+		validate();
 	}
 
 	function onclear() {
@@ -53,6 +57,7 @@
 						bind:value={form.values[field.id]}
 						error={form.errors[field.id] ?? null}
 						onblur={() => form.blur(field.id)}
+						onenter={validate}
 					/>
 				{/each}
 			</div>

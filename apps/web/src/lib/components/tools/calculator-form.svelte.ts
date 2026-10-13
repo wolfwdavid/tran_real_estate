@@ -11,7 +11,7 @@ import {
 	validateToolField,
 	type FieldError
 } from '@tran/core/finance';
-import { SHARED_TOOL_COPY, type ToolField } from '$lib/content/tools';
+import { SHARED_TOOL_COPY, TOOLS, type ToolField } from '$lib/content/tools';
 
 const V = SHARED_TOOL_COPY.validation;
 const ANNOUNCE_DELAY_MS = 750;
@@ -63,6 +63,14 @@ export function isExample(fields: readonly ToolField[], values: FieldValues): bo
 export function fillAnnouncement(template: string, x: string, y: string): string {
 	const xText = template.includes('{x}%') ? x.replace(/%$/, '') : x;
 	return template.replace('{x}', xText).replace('{y}', y);
+}
+
+const MINUS = '−';
+const NEGATIVE = TOOLS['cash-on-cash'].negativeSuffix ?? '(negative)';
+
+/** "−$53" -> "−$53 (negative)": the sign never depends on color (Accessibility Contract). */
+export function markNegative(text: string): string {
+	return text.startsWith(MINUS) ? `${text} ${NEGATIVE}` : text;
 }
 
 export interface CalculatorFormOptions {
