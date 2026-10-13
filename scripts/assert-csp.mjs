@@ -2,13 +2,19 @@
 //
 // The allowlist below is a deliberate literal duplicate of apps/web/svelte.config.js:
 // changing the policy must produce a reviewed two-file diff, never a silent pass.
-// The Phase 10 beacon host is NOT accepted here yet (Phase 10 adds it to both files together).
+// The Phase 10 first-party analytics host is accepted only through the validated env
+// (resolveAnalytics, optionally overlaid with a --target build env): the same rule the build uses
+// in apps/web/src/lib/csp-policy.js, so a host in the build but not the env (or the reverse) fails.
+// JSON-LD data blocks (Phase 10) need no script-src hash, but must parse as JSON and carry no raw
+// < or &; every other inline script still needs its hash.
 // img-src gains exactly one host (OSM tiles, Phase 6). Never data:.
 // img-src allows same-origin blob: object URLs for the agent logo (Phase 8); data: stays banned.
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { resolveAnalytics } from '../apps/web/src/lib/site-config.js';
+import { targetEnv } from './lib/build-targets.mjs';
 
 export const CONNECT =
 	"'self' https://api.rentcast.io https://api.anthropic.com https://api.openai.com https://generativelanguage.googleapis.com https://openrouter.ai https://api.web3forms.com".split(
@@ -88,6 +94,9 @@ const APPLE_TOUCH_ICON = { src: 'icons/apple-touch-icon-180.png', sizes: '180x18
 // Directives a <meta> CSP silently ignores; their presence is a false sense of safety.
 const META_IGNORED = ['frame-ancestors', 'report-uri', 'sandbox'];
 
+// A JSON-LD data block: the type attribute itself (not a data-* attribute naming it) is ld+json.
+const LD_JSON = /(?:^|\s)type\s*=\s*(["']?)application\/ld\+json\1(?=\s|\/|$)/i;
+
 const walk = (d) =>
 	readdirSync(d).flatMap((f) =>
 		statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]
@@ -110,8 +119,11 @@ const parsePolicy = (content) =>
 			.map(([k, ...v]) => [k, v])
 	);
 
-/** Returns [] when the page satisfies the contract; otherwise one string per fault. */
-export function checkHtml(relPath, html) {
+/**
+ * Returns [] when the page satisfies the contract; otherwise one string per fault.
+ * `analyticsHost` (an origin, or '') is the one extra connect-src origin the build may carry.
+ */
+export function checkHtml(relPath, html, { analyticsHost = '' } = {}) {
 	const errors = [];
 	const err = (msg) => errors.push(`${relPath}: ${msg}`);
 
@@ -136,7 +148,11 @@ export function checkHtml(relPath, html) {
 
 	const policy = parsePolicy(/content="([^"]*)"/i.exec(tags[i])?.[1] ?? '');
 
-	for (const [k, v] of Object.entries(EXACT)) {
+	const expected = {
+		...EXACT,
+		'connect-src': analyticsHost ? [...CONNECT, analyticsHost] : CONNECT
+	};
+	for (const [k, v] of Object.entries(expected)) {
 		if (!sameSet(policy[k] ?? [], v)) {
 			err(`${k} is [${(policy[k] ?? []).join(' ')}], expected [${v.join(' ')}]`);
 		}
@@ -158,8 +174,19 @@ export function checkHtml(relPath, html) {
 		err("style-src-attr must be exactly 'unsafe-inline'");
 	}
 
-	for (const m of html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)) {
-		const hash = `'sha256-${createHash('sha256').update(m[1]).digest('base64')}'`;
+	for (const [, attrs, body] of html.matchAll(
+		/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi
+	)) {
+		if (LD_JSON.test(attrs)) {
+			try {
+				JSON.parse(body);
+			} catch {
+				err('ld+json block is not valid JSON');
+			}
+			if (/[<&]/.test(body)) err('ld+json block must \\u-escape < and &');
+			continue;
+		}
+		const hash = `'sha256-${createHash('sha256').update(body).digest('base64')}'`;
 		if (!scriptSrc.includes(hash)) err(`inline script not covered by script-src hash ${hash}`);
 	}
 
@@ -269,7 +296,7 @@ function checkPwaHead(relPath, html) {
 }
 
 /** Returns [] when every carrier file exists, the PWA manifest/icons are valid, every .html page passes checkHtml and links the install carriers, and no built .css/.html embeds a data: URI. */
-export function checkBuild(dir) {
+export function checkBuild(dir, opts = {}) {
 	const errors = [];
 	for (const f of [...CARRIERS, ...EXPECTED_PAGES]) {
 		if (!existsSync(join(dir, f))) errors.push(`missing ${f}`);
@@ -280,7 +307,7 @@ export function checkBuild(dir) {
 	for (const file of pages) {
 		const rel = relative(dir, file).split(sep).join('/');
 		const html = readFileSync(file, 'utf8');
-		errors.push(...checkHtml(rel, html), ...checkPwaHead(rel, html));
+		errors.push(...checkHtml(rel, html, opts), ...checkPwaHead(rel, html));
 	}
 	for (const file of walk(dir).filter((f) => f.endsWith('.css') || f.endsWith('.html'))) {
 		const rel = relative(dir, file).split(sep).join('/');
@@ -293,11 +320,26 @@ export const countPages = (dir) =>
 	existsSync(dir) ? walk(dir).filter((f) => f.endsWith('.html')).length : 0;
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-	const dir = process.argv[2] ?? 'build';
-	const errors = checkBuild(dir);
+	const args = process.argv.slice(2);
+	const t = args.indexOf('--target');
+	const target = t === -1 ? undefined : args[t + 1];
+	const dir = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--target') ?? 'build';
+	let host;
+	try {
+		if (t !== -1 && !target) throw new Error('--target needs a value');
+		({ host } = resolveAnalytics({ ...process.env, ...(target ? targetEnv(target) : {}) }));
+	} catch (e) {
+		console.error(
+			`${e.message}\nusage: node scripts/assert-csp.mjs <dir> [--target root|sub|configured]`
+		);
+		process.exit(2);
+	}
+	const errors = checkBuild(dir, { analyticsHost: host });
 	if (errors.length) {
 		console.error(`CSP assertion failed (${errors.length}):\n- ` + errors.join('\n- '));
 		process.exit(1);
 	}
-	console.log(`CSP assertion passed for ${countPages(dir)} pages in ${dir}`);
+	console.log(
+		`CSP assertion passed for ${countPages(dir)} pages in ${dir} (analytics host: ${host || 'none'})`
+	);
 }
