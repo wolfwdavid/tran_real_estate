@@ -10,7 +10,7 @@ created: 2026-10-04
 # Phase 9 — Validation Strategy
 
 > Per-phase validation contract for feedback sampling during execution.
-> Every task in plans 09-01 … 09-23 carries an `<automated>` verify command. Plan 09-23 flips row statuses and sets `wave_0_complete: true` after the final `corepack pnpm verify`.
+> Every task in plans 09-01 … 09-24 (09-24 is the verifier gap closure) carries an `<automated>` verify command. Plan 09-23 flips row statuses and sets `wave_0_complete: true` after the final `corepack pnpm verify`.
 
 ---
 
@@ -86,6 +86,9 @@ created: 2026-10-04
 | 9-22-02 | 22 | 9 | STU-03 | e2e + axe | `corepack pnpm --filter web exec playwright test studio-reel` | ✅ | ✅ green |
 | 9-23-01 | 23 | 10 | STU-01..04 | e2e (keyless, no-network, axe matrix) + scripts | `corepack pnpm --filter web exec playwright test studio-keyless && corepack pnpm vitest run --project scripts banned-terms` | ✅ | ✅ green |
 | 9-23-02 | 23 | 10 | STU-01..04 | full gate | `corepack pnpm verify` | ✅ | ✅ green (run step by step, see 09-23-VERIFY-PROGRESS.md) |
+| 9-24-01 | 24 | 1 | STU-01, STU-03 | unit (gap: stale-gate exits) | `corepack pnpm vitest run --project web apps/web/src/lib/ai/ui/panel-state.test.ts` | ✅ | ✅ green |
+| 9-24-02 | 24 | 1 | STU-01, STU-03 | browser (gap: panel exits + email href) | `corepack pnpm vitest run --project web-browser apps/web/src/lib/ai/ui/GenerationPanel.browser.test.ts` | ✅ | ✅ green |
+| 9-24-03 | 24 | 1 | STU-02 | browser (gap: card Copy) | `corepack pnpm vitest run --project web-browser apps/web/src/lib/ai/ui/PlatformCard.browser.test.ts` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
