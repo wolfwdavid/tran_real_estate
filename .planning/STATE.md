@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed wave 2 (10-02, 10-03, 10-04, 10-08)
+stopped_at: Completed wave 3 (10-05, 10-06, 10-07, 10-09)
 last_updated: "2026-10-13T17:11:34.329Z"
 progress:
   total_phases: 11
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 10 (launch-hardening-go-to-market) — EXECUTING
-Plan: 5 of 23 summarized (waves 1-2 done); next: wave 3 (10-05, 10-06, 10-07, 10-09)
+Plan: 9 of 23 summarized (waves 1-3 done); next: wave 4 (10-10, 10-22)
 
 ## Performance Metrics
 
@@ -586,6 +586,9 @@ Recent decisions affecting current work:
 - Legal/compliance items are directionally sound but warrant professional review before the public GTM push.
 
 ### Blockers/Concerns
+
+- **2026-10-13 (Phase 10 orchestrator):** `apps/web/src/lib/features/renter/search/ResultsView.browser.test.ts` flakes under full `test:unit` load (2 different tests failed in 2 full runs today; 3/3 green in isolation each time; code unchanged since Phase 6). 10-23's full gate must fix the root cause (likely a too-short waitFor/axe timeout under load), not retry.
+- **2026-10-13:** JS budget headroom on tool pages is ~6.5 KB gz (marketing layout already ships 53.5 KB of the 60 KB budget; research assumed ~27 KB). 10-12/10-13/10-14 must keep calculator code lean or trim the shared layout.
 
 None. Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).
 
