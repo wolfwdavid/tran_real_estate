@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
+	import SeoHead from '$lib/seo/SeoHead.svelte';
 	import type { Audience, FeatureIcon } from '$lib/content/audiences';
 	import Search from '@lucide/svelte/icons/search';
 	import Bell from '@lucide/svelte/icons/bell';
@@ -41,10 +42,7 @@
 	};
 </script>
 
-<svelte:head>
-	<title>{audience.docTitle}</title>
-	<meta name="description" content={audience.description} />
-</svelte:head>
+<SeoHead title={audience.docTitle} description={audience.description} />
 
 <section class="mx-auto max-w-page px-6 py-12 md:px-8 lg:py-24">
 	<p class="text-label font-semibold tracking-[0.06em] text-secondary uppercase">

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import SeoHead from '$lib/seo/SeoHead.svelte';
 
 	let {
 		title,
@@ -13,10 +14,7 @@
 		'This page explains, in plain language, how Tran Real Estate Tools works. It is not legal advice.';
 </script>
 
-<svelte:head>
-	<title>{docTitle}</title>
-	<meta name="description" content={description} />
-</svelte:head>
+<SeoHead title={docTitle} {description} />
 
 <article class="legal mx-auto max-w-page px-6 py-12 md:px-8 md:py-16">
 	<div class="max-w-reading">

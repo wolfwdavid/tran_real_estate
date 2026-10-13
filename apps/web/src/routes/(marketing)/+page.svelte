@@ -7,6 +7,7 @@
 	import RenterMark from '$lib/components/brand/marks/RenterMark.svelte';
 	import InvestorMark from '$lib/components/brand/marks/InvestorMark.svelte';
 	import AgentMark from '$lib/components/brand/marks/AgentMark.svelte';
+	import SeoHead from '$lib/seo/SeoHead.svelte';
 
 	const description =
 		'Browser-based real estate tools for renters, investors, and agents. Listing data from RentCast, your own API keys, and no Tran server.';
@@ -22,10 +23,7 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Tran Real Estate Tools: tools for renters, investors, and agents</title>
-	<meta name="description" content={description} />
-</svelte:head>
+<SeoHead title="Tran Real Estate Tools: tools for renters, investors, and agents" {description} />
 
 <section class="hero relative overflow-clip">
 	<svg

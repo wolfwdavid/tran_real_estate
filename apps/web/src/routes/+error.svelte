@@ -10,6 +10,7 @@
 
 <svelte:head>
 	<title>{notFound ? 'Page not found' : 'Something went wrong'}: Tran Real Estate Tools</title>
+	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <SiteHeader />

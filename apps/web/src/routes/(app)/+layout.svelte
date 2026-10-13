@@ -31,6 +31,11 @@
 	const runAlerts = $derived(!isAgentCrm(page.route.id));
 </script>
 
+<svelte:head>
+	<!-- Not a marketing page: kept out of search results and the sitemap (10-UI-SPEC robots rule). -->
+	<meta name="robots" content="noindex" />
+</svelte:head>
+
 <SiteHeader showSettings={true} />
 <main id="main-content" tabindex="-1">
 	<!-- DataShell renders the Data source status bar as the first child of <main>; AppNotice is the

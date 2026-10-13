@@ -7,6 +7,11 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+	<!-- Not a marketing page: kept out of search results and the sitemap (10-UI-SPEC robots rule). -->
+	<meta name="robots" content="noindex" />
+</svelte:head>
+
 <div class="flex min-h-screen flex-col bg-background">
 	<header class="flex h-16 items-center border-b border-border bg-background px-4">
 		<p class="text-label font-semibold tracking-[0.06em] text-secondary uppercase">Inquiry form</p>
