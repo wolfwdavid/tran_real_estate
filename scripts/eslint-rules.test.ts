@@ -769,3 +769,112 @@ describe('agent and public boundaries (lintText, in memory)', () => {
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
 	});
 });
+
+// Phase 10: the analytics beacon is the only new fetch, and the marketing-safe modules (calculators,
+// onboarding, forms, SEO, analytics, content, the shared affordability calculator) stay free of
+// storage, AI, data and portal code so marketing routes keep their size budget (RESEARCH Pitfall 9).
+describe('Phase 10 boundaries', () => {
+	const BEACON = `${WEB}/lib/analytics/beacon.ts`;
+	const WAITLIST = `${WEB}/lib/components/forms/WaitlistForm.svelte`;
+	const CAP_RATE = `${WEB}/lib/components/tools/CapRateCalculator.svelte`;
+	const ONBOARDING = `${WEB}/lib/components/onboarding/onboarding-state.ts`;
+	const SEO_HEAD = `${WEB}/lib/seo/SeoHead.svelte`;
+	const CONTENT = `${WEB}/lib/content/tools.ts`;
+	const AFFORD = `${WEB}/lib/features/shared/affordability/AffordabilityCalculator.svelte`;
+	const TOOL_ROUTE = `${WEB}/routes/(marketing)/tools/cap-rate/+page.svelte`;
+
+	test('lib/analytics/beacon.ts may call fetch', async () => {
+		const messages = await lint(
+			BEACON,
+			"export function send(): void {\n\tvoid fetch('https://stats.example.org/api/send', {});\n}\n"
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+
+	test('forms may not call fetch directly (they use lib/leads)', async () => {
+		const code = `<script lang="ts">\n\tasync function send() {\n\t\tawait fetch('https://x.test');\n\t}\n</script>\n\n<button onclick={send}>Send</button>\n`;
+		const messages = await lint(WAITLIST, code);
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-syntax');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('lib/analytics');
+	});
+
+	test.each(['$lib/storage/db', '$lib/features/investor/analyzer/x'])(
+		'a tool calculator may not import %s',
+		async (spec) => {
+			const messages = await lint(CAP_RATE, svelteImports(spec));
+			expectNoParseErrors(messages);
+			const errors = errorsFor(messages, 'no-restricted-imports');
+			expect(errors).toHaveLength(1);
+			expect(errors[0].message).toContain('Marketing-safe');
+		}
+	);
+
+	test('a tool calculator may import @tran/core', async () => {
+		const messages = await lint(CAP_RATE, svelteImports('@tran/core'));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test.each([
+		[ONBOARDING, '$lib/data/platform'],
+		[SEO_HEAD, '$lib/ai/x'],
+		[CONTENT, '$lib/storage/x'],
+		[AFFORD, '$lib/data/x']
+	])('%s importing %s is rejected', async (file, spec) => {
+		const code = file.endsWith('.svelte') ? svelteImports(spec) : importModule(spec);
+		const messages = await lint(file, code);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
+	});
+
+	test.each([
+		['$lib/storage/db', 1],
+		['$lib/ai/runner', 1],
+		['$lib/data', 1],
+		['leaflet', 1]
+	])('%s is rejected in every marketing-safe folder', async (spec, n) => {
+		for (const file of [ONBOARDING, CONTENT, BEACON, `${WEB}/lib/seo/jsonld.ts`]) {
+			const messages = await lint(file, importModule(spec));
+			expectNoParseErrors(messages);
+			expect(errorsFor(messages, 'no-restricted-imports'), file).toHaveLength(n);
+		}
+	});
+
+	test('forms may import lib/leads (the only send path)', async () => {
+		const messages = await lint(WAITLIST, svelteImports('$lib/leads/web3forms-sink'));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('a marketing route may not import a portal feature', async () => {
+		const messages = await lint(TOOL_ROUTE, svelteImports('$lib/features/renter/x'));
+		expectNoParseErrors(messages);
+		const errors = errorsFor(messages, 'no-restricted-imports');
+		expect(errors).toHaveLength(1);
+		expect(errors[0].message).toContain('portal features');
+	});
+
+	test('a marketing route may import the shared affordability calculator and tool components', async () => {
+		const messages = await lint(
+			TOOL_ROUTE,
+			svelteImports(
+				'$lib/features/shared/affordability/AffordabilityCalculator.svelte',
+				'$lib/components/tools/ToolPage.svelte'
+			)
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test('regression: portals still import their own features and features/shared', async () => {
+		const messages = await lint(
+			`${WEB}/routes/(app)/investor/__lintfix__/+page.svelte`,
+			svelteImports('$lib/features/investor/x', '$lib/features/shared/affordability')
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+});
