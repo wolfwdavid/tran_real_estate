@@ -66,8 +66,9 @@ test('landing explains the product and routes to every portal', async ({ page })
 	const choose = page.getByRole('link', { name: 'Choose your portal', exact: true });
 	await expect(choose).toHaveAttribute('href', '#portals');
 	await expect(page.locator('#portals')).toHaveCount(1);
-	const how = page.getByRole('link', { name: 'How it works', exact: true });
-	await expect(how).toHaveAttribute('href', '#how-it-works');
+	const tour = page.getByRole('link', { name: 'Show me around', exact: true });
+	await expect(tour).toHaveAttribute('href', '#get-started');
+	await expect(page.locator('#get-started')).toHaveCount(1);
 	await expect(page.locator('#how-it-works')).toHaveCount(1);
 
 	await expect(page.getByRole('heading', { name: 'Three steps, no account' })).toBeVisible();

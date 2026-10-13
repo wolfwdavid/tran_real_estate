@@ -8,6 +8,7 @@
 	import InvestorMark from '$lib/components/brand/marks/InvestorMark.svelte';
 	import AgentMark from '$lib/components/brand/marks/AgentMark.svelte';
 	import SeoHead from '$lib/seo/SeoHead.svelte';
+	import GetStartedGuide from '$lib/components/onboarding/GetStartedGuide.svelte';
 
 	const description =
 		'Browser-based real estate tools for renters, investors, and agents. Listing data from RentCast, your own API keys, and no Tran server.';
@@ -53,7 +54,7 @@
 		</p>
 		<div class="mt-8 flex flex-col gap-2 sm:flex-row sm:gap-4">
 			<ButtonLink href="#portals" variant="primary">Choose your portal</ButtonLink>
-			<ButtonLink href="#how-it-works" variant="secondary">How it works</ButtonLink>
+			<ButtonLink href="#get-started" variant="secondary">Show me around</ButtonLink>
 		</div>
 
 		<div id="portals" class="mt-8 lg:mt-12">
@@ -85,6 +86,7 @@
 	</div>
 </section>
 
+<GetStartedGuide />
 <HowItWorks />
 <TrustStrip />
 

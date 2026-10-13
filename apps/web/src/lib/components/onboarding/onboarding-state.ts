@@ -21,7 +21,8 @@ const STATUSES: readonly string[] = ['new', 'touring', 'done', 'hidden'];
 const PORTALS: readonly string[] = ['renter', 'investor', 'agent'];
 const STEPS: readonly unknown[] = [0, 1, 2, 3];
 
-const isPortal = (v: unknown): v is OnboardingPortal => typeof v === 'string' && PORTALS.includes(v);
+const isPortal = (v: unknown): v is OnboardingPortal =>
+	typeof v === 'string' && PORTALS.includes(v);
 
 /** Strict whitelist parse. Anything unreadable, or a bad status/step, falls back to `new`. */
 export function parseOnboarding(raw: string | null): OnboardingState {
