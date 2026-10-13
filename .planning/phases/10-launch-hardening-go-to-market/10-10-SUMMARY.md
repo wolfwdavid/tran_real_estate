@@ -45,7 +45,7 @@ metrics:
   duration: ~15 min
   completed: 2026-10-13
   tasks: 2
-  files: 16
+  files: 14
 ---
 
 # Phase 10 Plan 10: Calculator content, SeoHead, sitemap/robots and share-card endpoints Summary
@@ -108,5 +108,5 @@ None. The six share cards, sitemap and robots file are fully generated. SeoHead 
 
 ## Self-Check: PASSED
 
-- All 16 created files exist (verified by git ls-files after commit)
+- All 13 created files are tracked (git ls-files = 13) and og-card.server.ts is committed
 - Commits ad30742, d977415, 7553385, 0aa8a7e exist in `git log`
