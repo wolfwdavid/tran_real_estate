@@ -350,7 +350,7 @@ Plans:
   3. Agent can generate a founder-story reel script (hook → manual pain → before/after → results → mission → call to action) with timed beats, captions, B-roll list, and an AI-disclosure checklist, using only results the agent supplies.
   4. Agent can create a branded Market Snapshot report for a zip code (their logo, colors, and disclosures), labeled as not a CMA or appraisal, and print it to PDF.
   5. Demo-credible: every studio and report route works fully on sample data with no keys, the Market Snapshot stays under the call budget with a real key, all AI copy passes the Fair Housing checker, and axe checks pass.
-**Plans**: 23 plans in 10 waves
+**Plans**: 25 plans (23 in 10 waves + 2 gap closure in 2 waves)
 Plans:
 - [x] 09-01-PLAN.md — Disclosure variants (ad-inline/ad-block/print), platform limits, disclosure-last assembly, state team/title warnings (wave 1)
 - [x] 09-02-PLAN.md — Number check exposed from @tran/core/numbers, number-word detector, allowed-number sets (wave 1)
@@ -375,6 +375,8 @@ Plans:
 - [x] 09-21-PLAN.md — reel.v1 prompt, results/quote checks, AI-disclosure checklist, copy formatter (wave 8)
 - [x] 09-22-PLAN.md — STU-03 reel script page + E2E (wave 9)
 - [x] 09-23-PLAN.md — Cross-route keyless/axe proof, validation map, human UAT, full verify (wave 10)
+- [ ] 09-24-PLAN.md — Gap closure: PanelState/GenerationPanel/PlatformCard exits flush the pending edit recheck; email link href-less while pending (gap wave 1)
+- [ ] 09-25-PLAN.md — Gap closure: Snapshot Save and memo Print flush the panel recheck before reading the gate (gap wave 2)
 **Research flag**: light (state license-law ad disclosure requirements, NY AI advertising disclosure checklist)
 **UI hint**: yes. Use the UI/UX Pro Max skill via `/gsd:ui-phase 9`.
 **Cut line** (cut in this order): ship STU-01 (listing descriptions) and STU-04 (Market Snapshot) first. If the phase overruns, cut (1) STU-03 reel script generator, then (2) STU-02 social post pack.
