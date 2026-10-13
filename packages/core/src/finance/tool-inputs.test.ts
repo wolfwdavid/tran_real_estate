@@ -30,12 +30,22 @@ describe('parseToolNumber', () => {
 		expect(parseToolNumber(raw)).toBeNull();
 	});
 
-	test.each(['abc', '1,2,3x', '--5', '1e5', '$', '%', '1.2.3', '5%%', '$$5', 'Infinity', '.5', '5.'])(
-		'%j -> NaN',
-		(raw) => {
-			expect(parseToolNumber(raw)).toBeNaN();
-		}
-	);
+	test.each([
+		'abc',
+		'1,2,3x',
+		'--5',
+		'1e5',
+		'$',
+		'%',
+		'1.2.3',
+		'5%%',
+		'$$5',
+		'Infinity',
+		'.5',
+		'5.'
+	])('%j -> NaN', (raw) => {
+		expect(parseToolNumber(raw)).toBeNaN();
+	});
 });
 
 describe('validateToolField', () => {
@@ -77,9 +87,9 @@ describe('validateToolField', () => {
 	});
 
 	test('zero price -> price-zero', () => {
-		expect(
-			validateToolField('0', { kind: 'money', required: true, positive: true })
-		).toStrictEqual({ ok: false, code: 'price-zero' });
+		expect(validateToolField('0', { kind: 'money', required: true, positive: true })).toStrictEqual(
+			{ ok: false, code: 'price-zero' }
+		);
 	});
 
 	test('money returns integer cents', () => {

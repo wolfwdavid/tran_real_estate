@@ -135,7 +135,9 @@ describe('dscrCalc', () => {
 describe('reuse of Phase 7 primitives', () => {
 	test('calculators.ts imports monthlyPayment and has no local amortization formula', () => {
 		const src = readFileSync(new URL('./calculators.ts', import.meta.url), 'utf8');
-		expect(src).toMatch(/import\s*\{[^}]*\bmonthlyPayment\b[^}]*\}\s*from\s*'\.\/amortization\.js'/);
+		expect(src).toMatch(
+			/import\s*\{[^}]*\bmonthlyPayment\b[^}]*\}\s*from\s*'\.\/amortization\.js'/
+		);
 		expect(src).not.toContain('Math.pow');
 	});
 
