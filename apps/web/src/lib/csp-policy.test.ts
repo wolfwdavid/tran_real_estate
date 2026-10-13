@@ -54,8 +54,11 @@ describe('buildCsp', () => {
 	});
 
 	test('a configured analytics host changes no other directive', () => {
-		const { 'connect-src': _a, ...rest } = buildCsp({ analyticsHost: HOST }).directives;
-		const { 'connect-src': _b, ...baseRest } = buildCsp().directives;
+		const withHost = buildCsp({ analyticsHost: HOST }).directives;
+		const base = buildCsp().directives;
+		const rest = Object.fromEntries(Object.entries(withHost).filter(([k]) => k !== 'connect-src'));
+		const baseRest = Object.fromEntries(Object.entries(base).filter(([k]) => k !== 'connect-src'));
+		expect(Object.keys(rest)).toHaveLength(Object.keys(base).length - 1);
 		expect(rest).toEqual(baseRest);
 		expect(rest['form-action']).toEqual(['self', 'https://api.web3forms.com']);
 		expect(rest['script-src']).toEqual(['self']);

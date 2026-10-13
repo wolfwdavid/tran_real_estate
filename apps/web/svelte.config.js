@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { resolveBasePath, resolveBuildDir } from './src/lib/base-path.js';
-import { resolveSiteOrigin } from './src/lib/site-config.js';
+import { buildCsp } from './src/lib/csp-policy.js';
+import { resolveAnalytics, resolveSiteOrigin } from './src/lib/site-config.js';
 
 const base = resolveBasePath();
 const out = resolveBuildDir();
@@ -47,29 +48,8 @@ export default {
 			handleMissingId: 'fail',
 			handleUnseenRoutes: 'fail'
 		},
-		csp: {
-			mode: 'hash',
-			directives: {
-				'default-src': ['self'],
-				'script-src': ['self'],
-				'style-src': ['self'],
-				'style-src-attr': ['unsafe-inline'],
-				// Map tiles (Phase 6) plus same-origin blob object URLs for agent logos (Phase 8).
-				// Never the data scheme, never a./b./c. tile subdomains.
-				'img-src': ['self', 'https://tile.openstreetmap.org', 'blob:'],
-				'connect-src': [
-					'self',
-					'https://api.rentcast.io',
-					'https://api.anthropic.com',
-					'https://api.openai.com',
-					'https://generativelanguage.googleapis.com',
-					'https://openrouter.ai',
-					'https://api.web3forms.com'
-				],
-				'object-src': ['none'],
-				'base-uri': ['self'],
-				'form-action': ['self', 'https://api.web3forms.com']
-			}
-		}
+		// Policy literal lives in src/lib/csp-policy.js; scripts/assert-csp.mjs keeps an independent
+		// literal copy — change both in one commit.
+		csp: buildCsp({ analyticsHost: resolveAnalytics().host })
 	}
 };
