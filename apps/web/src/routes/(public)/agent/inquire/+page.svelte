@@ -78,7 +78,6 @@
 
 <svelte:head>
 	<title>{title}</title>
-	<meta name="robots" content="noindex" />
 	<meta name="referrer" content="no-referrer" />
 	<meta name="description" content="Send an inquiry to a real estate agent." />
 </svelte:head>
