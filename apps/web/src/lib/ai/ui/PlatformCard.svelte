@@ -353,14 +353,22 @@
 	}
 
 	async function onCopy(): Promise<void> {
+		// Check the text as it is right now: the edit recheck lags typing by recheckMs.
+		const current = text;
+		if (editing && checkedEdit !== current) {
+			clearTimeout(timer);
+			checkedEdit = current;
+		}
+		// findings / reason / gated are $derived and recompute synchronously on read.
 		if (gated) {
 			if (reason) {
+				await tick(); // the reason line may only now exist
 				reasonEl?.focus();
 				announce(reason);
 			}
 			return;
 		}
-		const payload = cardPayload(spec, text);
+		const payload = cardPayload(spec, current); // only the text that was just checked
 		if (await copyText(payload, clipboard)) {
 			statusLine = 'Copied.';
 			announce(`${spec.label} post copied.`);
