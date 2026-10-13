@@ -23,3 +23,6 @@
   `meta[name="robots"][content="noindex"]` on /agent/inquire/ — one from the `(public)` group layout
   (added by 10-11, dc94b27) and one from the page itself (08-13). Remove the page-level tag. Out of
   10-13 scope.
+- **(10-15 run) More load flakes in the sharded full E2E, all passed in isolation:**
+  `investor/buybox.spec.ts:217` (root and sub, toHaveCount) and `renter-saved.spec.ts:83` (root,
+  toBeVisible). Also re-confirmed the `agent-inquire.spec.ts:48` duplicate-noindex failure above.
