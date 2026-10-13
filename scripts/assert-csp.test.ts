@@ -87,6 +87,10 @@ interface PageOptions {
 	meta?: string | null;
 	boot?: string;
 	pwaHead?: string[];
+	/** Extra markup placed in <head> after the install carriers (e.g. a JSON-LD block). */
+	extraHead?: string;
+	/** Extra markup placed at the end of <body> (e.g. a second inline script). */
+	bodyScripts?: string;
 }
 
 function makePage(o: PageOptions = {}): string {
@@ -108,11 +112,13 @@ function makePage(o: PageOptions = {}): string {
 		'\t\t<script src="./frame-guard.js"></script>',
 		...(o.pwaHead ?? PWA_HEAD),
 		'\t\t<meta name="viewport" content="width=device-width, initial-scale=1" />',
+		...(o.extraHead ? [`\t\t${o.extraHead}`] : []),
 		'\t</head>',
 		'\t<body data-sveltekit-preload-data="hover">',
 		'\t\t<div class="app-root"><h1>Tran Real Estate Tools</h1>',
 		`\t\t\t<script>${boot}</script>`,
 		'\t\t</div>',
+		...(o.bodyScripts ? [`\t\t${o.bodyScripts}`] : []),
 		'\t</body>',
 		'</html>',
 		''
@@ -700,5 +706,133 @@ describe('drift guard against the real builds', () => {
 		const file = join(REPO_ROOT, 'apps', 'web', name, 'index.html');
 		if (!existsSync(file)) return;
 		expect(checkHtml('index.html', readFileSync(file, 'utf8'))).toEqual([]);
+	});
+});
+
+// Phase 10: JSON-LD structured data (GTM-03) and the optional first-party analytics host (GTM-04).
+const LD = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'WebApplication',
+	name: 'Tran Real Estate Tools',
+	description: 'Rent \\u003c budget \\u0026 more'
+});
+const ldBlock = (body: string, type = 'application/ld+json') =>
+	`<script type="${type}">${body}</script>`;
+const ANALYTICS = 'https://stats.example.org';
+
+describe('checkHtml JSON-LD data blocks', () => {
+	test('a valid ld+json block passes with no script-src hash', () => {
+		const page = makePage({ extraHead: ldBlock(LD) });
+		expect(page).toContain('application/ld+json');
+		expect(page).not.toContain(sha256(LD));
+		expect(checkHtml('index.html', page)).toEqual([]);
+	});
+
+	test('the ld+json type match is case-insensitive', () => {
+		const page = makePage({ extraHead: ldBlock(LD, 'Application/LD+JSON') });
+		expect(checkHtml('index.html', page)).toEqual([]);
+	});
+
+	test('an ld+json block whose body is not valid JSON is rejected', () => {
+		const errors = checkHtml('index.html', makePage({ extraHead: ldBlock('{"name": "x",}') }));
+		expect(errors.some((e) => e.includes('is not valid JSON'))).toBe(true);
+	});
+
+	test('an ld+json block containing a raw < is rejected', () => {
+		const body = JSON.stringify({ '@type': 'Thing', name: 'a < b' });
+		const errors = checkHtml('index.html', makePage({ extraHead: ldBlock(body) }));
+		expect(errors.some((e) => e.includes('must \\u-escape < and &'))).toBe(true);
+	});
+
+	test('an ld+json block containing a raw & is rejected', () => {
+		const body = JSON.stringify({ '@type': 'Thing', name: 'Rent & buy' });
+		const errors = checkHtml('index.html', makePage({ extraHead: ldBlock(body) }));
+		expect(errors.some((e) => e.includes('must \\u-escape < and &'))).toBe(true);
+	});
+
+	test('an unhashed inline type="module" script is rejected', () => {
+		const page = makePage({ bodyScripts: ldBlock('import("./x.js");', 'module') });
+		const errors = checkHtml('index.html', page);
+		expect(errors.some((e) => e.includes('not covered by script-src hash'))).toBe(true);
+	});
+
+	test('an unhashed inline type="text/javascript" script is rejected', () => {
+		const page = makePage({
+			bodyScripts: ldBlock('fetch("https://evil.example.com");', 'text/javascript')
+		});
+		const errors = checkHtml('index.html', page);
+		expect(errors.some((e) => e.includes('not covered by script-src hash'))).toBe(true);
+	});
+
+	test('ld+json named in a different attribute does not exempt a script', () => {
+		const page = makePage({
+			bodyScripts:
+				'<script data-kind="application/ld+json">fetch("https://evil.example.com");</script>'
+		});
+		const errors = checkHtml('index.html', page);
+		expect(errors.some((e) => e.includes('not covered by script-src hash'))).toBe(true);
+	});
+
+	test('a hashed module script still passes', () => {
+		const body = 'import("./x.js");';
+		const page = makePage({
+			directives: { 'script-src': `'self' ${sha256(BOOT)} ${sha256(body)}` },
+			bodyScripts: ldBlock(body, 'module')
+		});
+		expect(checkHtml('index.html', page)).toEqual([]);
+	});
+});
+
+describe('checkHtml optional analytics host', () => {
+	const withHost = makePage({
+		directives: { 'connect-src': `${CONNECT.join(' ')} ${ANALYTICS}` }
+	});
+
+	test('analytics host present: a page whose connect-src adds it passes', () => {
+		expect(checkHtml('index.html', withHost, { analyticsHost: ANALYTICS })).toEqual([]);
+	});
+
+	test('analytics host absent: the same page fails without the option', () => {
+		const errors = checkHtml('index.html', withHost);
+		expect(errors.some((e) => e.includes('connect-src'))).toBe(true);
+	});
+
+	test('analytics host present: a page lacking the origin fails', () => {
+		const errors = checkHtml('index.html', golden, { analyticsHost: ANALYTICS });
+		expect(errors.some((e) => e.includes('connect-src'))).toBe(true);
+	});
+
+	test('analytics host present: a different origin fails', () => {
+		const other = makePage({
+			directives: { 'connect-src': `${CONNECT.join(' ')} https://other.example.org` }
+		});
+		const errors = checkHtml('index.html', other, { analyticsHost: ANALYTICS });
+		expect(errors.some((e) => e.includes('connect-src'))).toBe(true);
+	});
+
+	test('the option never widens any other directive', () => {
+		const page = makePage({
+			directives: {
+				'connect-src': `${CONNECT.join(' ')} ${ANALYTICS}`,
+				'img-src': `'self' https://tile.openstreetmap.org blob: ${ANALYTICS}`
+			}
+		});
+		const errors = checkHtml('index.html', page, { analyticsHost: ANALYTICS });
+		expect(errors.some((e) => e.includes('img-src'))).toBe(true);
+	});
+
+	test('the option does not mutate the shared CONNECT literal', () => {
+		const before = [...CONNECT];
+		checkHtml('index.html', withHost, { analyticsHost: ANALYTICS });
+		expect(CONNECT).toEqual(before);
+		expect(EXACT['connect-src']).toEqual(before);
+	});
+
+	test('checkBuild forwards the analytics option to every page', () => {
+		withTempBuild(writeFullBuild, (dir) => {
+			expect(checkBuild(dir)).toEqual([]);
+			const errors = checkBuild(dir, { analyticsHost: ANALYTICS });
+			expect(errors.some((e) => e.includes('connect-src'))).toBe(true);
+		});
 	});
 });
