@@ -69,3 +69,7 @@
       After restoring it and rebuilding, it passed 9.
   - `pnpm check`: 0 errors, 0 warnings. `pnpm lint`: exit 0. `banned` and `ui:guard`: passed.
     `vitest run apps/web/src/lib/analytics`: 61 passed.
+- **(10-14 run) Load flake: `guide.spec.ts:107` (sub)** "hero Show me around resets the guide and
+  focuses its heading" failed once in the sharded full E2E (sub shard 2/4: the guide still showed the
+  agent tour, not "Where do you want to start?"). Re-run alone 3/3 passed, and the whole guide.spec on
+  root + sub 14/14. Same test 10-13 saw fail on sub. For 10-23 to root-cause.
