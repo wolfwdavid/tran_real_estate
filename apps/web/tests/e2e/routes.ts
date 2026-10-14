@@ -13,7 +13,9 @@ export const MARKETING_ROUTES = [
 	'for-renters/',
 	'for-investors/',
 	'for-agents/',
-	...TOOL_ROUTES
+	...TOOL_ROUTES,
+	// Feedback form (10-18, GTM-02).
+	'feedback/'
 ] as const;
 export const LEGAL_ROUTES = [
 	'legal/privacy/',

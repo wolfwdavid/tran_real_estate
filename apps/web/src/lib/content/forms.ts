@@ -45,7 +45,8 @@ export const FORMS_COPY = Object.freeze({
 		messageLabel: 'Your feedback',
 		messageHelper: "Don't include API keys, passwords, or anyone's personal details.",
 		counter: (n: number) => `${n.toLocaleString('en-US')} of 2,000 characters`,
-		counterLeft: (r: number) => `${r.toLocaleString('en-US')} ${r === 1 ? 'character' : 'characters'} left`,
+		counterLeft: (r: number) =>
+			`${r.toLocaleString('en-US')} ${r === 1 ? 'character' : 'characters'} left`,
 		emailLabel: 'Email (optional)',
 		emailHelper: "Only if you'd like a reply.",
 		button: 'Send feedback',
