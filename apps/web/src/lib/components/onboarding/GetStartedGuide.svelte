@@ -35,6 +35,14 @@
 	let headingEl = $state<HTMLHeadingElement>();
 	let stepEl = $state<HTMLHeadingElement>();
 	let showEl = $state<HTMLButtonElement>();
+	/** Set once onMount ran (stored state applied, listeners attached); specs wait on it. */
+	let ready = $state(false);
+	/**
+	 * Bumped on every state change and tour request. The first tour step awaits the lazily loaded
+	 * tour panel; only the latest request may apply, so a later Show me around, Hide this guide or
+	 * other tile wins over that stale step.
+	 */
+	let version = 0;
 
 	const compact = $derived(view.status === 'done' || view.status === 'hidden');
 	const touring = $derived(
@@ -48,6 +56,7 @@
 	}
 
 	function save(next: OnboardingState) {
+		version++;
 		view = next;
 		writeOnboarding(next);
 	}
@@ -65,7 +74,9 @@
 
 	async function go(step: 0 | 1 | 2 | 3, p: OnboardingPortal = portal) {
 		if (step === 0) return showGuide();
+		const at = ++version;
 		await loadTour();
+		if (at !== version) return;
 		save({ status: 'touring', portal: p, step, ...keep() });
 		void focusEl(() => stepEl);
 	}
@@ -83,7 +94,10 @@
 	onMount(() => {
 		const stored = readOnboarding();
 		if (stored.status === 'touring' && stored.portal && (stored.step ?? 0) > 0) {
-			void loadTour().then(() => (view = stored));
+			const at = version;
+			void loadTour().then(() => {
+				if (at === version) view = stored;
+			});
 		} else {
 			view = stored;
 		}
@@ -98,6 +112,7 @@
 		};
 		addEventListener('hashchange', onHash);
 		document.addEventListener('click', onClick);
+		ready = true;
 		return () => {
 			removeEventListener('hashchange', onHash);
 			document.removeEventListener('click', onClick);
@@ -114,6 +129,7 @@
 <section
 	id="get-started"
 	aria-labelledby="get-started-heading"
+	data-ready={ready ? '' : undefined}
 	class="bg-background py-12 md:py-16"
 >
 	<div class="mx-auto max-w-page px-6 md:px-8">

@@ -26,6 +26,8 @@ async function openLanding(page: Page) {
 	await page.goto('');
 	await expect(page.locator('html')).not.toHaveAttribute('hidden');
 	await expect(page.locator('#get-started')).toBeVisible();
+	// Drive the guide only after its onMount ran: a pre-hydration click on a tile does nothing.
+	await expect(page.locator('#get-started')).toHaveAttribute('data-ready', '');
 }
 
 const guide = (page: Page) => page.locator('#get-started');
@@ -107,11 +109,17 @@ test('guide: a sample-data exit records done with the last portal', async ({ pag
 test('guide: hero Show me around resets the guide and focuses its heading', async ({ page }) => {
 	await openLanding(page);
 	await guide(page).getByRole('button', { name: 'Agent Start the tour' }).click();
+	await expect(
+		guide(page).getByRole('heading', { level: 3, name: 'What the agent portal does' })
+	).toBeFocused();
 	await page.getByRole('link', { name: 'Show me around', exact: true }).click();
 	await expect(guide(page).getByRole('heading', { level: 2, name: 'Get started' })).toBeFocused();
 	await expect(guide(page)).toContainText('Where do you want to start?');
 	// Second click while already at #get-started (no hashchange) still resets.
 	await guide(page).getByRole('button', { name: 'Agent Start the tour' }).click();
+	await expect(
+		guide(page).getByRole('heading', { level: 3, name: 'What the agent portal does' })
+	).toBeFocused();
 	await page.getByRole('link', { name: 'Show me around', exact: true }).click();
 	await expect(guide(page).getByRole('heading', { level: 2, name: 'Get started' })).toBeFocused();
 	await expect(guide(page)).toContainText('Where do you want to start?');
