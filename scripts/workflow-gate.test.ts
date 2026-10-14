@@ -152,7 +152,7 @@ describe('quality matrix', () => {
 	test('owner variables reach only the root leg, in every env block', () => {
 		const quality = job('quality');
 		const blocks = count(quality, '\n        env:\n');
-		expect(blocks).toBe(3); // Build, CSP oracle, E2E
+		expect(blocks).toBe(4); // Build, CSP oracle, SEO oracle, E2E
 		for (const name of OWNER_KEYS) {
 			const gated = `${name}: \${{ matrix.target == 'root' && vars.${name} || '' }}`;
 			expect(count(quality, gated), name).toBe(blocks);
@@ -168,6 +168,51 @@ describe('quality matrix', () => {
 			'run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}'
 		);
 		expect(quality).toContain('playwright test --project=${{ matrix.target }}');
+	});
+
+	test('the SEO oracle runs on every leg for the matching target, after the build', () => {
+		const quality = job('quality');
+		const seo =
+			'run: node scripts/assert-seo.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}';
+		expect(count(quality, seo)).toBe(1);
+		// No `if:` on the SEO step: it must run on root, sub and configured alike.
+		const step = quality.slice(quality.lastIndexOf('- name:', quality.indexOf(seo)));
+		expect(step.slice(0, step.indexOf(seo))).not.toContain('if:');
+		expect(quality.indexOf(seo)).toBeGreaterThan(
+			quality.indexOf('run: pnpm run build:${{ matrix.target }}')
+		);
+		expect(quality.indexOf(seo)).toBeLessThan(quality.indexOf('name: E2E + axe'));
+	});
+
+	test('the JS budget gates the deploy build (root leg) and the analytics-on build (configured leg)', () => {
+		const quality = job('quality');
+		expect(quality).toContain(
+			"if: matrix.target == 'root'\n        run: node scripts/assert-budget.mjs apps/web/build --require-tools\n"
+		);
+		expect(quality).toContain(
+			"if: matrix.target == 'configured'\n        run: node scripts/assert-budget.mjs apps/web/build-configured --require-tools\n"
+		);
+		expect(count(quality, 'scripts/assert-budget.mjs')).toBe(2);
+		// Never on the sub leg and never via matrix.build_dir (that would include build-sub).
+		expect(quality).not.toMatch(/assert-budget\.mjs apps\/web\/\$\{\{ matrix\.build_dir \}\}/);
+	});
+
+	test('the full dependency audit runs once, on the root leg, right after pnpm install', () => {
+		const quality = job('quality');
+		const step = "- if: matrix.target == 'root'\n        run: pnpm audit:deps\n";
+		expect(count(quality, 'pnpm audit:deps')).toBe(1);
+		expect(quality).toContain(step);
+		expect(quality.indexOf(step)).toBeGreaterThan(
+			quality.indexOf('run: pnpm install --frozen-lockfile')
+		);
+		expect(quality.indexOf(step)).toBeLessThan(quality.indexOf('run: pnpm check'));
+		// pnpm audit:deps must stay the full audit (prod + dev, low and up).
+		const pkg = JSON.parse(readFileSync(join(import.meta.dirname, '../package.json'), 'utf8'));
+		expect(pkg.scripts['audit:deps']).toBe('pnpm audit --audit-level low');
+	});
+
+	test('the new gates add no third-party action: exactly 7 uses: lines', () => {
+		expect(count(text, 'uses: ')).toBe(7);
 	});
 
 	test('quality runs check, lint and unit before the build', () => {

@@ -78,6 +78,9 @@ jobs:
           tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
       - run: pnpm install --frozen-lockfile
+      # Full dependency audit (prod + dev, low and up). The lockfile is shared, so one leg is enough.
+      - if: matrix.target == 'root'
+        run: pnpm audit:deps
       # Before pnpm test:unit: the web-browser Vitest project runs component tests in Chromium.
       - run: pnpm --filter web exec playwright install --with-deps chromium
       - run: pnpm check
@@ -104,6 +107,22 @@ jobs:
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
           PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
+      - name: SEO oracle
+        run: node scripts/assert-seo.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
+          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
+          PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
+          PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
+      # Initial-JS budget on the deploy build AND on the analytics-on build: production ships with
+      # analytics configured, so the configured build is what visitors load.
+      - name: JS budget (deploy build)
+        if: matrix.target == 'root'
+        run: node scripts/assert-budget.mjs apps/web/build --require-tools
+      - name: JS budget (analytics-on build)
+        if: matrix.target == 'configured'
+        run: node scripts/assert-budget.mjs apps/web/build-configured --require-tools
       - name: E2E + axe
         run: pnpm --filter web exec playwright test --project=${{ matrix.target }}
         env:
