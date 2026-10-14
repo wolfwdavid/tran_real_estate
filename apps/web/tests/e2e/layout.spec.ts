@@ -60,7 +60,8 @@ test('prerendered HTML marks the current portal', async ({ page }) => {
 
 	// The header switcher marks each app page (the inline list and the menu panel both do). A
 	// portal sub-page (renter/shortlist/) marks its portal root as the current section instead.
-	for (const route of PORTAL_ROUTES) {
+	// /setup/rentcast/ (10-16) is an (app) page but no switcher destination, so nothing is marked.
+	for (const route of PORTAL_ROUTES.filter((r) => !r.startsWith('setup/'))) {
 		const root = `${route.split('/')[0]}/`;
 		const tags = await anchors(route, 'Portals', route === root ? 'page' : 'true');
 		expect(marked(tags, root), `Portals nav in raw ${route}: ${JSON.stringify(tags)}`).toBe(true);

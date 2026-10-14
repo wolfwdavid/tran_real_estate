@@ -45,10 +45,23 @@
 		 * agent CRM routes (08-27, SC5). Default true.
 		 */
 		runAlerts?: boolean;
+		/**
+		 * Called once per mount after start() resolves, with this shell's runtime. The (app) layout
+		 * uses it for the ?source=sample hand-off (10-16), since it sits above this context. The
+		 * check-on-open pass waits for it, so a switch to sample data lands before any spend.
+		 */
+		onStart?: (runtime: DataRuntime) => void | Promise<void>;
 		children: Snippet;
 	}
 
-	let { showStatusBar, runtime: injected, alerts, runAlerts = true, children }: Props = $props();
+	let {
+		showStatusBar,
+		runtime: injected,
+		alerts,
+		runAlerts = true,
+		onStart,
+		children
+	}: Props = $props();
 
 	// One runtime for this mount; a later prop change does not swap it.
 	const runtime = untrack(() => injected) ?? createDataRuntime();
@@ -187,6 +200,12 @@
 				return;
 			}
 			stop = cleanup;
+			try {
+				await untrack(() => onStart)?.(runtime);
+			} catch {
+				// A failed hand-off must not stop the shell; the page keeps its current source.
+			}
+			if (destroyed) return;
 			started = true;
 			if (untrack(() => runAlerts)) startAlerts();
 		};
