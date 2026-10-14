@@ -42,6 +42,20 @@ describe('numeric post-check properties', () => {
 		);
 	});
 
+	// Timing budget against the FASTEST of several runs: ReDoS backtracking is slow on every run, a
+	// preempted run under a loaded parallel test run is slow once (a 2-3 ms fair-housing scan measured
+	// 153 ms with 40 CPU burners running, 10-23). The budget itself is unchanged.
+	const RUNS = 5;
+	function fastest(fn: () => void): number {
+		let best = Infinity;
+		for (let i = 0; i < RUNS; i++) {
+			const started = performance.now();
+			fn();
+			best = Math.min(best, performance.now() - started);
+		}
+		return best;
+	}
+
 	test('ReDoS budget: 100,000 characters of digits, commas, dots and spaces', () => {
 		const alphabet = '0123456789,. ';
 		let seed = 42;
@@ -52,10 +66,11 @@ describe('numeric post-check properties', () => {
 		}
 		const commaChain = '1,'.repeat(50_000);
 		const digitRun = '9'.repeat(100_000);
-		const t0 = performance.now();
-		checkNumbers(text, [1, 2, 3]);
-		checkNumbers(commaChain, [1]);
-		checkNumbers(digitRun, [1]);
-		expect(performance.now() - t0).toBeLessThan(250);
+		const elapsed = fastest(() => {
+			checkNumbers(text, [1, 2, 3]);
+			checkNumbers(commaChain, [1]);
+			checkNumbers(digitRun, [1]);
+		});
+		expect(elapsed, `${elapsed.toFixed(1)} ms (fastest of ${RUNS})`).toBeLessThan(250);
 	});
 });
