@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { MediaQuery } from 'svelte/reactivity';
 	// The Menu / Close icons are inline copies of Lucide `menu` and `x` (ISC licence, @lucide/svelte
 	// 1.45.0 path data), not @lucide/svelte imports. This header is on every marketing page, and the
 	// two imports alone pulled Lucide's shared Icon runtime (~1.7 KB gz) into the initial JS of the
@@ -11,13 +10,7 @@
 
 	let { showSettings = false }: { showSettings?: boolean } = $props();
 
-	const wide = new MediaQuery('min-width: 640px', false);
-	// Writable $derived: re-derives to closed whenever the viewport crosses 640px, and stays
-	// assignable for the toggle. ($state + $effect trips eslint svelte/prefer-writable-derived.)
-	let open = $derived.by(() => {
-		void wide.current;
-		return false;
-	});
+	let open = $state(false);
 	let hydrated = $state(false);
 	let button: HTMLButtonElement | undefined = $state();
 
@@ -34,7 +27,16 @@
 	const current = (id: string) =>
 		page.route.id === id ? 'page' : page.route.id?.startsWith(`${id}/`) ? 'true' : undefined;
 
-	onMount(() => (hydrated = true));
+	onMount(() => {
+		hydrated = true;
+		// Close the menu whenever the viewport crosses 640px. A plain matchMedia listener, not
+		// svelte/reactivity's MediaQuery: that import put the shared reactivity chunk (~1.1 KB gz)
+		// into the initial JS of every page, including the budget-gated tool pages.
+		const wide = matchMedia('(min-width: 640px)');
+		const close = () => (open = false);
+		wide.addEventListener('change', close);
+		return () => wide.removeEventListener('change', close);
+	});
 	afterNavigate(() => (open = false));
 
 	function onkeydown(e: KeyboardEvent) {
