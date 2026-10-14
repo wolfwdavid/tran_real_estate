@@ -79,7 +79,10 @@
   repeats (times out clicking "Agent Start the tour"); same test 10-13/10-14 logged, for 10-23.
   Unit: `ResultsView.browser.test.ts` and `scripts/precommit.test.ts` failed once in the full
   `test:unit` run and passed in isolation (known, see handoffs).
-- **(10-16) ProviderKeyCard in-page links on /setup/rentcast/:** the card is embedded unchanged, so
+- **RESOLVED by 10-18 (b6b4dd5): (10-16) ProviderKeyCard in-page links on /setup/rentcast/.** The card
+  now takes a `settingsBase` prefix; /setup/rentcast/ passes `resolve('/settings/')`, Settings keeps
+  in-page fragments. E2E: setup-rentcast.spec.ts asserts the pointer is `…/settings/#rentcast-usage`
+  and resolves with 200. Original note: the card is embedded unchanged, so
   its post-hydration pointer "RentCast usage" (`#rentcast-usage`) and the locked-state "Key security"
   (`#key-security`) point at ids that exist only on Settings. Not crawled (client-only), but they
   do nothing on the setup page. A follow-up could let the card take a `settingsHref` base.
