@@ -16,12 +16,13 @@
 	import BackupSection from '$lib/features/shared/settings/BackupSection.svelte';
 	import StorageSection from '$lib/features/shared/settings/StorageSection.svelte';
 	import InstallSection from '$lib/features/shared/settings/InstallSection.svelte';
+	import GettingStartedSection from '$lib/features/shared/settings/GettingStartedSection.svelte';
 
 	// Prerendered shell: every section's static copy renders at build time. The vault, IndexedDB
 	// and Storage API code load only after hydration, through dynamic import() in onMount, so they
 	// never enter the prerender or any other route's entry chunk.
 
-	// Phase 3 sections plus Phase 4's RentCast usage and Phase 5's AI drafting. Later phases add their slot's component here
+	// Phase 3 sections plus Phase 4's RentCast usage, Phase 5's AI drafting and Phase 10's Getting started. Later phases add their slot's component here
 	// and flip `available` in sections.ts; the registry order decides placement.
 	const SECTION_COMPONENTS: Record<string, Component> = {
 		'api-keys': ApiKeysSection,
@@ -30,7 +31,8 @@
 		'key-security': KeySecuritySection,
 		backup: BackupSection,
 		storage: StorageSection,
-		install: InstallSection
+		install: InstallSection,
+		'getting-started': GettingStartedSection
 	};
 	const sections = availableSections().filter((s) => s.id in SECTION_COMPONENTS);
 

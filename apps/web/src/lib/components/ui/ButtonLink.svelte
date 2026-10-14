@@ -7,12 +7,15 @@
 		variant = 'primary',
 		arrow = false,
 		class: className = '',
+		onclick,
 		children
 	}: {
 		href: string;
 		variant?: 'primary' | 'secondary';
 		arrow?: boolean;
 		class?: string;
+		/** Runs before the browser follows the link (e.g. Settings "Show the tour again"). */
+		onclick?: (event: MouseEvent) => void;
 		children: Snippet;
 	} = $props();
 
@@ -25,6 +28,7 @@
 <!-- eslint-disable svelte/no-navigation-without-resolve -- callers pass resolve() output or a #fragment -->
 <a
 	{href}
+	{onclick}
 	class={[
 		'inline-flex min-h-12 cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-md px-6 text-body font-semibold transition-colors duration-150 ease-out motion-safe:active:translate-y-px',
 		variants[variant],

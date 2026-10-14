@@ -32,18 +32,8 @@ describe('settings section registry', () => {
 		expect(SETTINGS_SECTIONS.map((s) => s.owner)).toEqual([3, 4, 5, 3, 3, 3, 3, 10]);
 	});
 
-	it('marks exactly the Phase 3, 4 and 5 sections available', () => {
-		const available = SETTINGS_SECTIONS.filter((s) => s.available).map((s) => s.id);
-		expect(available).toEqual([
-			'api-keys',
-			'rentcast-usage',
-			'ai-drafting',
-			'key-security',
-			'backup',
-			'storage',
-			'install'
-		]);
-		for (const s of SETTINGS_SECTIONS) expect(s.available).toBe(s.owner !== 10);
+	it('marks every section available once Phase 10 ships Getting started', () => {
+		for (const s of SETTINGS_SECTIONS) expect(s.available).toBe(true);
 	});
 
 	it('has unique, anchor-safe ids', () => {
@@ -52,7 +42,7 @@ describe('settings section registry', () => {
 		for (const id of ids) expect(id).toMatch(/^[a-z-]+$/);
 	});
 
-	it('availableSections() returns the seven shipped sections in registry order', () => {
+	it('availableSections() returns the eight shipped sections in registry order', () => {
 		expect(availableSections().map((s) => s.id)).toEqual([
 			'api-keys',
 			'rentcast-usage',
@@ -60,7 +50,8 @@ describe('settings section registry', () => {
 			'key-security',
 			'backup',
 			'storage',
-			'install'
+			'install',
+			'getting-started'
 		]);
 	});
 

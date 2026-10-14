@@ -18,7 +18,7 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = Object.freeze([
 	{ id: 'backup', label: 'Backup and restore', owner: 3, available: true },
 	{ id: 'storage', label: 'Storage', owner: 3, available: true },
 	{ id: 'install', label: 'Install the app', owner: 3, available: true },
-	{ id: 'getting-started', label: 'Getting started', owner: 10, available: false }
+	{ id: 'getting-started', label: 'Getting started', owner: 10, available: true }
 ] as const satisfies readonly SettingsSection[]);
 
 /** The sections rendered today, in registry order. */

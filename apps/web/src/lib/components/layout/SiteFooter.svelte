@@ -47,6 +47,15 @@
 		}
 	] satisfies FooterLink[];
 
+	// Send feedback: on a portal route the link pre-selects that portal's topic. Computed from the
+	// route id, so each prerendered page carries a static href.
+	const feedbackPortal = $derived(
+		/^\/\(app\)\/(renter|investor|agent)(?:\/|$)/.exec(page.route.id ?? '')?.[1]
+	);
+	const feedbackHref = $derived(
+		resolve('/feedback/') + (feedbackPortal ? `?portal=${feedbackPortal}` : '')
+	);
+
 	const current = (id: string) => (page.route.id === id ? 'page' : undefined);
 	const heading = 'text-label font-semibold tracking-[0.06em] text-secondary uppercase';
 	const link =
@@ -83,6 +92,12 @@
 							{#each learn as l (l.id)}
 								<li><a href={l.href} aria-current={current(l.id)} class={link}>{l.label}</a></li>
 							{/each}
+							<li>
+								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve('/feedback/') + ?portal= -->
+								<a href={feedbackHref} aria-current={current('/(marketing)/feedback')} class={link}
+									>Send feedback</a
+								>
+							</li>
 						</ul>
 					</div>
 				</div>
