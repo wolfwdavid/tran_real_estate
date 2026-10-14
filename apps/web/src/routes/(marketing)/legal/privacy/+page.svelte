@@ -53,8 +53,9 @@
 	<p>
 		The waitlist and feedback forms send what you type to Web3Forms, a form service, which emails it
 		to the Tran team. Nothing is sent until you submit. Each message is labeled with the form it
-		came from, such as which waitlist you joined. Nothing else on the page is sent with it. Like any
-		web request, it reaches Web3Forms with your IP address and browser type.
+		came from, such as which waitlist you joined or which part of Tran your feedback is about.
+		Nothing else on the page is sent with it. Like any web request, it reaches Web3Forms with your
+		IP address and browser type.
 	</p>
 
 	<h2>Usage counts</h2>
