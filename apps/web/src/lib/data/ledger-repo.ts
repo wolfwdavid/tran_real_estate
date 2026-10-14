@@ -53,6 +53,15 @@ export interface LedgerRepo {
 	writeCap(cap: number): Promise<void>;
 }
 
+/**
+ * True once a cap has been saved at least once (the `rentcastCap` row exists). No row means the
+ * default cap is in force. /setup/rentcast/ shows its step 3 "Done" badge from this.
+ */
+export async function hasSavedCap(db: DataDb): Promise<boolean> {
+	const row = await db.dataPrefs.get('rentcastCap');
+	return row?.key === 'rentcastCap';
+}
+
 export function createLedgerRepo(db: DataDb, clock: () => number): LedgerRepo {
 	const readCapRow = async (): Promise<number> => {
 		const row = await db.dataPrefs.get('rentcastCap');

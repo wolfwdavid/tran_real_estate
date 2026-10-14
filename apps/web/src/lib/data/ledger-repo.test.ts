@@ -5,7 +5,7 @@ import { isGatewayError, type GatewayError } from '@tran/core/request';
 import { DEFAULT_CAP } from '@tran/core/budget';
 import type { DataDb } from './platform';
 import { issueGrant, type OverCapGrant } from './grants';
-import { createLedgerRepo, type LedgerRepo, type SpendRequest } from './ledger-repo';
+import { createLedgerRepo, hasSavedCap, type LedgerRepo, type SpendRequest } from './ledger-repo';
 import { T0, TEST_KEY, makeDb } from './testing/harness';
 
 let db: DataDb;
@@ -37,6 +37,12 @@ async function capError(p: Promise<unknown>): Promise<GatewayError> {
 }
 
 describe('cap preference', () => {
+	it('hasSavedCap is false until a cap is written, even one equal to the default', async () => {
+		expect(await hasSavedCap(db)).toBe(false);
+		await repo.writeCap(40);
+		expect(await hasSavedCap(db)).toBe(true);
+	});
+
 	it('defaults to 40 and round-trips a written cap', async () => {
 		expect(DEFAULT_CAP).toBe(40);
 		expect(await repo.readCap()).toBe(40);
