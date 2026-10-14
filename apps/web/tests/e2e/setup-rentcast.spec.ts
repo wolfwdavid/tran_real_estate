@@ -1,10 +1,11 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { FAKE_RENTCAST_KEY, blockRentCast, mockRentCast } from './helpers/data';
+import { FAKE_RENTCAST_KEY, RENTCAST_ROUTE, mockRentCast } from './helpers/data';
 
 // /setup/rentcast/, the guided free RentCast key setup (10-16; GTM-01; 10-UI-SPEC "/setup/rentcast/").
-// Real built site, both bases. RentCast is never reached: blockRentCast aborts every request and the
-// Test key case answers from mockRentCast. Axe titles follow the 10-22 audit contract ("axe" in
+// Real built site, both bases. RentCast (https://api.rentcast.io) is never reached: a catch-all
+// route records and aborts every request, and afterEach asserts it recorded nothing; the Test key
+// case answers from mockRentCast, which is registered later and takes precedence. Axe titles follow the 10-22 audit contract ("axe" in
 // the title, "setup" in the path) and cover the three UI-SPEC states: no key, a saved untested key,
 // and a tested key.
 
@@ -41,9 +42,23 @@ async function saveKeyHere(page: Page): Promise<void> {
 	);
 }
 
+/** RentCast requests that reached the catch-all (none may: only mockRentCast answers). */
+let unexpected: string[] = [];
+
 test.beforeEach(async ({ page }) => {
-	await blockRentCast(page);
+	unexpected = [];
+	await page.route(RENTCAST_ROUTE, async (route) => {
+		unexpected.push(`${route.request().method()} ${route.request().url()}`);
+		await route.abort();
+	});
 });
+
+test.afterEach(() => {
+	expect(unexpected, 'unmocked requests to api.rentcast.io').toEqual([]);
+});
+
+const statusBar = (page: Page) => page.getByRole('region', { name: 'Data source' });
+const announcer = (page: Page) => page.getByTestId('live-announcer');
 
 test('prerendered shell: static copy, "Checking this browser…" placeholders, one noindex', async ({
 	page
@@ -73,6 +88,7 @@ test('axe setup: no key — three steps, To do and Default: 40 badges, finish ro
 	await openSetup(page, '?portal=investor');
 
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Connect a free RentCast key');
+	await expect(page.locator('main ol > li')).toHaveCount(3);
 	const headings = page.locator('main ol > li > section h2');
 	await expect(headings).toHaveText([
 		'Create a key just for Tran',
@@ -91,6 +107,8 @@ test('axe setup: no key — three steps, To do and Default: 40 badges, finish ro
 	await expect(
 		finish(page).getByText('No tested key yet. Portals will use sample data until you add one.')
 	).toBeVisible();
+	// The setup page hides the portal Data source bar.
+	await expect(statusBar(page)).toHaveCount(0);
 
 	const open = finish(page).getByRole('link', { name: 'Open investor portal', exact: true });
 	await expect(open).toHaveAttribute('href', /\/investor\/$/);
@@ -153,4 +171,39 @@ test('saving a cap marks step 3 Done, and it stays Done after a reload', async (
 	await openSetup(page);
 	await expect(step3(page).getByText('Done', { exact: true })).toBeVisible();
 	await expect(step3(page).getByLabel('Monthly call cap', { exact: true })).toHaveValue('30');
+});
+
+for (const portal of ['renter', 'investor'] as const) {
+	test(`sample hand-off: ${portal}/?source=sample strips the parameter, announces and shows Sample data`, async ({
+		page
+	}) => {
+		await page.goto(`${portal}/?source=sample`);
+		await expect(announcer(page)).toHaveText('Showing sample data.');
+		await expect(page).toHaveURL(new RegExp(`/${portal}/$`));
+		expect(new URL(page.url()).searchParams.has('source')).toBe(false);
+		await expect(statusBar(page)).toContainText('Sample data');
+	});
+}
+
+test('sample hand-off: agent/?source=sample fills an empty CRM with the sample contacts', async ({
+	page
+}) => {
+	await page.goto('agent/?source=sample');
+	await expect(announcer(page)).toHaveText('Showing sample data.');
+	await expect(page).toHaveURL(/\/agent\/$/);
+	await page.goto('agent/contacts/');
+	await expect(page.getByRole('region', { name: 'Sample contacts' })).toBeVisible();
+});
+
+test('the setup page finish row hands off to the chosen portal in sample mode', async ({
+	page
+}) => {
+	await openSetup(page, '?portal=investor');
+	await finish(page).getByRole('link', { name: 'Use sample data for now', exact: true }).click();
+	await expect(page).toHaveURL(/\/investor\/$/);
+	await expect(announcer(page)).toHaveText('Showing sample data.');
+	await expect(statusBar(page)).toContainText('Sample data');
+	expect(await page.evaluate(() => localStorage.getItem('tran.onboarding.v1'))).toBe(
+		'{"status":"done","lastPortal":"investor"}'
+	);
 });
