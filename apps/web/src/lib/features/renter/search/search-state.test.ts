@@ -8,7 +8,7 @@ import { encodeSearchParams } from '@tran/core/renter';
 import type { Listing } from '@tran/core/listings';
 import { createDataRuntime, type DataGateway, type DataRequest } from '$lib/data';
 import { TranDb } from '$lib/storage/db';
-import { createRenterSearch } from './search-state.svelte';
+import { createRenterSearch, FILTER_ANNOUNCE_MS } from './search-state.svelte';
 
 const T0 = Date.parse('2026-10-15T12:00:00.000Z');
 const HOUR = 3_600_000;
@@ -104,7 +104,9 @@ async function setup(): Promise<Setup> {
 				spend: (req: DataRequest, kind?: 'get' | 'refresh') =>
 					runtime.requestSpend<Listing[]>(req, kind),
 				now: () => new Date(now),
-				announce: (m) => announced.push(m)
+				announce: (m) => announced.push(m),
+				// Every announcement is pushed, so the count is the announcer's sequence.
+				announcementSequence: () => announced.length
 			})
 	};
 }
@@ -211,6 +213,32 @@ describe('fetch wide, filter local', () => {
 
 		// Five changes later, still the one call.
 		expect(s.calls).toHaveLength(1);
+	});
+
+	it('the debounced filter summary is announced when nothing newer was announced', async () => {
+		const s = await setup();
+		const search = s.controller();
+		search.locInput = '74201';
+		await search.search();
+		search.setFilters({ ...search.filters, priceMax: 1600 });
+		await new Promise((r) => setTimeout(r, FILTER_ANNOUNCE_MS + 150));
+		expect(s.announced.at(-1)).toBe(`Showing ${search.filtered.length} of 12 rentals.`);
+		search.dispose();
+	});
+
+	it('a newer announcement (a pin selected) is never overwritten by the pending filter summary', async () => {
+		// renter-journey.spec.ts:43 saw "Showing 1 of 10 rentals." replace "…, selected." in the live
+		// region: the summary scheduled by the last filter change fired after the user's next action.
+		const s = await setup();
+		const search = s.controller();
+		search.locInput = '74201';
+		await search.search();
+		search.setFilters({ ...search.filters, priceMax: 1600 });
+		s.announced.push('101 Sample Way, $1,200 a month, selected.');
+		await new Promise((r) => setTimeout(r, FILTER_ANNOUNCE_MS + 150));
+		expect(s.announced.at(-1)).toBe('101 Sample Way, $1,200 a month, selected.');
+		expect(s.announced.some((m) => m.startsWith('Showing '))).toBe(false);
+		search.dispose();
 	});
 
 	it('filters set before searching never reach the request; re-searching after a change is cached', async () => {

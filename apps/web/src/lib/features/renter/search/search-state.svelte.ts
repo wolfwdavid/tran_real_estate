@@ -54,6 +54,12 @@ export interface RenterSearchDeps {
 	spend: (req: DataRequest, kind?: 'get' | 'refresh') => Promise<GatewayResult<Listing[]>>;
 	now: () => Date;
 	announce?: (message: string) => void;
+	/**
+	 * The announcer's sequence (announcementSequence). When given, the debounced filter summary is
+	 * dropped if anything else was announced after it was scheduled, so it never overwrites a newer
+	 * message such as a selected map pin.
+	 */
+	announcementSequence?: () => number;
 }
 
 export function createRenterSearch(deps: RenterSearchDeps) {
@@ -212,7 +218,9 @@ export function createRenterSearch(deps: RenterSearchDeps) {
 	function scheduleFilterAnnouncement(): void {
 		clearTimeout(announceTimer);
 		if (rows.length === 0) return;
+		const scheduledAt = deps.announcementSequence?.();
 		announceTimer = setTimeout(() => {
+			if (scheduledAt !== undefined && deps.announcementSequence?.() !== scheduledAt) return;
 			if (rows.length > 0) announce(`Showing ${filtered.length} of ${rows.length} rentals.`);
 		}, FILTER_ANNOUNCE_MS);
 	}

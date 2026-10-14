@@ -3,6 +3,15 @@
 // This module imports nothing from storage, so it is safe on marketing pages.
 
 const state = $state({ message: '' });
+let sequence = 0;
+
+/**
+ * How many announcements have been made. A delayed announcement records it when scheduled and
+ * skips itself if it changed, so a stale summary never replaces a newer message.
+ */
+export function announcementSequence(): number {
+	return sequence;
+}
 
 /** Current announcer text (read by LiveAnnouncer). */
 export function announcerMessage(): string {
@@ -14,6 +23,7 @@ export function announcerMessage(): string {
  * frame, so repeating the same message is announced again.
  */
 export function announce(message: string): void {
+	sequence++;
 	state.message = '';
 	const set = () => {
 		state.message = message;

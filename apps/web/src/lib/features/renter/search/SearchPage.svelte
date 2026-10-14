@@ -10,7 +10,7 @@
 	import { resolve } from '$app/paths';
 	import type { Listing } from '@tran/core/listings';
 	import { getDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { announce, announcementSequence } from '$lib/components/a11y/announcer.svelte';
 	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
 	import SavedSearchesSection from '../saved/SavedSearchesSection.svelte';
 	import ActiveFilterChips from './ActiveFilterChips.svelte';
@@ -28,7 +28,8 @@
 		gateway: () => runtime.gateway,
 		spend: (req, kind) => runtime.requestSpend<Listing[]>(req, kind),
 		now: () => new Date(),
-		announce
+		announce,
+		announcementSequence
 	});
 
 	let form = $state<ReturnType<typeof SearchForm> | null>(null);
