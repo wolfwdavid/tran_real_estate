@@ -1,0 +1,13 @@
+PASS	site footer	Tran Real Estate Tools is software, not a real estate brokerage. Nothing on this site is investment, legal, or tax advice.	
+PASS	affordability calculator	General guidelines, not financial advice	
+PASS	cap rate calculator	General guidelines, not financial advice	
+PASS	cash-on-cash calculator	General guidelines, not financial advice	
+PASS	DSCR calculator	General guidelines, not financial advice	
+PASS	renter affordability	This is a general guideline based on common rules of thumb, not financial advice.	
+PASS	deal analyzer	These figures are arithmetic on the numbers you entered. They're not investment, legal, or tax advice. Check every number before you rely on it.	
+PASS	investor overview	Not investment, legal, or tax advice. Tran is software, not a brokerage.	
+PASS	investor memo	Not investment, legal, or tax advice. Tran is software, not a brokerage.	
+PASS	investor memo printout	This memo was prepared with Tran Real Estate Tools, a software tool. It is not investment, legal, or tax advice, and Tran is not a real estate brokerage.	
+PASS	fair-rent check	Estimates can be wrong. Use them as one input when you talk to the listing contact.	
+PASS	market snapshot builder	Market information only. Not a comparative market analysis or a professional valuation of any property.	
+PASS	market snapshot printout	Market information only. Not a comparative market analysis or a professional valuation of any property.	

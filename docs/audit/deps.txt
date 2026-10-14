@@ -1,0 +1,18 @@
+exit code: 0
+{
+  "advisories": {},
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "dependencies": 114,
+    "devDependencies": 221,
+    "optionalDependencies": 62,
+    "totalDependencies": 362
+  }
+}
+

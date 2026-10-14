@@ -1,0 +1,38 @@
+feedback/index.html	js 104939	css 12004	REPORT
+for-agents/index.html	js 98773	css 12005	REPORT
+for-investors/index.html	js 98776	css 12005	REPORT
+for-renters/index.html	js 98774	css 12005	REPORT
+index.html	js 59112	css 12104	REPORT
+legal/data-coverage/index.html	js 51002	css 12248	REPORT
+legal/fair-housing/index.html	js 51208	css 12248	REPORT
+legal/privacy/index.html	js 52164	css 12248	REPORT
+legal/terms/index.html	js 49293	css 12248	REPORT
+tools/affordability/index.html	js 60075	css 11952	PASS
+tools/cap-rate/index.html	js 59950	css 11952	PASS
+tools/cash-on-cash/index.html	js 60108	css 11952	PASS
+tools/dscr/index.html	js 60088	css 11952	PASS
+tools/index.html	js 52325	css 11952	PASS
+apps/web/build-configured:
+feedback/index.html	js 105132	css 12004	REPORT
+for-agents/index.html	js 98964	css 12005	REPORT
+for-investors/index.html	js 98970	css 12005	REPORT
+for-renters/index.html	js 98964	css 12005	REPORT
+index.html	js 59277	css 12104	REPORT
+legal/data-coverage/index.html	js 51168	css 12248	REPORT
+legal/fair-housing/index.html	js 51373	css 12248	REPORT
+legal/privacy/index.html	js 52330	css 12248	REPORT
+legal/terms/index.html	js 49461	css 12248	REPORT
+tools/affordability/index.html	js 60245	css 11952	PASS
+tools/cap-rate/index.html	js 60118	css 11952	PASS
+tools/cash-on-cash/index.html	js 60276	css 11952	PASS
+tools/dscr/index.html	js 60257	css 11952	PASS
+tools/index.html	js 52491	css 11952	PASS
+report-only over budget: /feedback/ (apps/web/build) 102.5 KB, over by 42.5 KB
+report-only over budget: /for-agents/ (apps/web/build) 96.5 KB, over by 36.5 KB
+report-only over budget: /for-investors/ (apps/web/build) 96.5 KB, over by 36.5 KB
+report-only over budget: /for-renters/ (apps/web/build) 96.5 KB, over by 36.5 KB
+report-only over budget: /feedback/ (apps/web/build-configured) 102.7 KB, over by 42.7 KB
+report-only over budget: /for-agents/ (apps/web/build-configured) 96.6 KB, over by 36.6 KB
+report-only over budget: /for-investors/ (apps/web/build-configured) 96.7 KB, over by 36.7 KB
+report-only over budget: /for-renters/ (apps/web/build-configured) 96.6 KB, over by 36.6 KB
+cls: [{"route":"","viewport":"375x812","state":"first-visit","cls":0.011281149142177678},{"route":"","viewport":"375x812","state":"returning","cls":0.011281149142177678},{"route":"","viewport":"1280x800","state":"first-visit","cls":0.00015095362663269046},{"route":"","viewport":"1280x800","state":"returning","cls":0.00015095362663269046}]

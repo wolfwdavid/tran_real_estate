@@ -1,0 +1,37 @@
+command csp: exit 0
+
+command seo: exit 0
+
+command budget: exit 0
+
+command banned: exit 0
+
+command deps: exit 0
+info: 0, low: 1, moderate: 0, high: 0, critical: 0
+command guard: exit 0
+Real-data guard passed (1751 all files checked)
+command fixtures:check: exit 0
+Fixtures match generator output (6 files)
+command secrets:canary: exit 0
+gitleaks canary detected as expected
+command secrets:scan: exit 0
+[90m1:47AM[0m [32mINF[0m [1m1135 commits scanned.[0m
+[90m1:47AM[0m [32mINF[0m [1mscanned ~14699723 bytes (14.70 MB) in 2.22s[0m
+[90m1:47AM[0m [32mINF[0m [1mno leaks found[0m
+PASS	RentCast client	unit "packages/core/src/budget/cap.test.ts": 43 passed; unit "apps/web/src/lib/data/gateway.budget.test.ts": 17 passed; e2e "CapAboveLimitDialog: focus on Keep, typed confirmation": 2 passed
+PASS	Saved-search alerts	unit "apps/web/src/lib/data/scheduler.test.ts": 18 passed; unit "a second pass at once, or 23 h later, spends 0": 1 passed
+PASS	BYOK settings	unit "apps/web/src/lib/storage/secrets/testers.test.ts": 6 passed; unit "apps/web/src/lib/storage/secrets/vault.test.ts > forgetAll": 4 passed; unit "apps/web/src/lib/ai/providers/anthropic.test.ts": 22 passed; e2e "settings-keys.spec.ts": 24 passed; owner step: Human UAT 7
+PASS	LLM output rendering	unit "sanitizer module is the only place {@html} is allowed": 1 passed; unit "the same {@html} outside the sanitizer module is rejected": 1 passed; unit "HTML-like model text is escaped, never parsed": 1 passed; e2e "hostile params render as text": 2 passed
+PASS	CSP	command csp: exit 0; e2e "csp.spec.ts": 12 passed
+DEFERRED (human)	Pages deploy	Needs the live GitHub Pages origin: a hard refresh on a deep portal route can only be checked after deploy.; owner step: Human UAT 6
+PASS	Demo mode	e2e "axe reports no WCAG A/AA violations on": 88 passed; e2e "renter-demo-credible.spec.ts": 16 passed; e2e "agent-no-rentcast.spec.ts": 2 passed; e2e "studio-keyless.spec.ts": 16 passed
+PASS	Fixtures	command guard: exit 0; command fixtures:check: exit 0
+PASS	Export/Import	unit "round-trips to an equal envelope with migratedFrom null": 1 passed; unit "an older file is migrated forward and reports migratedFrom": 1 passed; unit "packages/core/src/backup/migrations.test.ts": 6 passed; e2e "settings-backup.spec.ts": 12 passed
+PASS	Storage persistence	unit "apps/web/src/lib/storage/persistence.test.ts": 11 passed; e2e "settings-storage.spec.ts": 12 passed; owner step: Human UAT 8
+PASS	Fair Housing linter	unit "at least 30 bad and 30 neutral phrases": 1 passed; unit "packages/core/src/fair-housing/check.test.ts": 450 passed; unit "packages/core/src/fair-housing/mutation.test.ts": 206 passed
+PASS	Disclaimers	e2e "disclaimer: ": 104 passed
+PASS	Agent exports	unit "apps/web/src/lib/features/studio/snapshot/build-record.test.ts": 10 passed; unit "apps/web/src/lib/features/shared/agent-profile/agent-profile.test.ts": 8 passed; e2e "snapshot-print.spec.ts": 10 passed
+PASS	Lead form	e2e "honeypot sends nothing but shows success": 2 passed; unit "a minimal link has only key, name and brokerage": 1 passed; unit "apps/web/src/lib/leads/web3forms-sink.test.ts": 11 passed; note: Captcha is intentionally off: the CSP forbids third-party captcha scripts (RESEARCH Pitfall 10); the honeypot and minimum fill time stand in. The agent email never enters the page: the link carries only the public Web3Forms access key, name and brokerage.
+N/A	Extension	Phase 11 browser extension is outside the web launch (ROADMAP: Phase 10 does not depend on Phase 11).
+N/A	Extension listing	Phase 11 browser extension is outside the web launch (ROADMAP: Phase 10 does not depend on Phase 11).
+PASS	Secrets	command secrets:canary: exit 0; command secrets:scan: exit 0; owner step: Human UAT 10
