@@ -119,10 +119,12 @@
 		};
 	});
 
-	// Arrival at /#get-started (e.g. Settings "Show the tour again"): focus the h2. afterNavigate runs
-	// after the router's own focus reset, so this focus sticks.
+	// Arrival at /#get-started (e.g. Settings "Show the tour again"): focus the h2. On a client-side
+	// arrival the router's focus reset queues a timeout that re-applies the #fragment
+	// (location.replace), which moves focus off the h2 to the body. A timeout queued here runs after
+	// that one, so the focus sticks.
 	afterNavigate(({ to }) => {
-		if (to?.url.hash === HASH) void focusEl(() => headingEl);
+		if (to?.url.hash === HASH) setTimeout(() => void focusEl(() => headingEl));
 	});
 </script>
 
