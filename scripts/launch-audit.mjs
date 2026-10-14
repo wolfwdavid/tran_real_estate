@@ -31,7 +31,7 @@ const CHECKLIST_HEADING = `## "Looks Done But Isn't" Checklist`;
 export const COMMAND_GATES = Object.freeze([
 	{ id: 'csp', command: 'pnpm csp:assert', run: null },
 	{ id: 'seo', command: 'node scripts/assert-seo.mjs <build> --target <t>', run: null },
-	{ id: 'budget', command: 'node scripts/assert-budget.mjs apps/web/build', run: null },
+	{ id: 'budget', command: 'pnpm budget:assert', run: null },
 	{ id: 'banned', command: 'pnpm banned', run: null },
 	{ id: 'deps', command: 'pnpm audit --json --audit-level low', run: null },
 	{ id: 'guard', command: 'pnpm guard', run: ['node', 'scripts/guard-real-data.mjs', '--all'] },
@@ -154,6 +154,29 @@ export const PERF_ROUTES = [
 	'tools/dscr/index.html'
 ];
 const CLS_LIMIT = 0.1;
+
+/** The build production ships when the owner sets analytics (gated like apps/web/build). */
+export const CONFIGURED_BUILD = 'apps/web/build-configured';
+
+/**
+ * Report-only pages (landing, audience, legal, feedback) are measured, not gated (UI-SPEC). Any of
+ * them over the tool budget is called out with its measured size, the cause found when it was
+ * built, and the recommended fix; keeping or trimming it is an owner decision (Human UAT).
+ */
+export const REPORT_ONLY_NOTES = [
+	{
+		match: /^feedback\//,
+		cause:
+			'The topic picker is a bits-ui RadioGroup (10-18); it pulls the bits-ui runtime into the initial JS.',
+		fix: 'Replace the RadioGroup with native <input type="radio"> elements styled as cards (same labels, same keyboard behavior); expected to remove most of the overage.'
+	},
+	{
+		match: /^for-[^/]+\//,
+		cause:
+			'The waitlist form (10-17: form gate, validation and success/error panels) ships in the initial JS of every audience page.',
+		fix: 'Load the waitlist form with a dynamic import when it scrolls into view or on first focus, keeping a same-size placeholder so CLS stays below 0.1.'
+	}
+];
 
 const AXE_KEYLESS = /^axe reports no WCAG A\/AA violations on ("(?:[^"\\]|\\.)*")$/;
 const AXE_KEYED = /^axe \(keyed\) reports no WCAG A\/AA violations on ("(?:[^"\\]|\\.)*")$/;
@@ -475,6 +498,46 @@ export function perfRows(data) {
 	});
 }
 
+/**
+ * Report-only rows over the tool budget, on the deploy build and the analytics-on build.
+ * @param {any} data
+ */
+export function oversizeReportRows(data) {
+	const builds = [
+		['apps/web/build', data.budget],
+		[CONFIGURED_BUILD, data.budgetConfigured]
+	];
+	return builds.flatMap(([dir, b]) =>
+		(b?.rows ?? [])
+			.filter((r) => r.result === 'REPORT' && r.jsGz > BUDGET_BYTES)
+			.map((r) => {
+				const note = REPORT_ONLY_NOTES.find((n) => n.match.test(r.route));
+				return {
+					route: `/${r.route.replace(/index\.html$/, '')}`,
+					build: dir,
+					js: kb(r.jsGz),
+					over: kb(r.jsGz - BUDGET_BYTES),
+					cause: note?.cause ?? 'Not yet analysed.',
+					fix:
+						note?.fix ??
+						'Measure the initial chunks and lazy-load what the first view does not need.'
+				};
+			})
+	);
+}
+
+/** Gated tool rows of the analytics-on build. */
+export function configuredBudgetRows(data) {
+	return (data.budgetConfigured?.rows ?? [])
+		.filter((r) => r.budget !== null)
+		.map((r) => ({
+			route: `/${r.route.replace(/index\.html$/, '')}`,
+			js: kb(r.jsGz),
+			css: kb(r.cssGz),
+			status: r.result === 'PASS' && r.jsGz <= BUDGET_BYTES ? PASS : FAIL
+		}));
+}
+
 export function cspStatus(csp) {
 	const targets = csp?.targets ?? [];
 	const pages = csp?.pages ?? [];
@@ -523,8 +586,12 @@ export function summaryRows(data) {
 		],
 		[
 			'Performance budget',
-			'`node scripts/assert-budget.mjs apps/web/build`',
-			perf.every((r) => r.status === PASS) && (data.budget?.errors ?? ['not run']).length === 0
+			'`pnpm budget:assert`',
+			perf.every((r) => r.status === PASS) &&
+			(data.budget?.errors ?? ['not run']).length === 0 &&
+			(data.budgetConfigured?.errors ?? ['not run']).length === 0 &&
+			configuredBudgetRows(data).length > 0 &&
+			configuredBudgetRows(data).every((r) => r.status === PASS)
 				? PASS
 				: FAIL,
 			ev('budget.txt', data.cls ? '' : ' (CLS report missing)')
@@ -730,6 +797,37 @@ export function renderAudit(data) {
 		);
 	} else out.push(`CLS report missing (${CLS_REPORT}).`, '');
 	if (data.budget?.errors?.length) out.push(...data.budget.errors.map((e) => `- ${e}`), '');
+	const configured = configuredBudgetRows(data);
+	out.push(
+		`Analytics-on build (\`${CONFIGURED_BUILD}\`, what production ships when the owner sets analytics), gated tool pages:`,
+		''
+	);
+	if (configured.length === 0)
+		out.push(`No gated tool pages measured in ${CONFIGURED_BUILD} (${FAIL}).`, '');
+	else
+		out.push(
+			...table(
+				['Route', 'JS (gz)', 'Budget', 'CSS (gz)', 'Result'],
+				configured.map((r) => [r.route, r.js, `${BUDGET_BYTES / 1024} KB`, r.css, r.status])
+			),
+			''
+		);
+	if (data.budgetConfigured?.errors?.length)
+		out.push(...data.budgetConfigured.errors.map((e) => `- ${e}`), '');
+	const oversize = oversizeReportRows(data);
+	out.push(
+		'Report-only pages over the tool budget (not gated; owner decision in the Human UAT):',
+		''
+	);
+	if (oversize.length === 0) out.push('None.', '');
+	else
+		out.push(
+			...table(
+				['Route', 'Build', 'JS (gz)', 'Over 60 KB by', 'Cause', 'Recommendation'],
+				oversize.map((r) => [r.route, r.build, r.js, r.over, r.cause, r.fix])
+			),
+			''
+		);
 	const seo = data.seo ?? { targets: [], sitemap: [], robots: '', og: [] };
 	out.push(
 		'## SEO artifacts',
@@ -842,6 +940,14 @@ export function evidenceFiles(data) {
 				(r) => `${r.route}\tjs ${r.jsGz}\tcss ${r.cssGz}\t${r.result}`
 			),
 			...(data.budget?.errors ?? []).map((e) => `error: ${e}`),
+			`${CONFIGURED_BUILD}:`,
+			...(data.budgetConfigured?.rows ?? []).map(
+				(r) => `${r.route}\tjs ${r.jsGz}\tcss ${r.cssGz}\t${r.result}`
+			),
+			...(data.budgetConfigured?.errors ?? []).map((e) => `error: ${e}`),
+			...oversizeReportRows(data).map(
+				(r) => `report-only over budget: ${r.route} (${r.build}) ${r.js}, over by ${r.over}`
+			),
 			data.cls ? `cls: ${JSON.stringify(data.cls)}` : `CLS report missing: ${CLS_REPORT}`
 		]),
 		'seo.txt': lines([
@@ -1014,7 +1120,9 @@ export function collect({ root, env = process.env }) {
 	};
 
 	const budget = checkBudget(join(root, 'apps/web/build'));
-	commands.budget = { exitCode: budget.errors.length ? 1 : 0, output: budget.errors.join('\n') };
+	const budgetConfigured = checkBudget(join(root, CONFIGURED_BUILD));
+	const budgetErrors = [...budget.errors, ...budgetConfigured.errors];
+	commands.budget = { exitCode: budgetErrors.length ? 1 : 0, output: budgetErrors.join('\n') };
 
 	const files = collectFiles(root);
 	const hits = files.flatMap((rel) => findBanned(rel, readFileSync(join(root, rel), 'utf8')));
@@ -1069,6 +1177,7 @@ export function collect({ root, env = process.env }) {
 		csp,
 		seo,
 		budget,
+		budgetConfigured,
 		banned,
 		deps,
 		pitfalls: parsePitfallsChecklist(

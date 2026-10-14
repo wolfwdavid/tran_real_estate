@@ -11,6 +11,7 @@ import {
 	auditFailed,
 	evidenceMapErrors,
 	parsePitfallsChecklist,
+	oversizeReportRows,
 	pitfallLabel,
 	renderAudit,
 	uncoveredPitfalls
@@ -271,6 +272,20 @@ function baseData(over: Record<string, unknown> = {}) {
 			],
 			errors: [] as string[]
 		},
+		budgetConfigured: {
+			rows: [
+				{ route: 'feedback/index.html', jsGz: 50000, cssGz: 9000, budget: null, result: 'REPORT' },
+				{ route: 'tools/index.html', jsGz: 55100, cssGz: 9000, budget: 61440, result: 'PASS' },
+				...CALCS.map((c) => ({
+					route: `tools/${c}/index.html`,
+					jsGz: 56100,
+					cssGz: 9100,
+					budget: 61440,
+					result: 'PASS'
+				}))
+			],
+			errors: [] as string[]
+		},
 		cls: [
 			{ route: '', viewport: '375x812', state: 'first-visit', cls: 0.01 },
 			{ route: '', viewport: '1280x800', state: 'first-visit', cls: 0.02 },
@@ -501,6 +516,73 @@ describe('renderAudit', () => {
 			(r: { route: string }) => r.route !== 'tools/dscr/index.html'
 		);
 		expect(summary(renderAudit(missing))['Performance budget'].result).toBe('FAIL');
+	});
+
+	test('the analytics-on build is gated too: a miss, an error or no measurement fails Performance', () => {
+		const md = renderAudit(baseData());
+		const t = tables(md).find((t) => t.header.join('|') === 'Route|JS (gz)|Budget|CSS (gz)|Result');
+		expect(t?.rows.map((r) => r[0])).toEqual(['/tools/', ...CALCS.map((c) => `/tools/${c}/`)]);
+		expect(t?.rows.every((r) => r[4] === 'PASS')).toBe(true);
+		const over = baseData();
+		over.budgetConfigured.rows[2] = {
+			...over.budgetConfigured.rows[2],
+			jsGz: 61500,
+			result: 'FAIL'
+		};
+		over.budgetConfigured.errors = [
+			'tools/cap-rate/index.html: initial JS 60.1 KB gz exceeds the 60 KB budget'
+		];
+		const overMd = renderAudit(over);
+		expect(summary(overMd)['Performance budget'].result).toBe('FAIL');
+		expect(overMd).toContain(
+			'- tools/cap-rate/index.html: initial JS 60.1 KB gz exceeds the 60 KB budget'
+		);
+		expect(
+			summary(renderAudit(baseData({ budgetConfigured: undefined })))['Performance budget'].result
+		).toBe('FAIL');
+		expect(
+			summary(renderAudit(baseData({ budgetConfigured: { rows: [], errors: [] } })))[
+				'Performance budget'
+			].result
+		).toBe('FAIL');
+	});
+
+	test('report-only pages over the budget are called out with size, cause and fix, without failing', () => {
+		const none = renderAudit(baseData());
+		expect(none).toContain('Report-only pages over the tool budget');
+		expect(oversizeReportRows(baseData())).toEqual([]);
+		const d = baseData();
+		d.budget.rows.push({
+			route: 'for-renters/index.html',
+			jsGz: 98611,
+			cssGz: 9000,
+			budget: null,
+			result: 'REPORT'
+		});
+		d.budgetConfigured.rows[0] = { ...d.budgetConfigured.rows[0], jsGz: 104960 };
+		const rows = oversizeReportRows(d);
+		expect(
+			rows.map((r: { route: string; build: string; js: string; over: string }) => [
+				r.route,
+				r.build,
+				r.js,
+				r.over
+			])
+		).toEqual([
+			['/for-renters/', 'apps/web/build', '96.3 KB', '36.3 KB'],
+			['/feedback/', 'apps/web/build-configured', '102.5 KB', '42.5 KB']
+		]);
+		for (const r of rows) {
+			expect(r.cause).not.toBe('Not yet analysed.');
+			expect(r.fix.length).toBeGreaterThan(20);
+		}
+		const md = renderAudit(d);
+		const t = tables(md).find(
+			(t) => t.header[0] === 'Route' && t.header.includes('Recommendation')
+		);
+		expect(t?.rows).toHaveLength(2);
+		expect(summary(md)['Performance budget'].result).toBe('PASS');
+		expect(md).toContain('Report-only pages over the JS budget (owner decision)');
 	});
 
 	test('CSP, banned terms, SEO and disclaimers fail from their real results', () => {

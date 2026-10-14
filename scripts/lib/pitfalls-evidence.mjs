@@ -58,6 +58,11 @@ export const HUMAN_UAT = Object.freeze([
 		step: 'On a real device running Safari 17 or later, open Settings and confirm the storage persistence result (granted or not granted) is shown.'
 	},
 	{
+		id: 'report-only-budget',
+		title: 'Report-only pages over the JS budget (owner decision)',
+		step: 'Read "Report-only pages over the tool budget" in the Performance budget section: decide per page whether to ship it as is or schedule the recommended trim, and record the decision.'
+	},
+	{
 		id: 'secret-scanning',
 		title: 'Secret scanning and push protection',
 		step: 'In the GitHub repository settings, confirm secret scanning and push protection are enabled (docs/DEPLOY-CHECKLIST.md Step 5).'
