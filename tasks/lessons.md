@@ -38,3 +38,21 @@
   trap. Cap every call at 7 minutes (timeout 420000) and size Playwright chunks to about 5 minutes.
 - Rule: when a gate agent stalls, check `git log` and `git status` first, then resume the same agent
   with the exact tree state; ask it to commit finished items one by one so a stall loses nothing.
+
+## 2026-10-13: Phase 10 orchestration
+
+- Rule: a test that "passes in isolation" is not proven to be a flake. `guide.spec.ts:107` failed in three
+  separate full runs and was written off as load-sensitive; it was a real race (a slow lazy-loaded tour
+  panel overwrote a later user action). Before classifying any failure as a flake, reproduce it under an
+  artificial delay (route-level delay on the lazy chunk, throttled CPU) and look for a write that can land
+  after a newer user action.
+- Rule: a lock-wait loop that times out must abort, never fall through to the guarded command. One
+  executor's loop expired and it built anyway, clobbering another plan's build output. Use the
+  `GOT=1 ... || exit 3` pattern.
+- Rule: when executors die from network drops (ENOTFOUND), wait for ~2 minutes of continuous connectivity,
+  inspect `git log`, `git status` and the build-lock owner, then resume the SAME agent with the exact tree
+  state (its commits, its uncommitted files, whether it still holds the lock). No work was lost across
+  four drops this way.
+- Rule: per-route JS budgets are spent by shared code. Every change that touches every page (footer,
+  layout, a shared helper import) must re-measure the gated routes on the build that production ships
+  (analytics on), not only the default build.

@@ -411,9 +411,9 @@ Plans:
 - [x] 10-15-PLAN.md — Onboarding state + inline Get started guide on the landing
 - [x] 10-16-PLAN.md — /setup/rentcast/ guided key setup + ?source=sample hand-off
 - [x] 10-17-PLAN.md — Form gates + owner Web3Forms sink + per-portal waitlist (+ E2E)
-- [ ] 10-18-PLAN.md — Feedback form/page, footer + Settings Getting started (+ E2E)
+- [x] 10-18-PLAN.md — Feedback form/page, footer + Settings Getting started (+ E2E)
 - [x] 10-19-PLAN.md — Beacon wiring, privacy Usage counts, owner go-live steps, beacon/third-party E2E
-- [ ] 10-20-PLAN.md — Onboarding, setup and CLS E2E
+- [x] 10-20-PLAN.md — Onboarding, setup and CLS E2E
 - [ ] 10-21-PLAN.md — Keyed-state axe on every route, disclaimer audit, final route lists
 - [x] 10-22-PLAN.md — Launch-audit generator + PITFALLS evidence map
 - [ ] 10-23-PLAN.md — Compose verify/CI, generate docs/LAUNCH-AUDIT.md, HUMAN-UAT, validation sign-off
@@ -466,5 +466,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
-| 10. Launch Hardening & Go-to-Market | 19/23 | In Progress|  |
+| 10. Launch Hardening & Go-to-Market | 21/23 | In Progress|  |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
