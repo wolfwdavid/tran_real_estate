@@ -28,8 +28,7 @@
 		investor: resolve('/investor/'),
 		agent: resolve('/agent/')
 	};
-	// /setup/rentcast/ is added by plan 10-16; built from the resolved root until that route exists.
-	const setupHref = (p: OnboardingPortal) => `${resolve('/')}setup/rentcast/?portal=${p}`;
+	const setupHref = (p: OnboardingPortal) => `${resolve('/setup/rentcast/')}?portal=${p}`;
 
 	let view = $state<OnboardingState>({ status: 'new' });
 	let TourPanel = $state<typeof TourPanelType>();

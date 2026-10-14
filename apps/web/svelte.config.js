@@ -42,7 +42,10 @@ export default {
 				// (AgentNav Studio, the hub's "Preview a sample report"); listed so the crawler reaches
 				// them however later plans render those links (09-UI-SPEC Planner Note 11).
 				'/agent/studio/',
-				'/print/snapshot/'
+				'/print/snapshot/',
+				// The guided key setup (10-16) is linked only from the guide's client-rendered tour step;
+				// Settings links it statically from 10-18 on.
+				'/setup/rentcast/'
 			],
 			handleHttpError: 'fail',
 			handleMissingId: 'fail',

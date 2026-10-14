@@ -28,7 +28,14 @@ export const RENTER_ROUTES = [
 	'renter/shortlist/',
 	'renter/affordability/'
 ] as const;
-export const APP_ROUTES = [...RENTER_ROUTES, 'investor/', 'agent/', 'settings/'] as const;
+export const APP_ROUTES = [
+	...RENTER_ROUTES,
+	'investor/',
+	'agent/',
+	'settings/',
+	// Guided RentCast key setup (10-16); reached from the landing guide and Settings.
+	'setup/rentcast/'
+] as const;
 /**
  * The investor portal's sub-pages (Phase 7). `investor/` itself stays in APP_ROUTES. Compare, memo
  * and market take query params read in onMount (?ids=, ?id=, ?zip=), so they are prerendered
