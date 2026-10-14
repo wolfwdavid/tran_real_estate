@@ -59,7 +59,12 @@ const reachesData = (entries: string[], lib: string) =>
 		(f) => under(posix.join(lib, 'data'))(f) && f !== posix.join(lib, 'data/tables.ts')
 	);
 
-describe('Content Studio import-graph boundaries', () => {
+// Each test walks the real import graph of src/lib with synchronous file reads: 1.9 s alone with 40
+// CPU burners running, 2.5 s in a full `vitest run`, against Vitest's 5 s default, which a heavier
+// parallel run exceeded (10-23). The limit is explicit; the walk and the assertions are unchanged.
+const GRAPH_WALK_MS = 30_000;
+
+describe('Content Studio import-graph boundaries', { timeout: GRAPH_WALK_MS }, () => {
 	test('features/studio never reaches features/investor, features/agent/crm or lib/leads', () => {
 		// Non-vacuity: the studio folder holds sources from 09-12 on, including the snapshot print.
 		expect(studioEntries.length).toBeGreaterThan(0);
