@@ -167,14 +167,14 @@ export const REPORT_ONLY_NOTES = [
 	{
 		match: /^feedback\//,
 		cause:
-			'The topic picker is a bits-ui RadioGroup (10-18); it pulls the bits-ui runtime into the initial JS.',
-		fix: 'Replace the RadioGroup with native <input type="radio"> elements styled as cards (same labels, same keyboard behavior); expected to remove most of the overage.'
+			'Measured 10-23 (build/, gzip -9): the form uses the shadcn Button, which brings tailwind-variants + tailwind-merge (13.0 + 8.6 KB), plus zod for validation (9.2 KB), the bits-ui RadioGroup runtime for the topic picker (about 3 KB) and the shared form modules. The tool pages avoid all of these.',
+		fix: 'Use plain <button> and native <input type="radio"> elements with static classes (as the tool pages do) and load zod with a dynamic import on submit; about 34 KB of the overage is in those chunks.'
 	},
 	{
 		match: /^for-[^/]+\//,
 		cause:
-			'The waitlist form (10-17: form gate, validation and success/error panels) ships in the initial JS of every audience page.',
-		fix: 'Load the waitlist form with a dynamic import when it scrolls into view or on first focus, keeping a same-size placeholder so CLS stays below 0.1.'
+			'Measured 10-23 (build/, gzip -9): the waitlist form ships in the initial JS with the shadcn Button (tailwind-variants + tailwind-merge, 13.0 + 8.6 KB) and zod (9.2 KB), plus its own form chunks (about 8 KB).',
+		fix: 'Use a plain <button> with static classes and load zod (or the whole form) with a dynamic import on first focus or when the form scrolls into view, keeping a same-size placeholder so CLS stays below 0.1; about 31 KB of the overage is in those chunks.'
 	}
 ];
 
