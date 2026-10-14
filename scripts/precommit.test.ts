@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import {
 	chmodSync,
 	copyFileSync,
+	cpSync,
 	existsSync,
 	mkdirSync,
 	mkdtempSync,
@@ -15,7 +16,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { afterEach, beforeAll, beforeEach, describe, expect, test } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from 'vitest';
 
 const repoRoot = resolve(import.meta.dirname, '..');
 const repoRootPosix = repoRoot.replace(/\\/g, '/');
@@ -62,7 +63,7 @@ function makeRepo(): string {
 	const dir = mkdtempSync(join(tmpdir(), 'tran-precommit-'));
 	expect(git(dir, 'init', '-q', '-b', 'main').status).toBe(0);
 	for (const [k, v] of [
-		['user.email', 'tester@example.com'],
+		['user.email', 'tester@example.com'], // TEST_AUTHOR
 		['user.name', 'Test'],
 		['commit.gpgsign', 'false'],
 		['core.hooksPath', '.git/hooks']
@@ -121,23 +122,38 @@ describe('pre-commit gate prerequisites', () => {
 	});
 });
 
+// The test identity makeRepo() configures; no commit by it may ever reach this repository.
+const TEST_AUTHOR = 'tester@example.com';
+
 describe('pre-commit gate in an isolated repository', () => {
+	// One template repository (its baseline commit goes through the real hook once), copied fresh
+	// for every test. Building a repo per test ran the hook twice per test; under a fully loaded
+	// parallel `vitest run` one test took 56 s against the 60 s limit (10-23).
+	let template = '';
 	let dir = '';
-	let headBefore = '';
 
 	beforeAll(() => {
-		headBefore = git(repoRoot, 'rev-parse', 'HEAD').stdout.trim();
+		template = makeRepo();
+	});
+
+	afterAll(() => {
+		if (template) rmSync(template, { recursive: true, force: true });
 	});
 
 	beforeEach(() => {
-		dir = makeRepo();
+		dir = mkdtempSync(join(tmpdir(), 'tran-precommit-'));
+		cpSync(template, dir, { recursive: true });
+		expect(commitCount(dir)).toBe(1);
 	});
 
 	afterEach(() => {
 		if (dir) rmSync(dir, { recursive: true, force: true });
 		dir = '';
-		// The suite never commits to this repository.
-		expect(git(repoRoot, 'rev-parse', 'HEAD').stdout.trim()).toBe(headBefore);
+		// The suite never commits to this repository. Checked by author, not by comparing HEAD:
+		// other processes may legitimately commit here while the suite runs.
+		const leaked = git(repoRoot, 'log', '-n', '1', '--format=%H', `--author=${TEST_AUTHOR}`);
+		expect(leaked.status, leaked.stderr).toBe(0);
+		expect(leaked.stdout.trim()).toBe('');
 	});
 
 	test('a staged canary secret blocks the commit', () => {
