@@ -73,3 +73,13 @@
   focuses its heading" failed once in the sharded full E2E (sub shard 2/4: the guide still showed the
   agent tour, not "Where do you want to start?"). Re-run alone 3/3 passed, and the whole guide.spec on
   root + sub 14/14. Same test 10-13 saw fail on sub. For 10-23 to root-cause.
+- **(10-16 run) Load flakes in the full E2E (8 shards, 2025 passed / 3 failed):**
+  `agent-contact.spec.ts:351` (root, axe at 1280px) and `agent-followup.spec.ts:169` (root) passed
+  3/3 each in isolation. `guide.spec.ts:107` (root) failed again under load and 1 of 3 isolated
+  repeats (times out clicking "Agent Start the tour"); same test 10-13/10-14 logged, for 10-23.
+  Unit: `ResultsView.browser.test.ts` and `scripts/precommit.test.ts` failed once in the full
+  `test:unit` run and passed in isolation (known, see handoffs).
+- **(10-16) ProviderKeyCard in-page links on /setup/rentcast/:** the card is embedded unchanged, so
+  its post-hydration pointer "RentCast usage" (`#rentcast-usage`) and the locked-state "Key security"
+  (`#key-security`) point at ids that exist only on Settings. Not crawled (client-only), but they
+  do nothing on the setup page. A follow-up could let the card take a `settingsHref` base.
