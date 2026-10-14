@@ -895,7 +895,8 @@ export function auditFailed(md) {
 	const end = rest.indexOf('\n## ');
 	const rows = (end === -1 ? rest : rest.slice(0, end))
 		.split('\n')
-		.filter((l) => /^\| \d+ \|/.test(l))
+		// Rows as rendered (`| 1 |`) or as Prettier pads them in the committed doc (`| 1   |`).
+		.filter((l) => /^\|\s*\d+\s*\|/.test(l))
 		.map((l) => l.split(/(?<!\\)\|/).map((c) => c.trim()));
 	return rows.length === 0 || rows.some((c) => c[4] !== PASS);
 }
@@ -1196,7 +1197,12 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 		for (const [f, text] of Object.entries(evidenceFiles(data))) {
 			writeFileSync(join(root, EVIDENCE_DIR, f), text);
 		}
-		writeFileSync(join(root, AUDIT_DOC), md);
+		// The committed document goes through the repository's Prettier config, so `pnpm lint`
+		// (prettier --check .) accepts it as generated, with no hand edits and no ignore entry.
+		const prettier = await import('prettier');
+		const file = join(root, AUDIT_DOC);
+		const options = (await prettier.resolveConfig(file)) ?? {};
+		writeFileSync(file, await prettier.format(md, { ...options, filepath: file }));
 		console.log(`Wrote ${AUDIT_DOC} and ${EVIDENCE_DIR}*.txt`);
 	} else {
 		console.log(md);

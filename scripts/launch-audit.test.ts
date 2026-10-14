@@ -391,6 +391,16 @@ describe('renderAudit', () => {
 		expect(auditFailed(md)).toBe(false);
 	});
 
+	test('auditFailed reads the Prettier-formatted document the CLI commits', async () => {
+		const prettier = await import('prettier');
+		const fmt = (md: string) => prettier.format(md, { parser: 'markdown' });
+		const green = await fmt(renderAudit(baseData()));
+		expect(green).toMatch(/^\| 1 {3}\| axe \(keyless\)/m);
+		expect(auditFailed(green)).toBe(false);
+		const red = await fmt(renderAudit(baseData({ cls: null })));
+		expect(auditFailed(red)).toBe(true);
+	});
+
 	test('every status cell is a status word and the output has no emoji', () => {
 		for (const data of [baseData(), baseData({ e2eReport: null, unitReport: null, cls: null })]) {
 			const md = renderAudit(data);
