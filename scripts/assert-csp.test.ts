@@ -350,7 +350,10 @@ function writeFullBuild(dir: string): void {
 	}
 	for (const page of EXPECTED_PAGES) {
 		mkdirSync(dirname(join(dir, page)), { recursive: true });
-		writeFileSync(join(dir, page), golden);
+		// Only .html files are pages; the SEO and share-card files just have to exist.
+		if (page.endsWith('.html')) writeFileSync(join(dir, page), golden);
+		else if (page.endsWith('.png')) writeFileSync(join(dir, page), png(1200, 630));
+		else writeFileSync(join(dir, page), 'placeholder\n');
 	}
 }
 
@@ -385,17 +388,20 @@ describe('checkBuild over a temp directory', () => {
 		);
 	});
 
-	test.each(['404.html', 'settings/index.html'])('a build missing %s is rejected', (page) => {
-		withTempBuild(
-			(dir) => {
-				writeFullBuild(dir);
-				rmSync(join(dir, page));
-			},
-			(dir) => {
-				expect(checkBuild(dir)).toContain(`missing ${page}`);
-			}
-		);
-	});
+	test.each(['404.html', 'settings/index.html', 'sitemap.xml'])(
+		'a build missing %s is rejected',
+		(page) => {
+			withTempBuild(
+				(dir) => {
+					writeFullBuild(dir);
+					rmSync(join(dir, page));
+				},
+				(dir) => {
+					expect(checkBuild(dir)).toContain(`missing ${page}`);
+				}
+			);
+		}
+	);
 
 	test('a faulty nested page is reported with its build-relative path', () => {
 		withTempBuild(
@@ -469,8 +475,27 @@ describe('checkBuild over a temp directory', () => {
 			expect(EXPECTED_PAGES).toContain(page);
 		}
 		// 32 entries after Phase 8 (24 pages + 404.html, six agent sub-pages, the inquiry page),
-		// plus the five Studio routes and the snapshot printout.
-		expect(EXPECTED_PAGES).toHaveLength(38);
+		// plus the five Studio routes and the snapshot printout = 38; the total is pinned below.
+		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
+	});
+
+	test('EXPECTED_PAGES pins the Phase 10 pages and SEO files', () => {
+		for (const page of [
+			'tools/index.html',
+			'tools/affordability/index.html',
+			'tools/cap-rate/index.html',
+			'tools/cash-on-cash/index.html',
+			'tools/dscr/index.html',
+			'feedback/index.html',
+			'setup/rentcast/index.html',
+			'sitemap.xml',
+			'robots.txt',
+			'og/default.png'
+		]) {
+			expect(EXPECTED_PAGES).toContain(page);
+		}
+		// 38 entries after Phase 9, plus seven Phase 10 pages and three SEO / share-card files.
+		expect(EXPECTED_PAGES).toHaveLength(48);
 		expect(EXPECTED_PAGES).toHaveLength(new Set(EXPECTED_PAGES).size);
 	});
 });

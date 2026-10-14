@@ -72,6 +72,18 @@ export const EXPECTED_PAGES = [
 	'agent/studio/reel/index.html',
 	'agent/studio/snapshot/index.html',
 	'print/snapshot/index.html',
+	// Phase 10: the free tools hub and calculators, the feedback form, the guided RentCast setup,
+	// and the SEO / share-card files every build must ship (10-07..10-18).
+	'tools/index.html',
+	'tools/affordability/index.html',
+	'tools/cap-rate/index.html',
+	'tools/cash-on-cash/index.html',
+	'tools/dscr/index.html',
+	'feedback/index.html',
+	'setup/rentcast/index.html',
+	'sitemap.xml',
+	'robots.txt',
+	'og/default.png',
 	'404.html'
 ];
 
