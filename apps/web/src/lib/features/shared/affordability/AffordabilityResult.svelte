@@ -3,13 +3,17 @@
 	// "Try a rent amount" slider paired with a number input, and the search CTA. All copy is the
 	// UI-SPEC contract; it describes a general guideline and never tells the renter what to do.
 	// Props only: no storage, no data layer, no network. The CTA only links to the search page.
+	//
+	// Bytes (10-14): this component also renders on /tools/affordability/, gated at 60 KB gz of
+	// initial JS. The bits-ui slider and its tailwind-merge/runed helpers are ~24 KB gz, so the slider
+	// module is imported after mount (a same-origin chunk, never preloaded); it is only shown once a
+	// result exists, and a 44px placeholder holds its place until it lands. Icons are inline SVG,
+	// and the search CTA carries ButtonLink's primary classes inline (ButtonLink drags Lucide's
+	// runtime in through its arrow icon).
+	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import CircleCheck from '@lucide/svelte/icons/circle-check';
-	import Search from '@lucide/svelte/icons/search';
-	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import { Slider } from '$lib/components/ui/slider/index.js';
+	import ToolIcon from '$lib/components/tools/ToolIcon.svelte';
+	import type { Slider as SliderComponent } from '$lib/components/ui/slider/index.js';
 	import {
 		landlordIncome,
 		moveInCash,
@@ -29,6 +33,11 @@
 	}
 
 	let { result, debts, savings, tried = $bindable(null), idPrefix = 'afford' }: Props = $props();
+
+	let Slider = $state<typeof SliderComponent | null>(null);
+	onMount(() => {
+		void import('$lib/components/ui/slider/index.js').then((m) => (Slider = m.Slider));
+	});
 
 	const EMPTY = 'Enter your income to see a rent range.';
 	const TRY_LABEL = 'Try a rent amount';
@@ -166,26 +175,30 @@
 					<span id={tryUnitId} class="text-base leading-[1.6] text-muted-foreground">a month</span>
 				</div>
 			</div>
-			<Slider
-				type="single"
-				bind:value={() => rent, (v: number) => (tried = v)}
-				min={0}
-				{max}
-				step={STEP}
-				thumbProps={{
-					'aria-labelledby': tryLabelId,
-					'aria-valuetext': `${money(rent)} a month`,
-					'aria-describedby': feedbackId
-				}}
-			/>
+			{#if Slider}
+				<Slider
+					type="single"
+					bind:value={() => rent, (v: number) => (tried = v)}
+					min={0}
+					{max}
+					step={STEP}
+					thumbProps={{
+						'aria-labelledby': tryLabelId,
+						'aria-valuetext': `${money(rent)} a month`,
+						'aria-describedby': feedbackId
+					}}
+				/>
+			{:else}
+				<div class="h-11" aria-hidden="true"></div>
+			{/if}
 			{#if feedback}
 				<p id={feedbackId} class="flex items-start gap-2 text-base leading-[1.6] text-foreground">
 					{#if feedback.kind === 'within'}
-						<CircleCheck class="mt-0.5 size-5 shrink-0 text-secondary" aria-hidden="true" />
+						<ToolIcon name="circle-check" class="mt-0.5 size-5 shrink-0 text-secondary" />
 					{:else if feedback.kind === 'above30'}
-						<TriangleAlert class="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
+						<ToolIcon name="triangle-alert" class="mt-0.5 size-5 shrink-0 text-foreground" />
 					{:else}
-						<CircleAlert class="mt-0.5 size-5 shrink-0 text-foreground" aria-hidden="true" />
+						<ToolIcon name="circle-alert" class="mt-0.5 size-5 shrink-0 text-foreground" />
 					{/if}
 					<span>{feedback.text}</span>
 				</p>
@@ -196,10 +209,15 @@
 
 		{#if result.high > 0}
 			<div>
-				<ButtonLink href={searchHref}>
-					<Search size={16} aria-hidden="true" />
+				<!-- eslint-disable svelte/no-navigation-without-resolve -- searchHref is resolve() output -->
+				<a
+					href={searchHref}
+					class="inline-flex min-h-12 cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-md bg-primary px-6 text-body font-semibold text-primary-foreground transition-colors duration-150 ease-out hover:bg-primary-hover motion-safe:active:translate-y-px"
+				>
+					<ToolIcon name="search" size={16} />
 					Search rentals up to {money(result.high)}
-				</ButtonLink>
+				</a>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
 			</div>
 		{/if}
 	</section>

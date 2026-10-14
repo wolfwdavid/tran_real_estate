@@ -3,7 +3,17 @@
 	// calculator pages. Each @lucide/svelte icon builds into its own ~0.3 KB gz chunk, and five of
 	// them were the difference between a tool page passing and failing the 60 KB gz budget (10-13).
 	// Inline SVG compiles into the template string of the chunk that already ships.
-	type Name = 'server-off' | 'info' | 'arrow-right' | 'calculator' | 'circle-alert';
+	// The affordability calculator (shared/affordability) uses it too: on /tools/affordability/ the
+	// Lucide runtime plus six icon chunks were ~3 KB gz of a page over budget (10-14).
+	type Name =
+		| 'server-off'
+		| 'info'
+		| 'arrow-right'
+		| 'calculator'
+		| 'circle-alert'
+		| 'circle-check'
+		| 'triangle-alert'
+		| 'search';
 
 	let {
 		name,
@@ -51,6 +61,16 @@
 		<path d="M8 14h.01" />
 		<path d="M12 18h.01" />
 		<path d="M8 18h.01" />
+	{:else if name === 'circle-check'}
+		<circle cx="12" cy="12" r="10" />
+		<path d="m16 9-5.5 5.5L8 12" />
+	{:else if name === 'triangle-alert'}
+		<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+		<path d="M12 9v4" />
+		<path d="M12 17h.01" />
+	{:else if name === 'search'}
+		<path d="m21 21-4.34-4.34" />
+		<circle cx="11" cy="11" r="8" />
 	{:else}
 		<circle cx="12" cy="12" r="10" />
 		<line x1="12" x2="12" y1="8" y2="12" />

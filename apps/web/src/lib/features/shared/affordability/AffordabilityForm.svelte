@@ -2,7 +2,7 @@
 	// 06-UI-SPEC "AffordabilityForm" (RENT-08). Three money fields with the Phase 3 field anatomy and
 	// the income period chips. Props and local state only: no storage, no data layer, no network.
 	// Values are bound to the parent calculator, which owns all state in $state and saves nothing.
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
+	import ToolIcon from '$lib/components/tools/ToolIcon.svelte';
 	import { parseMoneyInput, type IncomePeriod } from '@tran/core/renter/affordability';
 
 	interface Props {
@@ -81,7 +81,7 @@
 
 {#snippet fieldError(id: string, message: string)}
 	<p {id} class="flex items-center gap-1 text-label text-destructive">
-		<CircleAlert class="size-4 shrink-0" aria-hidden="true" />
+		<ToolIcon name="circle-alert" class="size-4 shrink-0" />
 		{message}
 	</p>
 {/snippet}

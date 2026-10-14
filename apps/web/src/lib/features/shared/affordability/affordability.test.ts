@@ -130,14 +130,17 @@ describe('AffordabilityResult', () => {
 		expect(h).toContain('<dl');
 	});
 
-	test('the slider starts at the top of the range with a dollar valuetext and the within line', () => {
+	test('the rent try starts at the top of the range with the within line', () => {
 		const h = html(AffordabilityResult, { result: RESULT_72K, debts: 400, savings: 3000 });
 		const t = text(h);
 		expect(t).toContain('Try a rent amount');
-		expect(h).toContain('aria-valuetext="$1,800 a month"');
-		expect(h).toContain('aria-labelledby="afford-try-label"');
-		expect(h).toContain('role="slider"');
-		expect(h).toContain('aria-valuemax="10000"');
+		// The bits-ui slider is imported after mount (10-14 budget), so the server renders a 44px
+		// placeholder in its place. Its ARIA (valuetext, valuemax, label) is pinned in the browser test.
+		expect(h).not.toContain('role="slider"');
+		expect(h).toContain('<div class="h-11" aria-hidden="true"></div>');
+		expect(h).toMatch(
+			/<input id="afford-try-input" type="number" min="0" max="10000"[^>]*value="1800"/
+		);
 		expect(t).toContain('At $1,800, rent is 30% of your income, within the 30% guideline.');
 		expect(t).toContain(
 			'Many landlords look for income of about 40 times the monthly rent: $72,000 a year at this rent.'

@@ -3,6 +3,7 @@
 /** The free calculator pages (Phase 10, GTM-03): the hub and one page per tool. */
 export const TOOL_ROUTES = [
 	'tools/',
+	'tools/affordability/',
 	'tools/cap-rate/',
 	'tools/cash-on-cash/',
 	'tools/dscr/'

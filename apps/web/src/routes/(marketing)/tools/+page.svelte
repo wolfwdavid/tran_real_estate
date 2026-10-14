@@ -6,10 +6,9 @@
 	import { AFFORDABILITY_READY, CRUMBS, TOOL_SLUGS, type ToolSlug } from '$lib/content/tools/meta';
 	import { TOOL_CARDS, TOOLS_HUB } from '$lib/content/tools/hub';
 
-	// Typed literal paths keep resolve() checked. /tools/affordability/ is not a route until 10-14,
-	// so its href is built from the hub path (and the card stays hidden until AFFORDABILITY_READY).
+	// Typed literal paths keep resolve() checked.
 	const hrefs: Record<ToolSlug, string> = {
-		affordability: `${resolve('/tools/')}affordability/`,
+		affordability: resolve('/tools/affordability/'),
 		'cap-rate': resolve('/tools/cap-rate/'),
 		'cash-on-cash': resolve('/tools/cash-on-cash/'),
 		dscr: resolve('/tools/dscr/')

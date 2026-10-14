@@ -9,13 +9,14 @@ import {
 	type RentalRowLike,
 	type RenterLocation
 } from './types.js';
+import { utcDayDiff } from './dates.js';
+
+export { utcDayDiff };
 
 export type ServerParams = Record<string, string | number | readonly string[]>;
 
 /** Upper bounds used so narrow ranges are always closed (06-RESEARCH Open Question 8). */
 const PRICE_CEILING = 100000;
-const DAY_MS = 86_400_000;
-const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})/;
 
 export function toServerParams(
 	location: RenterLocation,
@@ -38,15 +39,6 @@ export function toServerParams(
 	if (filters.types.length > 0) params.propertyType = [...filters.types].sort();
 	if (filters.listedWithin !== 'any') params.daysOld = `1:${filters.listedWithin}`;
 	return params;
-}
-
-/** Whole UTC calendar days from the date part of `iso` to `now`; NaN when `iso` has no date. */
-export function utcDayDiff(now: Date, iso: string): number {
-	const m = ISO_DATE.exec(iso);
-	if (!m) return NaN;
-	const listed = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-	const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-	return Math.round((today - listed) / DAY_MS);
 }
 
 export function matchRental(row: RentalRowLike, f: RentalFilters, now: Date): boolean {

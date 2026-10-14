@@ -17,6 +17,21 @@
 		{ href: resolve('/for-investors/'), label: 'For investors', id: '/(marketing)/for-investors' },
 		{ href: resolve('/for-agents/'), label: 'For agents', id: '/(marketing)/for-agents' }
 	] satisfies FooterLink[];
+	const tools = [
+		{
+			href: resolve('/tools/affordability/'),
+			label: 'Rent affordability',
+			id: '/(marketing)/tools/affordability'
+		},
+		{ href: resolve('/tools/cap-rate/'), label: 'Cap rate', id: '/(marketing)/tools/cap-rate' },
+		{
+			href: resolve('/tools/cash-on-cash/'),
+			label: 'Cash-on-cash return',
+			id: '/(marketing)/tools/cash-on-cash'
+		},
+		{ href: resolve('/tools/dscr/'), label: 'DSCR', id: '/(marketing)/tools/dscr' },
+		{ href: resolve('/tools/'), label: 'All calculators', id: '/(marketing)/tools' }
+	] satisfies FooterLink[];
 	const legal = [
 		{ href: resolve('/legal/privacy/'), label: 'Privacy', id: '/(marketing)/legal/privacy' },
 		{ href: resolve('/legal/terms/'), label: 'Terms', id: '/(marketing)/legal/terms' },
@@ -40,7 +55,10 @@
 
 <footer class="mt-auto bg-surface pt-12 md:pt-16">
 	<div class="mx-auto max-w-page px-6 md:px-8">
-		<div class="grid gap-8 md:grid-cols-3">
+		<!-- UI-SPEC "SiteFooter changes": wordmark | Portals + Learn | Tools | Legal. One column below
+		     768px, 2 x 2 from 768px, 4 columns from 1024px. The Footer nav uses display: contents so
+		     its three groups sit in the same grid as the wordmark (the landmark stays in the a11y tree). -->
+		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 			<div>
 				<p class="font-display text-heading font-semibold">Tran Real Estate Tools</p>
 				<p class="mt-4 text-label text-muted-foreground">
@@ -49,8 +67,8 @@
 					or out of date.
 				</p>
 			</div>
-			<nav aria-label="Footer" class="grid gap-8 sm:grid-cols-2 md:col-span-2">
-				<div class="grid gap-8">
+			<nav aria-label="Footer" class="contents">
+				<div class="grid content-start gap-8">
 					<div>
 						<h2 class={heading}>Portals</h2>
 						<ul class="mt-2">
@@ -67,6 +85,14 @@
 							{/each}
 						</ul>
 					</div>
+				</div>
+				<div>
+					<h2 class={heading}>Tools</h2>
+					<ul class="mt-2">
+						{#each tools as l (l.id)}
+							<li><a href={l.href} aria-current={current(l.id)} class={link}>{l.label}</a></li>
+						{/each}
+					</ul>
 				</div>
 				<div>
 					<h2 class={heading}>Legal</h2>

@@ -1,7 +1,7 @@
 // Shared renter formatters (RENT-03): money, dates and relative times read the same on every
 // renter surface. Renter money has no cents. Dates are calendar dates, formatted in UTC.
 
-import { utcDayDiff } from './filters.js';
+import { utcDayDiff } from './dates.js';
 
 const USD = new Intl.NumberFormat('en-US', {
 	style: 'currency',

@@ -26,6 +26,8 @@ describe('AffordabilityCalculator (browser)', () => {
 		await fillContract();
 		const slider = page.getByRole('slider', { name: 'Try a rent amount' });
 		await expect.element(slider).toHaveAttribute('aria-valuetext', '$1,800 a month');
+		await expect.element(slider).toHaveAttribute('aria-valuemax', '10000');
+		await expect.element(slider).toHaveAttribute('aria-labelledby', 'afford-try-label');
 		await expect.element(page.getByText('within the 30% guideline')).toBeVisible();
 
 		await page.getByRole('spinbutton', { name: 'Try a rent amount a month' }).fill('2100');
@@ -38,6 +40,8 @@ describe('AffordabilityCalculator (browser)', () => {
 		await render(AffordabilityCalculator);
 		await fillContract();
 		const slider = page.getByRole('slider', { name: 'Try a rent amount' });
+		// The slider module is imported after mount; wait for it before reading the element.
+		await expect.element(slider).toHaveAttribute('aria-valuetext', '$1,800 a month');
 		(slider.element() as HTMLElement).focus();
 		await expect.element(slider).toHaveFocus();
 		await userEvent.keyboard('{ArrowRight}');

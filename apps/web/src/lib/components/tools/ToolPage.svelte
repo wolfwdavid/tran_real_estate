@@ -32,8 +32,7 @@
 		'/renter/': `${resolve('/renter/')}?source=sample`
 	};
 	const toolHrefs: Record<ToolSlug, string> = {
-		// Built from the hub path: /tools/affordability/ is not a route until 10-14.
-		affordability: `${resolve('/tools/')}affordability/`,
+		affordability: resolve('/tools/affordability/'),
 		'cap-rate': resolve('/tools/cap-rate/'),
 		'cash-on-cash': resolve('/tools/cash-on-cash/'),
 		dscr: resolve('/tools/dscr/')

@@ -11,11 +11,10 @@ export const TOOL_SLUGS: readonly ToolSlug[] = [
 ];
 
 /**
- * /tools/affordability/ ships in 10-14. Until then the hub card and the "Other free calculators"
- * link to it stay hidden, so the prerender crawl (handleHttpError: 'fail') never hits a 404.
- * 10-14 flips this to true.
+ * /tools/affordability/ shipped in 10-14, so the hub card and the "Other free calculators" link to
+ * it are shown. Setting this to false hides both again (the prerender crawl fails on a 404 link).
  */
-export const AFFORDABILITY_READY = false;
+export const AFFORDABILITY_READY = true;
 
 /** Breadcrumb labels (UI-SPEC "Tool pages > Shared strings"). */
 export const CRUMBS = { home: 'Home', tools: 'Tools' } as const;
