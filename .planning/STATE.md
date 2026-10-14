@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed wave 6 (10-13, 10-15, 10-17, 10-19)
+stopped_at: Completed wave 7 (10-14)
 last_updated: "2026-10-13T17:11:34.329Z"
 progress:
   total_phases: 11
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 10 (launch-hardening-go-to-market) — EXECUTING
-Plan: 17 of 23 summarized (waves 1-6 done + inter-wave fix 50a2fbc/f4ef7bb); next: wave 7 (10-14)
+Plan: 18 of 23 summarized (waves 1-7 done); next: wave 8 (10-16)
 
 ## Performance Metrics
 
@@ -591,6 +591,7 @@ Recent decisions affecting current work:
 - **2026-10-13:** `scripts/precommit.test.ts` also flakes under parallel load (56 s; 10/10 alone). Same rule: 10-23 root-causes it.
 - **2026-10-13:** 10-22 launch-audit naming contracts (keyed axe titles, `disclaimer: <name>`, report JSONs before `audit:launch`) are listed in 10-22-SUMMARY.md; 10-11..10-23 must match them or audit rows FAIL.
 - **2026-10-13 (after wave 6):** load-sensitive tests are now a pattern, not one-offs: under full `test:unit` load, ReDoS time budgets (`fair-housing/mutation.test.ts`, `numbers.property.test.ts`), `studio/boundaries.test.ts` and `precommit.test.ts` failed (224/224 green in isolation); E2E load flakes in deferred-items.md. 10-23 must make the suite deterministic under load (e.g. separate timing-budget tests from the parallel run, raise only test timeouts with justification), not retry.
+- **2026-10-13 (after wave 7):** audience pages (`for-renters/`, `for-investors/`, `for-agents/`) now ship 96.3 KB gz JS (report-only per UI-SPEC; were 53.5 KB at 10-09). The ~43 KB jump arrived with 10-17's waitlist. Not a gate failure, but 10-23's launch audit must call it out and either trim (lazy form/libs, as 10-14 did for the slider) or record an explicit owner-accepted exception. Tool pages now 59.2-59.5 KB gz (≈0.5-0.7 KB headroom).
 - **2026-10-13:** JS budget headroom on tool pages is ~6.5 KB gz (marketing layout already ships 53.5 KB of the 60 KB budget; research assumed ~27 KB). 10-12/10-13/10-14 must keep calculator code lean or trim the shared layout.
 
 None. Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).

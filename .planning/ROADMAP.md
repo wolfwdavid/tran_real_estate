@@ -407,7 +407,7 @@ Plans:
 - [x] 10-11-PLAN.md — SeoHead on marketing pages, noindex elsewhere, SEO E2E
 - [x] 10-12-PLAN.md — Calculator components (shell, fields, three calculators)
 - [x] 10-13-PLAN.md — ToolPage frame, /tools/ hub and three calculator pages
-- [ ] 10-14-PLAN.md — Affordability tool page, footer Tools column, tools E2E
+- [x] 10-14-PLAN.md — Affordability tool page, footer Tools column, tools E2E
 - [x] 10-15-PLAN.md — Onboarding state + inline Get started guide on the landing
 - [ ] 10-16-PLAN.md — /setup/rentcast/ guided key setup + ?source=sample hand-off
 - [x] 10-17-PLAN.md — Form gates + owner Web3Forms sink + per-portal waitlist (+ E2E)
@@ -466,5 +466,5 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 7. Investor Portal | 21/21 | Complete    | 2026-10-06 |
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
-| 10. Launch Hardening & Go-to-Market | 17/23 | In Progress|  |
+| 10. Launch Hardening & Go-to-Market | 18/23 | In Progress|  |
 | 11. Zillow Sponsored Listing Filter Extension | 0/TBD | Not started | - |
