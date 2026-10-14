@@ -30,6 +30,10 @@
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
 		"audit:deps": "pnpm audit --audit-level low",
+		"evidence:clean": "node scripts/audit-evidence.mjs clean",
+		"evidence:e2e": "node scripts/audit-evidence.mjs e2e",
+		"evidence:unit": "node scripts/audit-evidence.mjs unit",
+		"evidence:merge": "node scripts/audit-evidence.mjs merge",
 		"audit:launch": "node scripts/launch-audit.mjs --write",
 		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm seo:assert && pnpm budget:assert && pnpm test:e2e && pnpm audit:deps && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
 	},
