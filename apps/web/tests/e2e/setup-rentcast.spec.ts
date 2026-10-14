@@ -142,6 +142,12 @@ test('axe setup: saved untested key keeps step 2 at To do', async ({ page }) => 
 	await expect(step2(page).getByText('To do', { exact: true })).toBeVisible();
 	await expect(step2(page).getByRole('button', { name: 'Test key (0 calls)' })).toBeVisible();
 	await expect(finish(page).getByText('No tested key yet.', { exact: false })).toBeVisible();
+	// The embedded key card's section pointer reaches the Settings page, not a missing in-page id
+	// (10-18). On Settings itself the same card keeps the in-page #rentcast-usage link.
+	const usage = step2(page).getByRole('link', { name: 'RentCast usage', exact: true });
+	await expect(usage).toHaveAttribute('href', /\/settings\/#rentcast-usage$/);
+	const target = new URL((await usage.getAttribute('href'))!, page.url());
+	expect((await page.request.get(target.href)).status()).toBe(200);
 	await expectAxeClean(page, 'setup/rentcast/ (saved, untested key)');
 });
 

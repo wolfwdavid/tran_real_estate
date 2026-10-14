@@ -31,7 +31,9 @@
 	// cleared on every save outcome and never rendered back (the saved summary shows last4 only).
 	// Nothing in this file logs, and no key value ever reaches an attribute, URL, error or announcement.
 
-	let { provider }: { provider: ProviderInfo } = $props();
+	// `settingsBase` is '' on Settings (in-page #fragments). Pages that embed the card elsewhere
+	// (/setup/rentcast/) pass resolve('/settings/') so its section links reach the Settings page.
+	let { provider, settingsBase = '' }: { provider: ProviderInfo; settingsBase?: string } = $props();
 
 	const ctx = getSettingsContext();
 
@@ -260,8 +262,8 @@
 		<p class="text-label text-muted-foreground">Checking this browser…</p>
 	{:else if isLocked}
 		<p class="text-body">
-			Unlock your keys in Key security to use or change this key. <a
-				href="#key-security"
+			Unlock your keys in Key security to use or change this key. <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- '' or resolve('/settings/') + #fragment --><a
+				href="{settingsBase}#key-security"
 				class="text-primary underline underline-offset-3 hover:text-primary-hover">Key security</a
 			>
 		</p>
@@ -335,8 +337,8 @@
 		{/if}
 		{#if isRentCast}
 			<p class="text-label text-muted-foreground">
-				{pointerLead}<a
-					href="#rentcast-usage"
+				{pointerLead}<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- '' or resolve('/settings/') + #fragment --><a
+					href="{settingsBase}#rentcast-usage"
 					class="text-primary underline underline-offset-3 hover:text-primary-hover"
 					>{POINTER_LINK}</a
 				>.

@@ -193,7 +193,7 @@
 				</div>
 				<p class="mt-4 text-body">{COPY.step2.paragraph}</p>
 				<div class="mt-6">
-					<ProviderKeyCard provider={rentcast} />
+					<ProviderKeyCard provider={rentcast} settingsBase={resolve('/settings/')} />
 				</div>
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve('/settings/') + #fragment -->
 				<p class="mt-4 text-label text-muted-foreground">

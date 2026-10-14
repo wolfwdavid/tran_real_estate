@@ -164,6 +164,9 @@ describe('ProviderKeyCard AI wiring (source)', () => {
 	test('RentCast branch keeps its result line and pointer', () => {
 		expect(src).toContain('<RentCastKeyTestResult result={rentCastKeyTest.current} />');
 		expect(src).toContain("const POINTER = 'Usage, cap, and data source are in RentCast usage.';");
-		expect(src).toContain('href="#rentcast-usage"');
+		expect(src).toContain('href="{settingsBase}#rentcast-usage"');
+		// Off Settings (e.g. /setup/rentcast/) the card's section links point at the Settings page.
+		expect(src).toContain('href="{settingsBase}#key-security"');
+		expect(src).not.toMatch(/href="#(?:rentcast-usage|key-security)"/);
 	});
 });
