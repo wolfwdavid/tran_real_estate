@@ -86,3 +86,34 @@
   its post-hydration pointer "RentCast usage" (`#rentcast-usage`) and the locked-state "Key security"
   (`#key-security`) point at ids that exist only on Settings. Not crawled (client-only), but they
   do nothing on the setup page. A follow-up could let the card take a `settingsHref` base.
+
+## From 10-23 (phase gate): load-sensitive tests, root-caused or open
+
+- **FIXED, real race:** `renter-journey.spec.ts:43`. The renter search's debounced filter summary
+  ("Showing N of M rentals.", 500 ms after the last filter change) could land after a newer
+  announcement (a selected map pin) and replace it in the polite live region. The announcer now keeps
+  a sequence and the summary drops itself when anything newer was announced (0ad7c49, unit test
+  reproduces it RED first).
+- **FIXED, test waits:** `ResultsView.browser.test.ts` (a 1 s default poll for two chained lazy
+  imports; reproduced with a 1.5 s delay on the leaflet import; plus a 5 s default test timeout vs
+  3.9 s measured under full load) 315aed7; ReDoS budget tests judge the fastest of 5 runs (reproduced:
+  one 2-3 ms scan measured 153 ms under 40 CPU burners; budgets unchanged) 2f8c5d7; `precommit.test.ts`
+  HEAD-comparison race with concurrent committers replaced by an author check, hook work halved
+  b9895f4; `studio/boundaries.test.ts` explicit 30 s limit for a synchronous full-tree walk e8d6939.
+- **OPEN, product decision (orchestrator): `renter-saved.spec.ts:83`.** Failed once in 10 runs under
+  40 CPU burners: after the due reload the row still said "Checked 1 day ago" (the check-on-open pass
+  never ran). Probe (scratch spec, not committed): holding `navigator.locks` 'tran-alerts' for 3 s from
+  a second page during the reload makes the pass skip as `busy` and nothing retries it, so the visit
+  shows no new count; with no lock held the same flow passes. The scheduler's `ifAvailable` lock
+  (Phase 4 design: a busy lock means another tab is checking) also skips when the holder is a document
+  that is going away (reload during an in-flight pass). Proposed fix: request the lock without
+  `ifAvailable` but with a bounded wait (AbortSignal, about 10 s), then recompute due searches inside
+  the lock (claims already prevent double runs); needs the scheduler's two-tab tests updated and the
+  concurrency guards mutation-tested. Not changed in the gate plan.
+- **CPU starvation only:** `agent-contact.spec.ts:351`, `agent-followup.spec.ts:169` failed only as
+  30 s test timeouts (axe over several states) with 40 CPU burners plus an external llama-server
+  (~8 of 16 cores). 0 failures in 6 runs each under 16 burners at default workers. The first full-gate
+  E2E shard at 8 workers beside llama-server also hit 6 such timeouts in agent specs; at 4 workers all
+  2331 tests passed.
+- **Not reproduced:** `investor/autofill.spec.ts:195`, `csp.spec.ts:46`, `investor/buybox.spec.ts:217`:
+  0 failures in 16 runs each (root + sub, repeat 3 under 16 burners and repeat 5 under 40 burners).
