@@ -4,7 +4,11 @@ import { COUNT_PUSH, GET_COUNT, type CountPush, type CountResponse } from '../sr
 import { PILL_TAG } from '../src/lib/config';
 import { fixtureA, mount } from './fixtures/cards';
 
-type Listener = (msg: unknown, sender: unknown, sendResponse: (r: CountResponse) => void) => unknown;
+type Listener = (
+	msg: unknown,
+	sender: unknown,
+	sendResponse: (r: CountResponse) => void
+) => unknown;
 
 function fakeRuntime(reject = false) {
 	const listeners = new Set<Listener>();
@@ -71,7 +75,7 @@ describe('wireContent', () => {
 		const c = fakeCtx();
 		const ctl = await wireContent(c.ctx, deps(rt.runtime));
 		expect(rt.raw.onMessage.addListener).toHaveBeenCalledTimes(1);
-		const [listener] = [...rt.listeners];
+		const listener = [...rt.listeners][0]!;
 		const sendResponse = vi.fn();
 		const ret = listener({ type: GET_COUNT }, {}, sendResponse);
 		expect(ret).toBe(true);
@@ -85,7 +89,7 @@ describe('wireContent', () => {
 		const rt = fakeRuntime();
 		const ctl = await wireContent(fakeCtx().ctx, deps(rt.runtime));
 		expect(rt.sent).toEqual([{ type: COUNT_PUSH, enabled: true, count: 3 }]);
-		expect(Object.keys(rt.sent[0]).sort()).toEqual(['count', 'enabled', 'type']);
+		expect(Object.keys(rt.sent[0]!).sort()).toEqual(['count', 'enabled', 'type']);
 		ctl.stop();
 	});
 
@@ -121,7 +125,9 @@ describe('wireContent', () => {
 		c.invalidate();
 		expect(rt.raw.onMessage.removeListener).toHaveBeenCalledTimes(1);
 		expect(rt.listeners.size).toBe(0);
-		expect(document.querySelectorAll(`[data-tran-slf], [data-tran-slf-pos], ${PILL_TAG}`)).toHaveLength(0);
+		expect(
+			document.querySelectorAll(`[data-tran-slf], [data-tran-slf-pos], ${PILL_TAG}`)
+		).toHaveLength(0);
 		expect(document.body.innerHTML).toBe(before);
 	});
 });
