@@ -198,12 +198,52 @@ describe('startFilter', () => {
 		await vi.advanceTimersByTimeAsync(1000);
 		expect(h.published.length).toBe(calls);
 		// The new one is: a late card is picked up.
-		document.querySelector('#search-page-list-container ul')!.insertAdjacentHTML(
-			'beforeend',
-			'<li id="c-9"><span>Sponsored</span></li>'
-		);
+		document
+			.querySelector('#search-page-list-container ul')!
+			.insertAdjacentHTML('beforeend', '<li id="c-9"><span>Sponsored</span></li>');
 		await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
 		expect(ctl.count()).toBe(4);
+		ctl.stop();
+	});
+
+	it('keeps re-checking after navigation and catches a container swapped late', async () => {
+		mount(document, fixtureA.html);
+		const h = harness();
+		const ctl = await startFilter(h.deps);
+		h.navigate();
+		await vi.advanceTimersByTimeAsync(DEBOUNCE_MS + RETRY_MIN_MS + 100);
+		// The old container survived the navigation debounce; React swaps it only now.
+		document.body.innerHTML = fixtureC.html;
+		// Checks run at +250 and +750 after the navigation debounce; the next one catches the swap.
+		await vi.advanceTimersByTimeAsync(2 * RETRY_MIN_MS - 100 - 1);
+		expect(byId('c-3').hasAttribute('data-tran-slf')).toBe(false);
+		await vi.advanceTimersByTimeAsync(1);
+		expect(byId('c-3').getAttribute('data-tran-slf')).toBe('dimmed');
+		expect(ctl.count()).toBe(3);
+		ctl.stop();
+	});
+
+	it('re-acquires a container swapped during a mutation burst, without a navigation event', async () => {
+		const old = mount(document, fixtureA.html);
+		const h = harness();
+		const ctl = await startFilter(h.deps);
+		old.querySelector('ul')!.insertAdjacentHTML('beforeend', SPONSORED_LI);
+		await vi.advanceTimersByTimeAsync(50);
+		document.body.innerHTML = fixtureC.html;
+		await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+		expect(byId('c-1').getAttribute('data-tran-slf')).toBe('dimmed');
+		expect(ctl.count()).toBe(3);
+		ctl.stop();
+	});
+
+	it('rescan() re-acquires a replaced container', async () => {
+		mount(document, fixtureA.html);
+		const h = harness();
+		const ctl = await startFilter(h.deps);
+		document.body.innerHTML = fixtureC.html;
+		ctl.rescan();
+		expect(byId('c-2').getAttribute('data-tran-slf')).toBe('dimmed');
+		expect(ctl.count()).toBe(3);
 		ctl.stop();
 	});
 
