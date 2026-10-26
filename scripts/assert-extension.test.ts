@@ -350,7 +350,9 @@ describe('assert-extension oracle: planted manifest faults', () => {
 	test('<all_urls> anywhere in the manifest text is reported', () => {
 		const m = goldenManifest();
 		(m.action as Record<string, unknown>).default_title = '<all_urls>';
-		expect(checkManifest(m, () => true).join('\n')).toContain('<all_urls>');
+		// Exact message: the default_title check also echoes the planted value, which alone
+		// would make a substring assertion pass even with the text scan removed.
+		expect(checkManifest(m, () => true)).toContain('manifest.json: contains <all_urls>');
 	});
 });
 
