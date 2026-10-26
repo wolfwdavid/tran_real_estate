@@ -55,7 +55,7 @@
 		"svelte": "5.57.0",
 		"typescript": "~6.0.3",
 		"typescript-eslint": "8.70.0",
-		"vitest": "4.1.11"
+		"vitest": "4.1.12"
 	},
 	"simple-git-hooks": {
 		"pre-commit": "node scripts/gitleaks.mjs staged && node scripts/guard-real-data.mjs --staged"

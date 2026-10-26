@@ -30,7 +30,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | SvelteKit (`@sveltejs/kit`) | **2.70.3** | App framework, file routing, prerendering | User constraint. Latest stable 2.x (2026-08-18). Kit 3 is still RC; see Headline 4. | HIGH |
 | Svelte | **5.57.0** | UI runtime (runes) | Current stable. `vite-plugin-svelte@7` requires `svelte ^5.46.4`; bits-ui requires `^5.33`. | HIGH |
 | `@sveltejs/adapter-static` | **3.0.10** | Emit static site for GitHub Pages | Official adapter. v4 is `next` only. Supports `fallback: '404.html'` for client-routed deep links on Pages. | HIGH |
-| Vite | **8.3.0** | Build/dev server | `@sveltejs/vite-plugin-svelte@7.3.0` requires Vite 8. Kit 2.70, Tailwind 4.3, WXT, and CRXJS all accept Vite 8. | HIGH |
+| Vite | **8.3.5** | Build/dev server | `@sveltejs/vite-plugin-svelte@7.3.0` requires Vite 8. Kit 2.70, Tailwind 4.3, WXT, and CRXJS all accept Vite 8. | HIGH |
 | `@sveltejs/vite-plugin-svelte` | **7.3.0** | Svelte compilation in Vite | Required by Kit + Vite 8. Engines: Node `^20.19 \|\| ^22.12 \|\| >=24`. | HIGH |
 | TypeScript | **6.0.3** (pin `~6.0.3`) | Types | See Headline 3. **Do not install 7.x.** | HIGH |
 | Node.js (CI + local) | **24 LTS** (24.21.0, "Krypton") | Runtime for tooling | Active LTS. WXT requires Node `>=22`; the OpenAI SDK's Node minimum is 22. 24 satisfies everything. | HIGH |
@@ -42,7 +42,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | Library | Version | Purpose | When to Use | Confidence |
 |---------|---------|---------|-------------|------------|
 | Native `fetch` (no SDK) | n/a | Typed RentCast client | RentCast is a simple GET + `X-Api-Key` REST API. A ~200-line typed client (endpoint functions + response schemas) beats any wrapper. No official RentCast JS SDK was found. | HIGH (API shape) / LOW (no-SDK claim) |
-| Zod | **4.6.4** (import from `zod/mini` in client code) | Runtime validation of RentCast responses, persisted IndexedDB records, imported CRM JSON | Validate at every trust boundary: API responses drift, and user-imported files are untrusted. `runed` peers `zod ^4.1`, so it is already in the graph. | HIGH |
+| Zod | **4.6.7** (import from `zod/mini` in client code) | Runtime validation of RentCast responses, persisted IndexedDB records, imported CRM JSON | Validate at every trust boundary: API responses drift, and user-imported files are untrusted. `runed` peers `zod ^4.1`, so it is already in the graph. | HIGH |
 | `@anthropic-ai/sdk` | **0.125.0** | Claude calls (streaming) | `new Anthropic({ apiKey, dangerouslyAllowBrowser: true })`. **Load via dynamic `import()` only when the user picks Claude.** | HIGH |
 | `openai` | **7.15.0** | OpenAI calls | Use the **Responses API** (`client.responses.create`), which the official docs recommend over Chat Completions. `dangerouslyAllowBrowser: true`. Dynamic import. | HIGH |
 | `@google/genai` | **2.22.0** | Gemini calls | The current unified SDK with a `browser` export. Dynamic import. | HIGH |
@@ -65,8 +65,8 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | Tool | Version | Purpose | Notes | Confidence |
 |------|---------|---------|-------|------------|
 | `sv` CLI | **0.17.0** | Scaffold (`sv create --add tailwindcss,vitest,playwright,eslint,prettier`) | Scaffolds Vitest `^4.1.8`, TS `^6.0.3`, Tailwind `^4.3.0`, matching this doc's pins. Do **not** use `sv@next` (targets Kit 3). | HIGH |
-| Vitest | **4.1.11** (not 5.0.0) | Unit tests (deal math, cap rate, cache/quota ledger, RentCast client, prompt builders) | Vitest 5.0.0 released 2026-09-03 (10 days old); `sv` still scaffolds 4.x. Upgrade in a later phase. Deal-analyzer math is pure functions, so it should be the highest-coverage module. | HIGH |
-| `@vitest/browser-playwright` + `vitest-browser-svelte` | **4.1.11** + **2.2.1** | Component tests in a real browser | Match the Vitest major (4). Real browser = real IndexedDB, no jsdom quirks. | HIGH |
+| Vitest | **4.1.12** (not 5.0.x) | Unit tests (deal math, cap rate, cache/quota ledger, RentCast client, prompt builders) | Vitest 5.0.0 released 2026-09-03 (10 days old); `sv` still scaffolds 4.x. Upgrade in a later phase. Deal-analyzer math is pure functions, so it should be the highest-coverage module. | HIGH |
+| `@vitest/browser-playwright` + `vitest-browser-svelte` | **4.1.12** + **2.2.1** | Component tests in a real browser | Match the Vitest major (4). Real browser = real IndexedDB, no jsdom quirks. | HIGH |
 | fake-indexeddb | **6.2.5** | Dexie tests in the Node Vitest project | For fast pure-logic tests of repositories/migrations without a browser. | HIGH |
 | `@playwright/test` | **1.63.0** | E2E across the 3 portals | Mock *all* outbound calls with `page.route()` + synthetic fixtures. CI must never hit RentCast (50 calls/month) or LLM providers. | HIGH |
 | `@axe-core/playwright` | **4.13.0** | Accessibility assertions (WCAG AA) inside E2E | Run `AxeBuilder` on every route in both empty-key (demo) and key-present states. | HIGH |
@@ -144,7 +144,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | Google Fonts CDN `<link>` | Third-party request (privacy), complicates CSP, and PDF export needs the TTFs locally anyway. | `@fontsource-variable/*` self-hosted. |
 | Svelte UI / shadow-root UI inside the Zillow content script | Unneeded weight on a third-party page. Hiding cards is a `MutationObserver` + class/`display:none`. More surface for Zillow DOM breakage. | Plain TS content script; Svelte only for the popup. |
 | Any Zillow data extraction in the extension (reading prices, sending DOM data to the app) | Crosses from "hide elements" into scraping, violating Zillow ToU and PROJECT.md constraints. Also triggers stricter Chrome Web Store review. | Content script reads only selectors/labels needed to identify sponsored cards; no network permissions, no `host_permissions` beyond Zillow match patterns, no messaging of page content. |
-| Vitest 5.0.0 right now | 10 days old; `sv` scaffolds 4.x; browser-mode companion packages must match the major exactly. | Vitest 4.1.11 now; upgrade as a chore later. |
+| Vitest 5.0.0 right now | 10 days old; `sv` scaffolds 4.x; browser-mode companion packages must match the major exactly. | Vitest 4.1.12 now; upgrade as a chore later. |
 | sveltekit-superforms / form actions | Built around server actions. There is no server on GitHub Pages. | Plain Svelte 5 forms + Zod validation client-side. |
 ## Stack Patterns by Variant
 - Swap the RentCast client for a `FixtureRentCastClient` behind the same interface (dependency-injected at app init).
@@ -171,7 +171,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | `wxt@0.21.4` | `vite ^6.3.4 \|\| ^7 \|\| ^8`, `typescript >=5.4`; Node `>=22` | CI Node 24 satisfies it. |
 | `@wxt-dev/module-svelte@2.0.5` | `wxt >=0.18.6`, `svelte >=5` | OK. |
 | `vitest-browser-svelte@2.2.1` | `vitest ^4` (3.x line requires Vitest 5) | Keep all Vitest-family packages on one major. |
-| `@vitest/browser-playwright@4.1.11` | `vitest 4.1.11` (exact) | Exact-match pin. |
+| `@vitest/browser-playwright@4.1.12` | `vitest 4.1.12` (exact) | Exact-match pin. |
 | `jspdf-autotable@5.0.8` | `jspdf ^2 \|\| ^3 \|\| ^4` | Only if choosing the jsPDF alternative. |
 | `openai@7.15.0` | TS `>=4.9`; Node 22+ (browser OK with flag) | Node minimum only affects running it in Node tests. |
 | `@anthropic-ai/sdk@0.125.0` | TS `>=5.0`; Node 20+ (browser OK with flag) | |

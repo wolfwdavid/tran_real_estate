@@ -7,3 +7,5 @@ engineStrict: true
 audit:
   ignore:
     - GHSA-pxg6-pf52-xh8x # cookie <0.7 via @sveltejs/kit 2.x server runtime; not in the static bundle. Re-check on Kit upgrade.
+    - GHSA-pfhg-q3qv-9q6r # @sveltejs/kit <3 server-side redirect handling; the site is fully prerendered (adapter-static), no Kit server runs. Re-check on Kit upgrade.
+    - GHSA-27mw-82g8-phjj # @sveltejs/kit <3 cache-control header XSS in the server runtime; not in the static bundle. Re-check on Kit upgrade.
