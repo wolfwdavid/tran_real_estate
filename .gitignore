@@ -17,6 +17,7 @@ playwright-report/
 
 # Browser component-test artifacts (failure screenshots, attachments)
 apps/web/.vitest-attachments/
+apps/extension/.vitest-attachments/
 **/__screenshots__/
 
 # WXT extension generated dirs
