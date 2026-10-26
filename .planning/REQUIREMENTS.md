@@ -88,7 +88,7 @@
 
 - [x] **EXT-01**: Zillow user with the extension installed sees sponsored or promoted listing cards dimmed, with a one-click reveal on each
 - [x] **EXT-02**: User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup
-- [ ] **EXT-03**: Extension makes no network requests and collects no data (permissions limited to storage and zillow.com)
+- [x] **EXT-03**: Extension makes no network requests and collects no data (permissions limited to storage and zillow.com)
 - [x] **EXT-04**: User can install the extension from a GitHub Releases zip (with load-unpacked instructions), Microsoft Edge Add-ons, or Firefox Add-ons
 
 ### Go-to-Market
@@ -202,7 +202,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STU-04 | Phase 9 | Complete |
 | EXT-01 | Phase 11 | Complete |
 | EXT-02 | Phase 11 | Complete |
-| EXT-03 | Phase 11 | Pending |
+| EXT-03 | Phase 11 | Complete |
 | EXT-04 | Phase 11 | Complete |
 | GTM-01 | Phase 10 | Pending |
 | GTM-02 | Phase 10 | Pending |
