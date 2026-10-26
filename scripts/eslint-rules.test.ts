@@ -878,3 +878,89 @@ describe('Phase 10 boundaries', () => {
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
 	});
 });
+
+// EXT-03: the extension makes no network requests. Every primitive below must be a lint error in
+// shipped extension source (apps/extension/src). Virtual paths only; nothing is written to disk.
+describe('extension zero-network (EXT-03)', () => {
+	const EXT_FIX = 'apps/extension/src/__lintfix__';
+
+	beforeAll(() => {
+		expect(existsSync(resolve(repoRoot, EXT_FIX))).toBe(false);
+	});
+
+	test.each([
+		['fetch', "export const a = fetch('x');\n", 'no-restricted-syntax'],
+		['window.fetch', "export const a = window.fetch('x');\n", 'no-restricted-syntax'],
+		['sendBeacon', "export const a = navigator.sendBeacon('x', 'y');\n", 'no-restricted-syntax'],
+		['XMLHttpRequest', 'export const a = new XMLHttpRequest();\n', 'no-restricted-globals'],
+		['WebSocket', "export const a = new WebSocket('wss://x.test');\n", 'no-restricted-globals'],
+		['EventSource', "export const a = new EventSource('x');\n", 'no-restricted-globals'],
+		[
+			'WebTransport',
+			"export const a = new WebTransport('https://x.test');\n",
+			'no-restricted-globals'
+		],
+		['importScripts', "importScripts('x');\nexport {};\n", 'no-restricted-globals'],
+		['RTCPeerConnection', 'export const a = new RTCPeerConnection();\n', 'no-restricted-globals'],
+		[
+			'connectNative',
+			"declare const browser: any;\nexport const a = browser.runtime.connectNative('x');\n",
+			'no-restricted-syntax'
+		],
+		[
+			'sendNativeMessage',
+			"declare const chrome: any;\nexport const a = chrome.runtime.sendNativeMessage('x', {});\n",
+			'no-restricted-syntax'
+		],
+		[
+			'dynamic import()',
+			"export const a = async () => await import('./x');\n",
+			'no-restricted-syntax'
+		],
+		['new Image()', 'export const a = new Image();\n', 'no-restricted-syntax']
+	])('%s is a lint error in extension source', async (_name, code, ruleId) => {
+		const messages = await lint(`${EXT_FIX}/net-fixture.ts`, code);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, ruleId).length).toBeGreaterThanOrEqual(1);
+	});
+
+	test('the network messages name EXT-03', async () => {
+		const messages = await lint(
+			`${EXT_FIX}/net-fixture.ts`,
+			'export const a = new WebSocket("x");\n'
+		);
+		expect(errorsFor(messages, 'no-restricted-globals')[0].message).toContain('EXT-03');
+	});
+
+	test('fetch() inside an extension .svelte component errors', async () => {
+		const messages = await lint(`${EXT_FIX}/Popup.svelte`, plainSvelteFetch);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax').length).toBeGreaterThanOrEqual(1);
+	});
+
+	test('a .js file in extension source is covered too', async () => {
+		const messages = await lint(
+			`${EXT_FIX}/net-fixture.js`,
+			'export const a = new XMLHttpRequest();\n'
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-globals').length).toBeGreaterThanOrEqual(1);
+	});
+
+	test('a clean extension file has zero errors', async () => {
+		const messages = await lint(
+			`${EXT_FIX}/clean-fixture.ts`,
+			"export const a = document.querySelector('#x');\n"
+		);
+		expect(messages).toEqual([]);
+	});
+
+	test('the extension block does not leak into the web app (WebSocket stays legal there)', async () => {
+		const messages = await lint(
+			`${WEB}/lib/features/shared/__lintfix__/ws.ts`,
+			"export const a = new Image();\nexport const b = async () => await import('./x');\n"
+		);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
+	});
+});
