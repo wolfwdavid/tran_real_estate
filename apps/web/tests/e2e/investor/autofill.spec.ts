@@ -197,7 +197,11 @@ test('the cost label appears when the data runtime starts after the analyzer', a
 	const fixtures = await holdSampleFixtures(page);
 	await openAnalyzer(page);
 	await fillAddress(page);
-	expect(fixtures.held()).toBe(true);
+	// The fixture chunk is requested lazily after hydration; under load it can arrive after the
+	// address is typed. Wait for the hold to engage (the gate keeps the runtime late either way).
+	await expect
+		.poll(() => fixtures.held(), { message: 'the sample-fixture chunk was never requested' })
+		.toBe(true);
 
 	fixtures.release();
 	// No hover and no focus on the button: the label must arrive on its own.
