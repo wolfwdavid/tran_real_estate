@@ -71,3 +71,12 @@
 - Rule: research built from a snapshot of a third-party DOM must be re-checked live before the detector
   plan runs. A read-only browser pass (ten minutes) confirmed the selectors and showed that label text
   never appears today, which changed the primary signal to the ad-slot list items.
+- Rule: `pnpm audit --audit-level low` is a moving target. Eleven advisories against pins that were
+  unchanged since Phase 10 appeared between 10-14 and 10-26, so a close-out plan can fail `verify` on
+  code nobody touched. Run `corepack pnpm audit` FIRST in any close-out or resume, before the long
+  chain. Patch-level bumps for devtools (vite/vitest/happy-dom/zod) are safe; a major-only fix
+  (Kit 2 -> 3) goes into `scripts/lib/audit-exceptions.mjs` + `pnpm-workspace.yaml` with proof the
+  code path never ships (grep src + grep build/_app), and regenerate `docs/LAUNCH-AUDIT.md`.
+- Rule: an instant `expect(flag).toBe(true)` on a flag set inside a Playwright route handler is a
+  race under load (autofill.spec.ts:200 failed once in 2,327). Use `expect.poll` for anything set by
+  an intercepted request; keep instant reads for "this must never have happened" assertions only.
