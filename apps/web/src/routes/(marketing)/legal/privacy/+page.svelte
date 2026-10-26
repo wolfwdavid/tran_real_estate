@@ -101,4 +101,20 @@
 
 	<h2>Contact</h2>
 	<p>Contact details will be posted here before public launch.</p>
+
+	<h2 id="browser-extension">Sponsored Listing Filter extension</h2>
+	<p>
+		The Sponsored Listing Filter — for Zillow browser extension runs only on zillow.com pages. It
+		reads the short labels on listing cards, such as "Sponsored" or "Promoted", to find paid
+		placements and dims them. You can show any card with one click.
+	</p>
+	<p>
+		It does not read prices, addresses, or any other listing details. It makes no network requests,
+		sends nothing to Tran or anyone else, and has no analytics. Its only stored data is one on/off
+		setting kept in your browser's extension storage.
+	</p>
+	<p>
+		Permissions: storage, and access to zillow.com pages. Not affiliated with or endorsed by Zillow
+		Group.
+	</p>
 </LegalPage>
