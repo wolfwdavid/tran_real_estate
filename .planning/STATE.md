@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed wave 11 (10-23); all 23 plans summarized
-last_updated: "2026-10-13T17:11:34.329Z"
+status: unknown
+stopped_at: Completed 11-01-PLAN.md
+last_updated: "2026-10-26T02:33:05.323Z"
 progress:
   total_phases: 11
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 209
-  completed_plans: 174
+  completed_plans: 198
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-13)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 10 — launch-hardening-go-to-market
+**Current focus:** Phase 11 — zillow-sponsored-listing-filter-extension
 
 ## Current Position
 
-Phase: 10 (launch-hardening-go-to-market) — EXECUTING
-Plan: 23 of 23 summarized; next: Phase 10 verification
+Phase: 11 (zillow-sponsored-listing-filter-extension) — EXECUTING
+Plan: 2 of 12
 
 ## Performance Metrics
 
@@ -220,6 +220,7 @@ Plan: 23 of 23 summarized; next: Phase 10 verification
 | Phase 09 P23 | 7.6h | 2 tasks | 18 files |
 | Phase 09 P24 | 18min | 3 tasks | 8 files |
 | Phase 09 P25 | 16min | 2 tasks | 5 files |
+| Phase 11 P01 | 21min | 3 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -569,6 +570,11 @@ Recent decisions affecting current work:
 - [Phase 09]: 09-24: the email link carries no href while an edit recheck is pending (aria-disabled stays gate-based); hosts can bind checkPending and call flushChecks()
 - [Phase 09]: 09-24: PlatformCard onCopy checks the live edit (checkedEdit = current) and copies only that text; GenerationPanel forwards recheckMs to cards
 - [Phase 09]: 09-25: snapshot Save and memo Print flush the panel recheck (flushChecks + flushSync) before reading the gate; memo print link has no href while checkPending (printLive), aria-disabled stays gate-based
+- [Phase 11]: 11-01: WXT ConfigEnv exposes mode; production-only popup CSP keys on mode === 'production'
+- [Phase 11]: 11-01: WxtVitest({ root }) works under the root projects harness; no wxt/browser alias fallback
+- [Phase 11]: 11-01: content script imports wxt/utils/define-content-script; settings.ts is the only wxt/utils/storage importer
+- [Phase 11]: 11-01: extension pins axe-core 4.13.0 (same engine as apps/web); no allowBuilds entries needed
+- [Phase 11]: 11-01: EXT-01/02/03 left unchecked after 11-01 (harness + contracts only); later Phase 11 plans close them
 
 ### Pending Todos
 
@@ -598,7 +604,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-13T15:33:20.877Z
-Stopped at: Completed 09-25-PLAN.md
+Last session: 2026-10-26T02:33:05.317Z
+Stopped at: Completed 11-01-PLAN.md
 Resume file: None
 Next: run the clock health check in the handoff, then `/gsd:plan-phase 9 --gaps` to close the edit-mode exit gap, re-verify, `phase complete 9`, then Phase 10. Still no remote and no push by design.
