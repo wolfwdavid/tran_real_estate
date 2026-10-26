@@ -436,7 +436,7 @@ Plans:
 - [x] 11-02-PLAN.md — Brand icons + Edge 300x300 logo from a committed generator
 - [ ] 11-03-PLAN.md — Label-first detector + synthetic fixtures A-D
 - [ ] 11-04-PLAN.md — Closed-shadow reveal pill, manifest content CSS, brand parity gate
-- [ ] 11-05-PLAN.md — Popup state model (DI'd messaging) + token mirror
+- [x] 11-05-PLAN.md — Popup state model (DI'd messaging) + token mirror
 - [ ] 11-06-PLAN.md — Zero-network: ESLint ban + production manifest/bundle/zip oracle (mutation-tested)
 - [ ] 11-07-PLAN.md — Gated release workflow, install guide, Edge listing copy, privacy #browser-extension section
 - [ ] 11-08-PLAN.md — Reconcile, scoped debounced observer, filter controller (scroll + SPA)
@@ -467,4 +467,4 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | 23/23 | Complete   | 2026-10-14 |
-| 11. Zillow Sponsored Listing Filter Extension | 2/12 | In Progress|  |
+| 11. Zillow Sponsored Listing Filter Extension | 3/12 | In Progress|  |
