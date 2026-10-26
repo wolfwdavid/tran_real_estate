@@ -7,7 +7,8 @@ export default defineConfig({
 			'packages/core',
 			'packages/brand',
 			'scripts',
-			'apps/web/vitest.browser.config.ts'
+			'apps/web/vitest.browser.config.ts',
+			'apps/extension'
 		]
 	}
 });

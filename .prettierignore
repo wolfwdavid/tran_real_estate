@@ -11,3 +11,6 @@ test-results/
 playwright-report/
 .tools/
 **/__lintfix__/
+**/.wxt/
+**/.output/
+**/__screenshots__/

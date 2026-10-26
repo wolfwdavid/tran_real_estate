@@ -91,6 +91,8 @@ export default defineConfig(
 			'**/build-configured/',
 			'**/.svelte-kit/',
 			'**/test-results/',
+			'**/.wxt/',
+			'**/.output/',
 			'.planning/'
 		]
 	},
