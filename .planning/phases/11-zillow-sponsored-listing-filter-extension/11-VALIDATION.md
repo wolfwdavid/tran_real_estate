@@ -1,9 +1,9 @@
 ---
 phase: 11
 slug: zillow-sponsored-listing-filter-extension
-status: draft
+status: approved-pending-composed-verify
 nyquist_compliant: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-10-04
 ---
 
@@ -38,31 +38,31 @@ created: 2026-10-04
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 11-01-01 | 01 | 1 | EXT-03 | unit (non-vacuity) | `corepack pnpm vitest run --project extension no-network && corepack pnpm --filter extension check` | ❌ W0 | ⬜ pending |
-| 11-01-02 | 01 | 1 | EXT-01, EXT-02 | unit (schema, fakeBrowser, messaging) | `corepack pnpm vitest run --project extension selectors settings messages` | ❌ W0 | ⬜ pending |
-| 11-01-03 | 01 | 1 | EXT-03 | unit (banned copy + planted control) | `corepack pnpm vitest run --project extension copy-banned` | ❌ W0 | ⬜ pending |
-| 11-02-01 | 02 | 2 | EXT-04 | script output | `corepack pnpm --filter extension icons` | ❌ | ⬜ pending |
-| 11-02-02 | 02 | 2 | EXT-04 | unit (PNG IHDR) | `corepack pnpm vitest run --project extension icons` | ❌ | ⬜ pending |
-| 11-03-01 | 03 | 2 | EXT-01 | guard | `node scripts/guard-real-data.mjs --all` | ❌ | ⬜ pending |
-| 11-03-02 | 03 | 2 | EXT-01 | unit (synthetic-DOM matcher, 4 fixtures, Showcase/Gas-fireplace negatives) | `corepack pnpm vitest run --project extension detect fixtures` | ❌ | ⬜ pending |
-| 11-04-01 | 04 | 2 | EXT-01 | unit (pill a11y, closed shadow, shared sheet, stopPropagation) | `corepack pnpm vitest run --project extension reveal-host` | ❌ | ⬜ pending |
-| 11-04-02 | 04 | 2 | EXT-01 | unit (token parity, rejects planted #006AFF) | `corepack pnpm vitest run --project extension brand-parity` | ❌ | ⬜ pending |
-| 11-05-01 | 05 | 2 | EXT-02 | unit (7 popup states, injected sendToTab) | `corepack pnpm vitest run --project extension popup-model` | ❌ | ⬜ pending |
-| 11-05-02 | 05 | 2 | EXT-02 | unit (token mirror) | `corepack pnpm vitest run --project extension popup-tokens` | ❌ | ⬜ pending |
-| 11-06-01 | 06 | 2 | EXT-03 | unit (ESLint planted violations) | `corepack pnpm vitest run --project scripts eslint-rules` | ✅ (extend) | ⬜ pending |
-| 11-06-02 | 06 | 2 | EXT-03 | unit (manifest/bundle/zip oracle mutation suite) | `corepack pnpm vitest run --project scripts assert-extension` | ❌ | ⬜ pending |
-| 11-07-01 | 07 | 2 | EXT-04 | unit (release gate) + actionlint | `corepack pnpm vitest run --project scripts extension-release-gate && corepack pnpm lint:workflows` | ❌ | ⬜ pending |
-| 11-07-02 | 07 | 2 | EXT-04, EXT-03 | unit (docs, Edge copy, privacy section) | `corepack pnpm vitest run --project scripts extension-docs && corepack pnpm banned` | ❌ | ⬜ pending |
-| 11-08-01 | 08 | 3 | EXT-01 | unit (idempotent reconcile, recycled nodes, byte-exact restore) | `corepack pnpm vitest run --project extension reconcile` | ❌ | ⬜ pending |
-| 11-08-02 | 08 | 3 | EXT-01, EXT-02 | unit (MutationObserver debounce, locationchange re-scan, toggle) | `corepack pnpm vitest run --project extension observe filter` | ❌ | ⬜ pending |
-| 11-09-01 | 09 | 3 | EXT-02, EXT-03 | typecheck + build | `corepack pnpm --filter extension check && corepack pnpm --filter extension build` | ❌ | ⬜ pending |
-| 11-09-02 | 09 | 3 | EXT-02, EXT-03 | browser (popup axe, all 7 states, planted control) | `corepack pnpm --filter extension test:browser` | ❌ | ⬜ pending |
-| 11-10-01 | 10 | 4 | EXT-01, EXT-02 | unit (badge, content wiring/messaging) | `corepack pnpm vitest run --project extension badge content-wiring` | ❌ | ⬜ pending |
-| 11-10-02 | 10 | 4 | EXT-03, EXT-04 | integration (production manifest + bundle + zip oracle) | `corepack pnpm --filter extension zip && node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output` | ❌ | ⬜ pending |
-| 11-11-01 | 11 | 5 | EXT-01 | typecheck | `corepack pnpm --filter extension check` | ❌ | ⬜ pending |
-| 11-11-02 | 11 | 5 | EXT-01, EXT-02, EXT-03 | E2E (loaded extension, zero-network session) | `corepack pnpm --filter extension build && corepack pnpm --filter extension e2e` | ❌ | ⬜ pending |
-| 11-12-01 | 12 | 6 | EXT-01..04 | unit (CI gate) + actionlint | `corepack pnpm vitest run --project scripts workflow-gate && corepack pnpm lint:workflows` | ✅ (extend) | ⬜ pending |
-| 11-12-02 | 12 | 6 | EXT-01..04 | composed gate | `corepack pnpm verify` | ✅ | ⬜ pending |
+| 11-01-01 | 01 | 1 | EXT-03 | unit (non-vacuity) | `corepack pnpm vitest run --project extension no-network && corepack pnpm --filter extension check` | ✅ | ✅ green |
+| 11-01-02 | 01 | 1 | EXT-01, EXT-02 | unit (schema, fakeBrowser, messaging) | `corepack pnpm vitest run --project extension selectors settings messages` | ✅ | ✅ green |
+| 11-01-03 | 01 | 1 | EXT-03 | unit (banned copy + planted control) | `corepack pnpm vitest run --project extension copy-banned` | ✅ | ✅ green |
+| 11-02-01 | 02 | 2 | EXT-04 | script output | `corepack pnpm --filter extension icons` | ✅ | ✅ green |
+| 11-02-02 | 02 | 2 | EXT-04 | unit (PNG IHDR) | `corepack pnpm vitest run --project extension icons` | ✅ | ✅ green |
+| 11-03-01 | 03 | 2 | EXT-01 | guard | `node scripts/guard-real-data.mjs --all` | ✅ | ✅ green |
+| 11-03-02 | 03 | 2 | EXT-01 | unit (synthetic-DOM matcher, 4 fixtures, Showcase/Gas-fireplace negatives) | `corepack pnpm vitest run --project extension detect fixtures` | ✅ | ✅ green |
+| 11-04-01 | 04 | 2 | EXT-01 | unit (pill a11y, closed shadow, shared sheet, stopPropagation) | `corepack pnpm vitest run --project extension reveal-host` | ✅ | ✅ green |
+| 11-04-02 | 04 | 2 | EXT-01 | unit (token parity, rejects planted #006AFF) | `corepack pnpm vitest run --project extension brand-parity` | ✅ | ✅ green |
+| 11-05-01 | 05 | 2 | EXT-02 | unit (7 popup states, injected sendToTab) | `corepack pnpm vitest run --project extension popup-model` | ✅ | ✅ green |
+| 11-05-02 | 05 | 2 | EXT-02 | unit (token mirror) | `corepack pnpm vitest run --project extension popup-tokens` | ✅ | ✅ green |
+| 11-06-01 | 06 | 2 | EXT-03 | unit (ESLint planted violations) | `corepack pnpm vitest run --project scripts eslint-rules` | ✅ (extend) | ✅ green |
+| 11-06-02 | 06 | 2 | EXT-03 | unit (manifest/bundle/zip oracle mutation suite) | `corepack pnpm vitest run --project scripts assert-extension` | ✅ | ✅ green |
+| 11-07-01 | 07 | 2 | EXT-04 | unit (release gate) + actionlint | `corepack pnpm vitest run --project scripts extension-release-gate && corepack pnpm lint:workflows` | ✅ | ✅ green |
+| 11-07-02 | 07 | 2 | EXT-04, EXT-03 | unit (docs, Edge copy, privacy section) | `corepack pnpm vitest run --project scripts extension-docs && corepack pnpm banned` | ✅ | ✅ green |
+| 11-08-01 | 08 | 3 | EXT-01 | unit (idempotent reconcile, recycled nodes, byte-exact restore) | `corepack pnpm vitest run --project extension reconcile` | ✅ | ✅ green |
+| 11-08-02 | 08 | 3 | EXT-01, EXT-02 | unit (MutationObserver debounce, locationchange re-scan, toggle) | `corepack pnpm vitest run --project extension observe filter` | ✅ | ✅ green |
+| 11-09-01 | 09 | 3 | EXT-02, EXT-03 | typecheck + build | `corepack pnpm --filter extension check && corepack pnpm --filter extension build` | ✅ | ✅ green |
+| 11-09-02 | 09 | 3 | EXT-02, EXT-03 | browser (popup axe, all 7 states, planted control) | `corepack pnpm --filter extension test:browser` | ✅ | ✅ green |
+| 11-10-01 | 10 | 4 | EXT-01, EXT-02 | unit (badge, content wiring/messaging) | `corepack pnpm vitest run --project extension badge content-wiring` | ✅ | ✅ green |
+| 11-10-02 | 10 | 4 | EXT-03, EXT-04 | integration (production manifest + bundle + zip oracle) | `corepack pnpm --filter extension zip && node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output` | ✅ | ✅ green |
+| 11-11-01 | 11 | 5 | EXT-01 | typecheck | `corepack pnpm --filter extension check` | ✅ | ✅ green |
+| 11-11-02 | 11 | 5 | EXT-01, EXT-02, EXT-03 | E2E (loaded extension, zero-network session) | `corepack pnpm --filter extension build && corepack pnpm --filter extension e2e` | ✅ | ✅ green |
+| 11-12-01 | 12 | 6 | EXT-01..04 | unit (CI gate) + actionlint | `corepack pnpm vitest run --project scripts workflow-gate && corepack pnpm lint:workflows` | ✅ (extend) | ✅ green |
+| 11-12-02 | 12 | 6 | EXT-01..04 | composed gate | `corepack pnpm verify` | ✅ | ⚠️ interrupted (see sign-off) |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -74,12 +74,12 @@ Sampling continuity: no three consecutive tasks lack an automated command (every
 
 Plan 11-01 is the Wave 0 / foundation plan:
 
-- [ ] `apps/extension/package.json` + one-shot install of every phase dependency (WXT 0.21.4 + explicit `vite@8.3.0`, no `web-ext`)
-- [ ] `apps/extension/vitest.config.ts` with `WxtVitest({ root })`, happy-dom, network-disabling settings; root `vitest.config.ts` projects += `'apps/extension'` (verified FROM THE REPO ROOT)
-- [ ] `apps/extension/tests/setup-no-network.ts` + `no-network.test.ts` non-vacuity
-- [ ] `.gitignore` / `.prettierignore` / ESLint ignores += `**/.wxt/`, `**/.output/`
-- [ ] Contracts: `selectors.v1.json`, `config.ts`, `copy.ts`, `messages.ts`, `settings.ts` with tests
-- [ ] Precondition: Phase 2 executed (`themeVars` exported, `/legal/privacy/` exists) — fail closed otherwise
+- [x] `apps/extension/package.json` + one-shot install of every phase dependency (WXT 0.21.4 + explicit `vite@8.3.0`, no `web-ext`)
+- [x] `apps/extension/vitest.config.ts` with `WxtVitest({ root })`, happy-dom, network-disabling settings; root `vitest.config.ts` projects += `'apps/extension'` (verified FROM THE REPO ROOT)
+- [x] `apps/extension/tests/setup-no-network.ts` + `no-network.test.ts` non-vacuity
+- [x] `.gitignore` / `.prettierignore` / ESLint ignores += `**/.wxt/`, `**/.output/`
+- [x] Contracts: `selectors.v1.json`, `config.ts`, `copy.ts`, `messages.ts`, `settings.ts` with tests
+- [x] Precondition: Phase 2 executed (`themeVars` exported, `/legal/privacy/` exists) — fail closed otherwise
 
 ---
 
@@ -107,4 +107,8 @@ All are non-blocking for the build (owner fully autonomous). Firefox Add-ons is 
 - [x] Feedback latency < 11s (quick command)
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending (11-12 Task 2 sets approved after the composed verify)
+**Approval:** approved 2026-10-26 for every per-task row; the single composed run (11-12-02) is outstanding.
+
+Evidence (2026-10-26, 11-12):
+- Every per-task command above was green in its plan (11-01..11-11 SUMMARY Verification sections) and was re-run standalone in 11-12: `vitest --project extension` 17 files / 241 tests; `vitest --project scripts eslint-rules assert-extension extension-release-gate extension-docs workflow-gate` 5 files / 240 tests; `pnpm ext:build && pnpm ext:assert` (oracle passed, 6 files, zip root verified); `pnpm ext:test:browser` 13/13; `pnpm ext:e2e` 7/7; `guard-real-data --all` passed; `pnpm lint`, `pnpm lint:workflows`, `pnpm banned` exit 0.
+- 11-12-02 composed `corepack pnpm verify`: started 2026-10-26; `check`, `lint`, `banned` and `ui:guard` passed, then the host killed the run for low system memory during `pnpm test:unit` (reaped by the shell, not a test failure). In that starved run `scripts/precommit.test.ts` reported 6 failures; the same suite run alone immediately afterwards passed 10/10, so those were resource starvation (it spawns git + gitleaks per test), not a regression. The full composed run must be repeated on a machine with free memory before `/gsd:verify-work`; until then `status` stays `approved-pending-composed-verify`.
