@@ -25,5 +25,8 @@ export default defineConfig({
 	zip: {
 		artifactTemplate: 'sponsored-listing-filter-{{packageVersion}}-{{browser}}{{modeSuffix}}.zip'
 	},
-	vite: () => ({ build: { assetsInlineLimit: 0 } })
+	// modulePreload.polyfill: Vite otherwise injects a `fetch(link.href)` polyfill for
+	// <link rel=modulepreload> into the popup chunk. MV3 Chrome preloads natively, and the popup
+	// CSP is connect-src 'none' anyway; dropping it keeps the bundle free of network primitives.
+	vite: () => ({ build: { assetsInlineLimit: 0, modulePreload: { polyfill: false } } })
 });
