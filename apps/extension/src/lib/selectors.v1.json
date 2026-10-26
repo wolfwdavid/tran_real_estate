@@ -1,0 +1,27 @@
+{
+	"version": 1,
+	"observed": "2026-09-15 (web.archive.org snapshots)",
+	"labels": {
+		"sponsored": ["sponsored", "sponsored listing"],
+		"promoted": ["promoted", "promoted listing", "promoted community"],
+		"featured": ["featured", "featured listing"],
+		"ad": ["ad", "advertisement"]
+	},
+	"optInLabels": { "showcase": ["showcase"] },
+	"resultsContainers": [
+		"#grid-search-results",
+		"[data-testid=\"search-page-list-container\"]",
+		"#search-page-list-container"
+	],
+	"cardRoots": [
+		"article[data-testid=\"property-card\"]",
+		"[data-c11n-component=\"PropertyCard.Root\"]",
+		"[data-test=\"property-card\"]"
+	],
+	"itemRoots": ["li[data-c11n-component=\"List.Item\"]", ":scope > ul > li"],
+	"adSlots": ["[data-testid^=\"search-list-\"][data-testid$=\"-ad\"]"],
+	"badgeScopes": [
+		"[data-c11n-component=\"PropertyCard.Badge\"]",
+		"[data-c11n-component=\"PropertyCard.BadgeArea\"]"
+	]
+}
