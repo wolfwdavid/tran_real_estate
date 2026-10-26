@@ -439,7 +439,7 @@ Plans:
 - [x] 11-05-PLAN.md — Popup state model (DI'd messaging) + token mirror
 - [x] 11-06-PLAN.md — Zero-network: ESLint ban + production manifest/bundle/zip oracle (mutation-tested)
 - [x] 11-07-PLAN.md — Gated release workflow, install guide, Edge listing copy, privacy #browser-extension section
-- [ ] 11-08-PLAN.md — Reconcile, scoped debounced observer, filter controller (scroll + SPA)
+- [x] 11-08-PLAN.md — Reconcile, scoped debounced observer, filter controller (scroll + SPA)
 - [ ] 11-09-PLAN.md — Svelte popup components + browser-mode axe across all states
 - [ ] 11-10-PLAN.md — Content + badge entrypoints, first production build through the oracle
 - [ ] 11-11-PLAN.md — Runtime Playwright E2E with a zero-network monitored session
@@ -467,4 +467,4 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | 23/23 | Complete   | 2026-10-14 |
-| 11. Zillow Sponsored Listing Filter Extension | 7/12 | In Progress|  |
+| 11. Zillow Sponsored Listing Filter Extension | 8/12 | In Progress|  |
