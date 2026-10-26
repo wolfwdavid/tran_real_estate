@@ -1,4 +1,5 @@
 // Fail-closed actionlint runner. Usage: node scripts/actionlint.mjs [workflow files...]
+// With no arguments it lints every .github/workflows/*.yml|*.yaml file; an empty list fails closed.
 //
 // Resolution order:
 //   1. ACTIONLINT_BIN, when set and non-empty, is the ONLY candidate. If it does not resolve the
@@ -7,7 +8,7 @@
 //   3. Bare `actionlint` on PATH.
 // If nothing resolves the run exits 1 with the install hint. Missing linter is never a silent skip.
 import { spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -56,6 +57,20 @@ if (version !== PINNED_VERSION) {
 	console.warn(`actionlint ${version} found; pinned version is ${PINNED_VERSION}`);
 }
 
-const files = process.argv.length > 2 ? process.argv.slice(2) : ['.github/workflows/ci.yml'];
+function listWorkflows() {
+	const dir = join(repoRoot, '.github/workflows');
+	const names = existsSync(dir)
+		? readdirSync(dir)
+				.filter((name) => /\.ya?ml$/.test(name))
+				.sort()
+		: [];
+	if (names.length === 0) {
+		console.error('No workflow files found under .github/workflows; workflow lint blocked.');
+		process.exit(1);
+	}
+	return names.map((name) => `.github/workflows/${name}`);
+}
+
+const files = process.argv.length > 2 ? process.argv.slice(2) : listWorkflows();
 const result = spawnSync(bin, files, { cwd: repoRoot, stdio: 'inherit' });
 process.exit(result.status ?? 1);
