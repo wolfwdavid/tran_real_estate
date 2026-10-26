@@ -56,3 +56,18 @@
 - Rule: per-route JS budgets are spent by shared code. Every change that touches every page (footer,
   layout, a shared helper import) must re-measure the gated routes on the build that production ships
   (analytics on), not only the default build.
+
+## 2026-10-25: Phase 11 orchestration
+
+- Rule: parallel executors add a `Co-Authored-By` model trailer to their first commit unless the prompt
+  forbids it explicitly. Two wave-2 agents could not amend because another agent had already committed on
+  top. Put the ban in every executor prompt ("no trailer; amend it off while the commit is still HEAD"),
+  and after each wave run `git log --format='%h %(trailers:key=Co-Authored-By,valueonly)' <base>..HEAD`.
+  If any remain, `git filter-branch --msg-filter 'grep -v "^Co-Authored-By:"' <base>..HEAD` BEFORE the
+  first push, then remap the hashes quoted in the SUMMARY files (the subjects are stable, the hashes are not).
+- Rule: a sub-package with a stricter generated tsconfig (WXT sets `noUncheckedIndexedAccess`) type-checks
+  shared workspace packages under its own rules. `packages/brand` passed its own `tsc` and failed inside
+  `apps/extension`. Fix the shared code (it was a real gap), never loosen the generated config.
+- Rule: research built from a snapshot of a third-party DOM must be re-checked live before the detector
+  plan runs. A read-only browser pass (ten minutes) confirmed the selectors and showed that label text
+  never appears today, which changed the primary signal to the ad-slot list items.
