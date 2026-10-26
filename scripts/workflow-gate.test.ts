@@ -256,6 +256,57 @@ describe('quality matrix', () => {
 	});
 });
 
+describe('extension (Phase 11)', () => {
+	const BUILD = 'run: pnpm ext:build && pnpm ext:assert';
+	const BROWSER = 'run: pnpm ext:test:browser && pnpm ext:e2e';
+
+	// The `if:` line directly above a run line, within the same step.
+	const ifAbove = (quality: string, run: string): string => {
+		const at = quality.indexOf(run);
+		const step = quality.slice(quality.lastIndexOf('- name:', at), at);
+		return step.match(/^ +if: (.*)$/m)?.[1] ?? '';
+	};
+
+	test('the root leg builds the extension and runs the manifest/zero-network oracle', () => {
+		const quality = job('quality');
+		expect(count(quality, BUILD)).toBe(1);
+		expect(ifAbove(quality, BUILD)).toBe("matrix.target == 'root'");
+	});
+
+	test('the root leg runs the popup axe suite and the runtime E2E', () => {
+		const quality = job('quality');
+		expect(count(quality, BROWSER)).toBe(1);
+		expect(ifAbove(quality, BROWSER)).toBe("matrix.target == 'root'");
+	});
+
+	test('extension steps run after Chromium install and web E2E, before the Pages upload', () => {
+		const quality = job('quality');
+		const chromium = quality.indexOf('playwright install --with-deps chromium');
+		const webE2e = quality.indexOf('name: E2E + axe');
+		const build = quality.indexOf(BUILD);
+		const browser = quality.indexOf(BROWSER);
+		const upload = quality.indexOf('uses: actions/upload-pages-artifact@');
+		expect(chromium).toBeGreaterThan(-1);
+		expect(build).toBeGreaterThan(chromium);
+		expect(build).toBeGreaterThan(webE2e);
+		expect(browser).toBeGreaterThan(build);
+		expect(upload).toBeGreaterThan(browser);
+	});
+
+	test('root package.json wires the ext:* scripts into the end of verify', () => {
+		const pkg = JSON.parse(readFileSync(join(import.meta.dirname, '../package.json'), 'utf8'));
+		expect(pkg.scripts['ext:build']).toBe('pnpm --filter extension zip');
+		expect(pkg.scripts['ext:assert']).toBe(
+			'node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output'
+		);
+		expect(pkg.scripts['ext:test:browser']).toBe('pnpm --filter extension test:browser');
+		expect(pkg.scripts['ext:e2e']).toBe('pnpm --filter extension e2e');
+		expect(pkg.scripts.verify).toMatch(
+			/ && pnpm ext:build && pnpm ext:assert && pnpm ext:test:browser && pnpm ext:e2e$/
+		);
+	});
+});
+
 describe('hygiene job', () => {
 	test('runs the canary self-test, the full-history scan and the real-data guard', () => {
 		const hygiene = job('hygiene');

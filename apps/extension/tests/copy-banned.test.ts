@@ -83,6 +83,14 @@ describe('extension copy banned words', () => {
 		expect(copySurfaces().map((s) => s.path)).toContain('src/lib/copy.ts');
 	});
 
+	test('the scanned scope never silently shrinks (copy.ts, 6 Svelte files, store copy, install doc)', () => {
+		const paths = copySurfaces().map((s) => s.path);
+		expect(paths.length).toBeGreaterThanOrEqual(9);
+		expect(paths).toContain('src/entrypoints/popup/App.svelte');
+		expect(paths).toContain('store/edge-listing.md');
+		expect(paths).toContain('../../docs/EXTENSION-INSTALL.md');
+	});
+
 	test('no COPY value uses the standalone word "Ad" (detection label only)', () => {
 		const offenders = Object.entries(COPY).filter(([, value]) => /\bAd\b/.test(value));
 		expect(offenders).toEqual([]);
