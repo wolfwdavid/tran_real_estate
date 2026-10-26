@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 11-04-PLAN.md
-last_updated: "2026-10-26T02:42:55.181Z"
+stopped_at: Completed 11-03-PLAN.md
+last_updated: "2026-10-26T02:43:23.563Z"
 progress:
   total_phases: 11
   completed_phases: 10
   total_plans: 209
-  completed_plans: 201
+  completed_plans: 202
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 11 (zillow-sponsored-listing-filter-extension) — EXECUTING
-Plan: 5 of 12
+Plan: 6 of 12
 
 ## Performance Metrics
 
@@ -224,6 +224,7 @@ Plan: 5 of 12
 | Phase 11 P02 | 6min | 2 tasks | 7 files |
 | Phase 11 P05 | 8min | 2 tasks | 4 files |
 | Phase 11 P04 | 12min | 2 tasks | 5 files |
+| Phase 11 P03 | 7min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -584,6 +585,8 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-05: applyPush only accepts pushes from the known active tab and never overrides not-zillow or storage-error
 - [Phase 11]: 11-04: Pill isolation = closed shadow root + one constructable sheet per document (RESEARCH Pattern 4) instead of UI-SPEC 'No shadow DOM'; data-tran-slf-pill on host, visual contract unchanged
 - [Phase 11]: 11-04: reveal-host is structure-agnostic: works on card article, its li, or an ad-slot li wrapping only an iframe
+- [Phase 11]: 11-03: Ad slots classify as ad via ad-slot regardless of label; the ad-slot li is the dim target (live slots hold an iframe, no card article)
+- [Phase 11]: 11-03: Showcase kept out of the default vocabulary (opt-in only); owner decision candidate for 11-HUMAN-UAT
 
 ### Pending Todos
 
@@ -613,7 +616,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-26T02:42:55.170Z
-Stopped at: Completed 11-04-PLAN.md
+Last session: 2026-10-26T02:43:23.552Z
+Stopped at: Completed 11-03-PLAN.md
 Resume file: None
 Next: run the clock health check in the handoff, then `/gsd:plan-phase 9 --gaps` to close the edit-mode exit gap, re-verify, `phase complete 9`, then Phase 10. Still no remote and no push by design.
