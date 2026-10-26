@@ -183,6 +183,8 @@ describe('assert-extension oracle: golden output', () => {
 		expect(EXPECTED_PERMISSIONS).toEqual(['storage']);
 		expect(URL_ALLOWLIST).toContain('https://svelte.dev/e/');
 		expect(URL_ALLOWLIST).toContain('https://tranrealestate.github.io/');
+		expect(URL_ALLOWLIST).toContain('https://github.com/wxt-dev/wxt/issues/371');
+		expect(URL_ALLOWLIST).toContain('https://wxt.dev/guide/go-further/testing.html');
 	});
 });
 
@@ -407,9 +409,33 @@ describe('assert-extension oracle: planted bundle faults', () => {
 		'http://www.w3.org/1999/xhtml',
 		'http://www.w3.org/1998/Math/MathML',
 		'https://svelte.dev/e/each_key_duplicate',
-		'https://tranrealestate.github.io/legal/privacy/#browser-extension'
+		'https://tranrealestate.github.io/legal/privacy/#browser-extension',
+		'https://github.com/wxt-dev/wxt/issues/371',
+		'https://wxt.dev/guide/go-further/testing.html'
 	])('allowlisted URL %s is not a problem', (url) => {
 		expect(scanBundle([{ path: 'chunks/a.js', text: `const u = "${url}";` }])).toEqual([]);
+	});
+
+	test('the WXT error-text entries are exact: other github.com and wxt.dev URLs are reported', () => {
+		const problems = scanBundle([
+			{
+				path: 'chunks/a.js',
+				text: 'const a = "https://github.com/wxt-dev/wxt/releases/x"; const b = "https://github.com/evil/repo"; const c = "https://wxt.dev/api/x";'
+			}
+		]);
+		expect(problems).toHaveLength(3);
+		expect(problems.join('\n')).toContain('https://github.com/evil/repo');
+		expect(problems.join('\n')).toContain('https://wxt.dev/api/x');
+	});
+
+	test('the WXT error text as bundled passes', () => {
+		const text = [
+			'throw Error(`',
+			' - If thrown during a build, see https://github.com/wxt-dev/wxt/issues/371',
+			" - If thrown during tests, mock 'wxt/browser' correctly. See https://wxt.dev/guide/go-further/testing.html",
+			'`)'
+		].join('\n');
+		expect(scanBundle([{ path: 'content-scripts/zillow.js', text }])).toEqual([]);
 	});
 
 	test('an allowlist prefix lookalike host is still reported', () => {

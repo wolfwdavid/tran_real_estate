@@ -82,6 +82,10 @@ export const URL_ALLOWLIST = [
 	'http://www.w3.org/1999/xhtml',
 	'http://www.w3.org/1998/Math/MathML',
 	'https://svelte.dev/e/',
+	// Exact URLs inside the error text WXT's `wxt/browser` shim throws when no extension API
+	// exists ("If thrown during a build, see ..."). Shown to developers, never fetched.
+	'https://github.com/wxt-dev/wxt/issues/371',
+	'https://wxt.dev/guide/go-further/testing.html',
 	'https://tranrealestate.github.io/'
 ];
 
