@@ -64,10 +64,10 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1 RED: failing popup model tests** - `3cdd818` (test)
-2. **Task 1 GREEN: popup state model** - `c43fe53` (feat)
-3. **Task 2 RED: failing popup token mirror test** - `99c91bf` (test)
-4. **Task 2 GREEN: popup token mirror** - `807bd34` (feat)
+1. **Task 1 RED: failing popup model tests** - `c10ca50` (test)
+2. **Task 1 GREEN: popup state model** - `ae76445` (feat)
+3. **Task 2 RED: failing popup token mirror test** - `9c951d1` (test)
+4. **Task 2 GREEN: popup token mirror** - `208959c` (feat)
 
 ## Files Created/Modified
 
@@ -89,16 +89,16 @@ See key-decisions in the frontmatter.
 - **Issue:** The plan did not cover a rejected `activeTab()`, a Zillow tab without an id, or a malformed content-script reply.
 - **Fix:** They resolve to not-zillow, not-running (no send) and not-running respectively. Each case has a test.
 - **Files modified:** apps/extension/src/lib/popup-model.ts, apps/extension/tests/popup-model.test.ts
-- **Commit:** c43fe53
+- **Commit:** ae76445
 
 **2. [Process] Separate RED commit for Task 2**
-- The plan named a single `feat(11-05): popup token mirror` commit. Under the TDD protocol the failing test was committed first (`99c91bf`), then the stylesheet (`807bd34`).
+- The plan named a single `feat(11-05): popup token mirror` commit. Under the TDD protocol the failing test was committed first (`9c951d1`), then the stylesheet (`208959c`).
 
 **Total deviations:** 2 (minor). **Impact:** none on scope.
 
 ## Issues Encountered
 
-- The first commit (`3cdd818`) carries a co-author trailer. A parallel executor had already committed on top of it before this was noticed, so shared history was not rewritten. Later commits have no trailer.
+- The first commit (`c10ca50`) carries a co-author trailer. A parallel executor had already committed on top of it before this was noticed, so shared history was not rewritten. Later commits have no trailer.
 - `corepack pnpm --filter extension check` reports 1 error in `tests/icons.test.ts` (owned by a parallel wave-2 plan). Out of scope. popup-model and popup-tokens type-check clean.
 - The full `extension` project currently shows 2 failing files, `detect.test.ts` and `fixtures.test.ts`. Both are another plan's in-flight RED tests (`../src/lib/detect` does not exist yet). All 133 tests that load pass.
 - `brand-parity.test.ts` (11-04) has not landed yet, so it could not be run against `tokens.css` in this plan.
@@ -118,4 +118,4 @@ None.
 
 ## Self-Check: PASSED
 
-All 4 key files exist; commits 3cdd818, c43fe53, 99c91bf, 807bd34 are present.
+All 4 key files exist; commits c10ca50, ae76445, 9c951d1, 208959c are present.

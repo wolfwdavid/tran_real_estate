@@ -67,8 +67,8 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1: Icon generator script and committed PNGs**: `1de6172` (feat)
-2. **Task 2: Icon dimension test**: `5a48d07` (test)
+1. **Task 1: Icon generator script and committed PNGs**: `3d60da0` (feat)
+2. **Task 2: Icon dimension test**: `7928470` (test)
 
 ## TDD Evidence (Task 2)
 
@@ -83,13 +83,13 @@ completed: 2026-10-26
 - **Found during:** Task 1 (borrowed from the Phase 3 script)
 - **Issue:** `document.fonts.ready` resolves even if the font fails to load. Without a check, the generator could quietly write Georgia "T" icons.
 - **Fix:** After the fonts are ready, `document.fonts.check("600 64px 'Fraunces Variable'")` must pass, or the script throws.
-- **Commit:** 1de6172
+- **Commit:** 3d60da0
 
 **2. [Rule 1 - Bug] Test title formatter**
 - The title `'%s is %ix%i'` printed `48xNaN`, because `it.each` has no third value to fill the second `%i`. I changed it to `'%s is %i px square'` before committing.
 
 **3. Commit trailer**
-- Commit `1de6172` went in with a `Co-Authored-By` trailer that names an AI model, which breaks the project's commit-message rule. By the time I tried to amend it, another wave-2 agent had committed on top (`396a9cc`, 11-07), so rewriting it was no longer safe. It is unpushed, so the owner can reword it before pushing (for example with `git rebase -i` and reword). `5a48d07` has no trailer.
+- Commit `3d60da0` went in with a `Co-Authored-By` trailer that names an AI model, which breaks the project's commit-message rule. By the time I tried to amend it, another wave-2 agent had committed on top (`fca59e0`, 11-07), so rewriting it was no longer safe. It is unpushed, so the owner can reword it before pushing (for example with `git rebase -i` and reword). `7928470` has no trailer.
 
 **Total deviations:** 3 (all minor). **Impact:** none on scope.
 
@@ -113,4 +113,4 @@ None.
 
 ## Self-Check: PASSED
 
-All 7 created files exist and are non-empty; commits 1de6172 and 5a48d07 are present.
+All 7 created files exist and are non-empty; commits 3d60da0 and 7928470 are present.

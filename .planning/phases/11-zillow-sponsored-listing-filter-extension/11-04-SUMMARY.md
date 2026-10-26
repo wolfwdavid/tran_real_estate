@@ -68,9 +68,9 @@ completed: 2026-10-25
 
 ## Task Commits
 
-1. **Task 1 RED: failing reveal pill tests** - `9edb1a4` (test)
-2. **Task 1 GREEN: closed-shadow reveal pill** - `4ae540d` (feat)
-3. **Task 2: content stylesheet and brand parity gate** - `f014d68` (feat)
+1. **Task 1 RED: failing reveal pill tests** - `8357556` (test)
+2. **Task 1 GREEN: closed-shadow reveal pill** - `de4da46` (feat)
+3. **Task 2: content stylesheet and brand parity gate** - `0d71d75` (feat)
 
 ## Deviation from UI-SPEC
 
@@ -86,7 +86,7 @@ completed: 2026-10-25
 - **Found during:** Task 2
 - **Issue:** under happy-dom, `import.meta.url` is not a `file:` URL, so `fileURLToPath` threw.
 - **Fix:** used `join(import.meta.dirname, '..', 'src')`, the same as `copy-banned.test.ts`.
-- **Commit:** f014d68
+- **Commit:** 0d71d75
 
 **2. [Rule 2 - Correctness] Extra tests beyond the behavior list**
 - Added: click `defaultPrevented`, re-ensure swaps the callback without stacking listeners, the `removePill` no-op, `pillButton(null-case)`, the ad-slot `li`+`iframe` and bare `article` mounts, the dim-selector match test, and accept-cases for the parity checker (uppercase token hex, `--ease-out`, `--duration-fast`).
@@ -120,4 +120,4 @@ None. `style.css` is not imported yet; plan 11-10 adds `import './style.css'` to
 
 ## Self-Check: PASSED
 
-All 5 key files exist; commits 9edb1a4, 4ae540d, f014d68 are present.
+All 5 key files exist; commits 8357556, de4da46, 0d71d75 are present.
