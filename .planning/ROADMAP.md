@@ -442,7 +442,7 @@ Plans:
 - [x] 11-08-PLAN.md — Reconcile, scoped debounced observer, filter controller (scroll + SPA)
 - [x] 11-09-PLAN.md — Svelte popup components + browser-mode axe across all states
 - [x] 11-10-PLAN.md — Content + badge entrypoints, first production build through the oracle
-- [ ] 11-11-PLAN.md — Runtime Playwright E2E with a zero-network monitored session
+- [x] 11-11-PLAN.md — Runtime Playwright E2E with a zero-network monitored session
 - [ ] 11-12-PLAN.md — Verify/CI wiring, HUMAN-UAT, validation sign-off
 **Research flag**: YES. Needs `/gsd:research-phase`: current Zillow sponsored-card DOM and labels, store naming tolerance for "for Zillow", and WXT 0.x stability.
 **UI hint**: yes, small (toolbar popup using Phase 2 brand tokens). Use `/gsd:ui-phase 11`.
@@ -467,4 +467,4 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | 23/23 | Complete   | 2026-10-14 |
-| 11. Zillow Sponsored Listing Filter Extension | 10/12 | In Progress|  |
+| 11. Zillow Sponsored Listing Filter Extension | 11/12 | In Progress|  |
