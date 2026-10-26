@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 11-01-PLAN.md
-last_updated: "2026-10-26T02:33:05.323Z"
+stopped_at: Completed 11-02-PLAN.md
+last_updated: "2026-10-26T02:39:40.244Z"
 progress:
   total_phases: 11
   completed_phases: 10
   total_plans: 209
-  completed_plans: 198
+  completed_plans: 199
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-09-13)
 ## Current Position
 
 Phase: 11 (zillow-sponsored-listing-filter-extension) — EXECUTING
-Plan: 2 of 12
+Plan: 3 of 12
 
 ## Performance Metrics
 
@@ -221,6 +221,7 @@ Plan: 2 of 12
 | Phase 09 P24 | 18min | 3 tasks | 8 files |
 | Phase 09 P25 | 16min | 2 tasks | 5 files |
 | Phase 11 P01 | 21min | 3 tasks | 21 files |
+| Phase 11 P02 | 6min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -575,6 +576,8 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-01: content script imports wxt/utils/define-content-script; settings.ts is the only wxt/utils/storage importer
 - [Phase 11]: 11-01: extension pins axe-core 4.13.0 (same engine as apps/web); no allowBuilds entries needed
 - [Phase 11]: 11-01: EXT-01/02/03 left unchecked after 11-01 (harness + contracts only); later Phase 11 plans close them
+- [Phase 11]: 11-02: Extension got its own make-icons.mjs (Phase 3 generate-icons.mjs runs at top level with no exports and hardcodes hexes); colors imported from @tran/brand via relative TS path
+- [Phase 11]: 11-02: Icon glyph font-size 0.72 x square (GLYPH_SCALE); generator throws if Fraunces fails to load
 
 ### Pending Todos
 
@@ -604,7 +607,7 @@ None. Hosting and owner-account items are deferred, non-blocking todos (see Pend
 
 ## Session Continuity
 
-Last session: 2026-10-26T02:33:05.317Z
-Stopped at: Completed 11-01-PLAN.md
+Last session: 2026-10-26T02:39:40.233Z
+Stopped at: Completed 11-02-PLAN.md
 Resume file: None
 Next: run the clock health check in the handoff, then `/gsd:plan-phase 9 --gaps` to close the edit-mode exit gap, re-verify, `phase complete 9`, then Phase 10. Still no remote and no push by design.
