@@ -36,7 +36,9 @@ describe('ensurePill', () => {
 		expect(btn.localName).toBe('button');
 		expect(btn.type).toBe('button');
 		expect(btn.textContent).toBe(COPY.pillDimmed + COPY.pillDimmedHidden);
-		expect(btn.textContent).toBe('Sponsored — show this listing (dimmed by Sponsored Listing Filter)');
+		expect(btn.textContent).toBe(
+			'Sponsored — show this listing (dimmed by Sponsored Listing Filter)'
+		);
 		expect(btn.firstChild!.nodeType).toBe(3);
 		expect(btn.firstChild!.textContent).toBe('Sponsored — show');
 		const vh = btn.querySelector('span.vh')!;
