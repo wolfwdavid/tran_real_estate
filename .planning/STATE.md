@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 11-11-PLAN.md
-last_updated: "2026-10-26T03:35:36.583Z"
+stopped_at: Completed 11-12-PLAN.md
+last_updated: "2026-10-26T03:47:01.786Z"
 progress:
   total_phases: 11
-  completed_phases: 10
+  completed_phases: 11
   total_plans: 209
-  completed_plans: 208
+  completed_plans: 209
 ---
 
 # Project State
@@ -231,6 +231,7 @@ Plan: 12 of 12
 | Phase 11 P09 | 11min | 2 tasks | 13 files |
 | Phase 11 P10 | 8min | 2 tasks | 9 files |
 | Phase 11 P11 | 12 min | 2 tasks | 3 files |
+| Phase 11 P12 | 10min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -604,6 +605,7 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-10: Vite modulepreload polyfill disabled in wxt.config.ts to remove fetch( from popup bundle at source
 - [Phase 11]: 11-10: oracle URL_ALLOWLIST gains two exact WXT error-text URLs (issues/371, go-further/testing.html), tested against sibling URLs
 - [Phase 11]: Extension E2E runs headless (channel chromium) against the production chrome-mv3 build; zero-network test carries page + worker planted-violation controls
+- [Phase 11]: 11-12: extension build/oracle/axe/e2e run only on the CI root leg and at the end of pnpm verify; no xvfb (new-headless Chromium loads MV3)
 
 ### Pending Todos
 
@@ -629,11 +631,13 @@ Recent decisions affecting current work:
 - **2026-10-13 (after wave 7):** audience pages (`for-renters/`, `for-investors/`, `for-agents/`) now ship 96.3 KB gz JS (report-only per UI-SPEC; were 53.5 KB at 10-09). The ~43 KB jump arrived with 10-17's waitlist. Not a gate failure, but 10-23's launch audit must call it out and either trim (lazy form/libs, as 10-14 did for the slider) or record an explicit owner-accepted exception. Tool pages now 59.2-59.5 KB gz (≈0.5-0.7 KB headroom).
 - **2026-10-13:** JS budget headroom on tool pages is ~6.5 KB gz (marketing layout already ships 53.5 KB of the 60 KB budget; research assumed ~27 KB). 10-12/10-13/10-14 must keep calculator code lean or trim the shared layout.
 
-None. Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).
+Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).
+
+- Phase 11 composed pnpm verify interrupted by host low-memory reap during test:unit; re-run with free memory before verify-work (all ext:* steps green standalone)
 
 ## Session Continuity
 
-Last session: 2026-10-26T03:35:36.578Z
-Stopped at: Completed 11-11-PLAN.md
+Last session: 2026-10-26T03:46:55.438Z
+Stopped at: Completed 11-12-PLAN.md
 Resume file: None
 Next: run the clock health check in the handoff, then `/gsd:plan-phase 9 --gaps` to close the edit-mode exit gap, re-verify, `phase complete 9`, then Phase 10. Still no remote and no push by design.

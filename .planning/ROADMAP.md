@@ -24,7 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Agent Portal: Profile, Lead Intake & CRM** - Agent profile with disclosures, Web3Forms inquiry page, paste import, pipeline, tasks, AI follow-ups, CSV (completed 2026-10-07)
 - [x] **Phase 9: Agent Content Studio & Market Snapshot Reports** - Listing descriptions, social post pack, founder-story reel scripts, branded Market Snapshot PDF (completed 2026-10-08)
 - [x] **Phase 10: Launch Hardening & Go-to-Market** - First-run onboarding, waitlist/feedback, SEO calculator pages, first-party analytics, full launch audit (completed 2026-10-14)
-- [ ] **Phase 11: Zillow Sponsored Listing Filter Extension** - Hide-only MV3 extension with zero network, distributed via GitHub Releases + Edge Add-ons
+- [x] **Phase 11: Zillow Sponsored Listing Filter Extension** - Hide-only MV3 extension with zero network, distributed via GitHub Releases + Edge Add-ons (completed 2026-10-26)
 
 ## Dependency Graph & Parallelization
 
@@ -443,7 +443,7 @@ Plans:
 - [x] 11-09-PLAN.md — Svelte popup components + browser-mode axe across all states
 - [x] 11-10-PLAN.md — Content + badge entrypoints, first production build through the oracle
 - [x] 11-11-PLAN.md — Runtime Playwright E2E with a zero-network monitored session
-- [ ] 11-12-PLAN.md — Verify/CI wiring, HUMAN-UAT, validation sign-off
+- [x] 11-12-PLAN.md — Verify/CI wiring, HUMAN-UAT, validation sign-off
 **Research flag**: YES. Needs `/gsd:research-phase`: current Zillow sponsored-card DOM and labels, store naming tolerance for "for Zillow", and WXT 0.x stability.
 **UI hint**: yes, small (toolbar popup using Phase 2 brand tokens). Use `/gsd:ui-phase 11`.
 **Human action required**: The owner reads the Zillow Terms of Use manually before release (automated fetch returns 403). The owner also creates a free Microsoft Edge Add-ons Partner Center account and, optionally, a Firefox AMO account.
@@ -467,4 +467,4 @@ With parallelization enabled: 1 → {2, 3} → {4, 5} → {6, 7, 8} → 9 → 10
 | 8. Agent Portal: Profile, Lead Intake & CRM | 27/27 | Complete    | 2026-10-07 |
 | 9. Agent Content Studio & Market Snapshot Reports | 25/25 | Complete    | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | 23/23 | Complete   | 2026-10-14 |
-| 11. Zillow Sponsored Listing Filter Extension | 11/12 | In Progress|  |
+| 11. Zillow Sponsored Listing Filter Extension | 12/12 | Complete   | 2026-10-26 |
