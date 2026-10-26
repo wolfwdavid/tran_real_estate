@@ -29,13 +29,17 @@
 		"secrets:canary": "node scripts/gitleaks-canary.mjs",
 		"secrets:scan": "node scripts/gitleaks.mjs history",
 		"lint:workflows": "node scripts/actionlint.mjs",
+		"ext:build": "pnpm --filter extension zip",
+		"ext:assert": "node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output",
+		"ext:test:browser": "pnpm --filter extension test:browser",
+		"ext:e2e": "pnpm --filter extension e2e",
 		"audit:deps": "pnpm audit --audit-level low",
 		"evidence:clean": "node scripts/audit-evidence.mjs clean",
 		"evidence:e2e": "node scripts/audit-evidence.mjs e2e",
 		"evidence:unit": "node scripts/audit-evidence.mjs unit",
 		"evidence:merge": "node scripts/audit-evidence.mjs merge",
 		"audit:launch": "node scripts/launch-audit.mjs --write",
-		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm seo:assert && pnpm budget:assert && pnpm test:e2e && pnpm audit:deps && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows"
+		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm seo:assert && pnpm budget:assert && pnpm test:e2e && pnpm audit:deps && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows && pnpm ext:build && pnpm ext:assert && pnpm ext:test:browser && pnpm ext:e2e"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",

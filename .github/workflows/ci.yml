@@ -131,6 +131,14 @@ jobs:
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
           PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
+      # The extension is target-independent (no BASE_PATH, no owner variables), so it runs once on
+      # the root leg. Chromium is already installed above; the E2E runs new-headless Chromium.
+      - name: Extension build + manifest/zero-network oracle
+        if: matrix.target == 'root'
+        run: pnpm ext:build && pnpm ext:assert
+      - name: Extension popup axe + runtime E2E
+        if: matrix.target == 'root'
+        run: pnpm ext:test:browser && pnpm ext:e2e
       - name: Upload Pages artifact
         if: matrix.target == 'root' && github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
