@@ -11,7 +11,7 @@ function readPngSize(buf: Uint8Array): { width: number; height: number; colorTyp
 		throw new Error('not a PNG');
 	}
 	const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
-	return { width: view.getUint32(16), height: view.getUint32(20), colorType: buf[25] };
+	return { width: view.getUint32(16), height: view.getUint32(20), colorType: view.getUint8(25) };
 }
 
 const root = join(import.meta.dirname, '..');

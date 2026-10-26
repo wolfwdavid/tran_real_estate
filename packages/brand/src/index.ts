@@ -68,8 +68,9 @@ export function luminance(hex: string): number {
 
 /** WCAG 2.2 contrast ratio (1..21), order-independent. */
 export function contrastRatio(a: string, b: string): number {
-	const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-	return (hi + 0.05) / (lo + 0.05);
+	const la = luminance(a);
+	const lb = luminance(b);
+	return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 
 const SURFACES = [
