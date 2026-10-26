@@ -7,7 +7,8 @@ import { defineConfig } from 'eslint/config';
 
 const WEB = 'apps/web/src';
 const PORTALS = ['renter', 'investor', 'agent'];
-const restrictedSyntax = [
+// The fetch ban, hoisted so the extension block below can re-spread it (flat config replaces options).
+const noFetch = [
 	{
 		selector: "CallExpression[callee.name='fetch']",
 		message:
@@ -18,7 +19,10 @@ const restrictedSyntax = [
 			"CallExpression[callee.type='MemberExpression'][callee.property.name='fetch'][callee.object.name=/^(window|globalThis|self)$/]",
 		message:
 			'fetch is allowed only in adapter folders (lib/data/rentcast, lib/ai/providers, lib/leads, lib/analytics).'
-	},
+	}
+];
+const restrictedSyntax = [
+	...noFetch,
 	{
 		// Layer 1 of the "10 re-renders spend 0" defense: a reactive effect must never spend a call.
 		selector:
@@ -77,6 +81,17 @@ const MARKETING_SAFE = [
 	`${WEB}/lib/content/**`,
 	`${WEB}/lib/features/shared/affordability/**`
 ];
+// Phase 11 (EXT-03): the Zillow extension makes no network requests. Scoped to what ships.
+const EXT_SRC = 'apps/extension/src';
+const netMsg = 'The extension makes no network requests (EXT-03).';
+const NET_GLOBALS = [
+	'XMLHttpRequest',
+	'WebSocket',
+	'EventSource',
+	'WebTransport',
+	'RTCPeerConnection',
+	'importScripts'
+];
 const MARKETING_FORBIDDEN = ['storage', 'ai', 'data', ...PORTAL_FOLDERS];
 const AGENT_NO_GATEWAY = forbid(
 	['data'],
@@ -123,6 +138,26 @@ export default defineConfig(
 	{
 		files: ['**/*.{ts,js,mjs,svelte}'],
 		rules: { 'no-restricted-syntax': ['error', ...restrictedSyntax] }
+	},
+	{
+		// EXT-03 source layer. The built-bundle oracle (scripts/assert-extension.mjs) is the backstop.
+		files: [`${EXT_SRC}/**/*.{ts,js,mjs,svelte}`, `${EXT_SRC}/**/*.svelte.ts`],
+		rules: {
+			'no-restricted-globals': ['error', ...NET_GLOBALS.map((name) => ({ name, message: netMsg }))],
+			'no-restricted-syntax': [
+				'error',
+				// Flat config REPLACES earlier options for matching files: re-spread or the fetch ban
+				// disappears here (RESEARCH Pitfall 7).
+				...noFetch,
+				{
+					selector:
+						'MemberExpression[property.name=/^(sendBeacon|connectNative|sendNativeMessage)$/]',
+					message: netMsg
+				},
+				{ selector: 'ImportExpression', message: `${netMsg} No dynamic import().` },
+				{ selector: "NewExpression[callee.name='Image']", message: netMsg }
+			]
+		}
 	},
 	{
 		// Phase 10: lib/analytics holds the first-party beacon, the only new fetch (RESEARCH Pattern 10).
