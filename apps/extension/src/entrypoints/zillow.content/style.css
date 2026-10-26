@@ -1,0 +1,36 @@
+[data-tran-slf] {
+	isolation: isolate;
+}
+[data-tran-slf-pos] {
+	position: relative !important;
+}
+[data-tran-slf='dimmed'] > :not([data-tran-slf-pill]) {
+	opacity: 0.35 !important;
+	filter: grayscale(1) !important;
+	transition:
+		opacity 150ms cubic-bezier(0.22, 1, 0.36, 1),
+		filter 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-tran-slf-pill] {
+	all: initial !important;
+	display: block !important;
+	position: absolute !important;
+	top: 8px !important;
+	left: 8px !important;
+	z-index: 10 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+	[data-tran-slf] > *,
+	[data-tran-slf-pill] {
+		transition: none !important;
+	}
+}
+@media print {
+	[data-tran-slf-pill] {
+		display: none !important;
+	}
+	[data-tran-slf] > * {
+		opacity: 1 !important;
+		filter: none !important;
+	}
+}
