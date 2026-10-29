@@ -154,6 +154,24 @@ Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) �
 - **Brand:** Public brand is "Tran Real Estate Tools" (descriptor avoids implying a licensed brokerage); Tran is also the client behind the sibling AI trading desk (`Websites/Tran/Tran_desktop`, Svelte frontend).
 - **Research:** `.planning/research/` (STACK, FEATURES, ARCHITECTURE, PITFALLS, SUMMARY) — 2026-09-13.
 
+## Current State
+
+**Shipped v1.0 MVP on 2026-10-29** (11 phases, 209 plans, 475 tasks, 1,206 commits, ~165k lines). Everything in the v1 scope is built and verified locally: three portals, the key vault and budget-guarded data layer, four BYOK LLM providers behind the Fair Housing gate, the launch surface, and the Zillow extension. Gates: 6,647 unit tests, 2,327 E2E with axe on every route, launch audit all rows PASS, dependency audit clean with four reviewed low exceptions.
+
+**Not yet live.** The repository has no git remote. The `tranrealestate` GitHub org and `tranrealestate.github.io` repo do not exist. The "live demo of all 3 portals" half of the v1 definition of done is owner action (`docs/DEPLOY-CHECKLIST.md` steps 1-9), as are the 77 HUMAN-UAT rows and GTM-01..04.
+
+Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
+
+## Next Milestone Goals
+
+Not yet defined (`/gsd:new-milestone`). Candidates from the v1.0 audit:
+
+- **Go live:** org + repo + Pages, then the owner UAT burn-down and GTM-01..04 proof on the real origin.
+- **Extension release:** Edge Add-ons listing, `ext-v0.1.0` GitHub Release, the "Showcase" badge decision, a live-Zillow smoke.
+- **Carry-forward debt:** origin drift test, backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, one load-sensitive spec.
+- **Maintenance:** SvelteKit 3 migration (clears three low audit exceptions), Vitest 5, pnpm 12.
+- **Product (parked since v1 questioning):** paid tiers need a host other than GitHub Pages (commercial-use terms); accounts and billing were explicitly out of v1 scope.
+
 ## Constraints
 
 - **Tech stack**: SvelteKit 2 (Svelte 5) + adapter-static, TypeScript pinned to 6.x, Tailwind 4 + shadcn-svelte, Dexie, pnpm workspace — user requirement (Svelte) + research
@@ -208,4 +226,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-29 after Phase 11 completion*
+*Last updated: 2026-10-29 after v1.0 milestone*
