@@ -98,6 +98,14 @@ Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) �
 - ✓ EXT-03 — Extension makes no network requests and collects no data (permissions limited to storage and zillow.com) (Phase 11)
 - ✓ EXT-04 — User can install the extension from a GitHub Releases zip (with load-unpacked instructions), Microsoft Edge Add-ons, or Firefox Add-ons (Phase 11)
 
+Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/5 success criteria verified locally; full gate green at `a61db44` (6,803 unit, 2,335 E2E, 363 smoke tests in ~64 s, extension suites, secrets scan over 1,250 commits). The owner gate closed under the owner's own account: `wolfwdavid/tran_real_estate` pushed, first CI run green with `deploy` skipped.
+
+- ✓ LIVE-01 — History carries zero assistant attribution (145 trailers rewritten with git filter-repo, hashes remapped, gitleaks allowlist re-derived, commit-msg hook + `--history` guard in unit tests and CI) (Phase 12)
+- ✓ LIVE-04 — Every web build is stamped with its commit SHA (`/_app/version.json`), checked by unit, E2E and smoke (Phase 12)
+- ✓ LIVE-08 — `PUBLIC_SITE_URL` alone drives canonical, sitemap, OG URLs and the extension's origin/privacy URL; configured target pinned to a test origin on every run (Phase 12)
+- ✓ SMOKE-01/02/03/05/06 — Read-only, fail-closed smoke suite (10 specs, 363 tests, three local builds) inside `pnpm verify`; static read-only guard; single GPC-off analytics spec; axe on key routes (Phase 12)
+- ◐ LIVE-05 — Deploy checklist corrected and Search Console meta slot pinned (Phase 12); live half (property verified, sitemap read) lands in Phase 13
+
 ### Active
 
 **Platform (shared)**
@@ -158,7 +166,7 @@ Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) �
 
 **Shipped v1.0 MVP on 2026-10-29** (11 phases, 209 plans, 475 tasks, 1,206 commits, ~165k lines). Everything in the v1 scope is built and verified locally: three portals, the key vault and budget-guarded data layer, four BYOK LLM providers behind the Fair Housing gate, the launch surface, and the Zillow extension. Gates: 6,647 unit tests, 2,327 E2E with axe on every route, launch audit all rows PASS, dependency audit clean with four reviewed low exceptions.
 
-**Not yet live.** The repository has no git remote. The `tranrealestate` GitHub org and `tranrealestate.github.io` repo do not exist. The "live demo of all 3 portals" half of the v1 definition of done is owner action (`docs/DEPLOY-CHECKLIST.md` steps 1-9), as are the 77 HUMAN-UAT rows and GTM-01..04.
+**Phase 12 complete, pushed, not yet deployed (2026-10-29).** The owner chose the personal account over a new org: the public repo is `wolfwdavid/tran_real_estate`, `main` + `v1.0` are pushed, the first CI run (40961373692) is green with `deploy` skipped, Pages source is GitHub Actions, secret scanning + push protection + Dependabot are on. The live origin will be `https://wolfwdavid.github.io/tran_real_estate/` (sub-path build, shared `wolfwdavid.github.io` storage origin accepted by the owner). Phase 13 sets `PUBLIC_SITE_URL`, deploys with `PAGES_ENABLED=true`, and runs the live smoke; the 77 HUMAN-UAT rows and GTM-01..04 still await that origin.
 
 Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
@@ -167,7 +175,7 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 **Goal:** Take the locally verified v1.0 build live on its own origin, make go-live and every future deploy boring, and clear the debt and toolchain drift carried out of v1.0 so the platform is on current, supported foundations.
 
 **Target features:**
-- Go-live: the owner creates the `tranrealestate` org and `tranrealestate.github.io` repo early in the milestone, pushes `main`, enables Pages; the deferred live-origin checks (CSP on the real origin, deep-link refresh, Umami beacon, Web3Forms delivery, share-card unfurl, Search Console) become phase gates and GTM-01..04 get their proof
+- Go-live: the owner pushes `main` early in the milestone (done 2026-10-29 to `wolfwdavid/tran_real_estate`), Phase 13 enables Pages; the deferred live-origin checks (CSP on the real origin, deep-link refresh, Umami beacon, Web3Forms delivery, share-card unfurl, Search Console) become phase gates and GTM-01..04 get their proof
 - Live-origin smoke suite: a repeatable, configurable-origin check that runs the deferred v1.0 verifications against any deployed origin (local stand-in first, real origin once it exists), shrinking the 77 owner HUMAN-UAT rows to the few that truly need a human
 - Carried debt: origin drift test (extension ↔ web app), UI-level backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, the load-sensitive saved-search spec
 - Load-flake elimination: full `test:unit` and E2E runs deterministic under parallel load (timing-budget tests separated from the parallel run; no blind timeout raises)
@@ -207,7 +215,8 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | Warm editorial visual direction | Matches reference video's premium, trustworthy mood | — Pending |
 | Public brand = "Tran Real Estate Tools" | "Real Estate" alone implies a licensed brokerage; descriptor signals a software tool | — Pending |
 | Analytics = first-party fetch beacon to Umami free tier, no third-party scripts | Any script on the origin can read stored keys; page/portal events only, no PII | — Pending |
-| GitHub org name `tranrealestate` → `tranrealestate.github.io` | Dedicated origin; name available 2026-09-13; owner creates org in browser | — Pending |
+| GitHub org name `tranrealestate` → `tranrealestate.github.io` | Dedicated origin; name available 2026-09-13; owner creates org in browser | ✗ Superseded at the Phase 12 gate |
+| Host under the owner's account: `wolfwdavid/tran_real_estate` → `wolfwdavid.github.io/tran_real_estate/` | Owner decision 2026-10-29 at the go-live gate ("just use my own github account"); trade-off accepted: browser storage shared with the owner's other Pages sites; sub-path build already exists and is CI-tested | ✓ Phase 12 |
 | v1 depth = all three portals at capped depth | Honors "live demo of all 3 portals" without solo-build scope creep; each portal phase has demo-credible exit criteria and a named cut line | — Pending |
 | Zillow detection: ad-slot list items are the primary signal; label text is secondary | Live zillow.com (2026-10-25) shows no visible "Sponsored/Featured" label on any card; paid placements render as iframe ad-slot `li`s (`search-list-{first,second,third}-ad`). The "Showcase" paid badge stays opt-in until the owner decides (11-HUMAN-UAT row 3) | ✓ Phase 11 |
 | Audit exceptions only for code that never ships, with proof | `pnpm audit --audit-level low` moves between phases (12 advisories on unchanged pins appeared 2026-10-23). Patch-level bumps are applied; a major-only fix (Kit 2→3, build-time deepmerge) is recorded in `scripts/lib/audit-exceptions.mjs` with a grep of the shipped output and a revisit date | ✓ Phase 11 close-out |
@@ -230,4 +239,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-29 after starting milestone v1.1*
+*Last updated: 2026-10-29 after Phase 12 (go-live readiness) completed and the owner gate closed*
