@@ -17,6 +17,8 @@
 //                           build's analytics host); records each beacon body and headers
 //                           (incl. `userAgent`). The record is shared by every worker, so specs
 //                           tag their user agent and filter on it rather than wiping the record.
+//                           Answers 200 JSON like Umami (the smoke's GPC-off spec reads it
+//                           through route.fetch()).
 //     GET  /__beacons       the recorded beacons as JSON
 //     POST /__beacons/reset empties the record; `?ua=<tag>` removes only entries whose user agent
 //                           contains <tag>
@@ -138,8 +140,8 @@ http
 					userAgent: req.headers['user-agent'] ?? null,
 					at: Date.now()
 				});
-				res.writeHead(200);
-				res.end();
+				res.writeHead(200, { 'content-type': 'application/json' });
+				res.end('{"cache":"serve-pages"}');
 			});
 			return;
 		}
