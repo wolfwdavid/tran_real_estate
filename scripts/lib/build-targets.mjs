@@ -3,13 +3,16 @@
 //
 //   root        the deploy build at the site root; owner settings pass through from the env
 //   sub         the /tran_real_estate sub-path build; every owner setting is blank
-//   configured  a root-path build with a test value for every owner setting (E2E only)
+//   configured  a root-path build with a test value for every owner setting AND its own test site
+//               origin (E2E + smoke only)
 
 /** Web3Forms-shaped test key; never a real access key. */
 export const TEST_FORM_KEY = '00000000-0000-4000-8000-000000000000';
 /** Umami-shaped test website id. */
 export const TEST_WEBSITE_ID = '00000000-0000-4000-8000-000000000001';
 export const TEST_CONTACT_EMAIL = 'hello@example.com';
+/** Test site origin for the configured target (LIVE-08): every run proves canonical/sitemap/OG follow PUBLIC_SITE_URL. Never a real host. */
+export const TEST_SITE_ORIGIN = 'https://tran-configured.example';
 export const OWNER_KEYS = [
 	'PUBLIC_ANALYTICS_HOST',
 	'PUBLIC_ANALYTICS_WEBSITE_ID',
@@ -53,7 +56,7 @@ export function targetEnv(name, env = process.env) {
 			PUBLIC_ANALYTICS_WEBSITE_ID: TEST_WEBSITE_ID,
 			PUBLIC_WEB3FORMS_KEY: TEST_FORM_KEY,
 			PUBLIC_CONTACT_EMAIL: TEST_CONTACT_EMAIL,
-			...site
+			PUBLIC_SITE_URL: TEST_SITE_ORIGIN
 		};
 	}
 	throw new Error(`unknown build target ${JSON.stringify(name)} (expected ${TARGETS.join('|')})`);
