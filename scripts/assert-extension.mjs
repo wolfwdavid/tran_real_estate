@@ -5,12 +5,14 @@
 // The manifest strings and EXPECTED_CSP are deliberate literal duplicates of
 // apps/extension/src/lib/copy.ts and apps/extension/wxt.config.ts POPUP_CSP (same precedent as
 // assert-csp.mjs's CONNECT list): changing either must produce a reviewed two-file diff in one
-// commit, never a silent pass. Dependency-free on purpose.
+// commit, never a silent pass. Dependency-free on purpose: node builtins plus a relative import of
+// the web app's plain-JS origin validator, so the allowlisted site origin is the one the build used.
 //
 // usage: node scripts/assert-extension.mjs <outDir> [--zip-dir <dir>]
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
 
 export const EXPECTED_NAME = 'Sponsored Listing Filter — for Zillow';
 export const EXPECTED_SHORT_NAME = 'Sponsored Filter';
@@ -76,7 +78,7 @@ const URL_PATTERN = /https?:\/\/[^\s"'`)<>\\]+/g;
 
 // Prefix match. Namespace URIs and Svelte's error-doc links are inert strings; the privacy link
 // is the one navigation target (opened in a tab, never fetched).
-export const URL_ALLOWLIST = [
+const STATIC_URL_ALLOWLIST = [
 	'http://www.w3.org/2000/svg',
 	'http://www.w3.org/1999/xlink',
 	'http://www.w3.org/1999/xhtml',
@@ -85,9 +87,20 @@ export const URL_ALLOWLIST = [
 	// Exact URLs inside the error text WXT's `wxt/browser` shim throws when no extension API
 	// exists ("If thrown during a build, see ..."). Shown to developers, never fetched.
 	'https://github.com/wxt-dev/wxt/issues/371',
-	'https://wxt.dev/guide/go-further/testing.html',
-	'https://tranrealestate.github.io/'
+	'https://wxt.dev/guide/go-further/testing.html'
 ];
+
+/**
+ * The privacy link's origin follows PUBLIC_SITE_URL (LIVE-08), like the build that produced the
+ * bundle. The trailing slash keeps a lookalike host (origin + ".evil.test") off the list.
+ * @param {Record<string, string | undefined>} [env]
+ * @returns {string[]}
+ */
+export function urlAllowlist(env = process.env) {
+	return [...STATIC_URL_ALLOWLIST, `${resolveSiteOrigin(env)}/`];
+}
+
+export const URL_ALLOWLIST = urlAllowlist();
 
 export const ZIP_NAME = /^sponsored-listing-filter-\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?-chrome\.zip$/;
 
@@ -189,9 +202,10 @@ export function checkManifest(m, exists) {
 /**
  * Returns [] when no built JS/HTML/CSS carries a network primitive or a non-allowlisted URL.
  * @param {Array<{ path: string, text: string }>} files output-relative paths with their text
+ * @param {readonly string[]} [allowlist] URL prefixes allowed in the bundle
  * @returns {string[]}
  */
-export function scanBundle(files) {
+export function scanBundle(files, allowlist = URL_ALLOWLIST) {
 	const errors = [];
 	for (const { path, text } of files) {
 		const isCss = path.endsWith('.css');
@@ -203,7 +217,7 @@ export function scanBundle(files) {
 			errors.push(`${path}: remote url( in CSS`);
 		}
 		for (const [url] of text.matchAll(URL_PATTERN)) {
-			if (!URL_ALLOWLIST.some((p) => url.startsWith(p))) {
+			if (!allowlist.some((p) => url.startsWith(p))) {
 				errors.push(`${path}: URL not on allowlist: ${url}`);
 			}
 		}
@@ -218,9 +232,10 @@ export const countScanned = (dir) =>
 /**
  * Returns [] when dir is a production output whose manifest and bundle pass.
  * @param {string} dir
+ * @param {readonly string[]} [allowlist] URL prefixes allowed in the bundle
  * @returns {string[]}
  */
-export function checkOutput(dir) {
+export function checkOutput(dir, allowlist = URL_ALLOWLIST) {
 	if (/-dev$/.test(basename(dir))) return [`refusing dev output: ${dir}`];
 	if (!existsSync(dir) || !statSync(dir).isDirectory()) return [`missing output directory ${dir}`];
 	const manifestFile = join(dir, 'manifest.json');
@@ -235,7 +250,7 @@ export function checkOutput(dir) {
 	const files = walk(dir)
 		.filter((f) => SCANNED.test(f))
 		.map((f) => ({ path: relative(dir, f).split(sep).join('/'), text: readFileSync(f, 'utf8') }));
-	return [...checkManifest(m, exists), ...scanBundle(files)];
+	return [...checkManifest(m, exists), ...scanBundle(files, allowlist)];
 }
 
 /**
