@@ -4,15 +4,15 @@ exit code: 0
   "metadata": {
     "vulnerabilities": {
       "info": 0,
-      "low": 1,
+      "low": 4,
       "moderate": 0,
       "high": 0,
       "critical": 0
     },
     "dependencies": 114,
-    "devDependencies": 221,
+    "devDependencies": 330,
     "optionalDependencies": 62,
-    "totalDependencies": 362
+    "totalDependencies": 471
   }
 }
 

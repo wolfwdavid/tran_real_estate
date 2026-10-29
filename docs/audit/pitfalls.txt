@@ -7,17 +7,17 @@ command budget: exit 0
 command banned: exit 0
 
 command deps: exit 0
-info: 0, low: 1, moderate: 0, high: 0, critical: 0
+info: 0, low: 4, moderate: 0, high: 0, critical: 0
 command guard: exit 0
-Real-data guard passed (1751 all files checked)
+Real-data guard passed (1846 all files checked)
 command fixtures:check: exit 0
 Fixtures match generator output (6 files)
 command secrets:canary: exit 0
 gitleaks canary detected as expected
 command secrets:scan: exit 0
-[90m1:47AM[0m [32mINF[0m [1m1135 commits scanned.[0m
-[90m1:47AM[0m [32mINF[0m [1mscanned ~14699723 bytes (14.70 MB) in 2.22s[0m
-[90m1:47AM[0m [32mINF[0m [1mno leaks found[0m
+[90m8:31AM[0m [32mINF[0m [1m1199 commits scanned.[0m
+[90m8:31AM[0m [32mINF[0m [1mscanned ~15203183 bytes (15.20 MB) in 2.7s[0m
+[90m8:31AM[0m [32mINF[0m [1mno leaks found[0m
 PASS	RentCast client	unit "packages/core/src/budget/cap.test.ts": 43 passed; unit "apps/web/src/lib/data/gateway.budget.test.ts": 17 passed; e2e "CapAboveLimitDialog: focus on Keep, typed confirmation": 2 passed
 PASS	Saved-search alerts	unit "apps/web/src/lib/data/scheduler.test.ts": 18 passed; unit "a second pass at once, or 23 h later, spends 0": 1 passed
 PASS	BYOK settings	unit "apps/web/src/lib/storage/secrets/testers.test.ts": 6 passed; unit "apps/web/src/lib/storage/secrets/vault.test.ts > forgetAll": 4 passed; unit "apps/web/src/lib/ai/providers/anthropic.test.ts": 22 passed; e2e "settings-keys.spec.ts": 24 passed; owner step: Human UAT 7
