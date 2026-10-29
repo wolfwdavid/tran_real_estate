@@ -1,10 +1,14 @@
+import { spawnSync } from 'node:child_process';
 import adapter from '@sveltejs/adapter-static';
 import { resolveBasePath, resolveBuildDir } from './src/lib/base-path.js';
 import { buildCsp } from './src/lib/csp-policy.js';
+import { resolveBuildStamp } from './src/lib/build-stamp.js';
 import { resolveAnalytics, resolveSiteOrigin } from './src/lib/site-config.js';
 
 const base = resolveBasePath();
 const out = resolveBuildDir();
+const readHead = () =>
+	(spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout ?? '').trim();
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
@@ -17,6 +21,8 @@ export default {
 			strict: true
 		}),
 		paths: { base },
+		// LIVE-04: /_app/version.json and the service-worker cache key carry the commit SHA.
+		version: { name: resolveBuildStamp(process.env, readHead) },
 		// cache.addAll() in the service worker is all-or-nothing, and $service-worker `files`
 		// included /.nojekyll, which GitHub Pages never serves. Keep every dotfile out of the precache.
 		serviceWorker: { files: (filepath) => !/(^|[\\/])\./.test(filepath) },
