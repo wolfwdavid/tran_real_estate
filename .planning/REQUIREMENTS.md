@@ -111,53 +111,55 @@ Which phases cover which requirements. Filled during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LIVE-01 | — | Pending |
-| LIVE-02 | — | Pending |
-| LIVE-03 | — | Pending |
-| LIVE-04 | — | Pending |
-| LIVE-05 | — | Pending |
-| LIVE-06 | — | Pending |
-| LIVE-07 | — | Pending |
-| LIVE-08 | — | Pending |
-| LIVE-09 | — | Pending |
-| SMOKE-01 | — | Pending |
-| SMOKE-02 | — | Pending |
-| SMOKE-03 | — | Pending |
-| SMOKE-04 | — | Pending |
-| SMOKE-05 | — | Pending |
-| SMOKE-06 | — | Pending |
-| DEBT-01 | — | Pending |
-| DEBT-02 | — | Pending |
-| DEBT-03 | — | Pending |
-| DEBT-04 | — | Pending |
-| DEBT-05 | — | Pending |
-| DEBT-06 | — | Pending |
-| DEBT-07 | — | Pending |
-| DEBT-08 | — | Pending |
-| DEBT-09 | — | Pending |
-| TEST-01 | — | Pending |
-| TEST-02 | — | Pending |
-| TEST-03 | — | Pending |
-| TEST-04 | — | Pending |
-| TEST-05 | — | Pending |
-| TEST-06 | — | Pending |
-| TOOL-01 | — | Pending |
-| TOOL-02 | — | Pending |
-| TOOL-03 | — | Pending |
-| TOOL-04 | — | Pending |
-| TOOL-05 | — | Pending |
-| TOOL-06 | — | Pending |
-| EXT-05 | — | Pending |
-| EXT-06 | — | Pending |
-| EXT-07 | — | Pending |
-| EXT-08 | — | Pending |
-| EXT-09 | — | Pending |
+| LIVE-01 | Phase 12 | Pending |
+| LIVE-02 | Phase 13 | Pending |
+| LIVE-03 | Phase 13 | Pending |
+| LIVE-04 | Phase 12 | Pending |
+| LIVE-05 | Phase 12 | Pending |
+| LIVE-06 | Phase 13 | Pending |
+| LIVE-07 | Phase 13 | Pending |
+| LIVE-08 | Phase 12 | Pending |
+| LIVE-09 | Phase 13 | Pending |
+| SMOKE-01 | Phase 12 | Pending |
+| SMOKE-02 | Phase 12 | Pending |
+| SMOKE-03 | Phase 12 | Pending |
+| SMOKE-04 | Phase 13 | Pending |
+| SMOKE-05 | Phase 12 | Pending |
+| SMOKE-06 | Phase 12 | Pending |
+| DEBT-01 | Phase 14 | Pending |
+| DEBT-02 | Phase 14 | Pending |
+| DEBT-03 | Phase 14 | Pending |
+| DEBT-04 | Phase 14 | Pending |
+| DEBT-05 | Phase 14 | Pending |
+| DEBT-06 | Phase 14 | Pending |
+| DEBT-07 | Phase 14 | Pending |
+| DEBT-08 | Phase 14 | Pending |
+| DEBT-09 | Phase 14 | Pending |
+| TEST-01 | Phase 15 | Pending |
+| TEST-02 | Phase 15 | Pending |
+| TEST-03 | Phase 15 | Pending |
+| TEST-04 | Phase 15 | Pending |
+| TEST-05 | Phase 15 | Pending |
+| TEST-06 | Phase 15 | Pending |
+| TOOL-01 | Phase 16 | Pending |
+| TOOL-02 | Phase 16 | Pending |
+| TOOL-03 | Phase 16 | Pending |
+| TOOL-04 | Phase 16 | Pending |
+| TOOL-05 | Phase 16 | Pending |
+| TOOL-06 | Phase 16 | Pending |
+| EXT-05 | Phase 17 | Pending |
+| EXT-06 | Phase 17 | Pending |
+| EXT-07 | Phase 17 | Pending |
+| EXT-08 | Phase 17 | Pending |
+| EXT-09 | Phase 17 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 41 total
-- Mapped to phases: 0
-- Unmapped: 41 ⚠️ (roadmap pending)
+- Mapped to phases: 41 (Phase 12: 9, Phase 13: 6, Phase 14: 9, Phase 15: 6, Phase 16: 6, Phase 17: 5)
+- Unmapped: 0 ✓
+
+LIVE-05 is owned by Phase 12 (checklist corrections, pinned Search Console meta slot); its live half (Search Console verified, sitemap submitted and read) is completed in Phase 13 under LIVE-06's GTM-04 proof.
 
 ---
 *Requirements defined: 2026-10-29*
-*Last updated: 2026-10-29 after initial definition*
+*Last updated: 2026-10-29 after roadmap creation (traceability filled, Phases 12-17)*

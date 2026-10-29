@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: defining_requirements
-stopped_at: Milestone v1.1 started (defining requirements)
+status: roadmap_created
+stopped_at: v1.1 roadmap created (Phases 12-17); Phase 12 ready to plan
 last_updated: "2026-10-29T00:00:00.000Z"
 progress:
-  total_phases: 0
+  total_phases: 6
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -19,14 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Milestone v1.1 Launch & Hardening — defining requirements (go-live on the real origin, live-origin smoke suite, carried debt, load-flake elimination, Kit 3 / Vitest 5 / pnpm 12, extension release packaging).
+**Current focus:** Milestone v1.1 Launch & Hardening — Phase 12: Go-live Readiness & Local Smoke Suite (clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main`).
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-10-29 — Milestone v1.1 started
+Phase: 12 of 17 (Go-live Readiness & Local Smoke Suite) — first of 6 v1.1 phases (12-17)
+Plan: — (not started; ready to plan)
+Status: Ready to plan
+Last activity: 2026-10-29 — v1.1 roadmap created: Phases 12-17, 41/41 requirements mapped
+
+Progress (v1.1): [░░░░░░░░░░] 0% (0/6 phases, 0 plans)
 
 ## Performance Metrics
 
@@ -638,6 +640,6 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 ## Session Continuity
 
 Last session: 2026-10-29
-Stopped at: Milestone v1.1 started; research → requirements → roadmap in progress
+Stopped at: v1.1 roadmap written (ROADMAP.md Phases 12-17, REQUIREMENTS.md traceability filled); next = `/gsd:plan-phase 12`
 Resume file: None
 Next: finish `/gsd:new-milestone` (requirements + roadmap from Phase 12), then `/gsd:plan-phase 12`. Owner go-live (org, remote, push, Pages) is planned EARLY in v1.1 per owner decision 2026-10-29.
