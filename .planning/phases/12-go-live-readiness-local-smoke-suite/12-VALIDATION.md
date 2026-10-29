@@ -30,6 +30,7 @@ created: 2026-10-29
 - **After every task commit:** `corepack pnpm vitest run --project scripts` (plus the project of the files touched) and `node scripts/commit-hygiene.mjs --message-file` runs automatically as the commit-msg hook from 12-01 on
 - **After every plan wave:** `corepack pnpm test:unit`; after any build-affecting wave: the three builds + `csp:assert` + `seo:assert`; from wave 5 on: `corepack pnpm smoke:local`; after every wave: `git log --all --format='%(trailers:key=Co-Authored-By,valueonly)' | grep -ciE 'anthropic|claude'` = 0 (from wave 2 on)
 - **Before `/gsd:verify-work`:** 12-10 Task 2 phase gate (stages A-G) green at one commit
+- **Rebuild rule (applies to every smoke run, phase-wide):** `scripts/smoke.mjs` compares each build stamp to the exact `git rev-parse HEAD`, so any commit (including docs-only STATE, SUMMARY or deferred-items commits) makes the three builds stale and `smoke:local` exits 2 by design. After any commit and before any smoke run, rebuild all three targets: `corepack pnpm build:root && corepack pnpm build:sub && corepack pnpm build:configured` (under the build lock). Every smoke command in the map below assumes this; the plans' `<verify>` blocks include the three builds.
 - **Max feedback latency:** ~20 s for the quick command; smoke runs are per wave, not per commit
 
 ---
