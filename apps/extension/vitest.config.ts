@@ -1,11 +1,13 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { WxtVitest } from 'wxt/testing/vitest-plugin';
+import { resolveSiteOrigin } from '../web/src/lib/site-config.js';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
 	plugins: [WxtVitest({ root })],
+	define: { __TRAN_ORIGIN__: JSON.stringify(resolveSiteOrigin()) },
 	test: {
 		name: 'extension',
 		environment: 'happy-dom',

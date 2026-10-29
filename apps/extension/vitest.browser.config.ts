@@ -1,6 +1,7 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
+import { resolveSiteOrigin } from '../web/src/lib/site-config.js';
 
 // Popup component tests in real Chromium (UI-SPEC Accessibility Contract: axe on every popup
 // state). Deliberately NOT listed in the root vitest.config.ts projects, so `pnpm test:unit` stays
@@ -19,6 +20,7 @@ if (process.platform === 'win32') {
 
 export default defineConfig({
 	plugins: [svelte()],
+	define: { __TRAN_ORIGIN__: JSON.stringify(resolveSiteOrigin()) },
 	// Discover every dependency up front: a dep found mid-run (an individual @lucide/svelte icon)
 	// is re-optimized and reloads the page, which can load a second Svelte runtime.
 	optimizeDeps: {

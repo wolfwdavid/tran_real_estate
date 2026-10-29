@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ExternalLink from '@lucide/svelte/icons/external-link';
-	import { PRIVACY_URL } from '../../../lib/config';
+	import { PRIVACY_URL } from '../../../lib/site';
 	import { COPY } from '../../../lib/copy';
 </script>
 

@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import App from '../../src/entrypoints/popup/App.svelte';
-import { PRIVACY_URL } from '../../src/lib/config';
+import { PRIVACY_URL } from '../../src/lib/site';
 import { COPY } from '../../src/lib/copy';
 import { COUNT_PUSH, type CountPush, type CountResponse } from '../../src/lib/messages';
 import type { ActiveTab, PopupDeps } from '../../src/lib/popup-model';
@@ -149,6 +149,7 @@ describe('popup states', () => {
 			.toBeVisible();
 
 		const link = page.getByRole('link', { name: /Privacy details/ });
+		expect(PRIVACY_URL).toBe('https://tranrealestate.github.io/legal/privacy/#browser-extension');
 		await expect.element(link).toHaveAttribute('href', PRIVACY_URL);
 		await expect.element(link).toHaveAccessibleName('Privacy details (opens in a new tab)');
 		await expect.element(link).toHaveAttribute('target', '_blank');

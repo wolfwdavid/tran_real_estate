@@ -1,7 +1,5 @@
 import raw from './selectors.v1.json';
 
-export const TRAN_ORIGIN = 'https://tranrealestate.github.io';
-export const PRIVACY_URL = `${TRAN_ORIGIN}/legal/privacy/#browser-extension`;
 export const ZILLOW_MATCH = '*://*.zillow.com/*';
 export const PILL_TAG = 'tran-slf-pill';
 
