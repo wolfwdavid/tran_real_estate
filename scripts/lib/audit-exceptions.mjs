@@ -27,5 +27,13 @@ export const AUDIT_EXCEPTIONS = Object.freeze([
 		path: 'apps/web > @sveltejs/kit (also via adapter-static, runed > @sveltejs/kit)',
 		why: 'XSS via an untrusted cache-control value passed to setHeaders on a prerendered page. apps/web/src never calls setHeaders (0 matches); the only cache-control string in build/_app is the Kit client version-check request header, not the unescaped meta tag. Fixed only in Kit 3.0.0 (major). Re-check on the Kit 3 migration.',
 		revisitBy: '2027-01-31'
+	},
+	{
+		ghsa: 'GHSA-gcqx-w48m-w2h4',
+		package: 'deepmerge',
+		severity: 'low',
+		path: '@sveltejs/vite-plugin-svelte@7.3.0 > deepmerge@4.3.1 (apps/web and apps/extension build tooling)',
+		why: 'Prototype poisoning in deepmerge.mergeObject(). deepmerge is used only by the Svelte Vite plugin at build time to merge compiler options from trusted config files; no patched version exists (advisory lists none). It never ships: 0 matches for deepmerge/mergeObject in apps/web/build/_app and apps/extension/.output/chrome-mv3. Re-check when vite-plugin-svelte drops or bumps deepmerge.',
+		revisitBy: '2027-01-31'
 	}
 ]);
