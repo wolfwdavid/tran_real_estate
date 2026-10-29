@@ -87,3 +87,5 @@ export const test = withMonitor.extend<{ gpc: void }>({
 /** GPC OFF. Imported by analytics.smoke.ts ONLY (12-09 adds a static guard). */
 export const testGpcOff = withMonitor;
 export { expect, smoke };
+/** Re-exported so specs never import @playwright/test directly (scripts/smoke-readonly.test.ts). */
+export type { Page } from '@playwright/test';
