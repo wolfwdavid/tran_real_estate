@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: Completed 12-02-PLAN.md
-last_updated: "2026-10-29T19:27:25.895Z"
+stopped_at: Completed 12-03-PLAN.md
+last_updated: "2026-10-29T19:39:04.405Z"
 last_activity: 2026-10-29
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 10
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 12 (go-live-readiness-local-smoke-suite) — EXECUTING
-Plan: 3 of 10
-Status: Executing (12-02 complete: history rewritten with 0 attributed commits, hashes remapped, allowlist re-derived, guard in test:unit + CI; next = wave 3, 12-03 rebuilds the stale build dirs)
-Last activity: 2026-10-29 — 12-02 executed (history rewrite)
+Plan: 4 of 10
+Status: Executing (wave 3: 12-03 complete, build dirs stamped with commit SHA; rebuild all three targets before any E2E or smoke)
+Last activity: 2026-10-29 — 12-03 executed (build stamp, LIVE-04)
 
-Progress (v1.1): [██░░░░░░░░] Phase 12 2/10 plans (0/6 phases)
+Progress (v1.1): [███░░░░░░░] Phase 12 3/10 plans (0/6 phases)
 
 ## Performance Metrics
 
@@ -239,6 +239,7 @@ Progress (v1.1): [██░░░░░░░░] Phase 12 2/10 plans (0/6 phase
 | Phase 11 P12 | 10min | 2 tasks | 7 files |
 | Phase 12 P01 | 9min | 2 tasks | 5 files |
 | Phase 12 P02 | 12min | 3 tasks | 50 files |
+| Phase 12 P03 | 9min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -617,6 +618,7 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-01: launch-audit reads the v1.0 checklist via PITFALLS_DOC = .planning/milestones/v1.0-research/PITFALLS.md
 - [Phase 12]: 12-02: history rewritten message-only with filter-repo (240 changed / 978 identical, 145 trailers to 0); bundle + commit-map kept outside the repo at ../tran_real_estate-rewrite-2026-10-29/
 - [Phase 12]: 12-02: pre-rewrite hashes are never quoted literally in tracked files, so remap-hashes.mjs --check stays at 0 stale for 12-10
+- [Phase 12]: 12-03: build stamp precedence BUILD_SHA > GITHUB_SHA > git HEAD, 40-hex or a named build error; build-web.mjs resolves once and passes BUILD_SHA
 
 ### Pending Todos
 
@@ -646,7 +648,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-29T19:27:25.890Z
-Stopped at: Completed 12-02-PLAN.md
+Last session: 2026-10-29T19:39:04.399Z
+Stopped at: Completed 12-03-PLAN.md
 Resume file: None
 Next: continue `/gsd:execute-phase 12` at wave 3 (12-03..12-05). History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.

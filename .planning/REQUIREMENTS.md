@@ -13,7 +13,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 - [ ] **LIVE-01**: Before any remote is added, the git history contains no AI co-author trailers or assistant mentions in commit messages (145 trailered commits from 2026-10-13..14 rewritten), the gitleaks SHA allowlist is re-derived for the rewritten commits, and the CI history scan passes on the rewritten history
 - [ ] **LIVE-02**: Owner can create the `tranrealestate` org and the empty `tranrealestate.github.io` repo, set the Pages source to GitHub Actions, push `main` with `PAGES_ENABLED` unset, and see the first-ever GitHub run of `ci.yml` green (hygiene, quality, three-leg matrix) with the deploy job skipped
 - [ ] **LIVE-03**: After `PAGES_ENABLED=true`, a push deploys to `https://tranrealestate.github.io/` and the live routing contract holds: landing 200, `/renter` redirects to `/renter/`, deep route survives hard refresh, unknown path returns the branded 404 with HTTP 404, HTTPS enforced
-- [ ] **LIVE-04**: Every deployed build carries a build stamp (Kit `version.name` = commit SHA, served at `/_app/version.json`) so a deploy can be identified and a post-deploy check can wait for the right build behind the Pages CDN cache
+- [x] **LIVE-04**: Every deployed build carries a build stamp (Kit `version.name` = commit SHA, served at `/_app/version.json`) so a deploy can be identified and a post-deploy check can wait for the right build behind the Pages CDN cache
 - [ ] **LIVE-05**: `docs/DEPLOY-CHECKLIST.md` is corrected (Pages source before `PAGES_ENABLED`, exact repo name, Umami host `gateway.umami.is`, meta-tag Search Console method placed after `%sveltekit.head%`, fresh-profile rule for live checks) and Search Console is verified with `sitemap.xml` submitted and read
 - [ ] **LIVE-06**: GTM-01..GTM-04 are proven on the live origin (Umami pageviews with GPC respected, Web3Forms waitlist + feedback delivery, share cards in the Facebook and LinkedIn debuggers, Search Console) and ticked, or GTM-04 is cut per the documented cut line with the decision recorded
 - [ ] **LIVE-07**: The 77 owner HUMAN-UAT rows are reclassified: rows the smoke suite verifies are closed with run links; the truly human rows are consolidated into one file with their results; a launch-proof bundle (dated screenshots and run links) is committed under `docs/launch-proof/<date>/` and `docs/LAUNCH-AUDIT.md` is regenerated at the deployed commit
@@ -114,7 +114,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | LIVE-01 | Phase 12 | Pending |
 | LIVE-02 | Phase 13 | Pending |
 | LIVE-03 | Phase 13 | Pending |
-| LIVE-04 | Phase 12 | Pending |
+| LIVE-04 | Phase 12 | Complete |
 | LIVE-05 | Phase 12 | Pending |
 | LIVE-06 | Phase 13 | Pending |
 | LIVE-07 | Phase 13 | Pending |
