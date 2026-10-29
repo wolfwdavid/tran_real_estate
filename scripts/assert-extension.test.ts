@@ -16,8 +16,10 @@ import {
 	checkOutput,
 	checkZip,
 	listZipEntries,
-	scanBundle
+	scanBundle,
+	urlAllowlist
 } from './assert-extension.mjs';
+import { DEFAULT_SITE_ORIGIN } from '../apps/web/src/lib/site-config.js';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CLI = join(REPO_ROOT, 'scripts', 'assert-extension.mjs');
@@ -71,7 +73,7 @@ const goldenFiles = (): Record<string, string | Buffer> => ({
 		'const XH = "http://www.w3.org/1999/xhtml";',
 		'const MM = "http://www.w3.org/1998/Math/MathML";',
 		'const E = "https://svelte.dev/e/each_key_duplicate";',
-		'const P = "https://tranrealestate.github.io/legal/privacy/#browser-extension";',
+		`const P = "${DEFAULT_SITE_ORIGIN}/legal/privacy/#browser-extension";`,
 		'export { NS, XL, XH, MM, E, P };'
 	].join('\n'),
 	'content-scripts/zillow.js': 'document.querySelectorAll("article").forEach((a) => a.remove);',
@@ -182,7 +184,7 @@ describe('assert-extension oracle: golden output', () => {
 	test('the exported constants are the locked contract', () => {
 		expect(EXPECTED_PERMISSIONS).toEqual(['storage']);
 		expect(URL_ALLOWLIST).toContain('https://svelte.dev/e/');
-		expect(URL_ALLOWLIST).toContain('https://tranrealestate.github.io/');
+		expect(URL_ALLOWLIST).toContain(`${DEFAULT_SITE_ORIGIN}/`);
 		expect(URL_ALLOWLIST).toContain('https://github.com/wxt-dev/wxt/issues/371');
 		expect(URL_ALLOWLIST).toContain('https://wxt.dev/guide/go-further/testing.html');
 	});
@@ -393,7 +395,7 @@ describe('assert-extension oracle: planted bundle faults', () => {
 		[
 			'network token in the background service worker',
 			(fx) => {
-				fx.files['background.js'] += '\nfetch("https://tranrealestate.github.io/");';
+				fx.files['background.js'] += `\nfetch("${DEFAULT_SITE_ORIGIN}/");`;
 			},
 			'background.js'
 		]
@@ -409,7 +411,7 @@ describe('assert-extension oracle: planted bundle faults', () => {
 		'http://www.w3.org/1999/xhtml',
 		'http://www.w3.org/1998/Math/MathML',
 		'https://svelte.dev/e/each_key_duplicate',
-		'https://tranrealestate.github.io/legal/privacy/#browser-extension',
+		`${DEFAULT_SITE_ORIGIN}/legal/privacy/#browser-extension`,
 		'https://github.com/wxt-dev/wxt/issues/371',
 		'https://wxt.dev/guide/go-further/testing.html'
 	])('allowlisted URL %s is not a problem', (url) => {
@@ -440,9 +442,71 @@ describe('assert-extension oracle: planted bundle faults', () => {
 
 	test('an allowlist prefix lookalike host is still reported', () => {
 		const problems = scanBundle([
-			{ path: 'chunks/a.js', text: 'const u = "https://tranrealestate.github.io.evil.test/x";' }
+			{ path: 'chunks/a.js', text: `const u = "${DEFAULT_SITE_ORIGIN}.evil.test/x";` }
 		]);
 		expect(problems.join('\n')).toContain('evil.test');
+	});
+});
+
+describe('assert-extension oracle: the site origin follows PUBLIC_SITE_URL (LIVE-08)', () => {
+	const PROBE = 'https://probe.example';
+	const probeLink = `${PROBE}/legal/privacy/#browser-extension`;
+	const site = (origin: string) => `${origin}/`;
+	const bundle = (url: string) => [{ path: 'chunks/a.js', text: `const u = "${url}";` }];
+
+	test('the default allowlist carries DEFAULT_SITE_ORIGIN with a trailing slash', () => {
+		expect(urlAllowlist({})).toContain(site(DEFAULT_SITE_ORIGIN));
+		expect(urlAllowlist({ PUBLIC_SITE_URL: '' })).toContain(site(DEFAULT_SITE_ORIGIN));
+	});
+
+	test('PUBLIC_SITE_URL replaces the site entry and keeps the static entries', () => {
+		const list = urlAllowlist({ PUBLIC_SITE_URL: PROBE });
+		expect(list).toContain(site(PROBE));
+		expect(list).not.toContain(site(DEFAULT_SITE_ORIGIN));
+		expect(list).toEqual([...urlAllowlist({}).slice(0, -1), site(PROBE)]);
+	});
+
+	test('URL_ALLOWLIST is urlAllowlist(process.env) at module load', () => {
+		expect(URL_ALLOWLIST).toEqual(urlAllowlist(process.env));
+	});
+
+	test('a malformed PUBLIC_SITE_URL is a named error, never a silent allowlist', () => {
+		expect(() => urlAllowlist({ PUBLIC_SITE_URL: 'https://probe.example/' })).toThrow(
+			/PUBLIC_SITE_URL/
+		);
+		expect(() => urlAllowlist({ PUBLIC_SITE_URL: 'http://probe.example' })).toThrow(
+			/PUBLIC_SITE_URL/
+		);
+	});
+
+	test('the probe privacy link is rejected by the default allowlist', () => {
+		expect(scanBundle(bundle(probeLink)).join('\n')).toContain(probeLink);
+	});
+
+	test('the probe privacy link passes an injected PUBLIC_SITE_URL allowlist', () => {
+		expect(scanBundle(bundle(probeLink), urlAllowlist({ PUBLIC_SITE_URL: PROBE }))).toEqual([]);
+	});
+
+	test('the default origin is reported under a probe allowlist', () => {
+		const url = `${DEFAULT_SITE_ORIGIN}/legal/privacy/`;
+		const problems = scanBundle(bundle(url), urlAllowlist({ PUBLIC_SITE_URL: PROBE }));
+		expect(problems.join('\n')).toContain(url);
+	});
+
+	test('a probe-origin lookalike host is still reported', () => {
+		const url = `${PROBE}.evil.test/x`;
+		const problems = scanBundle(bundle(url), urlAllowlist({ PUBLIC_SITE_URL: PROBE }));
+		expect(problems.join('\n')).toContain('evil.test');
+	});
+
+	test('checkOutput passes the allowlist through to the bundle scan', () => {
+		withTmp((root) => {
+			const fx = golden();
+			fx.files['chunks/popup-x.js'] = `const P = "${probeLink}"; export { P };`;
+			const dir = writeOutput(root, 'chrome-mv3', fx);
+			expect(checkOutput(dir).join('\n')).toContain(probeLink);
+			expect(checkOutput(dir, urlAllowlist({ PUBLIC_SITE_URL: PROBE }))).toEqual([]);
+		});
 	});
 });
 
