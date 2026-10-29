@@ -89,6 +89,15 @@ Validated in Phase 9: Agent Content Studio & Market Snapshot Reports (2026-10-13
 - ✓ STU-03 — Founder-story reel script (hook → manual pain → before/after → results → mission → CTA) with timed beats, captions, B-roll list and an AI-disclosure checklist (Phase 9)
 - ✓ STU-04 — Branded Market Snapshot report for a ZIP code that prints to PDF, labeled not a CMA or appraisal (Phase 9)
 
+Phase 10: Launch Hardening & Go-to-Market shipped 2026-10-14 (23/23 plans, 5/5 success criteria verified locally). GTM-01..04 stay Active on purpose: their proof (Umami pageviews, Web3Forms delivery, share cards, Search Console) needs the live origin and the owner's accounts (10-HUMAN-UAT.md, 8 rows).
+
+Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) — 4/4 must-haves verified against the production build (241 extension unit tests, 13 popup axe tests, 7 runtime E2E incl. a zero-network monitored session, manifest/bundle/zip oracle). `human_needed`: 7 owner rows in 11-HUMAN-UAT.md (live zillow.com smoke, real-browser zero-network check, the "Showcase" badge decision, Zillow ToU read, privacy URL live, Edge Add-ons submission, `ext-v0.1.0` release once the remote exists); Firefox Add-ons cut per the roadmap cut line.
+
+- ✓ EXT-01 — Zillow user with the extension installed sees sponsored or promoted listing cards dimmed, with a one-click reveal on each (Phase 11)
+- ✓ EXT-02 — User can toggle the filter on/off and see the count of hidden sponsored listings from the toolbar popup (Phase 11)
+- ✓ EXT-03 — Extension makes no network requests and collects no data (permissions limited to storage and zillow.com) (Phase 11)
+- ✓ EXT-04 — User can install the extension from a GitHub Releases zip (with load-unpacked instructions), Microsoft Edge Add-ons, or Firefox Add-ons (Phase 11)
+
 ### Active
 
 **Platform (shared)**
@@ -105,7 +114,7 @@ Validated in Phase 9: Agent Content Studio & Market Snapshot Reports (2026-10-13
 - [x] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit" — shipped in Phase 6
 - [x] AI outreach drafts: draft an interest message to the listing agent (asking about availability, pets, amenities not in the data); human reviews and sends — shipped in Phase 6
 - [x] Fair-rent check: compare a listing's asking rent against estimated market rent — shipped in Phase 6
-- [ ] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons
+- [x] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons — shipped in Phase 11 (`apps/extension`: dim-with-reveal, popup toggle + count, storage + zillow.com permissions only, gated GitHub Release workflow, Edge listing copy; store submission and the live-site smoke are owner steps)
 
 **Investor portal**
 - [x] Deal analyzer: cap rate, NOI, cash flow, cash-on-cash return, DSCR using rent estimates and comps — shipped in Phase 7
@@ -178,6 +187,8 @@ Validated in Phase 9: Agent Content Studio & Market Snapshot Reports (2026-10-13
 | Analytics = first-party fetch beacon to Umami free tier, no third-party scripts | Any script on the origin can read stored keys; page/portal events only, no PII | — Pending |
 | GitHub org name `tranrealestate` → `tranrealestate.github.io` | Dedicated origin; name available 2026-09-13; owner creates org in browser | — Pending |
 | v1 depth = all three portals at capped depth | Honors "live demo of all 3 portals" without solo-build scope creep; each portal phase has demo-credible exit criteria and a named cut line | — Pending |
+| Zillow detection: ad-slot list items are the primary signal; label text is secondary | Live zillow.com (2026-10-25) shows no visible "Sponsored/Featured" label on any card; paid placements render as iframe ad-slot `li`s (`search-list-{first,second,third}-ad`). The "Showcase" paid badge stays opt-in until the owner decides (11-HUMAN-UAT row 3) | ✓ Phase 11 |
+| Audit exceptions only for code that never ships, with proof | `pnpm audit --audit-level low` moves between phases (12 advisories on unchanged pins appeared 2026-10-23). Patch-level bumps are applied; a major-only fix (Kit 2→3, build-time deepmerge) is recorded in `scripts/lib/audit-exceptions.mjs` with a grep of the shipped output and a revisit date | ✓ Phase 11 close-out |
 
 ## Evolution
 
@@ -197,4 +208,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-13 after Phase 9 completion*
+*Last updated: 2026-10-29 after Phase 11 completion*
