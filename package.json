@@ -58,6 +58,7 @@
 		"vitest": "4.1.12"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "node scripts/gitleaks.mjs staged && node scripts/guard-real-data.mjs --staged"
+		"pre-commit": "node scripts/gitleaks.mjs staged && node scripts/guard-real-data.mjs --staged",
+		"commit-msg": "node scripts/commit-hygiene.mjs --message-file $1"
 	}
 }
