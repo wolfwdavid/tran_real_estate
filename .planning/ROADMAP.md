@@ -77,7 +77,7 @@ Execution order: 12 → 13 → {14, 15, 17 in any order or overlapping} → 16. 
 **Note on LIVE-05:** this phase owns the requirement and delivers its local half (the checklist corrections and the pinned Search Console meta slot). The live half ("Search Console verified, `sitemap.xml` submitted and read") can only happen once the origin exists and is completed in Phase 13 under LIVE-06's GTM-04 proof; LIVE-05 is ticked when Phase 13 records it.
 **Research flag:** no (standard patterns: Playwright `APIRequestContext`, the emulator contract, `git filter-repo`, gitleaks allowlist shapes, Search Console meta method; all exercised in this repo already).
 **UI hint:** no.
-**Plans:** 9/10 plans executed
+**Plans:** 10/10 plans executed; 12-10 Task 3 (owner go-live gate) pending
 
 Plans:
 - [x] 12-01-PLAN.md — Wave 1: repoint launch audit to the archived v1.0 PITFALLS (test:unit green) + commit-msg hygiene hook (LIVE-01)
@@ -180,7 +180,7 @@ Plans:
 | 9. Agent Content Studio & Market Snapshot Reports | v1.0 | 25/25 | Complete | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | v1.0 | 23/23 | Complete | 2026-10-14 |
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
-| 12. Go-live Readiness & Local Smoke Suite | v1.1 | 9/10 | In Progress|  |
+| 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Awaiting owner gate |  |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 0/TBD | Not started | - |
 | 14. Carried Debt | v1.1 | 0/TBD | Not started | - |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |

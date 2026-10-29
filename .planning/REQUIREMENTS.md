@@ -10,7 +10,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 
 ### Go-live (LIVE)
 
-- [ ] **LIVE-01**: Before any remote is added, the git history contains no AI co-author trailers or assistant mentions in commit messages (145 trailered commits from 2026-10-13..14 rewritten), the gitleaks SHA allowlist is re-derived for the rewritten commits, and the CI history scan passes on the rewritten history
+- [x] **LIVE-01**: Before any remote is added, the git history contains no AI co-author trailers or assistant mentions in commit messages (145 trailered commits from 2026-10-13..14 rewritten), the gitleaks SHA allowlist is re-derived for the rewritten commits, and the CI history scan passes on the rewritten history
 - [ ] **LIVE-02**: Owner can create the `tranrealestate` org and the empty `tranrealestate.github.io` repo, set the Pages source to GitHub Actions, push `main` with `PAGES_ENABLED` unset, and see the first-ever GitHub run of `ci.yml` green (hygiene, quality, three-leg matrix) with the deploy job skipped
 - [ ] **LIVE-03**: After `PAGES_ENABLED=true`, a push deploys to `https://tranrealestate.github.io/` and the live routing contract holds: landing 200, `/renter` redirects to `/renter/`, deep route survives hard refresh, unknown path returns the branded 404 with HTTP 404, HTTPS enforced
 - [x] **LIVE-04**: Every deployed build carries a build stamp (Kit `version.name` = commit SHA, served at `/_app/version.json`) so a deploy can be identified and a post-deploy check can wait for the right build behind the Pages CDN cache
@@ -111,11 +111,11 @@ Which phases cover which requirements. Filled during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LIVE-01 | Phase 12 | Pending |
+| LIVE-01 | Phase 12 | Complete |
 | LIVE-02 | Phase 13 | Pending |
 | LIVE-03 | Phase 13 | Pending |
 | LIVE-04 | Phase 12 | Complete |
-| LIVE-05 | Phase 12 | Pending |
+| LIVE-05 | Phase 12 | Pending (local half done; live half in Phase 13) |
 | LIVE-06 | Phase 13 | Pending |
 | LIVE-07 | Phase 13 | Pending |
 | LIVE-08 | Phase 12 | Complete |
