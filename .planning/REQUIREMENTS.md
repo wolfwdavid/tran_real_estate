@@ -17,7 +17,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 - [ ] **LIVE-05**: `docs/DEPLOY-CHECKLIST.md` is corrected (Pages source before `PAGES_ENABLED`, exact repo name, Umami host `gateway.umami.is`, meta-tag Search Console method placed after `%sveltekit.head%`, fresh-profile rule for live checks) and Search Console is verified with `sitemap.xml` submitted and read
 - [ ] **LIVE-06**: GTM-01..GTM-04 are proven on the live origin (Umami pageviews with GPC respected, Web3Forms waitlist + feedback delivery, share cards in the Facebook and LinkedIn debuggers, Search Console) and ticked, or GTM-04 is cut per the documented cut line with the decision recorded
 - [ ] **LIVE-07**: The 77 owner HUMAN-UAT rows are reclassified: rows the smoke suite verifies are closed with run links; the truly human rows are consolidated into one file with their results; a launch-proof bundle (dated screenshots and run links) is committed under `docs/launch-proof/<date>/` and `docs/LAUNCH-AUDIT.md` is regenerated at the deployed commit
-- [ ] **LIVE-08**: `PUBLIC_SITE_URL` is honoured end to end (canonical URLs, sitemap, OG absolute URLs, extension `TRAN_ORIGIN`/`PRIVACY_URL`) so a future custom domain is a variable change, not a code hunt
+- [x] **LIVE-08**: `PUBLIC_SITE_URL` is honoured end to end (canonical URLs, sitemap, OG absolute URLs, extension `TRAN_ORIGIN`/`PRIVACY_URL`) so a future custom domain is a variable change, not a code hunt
 - [ ] **LIVE-09**: Owner can follow `docs/RUNBOOK.md` to redeploy, roll back (re-run the deploy on the previous commit or revert and push), read a smoke result, and run the suites at the known-good worker counts for the dev machine and CI
 
 ### Live-origin smoke suite (SMOKE)
@@ -118,7 +118,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | LIVE-05 | Phase 12 | Pending |
 | LIVE-06 | Phase 13 | Pending |
 | LIVE-07 | Phase 13 | Pending |
-| LIVE-08 | Phase 12 | Pending |
+| LIVE-08 | Phase 12 | Complete |
 | LIVE-09 | Phase 13 | Pending |
 | SMOKE-01 | Phase 12 | Pending |
 | SMOKE-02 | Phase 12 | Pending |
