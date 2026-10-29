@@ -633,7 +633,6 @@ Recent decisions affecting current work:
 
 Hosting and owner-account items are deferred, non-blocking todos (see Pending Todos).
 
-- Phase 11 composed pnpm verify interrupted by host low-memory reap during test:unit; re-run with free memory before verify-work (all ext:* steps green standalone)
 
 ## Session Continuity
 

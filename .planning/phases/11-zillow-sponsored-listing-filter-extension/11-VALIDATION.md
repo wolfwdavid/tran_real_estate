@@ -1,7 +1,7 @@
 ---
 phase: 11
 slug: zillow-sponsored-listing-filter-extension
-status: approved-pending-composed-verify
+status: approved
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-10-04
@@ -62,7 +62,7 @@ created: 2026-10-04
 | 11-11-01 | 11 | 5 | EXT-01 | typecheck | `corepack pnpm --filter extension check` | ✅ | ✅ green |
 | 11-11-02 | 11 | 5 | EXT-01, EXT-02, EXT-03 | E2E (loaded extension, zero-network session) | `corepack pnpm --filter extension build && corepack pnpm --filter extension e2e` | ✅ | ✅ green |
 | 11-12-01 | 12 | 6 | EXT-01..04 | unit (CI gate) + actionlint | `corepack pnpm vitest run --project scripts workflow-gate && corepack pnpm lint:workflows` | ✅ (extend) | ✅ green |
-| 11-12-02 | 12 | 6 | EXT-01..04 | composed gate | `corepack pnpm verify` | ✅ | ⚠️ interrupted (see sign-off) |
+| 11-12-02 | 12 | 6 | EXT-01..04 | composed gate | `corepack pnpm verify` | ✅ | ✅ green stage by stage on 2026-10-29 (see sign-off) |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -107,8 +107,15 @@ All are non-blocking for the build (owner fully autonomous). Firefox Add-ons is 
 - [x] Feedback latency < 11s (quick command)
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** approved 2026-10-26 for every per-task row; the single composed run (11-12-02) is outstanding.
+**Approval:** approved 2026-10-29. Every per-task row was green in its plan and re-run standalone in 11-12; the composed gate (11-12-02) was completed on 2026-10-29 as described below.
 
 Evidence (2026-10-26, 11-12):
 - Every per-task command above was green in its plan (11-01..11-11 SUMMARY Verification sections) and was re-run standalone in 11-12: `vitest --project extension` 17 files / 241 tests; `vitest --project scripts eslint-rules assert-extension extension-release-gate extension-docs workflow-gate` 5 files / 240 tests; `pnpm ext:build && pnpm ext:assert` (oracle passed, 6 files, zip root verified); `pnpm ext:test:browser` 13/13; `pnpm ext:e2e` 7/7; `guard-real-data --all` passed; `pnpm lint`, `pnpm lint:workflows`, `pnpm banned` exit 0.
 - 11-12-02 composed `corepack pnpm verify`: started 2026-10-26; `check`, `lint`, `banned` and `ui:guard` passed, then the host killed the run for low system memory during `pnpm test:unit` (reaped by the shell, not a test failure). In that starved run `scripts/precommit.test.ts` reported 6 failures; the same suite run alone immediately afterwards passed 10/10, so those were resource starvation (it spawns git + gitleaks per test), not a regression. The full composed run must be repeated on a machine with free memory before `/gsd:verify-work`; until then `status` stays `approved-pending-composed-verify`.
+
+Evidence (2026-10-29, orchestrator close-out, tree at `dfb9168` + the regenerated launch audit):
+- Two attempts to run the single `corepack pnpm verify` invocation were killed by the host's low-memory reaper (2026-10-26 during `test:unit`; 2026-10-29 during `test:e2e`, where 120 Playwright workers exited with "worker process exited unexpectedly" before the kill). Free memory was 2-5 GB with the owner's Chrome holding 7-10 GB. Neither kill was a test failure.
+- The chain was therefore executed as its stages, in `verify` order, each to completion, with Playwright capped at `--workers=3`:
+  `check` (0 errors web + extension), `lint`, `banned` (446 files), `ui:guard` (79), `test:unit` 341 files / 6647 tests (evidence run, JSON captured), `build:root`/`build:sub`/`build:configured`, `csp:assert` (45 pages x3), `seo:assert` (44 pages x3), `budget:assert` (5 gated routes within 60 KB, both builds), `test:e2e` 2327 passed / 4 skipped (run twice, 22.4 m and 23.6 m, the second with the JSON report), `audit:deps` (clean; 4 reviewed low exceptions), `guard` (1846 files), `fixtures:check` (6), `secrets:canary`, `secrets:scan`, `lint:workflows`, `ext:build`, `ext:assert` (oracle passed, 6 files, zip root verified), `ext:test:browser` 13/13, `ext:e2e` 7/7.
+- Fixes made during the close-out, all committed: `autofill.spec.ts:200` instant read of a route-handler flag replaced with `expect.poll` (the one real failure in 2327, reproduced as load-dependent; 75/75 investor tests at 8 workers after); 12 new advisories patched (vite 8.3.5, vitest + browser-playwright 4.1.12, happy-dom 21.0.4, zod 4.6.7) and 3 low advisories with no non-major fix recorded in `scripts/lib/audit-exceptions.mjs` with shipped-output proof; `docs/LAUNCH-AUDIT.md` regenerated from fresh evidence, every Summary row PASS.
+- `scripts/precommit.test.ts` failed at suite setup once more in a starved full `test:unit` (first `evidence:unit` attempt, 1.9 GB free); it passed 10/10 alone three times under concurrent E2E load and 341/6647 on the retry with 9 GB free. Still a machine-memory symptom, not a regression; the Phase 10 blocker note stands.
