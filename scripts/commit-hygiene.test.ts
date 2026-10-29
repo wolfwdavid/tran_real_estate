@@ -263,3 +263,18 @@ describe('commit-msg hook', () => {
 		expect(git(dir, 'rev-list', '--count', 'HEAD').stdout.trim()).toBe('1');
 	});
 });
+
+describe('this repository', () => {
+	test('no commit reachable from any ref carries assistant attribution', () => {
+		const r = spawnSync(process.execPath, ['scripts/commit-hygiene.mjs', '--history'], {
+			cwd: repoRoot,
+			encoding: 'utf8'
+		});
+		expect(r.status, r.stderr + r.stdout).toBe(0);
+		expect(r.stdout).toMatch(/ 0 with assistant attribution/);
+		const scanned = Number(/(\d+) commits scanned/.exec(r.stdout)?.[1] ?? 'NaN');
+		// CI quality checkouts are shallow; only a full clone proves the whole history was read.
+		const shallow = git(repoRoot, 'rev-parse', '--is-shallow-repository').stdout.trim();
+		expect(scanned).toBeGreaterThan(shallow === 'false' ? 1000 : 0);
+	});
+});

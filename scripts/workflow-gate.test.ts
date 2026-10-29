@@ -319,6 +319,18 @@ describe('hygiene job', () => {
 	test('runs the banned marketing/legal terms gate', () => {
 		expect(job('hygiene')).toContain('run: node scripts/banned-terms.mjs');
 	});
+
+	test('runs the commit-message hygiene check over the full history', () => {
+		const hygiene = job('hygiene');
+		const step = 'run: node scripts/commit-hygiene.mjs --history';
+		expect(hygiene).toContain(step);
+		expect(hygiene).toContain('fetch-depth: 0');
+		const at = hygiene.indexOf(step);
+		expect(at).toBeGreaterThan(hygiene.indexOf('uses: actions/checkout@'));
+		expect(at).toBeLessThan(
+			hygiene.indexOf('run: gitleaks git --no-banner --redact --config .gitleaks.toml .')
+		);
+	});
 });
 
 describe('no remote side effects', () => {
