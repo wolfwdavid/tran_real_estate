@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: MVP
-status: milestone_complete
-stopped_at: Completed 11-12-PLAN.md
-last_updated: "2026-10-29T12:55:19.508Z"
+milestone: v1.1
+milestone_name: Launch & Hardening
+status: defining_requirements
+stopped_at: Milestone v1.1 started (defining requirements)
+last_updated: "2026-10-29T00:00:00.000Z"
 progress:
-  total_phases: 11
-  completed_phases: 11
-  total_plans: 209
-  completed_plans: 209
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
@@ -19,12 +19,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** v1.0 shipped 2026-10-29; planning v1.1 (`/gsd:new-milestone`). Owner launch steps in docs/DEPLOY-CHECKLIST.md.
+**Current focus:** Milestone v1.1 Launch & Hardening — defining requirements (go-live on the real origin, live-origin smoke suite, carried debt, load-flake elimination, Kit 3 / Vitest 5 / pnpm 12, extension release packaging).
 
 ## Current Position
 
-Phase: 11
-Plan: Not started
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-10-29 — Milestone v1.1 started
 
 ## Performance Metrics
 
@@ -635,7 +637,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-26T03:46:55.438Z
-Stopped at: Completed 11-12-PLAN.md
+Last session: 2026-10-29
+Stopped at: Milestone v1.1 started; research → requirements → roadmap in progress
 Resume file: None
-Next: run the clock health check in the handoff, then `/gsd:plan-phase 9 --gaps` to close the edit-mode exit gap, re-verify, `phase complete 9`, then Phase 10. Still no remote and no push by design.
+Next: finish `/gsd:new-milestone` (requirements + roadmap from Phase 12), then `/gsd:plan-phase 12`. Owner go-live (org, remote, push, Pages) is planned EARLY in v1.1 per owner decision 2026-10-29.

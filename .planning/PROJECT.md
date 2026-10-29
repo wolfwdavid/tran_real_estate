@@ -162,15 +162,19 @@ Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) �
 
 Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
-## Next Milestone Goals
+## Current Milestone: v1.1 Launch & Hardening
 
-Not yet defined (`/gsd:new-milestone`). Candidates from the v1.0 audit:
+**Goal:** Take the locally verified v1.0 build live on its own origin, make go-live and every future deploy boring, and clear the debt and toolchain drift carried out of v1.0 so the platform is on current, supported foundations.
 
-- **Go live:** org + repo + Pages, then the owner UAT burn-down and GTM-01..04 proof on the real origin.
-- **Extension release:** Edge Add-ons listing, `ext-v0.1.0` GitHub Release, the "Showcase" badge decision, a live-Zillow smoke.
-- **Carry-forward debt:** origin drift test, backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, one load-sensitive spec.
-- **Maintenance:** SvelteKit 3 migration (clears three low audit exceptions), Vitest 5, pnpm 12.
-- **Product (parked since v1 questioning):** paid tiers need a host other than GitHub Pages (commercial-use terms); accounts and billing were explicitly out of v1 scope.
+**Target features:**
+- Go-live: the owner creates the `tranrealestate` org and `tranrealestate.github.io` repo early in the milestone, pushes `main`, enables Pages; the deferred live-origin checks (CSP on the real origin, deep-link refresh, Umami beacon, Web3Forms delivery, share-card unfurl, Search Console) become phase gates and GTM-01..04 get their proof
+- Live-origin smoke suite: a repeatable, configurable-origin check that runs the deferred v1.0 verifications against any deployed origin (local stand-in first, real origin once it exists), shrinking the 77 owner HUMAN-UAT rows to the few that truly need a human
+- Carried debt: origin drift test (extension ↔ web app), UI-level backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, the load-sensitive saved-search spec
+- Load-flake elimination: full `test:unit` and E2E runs deterministic under parallel load (timing-budget tests separated from the parallel run; no blind timeout raises)
+- Toolchain: SvelteKit 2 → 3, Vitest 5, pnpm 12 in one isolated phase after the debt is cleared, clearing the three low audit exceptions before their 2027-01-31 revisit
+- Extension release: `ext-v0.1.0` GitHub Release artifacts and Edge Add-ons listing assets ready to submit; store submission, the Showcase badge decision and the live-Zillow smoke stay owner steps
+
+**Out of this milestone:** new portal features, monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages), Chrome Web Store listing.
 
 ## Constraints
 
@@ -226,4 +230,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-29 after v1.0 milestone*
+*Last updated: 2026-10-29 after starting milestone v1.1*
