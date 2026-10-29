@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: Completed 12-05-PLAN.md
-last_updated: "2026-10-29T19:41:23.179Z"
+stopped_at: Completed 12-04-PLAN.md
+last_updated: "2026-10-29T19:46:40.884Z"
 last_activity: 2026-10-29
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 10
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 12 (go-live-readiness-local-smoke-suite) — EXECUTING
-Plan: 5 of 10
+Plan: 6 of 10
 Status: Executing (wave 3: 12-03 complete, build dirs stamped with commit SHA; rebuild all three targets before any E2E or smoke)
 Last activity: 2026-10-29
 
@@ -241,6 +241,7 @@ Progress (v1.1): [███░░░░░░░] Phase 12 3/10 plans (0/6 phase
 | Phase 12 P02 | 12min | 3 tasks | 50 files |
 | Phase 12 P03 | 9min | 2 tasks | 5 files |
 | Phase 12 P05 | 14min | 2 tasks | 4 files |
+| Phase 12 P04 | 16min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -622,6 +623,7 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-03: build stamp precedence BUILD_SHA > GITHUB_SHA > git HEAD, 40-hex or a named build error; build-web.mjs resolves once and passes BUILD_SHA
 - [Phase 12]: 12-05: DEPLOY-CHECKLIST keeps Step 5/7 and all Step 8 item numbers; Dependabot moved to Step 4 with an in-place pointer at 8.6
 - [Phase 12]: 12-05: Search Console = HTML-tag meta on the line after the app.html search-console marker (after %sveltekit.head%); Umami host = gateway.umami.is
+- [Phase 12]: 12-04: extension TRAN_ORIGIN comes from a __TRAN_ORIGIN__ define fed by the web resolveSiteOrigin(); oracle allowlist uses urlAllowlist(env) from the same validator
 
 ### Pending Todos
 
@@ -651,7 +653,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-29T19:41:23.173Z
-Stopped at: Completed 12-05-PLAN.md
+Last session: 2026-10-29T19:46:40.880Z
+Stopped at: Completed 12-04-PLAN.md
 Resume file: None
 Next: continue `/gsd:execute-phase 12` at wave 3 (12-03..12-05). History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
