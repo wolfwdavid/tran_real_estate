@@ -3,13 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: Completed 12-01-PLAN.md
-last_updated: "2026-10-29T19:14:31.056Z"
+stopped_at: Completed 12-02-PLAN.md
+last_updated: "2026-10-29T19:27:25.895Z"
+last_activity: 2026-10-29
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 10
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 12 (go-live-readiness-local-smoke-suite) — EXECUTING
-Plan: 2 of 10
-Status: Executing (12-01 complete: test:unit green, commit-msg hygiene hook installed; next = 12-02 history rewrite, alone in wave 2)
-Last activity: 2026-10-29 — 12-01 executed
+Plan: 3 of 10
+Status: Executing (12-02 complete: history rewritten with 0 attributed commits, hashes remapped, allowlist re-derived, guard in test:unit + CI; next = wave 3, 12-03 rebuilds the stale build dirs)
+Last activity: 2026-10-29 — 12-02 executed (history rewrite)
 
-Progress (v1.1): [█░░░░░░░░░] Phase 12 1/10 plans (0/6 phases)
+Progress (v1.1): [██░░░░░░░░] Phase 12 2/10 plans (0/6 phases)
 
 ## Performance Metrics
 
@@ -237,6 +238,7 @@ Progress (v1.1): [█░░░░░░░░░] Phase 12 1/10 plans (0/6 phase
 | Phase 11 P11 | 12 min | 2 tasks | 3 files |
 | Phase 11 P12 | 10min | 2 tasks | 7 files |
 | Phase 12 P01 | 9min | 2 tasks | 5 files |
+| Phase 12 P02 | 12min | 3 tasks | 50 files |
 
 ## Accumulated Context
 
@@ -613,6 +615,8 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-12: extension build/oracle/axe/e2e run only on the CI root leg and at the end of pnpm verify; no xvfb (new-headless Chromium loads MV3)
 - [Phase 12]: 12-01: commit-msg hook (scripts/commit-hygiene.mjs) rejects attribution trailers; --history mode reports 145 today, wired into tests/CI only after the 12-02 rewrite
 - [Phase 12]: 12-01: launch-audit reads the v1.0 checklist via PITFALLS_DOC = .planning/milestones/v1.0-research/PITFALLS.md
+- [Phase 12]: 12-02: history rewritten message-only with filter-repo (240 changed / 978 identical, 145 trailers to 0); bundle + commit-map kept outside the repo at ../tran_real_estate-rewrite-2026-10-29/
+- [Phase 12]: 12-02: pre-rewrite hashes are never quoted literally in tracked files, so remap-hashes.mjs --check stays at 0 stale for 12-10
 
 ### Pending Todos
 
@@ -642,7 +646,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-29T19:14:31.051Z
-Stopped at: Completed 12-01-PLAN.md
+Last session: 2026-10-29T19:27:25.890Z
+Stopped at: Completed 12-02-PLAN.md
 Resume file: None
-Next: finish `/gsd:new-milestone` (requirements + roadmap from Phase 12), then `/gsd:plan-phase 12`. Owner go-live (org, remote, push, Pages) is planned EARLY in v1.1 per owner decision 2026-10-29.
+Next: continue `/gsd:execute-phase 12` at wave 3 (12-03..12-05). History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
