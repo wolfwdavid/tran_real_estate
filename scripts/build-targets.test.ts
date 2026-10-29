@@ -1,6 +1,7 @@
 // The single build-target table read by build-web.mjs, the CSP oracle and the E2E harness.
 import { describe, expect, test } from 'vitest';
 import {
+	DEFAULT_SITE_ORIGIN,
 	resolveAnalytics,
 	resolveContactEmail,
 	resolveSiteOrigin,
@@ -11,6 +12,7 @@ import {
 	TARGETS,
 	TEST_CONTACT_EMAIL,
 	TEST_FORM_KEY,
+	TEST_SITE_ORIGIN,
 	TEST_WEBSITE_ID,
 	targetEnv
 } from './lib/build-targets.mjs';
@@ -67,16 +69,18 @@ describe('build targets', () => {
 		);
 	});
 
-	test('configured carries a test value for every owner setting', () => {
+	test('configured carries a test value for every owner setting and its own site origin', () => {
 		expect(targetEnv('configured', {})).toEqual({
 			BASE_PATH: '',
 			BUILD_DIR: 'build-configured',
 			PUBLIC_ANALYTICS_HOST: 'http://127.0.0.1:4275',
 			PUBLIC_ANALYTICS_WEBSITE_ID: TEST_WEBSITE_ID,
 			PUBLIC_WEB3FORMS_KEY: TEST_FORM_KEY,
-			PUBLIC_CONTACT_EMAIL: 'hello@example.com'
+			PUBLIC_CONTACT_EMAIL: 'hello@example.com',
+			PUBLIC_SITE_URL: 'https://tran-configured.example'
 		});
 		expect(TEST_CONTACT_EMAIL).toBe('hello@example.com');
+		expect(TEST_SITE_ORIGIN).toBe('https://tran-configured.example');
 	});
 
 	test('configured ignores owner values and takes the collector port from E2E_PORT_ATTACKER', () => {
@@ -84,6 +88,11 @@ describe('build targets', () => {
 		expect(t.PUBLIC_ANALYTICS_HOST).toBe('http://127.0.0.1:5123');
 		expect(t.PUBLIC_WEB3FORMS_KEY).toBe(TEST_FORM_KEY);
 		expect(t.PUBLIC_CONTACT_EMAIL).toBe(TEST_CONTACT_EMAIL);
+	});
+
+	test('configured ignores an owner PUBLIC_SITE_URL (LIVE-08: every run exercises the variable)', () => {
+		const t = targetEnv('configured', { ...OWNER_ENV, PUBLIC_SITE_URL: 'https://owner.example' });
+		expect(t.PUBLIC_SITE_URL).toBe(TEST_SITE_ORIGIN);
 	});
 
 	test('every configured value passes the matching site-config resolver', () => {
@@ -94,7 +103,8 @@ describe('build targets', () => {
 		});
 		expect(resolveWeb3formsKey(t)).toBe(TEST_FORM_KEY);
 		expect(resolveContactEmail(t)).toBe(TEST_CONTACT_EMAIL);
-		expect(resolveSiteOrigin(t)).toBe('https://tranrealestate.github.io');
+		expect(resolveSiteOrigin(t)).toBe(TEST_SITE_ORIGIN);
+		expect(resolveSiteOrigin(t)).not.toBe(DEFAULT_SITE_ORIGIN);
 	});
 
 	test('the sub target resolves to everything off', () => {
