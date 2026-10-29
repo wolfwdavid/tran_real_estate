@@ -152,14 +152,18 @@ describe('quality matrix', () => {
 	test('owner variables reach only the root leg, in every env block', () => {
 		const quality = job('quality');
 		const blocks = count(quality, '\n        env:\n');
-		expect(blocks).toBe(4); // Build, CSP oracle, SEO oracle, E2E
+		// Build, CSP oracle, SEO oracle and E2E carry every owner setting; the fifth block, the
+		// extension build, carries only the site origin (LIVE-08).
+		expect(blocks).toBe(5);
+		const ownerBlocks = 4;
 		for (const name of OWNER_KEYS) {
 			const gated = `${name}: \${{ matrix.target == 'root' && vars.${name} || '' }}`;
-			expect(count(quality, gated), name).toBe(blocks);
+			expect(count(quality, gated), name).toBe(ownerBlocks);
 			// No other use of the variable anywhere in the workflow.
-			expect(count(text, `vars.${name}`), name).toBe(blocks);
+			expect(count(text, `vars.${name}`), name).toBe(ownerBlocks);
 		}
 		expect(count(quality, 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}')).toBe(blocks);
+		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(blocks);
 	});
 
 	test('the CSP oracle and E2E run for the matching target', () => {
@@ -271,6 +275,22 @@ describe('extension (Phase 11)', () => {
 		const quality = job('quality');
 		expect(count(quality, BUILD)).toBe(1);
 		expect(ifAbove(quality, BUILD)).toBe("matrix.target == 'root'");
+	});
+
+	test('the extension build step carries only PUBLIC_SITE_URL', () => {
+		const quality = job('quality');
+		const name = '- name: Extension build + manifest/zero-network oracle';
+		const start = quality.indexOf(name);
+		expect(start).toBeGreaterThan(-1);
+		const next = quality.indexOf('- name:', start + name.length);
+		const step = quality.slice(start, next === -1 ? undefined : next);
+		expect(step).toContain(BUILD);
+		expect(step).toContain(
+			'\n        env:\n          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}\n'
+		);
+		for (const key of OWNER_KEYS) expect(step, key).not.toContain(key);
+		// Exactly one expression in the step: the site origin.
+		expect(count(step, '${{')).toBe(1);
 	});
 
 	test('the root leg runs the popup axe suite and the runtime E2E', () => {

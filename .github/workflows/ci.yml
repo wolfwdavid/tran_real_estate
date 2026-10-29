@@ -133,11 +133,14 @@ jobs:
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
           PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
-      # The extension is target-independent (no BASE_PATH, no owner variables), so it runs once on
-      # the root leg. Chromium is already installed above; the E2E runs new-headless Chromium.
+      # The extension is target-independent (no BASE_PATH, no owner variables except the site origin
+      # its privacy link uses), so it runs once on the root leg. The build and the oracle read the
+      # same PUBLIC_SITE_URL. Chromium is already installed above; the E2E runs new-headless Chromium.
       - name: Extension build + manifest/zero-network oracle
         if: matrix.target == 'root'
         run: pnpm ext:build && pnpm ext:assert
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
       - name: Extension popup axe + runtime E2E
         if: matrix.target == 'root'
         run: pnpm ext:test:browser && pnpm ext:e2e
