@@ -48,8 +48,8 @@ Every prerendered route is now axe-clean (WCAG 2.0/2.1/2.2 A+AA) with a real-for
 
 | Task | Commit | Message |
 |------|--------|---------|
-| 1 | dd8ef85 | test(10-21): keyed-state axe on every route; final route lists |
-| 2 | 5561752 | test(10-21): disclaimer presence audit |
+| 1 | 5374246 | test(10-21): keyed-state axe on every route; final route lists |
+| 2 | d3964d2 | test(10-21): disclaimer presence audit |
 
 ## What was built
 
@@ -135,7 +135,7 @@ In practice that means the whole suite. The full run does not fit one 7-minute c
 - **Found during:** Task 2 (first run, root + sub failed).
 - **Issue:** The contract map lists the pre-estimate intro as the fair-rent disclaimer. In sample mode, and after any estimate, the component shows the 06-UI-SPEC result disclaimer instead.
 - **Fix:** The test now checks the result-state disclaimer after the estimate is visible. No product change.
-- **Commit:** 5561752
+- **Commit:** d3964d2
 
 **2. [Plan text vs orchestrator] Provider mocks abort instead of fulfilling `{}`.** See decisions. The acceptance strings (`api.rentcast.io`, `api.anthropic.com`, `openrouter.ai`, `passes.length`, `axe (keyed)`) are all present.
 
@@ -152,4 +152,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: apps/web/tests/e2e/a11y-keyed.spec.ts, apps/web/tests/e2e/disclaimers.spec.ts, scripts/assert-csp.mjs, scripts/assert-csp.test.ts
-- FOUND commits: dd8ef85, 5561752
+- FOUND commits: 5374246, d3964d2

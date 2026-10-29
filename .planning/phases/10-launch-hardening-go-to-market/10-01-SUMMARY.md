@@ -49,9 +49,9 @@ Gate passed for Phases 2-9. 10-CONTRACT-MAP.md records the real path and export 
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 | Wave 0 gate and Phase 2-9 contract map | ecbf6a4 | 10-CONTRACT-MAP.md |
-| 2 | Validated site-config module (TDD) | 39b1f63 (RED), 772f8b6 (GREEN) | site-config.test.ts, site-config.js |
-| 3 | Define constants, prerender.origin, typed site module | edb8890 | site.ts, site.test.ts, app.d.ts, vite.config.ts, svelte.config.js, eslint.config.js |
+| 1 | Wave 0 gate and Phase 2-9 contract map | 4a77381 | 10-CONTRACT-MAP.md |
+| 2 | Validated site-config module (TDD) | 53f8c4c (RED), 5bae821 (GREEN) | site-config.test.ts, site-config.js |
+| 3 | Define constants, prerender.origin, typed site module | 70e1a1f | site.ts, site.test.ts, app.d.ts, vite.config.ts, svelte.config.js, eslint.config.js |
 
 ## Gate result
 
@@ -78,13 +78,13 @@ PLAN/SUMMARY counts: 02 12/12, 03 17/17, 04 25/25, 05 16/16, 06 22/22, 07 21/21,
 - **Found during:** Task 3
 - **Issue:** `vite.config.ts` already had a top-level `define: { __BUILD_YEAR__ }`, and `app.d.ts` already existed.
 - **Fix:** Merged the five new constants into the existing `define` object and the existing `declare global` block. Both are covered by the plan's own "if app.d.ts exists" instruction.
-- **Commit:** edb8890
+- **Commit:** 70e1a1f
 
 **2. [Rule 1 - Acceptance] Comment wording in site-config.js**
 - **Found during:** Task 2
 - **Issue:** The explanatory comment named the module path, which tripped the acceptance grep that requires zero hits.
 - **Fix:** Reworded the comment to "Kit's static public env module".
-- **Commit:** 772f8b6
+- **Commit:** 5bae821
 
 ## Known Stubs
 
@@ -93,5 +93,5 @@ None. `ANALYTICS`, `WEB3FORMS_KEY` and `CONTACT_EMAIL` default to `''` on purpos
 ## Self-Check: PASSED
 
 - FOUND: 10-CONTRACT-MAP.md, site-config.js, site-config.test.ts, site.ts, site.test.ts
-- FOUND commits: ecbf6a4, 39b1f63, 772f8b6, edb8890
+- FOUND commits: 4a77381, 53f8c4c, 5bae821, 70e1a1f
 - Build lock released; no stray apps/web/test-results

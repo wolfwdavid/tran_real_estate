@@ -56,9 +56,9 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1 RED:** `2ed9c74` test(11-12): add failing extension CI gate assertions
-2. **Task 1 GREEN:** `9211bf3` ci(11-12): run extension build, oracle, axe and e2e in verify and CI
-3. **Task 2:** `5f069d2` docs(11-12): extension HUMAN-UAT, release checklist, validation sign-off
+1. **Task 1 RED:** `14d62a1` test(11-12): add failing extension CI gate assertions
+2. **Task 1 GREEN:** `62b59a4` ci(11-12): run extension build, oracle, axe and e2e in verify and CI
+3. **Task 2:** `a243aff` docs(11-12): extension HUMAN-UAT, release checklist, validation sign-off
 
 ## Verification
 
@@ -70,7 +70,7 @@ completed: 2026-10-26
 
 ## Deferred-items check
 
-All three 11-09 findings in `deferred-items.md` were closed by 11-10: the modulepreload `fetch(` by `96f6b80` (`modulePreload.polyfill: false`), and the two inert WXT URLs by `0ae70e4` (exact-prefix oracle allowlist). Today's oracle run passes on the production output.
+All three 11-09 findings in `deferred-items.md` were closed by 11-10: the modulepreload `fetch(` by `cff6621` (`modulePreload.polyfill: false`), and the two inert WXT URLs by `52a7d6e` (exact-prefix oracle allowlist). Today's oracle run passes on the production output.
 
 ## Deviations from Plan
 
@@ -90,7 +90,7 @@ All three 11-09 findings in `deferred-items.md` were closed by 11-10: the module
 ## Self-Check: PASSED
 
 - FOUND: .planning/phases/11-zillow-sponsored-listing-filter-extension/11-HUMAN-UAT.md
-- FOUND: commits 2ed9c74, 9211bf3, 5f069d2
+- FOUND: commits 14d62a1, 62b59a4, a243aff
 
 ---
 *Phase: 11-zillow-sponsored-listing-filter-extension*

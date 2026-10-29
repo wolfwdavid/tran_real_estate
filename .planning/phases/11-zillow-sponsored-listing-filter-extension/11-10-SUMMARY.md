@@ -50,8 +50,8 @@ The real WXT entrypoints are now in place. A thin `zillow.content` script import
 
 | # | Task | Commits |
 |---|------|---------|
-| 1 | Badge module, background worker, thin content entrypoint (TDD) | ec96be1 (RED), 0a8bcf5 (GREEN) |
-| 2 | Production build + zip through the oracle | 96f6b80, 0ae70e4 |
+| 1 | Badge module, background worker, thin content entrypoint (TDD) | 9dc975d (RED), 71c9b52 (GREEN) |
+| 2 | Production build + zip through the oracle | cff6621, 52a7d6e |
 
 ## Verification
 
@@ -72,9 +72,9 @@ Checked by eye: permissions `["storage"]` only; no `tabs`, `scripting`, `web_acc
 
 ## Deferred findings from 11-09: resolution
 
-1. **`chunks/popup-*.js: network token fetch(`.** This was Vite's modulepreload polyfill (`function n(e){...fetch(e.href,n)}`). Fixed at the source with `vite: () => ({ build: { assetsInlineLimit: 0, modulePreload: { polyfill: false } } })` in `apps/extension/wxt.config.ts` (96f6b80). After the rebuild the popup chunk has no `fetch(`. MV3 Chrome supports modulepreload natively.
+1. **`chunks/popup-*.js: network token fetch(`.** This was Vite's modulepreload polyfill (`function n(e){...fetch(e.href,n)}`). Fixed at the source with `vite: () => ({ build: { assetsInlineLimit: 0, modulePreload: { polyfill: false } } })` in `apps/extension/wxt.config.ts` (cff6621). After the rebuild the popup chunk has no `fetch(`. MV3 Chrome supports modulepreload natively.
 2. **`URL not on allowlist: https://github.com/wxt-dev/wxt/issues/371`.**
-3. **`URL not on allowlist: https://wxt.dev/guide/go-further/testing.html`.** Both appear in the popup chunk and in `content-scripts/zillow.js`. They are inert developer error text from the `wxt/browser` shim (`- If thrown during a build, see https://github.com/wxt-dev/wxt/issues/371` / `- If thrown during tests, mock 'wxt/browser' correctly. See https://wxt.dev/guide/go-further/testing.html`) and are never fetched. They are now allowlisted as exact full URLs, each with a one-line comment (0ae70e4). New tests:
+3. **`URL not on allowlist: https://wxt.dev/guide/go-further/testing.html`.** Both appear in the popup chunk and in `content-scripts/zillow.js`. They are inert developer error text from the `wxt/browser` shim (`- If thrown during a build, see https://github.com/wxt-dev/wxt/issues/371` / `- If thrown during tests, mock 'wxt/browser' correctly. See https://wxt.dev/guide/go-further/testing.html`) and are never fetched. They are now allowlisted as exact full URLs, each with a one-line comment (52a7d6e). New tests:
    - both URLs are in the locked-contract assertion and the allowlisted-URL `test.each`
    - the error text exactly as bundled passes `scanBundle`
    - sibling URLs (`https://github.com/wxt-dev/wxt/releases/x`, `https://github.com/evil/repo`, `https://wxt.dev/api/x`) are still reported. This proves the entries do not open whole hosts.
@@ -99,4 +99,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: apps/extension/src/lib/badge.ts, src/lib/content-wiring.ts, src/entrypoints/background.ts, tests/badge.test.ts, tests/content-wiring.test.ts, .output/sponsored-listing-filter-0.1.0-chrome.zip
-- FOUND commits: ec96be1, 0a8bcf5, 96f6b80, 0ae70e4
+- FOUND commits: 9dc975d, 71c9b52, cff6621, 52a7d6e

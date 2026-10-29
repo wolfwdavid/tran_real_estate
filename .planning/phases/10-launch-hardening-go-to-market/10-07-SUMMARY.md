@@ -60,8 +60,8 @@ GTM-03 note: this plan delivers the primitives. The prerendered `/og/*.png` endp
 
 | Task | Name | Commits |
 | ---- | ---- | ------- |
-| 1 | Dependencies, JSON-LD serializer and canonical paths | eaabc72 (deps), 4124815 (RED), 0f1eae5 (GREEN) |
-| 2 | WOFF to SFNT converter and the share-card renderer | b735a85 (RED), 71e08b2 (GREEN), aae397f (fix: hero tints, size, timeout) |
+| 1 | Dependencies, JSON-LD serializer and canonical paths | 1d0bc5e (deps), f4be56d (RED), 5ea7ce9 (GREEN) |
+| 2 | WOFF to SFNT converter and the share-card renderer | c432573 (RED), 5fd498c (GREEN), 41319be (fix: hero tints, size, timeout) |
 
 ## Verification (real output)
 
@@ -80,27 +80,27 @@ GTM-03 note: this plan delivers the primitives. The prerendered `/og/*.png` endp
 
 **1. [Rule 1 - Bug] Raw U+2028/U+2029 characters written into source**
 - **Found during:** Task 1 GREEN
-- **Issue:** the file-writing step turned the escape sequences in the regex and test input into raw separator characters, so Prettier/ESLint could not parse jsonld.ts or jsonld.test.ts (vitest still ran). The RED commit 4124815 contains the raw characters in the test file.
-- **Fix:** rewrote both files with the escape sequences (built from character codes); the corrected test file is in 0f1eae5
+- **Issue:** the file-writing step turned the escape sequences in the regex and test input into raw separator characters, so Prettier/ESLint could not parse jsonld.ts or jsonld.test.ts (vitest still ran). The RED commit f4be56d contains the raw characters in the test file.
+- **Fix:** rewrote both files with the escape sequences (built from character codes); the corrected test file is in 5ea7ce9
 - **Files modified:** apps/web/src/lib/seo/jsonld.ts, apps/web/src/lib/seo/jsonld.test.ts
 
 **2. [Rule 1 - Bug] Cash-on-cash title overlapped the mark disc**
 - **Found during:** Task 2 GREEN (the overflow test caught it: 1,764 text pixels inside the disc square)
 - **Fix:** the fixture (and the content contract for 10-10) breaks the title as 'Cash-on-cash' / 'return calculator'
-- **Commit:** 71e08b2
+- **Commit:** 5fd498c
 
 **3. [Rule 1 - Bug] Default card within 1% of the PNG budget**
 - **Found during:** Task 2 review of real sizes (202,589 of 204,800 bytes)
 - **Fix:** tints changed to the hero's exact elliptical gradients (the UI-SPEC says the hero's two tints); default card now 142,993 bytes
-- **Commit:** aae397f
+- **Commit:** 41319be
 
 **4. [Rule 3 - Blocking] Renderer tests timed out once under parallel load**
 - **Found during:** final verification (20 s run while other executors were busy; 1 test exceeded the 5 s default)
 - **Fix:** `describe('renderOgCard', { timeout: 30_000 })`; two consecutive runs green
-- **Commit:** aae397f
+- **Commit:** 41319be
 
 **5. [Plan adjustment] Dependencies committed separately**
-- The dependency add went into its own `chore(10-07)` commit (eaabc72) ahead of the RED commit so the lockfile change is isolated.
+- The dependency add went into its own `chore(10-07)` commit (1d0bc5e) ahead of the RED commit so the lockfile change is isolated.
 
 ## Known Stubs
 
@@ -115,4 +115,4 @@ None. The modules are complete; their consumers (OG endpoints, ToolPage JSON-LD)
 ## Self-Check: PASSED
 
 - All 9 created source/test files exist under apps/web/src/lib/seo/
-- Commits eaabc72, 4124815, 0f1eae5, b735a85, 71e08b2, aae397f exist in `git log`
+- Commits 1d0bc5e, f4be56d, 5ea7ce9, c432573, 5fd498c, 41319be exist in `git log`

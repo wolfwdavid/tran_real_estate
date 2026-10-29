@@ -69,10 +69,10 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1 RED: failing release gate tests**: `fca59e0` (test)
-2. **Task 1 GREEN: gated release workflow + actionlint over all workflows**: `a8d9d9e` (feat)
-3. **Task 2 RED: failing docs tests**: `9d56ece` (test)
-4. **Task 2 GREEN: install guide, Edge listing, privacy section**: `102e356` (docs)
+1. **Task 1 RED: failing release gate tests**: `cb3c4d0` (test)
+2. **Task 1 GREEN: gated release workflow + actionlint over all workflows**: `2e1a5cf` (feat)
+3. **Task 2 RED: failing docs tests**: `fe49cba` (test)
+4. **Task 2 GREEN: install guide, Edge listing, privacy section**: `779af95` (docs)
 
 ## Verification
 
@@ -102,7 +102,7 @@ See key-decisions in the frontmatter.
 - **Found during:** Task 1 GREEN
 - **Issue:** The first draft's header comment named `EXTENSION_RELEASES_ENABLED`, so the gate test counted the name twice.
 - **Fix:** Reworded the comment to refer to "the repository variable named in the release job's if: line".
-- **Commit:** a8d9d9e
+- **Commit:** 2e1a5cf
 
 **2. [Note] Line-based grep of the privacy notice**
 - Prettier (printWidth 100) wraps ¶3 of the privacy section, so a literal line grep for `Not affiliated with or endorsed by Zillow Group.` in the `.svelte` file does not match on one line. The plan's test compares the whitespace-collapsed source, as the plan directs, and that test passes. The rendered text is exact. No prettier-ignore was added.
@@ -131,4 +131,4 @@ See key-decisions in the frontmatter.
 
 ## Self-Check: PASSED
 
-All 5 created files exist; commits fca59e0, a8d9d9e, 9d56ece, 102e356 are present. EXT-03 is not marked complete here (popup notice lands in the popup plan); this plan supplies only its privacy-URL target.
+All 5 created files exist; commits cb3c4d0, 2e1a5cf, fe49cba, 779af95 are present. EXT-03 is not marked complete here (popup notice lands in the popup plan); this plan supplies only its privacy-URL target.

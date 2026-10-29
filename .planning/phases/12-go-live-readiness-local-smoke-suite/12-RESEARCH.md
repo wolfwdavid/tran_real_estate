@@ -58,7 +58,7 @@ No `12-CONTEXT.md` exists (no `/gsd:discuss-phase` was run). The constraints bel
 
 Phase 12 is four independent pre-push corrections plus one new test harness. None needs a new dependency: `git filter-repo` is already installed (`C:\Users\Mkaru\AppData\Local\Programs\Python\Python313\Scripts\git-filter-repo.exe`), gitleaks is 8.30.1 (the CI pin), Playwright is 1.63.0 with `@axe-core/playwright` 4.13.0, and every oracle the smoke needs already exists as an importable function or constant.
 
-The history rewrite is much smaller and safer than the milestone research implied. Exactly **145** commits carry `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (2026-10-13 10:57 `fc71580` .. 2026-10-14 `587e6e5`); there are **zero** other assistant mentions (the "168 mentions" figure counted provider product names like "Anthropic streaming adapter" and "Gemini dialog", which are product content and stay). A message-only `git filter-repo --message-callback` that touches only trailered messages rewrites exactly **233** commits (the trailered range and its descendants) and leaves the first **978** commits byte-identical, so the two gitleaks-allowlisted SHAs (`4e453c1`, `05793bf`, both 2026-10-06) **do not change**. On the scratch clone the rewritten history scanned green with the unmodified `.gitleaks.toml`, the canary still fired, the HEAD tree hash was identical, and the annotated tag `v1.0` was carried through. The remap of quoted hashes is mechanical: filter-repo writes `.git/filter-repo/commit-map` (old -> new), and 371 references to 153 rewritten commits sit in 43 tracked files.
+The history rewrite is much smaller and safer than the milestone research implied. Exactly **145** commits carry `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (2026-10-13 10:57 `7f14834` .. 2026-10-14 `38512f8`); there are **zero** other assistant mentions (the "168 mentions" figure counted provider product names like "Anthropic streaming adapter" and "Gemini dialog", which are product content and stay). A message-only `git filter-repo --message-callback` that touches only trailered messages rewrites exactly **233** commits (the trailered range and its descendants) and leaves the first **978** commits byte-identical, so the two gitleaks-allowlisted SHAs (`4e453c1`, `05793bf`, both 2026-10-06) **do not change**. On the scratch clone the rewritten history scanned green with the unmodified `.gitleaks.toml`, the canary still fired, the HEAD tree hash was identical, and the annotated tag `v1.0` was carried through. The remap of quoted hashes is mechanical: filter-repo writes `.git/filter-repo/commit-map` (old -> new), and 371 references to 153 rewritten commits sit in 43 tracked files.
 
 Two findings change the plan. First, **`pnpm test:unit` is red today**: `scripts/launch-audit.test.ts` (11 tests) parses `.planning/research/PITFALLS.md`, which the v1.1 research overwrote; the v1.0 copy now lives at `.planning/milestones/v1.0-research/PITFALLS.md`. The first CI run would fail on it, so it must be fixed in this phase. Second, a `no-cors` beacon's response is opaque to Playwright's `waitForResponse` (status is visible, content-type and body are not), so "answers JSON 200" must be measured with `page.route()` + `route.fetch()` passthrough, which was proven today to reach the host exactly once and expose status, content-type and the JSON body. The local collector in `serve-pages.mjs` currently answers an empty 200 and must answer JSON.
 
@@ -99,7 +99,7 @@ Two findings change the plan. First, **`pnpm test:unit` is red today**: `scripts
 
 ## History Rewrite (LIVE-01)
 
-### Verified facts (2026-10-29, working tree at `2c2ff2c`)
+### Verified facts (2026-10-29, working tree at `5b8d633`)
 | Fact | Command | Result |
 |------|---------|--------|
 | Remote | `git remote -v` | none |
@@ -110,13 +110,13 @@ Two findings change the plan. First, **`pnpm test:unit` is red today**: `scripts
 | Attribution commits, broad net | `git log --all -i -E --grep='co-authored-by:.*(claude\|anthropic)\|noreply@anthropic\.com\|generated with \[?claude\|claude code\|🤖' --format=%H \| wc -l` | **145** (same set) |
 | "claude" outside trailer lines | `git log --all --format=%B \| grep -v -i '^co-authored-by:' \| grep -ci claude` | **0** |
 | Other AI words | subject/body grep for `anthropic\|gemini\|openai\|llm\|gpt` excluding trailers | 36 lines in 28 commits, all product content (provider adapters, `LlmError`, `CallMeter`, "Gemini dialog"); keep them |
-| First trailered commit | | `fc71580` 2026-10-13 10:57 "test(09-24): add failing tests for exits inside the recheck window" |
-| Last trailered commit | | `587e6e5` 2026-10-14 "docs(10): owner records UAT results in 10-HUMAN-UAT.md, ..." |
-| Commits whose SHA changes | `git rev-list --count fc71580^..HEAD` | **233** (plus every commit made after this research) |
-| Allowlisted commits | `4e453c1` (2026-10-06, feat(08-01)), `05793bf` (2026-10-06, docs(08-06)) | both ancestors of `fc71580`: **SHAs unchanged by the rewrite** |
+| First trailered commit | | `7f14834` 2026-10-13 10:57 "test(09-24): add failing tests for exits inside the recheck window" |
+| Last trailered commit | | `38512f8` 2026-10-14 "docs(10): owner records UAT results in 10-HUMAN-UAT.md, ..." |
+| Commits whose SHA changes | `git rev-list --count 7f14834^..HEAD` | **233** (plus every commit made after this research) |
+| Allowlisted commits | `4e453c1` (2026-10-06, feat(08-01)), `05793bf` (2026-10-06, docs(08-06)) | both ancestors of `7f14834`: **SHAs unchanged by the rewrite** |
 
 ### Dry run on a scratch clone (`git clone --no-local`)
-- Callback that only touches trailered messages: 233 commits changed, 978 unchanged, `first-changed-commits` = `fc71580 -> 7f14834`, `ref-map` rewrote `refs/heads/main` and `refs/tags/v1.0`.
+- Callback that only touches trailered messages: 233 commits changed, 978 unchanged, `first-changed-commits` = `7f14834 -> 7f14834`, `ref-map` rewrote `refs/heads/main` and `refs/tags/v1.0`.
 - A first attempt that normalised every message (`rstrip` + `\n`) changed **593** commits, because older messages end in `\n\n`. The callback must return the message untouched unless it contains the trailer.
 - After rewrite: trailer count 0, broad-net count 0, HEAD tree hash identical (`a3a9ead…`), `v1.0` still an annotated tag, `node scripts/gitleaks.mjs history` → "1210 commits scanned … no leaks found" (exit 0), `node scripts/gitleaks-canary.mjs` → detected (exit 0). Whole rewrite took ~1.5 s.
 - The allowlist is load-bearing and redundant: with no allowlist at all gitleaks reports exactly 2 `generic-api-key` findings (`05793bf` `.planning/phases/08-…/deferred-items.md:5`, `4e453c1` `packages/core/src/agent/schemas.test.ts:73`); with only `commits` or only `paths` it reports 0.
@@ -144,10 +144,10 @@ return pat.sub(b'', message).rstrip(b'\n') + b'\n'
 9. Rebuild before any smoke run: every `apps/web/build*/_app/version.json` is stamped with a pre-rewrite SHA.
 
 ### Files quoting rewritten hashes (371 refs, 153 distinct commits, 43 files)
-`.planning/phases/10-launch-hardening-go-to-market/*-SUMMARY.md` (22 files, plus `deferred-items.md`, `10-VERIFICATION.md`), `.planning/phases/11-*/*-SUMMARY.md` (12 files, plus `11-VALIDATION.md`), `.planning/phases/09-*/09-24-SUMMARY.md`, `09-25-SUMMARY.md`, `.planning/MILESTONES.md` (`e1acd0a`; `213f4b6` predates the rewrite and stays valid), `.planning/research/PITFALLS.md` (1), `docs/LAUNCH-AUDIT.md` (`Commit: dfb9168`). Phase 1-8 SUMMARY hashes are all pre-rewrite and stay valid. `docs/LAUNCH-AUDIT.md` says "Generated, do not edit by hand"; a mechanical commit-map substitution of the header hash keeps it resolvable until Phase 13 regenerates it (LIVE-07). Recommend: remap it mechanically and say so in the SUMMARY.
+`.planning/phases/10-launch-hardening-go-to-market/*-SUMMARY.md` (22 files, plus `deferred-items.md`, `10-VERIFICATION.md`), `.planning/phases/11-*/*-SUMMARY.md` (12 files, plus `11-VALIDATION.md`), `.planning/phases/09-*/09-24-SUMMARY.md`, `09-25-SUMMARY.md`, `.planning/MILESTONES.md` (`a60413c`; `213f4b6` predates the rewrite and stays valid), `.planning/research/PITFALLS.md` (1), `docs/LAUNCH-AUDIT.md` (`Commit: aaf00d9`). Phase 1-8 SUMMARY hashes are all pre-rewrite and stay valid. `docs/LAUNCH-AUDIT.md` says "Generated, do not edit by hand"; a mechanical commit-map substitution of the header hash keeps it resolvable until Phase 13 regenerates it (LIVE-07). Recommend: remap it mechanically and say so in the SUMMARY.
 
 ### Ordering decision: rewrite FIRST
-Every commit after `fc71580`, including this research commit and every Phase 12 commit, gets a new SHA. Rewriting last would force a second remap of Phase 12's own SUMMARY files. Rewriting first means every later SUMMARY quotes final hashes. The risk of rewriting first (an executor adds a new trailer later) is closed by the guard below and by a final count check at phase end. The rewrite plan runs **alone in its wave**.
+Every commit after `7f14834`, including this research commit and every Phase 12 commit, gets a new SHA. Rewriting last would force a second remap of Phase 12's own SUMMARY files. Rewriting first means every later SUMMARY quotes final hashes. The risk of rewriting first (an executor adds a new trailer later) is closed by the guard below and by a final count check at phase end. The rewrite plan runs **alone in its wave**.
 
 ### Keep it from recurring
 `scripts/commit-hygiene.mjs` (pure function over messages + CLI over `git log --format=%B%x00`) with `scripts/commit-hygiene.test.ts` (planted trailered message fails, product mentions like "Anthropic streaming adapter" pass), and a hygiene-job step `run: node scripts/commit-hygiene.mjs` (the hygiene job already has `fetch-depth: 0`). That is a `run:` step, so the 7 pinned `uses:` lines do not move; add one assertion to `scripts/workflow-gate.test.ts` in the same commit. If the planner prefers not to touch `ci.yml` in Phase 12, the unit test alone still guards local history on every `pnpm test:unit`.
@@ -338,7 +338,7 @@ export default defineConfig({
 ## Common Pitfalls
 
 ### Pitfall 1: `pnpm test:unit` is already red (pre-existing, blocks CI)
-**What goes wrong:** `scripts/launch-audit.test.ts` (11 of 28 tests) and `scripts/launch-audit.mjs:1185` read `.planning/research/PITFALLS.md`, whose "Looks Done But Isn't" checklist was replaced by the v1.1 research on 2026-10-29 (commit `19039cf`); `scripts/lib/pitfalls-evidence.mjs` maps the v1.0 items. `npx vitest run --project scripts` today: 1 file failed, 11 tests failed, 761 passed.
+**What goes wrong:** `scripts/launch-audit.test.ts` (11 of 28 tests) and `scripts/launch-audit.mjs:1185` read `.planning/research/PITFALLS.md`, whose "Looks Done But Isn't" checklist was replaced by the v1.1 research on 2026-10-29 (commit `3c90f0c`); `scripts/lib/pitfalls-evidence.mjs` maps the v1.0 items. `npx vitest run --project scripts` today: 1 file failed, 11 tests failed, 761 passed.
 **How to avoid:** point both at `.planning/milestones/v1.0-research/PITFALLS.md` (exists; also update the descriptive string at `launch-audit.mjs:861`). Do it in the first wave; otherwise every executor's `pnpm test:unit` is red for an unrelated reason and the first GitHub CI run fails.
 **Warning sign:** `parsePitfallsChecklist > returns every checklist line of the section verbatim (>= 16)` failing.
 

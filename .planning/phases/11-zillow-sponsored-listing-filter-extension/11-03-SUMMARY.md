@@ -60,9 +60,9 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1: Synthetic fixtures A-D** - `837092c` (test)
-2. **Task 2 RED: failing detector and fixture tests** - `e0ea581` (test)
-3. **Task 2 GREEN: label-first detector** - `796ce8e` (feat)
+1. **Task 1: Synthetic fixtures A-D** - `9ce84ee` (test)
+2. **Task 2 RED: failing detector and fixture tests** - `8c3b995` (test)
+3. **Task 2 GREEN: label-first detector** - `d5b197e` (feat)
 
 ## Fixture Coverage
 
@@ -88,13 +88,13 @@ Fixtures contain no `src=`, `href=`, `url(` or `http` (grep count 0), and all te
 - **Found during:** Task 1
 - **Issue:** The plan's b-3 was an empty `div`. The live findings show ad slots render a "Loading..." spinner first and then an iframe unit, with no property-card article.
 - **Fix:** b-3 now holds a generic `<div><p>Loading...<svg aria-hidden="true"></svg></p></div>`. A new b-7 (`search-list-third-ad`) holds only `<div><iframe></iframe></div>` (no src). B's `dimmed` list is now b-3, b-6, b-7.
-- **Commit:** 837092c
+- **Commit:** 9ce84ee
 
 **2. [Rule 2 - Correctness] Extra ignored subtrees and tests**
 - `noscript` and `template` are ignored along with the pill, `script` and `style`. Extra tests cover: a wrapper containing an ad slot, a late-filled slot, `optIn: []`, normalized "ADVERTISEMENT:" and "Featured Listing —", pill attributes, document order, and an empty container. The fixtures suite also asserts that ad-slot, label and attribute paths are all exercised.
 
 **3. Commit message trailer removed**
-- The first Task 1 commit (837092c) was amended to 837092c to drop an attribution trailer. Under the project rules, commit messages must not mention assistants. The commit was local and unpushed, and HEAD was verified as mine before amending.
+- The first Task 1 commit (9ce84ee) was amended to 9ce84ee to drop an attribution trailer. Under the project rules, commit messages must not mention assistants. The commit was local and unpushed, and HEAD was verified as mine before amending.
 
 **Total deviations:** 3, all minor. **Impact:** none on scope.
 
@@ -117,4 +117,4 @@ None.
 
 ## Self-Check: PASSED
 
-All 4 created files exist; commits 837092c, e0ea581, 796ce8e are present.
+All 4 created files exist; commits 9ce84ee, 8c3b995, d5b197e are present.

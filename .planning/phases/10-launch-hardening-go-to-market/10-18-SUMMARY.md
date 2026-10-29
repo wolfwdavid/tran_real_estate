@@ -66,16 +66,16 @@ The new /feedback/ page has a topic radio group that defaults from `?portal=`, a
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 (RED) | Failing counter helper tests | 36d0892 | feedback-counter.test.ts |
-| 1 (GREEN) | Counter helpers | 8002fff | feedback-counter.ts, content/forms.ts |
-| 1 | Feedback form and page | c337290 | FeedbackForm.svelte, feedback/+page.svelte, routes.ts, forms.ts |
-| 2 | Footer link and Settings Getting started | 8136db5 | SiteFooter, GettingStartedSection, sections.ts(+test), settings page, ButtonLink, settings-shell.spec |
-| 2 (budget) | Drop svelte/reactivity MediaQuery from the header | 217c5c1 | PortalSwitcher.svelte |
-| extra | Key card links reach Settings from the setup page | b6b4dd5 | ProviderKeyCard, setup page, key-card-additions.test, setup-rentcast.spec |
-| 3 (fix) | Guide heading focus on client-side #get-started arrival | 14b096b | GetStartedGuide.svelte |
-| 3 | Feedback E2E | 30af516 | feedback.spec.ts, feedback.configured.spec.ts |
-| docs | Privacy text names the feedback topic | dc68225 | legal/privacy/+page.svelte |
-| docs | deferred-items: setup-page key card links resolved | 093e176 | deferred-items.md |
+| 1 (RED) | Failing counter helper tests | 1286d2c | feedback-counter.test.ts |
+| 1 (GREEN) | Counter helpers | 9975c17 | feedback-counter.ts, content/forms.ts |
+| 1 | Feedback form and page | 97ee3a9 | FeedbackForm.svelte, feedback/+page.svelte, routes.ts, forms.ts |
+| 2 | Footer link and Settings Getting started | c124919 | SiteFooter, GettingStartedSection, sections.ts(+test), settings page, ButtonLink, settings-shell.spec |
+| 2 (budget) | Drop svelte/reactivity MediaQuery from the header | 3d2d9ff | PortalSwitcher.svelte |
+| extra | Key card links reach Settings from the setup page | e13eae9 | ProviderKeyCard, setup page, key-card-additions.test, setup-rentcast.spec |
+| 3 (fix) | Guide heading focus on client-side #get-started arrival | 403a18b | GetStartedGuide.svelte |
+| 3 | Feedback E2E | cbca279 | feedback.spec.ts, feedback.configured.spec.ts |
+| docs | Privacy text names the feedback topic | 6f84a29 | legal/privacy/+page.svelte |
+| docs | deferred-items: setup-page key card links resolved | bb6b7f9 | deferred-items.md |
 
 ## Data sent by the feedback form (for checking against 10-19's privacy text)
 
@@ -83,7 +83,7 @@ The new /feedback/ page has a topic radio group that defaults from `?portal=`, a
 - **Destination:** exactly one `POST https://api.web3forms.com/submit` (JSON) through the shared `submitOwnerForm`.
 - **Body:** `access_key` (owner key), `subject` "Tran feedback: {Topic label}", `from_name` "Tran Real Estate Tools", `topic`, `message`, `email` only when given (trimmed), `botcheck: false`. No UA, URL, query, referrer or analytics id.
 - **Stored locally:** nothing. The message and email fields have no `name` (a pre-hydration submit cannot put them in the URL).
-- **Privacy text:** the 10-19 paragraph said messages are "labeled with the form it came from, such as which waitlist you joined". Feedback also carries the topic the visitor picked, so I changed the sentence to "...such as which waitlist you joined or which part of Tran your feedback is about." (dc68225). Everything else in the paragraph already matched: what you type goes to Web3Forms, only on submit, and the IP and browser type reach Web3Forms.
+- **Privacy text:** the 10-19 paragraph said messages are "labeled with the form it came from, such as which waitlist you joined". Feedback also carries the topic the visitor picked, so I changed the sentence to "...such as which waitlist you joined or which part of Tran your feedback is about." (6f84a29). Everything else in the paragraph already matched: what you type goes to Web3Forms, only on submit, and the IP and browser type reach Web3Forms.
 
 ## Budget (orchestrator request): `node scripts/assert-budget.mjs <dir> --require-tools`, initial JS KB gz
 
@@ -115,7 +115,7 @@ All three runs print "Budget assertion passed: 5 gated route(s) within 60 KB, 9 
 - `build:root`, `build:sub`, `build:configured`: all exit 0. `pnpm csp:assert`: passed for 45 pages × 3 targets.
 - `grep -o 'feedback/?portal=investor' apps/web/build/investor/index.html`: match.
 - Built `feedback/index.html`: default build has 0 `<textarea>` and 1 "feedback form isn". Configured has 1 `<textarea>` with `maxlength="2000"`, and `botcheck` is its only `name=` attribute on a form field.
-- `playwright test feedback` (first run): 27 passed and 2 failed. The failures were the Settings "Show the tour again" focus test on root and sub: `activeElement.id` was "" and not `get-started-heading`. This was a real bug, fixed in 14b096b (see Deviations). After the fix, `playwright test feedback guide --project=root --project=sub` gave 26 passed. `feedback.configured`, `setup-rentcast`, `settings-shell`, `layout` and `routes-drift` gave 581 passed.
+- `playwright test feedback` (first run): 27 passed and 2 failed. The failures were the Settings "Show the tour again" focus test on root and sub: `activeElement.id` was "" and not `get-started-heading`. This was a real bug, fixed in 403a18b (see Deviations). After the fix, `playwright test feedback guide --project=root --project=sub` gave 26 passed. `feedback.configured`, `setup-rentcast`, `settings-shell`, `layout` and `routes-drift` gave 581 passed.
 - **Full `pnpm test:e2e`** in 8 shards (about 1 to 4 min each): **2129 passed, 4 skipped, 2 failed**. Both failures are known load flakes and passed 3/3 when run alone:
   - `renter-journey.spec.ts:43` (root): the announcer showed "Showing 1 of 10 rentals." where the test expected "...selected.", because two announcements raced. 3/3 passed alone.
   - `investor/autofill.spec.ts:195` (sub): already listed by 10-19. 3/3 passed alone.
@@ -130,7 +130,7 @@ All three runs print "Budget assertion passed: 5 gated route(s) within 60 KB, 9 
 - **Issue:** ProviderKeyCard's "RentCast usage" pointer and the locked-state "Key security" link used `#rentcast-usage` and `#key-security`. Those ids exist only on Settings.
 - **Fix:** Added a `settingsBase` prop. It defaults to `''`, so Settings keeps its in-page links. The setup page passes `resolve('/settings/')`.
 - **Tests:** setup-rentcast.spec.ts now checks that the pointer is `…/settings/#rentcast-usage` and that it returns 200. key-card-additions.test.ts checks both `{settingsBase}#…` hrefs and that no bare `href="#rentcast-usage|key-security"` is left. deferred-items.md marks the entry RESOLVED.
-- **Commits:** b6b4dd5, 093e176.
+- **Commits:** e13eae9, bb6b7f9.
 
 ### Auto-fixed Issues
 
@@ -139,9 +139,9 @@ All three runs print "Budget assertion passed: 5 gated route(s) within 60 KB, 9 
 - **Issue:** SvelteKit's `reset_focus` runs before the `afterNavigate` callbacks. It queues a `setTimeout` that re-applies the fragment with `location.replace('#get-started')`. The guide focused its h2 after a microtask tick, and then the fragment re-apply moved focus to the body. The hero same-page link and full page loads were not affected, so 10-15's specs never saw it. This is the Settings → landing path that the UI-SPEC "Focus management" table requires.
 - **Fix:** In `afterNavigate`, focus the heading inside a `setTimeout`, which is queued after the router's.
 - **Evidence:** Before the fix the test failed 2/2. After the fix, feedback plus guide passed 26/26 and the full E2E was green for both.
-- **Commit:** 14b096b.
+- **Commit:** 403a18b.
 
-**4. [Rule 3 - Blocking/budget] Tool pages at 44 B headroom on build-configured.** Fixed by the PortalSwitcher matchMedia change (217c5c1). Numbers are in the budget section above. The menu still closes when the viewport crosses 640px. layout.spec "resizing to 640px closes the panel" passed in the targeted run and in the full E2E.
+**4. [Rule 3 - Blocking/budget] Tool pages at 44 B headroom on build-configured.** Fixed by the PortalSwitcher matchMedia change (3d2d9ff). Numbers are in the budget section above. The menu still closes when the viewport crosses 640px. layout.spec "resizing to 640px closes the panel" passed in the targeted run and in the full E2E.
 
 **5. Registry tests updated for the shipped slot.** sections.test.ts asserted that slot 8 was unavailable, and settings-shell.spec asserted that `id="getting-started"` was absent. Both were placeholder assertions that this plan was meant to flip. They now expect 8 sections, in order, with Getting started last.
 
@@ -164,4 +164,4 @@ None. The coming-soon panel is the intended state when the build has no owner ke
 ## Self-Check: PASSED
 
 - FOUND: all 7 created files and 16 modified files listed above
-- FOUND: commits 36d0892, 8002fff, c337290, 8136db5, 217c5c1, b6b4dd5, 14b096b, 30af516, dc68225, 093e176
+- FOUND: commits 1286d2c, 9975c17, 97ee3a9, c124919, 3d2d9ff, e13eae9, 403a18b, cbca279, 6f84a29, bb6b7f9

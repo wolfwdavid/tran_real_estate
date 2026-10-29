@@ -71,7 +71,7 @@ The first-run journey is now proven end to end on both bases: guide focus and pe
 - A debug run held `.js` requests for 1.5 s after load. Clicking the Agent tile and then the hero link ended with storage `{"status":"touring","portal":"agent","step":1}` after the hero had written `{"status":"new","step":0}`.
 - The regression tests `a slow tour load never overrides a later hero Show me around / Hide this guide` failed **4/4 (root + sub) on the pre-fix build** and passed after the fix.
 
-**Fix (commit bea3f1a), latest request wins:**
+**Fix (commit 43fb1f5), latest request wins:**
 - A `version` counter is bumped by every `save()` and by each `go()` request. `go()` captures `++version` before the await and returns without writing if anything changed meanwhile. So a later Show me around, Hide, or another tile wins.
 - The stored-tour resume in `onMount` is guarded the same way.
 - A second, smaller source of flakiness: the prerendered tiles are real buttons with no handler before hydration. The guide now sets `data-ready` once `onMount` ran, and both guide.spec.ts and onboarding.spec.ts wait on it. guide.spec.ts:107 also now waits for the step-1 heading before clicking the hero link, so it really tests "reset from a tour".
@@ -104,7 +104,7 @@ The first-run journey is now proven end to end on both bases: guide focus and pe
 - **Found during:** Task 1 (orchestrator asked to root-cause guide.spec.ts:107)
 - **Fix:** latest-request-wins `version` guard in `go()` and the onMount resume; `data-ready` hydration marker
 - **Files modified:** apps/web/src/lib/components/onboarding/GetStartedGuide.svelte, apps/web/tests/e2e/guide.spec.ts
-- **Commit:** bea3f1a
+- **Commit:** 43fb1f5
 
 **2. [Scope] setup-rentcast.spec.ts already existed (10-16)**
 - I extended it rather than recreating it. The plan items that were already covered were kept, and the missing items were added (catch-all recorder, `ol > li` count, status bar absence, per-portal sample hand-off, finish-row hand-off).
@@ -115,9 +115,9 @@ None.
 
 ## Commits
 
-- bea3f1a fix(10-20): a slow tour load can no longer override a later guide action
-- d98a485 test(10-20): onboarding guide E2E
-- 24442b8 test(10-20): RentCast setup and sample hand-off E2E
-- 266bc64 test(10-20): landing CLS budget
+- 43fb1f5 fix(10-20): a slow tour load can no longer override a later guide action
+- 57bc358 test(10-20): onboarding guide E2E
+- 5505f11 test(10-20): RentCast setup and sample hand-off E2E
+- e6b5357 test(10-20): landing CLS budget
 
 ## Self-Check: PASSED

@@ -43,8 +43,8 @@ completed: 2026-10-13
 
 | Task | Name | Commit |
 | ---- | ---- | ------ |
-| 1 | SeoHead on marketing templates; noindex on app, print, public and error pages | dc94b27 |
-| 2 | E2E proof of head tags and SEO file serving (seo.spec.ts) | 7c73a3f |
+| 1 | SeoHead on marketing templates; noindex on app, print, public and error pages | 8eb7330 |
+| 2 | E2E proof of head tags and SEO file serving (seo.spec.ts) | 4dcfd62 |
 
 Titles and descriptions are unchanged (landing title verbatim, `audience.docTitle`/`description`, `docTitle`/`description`).
 
@@ -69,7 +69,7 @@ Titles and descriptions are unchanged (landing title verbatim, `audience.docTitl
 - **Found during:** Task 1
 - **Issue:** The plan listed only (app), (print) and the error page, but the 10-10 handoff showed assert-seo also flagging (public) (agent/inquire/), which is not in the (marketing)-only sitemap and has no SeoHead.
 - **Fix:** Added the same `<meta name="robots" content="noindex" />` head block to `(public)/+layout.svelte`.
-- **Commit:** dc94b27
+- **Commit:** 8eb7330
 
 Extra assertions in seo.spec.ts beyond the plan: meta description count 1, no robots meta on marketing pages, og:url equals canonical, and no canonical on app/print pages.
 
@@ -84,4 +84,4 @@ None.
 
 ## Self-Check: PASSED
 - FOUND: apps/web/tests/e2e/seo.spec.ts
-- FOUND: dc94b27, 7c73a3f
+- FOUND: 8eb7330, 4dcfd62

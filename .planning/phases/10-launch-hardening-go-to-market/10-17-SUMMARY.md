@@ -56,12 +56,12 @@ Each audience page now has a one-field waitlist. When the owner's Web3Forms key 
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 (RED) | Failing form gate and owner sink tests | 96706ee | form-gate.test.ts, owner-forms.test.ts |
-| 1 (GREEN) | Form gates, owner sink and form copy | 04f3912 | form-gate.ts, owner-forms.ts, web3forms-sink.ts, content/forms.ts |
-| 2 | Per-portal waitlist on audience pages | 52f62da | ComingSoonPanel, FormSuccess, FormError, WaitlistForm, AudiencePage |
-| 2 (fix) | Pre-hydration submit cannot leak the email into the URL; data-ready marker | 7f0c355 | WaitlistForm.svelte |
-| 3 | Waitlist E2E | 6890f40 | waitlist.spec.ts, waitlist.configured.spec.ts |
-| docs | Contract map entry for postWeb3Forms / owner forms | 413e47a | 10-CONTRACT-MAP.md |
+| 1 (RED) | Failing form gate and owner sink tests | df65cc5 | form-gate.test.ts, owner-forms.test.ts |
+| 1 (GREEN) | Form gates, owner sink and form copy | 4cfb461 | form-gate.ts, owner-forms.ts, web3forms-sink.ts, content/forms.ts |
+| 2 | Per-portal waitlist on audience pages | cc4674a | ComingSoonPanel, FormSuccess, FormError, WaitlistForm, AudiencePage |
+| 2 (fix) | Pre-hydration submit cannot leak the email into the URL; data-ready marker | 3743a4a | WaitlistForm.svelte |
+| 3 | Waitlist E2E | 799b6e5 | waitlist.spec.ts, waitlist.configured.spec.ts |
+| docs | Contract map entry for postWeb3Forms / owner forms | ec9641e | 10-CONTRACT-MAP.md |
 
 ## Data sent by the waitlist
 
@@ -103,7 +103,7 @@ Use this to check the 10-19 privacy text.
 - **Found during:** Task 3, while writing the hydration wait
 - **Issue:** The prerendered `<form novalidate>` has no action. If a visitor submits before hydration, the browser does a native GET to the same page. With `name="email"`, that would put `?email=...` into the URL and browser history.
 - **Fix:** Removed `name` from the email input; the value is bound, so it was never needed. Added a `data-ready` hydration marker that specs wait on. The happy-path spec also asserts `location.search === ''` after a submit.
-- **Commit:** 7f0c355
+- **Commit:** 3743a4a
 
 **2. [Rule 1 - Bug] `Portal` derived variable collided with the imported `Portal` type**
 - Renamed it to `portalName` (svelte-check parse error). Fixed before the Task 2 commit.
@@ -124,4 +124,4 @@ None. The coming-soon panel is the intended unset state, not a stub.
 ## Self-Check: PASSED
 
 - FOUND: all 11 created files and 3 modified files listed above
-- FOUND: commits 96706ee, 04f3912, 52f62da, 7f0c355, 6890f40, 413e47a
+- FOUND: commits df65cc5, 4cfb461, cc4674a, 3743a4a, 799b6e5, ec9641e

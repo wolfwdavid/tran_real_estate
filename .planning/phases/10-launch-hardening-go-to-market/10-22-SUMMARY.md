@@ -61,10 +61,10 @@ requirements: [GTM-01, GTM-02, GTM-03, GTM-04]
 
 | Task | Commit | Message |
 |------|--------|---------|
-| 1 RED | 388998e | test(10-22): add failing PITFALLS coverage tests |
-| 1 GREEN | 5c5411c | feat(10-22): PITFALLS evidence map |
-| 2 RED | 830d99a | test(10-22): add failing launch audit renderer tests |
-| 2 GREEN | d8de263 | feat(10-22): launch audit generator |
+| 1 RED | 2d44a51 | test(10-22): add failing PITFALLS coverage tests |
+| 1 GREEN | 7ae0c8f | feat(10-22): PITFALLS evidence map |
+| 2 RED | 9b6ddb8 | test(10-22): add failing launch audit renderer tests |
+| 2 GREEN | 14ea9ff | feat(10-22): launch audit generator |
 
 ## Verification (real output)
 
@@ -105,7 +105,7 @@ requirements: [GTM-01, GTM-02, GTM-03, GTM-04]
 - **Found during:** Task 2 GREEN.
 - **Issue:** The keyless Summary row correctly requires the existing `axe reports no WCAG A/AA violations at 375px on ...` group (a11y.spec.ts), but the green fixture had no such test.
 - **Fix:** Added one 375px title to the fixture. The generator was not changed.
-- **Commit:** d8de263
+- **Commit:** 14ea9ff
 
 ### Additions within scope
 - Beyond the five evidence files the plan named (csp, seo, budget, banned, deps), the generator also writes `docs/audit/a11y.txt`, `disclaimers.txt` and `pitfalls.txt`. This gives every Summary row an evidence path under `docs/audit/`, as UI-SPEC requires.
@@ -128,4 +128,4 @@ None. The Sign-off lines (`Audited by:`, `Date:`, `Notes:`) are left blank on pu
 ## Self-Check: PASSED
 
 - FOUND: scripts/launch-audit.mjs, scripts/launch-audit.test.ts, scripts/lib/pitfalls-evidence.mjs, package.json (audit:launch)
-- FOUND commits: 388998e, 5c5411c, 830d99a, d8de263
+- FOUND commits: 2d44a51, 7ae0c8f, 9b6ddb8, 14ea9ff

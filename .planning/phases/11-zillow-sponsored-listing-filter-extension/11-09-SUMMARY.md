@@ -54,8 +54,8 @@ The Svelte 5 toolbar popup is built to the approved UI-SPEC. It has a persisted 
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 | Popup entrypoint, deps wiring, five UI-SPEC components | 06f7d7a | popup/index.html, main.ts, app.css, deps.ts, App.svelte, components/*.svelte |
-| 2 | Browser-mode axe test across all popup states | 6cb04ba | vitest.browser.config.ts, tests/browser/popup.browser.test.ts, .gitignore |
+| 1 | Popup entrypoint, deps wiring, five UI-SPEC components | 63d160e | popup/index.html, main.ts, app.css, deps.ts, App.svelte, components/*.svelte |
+| 2 | Browser-mode axe test across all popup states | 1d458d2 | vitest.browser.config.ts, tests/browser/popup.browser.test.ts, .gitignore |
 
 ## Verification
 
@@ -76,13 +76,13 @@ The Svelte 5 toolbar popup is built to the approved UI-SPEC. It has a persisted 
 - **Found during:** Task 2 (the mutation runs)
 - **Issue:** Failing browser tests write screenshots to `apps/extension/.vitest-attachments/`, which was untracked.
 - **Fix:** Added `apps/extension/.vitest-attachments/` next to the existing `apps/web` entry in the root `.gitignore`.
-- **Commit:** 6cb04ba
+- **Commit:** 1d458d2
 
 **2. [Rule 2 - A11y] State word aria-hidden; no disable during toggle**
 - **Found during:** Task 1
 - **Issue:** The `<label>` wraps the On/Off word, so the switch name would be "Dim sponsored listings On", and screen readers would hear the state twice. Disabling the input while a write is pending would also drop keyboard focus.
 - **Fix:** Put `aria-hidden="true"` on the state word, and made the toggle optimistic with a reload instead of disabling the input.
-- **Commit:** 06f7d7a
+- **Commit:** 63d160e
 
 ### Deferred (out of scope, logged in deferred-items.md for 11-10)
 

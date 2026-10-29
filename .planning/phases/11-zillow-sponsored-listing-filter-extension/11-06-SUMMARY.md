@@ -69,10 +69,10 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1 RED: failing extension network-ban lint tests**: `8932c5d` (test)
-2. **Task 1 GREEN: ESLint zero-network ban for extension source**: `ec27890` (feat)
-3. **Task 2 RED: failing extension oracle tests**: `2ec8a38` (test)
-4. **Task 2 GREEN: extension manifest, bundle and zip oracle**: `18d3d2c` (feat)
+1. **Task 1 RED: failing extension network-ban lint tests**: `22a9436` (test)
+2. **Task 1 GREEN: ESLint zero-network ban for extension source**: `d5a1ed2` (feat)
+3. **Task 2 RED: failing extension oracle tests**: `3c554c5` (test)
+4. **Task 2 GREEN: extension manifest, bundle and zip oracle**: `56e9dc1` (feat)
 
 ## Files Created/Modified
 
@@ -93,18 +93,18 @@ See key-decisions in the frontmatter.
 - **Found during:** Task 2
 - **Issue:** The plan's `FORBIDDEN_KEYS` is a denylist. An unlisted surface (`side_panel`, `options_page`, `content_scripts` world changes via new keys) would pass silently.
 - **Fix:** Added `ALLOWED_KEYS` with a planted `side_panel` test. The first real WXT build uses exactly this key set, so the change carries no false-positive risk today.
-- **Commit:** `18d3d2c`
+- **Commit:** `56e9dc1`
 
 **2. [Rule 1 - Bug] A vacuous test, found by mutating the oracle**
 - **Found during:** Task 2 oracle mutation pass
 - **Issue:** The "`<all_urls>` anywhere in the manifest text" test planted the value in `action.default_title`. The `default_title` check echoes that value, so the substring assertion still passed with the text scan removed.
 - **Fix:** The test now asserts the exact message `manifest.json: contains <all_urls>`. Re-mutating the oracle turns it red.
-- **Commit:** `18d3d2c`
+- **Commit:** `56e9dc1`
 
 **3. [Rule 3 - Blocking] The root list was named `restrictedSyntax`, not `noFetch`**
 - **Issue:** The plan's interface described a `noFetch` array. The real config had one `restrictedSyntax` array holding both fetch selectors and the `$effect` gateway rule.
 - **Fix:** Split it into `noFetch` (the two fetch selectors) and `restrictedSyntax = [...noFetch, $effect rule]`. Web behaviour is unchanged: the full existing lint suite passes.
-- **Commit:** `ec27890`
+- **Commit:** `d5a1ed2`
 
 **4. Extra coverage beyond the behavior list:** lint tests for `WebTransport`, `.js` coverage, EXT-03 message text and web non-leak. Oracle tests for `run_at`, `default_popup`, a missing content-script file on disk, a remote script URL in HTML, a token in `background.js`, the allowlist lookalike host, a missing manifest.json, a non-zip file, a nested zip via the CLI, and CLI usage (exit 2).
 
@@ -113,7 +113,7 @@ See key-decisions in the frontmatter.
 ## Issues Encountered
 
 - A mid-run `pnpm lint` failed on another wave-2 agent's in-progress file (`apps/extension/tests/reveal-host.test.ts`, Prettier). I did not touch it. By the end of the plan, the full `corepack pnpm lint` passed (exit 0).
-- An earlier commit was amended only to drop a trailer line before any other agent committed on top of it. Its final hash is `8932c5d`.
+- An earlier commit was amended only to drop a trailer line before any other agent committed on top of it. Its final hash is `22a9436`.
 
 ## Known Stubs
 
@@ -137,4 +137,4 @@ Plan 11-10 runs `node scripts/assert-extension.mjs apps/extension/.output/chrome
 
 ## Self-Check: PASSED
 
-All 4 key files exist; commits 8932c5d, ec27890, 2ec8a38, 18d3d2c are present.
+All 4 key files exist; commits 22a9436, d5a1ed2, 3c554c5, 56e9dc1 are present.

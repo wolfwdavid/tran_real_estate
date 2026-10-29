@@ -50,7 +50,7 @@ completed: 2026-10-29
 
 **launch-audit now reads the archived v1.0 PITFALLS checklist through one `PITFALLS_DOC` constant (11 failing tests fixed, `pnpm test:unit` green at 6672/6672), and a simple-git-hooks commit-msg hook rejects any model co-author trailer, anthropic noreply address, "Generated with" footer, "Claude Code" mention or robot emoji before the commit is created.**
 
-> Hash note: the hashes below will be remapped by 12-02. The history rewrite changes every commit after the first trailered one (fc71580, 2026-10-13), and that includes this plan's commits. Subjects stay the same; look commits up by subject after the rewrite.
+> Hash note: the hashes below will be remapped by 12-02. The history rewrite changes every commit after the first trailered one (7f14834, 2026-10-13), and that includes this plan's commits. Subjects stay the same; look commits up by subject after the rewrite.
 
 ## Performance
 
@@ -69,8 +69,8 @@ completed: 2026-10-29
 
 ## Task Commits
 
-1. **Task 1: Repoint the launch audit at the archived v1.0 PITFALLS checklist** - `01072e2` (fix)
-2. **Task 2: Commit-message hygiene check with a commit-msg hook** - `ac55917` (feat)
+1. **Task 1: Repoint the launch audit at the archived v1.0 PITFALLS checklist** - `8817d7f` (fix)
+2. **Task 2: Commit-message hygiene check with a commit-msg hook** - `cdc9872` (feat)
 
 Neither commit has a trailer or mentions an assistant (`git log -2 --format=%B | grep -ciE "claude|anthropic|co-authored-by"` = 0).
 
@@ -95,14 +95,14 @@ See `key-decisions` in the frontmatter.
 - **Issue:** The comment the plan specified contained `.planning/research/PITFALLS.md`. That made the criterion "`grep -n "\.planning/research/PITFALLS"` prints nothing" fail.
 - **Fix:** Reworded it to "The v1.1 research overwrote the live research PITFALLS.md on 2026-10-29; the v1.0 copy is archived here."
 - **Files modified:** scripts/launch-audit.mjs
-- **Commit:** 01072e2
+- **Commit:** 8817d7f
 
 **2. [Rule 2 - Correctness] Scissors-line handling in --message-file**
 - **Found during:** Task 2
 - **Issue:** With `git commit -v`, git puts the staged diff below a `# --- >8 ---` line in the message file. Diff lines do not start with `#`, so dropping `#` lines alone would scan diff content. A diff of this very script would then reject a clean commit.
 - **Fix:** `stripCommentLines` cuts at the scissors line before dropping `#` lines. A test covers it.
 - **Files modified:** scripts/commit-hygiene.mjs, scripts/commit-hygiene.test.ts
-- **Commit:** ac55917
+- **Commit:** cdc9872
 
 **3. [Minor] Header comment wording**
 - The plan's header comment said "assistant attribution" and "LLM providers". To follow the executor rule that added comments never mention assistants, the comment now says "tool attribution trailers" and "model providers". The stderr message is exactly the plan's text.

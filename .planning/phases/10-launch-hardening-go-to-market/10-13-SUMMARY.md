@@ -65,16 +65,16 @@ The /tools/ hub and the cap rate, cash-on-cash and DSCR calculator pages now run
 
 | # | Task | Commit | Notes |
 |---|------|--------|-------|
-| 1 | ToolPage frame, Breadcrumb, ToolCard | 4637d08 | |
-| 2a | Budget work: per-tool copy, og.ts, inline icons | 3af2f2c | Required by Task 2's budget gate |
-| 2b | Hub, three calculator routes, TOOL_ROUTES | 578032f | |
-| - | Deferred items log | 37af956 | |
+| 1 | ToolPage frame, Breadcrumb, ToolCard | 4fdbc4f | |
+| 2a | Budget work: per-tool copy, og.ts, inline icons | 9dd42c7 | Required by Task 2's budget gate |
+| 2b | Hub, three calculator routes, TOOL_ROUTES | 890f0ae | |
+| - | Deferred items log | 26c7b1e | |
 
 ## Per-route initial JS (gz, `node scripts/assert-budget.mjs <dir> --require-tools`)
 
-All the numbers below come from builds of base `0905979` plus 10-13's changes, later committed as 3af2f2c and 578032f. That base already includes 10-19's beacon (7da72e6) and 10-17's waitlist (52f62da).
+All the numbers below come from builds of base `d681a79` plus 10-13's changes, later committed as 9dd42c7 and 890f0ae. That base already includes 10-19's beacon (f716627) and 10-17's waitlist (cc4674a).
 
-| Route | First measure (Task 2 as planned, base 52f62da) | After tools.ts split + og.ts | Final `build/` | Final `build-sub/` | Final `build-configured/` (analytics on) |
+| Route | First measure (Task 2 as planned, base cc4674a) | After tools.ts split + og.ts | Final `build/` | Final `build-sub/` | Final `build-configured/` (analytics on) |
 |---|---|---|---|---|---|
 | tools/ | 55.4 | 53.1 | **51.8 PASS** | 51.8 PASS | 52.4 PASS |
 | tools/cap-rate/ | 63.0 FAIL | 61.7 FAIL | **59.8 PASS** | 59.8 PASS | **60.3 FAIL** |
@@ -84,7 +84,7 @@ All the numbers below come from builds of base `0905979` plus 10-13's changes, l
 | for-* (report only) | 100.3 | 96.3 | 96.3 | - | 96.9 |
 | legal/terms (report only) | 54.2 | 50.2 | 50.2 | - | 50.8 |
 
-An intermediate step (inline icons, base 0905979) measured 60.5 / 60.6 / 60.6. The final step moved the hub-only data out and inlined the CTAs.
+An intermediate step (inline icons, base d681a79) measured 60.5 / 60.6 / 60.6. The final step moved the hub-only data out and inlined the CTAs.
 
 **Budget risk:** the calculator pages pass on `build/` with only **0.1-0.2 KB** to spare, and the analytics-configured build is **0.3-0.5 KB over**. The difference is the root-layout beacon. Any new layout JS, or the 10-14 affordability page, will tip them over. Logged in deferred-items.md with a suggested fix: load the beacon with a dynamic `import()` after hydration, and/or run the gate on `build-configured`. The budget was not raised.
 
@@ -113,8 +113,8 @@ Where the calculator page bytes go: about 48 KB gz is the shared layout and Kit 
 
 ## Deviations from Plan
 
-1. **[Rule 3 - Blocking] Budget split (handoff-directed).** Task 2's budget gate failed at 63 KB. Per the 10-12 handoff I split `content/tools.ts` into per-tool modules and kept `tools.ts` as a barrel. I also moved the default OG data to `content/og.ts`, inlined the calculator-page Lucide icons (new `ToolIcon.svelte`, which also touches 10-12's CalculatorShell, EmptyResult and NumberField), and inlined the CTA styles in ToolPage instead of `ButtonLink`. Commit 3af2f2c.
-2. **Task 1 typecheck order.** `resolve('/tools/...')` does not typecheck until the routes exist, so Task 1's `pnpm check` was run once the Task 2 route files were in place. The Task 1 commit (4637d08) on its own does not pass svelte-check. `/tools/affordability/` is built from `resolve('/tools/')` + `affordability/` because that route is 10-14's.
+1. **[Rule 3 - Blocking] Budget split (handoff-directed).** Task 2's budget gate failed at 63 KB. Per the 10-12 handoff I split `content/tools.ts` into per-tool modules and kept `tools.ts` as a barrel. I also moved the default OG data to `content/og.ts`, inlined the calculator-page Lucide icons (new `ToolIcon.svelte`, which also touches 10-12's CalculatorShell, EmptyResult and NumberField), and inlined the CTA styles in ToolPage instead of `ButtonLink`. Commit 9dd42c7.
+2. **Task 1 typecheck order.** `resolve('/tools/...')` does not typecheck until the routes exist, so Task 1's `pnpm check` was run once the Task 2 route files were in place. The Task 1 commit (4fdbc4f) on its own does not pass svelte-check. `/tools/affordability/` is built from `resolve('/tools/')` + `affordability/` because that route is 10-14's.
 3. **Breadcrumb markup.** The separators sit inside `aria-hidden` `<li>`s rather than as bare `<ol>` children, which keeps the HTML valid.
 4. **Process violation (reported honestly):** on my second build attempt, the lock-wait loop timed out without acquiring `.tools/build.lock` (held by 10-19), and the script went on to run `build:root` anyway (~16:10-16:21). That build may have overwritten 10-19's `apps/web/build` mid-run. All later builds were gated on a successful acquire.
 
@@ -125,4 +125,4 @@ Where the calculator page bytes go: about 48 KB gz is the shared layout and Kit 
 ## Self-Check: PASSED
 
 - Files: ToolPage, Breadcrumb, ToolCard, ToolIcon, content/tools/*.ts, content/og.ts and the 4 route files all exist.
-- Commits: 4637d08, 3af2f2c, 578032f and 37af956 are all in `git log`.
+- Commits: 4fdbc4f, 9dd42c7, 890f0ae and 26c7b1e are all in `git log`.

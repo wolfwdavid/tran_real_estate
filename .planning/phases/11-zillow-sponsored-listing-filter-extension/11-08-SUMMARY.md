@@ -73,8 +73,8 @@ completed: 2026-10-25
 
 ## Task Commits
 
-1. **Task 1: Idempotent reconcile**: `32a4090` (test, RED), `5b0d466` (feat, GREEN)
-2. **Task 2: Scoped observer + filter controller**: `cb26736` (test, RED), `8b9974c` (feat, GREEN; includes 3 extra controller tests added after mutation testing)
+1. **Task 1: Idempotent reconcile**: `31c89af` (test, RED), `736d17c` (feat, GREEN)
+2. **Task 2: Scoped observer + filter controller**: `d5af283` (test, RED), `10d997a` (feat, GREEN; includes 3 extra controller tests added after mutation testing)
 
 ## Verification
 
@@ -100,14 +100,14 @@ completed: 2026-10-25
 - **Issue:** `cloneNode(true)` on a marked item copies the `<tran-slf-pill>` element but not its closed shadow root or WeakMap registration. `ensurePill` then added a second host, and `removePill` could never remove the stray.
 - **Fix:** `reconcile.ts` drops unregistered pill-tag children (`pillButton(child) === null`) in mark, unmark and `unmarkAll`, using `removeChild`. Live pills are still removed only through `removePill`.
 - **Files modified:** apps/extension/src/lib/reconcile.ts
-- **Commit:** 5b0d466
+- **Commit:** 736d17c
 
 **2. [Rule 2 - Missing critical] Post-navigation container verification and mutation-gap tests**
 - **Found during:** Task 2 mutation sanity
 - **Issue:** the plan's single re-acquire at navigation debounce misses a container that React swaps after 150 ms. A detached container's observer never fires again, so the filter would silently stop. The `isConnected` branch was also untested.
 - **Fix:** after a navigation, the controller runs up to 5 extra container checks (250 ms doubling, reusing the retry loop). Three tests were added: late swap after navigation, swap during a mutation burst, and `rescan()` re-acquire.
 - **Files modified:** apps/extension/src/lib/filter.ts, apps/extension/tests/filter.test.ts
-- **Commit:** 8b9974c
+- **Commit:** 10d997a
 
 **Total deviations:** 2. **Impact:** none on scope or interfaces.
 
@@ -122,4 +122,4 @@ None. The content-script entrypoint (`zillow.content/index.ts`) is still the 11-
 ## Self-Check: PASSED
 
 - FOUND: apps/extension/src/lib/reconcile.ts, observe.ts, filter.ts and the three test files
-- FOUND commits: 32a4090, 5b0d466, cb26736, 8b9974c
+- FOUND commits: 31c89af, 736d17c, d5af283, 10d997a

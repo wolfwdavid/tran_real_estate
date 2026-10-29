@@ -56,8 +56,8 @@ metrics:
 
 | Task | Name | Commits |
 | ---- | ---- | ------- |
-| 1 | Typed calculator content module | ad30742 (RED), d977415 (GREEN) |
-| 2 | SeoHead, sitemap/robots endpoints and share-card endpoints | 7553385 (RED), 0aa8a7e (GREEN) |
+| 1 | Typed calculator content module | 9fa4659 (RED), b51524f (GREEN) |
+| 2 | SeoHead, sitemap/robots endpoints and share-card endpoints | 40c7473 (RED), 6c3d3ce (GREEN) |
 
 ## Verification (real output)
 
@@ -85,7 +85,7 @@ metrics:
 **1. [Rule 3 - Blocking] Buffer is not a BodyInit**
 - **Found during:** Task 2 (`pnpm check`: 6 errors "Buffer<ArrayBufferLike> is not assignable to BodyInit")
 - **Fix:** `new Response(new Uint8Array(renderOgCard(card).asPng()), ...)` in each og endpoint
-- **Commit:** 0aa8a7e
+- **Commit:** 6c3d3ce
 
 **2. [Plan adjustment] Cash-on-cash card title break**
 - The plan listed ['Cash-on-cash return', 'calculator']. The 10-07 handoff requires ['Cash-on-cash', 'return calculator'] because the single line overlaps the mark disc. The 10-07 version is used, and a test pins it.
@@ -109,4 +109,4 @@ None. The six share cards, sitemap and robots file are fully generated. SeoHead 
 ## Self-Check: PASSED
 
 - All 13 created files are tracked (git ls-files = 13) and og-card.server.ts is committed
-- Commits ad30742, d977415, 7553385, 0aa8a7e exist in `git log`
+- Commits 9fa4659, b51524f, 40c7473, 6c3d3ce exist in `git log`

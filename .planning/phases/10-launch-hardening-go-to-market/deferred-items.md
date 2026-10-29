@@ -5,7 +5,7 @@
 - **Duplicate robots meta on agent/inquire/** (root and sub): `agent-inquire.spec.ts:48` fails on
   `meta[name="robots"][content="noindex"]` count 2. The built page has two identical
   `<meta name="robots" content="noindex"/>` tags: one from the (public) group layout noindex added
-  in 10-11 (dc94b27) and one from the inquiry page's own head. Not caused by 10-19 (no head or
+  in 10-11 (8eb7330) and one from the inquiry page's own head. Not caused by 10-19 (no head or
   (public) file touched). Fix: drop one of the two tags.
 - **Load flakes seen in the full E2E run, both passed 3/3 in isolation:**
   `investor/autofill.spec.ts:195` (root) and `csp.spec.ts:46` (sub, transition toggle not visible).
@@ -21,7 +21,7 @@
   is 10-19's file and was being edited concurrently.
 - **(10-13 run) `agent-inquire.spec.ts:48` fails on root and sub, deterministic:** two
   `meta[name="robots"][content="noindex"]` on /agent/inquire/ — one from the `(public)` group layout
-  (added by 10-11, dc94b27) and one from the page itself (08-13). Remove the page-level tag. Out of
+  (added by 10-11, 8eb7330) and one from the page itself (08-13). Remove the page-level tag. Out of
   10-13 scope.
 - **(10-15 run) More load flakes in the sharded full E2E, all passed in isolation:**
   `investor/buybox.spec.ts:217` (root and sub, toHaveCount) and `renter-saved.spec.ts:83` (root,
@@ -29,12 +29,12 @@
 
 ## Inter-wave fix (after wave 6)
 
-- **RESOLVED: duplicate robots noindex on /agent/inquire/** (commit 50a2fbc). Removed the page-level
+- **RESOLVED: duplicate robots noindex on /agent/inquire/** (commit 2c1857c). Removed the page-level
   `<meta name="robots" content="noindex" />`; the `(public)` group layout is the single source. Title,
   referrer and description stay on the page. Built `agent/inquire/index.html` now has 1 noindex in
   both `build/` and `build-sub/`. `playwright agent-inquire.spec.ts seo.spec.ts --project=root
   --project=sub`: 54 passed.
-- **RESOLVED: tool pages over 60 KB gz on `build-configured/`** (commit f4ef7bb). Budget not raised.
+- **RESOLVED: tool pages over 60 KB gz on `build-configured/`** (commit 241feeb). Budget not raised.
   - Beacon: the root layout makes one lazy `import('$lib/analytics/boot')` inside the existing
     build-time gate, started from `afterNavigate` (after hydration). `boot.ts` holds the referrer/width
     logic and reads the defines directly, because the old dynamic `import('$lib/site')` made the
@@ -79,7 +79,7 @@
   repeats (times out clicking "Agent Start the tour"); same test 10-13/10-14 logged, for 10-23.
   Unit: `ResultsView.browser.test.ts` and `scripts/precommit.test.ts` failed once in the full
   `test:unit` run and passed in isolation (known, see handoffs).
-- **RESOLVED by 10-18 (b6b4dd5): (10-16) ProviderKeyCard in-page links on /setup/rentcast/.** The card
+- **RESOLVED by 10-18 (e13eae9): (10-16) ProviderKeyCard in-page links on /setup/rentcast/.** The card
   now takes a `settingsBase` prefix; /setup/rentcast/ passes `resolve('/settings/')`, Settings keeps
   in-page fragments. E2E: setup-rentcast.spec.ts asserts the pointer is `…/settings/#rentcast-usage`
   and resolves with 200. Original note: the card is embedded unchanged, so
@@ -92,14 +92,14 @@
 - **FIXED, real race:** `renter-journey.spec.ts:43`. The renter search's debounced filter summary
   ("Showing N of M rentals.", 500 ms after the last filter change) could land after a newer
   announcement (a selected map pin) and replace it in the polite live region. The announcer now keeps
-  a sequence and the summary drops itself when anything newer was announced (0ad7c49, unit test
+  a sequence and the summary drops itself when anything newer was announced (616c052, unit test
   reproduces it RED first).
 - **FIXED, test waits:** `ResultsView.browser.test.ts` (a 1 s default poll for two chained lazy
   imports; reproduced with a 1.5 s delay on the leaflet import; plus a 5 s default test timeout vs
-  3.9 s measured under full load) 315aed7; ReDoS budget tests judge the fastest of 5 runs (reproduced:
-  one 2-3 ms scan measured 153 ms under 40 CPU burners; budgets unchanged) 2f8c5d7; `precommit.test.ts`
+  3.9 s measured under full load) 5fd93cc; ReDoS budget tests judge the fastest of 5 runs (reproduced:
+  one 2-3 ms scan measured 153 ms under 40 CPU burners; budgets unchanged) ff20762; `precommit.test.ts`
   HEAD-comparison race with concurrent committers replaced by an author check, hook work halved
-  b9895f4; `studio/boundaries.test.ts` explicit 30 s limit for a synchronous full-tree walk e8d6939.
+  e3a9e2a; `studio/boundaries.test.ts` explicit 30 s limit for a synchronous full-tree walk 1ad1efd.
 - **OPEN, product decision (orchestrator): `renter-saved.spec.ts:83`.** Failed once in 10 runs under
   40 CPU burners: after the due reload the row still said "Checked 1 day ago" (the check-on-open pass
   never ran). Probe (scratch spec, not committed): holding `navigator.locks` 'tran-alerts' for 3 s from

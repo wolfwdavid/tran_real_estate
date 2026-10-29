@@ -55,8 +55,8 @@ metrics:
 
 | # | Task | Commits |
 |---|------|---------|
-| 1 | Setup params helper (TDD) and /setup/rentcast/ route | 93eab8a (RED), 6df26f7 (GREEN), a7deddc (hasSavedCap), 711b155 (page, routes, guide link, E2E) |
-| 2 | Sample hand-off in the (app) layout and DataStatusBar rule | d12c5a4 |
+| 1 | Setup params helper (TDD) and /setup/rentcast/ route | be0f9be (RED), 9b328e9 (GREEN), ea18300 (hasSavedCap), 73dc569 (page, routes, guide link, E2E) |
+| 2 | Sample hand-off in the (app) layout and DataStatusBar rule | 7245498 |
 
 ## Stubs closed
 
@@ -96,23 +96,23 @@ metrics:
 **1. [Rule 3 - Blocking] Prerender entry for the new route**
 - **Issue:** `handleUnseenRoutes: 'fail'`, and the only link to `/setup/rentcast/` is client-rendered (the tour step). The Settings link arrives in 10-18.
 - **Fix:** Added `'/setup/rentcast/'` to `prerender.entries` in svelte.config.js. This is a one-line, commented change. The CSP wiring is untouched, and csp:assert passes on all 3 targets.
-- **Commit:** 711b155
+- **Commit:** 73dc569
 
 **2. [Rule 1 - Bug] Hand-off read the param too late; DataShell runtime not reachable from the layout**
 - **Issue:** The plan's sketch has the layout `onMount` call a data-source writer, but the runtime is created in DataShell, the layout's child. Reading `location` once the runtime was ready also missed `/renter/`, because its search page rewrites the query first. The E2E caught both problems: the status bar stayed live, and the in-app link produced no announcement.
 - **Fix:** Added a DataShell `onStart(runtime)` prop, and DataShell awaits it before the check-on-open pass. The layout reads the param from `page.url` at init and from `nav.to.url` in afterNavigate. It then waits for the runtime and calls `setSourcePreference('sample')`. On `/agent/` it dynamically imports `hasAnyContacts`/`loadSampleContacts`. Finally it does `replaceState` on the current URL minus `source`, then `announce`.
 - **Files:** `(app)/+layout.svelte`, DataShell.svelte
-- **Commit:** d12c5a4
+- **Commit:** 7245498
 
 **3. [Rule 2 - Missing functionality] Cap-saved signal**
 - **Issue:** Routes may import only from `$lib/data`, and nothing there exposed whether the cap row exists.
 - **Fix:** Added `hasSavedCap(db)` in ledger-repo.ts, exported it, and added a unit test.
-- **Commit:** a7deddc
+- **Commit:** ea18300
 
 **4. [Rule 1 - Test semantics] layout.spec "prerendered HTML marks the current portal"**
 - **Issue:** This test iterates every (app) route, but the setup page is not a switcher destination, so nothing in it is marked.
 - **Fix:** The setup page is now skipped there. It stays in APP_ROUTES/PORTAL_ROUTES, which also means "the header shows the Settings link", and that holds.
-- **Commit:** d12c5a4
+- **Commit:** 7245498
 
 **5. Acceptance-grep note:** The page strings (`Create a key just for Tran`, etc.) live in `SETUP_COPY` (content/onboarding.ts), not as literals in `+page.svelte`. The prerendered HTML contains them all, and the E2E asserts this. `(opens external site)`, `https://app.rentcast.io/app/api`, `writeOnboarding(`, `Checking this browser` and `/(app)/setup/rentcast`, `consumeSampleParam`, `replaceState` and `Showing sample data.` are literal in the files the plan names. `app.rentcast.io` was already in `EXTERNAL_HOSTS`.
 
@@ -126,4 +126,4 @@ metrics:
 ## Self-Check: PASSED
 
 - All 5 created files exist on disk.
-- Commits 93eab8a, 6df26f7, a7deddc, 711b155 and d12c5a4 are present in `git log`.
+- Commits be0f9be, 9b328e9, ea18300, 73dc569 and 7245498 are present in `git log`.

@@ -6,7 +6,7 @@
 
 **Phases completed:** 11 phases, 209 plans, 475 tasks
 **Timeline:** 2026-09-13 → 2026-10-29 (47 days), 1,206 commits, 1,849 files, ~165k lines of TypeScript, Svelte, CSS and scripts (excluding generated output)
-**Git range:** `213f4b6` (chore: workspace root) → `e1acd0a` (docs(v1.0): milestone audit)
+**Git range:** `213f4b6` (chore: workspace root) → `a60413c` (docs(v1.0): milestone audit)
 **Audit:** `milestones/v1.0-MILESTONE-AUDIT.md` (status `tech_debt`: 58/58 requirements wired, 0 broken flows, owner-gated debt)
 
 **Key accomplishments:**

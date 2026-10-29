@@ -52,9 +52,9 @@ When a build has an analytics host and website id, it sends one Umami pageview p
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 | Beacon wiring, privacy variants, forms disclosure | 7da72e6, f052dc8 (wording fix after 10-17 data flow) | +layout.svelte, privacy/+page.svelte, LegalPage.svelte, marketing.spec.ts (my hunks only) |
-| 2 | Owner go-live steps | 3285942 | docs/DEPLOY-CHECKLIST.md |
-| 3 | Third-party and beacon E2E | 61bb0c8 | third-party.spec.ts, analytics.configured.spec.ts, helpers/beacons.ts, harness.configured.spec.ts, scripts/serve-pages.mjs |
+| 1 | Beacon wiring, privacy variants, forms disclosure | f716627, 6f0fcba (wording fix after 10-17 data flow) | +layout.svelte, privacy/+page.svelte, LegalPage.svelte, marketing.spec.ts (my hunks only) |
+| 2 | Owner go-live steps | 866f1be | docs/DEPLOY-CHECKLIST.md |
+| 3 | Third-party and beacon E2E | 9351032 | third-party.spec.ts, analytics.configured.spec.ts, helpers/beacons.ts, harness.configured.spec.ts, scripts/serve-pages.mjs |
 
 ## Budget (landing-page delta)
 
@@ -96,18 +96,18 @@ The text does not claim local storage behaviour. The feedback form (10-18) is no
 ### Auto-fixed Issues
 
 **1. [Rule 1 - Bug] Privacy Variant A claimed "a server we operate"**
-- Untrue if the owner follows Step 8's Umami Cloud path. I replaced it with a sentence that names the configured counter host. Commit 7da72e6.
+- Untrue if the owner follows Step 8's Umami Cloud path. I replaced it with a sentence that names the configured counter host. Commit f716627.
 
 **2. [Rule 3 - Blocking] marketing.spec.ts pinned every legal page to "4 October 2026"**
-- Made it per-route (privacy 13 October 2026). I staged only my hunks with `git apply --cached`; 10-15's hunk is left unstaged. Commit 7da72e6.
+- Made it per-route (privacy 13 October 2026). I staged only my hunks with `git apply --cached`; 10-15's hunk is left unstaged. Commit f716627.
 
 **3. [Rule 1 - Bug] Shared beacon collector races**
 - With the tracker wired, every configured-build page load (waitlist specs etc.) posts a beacon, so the harness spec's global reset + `toHaveLength(1)`, and the plan's "reset before each test", would race across workers.
-- The collector now records `userAgent` and supports `reset?ua=<tag>`. Specs tag their UA and use helpers/beacons.ts. Commit 61bb0c8.
+- The collector now records `userAgent` and supports `reset?ua=<tag>`. Specs tag their UA and use helpers/beacons.ts. Commit 9351032.
 
 **4. Lazy loading beyond the plan's snippet** (orchestrator budget instruction): the define-gated block plus lazy imports, instead of a top-level `createTracker` call. The plan's acceptance strings (`afterNavigate`, `createTracker(`, `ANALYTICS.host`, `SITE_BASE`) are all present.
 
-**5. Forms paragraph** extends the plan's verbatim sentence with three precise sentences (submit-only, form label, IP/browser type), per the orchestrator's 10-17 data flow. Commit f052dc8.
+**5. Forms paragraph** extends the plan's verbatim sentence with three precise sentences (submit-only, form label, IP/browser type), per the orchestrator's 10-17 data flow. Commit 6f0fcba.
 
 **6. Step 8 wording:** I wrote "Apply the cut line" rather than a "Cut line." heading so that the plan's case-sensitive `cut line` check matches.
 
@@ -124,4 +124,4 @@ None. Variant B ("Tran doesn't count visits right now") is the intended copy for
 ## Self-Check: PASSED
 
 - FOUND: third-party.spec.ts, analytics.configured.spec.ts, helpers/beacons.ts, deferred-items.md
-- FOUND commits: 7da72e6, 3285942, f052dc8, 61bb0c8
+- FOUND commits: f716627, 866f1be, 6f0fcba, 9351032

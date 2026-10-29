@@ -58,9 +58,9 @@ The Phase 6 rent affordability calculator now has its own page at /tools/afforda
 
 | # | Task | Commit | Notes |
 |---|------|--------|-------|
-| 1 | Affordability page, footer Tools column, route list (+ budget work) | 3fe853e | |
-| 2 | Tools E2E: zero requests, example figures, states, JSON-LD runtime, axe, footer | b6b5814 | 100/100 on the first run |
-| - | Contract map (affordability imports) + deferred flake log | d988c75 | |
+| 1 | Affordability page, footer Tools column, route list (+ budget work) | 7c52683 | |
+| 2 | Tools E2E: zero requests, example figures, states, JSON-LD runtime, axe, footer | 2a81239 | 100/100 on the first run |
+| - | Contract map (affordability imports) + deferred flake log | 3f6af31 | |
 
 ## Budget: initial JS, KB gz (`node scripts/assert-budget.mjs <dir> --require-tools`)
 
@@ -79,7 +79,7 @@ All three runs print "Budget assertion passed: 5 gated route(s) within 60 KB, 8 
 
 The affordability page went from 81.8 to 62.0 KB with the lazy slider plus inline icons, then to 59.3 KB with the inline CTA and the dates.ts split. On the affordability page the bits-ui slider costs about 10.3 KB gz, plus tailwind-merge (via `cn`) at 8.8 KB, svelte-toolbelt at 3.2 KB and runed helpers at 2.2 KB.
 
-**Calculator pages grew by about 1.0-1.1 KB.** I measured this against a clean HEAD build (31d6a72, built in a temporary worktree) for cap-rate: 58,935 B before and 60,017 B after.
+**Calculator pages grew by about 1.0-1.1 KB.** I measured this against a clean HEAD build (d27fb13, built in a temporary worktree) for cap-rate: 58,935 B before and 60,017 B after.
 - The footer Tools column accounts for about 0.2-0.3 KB. It is on every page; the landing page went 57.9 to 58.1.
 - The rest is chunk splitting. ToolPage, the shared tool copy and ToolIcon are now also imported by the affordability page, so Rolldown splits them out of the single calculator chunk (7,096 B) into three chunks: frame + copy 3,402 B, calculator infrastructure 3,604 B, and ToolIcon 970 B.
 - Headroom on the configured build is now about 0.5-0.7 KB per tool page. I measured the alternatives and they cost more than they save, so I did not apply them:
@@ -128,5 +128,5 @@ None. With `AFFORDABILITY_READY = true` the hub card and every Other-calculators
 ## Self-Check: PASSED
 
 - Files: `apps/web/src/routes/(marketing)/tools/affordability/+page.svelte`, `apps/web/tests/e2e/tools.spec.ts` and `packages/core/src/renter/dates.ts` all exist.
-- Commits: 3fe853e, b6b5814 and d988c75 are all in `git log`.
+- Commits: 7c52683, 2a81239 and 3f6af31 are all in `git log`.
 - The build lock was released, `apps/web/test-results/` was removed and the temporary worktree was pruned.

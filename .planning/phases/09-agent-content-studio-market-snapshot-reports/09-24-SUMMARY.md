@@ -61,15 +61,15 @@ completed: 2026-10-13
 ## Task Commits
 
 1. **Task 1: PanelState flushes before every exit**
-   - RED `fc71580` test(09-24): add failing tests for exits inside the recheck window
-   - GREEN `c24a511` fix(09-24): flush a pending edit recheck before every panel exit
+   - RED `7f14834` test(09-24): add failing tests for exits inside the recheck window
+   - GREEN `f8ce4f2` fix(09-24): flush a pending edit recheck before every panel exit
 2. **Task 2: GenerationPanel settles first; email href withheld; checkPending bindable**
-   - RED `0178d8b` test(09-24): add failing browser tests for panel exits inside the recheck window
-   - GREEN `09a9a1e` fix(09-24): settle pending edit checks before GenerationPanel exits
+   - RED `0eb27ed` test(09-24): add failing browser tests for panel exits inside the recheck window
+   - GREEN `c1601d8` fix(09-24): settle pending edit checks before GenerationPanel exits
 3. **Task 3: PlatformCard Copy checks current text; validation rows; studio E2E**
-   - RED `cad4f3e` test(09-24): add failing PlatformCard Copy test inside the recheck window
-   - GREEN `d34084a` fix(09-24): PlatformCard Copy checks the current edit before reading the gate
-   - `0bb70e4` docs(09-24): add gap-closure rows to the phase 9 validation map
+   - RED `bb44b07` test(09-24): add failing PlatformCard Copy test inside the recheck window
+   - GREEN `89258ef` fix(09-24): PlatformCard Copy checks the current edit before reading the gate
+   - `4fd432c` docs(09-24): add gap-closure rows to the phase 9 validation map
 
 ## TDD and mutation evidence
 
@@ -112,7 +112,7 @@ No Node pin was needed: the clock probe passed and no run hit the libuv assertio
 - **Issue:** Destructuring a prop as `state` in PanelBindHarness.svelte made Svelte treat `$state(...)` as a store subscription of `state` (`store_invalid_shape`).
 - **Fix:** Destructure as `state: panelState` and pass `state={panelState}`; comment explains why.
 - **Files modified:** apps/web/src/lib/ai/ui/testing/PanelBindHarness.svelte
-- **Commit:** 09a9a1e
+- **Commit:** c1601d8
 
 **2. [Test strengthening] Pending-href precondition in Tests C and F1**
 - Tests C and F1 also assert `href` is null right after typing (before activation), which makes them prove the href is restored by the settle inside the handler rather than being present all along. Not a behavior change.
@@ -141,4 +141,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: apps/web/src/lib/ai/ui/testing/PanelBindHarness.svelte
-- FOUND commits: fc71580, c24a511, 0178d8b, 09a9a1e, cad4f3e, d34084a, 0bb70e4
+- FOUND commits: 7f14834, f8ce4f2, 0eb27ed, c1601d8, bb44b07, 89258ef, 4fd432c

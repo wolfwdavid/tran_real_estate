@@ -58,8 +58,8 @@ completed: 2026-10-13
 
 ## Task Commits
 
-1. **Task 1: Payload builder and consent gate**: `c9ba839` (test, RED), `830bf4e` (feat, GREEN)
-2. **Task 2: Transport and tracker**: `efa8b5a` (test, RED), `3984501` (feat, GREEN), `d3de562` (refactor: reworded a doc comment so the `grep headers` acceptance check is clean)
+1. **Task 1: Payload builder and consent gate**: `1521358` (test, RED), `960a091` (feat, GREEN)
+2. **Task 2: Transport and tracker**: `03e2ad2` (test, RED), `be6e0ec` (feat, GREEN), `183ce5c` (refactor: reworded a doc comment so the `grep headers` acceptance check is clean)
 
 ## Verification (real output)
 
@@ -98,4 +98,4 @@ None. Wiring into the layout is plan 10-19 by design.
 ## Self-Check: PASSED
 
 - All 6 files exist under apps/web/src/lib/analytics/.
-- Commits c9ba839, 830bf4e, efa8b5a, 3984501, d3de562 present in `git log`.
+- Commits 1521358, 960a091, 03e2ad2, be6e0ec, 183ce5c present in `git log`.

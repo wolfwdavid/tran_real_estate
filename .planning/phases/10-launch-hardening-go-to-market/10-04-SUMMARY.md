@@ -54,9 +54,9 @@ The full `pnpm audit` (not the vacuous `--prod`) now exits 0. Seven of the eight
 
 | Task | Name | Commit |
 |---|---|---|
-| 1 | Fix fixable advisories and record reviewed exceptions | aedfb14 |
-| 2 (RED) | Failing supply-chain tests | a226228 |
-| 2 (GREEN) | Dependabot npm + supply-chain guard | b7f6b54 |
+| 1 | Fix fixable advisories and record reviewed exceptions | 0e6690d |
+| 2 (RED) | Failing supply-chain tests | 978b7c9 |
+| 2 (GREEN) | Dependabot npm + supply-chain guard | 41a66cf |
 
 ## Verification (real output)
 
@@ -69,7 +69,7 @@ The full `pnpm audit` (not the vacuous `--prod`) now exits 0. Seven of the eight
 - `corepack pnpm lint:workflows` (actionlint): exit 0. `eslint` and `prettier --check` on the new files are clean
 - `corepack pnpm test:unit` (full, run twice with 10-02/10-03/10-08 executing in parallel) was NOT fully green, and no failure is in this plan's files:
   - run 1: `scripts/assert-csp.test.ts` (8; it matches another executor's uncommitted `scripts/assert-csp.mjs`), `models.test.ts` CSP coverage, plus timeouts in `precommit.test.ts` and `ResultsView.browser.test.ts`
-  - run 2: 4 failures. `precommit.test.ts` x2 and `ResultsView.browser.test.ts` both pass in isolation (3/3, and 27/27 with models). They are load timeouts. `apps/web/src/lib/ai/models.test.ts` "every registry host is listed in svelte.config.js connect-src" fails in isolation as well. It started after 10-02's commit 0a4cde7 ("host-aware CSP builder") moved the connect-src literals out of svelte.config.js, so it belongs to 10-02 and not to this plan
+  - run 2: 4 failures. `precommit.test.ts` x2 and `ResultsView.browser.test.ts` both pass in isolation (3/3, and 27/27 with models). They are load timeouts. `apps/web/src/lib/ai/models.test.ts` "every registry host is listed in svelte.config.js connect-src" fails in isolation as well. It started after 10-02's commit d7a6d92 ("host-aware CSP builder") moved the connect-src literals out of svelte.config.js, so it belongs to 10-02 and not to this plan
 
 ## Deviations from Plan
 
@@ -88,4 +88,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: scripts/lib/audit-exceptions.mjs, scripts/supply-chain.test.ts, .github/dependabot.yml
-- FOUND commits: aedfb14, a226228, b7f6b54
+- FOUND commits: 0e6690d, 978b7c9, 41a66cf

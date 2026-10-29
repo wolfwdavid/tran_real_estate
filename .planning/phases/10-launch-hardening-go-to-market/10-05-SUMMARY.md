@@ -51,8 +51,8 @@ A third `configured` build (test form key, loopback analytics host + website id,
 
 | Task | Name | Commit | Files |
 | ---- | ---- | ------ | ----- |
-| 1 | Emulator MIME types, configured listener, beacon collector; Playwright configured project | f9d8069 | scripts/serve-pages.mjs, apps/web/playwright.config.ts, apps/web/tests/e2e/site-env.ts, apps/web/tests/e2e/harness.configured.spec.ts |
-| 2 | Scripts, ignore files and the CI configured leg | 06126b8 | package.json, .github/workflows/ci.yml, scripts/workflow-gate.test.ts, .gitignore, .prettierignore, eslint.config.js, apps/web/src/lib/site-config.js(+test) |
+| 1 | Emulator MIME types, configured listener, beacon collector; Playwright configured project | f491940 | scripts/serve-pages.mjs, apps/web/playwright.config.ts, apps/web/tests/e2e/site-env.ts, apps/web/tests/e2e/harness.configured.spec.ts |
+| 2 | Scripts, ignore files and the CI configured leg | ebbb5e9 | package.json, .github/workflows/ci.yml, scripts/workflow-gate.test.ts, .gitignore, .prettierignore, eslint.config.js, apps/web/src/lib/site-config.js(+test) |
 
 ## What was built
 
@@ -87,7 +87,7 @@ A third `configured` build (test form key, loopback analytics host + website id,
 - **Issue:** The plan sets `PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}` in each env block. GitHub expands an unset variable to `''`. `targetEnv` passes `''` through, and `resolveSiteOrigin` used `??` and rejected `''` (a test pinned that), so all three legs would fail at build time until the owner set the variable. The plan's own note says "an unset var is '' which site-config treats as unset". That was true for the four owner keys but not for the site URL.
 - **Fix:** `resolveSiteOrigin` now uses `env.PUBLIC_SITE_URL || DEFAULT_SITE_ORIGIN`, which matches the other resolvers. The site-config test no longer lists `''` as rejected and adds an "empty means unset" test. Malformed non-empty values still throw.
 - **Files modified:** apps/web/src/lib/site-config.js, apps/web/src/lib/site-config.test.ts
-- **Commit:** 06126b8
+- **Commit:** ebbb5e9
 
 **2. [Rule 3 - Blocking] Prettier wrapped the eslint ignores array** after `'**/build-configured/'` was added. I reformatted it, and the content matches the plan.
 
@@ -105,4 +105,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: apps/web/tests/e2e/site-env.ts, apps/web/tests/e2e/harness.configured.spec.ts
-- FOUND: commits f9d8069, 06126b8
+- FOUND: commits f491940, ebbb5e9

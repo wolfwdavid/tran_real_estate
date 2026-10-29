@@ -46,8 +46,8 @@ The cap rate, cash-on-cash and DSCR calculators are now pure functions in `@tran
 
 | # | Task | Commits |
 |---|------|---------|
-| 1 | Calculator functions over Phase 7 primitives | 487e594 (RED), 5cc2522 (GREEN) |
-| 2 | Tool input parsing, validation and display formatting | acd578c (RED), e79f9f8 (GREEN) |
+| 1 | Calculator functions over Phase 7 primitives | 651cf3b (RED), f7675c5 (GREEN) |
+| 2 | Tool input parsing, validation and display formatting | 2730312 (RED), 60891aa (GREEN) |
 
 ## Verification (real output)
 
@@ -72,4 +72,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: packages/core/src/finance/calculators.ts, calculators.test.ts, tool-inputs.ts, tool-inputs.test.ts
-- FOUND commits: 487e594, 5cc2522, acd578c, e79f9f8
+- FOUND commits: 651cf3b, f7675c5, 2730312, 60891aa

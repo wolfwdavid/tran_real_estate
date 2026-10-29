@@ -64,7 +64,7 @@ gsd-tools `verify artifacts` across 23 plans: 57/61 auto-pass. The 4 misses were
 | `scripts/assert-csp.mjs` | Missing `application/ld+json` | Implemented as `ld+json` block validation (lines 8, 109, 196-198): must parse as JSON and \u-escape `<`/`&` |
 | `lib/seo/SeoHead.svelte` | Missing `svelte:element this={'script'}` | Line 53: `<svelte:element this={scriptTag} type="application/ld+json">` (compiler rejects the literal) |
 | `components/tools/CalculatorShell.svelte` | Missing "Fill in an example" | Copy comes from content module (`{C.fillExample}`, line 71); browser test clicks the button by that name |
-| `routes/+layout.svelte` | Missing `createTracker` | Moved to lazy `lib/analytics/boot.ts` by orchestrator fix f4ef7bb (budget); layout dynamically imports it |
+| `routes/+layout.svelte` | Missing `createTracker` | Moved to lazy `lib/analytics/boot.ts` by orchestrator fix 241feeb (budget); layout dynamically imports it |
 
 ### Key Link Verification
 

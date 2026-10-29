@@ -94,10 +94,10 @@ completed: 2026-10-26
 
 ## Task Commits
 
-1. **Task 1: Package scaffold, one-shot dependency install, harness wiring** - `72fe6dc` (chore)
-2. **Task 2 RED: failing contract tests** - `4c09684` (test)
-3. **Task 2 GREEN: contracts (selectors, copy, messages, settings)** - `3d21357` (feat)
-4. **Task 3: banned-words gate for extension copy** - `4d65e0f` (test)
+1. **Task 1: Package scaffold, one-shot dependency install, harness wiring** - `21503f1` (chore)
+2. **Task 2 RED: failing contract tests** - `a47434a` (test)
+3. **Task 2 GREEN: contracts (selectors, copy, messages, settings)** - `4c5f325` (feat)
+4. **Task 3: banned-words gate for extension copy** - `0fcc74b` (test)
 
 ## Recorded Facts (requested by the plan output spec)
 
@@ -128,7 +128,7 @@ See key-decisions in the frontmatter. In short, every runtime fact the plan aske
 - **Found during:** Task 1
 - **Issue:** `wxt.config.ts` imports `COPY` and `ZILLOW_MATCH`, and the stub entrypoint imports `ZILLOW_MATCH`. Without them, `wxt prepare` and `check` cannot pass in Task 1, but both files belong to Task 2.
 - **Fix:** Task 1 shipped a minimal `config.ts` (ZILLOW_MATCH only) and `copy.ts` (the four manifest strings). Task 2 replaced both with the full contracts. The RED tests still failed first because `messages.ts`, `settings.ts`, `selectors.v1.json` and `normalizeLabel` did not exist yet.
-- **Commit:** 72fe6dc, then 3d21357
+- **Commit:** 21503f1, then 4c5f325
 
 **2. [Rule 2 - Correctness] Extra test coverage beyond the behavior list**
 - Added `isGetCount`/`isCountPush` guard tests (wrong type, non-boolean enabled, negative/fractional/NaN counts), a whitespace-collapse `normalizeLabel` case, a count-250 badge case and a COPY frozen check. No behavior change.
@@ -162,4 +162,4 @@ The wave-2 plans can consume `CONFIG`, `COPY`, `badgeTitleCount`, the message co
 
 ## Self-Check: PASSED
 
-All 7 key files exist; commits 72fe6dc, 4c09684, 3d21357, 4d65e0f are present.
+All 7 key files exist; commits 21503f1, a47434a, 4c5f325, 0fcc74b are present.

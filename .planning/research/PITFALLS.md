@@ -33,7 +33,7 @@ Read these first; several contradict assumptions in the current docs and checkli
 ### Pitfall 1: The first push publishes 145 model trailers and breaks the gitleaks SHA allowlist
 
 **What goes wrong:**
-The repo's rule (CLAUDE.md, lessons 2026-10-25) is that commits never mention AI assistants. The retrospective records a `filter-branch` cleanup, yet 145 commits between 2026-10-13 and 2026-10-14 still carry `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` and 168 commits mention Claude/AI somewhere in the message. The moment `git push -u origin main` succeeds, that history is public, forkable and indexed. Cleaning it afterwards means a force-push to a public default branch, which also invalidates every commit hash quoted in `.planning/MILESTONES.md` (`213f4b6`, `e1acd0a`), the phase SUMMARY files and `v1.0-MILESTONE-AUDIT.md`.
+The repo's rule (CLAUDE.md, lessons 2026-10-25) is that commits never mention AI assistants. The retrospective records a `filter-branch` cleanup, yet 145 commits between 2026-10-13 and 2026-10-14 still carry `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` and 168 commits mention Claude/AI somewhere in the message. The moment `git push -u origin main` succeeds, that history is public, forkable and indexed. Cleaning it afterwards means a force-push to a public default branch, which also invalidates every commit hash quoted in `.planning/MILESTONES.md` (`213f4b6`, `a60413c`), the phase SUMMARY files and `v1.0-MILESTONE-AUDIT.md`.
 
 Second-order failure: `.gitleaks.toml` allowlists two commits **by SHA** (`4e453c1bbce…`, `05793bfa1b1…`). A history rewrite changes those SHAs, so the CI `hygiene` job's `gitleaks git` full-history scan fails on the very first run after the push, blocking the deploy.
 

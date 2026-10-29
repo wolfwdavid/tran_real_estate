@@ -39,8 +39,8 @@ Two Node-builtin build oracles: `assert-seo.mjs` (sitemap/robots/head tags/1200x
 
 | # | Task | Commits |
 |---|------|---------|
-| 1 | SEO oracle | 5779b38 (RED test), 13a013a (GREEN) |
-| 2 | JS budget oracle | 4105a66 (RED test), b21de66 (GREEN) |
+| 1 | SEO oracle | a918e03 (RED test), ed43d3a (GREEN) |
+| 2 | JS budget oracle | 010528e (RED test), 161d33c (GREEN) |
 
 ## Verification (real output)
 
@@ -69,4 +69,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: scripts/assert-seo.mjs, scripts/assert-seo.test.ts, scripts/assert-budget.mjs, scripts/assert-budget.test.ts
-- FOUND commits: 5779b38, 13a013a, 4105a66, b21de66
+- FOUND commits: a918e03, ed43d3a, 010528e, 161d33c

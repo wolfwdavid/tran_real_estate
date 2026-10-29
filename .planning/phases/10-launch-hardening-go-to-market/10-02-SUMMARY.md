@@ -50,10 +50,10 @@ The CSP now comes from `buildCsp({ analyticsHost })`, which adds the analytics o
 
 | Task | Name | Commits |
 | ---- | ---- | ------- |
-| 1 | CSP builder consumed by svelte.config.js | 0e89e4d (RED), 0a4cde7 (GREEN) |
-| 2 | Build targets, oracle JSON-LD exemption, optional analytics host | b25beb0 (RED), 5068548 (GREEN) |
-| - | Deviation: CSP coverage test + svelte-check fix | c912d59 |
-| - | Deviation: stale invariant comment | b521f06 |
+| 1 | CSP builder consumed by svelte.config.js | 71fc847 (RED), d7a6d92 (GREEN) |
+| 2 | Build targets, oracle JSON-LD exemption, optional analytics host | 13ec1aa (RED), c8a0e53 (GREEN) |
+| - | Deviation: CSP coverage test + svelte-check fix | c2d9702 |
+| - | Deviation: stale invariant comment | 69dcf68 |
 
 ## Verification (real output)
 
@@ -75,19 +75,19 @@ The CSP now comes from `buildCsp({ analyticsHost })`, which adds the analytics o
 - **Found during:** after Task 1 (reported by the orchestrator from a parallel executor)
 - **Issue:** `apps/web/src/lib/ai/models.test.ts` "every registry host is listed in svelte.config.js connect-src" text-searched svelte.config.js, which no longer holds the host list.
 - **Fix:** The test now asserts against `buildCsp().directives['connect-src']`, the single source. Mutation-tested as described above. The stale comments in models.ts and packages/core/src/providers.ts were updated too.
-- **Commits:** c912d59, b521f06
+- **Commits:** c2d9702, 69dcf68
 
 **2. [Rule 3 - Blocking] svelte-check type-checked the Node oracle**
 - **Found during:** plan verification (`pnpm check`, 35 implicit-any errors in scripts/assert-csp.mjs)
 - **Issue:** The static import of `scripts/assert-csp.mjs` in csp-policy.test.ts pulled the untyped script into the web project's checkJs. The plan anticipated this.
 - **Fix:** The test now uses a typed dynamic import through `new URL(..., import.meta.url).href`. Check is back to 0 errors.
-- **Commit:** c912d59
+- **Commit:** c2d9702
 
 **3. [Rule 1 - Bug] build-web.mjs version probe on Windows without npm_execpath**
 - **Found during:** Task 2 (running `node scripts/build-web.mjs configured` directly)
 - **Issue:** The `corepack` fallback probe spawned without a shell, so on Windows it reported "pnpm unknown". The build spawn already used a shell.
 - **Fix:** Both spawns now share one `shell` flag. The probe returns 11.27.0.
-- **Commit:** 5068548
+- **Commit:** c8a0e53
 
 ## Notes for later plans
 

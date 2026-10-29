@@ -91,14 +91,14 @@ The `@tran/core/finance` barrel was pulling in reference cases, memo copy and de
 - **Found during:** Task 2 (browser test)
 - **Issue:** with several text inputs and no submit button, browsers never submit a form implicitly, so "Enter re-validates" could not work through `onsubmit`.
 - **Fix:** NumberField takes an `onenter` callback (keydown Enter, preventDefault), and the shell runs the same validate-and-focus-first-invalid path. A form-level keydown was rejected because it trips Svelte's a11y_no_noninteractive_element_interactions warning.
-- **Files:** NumberField.svelte, CalculatorShell.svelte. **Commit:** a4c8e9c
+- **Files:** NumberField.svelte, CalculatorShell.svelte. **Commit:** f9a62e4
 
 **2. [Rule 3 - Blocking/budget] Finance barrel blew the per-route JS budget**
 - **Found during:** post-task budget measurement
-- **Fix:** `"./finance/*": "./src/finance/*.ts"` export in packages/core/package.json; calculators import `@tran/core/finance/calculators` and `/tool-inputs`. **Commit:** d5a778f
+- **Fix:** `"./finance/*": "./src/finance/*.ts"` export in packages/core/package.json; calculators import `@tran/core/finance/calculators` and `/tool-inputs`. **Commit:** 6b3f4a5
 
 **3. [Rule 2 - Accessibility] Negative values are never sign-by-color only**
-- `markNegative` applies "(negative)" across all three calculators (the plan named only cash-on-cash rows). **Commit:** a4c8e9c
+- `markNegative` applies "(negative)" across all three calculators (the plan named only cash-on-cash rows). **Commit:** f9a62e4
 
 ### Additions beyond the file list
 - `EmptyResult.svelte` and `Headline.svelte` (shared result pieces, keeps each calculator small), `calculators.browser.test.ts` (state + axe coverage). CalculatorShell derives the first input from `fields[0]` instead of taking a `firstInputId` prop.
@@ -110,9 +110,9 @@ None. The components are complete; mounting them on pages is plan 10-13 by desig
 
 ## Commits
 
-- b0cb68b test(10-12): add failing calculator form tests
-- 5686bb8 feat(10-12): calculator shell, fields and form state
-- a4c8e9c feat(10-12): cap rate, cash-on-cash and DSCR calculators
-- d5a778f perf(10-12): import calculator math by module, not the finance barrel
+- 43e9aed test(10-12): add failing calculator form tests
+- fda1073 feat(10-12): calculator shell, fields and form state
+- f9a62e4 feat(10-12): cap rate, cash-on-cash and DSCR calculators
+- 6b3f4a5 perf(10-12): import calculator math by module, not the finance barrel
 
 ## Self-Check: PASSED

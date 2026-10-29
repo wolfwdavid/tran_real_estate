@@ -51,9 +51,9 @@ The landing now has an inline, modal-free Get started guide. A visitor picks Ren
 
 | # | Task | Commits |
 |---|------|---------|
-| 1 | Onboarding state module and copy (TDD) | 267615d (RED test), 501d373 (GREEN) |
-| 2 | GetStartedGuide and landing integration | 6cb5710, 2399e8d (perf: copy split) |
-| - | Deferred-items log | 8da5e02 |
+| 1 | Onboarding state module and copy (TDD) | f4c25fd (RED test), 2de1b55 (GREEN) |
+| 2 | GetStartedGuide and landing integration | 38b8927, cf028ab (perf: copy split) |
+| - | Deferred-items log | cf5dfd7 |
 
 ## Verification (real output)
 
@@ -80,13 +80,13 @@ The landing now has an inline, modal-free Get started guide. A visitor picks Ren
 - **Found during:** Task 2
 - **Issue:** `marketing.spec.ts` expected a link "How it works" → `#how-it-works`, which the plan replaces.
 - **Fix:** Now asserts "Show me around" → `#get-started`, and that both `#get-started` and `#how-it-works` exist. Only my hunk was in the file when I committed. Another agent's earlier hunk had already been committed.
-- **Commit:** 6cb5710
+- **Commit:** 38b8927
 
 **2. [Rule 2 - Performance budget] Tour panel lazy-loaded and copy split**
 - **Found during:** Task 2 budget check (landing at 59.2 of 60 KB gz)
 - **Fix:** Added `TourPanel.svelte` (dynamic import), `guide-buttons.ts` (shared button classes) and `content/onboarding-guide.ts`. GetStartedGuide still builds every href (`?source=sample`, `/setup/rentcast/`), so the acceptance greps hold.
 - **Acceptance-grep impact:** "New here, or want a refresher?" is now in `content/onboarding-guide.ts`, not `content/onboarding.ts`. `onboarding.ts` re-exports it, and `ONBOARDING_COPY.guide` includes it. All the other listed strings are still in `onboarding.ts`.
-- **Commits:** 6cb5710, 2399e8d
+- **Commits:** 38b8927, cf028ab
 
 **3. [Plan-sanctioned] Not registered in the backup registry**
 - The contract map says the registry cannot hold non-Dexie localStorage keys. As the plan instructs, I recorded this here rather than registering it.
@@ -101,4 +101,4 @@ The landing now has an inline, modal-free Get started guide. A visitor picks Ren
 ## Self-Check: PASSED
 
 - All 12 key files exist on disk.
-- Commits 267615d, 501d373, 6cb5710, 2399e8d and 8da5e02 are present in `git log`.
+- Commits f4c25fd, 2de1b55, 38b8927, cf028ab and cf5dfd7 are present in `git log`.

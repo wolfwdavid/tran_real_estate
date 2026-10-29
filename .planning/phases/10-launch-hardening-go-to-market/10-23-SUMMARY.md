@@ -65,19 +65,19 @@ Every Phase 10 oracle now runs in `pnpm verify` and on the matching CI legs. The
 
 | Task / item | Commit | Message |
 |---|---|---|
-| Task 1 | 6b5ea6b | ci(10-23): SEO, budget and dependency gates in verify and CI |
-| ORCH-b | a2bc256 | feat(10-23): sharded launch-audit evidence tool |
-| ORCH-a + ORCH-d | 1b758af | feat(10-23): launch audit gates the analytics-on build and calls out oversize report-only pages |
-| ORCH-e | 81562a8 | docs(10-23): contract map fair-rent disclaimer row names the checked result text |
-| ORCH-c | 315aed7 | test(10-23): ResultsView browser test waits for the lazy map and allows for its real cost |
-| ORCH-c | 2f8c5d7 | test(10-23): ReDoS budget tests judge the fastest of five runs |
-| ORCH-c | b9895f4 | test(10-23): pre-commit gate suite copies one template repo and checks leaks by author |
-| ORCH-c | e8d6939 | test(10-23): studio import-graph boundary tests state their real time limit |
-| ORCH-c | 0ad7c49 | fix(10-23): a pending filter summary never overwrites a newer screen-reader announcement |
-| ORCH-d | 7005f19 | docs(10-23): oversize report-only notes name the measured chunks |
-| Task 2 (fix) | 6f5319d | fix(10-23): launch audit writes a Prettier-clean document and reads it back |
-| Task 2 | 02cf740 | docs(10-23): launch audit |
-| Task 3 | 0c76bab | docs(10-23): human UAT record and validation sign-off |
+| Task 1 | 4bca276 | ci(10-23): SEO, budget and dependency gates in verify and CI |
+| ORCH-b | f3dbdba | feat(10-23): sharded launch-audit evidence tool |
+| ORCH-a + ORCH-d | 6d6b175 | feat(10-23): launch audit gates the analytics-on build and calls out oversize report-only pages |
+| ORCH-e | 77668f8 | docs(10-23): contract map fair-rent disclaimer row names the checked result text |
+| ORCH-c | 5fd93cc | test(10-23): ResultsView browser test waits for the lazy map and allows for its real cost |
+| ORCH-c | ff20762 | test(10-23): ReDoS budget tests judge the fastest of five runs |
+| ORCH-c | e3a9e2a | test(10-23): pre-commit gate suite copies one template repo and checks leaks by author |
+| ORCH-c | 1ad1efd | test(10-23): studio import-graph boundary tests state their real time limit |
+| ORCH-c | 616c052 | fix(10-23): a pending filter summary never overwrites a newer screen-reader announcement |
+| ORCH-d | be7d3b9 | docs(10-23): oversize report-only notes name the measured chunks |
+| Task 2 (fix) | 67b63ca | fix(10-23): launch audit writes a Prettier-clean document and reads it back |
+| Task 2 | face822 | docs(10-23): launch audit |
+| Task 3 | d317b15 | docs(10-23): human UAT record and validation sign-off |
 
 ## Gate results (real output, chunked equivalent of `pnpm verify`)
 
@@ -159,7 +159,7 @@ The plan's Task 2 node check reports all 11 sections present and no `| FAIL |` c
 - **ORCH-c: load-sensitive tests.** Full evidence is in deferred-items.md.
 
   Fixed:
-  - **renter-journey.spec.ts:43**: a real product race, fixed in 0ad7c49.
+  - **renter-journey.spec.ts:43**: a real product race, fixed in 616c052.
     - The debounced "Showing N of M rentals." summary could overwrite a newer "…, selected." announcement.
     - A unit test fails RED first.
     - The full E2E run passed after the fix.
@@ -214,7 +214,7 @@ The plan's Task 2 node check reports all 11 sections present and no `| FAIL |` c
    - verify runs both builds.
 3. **[Rule 3] Two launch-audit fixes so the committed doc passes `pnpm lint`.**
    - The CLI formats the doc with Prettier.
-   - `auditFailed` failed closed on padded rows; it now reads them (6f5319d).
+   - `auditFailed` failed closed on padded rows; it now reads them (67b63ca).
 4. **[Rule 3] The 10-VALIDATION legend line was reworded** ("⬜ = pending") because the plan's own check (`/⬜ pending/`) matched the legend. "Feedback latency < 10s" stays unchecked and is marked not met but accepted, same as Phases 1-2. Ticking it would be false.
 5. **Plan Task 2 step 1 ("one invocation of `pnpm verify`").**
    - Not possible under the 7-minute per-call cap. It was run in chunks with the same steps and order.
@@ -238,4 +238,4 @@ None. The audit's Sign-off lines (Audited by / Date / Notes) are blank on purpos
 ## Self-Check: PASSED
 
 - FOUND: scripts/audit-evidence.mjs, scripts/audit-evidence.test.ts, docs/LAUNCH-AUDIT.md, docs/audit/{a11y,banned,budget,csp,deps,disclaimers,pitfalls,seo}.txt, 10-HUMAN-UAT.md
-- FOUND commits: 6b5ea6b, a2bc256, 1b758af, 81562a8, 315aed7, 2f8c5d7, b9895f4, e8d6939, 0ad7c49, 7005f19, 6f5319d, 02cf740, 0c76bab
+- FOUND commits: 4bca276, f3dbdba, 6d6b175, 77668f8, 5fd93cc, ff20762, e3a9e2a, 1ad1efd, 616c052, be7d3b9, 67b63ca, face822, d317b15

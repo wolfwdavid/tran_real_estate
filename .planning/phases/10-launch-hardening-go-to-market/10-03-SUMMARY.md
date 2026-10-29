@@ -41,8 +41,8 @@ The analytics beacon folder joins the fetch allowlist. A single MARKETING_SAFE E
 
 | Task | Name | Commits |
 | ---- | ---- | ------- |
-| 1 | Fetch allowlist for lib/analytics + marketing-safe import boundary | c058f73 (RED), d9bbc9e (GREEN) |
-| 2 | Banned-terms scope covers the new copy folders | ecec9d5 (RED), 8bd0f54 (GREEN) |
+| 1 | Fetch allowlist for lib/analytics + marketing-safe import boundary | dc5f1b2 (RED), 2513ae9 (GREEN) |
+| 2 | Banned-terms scope covers the new copy folders | 810b1d1 (RED), a91950b (GREEN) |
 
 ## What changed
 
@@ -84,4 +84,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: eslint.config.js (contains `lib/analytics/**`, `MARKETING_SAFE`, `lib/components/onboarding/**`, `lib/components/forms/**`, `lib/seo/**`, `features/${p}` via PORTAL_FOLDERS)
-- FOUND commits: c058f73, d9bbc9e, ecec9d5, 8bd0f54
+- FOUND commits: dc5f1b2, 2513ae9, 810b1d1, a91950b

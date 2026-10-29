@@ -3,9 +3,12 @@ title = "tran-real-estate gitleaks config"
 [extend]
 useDefault = true
 
-# One synthetic Web3Forms-shaped fixture key landed in commit 4e453c1 (agent schema tests)
-# before it was swapped for an all-zero placeholder. Web3Forms keys are public-safe by design,
-# and this value never belonged to any account.
+# Two synthetic Web3Forms-shaped fixture keys landed in 4e453c1 (packages/core agent schema
+# tests) and 05793bf (Phase 8 deferred-items.md) before being swapped for all-zero placeholders.
+# Web3Forms keys are public-safe by design and neither value belonged to any account.
+# Re-derived 2026-10-29 after the message-only history rewrite (LIVE-01): without this table
+# gitleaks 8.30.1 reports exactly these 2 generic-api-key findings; both commits predate the
+# first rewritten commit, so their SHAs did not change. commits and paths each clear both.
 [allowlist]
 commits = ["4e453c1bbceefe392ad720eaa049bbd1dae8cc43", "05793bfa1b15bc5d55d0650cea17e8f17707a27e"]
 paths = [

@@ -43,8 +43,8 @@ The production extension (`wxt build` output in `apps/extension/.output/chrome-m
 
 | # | Task | Commit |
 |---|------|--------|
-| 1 | Playwright config and synthetic Zillow page | 3b29985 |
-| 2 | Runtime spec: dim, reveal, late insert, SPA nav, toggle, messaging, badge, zero network | 823ecaa |
+| 1 | Playwright config and synthetic Zillow page | 0da4ab7 |
+| 2 | Runtime spec: dim, reveal, late insert, SPA nav, toggle, messaging, badge, zero network | efd743d |
 
 ## Run facts
 
@@ -92,4 +92,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: apps/extension/playwright.config.ts, apps/extension/e2e/zillow-page.ts, apps/extension/e2e/extension.spec.ts
-- FOUND commits: 3b29985, 823ecaa
+- FOUND commits: 0da4ab7, efd743d

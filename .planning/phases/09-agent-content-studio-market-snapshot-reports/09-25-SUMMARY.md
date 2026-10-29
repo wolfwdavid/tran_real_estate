@@ -56,8 +56,8 @@ completed: 2026-10-13
 
 ## Task Commits
 
-1. **Task 1: Snapshot Save flushes the notes recheck first + E2E step** - `3fd0ae8` (fix)
-2. **Task 2: Memo Print settles first, href withheld while pending + E2E steps + validation rows** - `985eb3f` (fix)
+1. **Task 1: Snapshot Save flushes the notes recheck first + E2E step** - `5d17a3c` (fix)
+2. **Task 2: Memo Print settles first, href withheld while pending + E2E steps + validation rows** - `24cfec3` (fix)
 
 ## Failing-first and mutation evidence
 
@@ -110,4 +110,4 @@ None.
 ## Self-Check: PASSED
 
 - FOUND: .planning/phases/09-agent-content-studio-market-snapshot-reports/09-25-SUMMARY.md
-- FOUND commits: 3fd0ae8, 985eb3f
+- FOUND commits: 5d17a3c, 24cfec3
