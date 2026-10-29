@@ -7,6 +7,7 @@ import { AUDIT_EXCEPTIONS } from './lib/audit-exceptions.mjs';
 import { HUMAN_UAT, PITFALLS_EVIDENCE } from './lib/pitfalls-evidence.mjs';
 import {
 	COMMAND_GATES,
+	PITFALLS_DOC,
 	a11yMatrix,
 	auditFailed,
 	evidenceMapErrors,
@@ -18,7 +19,7 @@ import {
 } from './launch-audit.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
-const PITFALLS_MD = readFileSync(join(ROOT, '.planning/research/PITFALLS.md'), 'utf8');
+const PITFALLS_MD = readFileSync(join(ROOT, PITFALLS_DOC), 'utf8');
 
 /** The `- [ ]` lines of the checklist section, counted independently of the parser. */
 function checklistSection(md: string): string {
@@ -27,6 +28,10 @@ function checklistSection(md: string): string {
 	const end = rest.search(/^## /m);
 	return end === -1 ? rest : rest.slice(0, end);
 }
+
+test('PITFALLS_DOC is the archived v1.0 checklist', () => {
+	expect(PITFALLS_DOC).toBe('.planning/milestones/v1.0-research/PITFALLS.md');
+});
 
 describe('parsePitfallsChecklist', () => {
 	const items = parsePitfallsChecklist(PITFALLS_MD);

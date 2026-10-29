@@ -135,6 +135,8 @@ export const NA = 'N/A';
 export const DEFERRED = 'DEFERRED (human)';
 
 export const AUDIT_DOC = 'docs/LAUNCH-AUDIT.md';
+/** The v1.0 "Looks Done But Isn't" checklist. The v1.1 research overwrote the live research PITFALLS.md on 2026-10-29; the v1.0 copy is archived here. */
+export const PITFALLS_DOC = '.planning/milestones/v1.0-research/PITFALLS.md';
 export const EVIDENCE_DIR = 'docs/audit/';
 export const E2E_REPORT = 'apps/web/test-results/e2e-report.json';
 export const UNIT_REPORT = 'apps/web/test-results/vitest.json';
@@ -858,7 +860,7 @@ export function renderAudit(data) {
 		'',
 		`## "Looks Done But Isn't" checklist`,
 		'',
-		'Every item of .planning/research/PITFALLS.md, verbatim. Evidence is declared in `scripts/lib/pitfalls-evidence.mjs` and evaluated against the reports.',
+		`Every item of ${PITFALLS_DOC}, verbatim. Evidence is declared in \`scripts/lib/pitfalls-evidence.mjs\` and evaluated against the reports.`,
 		'',
 		...table(
 			['#', 'Item', 'Status', 'Evidence'],
@@ -1181,9 +1183,7 @@ export function collect({ root, env = process.env }) {
 		budgetConfigured,
 		banned,
 		deps,
-		pitfalls: parsePitfallsChecklist(
-			readFileSync(join(root, '.planning/research/PITFALLS.md'), 'utf8')
-		),
+		pitfalls: parsePitfallsChecklist(readFileSync(join(root, PITFALLS_DOC), 'utf8')),
 		disclaimers: disclaimerChecks(root)
 	};
 }
