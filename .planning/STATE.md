@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: roadmap_created
-stopped_at: v1.1 roadmap created (Phases 12-17); Phase 12 ready to plan
-last_updated: "2026-10-29T00:00:00.000Z"
+status: executing
+stopped_at: Completed 12-01-PLAN.md
+last_updated: "2026-10-29T19:14:31.056Z"
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 10
+  completed_plans: 1
 ---
 
 # Project State
@@ -19,16 +19,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Milestone v1.1 Launch & Hardening — Phase 12: Go-live Readiness & Local Smoke Suite (clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main`).
+**Current focus:** Phase 12 — go-live-readiness-local-smoke-suite
 
 ## Current Position
 
-Phase: 12 of 17 (Go-live Readiness & Local Smoke Suite) — first of 6 v1.1 phases (12-17)
-Plan: — (not started; ready to plan)
-Status: Ready to plan
-Last activity: 2026-10-29 — v1.1 roadmap created: Phases 12-17, 41/41 requirements mapped
+Phase: 12 (go-live-readiness-local-smoke-suite) — EXECUTING
+Plan: 2 of 10
+Status: Executing (12-01 complete: test:unit green, commit-msg hygiene hook installed; next = 12-02 history rewrite, alone in wave 2)
+Last activity: 2026-10-29 — 12-01 executed
 
-Progress (v1.1): [░░░░░░░░░░] 0% (0/6 phases, 0 plans)
+Progress (v1.1): [█░░░░░░░░░] Phase 12 1/10 plans (0/6 phases)
 
 ## Performance Metrics
 
@@ -236,6 +236,7 @@ Progress (v1.1): [░░░░░░░░░░] 0% (0/6 phases, 0 plans)
 | Phase 11 P10 | 8min | 2 tasks | 9 files |
 | Phase 11 P11 | 12 min | 2 tasks | 3 files |
 | Phase 11 P12 | 10min | 2 tasks | 7 files |
+| Phase 12 P01 | 9min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -610,6 +611,8 @@ Recent decisions affecting current work:
 - [Phase 11]: 11-10: oracle URL_ALLOWLIST gains two exact WXT error-text URLs (issues/371, go-further/testing.html), tested against sibling URLs
 - [Phase 11]: Extension E2E runs headless (channel chromium) against the production chrome-mv3 build; zero-network test carries page + worker planted-violation controls
 - [Phase 11]: 11-12: extension build/oracle/axe/e2e run only on the CI root leg and at the end of pnpm verify; no xvfb (new-headless Chromium loads MV3)
+- [Phase 12]: 12-01: commit-msg hook (scripts/commit-hygiene.mjs) rejects attribution trailers; --history mode reports 145 today, wired into tests/CI only after the 12-02 rewrite
+- [Phase 12]: 12-01: launch-audit reads the v1.0 checklist via PITFALLS_DOC = .planning/milestones/v1.0-research/PITFALLS.md
 
 ### Pending Todos
 
@@ -639,7 +642,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-29
-Stopped at: v1.1 roadmap written (ROADMAP.md Phases 12-17, REQUIREMENTS.md traceability filled); next = `/gsd:plan-phase 12`
+Last session: 2026-10-29T19:14:31.051Z
+Stopped at: Completed 12-01-PLAN.md
 Resume file: None
 Next: finish `/gsd:new-milestone` (requirements + roadmap from Phase 12), then `/gsd:plan-phase 12`. Owner go-live (org, remote, push, Pages) is planned EARLY in v1.1 per owner decision 2026-10-29.
