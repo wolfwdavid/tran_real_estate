@@ -325,6 +325,18 @@ describe('extension (Phase 11)', () => {
 			/ && pnpm ext:build && pnpm ext:assert && pnpm ext:test:browser && pnpm ext:e2e$/
 		);
 	});
+
+	test('verify runs the local smoke right after the E2E suite', () => {
+		const pkg = JSON.parse(readFileSync(join(import.meta.dirname, '../package.json'), 'utf8'));
+		const verify: string = pkg.scripts.verify;
+		expect(pkg.scripts['smoke:local']).toBe('node scripts/smoke.mjs --local');
+		expect(verify.split('pnpm smoke:local').length - 1).toBe(1);
+		expect(verify).toContain(' && pnpm test:e2e && pnpm smoke:local && pnpm audit:deps && ');
+		const smoke = verify.indexOf('pnpm smoke:local');
+		expect(smoke).toBeGreaterThan(verify.indexOf('pnpm build:configured'));
+		expect(smoke).toBeGreaterThan(verify.indexOf('pnpm test:e2e'));
+		expect(smoke).toBeLessThan(verify.indexOf('pnpm ext:build'));
+	});
 });
 
 describe('hygiene job', () => {

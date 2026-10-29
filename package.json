@@ -41,7 +41,7 @@
 		"evidence:unit": "node scripts/audit-evidence.mjs unit",
 		"evidence:merge": "node scripts/audit-evidence.mjs merge",
 		"audit:launch": "node scripts/launch-audit.mjs --write",
-		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm seo:assert && pnpm budget:assert && pnpm test:e2e && pnpm audit:deps && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows && pnpm ext:build && pnpm ext:assert && pnpm ext:test:browser && pnpm ext:e2e"
+		"verify": "pnpm check && pnpm lint && pnpm banned && pnpm ui:guard && pnpm test:unit && pnpm build:root && pnpm build:sub && pnpm build:configured && pnpm csp:assert && pnpm seo:assert && pnpm budget:assert && pnpm test:e2e && pnpm smoke:local && pnpm audit:deps && pnpm guard && pnpm fixtures:check && pnpm secrets:canary && pnpm secrets:scan && pnpm lint:workflows && pnpm ext:build && pnpm ext:assert && pnpm ext:test:browser && pnpm ext:e2e"
 	},
 	"devDependencies": {
 		"@eslint/js": "10.0.1",
