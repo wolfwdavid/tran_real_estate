@@ -23,6 +23,8 @@
 		"seo:assert": "node scripts/assert-seo.mjs apps/web/build --target root && node scripts/assert-seo.mjs apps/web/build-sub --target sub && node scripts/assert-seo.mjs apps/web/build-configured --target configured",
 		"budget:assert": "node scripts/assert-budget.mjs apps/web/build --require-tools && node scripts/assert-budget.mjs apps/web/build-configured --require-tools",
 		"test:e2e": "pnpm --filter web exec playwright test",
+		"smoke": "node scripts/smoke.mjs",
+		"smoke:local": "node scripts/smoke.mjs --local",
 		"guard": "node scripts/guard-real-data.mjs --all",
 		"fixtures:check": "node scripts/gen-fixtures.mjs --check",
 		"fixtures:gen": "node scripts/gen-fixtures.mjs",
