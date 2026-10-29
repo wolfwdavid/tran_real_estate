@@ -23,11 +23,11 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 ### Live-origin smoke suite (SMOKE)
 
 - [ ] **SMOKE-01**: Operator can run a read-only smoke suite against any origin via `SMOKE_BASE_URL`; it fails closed when the variable is unset or not `https://` (loopback allowed only with `SMOKE_ALLOW_HTTP=1`), runs with zero retries and `--fail-on-flaky-tests`, never submits forms, enters keys, or calls RentCast or an LLM, and finishes in under five minutes
-- [ ] **SMOKE-02**: The suite asserts the live contract: landing 200 with brand title, trailing-slash redirect, deep-route refresh, HTTP 404 branded page, CSP meta first in `<head>` with the exact `connect-src` (reusing the `assert-csp` oracle, no third copy), every hashed asset 200, `sitemap.xml` with the expected URL count, `robots.txt` with the `Sitemap:` line, `manifest.webmanifest` 200, OG/Twitter tags with absolute URLs on the audited origin and exactly one `og:image` returning `image/png`, zero third-party requests, service worker registering from the same origin and precaching only same-origin GETs, the `/legal/privacy/#browser-extension` anchor present, and the build stamp equal to `SMOKE_EXPECT_VERSION` after polling up to ten minutes
-- [ ] **SMOKE-03**: The suite is green against `scripts/serve-pages.mjs` for all three local builds (root, sub-path, configured) before the origin exists, with the build stamp read from the build directory
+- [x] **SMOKE-02**: The suite asserts the live contract: landing 200 with brand title, trailing-slash redirect, deep-route refresh, HTTP 404 branded page, CSP meta first in `<head>` with the exact `connect-src` (reusing the `assert-csp` oracle, no third copy), every hashed asset 200, `sitemap.xml` with the expected URL count, `robots.txt` with the `Sitemap:` line, `manifest.webmanifest` 200, OG/Twitter tags with absolute URLs on the audited origin and exactly one `og:image` returning `image/png`, zero third-party requests, service worker registering from the same origin and precaching only same-origin GETs, the `/legal/privacy/#browser-extension` anchor present, and the build stamp equal to `SMOKE_EXPECT_VERSION` after polling up to ten minutes
+- [x] **SMOKE-03**: The suite is green against `scripts/serve-pages.mjs` for all three local builds (root, sub-path, configured) before the origin exists, with the build stamp read from the build directory
 - [ ] **SMOKE-04**: After every deploy, a separate `live-smoke.yml` workflow (`workflow_run` after the deploy, plus `workflow_dispatch` with a URL input) runs the suite against the deployed URL and fails the run on any failure, with its own gate test and without changing the pinned action count in `ci.yml`
 - [ ] **SMOKE-05**: One analytics spec with GPC off lets exactly one page-view beacon through and asserts the configured analytics host answers with JSON 200 (a 404 means the wrong host); every other spec injects GPC so the smoke never pollutes the dashboard
-- [ ] **SMOKE-06**: The suite runs axe on `/`, one portal landing, and `/legal/privacy/` against the deployed bundle with zero violations
+- [x] **SMOKE-06**: The suite runs axe on `/`, one portal landing, and `/legal/privacy/` against the deployed bundle with zero violations
 
 ### Carried debt (DEBT)
 
@@ -121,11 +121,11 @@ Which phases cover which requirements. Filled during roadmap creation.
 | LIVE-08 | Phase 12 | Complete |
 | LIVE-09 | Phase 13 | Pending |
 | SMOKE-01 | Phase 12 | Pending |
-| SMOKE-02 | Phase 12 | Pending |
-| SMOKE-03 | Phase 12 | Pending |
+| SMOKE-02 | Phase 12 | Complete |
+| SMOKE-03 | Phase 12 | Complete |
 | SMOKE-04 | Phase 13 | Pending |
 | SMOKE-05 | Phase 12 | Pending |
-| SMOKE-06 | Phase 12 | Pending |
+| SMOKE-06 | Phase 12 | Complete |
 | DEBT-01 | Phase 14 | Pending |
 | DEBT-02 | Phase 14 | Pending |
 | DEBT-03 | Phase 14 | Pending |
