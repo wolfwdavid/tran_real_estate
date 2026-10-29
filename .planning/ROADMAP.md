@@ -36,7 +36,7 @@ Every phase closed with verifier status `human_needed` (no code gaps); the owner
 
 **Phase Numbering:** integer phases continue from v1.0 (12-17). Decimal phases (12.1, 12.2) are urgent insertions via `/gsd:insert-phase`.
 
-- [ ] **Phase 12: Go-live Readiness & Local Smoke Suite** - Clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, and a read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main`
+- [x] **Phase 12: Go-live Readiness & Local Smoke Suite** - Clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, and a read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main` (completed 2026-10-29)
 - [ ] **Phase 13: Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down** - First green GitHub CI run, first deploy observed, `live-smoke.yml` chained behind every deploy, GTM-01..04 proven or cut, HUMAN-UAT rows reclassified, launch-proof bundle and runbook
 - [ ] **Phase 14: Carried Debt** - The seven v1.0 follow-ups plus the emulator dotfile fix and the marketing-page JS trim, each closed to its sourced definition of done before the Kit 3 codemod
 - [ ] **Phase 15: Load-Deterministic Test Lanes** - Timing-budget tests in serial lanes, mechanical guard against blind timeouts and retries, capped workers, recorded evidence protocol and shuffle seed
@@ -77,7 +77,7 @@ Execution order: 12 → 13 → {14, 15, 17 in any order or overlapping} → 16. 
 **Note on LIVE-05:** this phase owns the requirement and delivers its local half (the checklist corrections and the pinned Search Console meta slot). The live half ("Search Console verified, `sitemap.xml` submitted and read") can only happen once the origin exists and is completed in Phase 13 under LIVE-06's GTM-04 proof; LIVE-05 is ticked when Phase 13 records it.
 **Research flag:** no (standard patterns: Playwright `APIRequestContext`, the emulator contract, `git filter-repo`, gitleaks allowlist shapes, Search Console meta method; all exercised in this repo already).
 **UI hint:** no.
-**Plans:** 10/10 plans executed; 12-10 Task 3 (owner go-live gate) pending
+**Plans:** 10/10 plans complete
 
 Plans:
 - [x] 12-01-PLAN.md — Wave 1: repoint launch audit to the archived v1.0 PITFALLS (test:unit green) + commit-msg hygiene hook (LIVE-01)
@@ -89,7 +89,7 @@ Plans:
 - [x] 12-07-PLAN.md — Wave 4: configured target test origin, PUBLIC_SITE_URL in CI/release workflows, site-url.test.ts (LIVE-08)
 - [x] 12-08-PLAN.md — Wave 5: routing/version/anchor/CSP/SEO/axe smoke specs green on three builds (SMOKE-02, SMOKE-03, SMOKE-06)
 - [x] 12-09-PLAN.md — Wave 6: assets/SW/third-party specs, single GPC-off analytics spec + JSON collector, static read-only guard (SMOKE-01, SMOKE-02, SMOKE-05)
-- [ ] 12-10-PLAN.md — Wave 7: smoke:local in pnpm verify, phase gate, owner go-live checkpoint (all)
+- [x] 12-10-PLAN.md — Wave 7: smoke:local in pnpm verify, phase gate, owner go-live checkpoint (all)
 
 ### Phase 13: Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down
 **Goal:** The v1.0 build is live at `https://tranrealestate.github.io/`, CI has proven itself on GitHub, every deploy of `main` is followed automatically by the live smoke, the GTM proofs are ticked or cut, and the owner holds a runbook, a launch-proof bundle and one consolidated human-UAT ledger instead of 77 scattered rows.
@@ -180,7 +180,7 @@ Plans:
 | 9. Agent Content Studio & Market Snapshot Reports | v1.0 | 25/25 | Complete | 2026-10-13 |
 | 10. Launch Hardening & Go-to-Market | v1.0 | 23/23 | Complete | 2026-10-14 |
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
-| 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Awaiting owner gate |  |
+| 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 0/TBD | Not started | - |
 | 14. Carried Debt | v1.1 | 0/TBD | Not started | - |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |

@@ -14,7 +14,7 @@ provides:
   - pnpm verify runs pnpm smoke:local right after pnpm test:e2e (pinned in workflow-gate.test.ts)
   - full Phase 12 gate green at one commit (a61db44), with the evidence below
   - final pre-remote history check (0 attributed commits by both counts, hygiene exit 0, no remote)
-  - owner go-live gate handed over (DEPLOY-CHECKLIST Steps 1-6.1), Task 3 awaiting the owner
+  - owner go-live gate DONE 2026-10-29 under the owner's own account: public repo `wolfwdavid/tran_real_estate`, `main` + `v1.0` pushed with `PAGES_ENABLED` unset, first `ci` run green with `deploy` skipped
 affects: [13 (first push, first CI run, PAGES_ENABLED), 14 (DEBT 5.4 origin-parity overlap), 15 (load determinism)]
 
 # Tech tracking
@@ -33,7 +33,7 @@ key-files:
 key-decisions:
   - "smoke:local sits after test:e2e and before audit:deps: the three builds exist at HEAD inside verify, Playwright ownership stays sequential, and it is the only local gate for the served stamp and the configured-origin proof at the HTTP layer (about 65 s measured, under the 2.5-3 min estimate)"
   - "LIVE-01 closed here on the final stage-G evidence; LIVE-05 left unticked: its local half is done, and ROADMAP says it is ticked when Phase 13 records the live half"
-  - "Phase 12 is not marked complete in ROADMAP: gsd-tools ticked the phase and the 12-10 line, which were reverted because Task 3 (the owner gate that closes the phase) is pending"
+  - "Owner chose the personal account over a new org at the gate: repo is wolfwdavid/tran_real_estate, live origin will be https://wolfwdavid.github.io/tran_real_estate/ (sub-path build); Phase 13 sets PUBLIC_SITE_URL accordingly and updates the org wording in the docs (see deferred-items.md)"
   - "Task 2 made no commit: the gate found no failures, so deferred-items.md was not touched"
 
 patterns-established:
@@ -55,7 +55,7 @@ completed: 2026-10-29
 - **Duration:** about 29 min
 - **Started:** 2026-10-29T20:36:00Z
 - **Completed:** 2026-10-29T21:05:00Z
-- **Tasks:** 2 of 3 done (Task 3 is the owner gate and is awaiting the owner)
+- **Tasks:** 3 of 3 done (Task 3, the owner gate, completed 2026-10-29 at the orchestrator checkpoint)
 - **Files modified:** 2
 
 ## Accomplishments
@@ -130,7 +130,7 @@ Compared with 12-02: 1218 commits right after the rewrite, 1251 now, and still 0
 
 1. **Task 1: smoke:local joins pnpm verify:** `a61db44` (build). TDD: RED was 1 failed and 36 passed (the new pin failed on the count of `pnpm smoke:local`, which was 0). GREEN was 37 of 37 after the `package.json` change. The plan asked for a single commit for the task, so the RED and GREEN steps were not committed separately.
 2. **Task 2: phase gate at one commit, final history check:** no commit by design. The gate made no commits, and with no failures there was nothing to record in `deferred-items.md`.
-3. **Task 3: owner gate:** awaiting the owner (checkpoint:human-action). No org, repo or remote was created, and nothing was pushed.
+3. **Task 3: owner gate:** DONE. The owner decided to use the existing GitHub account instead of a new org. The owner created the empty public repo `wolfwdavid/tran_real_estate`; the orchestrator then added the remote, pushed `main` (62d9973) and tag `v1.0`, and applied Steps 3-5 through the API (Pages build_type = workflow, secret scanning + push protection, Dependabot alerts + security updates). `PAGES_ENABLED` stayed unset.
 
 The Task 1 commit went through the real pre-commit and commit-msg hooks. `git log -1 --format=%B | grep -ciE "claude|anthropic|co-authored-by"` returned `0`.
 
@@ -151,22 +151,14 @@ None.
 
 None.
 
-## Owner gate (Task 3, pending)
+## Owner gate (Task 3, done 2026-10-29)
 
-The owner follows `docs/DEPLOY-CHECKLIST.md` Step 1 (create org `tranrealestate`), Step 2 (empty public repo `tranrealestate.github.io`), Step 3 (Pages Source = GitHub Actions), Step 4 (Dependabot alerts + security updates), Step 5 (secret scanning + push protection), then Step 6.1:
+Decision at the gate: the owner's own account, not the `tranrealestate` org. Evidence:
 
-```sh
-git remote add origin https://github.com/tranrealestate/tranrealestate.github.io.git
-git push -u origin main
-git push origin v1.0   # optional
-```
+- Repo: https://github.com/wolfwdavid/tran_real_estate (public, created empty by the owner with `gh repo create`).
+- `git remote -v` → `origin https://github.com/wolfwdavid/tran_real_estate.git`; `git rev-parse main` = `git rev-parse origin/main` = 62d9973; tag `v1.0` pushed.
+- Settings via API: Pages `build_type: workflow` (URL https://wolfwdavid.github.io/tran_real_estate/), `secret_scanning: enabled`, `secret_scanning_push_protection: enabled`, `dependabot_security_updates: enabled`, vulnerability alerts enabled.
+- First `ci` run (push, 62d9973): https://github.com/wolfwdavid/tran_real_estate/actions/runs/40961373692 — `conclusion: success`; jobs root/sub/configured + "secrets + real-data guard" all success; `deploy` skipped (PAGES_ENABLED unset). Root E2E: 1151 passed in 21.3 min on the runner.
+- Dependabot opened its first update runs immediately after the push.
 
-`PAGES_ENABLED` stays unset. Steps 6.2-6.3 (first green CI, then `PAGES_ENABLED=true` plus an empty commit) belong to Phase 13.
-
-## Build-dir state for Phase 13
-
-All three build directories are stamped `a61db44`. The docs commit for this SUMMARY moves HEAD, so they are stale by design. Rebuild all three before any local `smoke:local` run.
-
-## Self-Check: PASSED
-
-- `package.json`, `scripts/workflow-gate.test.ts` and this SUMMARY are present; commit `a61db44` is present.
+Consequences for Phase 13 are recorded in `deferred-items.md` (sub-path build, `PUBLIC_SITE_URL=https://wolfwdavid.github.io/tran_real_estate`, org wording in docs).
