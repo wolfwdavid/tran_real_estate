@@ -34,8 +34,16 @@ jobs:
       - name: Tag matches the extension package version
         run: test "$GITHUB_REF_NAME" = "ext-v$(node -p "require('./apps/extension/package.json').version")"
       - run: pnpm vitest run --project extension
-      - run: pnpm --filter extension zip
-      - run: node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output
+      # The zip and its oracle read the same site origin (TRAN_ORIGIN / PRIVACY_URL and the
+      # oracle's URL allowlist). Unset expands to '', which site-config treats as the default.
+      - name: Zip the extension
+        run: pnpm --filter extension zip
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      - name: Manifest and zero-network oracle
+        run: node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
       - name: Checksums
         working-directory: apps/extension/.output
         run: sha256sum sponsored-listing-filter-*.zip > SHA256SUMS.txt

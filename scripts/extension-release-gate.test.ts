@@ -122,6 +122,30 @@ describe('steps', () => {
 		for (const s of ORDER) expect(count(text, s), s).toBe(1);
 	});
 
+	// LIVE-08: the published zip and its oracle run are built for the owner's site origin. The
+	// variable sits in each step's own env block, never at job or workflow level.
+	test('the zip and oracle steps each carry PUBLIC_SITE_URL in their own step', () => {
+		const SITE = 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}';
+		const job = releaseJob();
+		const stepOf = (run: string): string => {
+			const at = job.indexOf(run);
+			expect(at, run).toBeGreaterThan(-1);
+			const next = job.indexOf('\n      - ', at);
+			return job.slice(job.lastIndexOf('\n      - ', at), next === -1 ? undefined : next);
+		};
+		for (const [name, run] of [
+			['Zip the extension', ORDER[3]],
+			['Manifest and zero-network oracle', ORDER[4]]
+		]) {
+			const step = stepOf(run);
+			expect(step, run).toContain(`- name: ${name}\n`);
+			expect(step, run).toContain(`\n        env:\n          ${SITE}`);
+		}
+		expect(count(text, SITE)).toBe(2);
+		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(2);
+		expect(text).not.toMatch(/^(?:env:| {4}env:)/m);
+	});
+
 	test('the release uploads the zip and SHA256SUMS.txt from the WXT output folder', () => {
 		expect(text).toContain('working-directory: apps/extension/.output');
 		expect(text).toContain('apps/extension/.output/sponsored-listing-filter-*.zip');
