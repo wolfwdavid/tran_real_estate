@@ -3,31 +3,39 @@
 Nothing in this file is required for local development. Every gate in the repository runs
 locally and in CI without a remote, an organization, or a domain. The steps below are the
 hosting actions only the repository owner can perform in a browser. Do them in order, once.
+The owner chose the personal account at the Phase 12 gate (2026-10-29): the repository is
+`wolfwdavid/tran_real_estate` and the site is the project site
+`https://wolfwdavid.github.io/tran_real_estate/`. Steps 1-6 are the record of that go-live;
+day-to-day operations live in `docs/RUNBOOK.md`.
 
 Until they are done the deploy job in `.github/workflows/ci.yml` stays dormant: it is gated on
 the repository variable `PAGES_ENABLED`, and an unset variable evaluates to `''`, so the upload
 and deploy steps skip cleanly on every run.
 
-## Step 1: Create the organization
+## Step 1: Use the owner account (no organization)
 
-Create the free GitHub organization `tranrealestate` in the browser. Organizations cannot be
-created through the API or the CLI, so this is always a manual step.
+**Completed 2026-10-29.** The site is hosted under the owner's personal account `wolfwdavid`. No
+organization is created. Trade-off accepted by the owner: the origin `https://wolfwdavid.github.io`
+is shared with the owner's other project sites, so browser storage (remembered keys, saved data)
+is shared with them (PROJECT.md Key Decisions). A custom domain later removes that and is a
+variable change (LIVE-08).
 
-## Step 2: Create an empty public repository named exactly `tranrealestate.github.io`
+## Step 2: Create an empty public repository named exactly `tran_real_estate`
 
-Inside the organization create a public repository **named exactly `tranrealestate.github.io`**.
-GitHub serves an organization root site (`https://tranrealestate.github.io/`) only from a
-repository with that exact name.
+**Completed 2026-10-29.**
+
+Create a public repository **named exactly `tran_real_estate`** under the owner account. GitHub
+serves it as the project site `https://wolfwdavid.github.io/tran_real_estate/`, so the deploy
+build uses the base path `/tran_real_estate` (the repository variable `BASE_PATH`, Step 6). The
+`sub` leg of the CI matrix already proves a non-root base path builds, routes and passes every
+check.
 
 Create it **empty**: do not add a README, licence or .gitignore. Any initial commit makes the first
 push of `main` non-fast-forward.
 
-If any other name is used, the site publishes under `https://tranrealestate.github.io/<repo>/`
-and the deploy must build with `BASE_PATH=/<repo>` (set it on the `Build` step of the `root`
-matrix leg in `ci.yml`). The `sub` leg of the CI matrix already proves that a non-root base path
-builds, routes, and passes every check, so this is a supported configuration, not a workaround.
-
 ## Step 3: Set the Pages source to GitHub Actions
+
+**Completed 2026-10-29** (applied through the GitHub API at the Phase 12 gate).
 
 Settings, then Pages, then Build and deployment: set **Source** to **GitHub Actions**.
 
@@ -36,10 +44,14 @@ Do this before Step 6. It creates the `github-pages` environment; without it the
 
 ## Step 4: Turn on Dependabot alerts and security updates
 
+**Completed 2026-10-29** (applied through the GitHub API at the Phase 12 gate).
+
 Settings, then Code security: enable Dependabot alerts and Dependabot security updates. `pnpm audit`
 in CI remains the authoritative gate.
 
 ## Step 5: Enable secret scanning and push protection
+
+**Completed 2026-10-29** (applied through the GitHub API at the Phase 12 gate).
 
 Settings, then Code security: enable **Secret scanning** and, under it, **Push protection**.
 Push protection rejects a push that contains a supported secret format before it reaches the
@@ -50,10 +62,13 @@ Turn this on before the first push in Step 6, so the first push is already scann
 
 ## Step 6: Push `main` with `PAGES_ENABLED` unset, wait for green CI, then go live
 
+**Completed 2026-10-29 up to the first green CI run (run 40961373692). The variables, the
+rehearsal push and the go-live push are recorded in `docs/launch-proof/` (Phase 13).**
+
 1. With `PAGES_ENABLED` **not** set, add the remote and push from a local clone:
 
    ```sh
-   git remote add origin https://github.com/tranrealestate/tranrealestate.github.io.git
+   git remote add origin https://github.com/wolfwdavid/tran_real_estate.git
    git push -u origin main
    git push origin v1.0   # optional: publish the v1.0 tag
    ```
@@ -63,7 +78,24 @@ Turn this on before the first push in Step 6, so the first push is already scann
 
 2. Wait for the first `ci` run on `main` to go green, with the `deploy` job skipped. If it fails,
    fix it before going live.
-3. Settings, then Secrets and variables, then Actions, then the **Variables** tab: add a repository
+3. Set the origin variables (Settings, then Secrets and variables, then Actions, then
+   **Variables**): `PUBLIC_SITE_URL` = `https://wolfwdavid.github.io` (the origin only, no path,
+   no trailing slash) and `BASE_PATH` = `/tran_real_estate`. From Git Bash use
+   `MSYS_NO_PATHCONV=1`, otherwise Git Bash rewrites `/tran_real_estate` into a Windows path and
+   the build fails by name:
+
+   ```sh
+   gh variable set PUBLIC_SITE_URL --repo wolfwdavid/tran_real_estate --body "https://wolfwdavid.github.io"
+   MSYS_NO_PATHCONV=1 gh variable set BASE_PATH --repo wolfwdavid/tran_real_estate --body "/tran_real_estate"
+   gh variable list --repo wolfwdavid/tran_real_estate
+   ```
+
+   Rehearse with `PAGES_ENABLED` still unset:
+   `git commit --allow-empty -m "chore: rehearse sub-path deploy build"` and `git push`. The run
+   must be green with `deploy` and `live-smoke` skipped; it is the first run whose root leg
+   builds and tests with the base path.
+
+4. Settings, then Secrets and variables, then Actions, then the **Variables** tab: add a repository
    variable named `PAGES_ENABLED` with the value `true`.
 
    This is the switch that un-gates the deploy. Both the `Upload Pages artifact` step and the
@@ -80,6 +112,9 @@ Turn this on before the first push in Step 6, so the first push is already scann
    git push
    ```
 
+   Every completed `ci` run on `main` is followed by `.github/workflows/live-smoke.yml`, which
+   waits for the deployed SHA and runs the read-only smoke (see `docs/RUNBOOK.md`).
+
 ## Step 7: Verify the live origin
 
 These checks are deferred human verification, recorded here as evidence to collect once the
@@ -91,14 +126,15 @@ or Incognito (Chrome) window or a fresh browser profile, never in a profile that
 site before. The service worker is cache-first and never skips waiting, so a used profile keeps
 serving the previous build's HTML and CSP.
 
-1. In a fresh InPrivate window, load `https://tranrealestate.github.io/`. Expect the landing
-   page.
-2. In a fresh InPrivate window, navigate to `/renter/` and refresh the browser. Expect the page,
-   not a 404.
-3. In a fresh InPrivate window, visit `https://tranrealestate.github.io/renter` (no trailing
-   slash). Expect a redirect to `/renter/`.
+1. In a fresh InPrivate window, load `https://wolfwdavid.github.io/tran_real_estate/`. Expect the
+   landing page.
+2. In a fresh InPrivate window, navigate to `/tran_real_estate/renter/` and refresh the browser.
+   Expect the page, not a 404.
+3. In a fresh InPrivate window, visit `https://wolfwdavid.github.io/tran_real_estate/renter` (no
+   trailing slash). Expect a redirect to `/tran_real_estate/renter/`.
 4. In a fresh InPrivate window, visit a bogus path such as
-   `https://tranrealestate.github.io/does-not-exist/`. Expect the branded not-found page.
+   `https://wolfwdavid.github.io/tran_real_estate/does-not-exist/`. Expect the branded not-found
+   page with HTTP status 404 (`curl -s -o /dev/null -w "%{http_code}" <url>` prints 404).
 5. In a fresh InPrivate window, view the source of any page. Expect the `Content-Security-Policy`
    meta tag immediately after `<meta charset>`, with no `unsafe-inline` or `unsafe-eval` in
    `script-src`.
@@ -141,12 +177,13 @@ serving the previous build's HTML and CSP.
 
 1. **Umami usage counts (analytics, optional).**
    1. Create a free Umami Cloud account (or self-host Umami) and add the website
-      `tranrealestate.github.io`.
+      `wolfwdavid.github.io`.
    2. Copy the website ID (a UUID) from the site's tracking code in the Umami dashboard. The
       collect host is `https://gateway.umami.is` (the official tracker script posts there). Set
       `PUBLIC_ANALYTICS_HOST=https://gateway.umami.is`.
-   3. In Umami's settings, confirm that IP addresses are not stored. Record the answer in
-      `.planning/phases/10-launch-hardening-go-to-market/10-HUMAN-UAT.md` (`docs/LAUNCH-AUDIT.md`
+   3. In Umami's settings and privacy policy, confirm that IP addresses are not stored (Umami
+      Cloud may have no toggle for it; record what the settings page and the policy say, with a
+      screenshot). Record the answer in `.planning/HUMAN-UAT.md` (row L82) (`docs/LAUNCH-AUDIT.md`
       is generated; never edit it by hand). The privacy page tells visitors the counter
       receives their IP address like any web request, so do not turn counting on until this is
       confirmed.
@@ -160,7 +197,7 @@ serving the previous build's HTML and CSP.
       ```sh
       curl -i -X POST https://gateway.umami.is/api/send \
         -H 'content-type: application/json' \
-        --data '{"type":"event","payload":{"website":"<your website id>","hostname":"tranrealestate.github.io","url":"/"}}'
+        --data '{"type":"event","payload":{"website":"<your website id>","hostname":"wolfwdavid.github.io","url":"/tran_real_estate/"}}'
       ```
 
       Expect `200` with a JSON body. `404 {"error":"Website not found"}` means the host OR the
@@ -192,36 +229,39 @@ serving the previous build's HTML and CSP.
    forms. Leave it unset and the forms show "check back later" text instead of an address.
 4. **Search Console.** Use the HTML-tag method only (the HTML-file method adds a page the CSP
    oracle rejects; DNS needs a custom domain). In Search Console add the URL-prefix property
-   `https://tranrealestate.github.io/`, choose **HTML tag**, copy the
+   `https://wolfwdavid.github.io/tran_real_estate/`, choose **HTML tag**, copy the
    `<meta name="google-site-verification" content="..." />` tag, and paste it in
    `apps/web/src/app.html` on the line directly after the `<!-- search-console: ... -->` marker,
    which sits directly after `%sveltekit.head%` (so the CSP meta stays first). The token is public.
    Run `pnpm vitest run --project scripts scripts/app-html.test.ts`, commit, push, wait for the
-   deploy, then press Verify and submit `https://tranrealestate.github.io/sitemap.xml`; confirm it
-   is read with 14 URLs.
-5. **Share cards.** Paste `https://tranrealestate.github.io/tools/cap-rate/` into a link-preview
-   debugger (LinkedIn Post Inspector or the Facebook Sharing Debugger). Confirm the card image and
-   title.
+   deploy, then press Verify and submit
+   `https://wolfwdavid.github.io/tran_real_estate/sitemap.xml`; confirm it is read with 14 URLs.
+   A project site's `robots.txt` is ignored by crawlers (they read it only at the host root), so
+   the sitemap must be submitted here; the pages that must stay out of search already carry
+   `noindex`.
+5. **Share cards.** Paste `https://wolfwdavid.github.io/tran_real_estate/tools/cap-rate/` into a
+   link-preview debugger (LinkedIn Post Inspector or the Facebook Sharing Debugger). Confirm the
+   card image and title.
 6. **Dependabot.** Done in Step 4 (kept here so the item numbers below stay stable).
-7. **Record the results** in `.planning/phases/10-launch-hardening-go-to-market/10-HUMAN-UAT.md`
-   (`docs/LAUNCH-AUDIT.md` is generated by `pnpm audit:launch`; never edit it by hand), including the Umami
-   IP-storage answer and the analytics cut-line decision (kept or cut).
+7. **Record the results** in `.planning/HUMAN-UAT.md` (the consolidated ledger; the per-phase
+   files are superseded) (`docs/LAUNCH-AUDIT.md` is generated by `pnpm audit:launch`; never edit
+   it by hand), including the Umami IP-storage answer and the analytics cut-line decision (kept or
+   cut).
 
 ## Step 9: Browser extension release (Phase 11)
 
 The Sponsored Listing Filter extension builds, tests and passes its zero-network oracle locally
 and in CI without any of these steps (`pnpm ext:build && pnpm ext:assert`). The release workflow
 `.github/workflows/extension-release.yml` stays dormant until the variable in step 4 exists. Do
-these in order, once. Record each result in
-`.planning/phases/11-zillow-sponsored-listing-filter-extension/11-HUMAN-UAT.md`.
+these in order, once. Record each result in `.planning/HUMAN-UAT.md`.
 
 1. **Read the current Zillow Terms of Use** in a browser (automated fetch is refused). Record the
-   "Updated" date and the section 5 Prohibited Use wording in 11-HUMAN-UAT item 4, and decide
-   go or no-go before any public release. This gates the store listing and the GitHub Release,
-   not the build.
+   "Updated" date and the section 5 Prohibited Use wording in the HUMAN-UAT extension rows, and
+   decide go or no-go before any public release. This gates the store listing and the GitHub
+   Release, not the build.
 2. **Confirm the privacy URL is live:**
-   `https://tranrealestate.github.io/legal/privacy/#browser-extension` (needs Steps 1-7). The
-   popup links to it and the store listing asks for it.
+   `https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension`
+   (needs Steps 1-7). The popup links to it and the store listing asks for it.
 3. **Microsoft Edge Add-ons.** Create a free Partner Center developer account. Submit the
    `sponsored-listing-filter-<version>-chrome.zip` produced by `pnpm ext:build` (or the
    GitHub Release zip), with the copy in `apps/extension/store/edge-listing.md`, the logo

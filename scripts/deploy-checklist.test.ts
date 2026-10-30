@@ -1,6 +1,8 @@
-// Text oracle for docs/DEPLOY-CHECKLIST.md (12-05). The checklist is the owner's go-live runbook,
-// so its step order, hosts and cross-referenced numbers are load-bearing: other files cite
-// "Step 5", "Step 7", "8.1.3", "8.1.8" and "8.7" and must stay true without edits.
+// Text oracle for docs/DEPLOY-CHECKLIST.md (12-05, rewritten in Phase 13 to the personal-account
+// reality: wolfwdavid/tran_real_estate served at https://wolfwdavid.github.io/tran_real_estate/).
+// The checklist is the owner's one-time go-live record, so its step order, hosts and
+// cross-referenced numbers are load-bearing: other files cite "Step 5", "Step 7", "8.1.3",
+// "8.1.8" and "8.7" and must stay true without edits.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
@@ -12,8 +14,8 @@ const FLAT = DOC.replace(/\s+/g, ' ');
 const EVIDENCE = readFileSync(join(ROOT, 'scripts/lib/pitfalls-evidence.mjs'), 'utf8');
 
 const HEADINGS = [
-	'## Step 1: Create the organization',
-	'## Step 2: Create an empty public repository named exactly `tranrealestate.github.io`',
+	'## Step 1: Use the owner account (no organization)',
+	'## Step 2: Create an empty public repository named exactly `tran_real_estate`',
 	'## Step 3: Set the Pages source to GitHub Actions',
 	'## Step 4: Turn on Dependabot alerts and security updates',
 	'## Step 5: Enable secret scanning and push protection',
@@ -73,24 +75,55 @@ describe('step order', () => {
 		expect(section(5)).toMatch(/before the first push in Step 6/);
 	});
 
-	test('Step 6 pushes first, waits for CI, then sets the variable and pushes an empty commit', () => {
+	test('Step 6 pushes first, waits for CI, sets the origin variables, rehearses, then goes live', () => {
 		const s6 = section(6);
 		const remote = s6.indexOf(
-			'git remote add origin https://github.com/tranrealestate/tranrealestate.github.io.git'
+			'git remote add origin https://github.com/wolfwdavid/tran_real_estate.git'
 		);
 		const push = s6.indexOf('git push -u origin main');
 		const green = s6.search(/go green/);
+		const vars = s6.search(/MSYS_NO_PATHCONV=1 gh variable set BASE_PATH/);
+		const rehearse = s6.indexOf('chore: rehearse sub-path deploy build');
 		const variable = s6.search(/`PAGES_ENABLED` with the value `true`/);
 		const empty = s6.indexOf('git commit --allow-empty -m "chore: go live"');
-		for (const i of [remote, push, green, variable, empty]) expect(i).toBeGreaterThan(-1);
+		for (const i of [remote, push, green, vars, rehearse, variable, empty]) {
+			expect(i).toBeGreaterThan(-1);
+		}
 		expect(remote).toBeLessThan(push);
 		expect(push).toBeLessThan(green);
-		expect(green).toBeLessThan(variable);
+		expect(green).toBeLessThan(vars);
+		expect(vars).toBeLessThan(rehearse);
+		expect(rehearse).toBeLessThan(variable);
 		expect(variable).toBeLessThan(empty);
 		expect(s6).toMatch(/never adds a remote/);
 		expect(s6).toMatch(/Setting the variable alone deploys nothing/);
 		expect(s6).toMatch(/`workflow_dispatch` is excluded from the gate/);
 		expect(DOC.split('git commit --allow-empty -m "chore: go live"')).toHaveLength(2);
+	});
+
+	test('Steps 1-6 carry the completion marker', () => {
+		for (const n of [1, 2, 3, 4, 5, 6]) {
+			expect(section(n), `Step ${n}`).toMatch(/\*\*Completed 2026-10-29/);
+		}
+	});
+});
+
+describe('personal-account origin', () => {
+	test('the checklist names only the real origin', () => {
+		expect(DOC).not.toMatch(/tranrealestate/);
+		expect(DOC).toMatch(/https:\/\/wolfwdavid\.github\.io\/tran_real_estate\//);
+	});
+
+	test('PUBLIC_SITE_URL is the origin only and BASE_PATH is set', () => {
+		expect(FLAT).toContain('--body "https://wolfwdavid.github.io"');
+		expect(FLAT).toContain('--body "/tran_real_estate"');
+		expect(FLAT).not.toContain('--body "https://wolfwdavid.github.io/tran_real_estate');
+	});
+
+	test('Step 8 notes that a project robots.txt is ignored', () => {
+		const s8 = section(8);
+		const item4 = s8.slice(s8.search(/^4\. /m), s8.search(/^5\. /m));
+		expect(item4).toMatch(/robots\.txt/);
 	});
 });
 
