@@ -104,7 +104,28 @@ Plans:
 **Owner steps inside the phase:** set `PAGES_ENABLED=true` and the launch Variables (`PUBLIC_WEB3FORMS_KEY`, `PUBLIC_ANALYTICS_HOST` + `PUBLIC_ANALYTICS_WEBSITE_ID`, `PUBLIC_SITE_URL`, optional `PUBLIC_CONTACT_EMAIL`); Search Console property; Umami and Web3Forms accounts; share-card debugger runs; real-key CORS checks per provider; the push-protection probe with a throwaway zero-permission PAT.
 **Research flag:** YES. Run `/gsd:research-phase 13`: the first live run of `ci.yml` on a 4-vCPU `ubuntu-24.04` runner (three-leg E2E runtime, memory, Playwright worker count) cannot be pre-verified and is planned as "run, observe, quick-fix"; verify live that Pages returns HTTP 404 (not 200) for `404.html`, that the `workflow_run` payload carries `head_sha`, and the HTTP → HTTPS redirect.
 **UI hint:** no.
-**Plans:** TBD
+**Plans:** 19 plans
+
+Plans:
+- [ ] 13-01-PLAN.md — Wave 1: planning docs reconciled to wolfwdavid.github.io/tran_real_estate, CI baseline evidence (LIVE-02), owner decisions A/B/C (checkpoint)
+- [ ] 13-02-PLAN.md — Wave 1: resolveSiteUrl helper, DEFAULT_SITE_ORIGIN, extension __TRAN_SITE_URL__ + oracle allowlist, base-path proof group (D-03/D-04)
+- [ ] 13-03-PLAN.md — Wave 1: live-smoke.yml (workflow_run + dispatch) + live-smoke-gate.test.ts, mutation-checked (SMOKE-04)
+- [ ] 13-04-PLAN.md — Wave 1: DEPLOY-CHECKLIST personal-account rewrite + extension docs privacy URL, with their oracles
+- [ ] 13-05-PLAN.md — Wave 1: one HUMAN-UAT ledger (99 + 4 rows) + no-row-dropped test; twelve per-phase files superseded (LIVE-07)
+- [ ] 13-06-PLAN.md — Wave 2: root BASE_PATH knob through build-targets, emulator, Playwright root project, smoke.mjs, specs; launch-audit header (blocker)
+- [ ] 13-07-PLAN.md — Wave 2: Dependabot toolchain-major ignores (D-06) + shared-origin privacy copy (decision C)
+- [ ] 13-08-PLAN.md — Wave 2: docs/RUNBOOK.md + runbook oracle; proof-shot script (LIVE-09, D-20)
+- [ ] 13-09-PLAN.md — Wave 3: ci.yml + extension-release.yml BASE_PATH wiring with gate tests (uses count stays 7)
+- [ ] 13-10-PLAN.md — Wave 4: local rehearsal of the go-live config + full verify gate set (production twin)
+- [ ] 13-11-PLAN.md — Wave 5: owner push of the code wave, CI green, live-smoke skipped; Dependabot PR triage (checkpoints)
+- [ ] 13-12-PLAN.md — Wave 6: owner sets PUBLIC_SITE_URL + BASE_PATH; rehearsal push green with Pages off (checkpoints)
+- [ ] 13-13-PLAN.md — Wave 7: PAGES_ENABLED + go-live push; deploy and live-smoke green on one SHA; D-13 facts; fresh-profile checks
+- [ ] 13-14-PLAN.md — Wave 8: GTM-04 Umami proof (IP finding, probe, GPC off/on) or cut
+- [ ] 13-15-PLAN.md — Wave 9: cut line if needed; Web3Forms waitlist + feedback delivery; GTM-01 walk
+- [ ] 13-16-PLAN.md — Wave 10: share cards in the debuggers; Search Console token in the pinned slot
+- [ ] 13-17-PLAN.md — Wave 11: token deploy, property verified, sitemap read with 14 URLs (LIVE-05 live half)
+- [ ] 13-18-PLAN.md — Wave 12: LAUNCH-AUDIT regenerated at the deployed commit with the deploy env (D-22)
+- [ ] 13-19-PLAN.md — Wave 13: ledger results, launch-proof index, runbook facts, requirement ticks, final green trio
 
 ### Phase 14: Carried Debt
 **Goal:** Every follow-up carried out of v1.0 is closed to its sourced definition of done (ListingCard ids, save-gate reason copy, memo print with notes-only numerals, origin-parity test, UI-level backup round-trip, tailwind-merge font-size token, saved-search scheduler lock, emulator dotfile fidelity, marketing-page JS budget) while `git blame` is still clean, before the Kit 3 codemod rewrites hundreds of files.
