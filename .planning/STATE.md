@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-02-PLAN.md
-last_updated: "2026-10-30T11:47:42.904Z"
+stopped_at: Completed 13-01-PLAN.md
+last_updated: "2026-10-30T13:07:17.706Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 6 of 21
+Plan: 7 of 21
 
 ## Performance Metrics
 
@@ -247,6 +247,7 @@ Plan: 6 of 21
 | Phase 13 P04 | 8min | 2 tasks | 5 files |
 | Phase 13 P05 | 9min | 2 tasks | 14 files |
 | Phase 13 P02 | 8min | 2 tasks | 15 files |
+| Phase 13 P01 | 2 sessions | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -649,6 +650,8 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-02: DEFAULT_SITE_ORIGIN is https://wolfwdavid.github.io; every absolute URL goes through resolveSiteUrl() = resolveSiteOrigin(env) + resolveBasePath(env), shared by the web __SITE_URL__ define, the extension __TRAN_SITE_URL__ define and the extension oracle allowlist (D-03, D-04)
 - [Phase 13]: 13-02: extension define renamed __TRAN_ORIGIN__ -> __TRAN_SITE_URL__; TRAN_ORIGIN derives from new URL(TRAN_SITE_URL).origin; urlAllowlist appends resolveSiteUrl(env) + '/' so a sibling project site on the shared origin is never allowlisted
 - [Phase 13]: 13-02: LIVE-03 left unchecked (origin/base helper half only); the first-deploy observation plan closes it; pnpm ext:test:browser deferred to the post-wave run
+- [Phase 13]: 13-01: owner decisions A-approve (project-instructions Origin line replaced), B-ignore (@types/node majors into Dependabot ignore, applied by 13-07), C-approve (shared-origin privacy copy, applied by 13-07) recorded verbatim in 13-01-SUMMARY
+- [Phase 13]: 13-01: HUMAN-UAT count is 99 rows (06/07 owner lists are 27 rows, not 8); LIVE-02 closed on runs 40961373692/40965347969/40980243892, LIVE-03 and LIVE-07 stay open for 13-13/13-19
 
 ### Pending Todos
 
@@ -678,7 +681,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T11:47:42.900Z
-Stopped at: Completed 13-02-PLAN.md
+Last session: 2026-10-30T13:07:17.700Z
+Stopped at: Completed 13-01-PLAN.md
 Resume file: None
 Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
