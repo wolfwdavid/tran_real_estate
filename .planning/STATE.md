@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-11-PLAN.md
-last_updated: "2026-10-30T18:12:27.868Z"
+stopped_at: Completed 13-12-PLAN.md
+last_updated: "2026-10-30T18:51:46.380Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 22
+  completed_plans: 23
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 13 of 21
+Plan: 14 of 21
 
 ## Performance Metrics
 
@@ -254,6 +254,7 @@ Plan: 13 of 21
 | Phase 13 P08 | 10min | 2 tasks | 5 files |
 | Phase 13 P10 | 78min | 3 tasks | 2 files |
 | Phase 13 P11 | 185min | 3 tasks | 4 files |
+| Phase 13 P12 | 34min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -672,6 +673,9 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-11: PR #1 (actions/setup-node 7.0.0 -> 7.1.0) squash-merged as f26cf24 on a green rebased ci run with the diff covering ci.yml, extension-release.yml and live-smoke.yml; the squash message carries GitHub Co-authored-by: dependabot[bot], which commit-hygiene accepts by design (patterns name anthropic/claude only) and is not rewritten
 - [Phase 13]: 13-11: Dependabot closed #4-#7 itself once the 13-07 ignores reached main and opened #8 as the regrouped #4; #2, #3, #8 closed with the D-07 comments, so the triage took four commands instead of seven
 - [Phase 13]: 13-11: code wave on main at bf0ffce (ci 41089068534 green 28m37s, live-smoke 41093390433 skipped); post-merge f26cf24 (ci 41099425596 green 33m13s, live-smoke 41103602722 skipped); LIVE-02 and SMOKE-04 evidence extended, LIVE-03 stays open for 13-13
+- [Phase 13]: 13-12: variables PUBLIC_SITE_URL and BASE_PATH set and rehearsal commit ab70bbb pushed by the executor only under the owner's verbatim approvals; PAGES_ENABLED and all optional variables left unset
+- [Phase 13]: 13-12: rehearsal ci run 41106746719 green with root leg BASE_PATH=/tran_real_estate, deploy and live-smoke skipped; go-live is one variable plus one empty commit
+- [Phase 13]: 13-12: the REST jobs/<id>/logs endpoint is the oracle for a completed job's full log; gh run view --job --log and step metadata lag minutes after completion
 
 ### Pending Todos
 
@@ -701,7 +705,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T18:12:27.862Z
-Stopped at: Completed 13-11-PLAN.md
+Last session: 2026-10-30T18:51:46.376Z
+Stopped at: Completed 13-12-PLAN.md
 Resume file: None
-Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
+Next: 13-13 go-live. Owner sets `PAGES_ENABLED=true` (`gh variable set PAGES_ENABLED --repo wolfwdavid/tran_real_estate --body "true"`) and pushes `git commit --allow-empty -m "chore: go live"` + `git push origin main`; executor watches ci (deploy job un-gated) and the live-smoke run on the deploy SHA, then records D-13 facts. State at hand-off: origin/main = local main = ab70bbb; variables PUBLIC_SITE_URL=https://wolfwdavid.github.io and BASE_PATH=/tran_real_estate set (13-12); rehearsal ci run 41106746719 green with root leg BASE_PATH=/tran_real_estate, deploy and live-smoke skipped. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
