@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-08-PLAN.md
-last_updated: "2026-10-30T13:37:16.441Z"
+stopped_at: Completed 13-10-PLAN.md
+last_updated: "2026-10-30T15:03:42.474Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 20
+  completed_plans: 21
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 11 of 21
+Plan: 12 of 21
 
 ## Performance Metrics
 
@@ -252,6 +252,7 @@ Plan: 11 of 21
 | Phase 13 P07 | 16min | 2 tasks | 5 files |
 | Phase 13 P09 | 8min | 2 tasks | 4 files |
 | Phase 13 P08 | 10min | 2 tasks | 5 files |
+| Phase 13 P10 | 78min | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -664,6 +665,8 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-09: ci.yml matrix env blocks carry BASE_PATH gated to the root leg (same idiom as the owner keys); the root-only extension step and extension-release.yml read vars.BASE_PATH directly; the JS budget steps stay env-free because assert-budget reads only the build directory
 - [Phase 13]: 13-08: runbook oracle reads its numbers from smoke config, smoke.mjs, live-smoke.yml and dependabot.yml, never ci.yml (13-09 edits it concurrently; workflow-gate.test.ts owns those facts)
 - [Phase 13]: 13-08: proof-shots.mjs keeps expectations as JSON objects in checks.json and exports checkMisses; exit 2 on bad args, 1 on a missed fact or a bundle over 5 MB
+- [Phase 13]: 13-10: TRAN_ORIGIN removed from the extension site.ts (unused export whose new URL() call kept a bare site-URL literal in the popup chunk that the oracle rejects by D-04 design); the oracle stays strict and pnpm ext:assert is green in both envs
+- [Phase 13]: 13-10: both rehearsals green at f4479c4 (go-live root with BASE_PATH: 1153 E2E, smoke 121, ext oracle; default: 2339 E2E, smoke 121x3, 6939 unit); LIVE-03 stays unchecked until 13-13
 
 ### Pending Todos
 
@@ -693,7 +696,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T13:37:16.436Z
-Stopped at: Completed 13-08-PLAN.md
+Last session: 2026-10-30T15:03:42.468Z
+Stopped at: Completed 13-10-PLAN.md
 Resume file: None
 Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
