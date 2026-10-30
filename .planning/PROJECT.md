@@ -231,6 +231,9 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | Origin = `PUBLIC_SITE_URL=https://wolfwdavid.github.io` (origin only) + new repository variable `BASE_PATH=/tran_real_estate` read by the root (deploy) leg; `DEFAULT_SITE_ORIGIN` = `https://wolfwdavid.github.io`; extension privacy URL = origin + base path from one helper | D-01..D-04: the origin validator is not loosened; one function composes origin and base so web and extension cannot disagree | ✓ Phase 13 |
 | HUMAN-UAT count is 99 rows, not 77 | Counting rule: one `### ` heading under `## Tests` or one `\| X<n> \|` table row per per-phase file (`### A.` step recipes in 04/05 are not rows); 77 came from counting the 06/07 owner lists as 8 rows instead of 27 | ✓ Phase 13 |
 | Project-site `robots.txt` is ignored by crawlers | Google reads robots.txt only at the host root; `https://wolfwdavid.github.io/robots.txt` is a 404, so the project robots lines are inert. `sitemap.xml` is submitted in Search Console, and the `(app)`, `(print)`, `(public)` layouts and `+error.svelte` already emit `noindex` | ✓ Phase 13 (accepted) |
+| Project-instructions Origin rule updated to the project-site origin | Owner decision A, 2026-10-30 | ✓ Phase 13 |
+| `@types/node` majors ignored by Dependabot until Phase 14/16 | Owner decision B, 2026-10-30 | ✓ Phase 13 |
+| Privacy copy names the shared storage origin and points to Forget all keys | Owner decision C, 2026-10-30; about 250 sibling project sites share wolfwdavid.github.io | ✓ Phase 13 |
 
 ## Evolution
 

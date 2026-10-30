@@ -244,7 +244,7 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 - **RentCast budget:** default hard cap is 40 of 50 calls, and every call goes through the DataGateway. Cache TTLs: listings 24h, estimates 14d, market stats 30d, property records 90d, 404 negative cache 24h.
 - **Keys:** session-only by default, "remember on this device" is opt-in, and a passphrase lock is available. Never include keys in backups, logs, or URLs.
 - **Analytics:** a first-party `fetch` beacon only, with no third-party `<script>` tags on the origin.
-- **Origin:** `tranrealestate.github.io`, a dedicated GitHub org. Never deploy under `wolfwdavid.github.io`.
+- **Origin:** `https://wolfwdavid.github.io/tran_real_estate/`, a project site under the owner's account (decision 2026-10-29). `PUBLIC_SITE_URL` is the origin only (`https://wolfwdavid.github.io`) and `BASE_PATH=/tran_real_estate`. Browser storage is shared with sibling project sites on that origin (accepted; revisit with a custom domain).
 - **Brand:** the public name is "Tran Real Estate Tools". Copy must never imply brokerage, appraisal, or investment advice.
 - **Data hygiene:** never commit real RentCast responses or any CoStar-derived data. Use synthetic fixtures only.
 - **Commits:** keep commit messages focused on the change, and never mention AI assistants.
