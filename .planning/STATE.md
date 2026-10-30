@@ -2,15 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: completed
-stopped_at: Phase 13 planned and verified (21 plans, 13 waves); execution not started
-last_updated: "2026-10-30T02:12:46.914Z"
-last_activity: 2026-10-29
+status: unknown
+stopped_at: Completed 13-20-PLAN.md
+last_updated: "2026-10-30T11:42:21.003Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -20,16 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 12 — go-live-readiness-local-smoke-suite
+**Current focus:** Phase 13 — live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down
 
 ## Current Position
 
-Phase: 13
-Plan: Not started
-Status: 12-10 Tasks 1-2 done (phase gate green at a61db44); Task 3 owner go-live gate (DEPLOY-CHECKLIST Steps 1-6.1) awaiting the owner. Build dirs stamped a61db44 (stale after the docs commit): rebuild all three before any smoke.
-Last activity: 2026-10-29
-
-Progress (v1.1): [██████████] Phase 12 10/10 plans executed, owner gate pending (0/6 phases)
+Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
+Plan: 2 of 21
 
 ## Performance Metrics
 
@@ -247,6 +242,7 @@ Progress (v1.1): [██████████] Phase 12 10/10 plans executed,
 | Phase 12 P08 | 13min | 3 tasks | 6 files |
 | Phase 12 P09 | 17min | 3 tasks | 7 files |
 | Phase 12 P10 | 29min | 2 tasks | 2 files |
+| Phase 13 P20 | 5min | 1 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -637,6 +633,8 @@ Recent decisions affecting current work:
 - [Phase 12]: 12-09: fixtures.ts re-exports the Page type so smoke specs never import @playwright/test; smoke-readonly guard requires exactly one testGpcOff user (analytics.smoke.ts)
 - [Phase 12]: smoke:local runs inside pnpm verify right after test:e2e (pinned in workflow-gate.test.ts)
 - [Phase 12]: Phase 12 gate green at a61db44; LIVE-01 closed on the final history check; LIVE-05 stays open (local half done, ticked when Phase 13 records the live half per ROADMAP)
+- [Phase 13]: 13-20: scripts/smoke.test.ts localTargets root/sub siteUrl assert DEFAULT_SITE_ORIGIN via resolveSiteOrigin (not fixtures); they pass only with 13-02's site-config.js, substituted anyway as the correct end state
+- [Phase 13]: 13-20: LIVE-03 left unchecked (fixture half only); the live routing-contract plans close it
 
 ### Pending Todos
 
@@ -666,7 +664,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T02:12:46.910Z
-Stopped at: Phase 13 planned and verified (21 plans, 13 waves); execution not started
-Resume file: .planning/phases/13-live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down/13-01-PLAN.md
+Last session: 2026-10-30T11:42:20.998Z
+Stopped at: Completed 13-20-PLAN.md
+Resume file: None
 Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
