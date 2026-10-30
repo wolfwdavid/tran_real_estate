@@ -149,7 +149,7 @@ describe('popup states', () => {
 			.toBeVisible();
 
 		const link = page.getByRole('link', { name: /Privacy details/ });
-		expect(PRIVACY_URL).toBe('https://tranrealestate.github.io/legal/privacy/#browser-extension');
+		expect(PRIVACY_URL).toBe('https://wolfwdavid.github.io/legal/privacy/#browser-extension');
 		await expect.element(link).toHaveAttribute('href', PRIVACY_URL);
 		await expect.element(link).toHaveAccessibleName('Privacy details (opens in a new tab)');
 		await expect.element(link).toHaveAttribute('target', '_blank');

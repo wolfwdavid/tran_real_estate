@@ -1,7 +1,7 @@
 import { defineConfig } from 'wxt';
 import { COPY } from './src/lib/copy';
 import { ZILLOW_MATCH } from './src/lib/config';
-import { resolveSiteOrigin } from '../web/src/lib/site-config.js';
+import { resolveSiteUrl } from '../web/src/lib/site-config.js';
 
 export const POPUP_CSP =
 	"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
@@ -29,10 +29,12 @@ export default defineConfig({
 	// modulePreload.polyfill: Vite otherwise injects a `fetch(link.href)` polyfill for
 	// <link rel=modulepreload> into the popup chunk. MV3 Chrome preloads natively, and the popup
 	// CSP is connect-src 'none' anyway; dropping it keeps the bundle free of network primitives.
-	// __TRAN_ORIGIN__ (src/lib/site.ts): PUBLIC_SITE_URL through the web validator, resolved here on
-	// the Node side so the validator is never bundled; a malformed value fails the build by name.
+	// __TRAN_SITE_URL__ (src/lib/site.ts): PUBLIC_SITE_URL + BASE_PATH through the web app's
+	// resolveSiteUrl(), resolved here on the Node side so the validators are never bundled; a
+	// malformed value fails the build by name. The web define, this define and the oracle allowlist
+	// share the helper, so the privacy link cannot miss the live project site's base path (D-04).
 	vite: () => ({
-		define: { __TRAN_ORIGIN__: JSON.stringify(resolveSiteOrigin()) },
+		define: { __TRAN_SITE_URL__: JSON.stringify(resolveSiteUrl()) },
 		build: { assetsInlineLimit: 0, modulePreload: { polyfill: false } }
 	})
 });

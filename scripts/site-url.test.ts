@@ -1,16 +1,24 @@
-// LIVE-08 proof. Overlap: Phase 14 item 5.4 (origin parity) is satisfied for TRAN_ORIGIN by group (c); Phase 14 keeps only the docs/listing literal checks.
+// LIVE-08 / LIVE-03 proof. Overlap: Phase 14 item 5.4 (origin parity) is satisfied for TRAN_ORIGIN
+// by group (c); Phase 14 keeps only the docs/listing literal checks.
 //
 // "Changing PUBLIC_SITE_URL alone changes canonical URLs, the sitemap, OG absolute URLs and the
-// extension's TRAN_ORIGIN / PRIVACY_URL." This file proves it without building anything (no builds
+// extension's TRAN_SITE_URL / PRIVACY_URL." This file proves it without building anything (no builds
 // in test:unit): (a) no shipped source hard-codes the origin outside DEFAULT_SITE_ORIGIN, (b) the web
-// app's absolute URLs and prerender origin come from resolveSiteOrigin(), (c) the extension's
-// __TRAN_ORIGIN__ define follows the variable, (d) the configured build target carries its own
-// origin, so every configured build + seo:assert run exercises the variable end to end.
+// app's absolute URLs come from resolveSiteUrl() and the prerender origin from resolveSiteOrigin(),
+// (c) the extension's __TRAN_SITE_URL__ define follows the variable, (d) the configured build target
+// carries its own origin, so every configured build + seo:assert run exercises the variable end to
+// end, (e) BASE_PATH on its own moves resolveSiteUrl, the extension define and the oracle
+// allowlist together (D-04), so a sibling project site on the shared origin is never allowlisted.
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { DEFAULT_SITE_ORIGIN, resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
+import {
+	DEFAULT_SITE_ORIGIN,
+	resolveSiteOrigin,
+	resolveSiteUrl
+} from '../apps/web/src/lib/site-config.js';
+import { urlAllowlist } from './assert-extension.mjs';
 import { TEST_SITE_ORIGIN, targetEnv } from './lib/build-targets.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -117,34 +125,78 @@ describe('(b) web absolute URLs come from PUBLIC_SITE_URL', () => {
 
 type WxtVite = { vite: (env: unknown) => { define: Record<string, string> } };
 
-describe('(c) the extension origin follows PUBLIC_SITE_URL', () => {
+const wxtDefine = async (): Promise<Record<string, string>> => {
+	const { default: config } = await import('../apps/extension/wxt.config.ts');
+	const cfg = config as unknown as WxtVite;
+	return cfg.vite({ mode: 'production', command: 'build' } as never).define;
+};
+
+describe('(c) the extension site URL follows PUBLIC_SITE_URL', () => {
 	afterEach(() => {
 		vi.unstubAllEnvs();
 	});
 
-	const define = async (): Promise<Record<string, string>> => {
-		const { default: config } = await import('../apps/extension/wxt.config.ts');
-		const cfg = config as unknown as WxtVite;
-		return cfg.vite({ mode: 'production', command: 'build' } as never).define;
-	};
-
-	test('__TRAN_ORIGIN__ is the probe origin when PUBLIC_SITE_URL is set', async () => {
+	test('__TRAN_SITE_URL__ is the probe origin when PUBLIC_SITE_URL is set', async () => {
 		vi.stubEnv('PUBLIC_SITE_URL', 'https://probe.example');
-		expect((await define()).__TRAN_ORIGIN__).toBe('"https://probe.example"');
+		vi.stubEnv('BASE_PATH', undefined);
+		expect((await wxtDefine()).__TRAN_SITE_URL__).toBe('"https://probe.example"');
 	});
 
-	test('__TRAN_ORIGIN__ is the default origin when PUBLIC_SITE_URL is unset', async () => {
+	test('__TRAN_SITE_URL__ is the probe origin plus the base path when both are set', async () => {
+		vi.stubEnv('PUBLIC_SITE_URL', 'https://probe.example');
+		vi.stubEnv('BASE_PATH', '/tran_real_estate');
+		expect((await wxtDefine()).__TRAN_SITE_URL__).toBe('"https://probe.example/tran_real_estate"');
+	});
+
+	test('__TRAN_SITE_URL__ is the default origin when both are unset', async () => {
 		vi.stubEnv('PUBLIC_SITE_URL', undefined);
-		expect((await define()).__TRAN_ORIGIN__).toBe(JSON.stringify(DEFAULT_SITE_ORIGIN));
-		expect((await define()).__TRAN_ORIGIN__).toBe('"https://wolfwdavid.github.io"');
+		vi.stubEnv('BASE_PATH', undefined);
+		const define = await wxtDefine();
+		expect(define.__TRAN_SITE_URL__).toBe(JSON.stringify(DEFAULT_SITE_ORIGIN));
+		expect(define.__TRAN_SITE_URL__).toBe('"https://wolfwdavid.github.io"');
+		// The site URL is the only define: no legacy origin-only key survives.
+		expect(Object.keys(define)).toEqual(['__TRAN_SITE_URL__']);
 	});
 
-	test('TRAN_ORIGIN comes from the define and PRIVACY_URL derives from it', () => {
+	test('TRAN_SITE_URL comes from the define; TRAN_ORIGIN and PRIVACY_URL derive from it', () => {
 		const site = read('apps/extension/src/lib/site.ts');
-		expect(site).toContain('export const TRAN_ORIGIN: string = __TRAN_ORIGIN__;');
+		expect(site).toContain('export const TRAN_SITE_URL: string = __TRAN_SITE_URL__;');
+		expect(site).toContain('export const TRAN_ORIGIN: string = new URL(TRAN_SITE_URL).origin;');
 		expect(site).toContain(
-			'export const PRIVACY_URL = `${TRAN_ORIGIN}/legal/privacy/#browser-extension`;'
+			'export const PRIVACY_URL = `${TRAN_SITE_URL}/legal/privacy/#browser-extension`;'
 		);
+		// The only build-time global the module declares or reads is the site URL.
+		expect(new Set(site.match(/__[A-Z]+(?:_[A-Z]+)*__/g))).toEqual(new Set(['__TRAN_SITE_URL__']));
+	});
+});
+
+describe('(e) BASE_PATH alone moves every absolute URL', () => {
+	afterEach(() => {
+		vi.unstubAllEnvs();
+	});
+
+	const PROBE_URL = 'https://wolfwdavid.github.io/probe_base';
+
+	test('resolveSiteUrl() appends the base path to the default origin', () => {
+		vi.stubEnv('PUBLIC_SITE_URL', undefined);
+		vi.stubEnv('BASE_PATH', '/probe_base');
+		expect(resolveSiteUrl()).toBe(PROBE_URL);
+		expect(resolveSiteUrl().endsWith('/probe_base')).toBe(true);
+	});
+
+	test('the extension define follows the base path', async () => {
+		vi.stubEnv('PUBLIC_SITE_URL', undefined);
+		vi.stubEnv('BASE_PATH', '/probe_base');
+		expect((await wxtDefine()).__TRAN_SITE_URL__).toBe(JSON.stringify(PROBE_URL));
+	});
+
+	test('the oracle allowlists the project site, not the bare shared origin', () => {
+		vi.stubEnv('PUBLIC_SITE_URL', undefined);
+		vi.stubEnv('BASE_PATH', '/probe_base');
+		const list = urlAllowlist();
+		expect(list).toContain(`${PROBE_URL}/`);
+		expect(list).not.toContain('https://wolfwdavid.github.io/');
+		expect(list).toContain(`${resolveSiteUrl()}/`);
 	});
 });
 

@@ -19,7 +19,7 @@ import {
 	scanBundle,
 	urlAllowlist
 } from './assert-extension.mjs';
-import { DEFAULT_SITE_ORIGIN } from '../apps/web/src/lib/site-config.js';
+import { DEFAULT_SITE_ORIGIN, resolveSiteUrl } from '../apps/web/src/lib/site-config.js';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CLI = join(REPO_ROOT, 'scripts', 'assert-extension.mjs');
@@ -464,6 +464,20 @@ describe('assert-extension oracle: the site origin follows PUBLIC_SITE_URL (LIVE
 		expect(list).toContain(site(PROBE));
 		expect(list).not.toContain(site(DEFAULT_SITE_ORIGIN));
 		expect(list).toEqual([...urlAllowlist({}).slice(0, -1), site(PROBE)]);
+	});
+
+	test('BASE_PATH joins the site entry, so a sibling project site is not allowlisted (D-04)', () => {
+		const env = { PUBLIC_SITE_URL: PROBE, BASE_PATH: '/tran_real_estate' };
+		const list = urlAllowlist(env);
+		expect(list).toContain(`${resolveSiteUrl(env)}/`);
+		expect(list).toContain(`${PROBE}/tran_real_estate/`);
+		expect(list).not.toContain(site(PROBE));
+		expect(urlAllowlist({ BASE_PATH: '/tran_real_estate' })).toContain(
+			'https://wolfwdavid.github.io/tran_real_estate/'
+		);
+		expect(() => urlAllowlist({ BASE_PATH: 'C:/Program Files/Git/x' })).toThrow(
+			/BASE_PATH must be/
+		);
 	});
 
 	test('URL_ALLOWLIST is urlAllowlist(process.env) at module load', () => {

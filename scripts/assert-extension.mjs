@@ -6,13 +6,13 @@
 // apps/extension/src/lib/copy.ts and apps/extension/wxt.config.ts POPUP_CSP (same precedent as
 // assert-csp.mjs's CONNECT list): changing either must produce a reviewed two-file diff in one
 // commit, never a silent pass. Dependency-free on purpose: node builtins plus a relative import of
-// the web app's plain-JS origin validator, so the allowlisted site origin is the one the build used.
+// the web app's plain-JS site-URL helper, so the allowlisted site URL is the one the build used.
 //
 // usage: node scripts/assert-extension.mjs <outDir> [--zip-dir <dir>]
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
+import { resolveSiteUrl } from '../apps/web/src/lib/site-config.js';
 
 export const EXPECTED_NAME = 'Sponsored Listing Filter — for Zillow';
 export const EXPECTED_SHORT_NAME = 'Sponsored Filter';
@@ -91,13 +91,15 @@ const STATIC_URL_ALLOWLIST = [
 ];
 
 /**
- * The privacy link's origin follows PUBLIC_SITE_URL (LIVE-08), like the build that produced the
- * bundle. The trailing slash keeps a lookalike host (origin + ".evil.test") off the list.
+ * The privacy link follows PUBLIC_SITE_URL + BASE_PATH (LIVE-08, D-04) through the same
+ * resolveSiteUrl() the build used, so an origin/base mismatch is impossible. The trailing slash
+ * keeps a lookalike host (origin + ".evil.test") and a sibling project site on the shared origin
+ * off the list.
  * @param {Record<string, string | undefined>} [env]
  * @returns {string[]}
  */
 export function urlAllowlist(env = process.env) {
-	return [...STATIC_URL_ALLOWLIST, `${resolveSiteOrigin(env)}/`];
+	return [...STATIC_URL_ALLOWLIST, `${resolveSiteUrl(env)}/`];
 }
 
 export const URL_ALLOWLIST = urlAllowlist();

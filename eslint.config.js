@@ -127,7 +127,7 @@ export default defineConfig(
 				__ANALYTICS_WEBSITE_ID__: 'readonly',
 				__WEB3FORMS_KEY__: 'readonly',
 				__CONTACT_EMAIL__: 'readonly',
-				__TRAN_ORIGIN__: 'readonly'
+				__TRAN_SITE_URL__: 'readonly'
 			}
 		}
 	},
