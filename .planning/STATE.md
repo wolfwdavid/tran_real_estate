@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-07-PLAN.md
-last_updated: "2026-10-30T13:19:35.420Z"
+stopped_at: Completed 13-09-PLAN.md
+last_updated: "2026-10-30T13:32:24.312Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 18
+  completed_plans: 19
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 9 of 21
+Plan: 10 of 21
 
 ## Performance Metrics
 
@@ -250,6 +250,7 @@ Plan: 9 of 21
 | Phase 13 P01 | 2 sessions | 3 tasks | 4 files |
 | Phase 13 P06 | 6min | 3 tasks | 12 files |
 | Phase 13 P07 | 16min | 2 tasks | 5 files |
+| Phase 13 P09 | 8min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -659,6 +660,7 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-06: launch-audit auditedBaseUrl(env) builds the header from resolveSiteUrl over the root and sub target envs; LIVE-03 left unchecked until 13-10 rehearsal and go-live
 - [Phase 13]: 13-07: Dependabot ignores semver-major updates of the D-06 toolchain set plus @types/node (owner decision B); minor/patch stays grouped weekly
 - [Phase 13]: 13-07: privacy deletion copy applied verbatim (decision C); the shared-origin paragraph renders under {#if SITE_BASE} with the host from SITE_ORIGIN; Last updated moved to 30 October 2026
+- [Phase 13]: 13-09: ci.yml matrix env blocks carry BASE_PATH gated to the root leg (same idiom as the owner keys); the root-only extension step and extension-release.yml read vars.BASE_PATH directly; the JS budget steps stay env-free because assert-budget reads only the build directory
 
 ### Pending Todos
 
@@ -688,7 +690,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T13:19:35.414Z
-Stopped at: Completed 13-07-PLAN.md
+Last session: 2026-10-30T13:32:24.307Z
+Stopped at: Completed 13-09-PLAN.md
 Resume file: None
 Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
