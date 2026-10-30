@@ -10,6 +10,7 @@ import {
 	PITFALLS_DOC,
 	a11yMatrix,
 	auditFailed,
+	auditedBaseUrl,
 	evidenceMapErrors,
 	parsePitfallsChecklist,
 	oversizeReportRows,
@@ -232,7 +233,7 @@ function baseData(over: Record<string, unknown> = {}) {
 		header: {
 			date: '2026-10-13',
 			commit: 'abc1234',
-			baseUrl: 'https://tranrealestate.github.io/',
+			baseUrl: 'https://wolfwdavid.github.io/',
 			buildCommand: 'pnpm build:root && pnpm build:sub && pnpm build:configured',
 			node: 'v24.21.0',
 			pnpm: '11.27.0'
@@ -259,8 +260,8 @@ function baseData(over: Record<string, unknown> = {}) {
 		},
 		seo: {
 			targets: [{ target: 'root', dir: 'apps/web/build', errors: [] as string[], urls: 14 }],
-			sitemap: ['https://tranrealestate.github.io/', 'https://tranrealestate.github.io/tools/'],
-			robots: 'User-agent: *\nAllow: /\nSitemap: https://tranrealestate.github.io/sitemap.xml',
+			sitemap: ['https://wolfwdavid.github.io/', 'https://wolfwdavid.github.io/tools/'],
+			robots: 'User-agent: *\nAllow: /\nSitemap: https://wolfwdavid.github.io/sitemap.xml',
 			og: [{ file: 'og/default.png', bytes: 51200, width: 1200, height: 630 }]
 		},
 		budget: {
@@ -665,5 +666,24 @@ describe('a11yMatrix', () => {
 		expect(m.keyed).toBe('FAIL');
 		expect(a11yMatrix(pwReport([])).keyless).toBe('FAIL');
 		expect(a11yMatrix(null).keyless).toBe('FAIL');
+	});
+});
+
+describe('auditedBaseUrl (Pitfall 8)', () => {
+	test('the root (deploy) build follows BASE_PATH; the sub build keeps its own path', () => {
+		expect(
+			auditedBaseUrl({
+				PUBLIC_SITE_URL: 'https://wolfwdavid.github.io',
+				BASE_PATH: '/tran_real_estate'
+			})
+		).toBe(
+			'https://wolfwdavid.github.io/tran_real_estate/ (root/deploy build); https://wolfwdavid.github.io/tran_real_estate/ (sub-path build)'
+		);
+	});
+
+	test('with nothing set the root build sits at the default origin root', () => {
+		expect(auditedBaseUrl({})).toBe(
+			'https://wolfwdavid.github.io/ (root/deploy build); https://wolfwdavid.github.io/tran_real_estate/ (sub-path build)'
+		);
 	});
 });

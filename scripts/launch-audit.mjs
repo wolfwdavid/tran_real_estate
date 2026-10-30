@@ -10,8 +10,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { resolveBasePath } from '../apps/web/src/lib/base-path.js';
-import { resolveAnalytics, resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
+import { resolveAnalytics, resolveSiteUrl } from '../apps/web/src/lib/site-config.js';
 import { EXACT, checkBuild, countPages } from './assert-csp.mjs';
 import { BUDGET_BYTES, checkBudget } from './assert-budget.mjs';
 import { checkSeo } from './assert-seo.mjs';
@@ -1033,17 +1032,26 @@ function disclaimerChecks(root) {
 }
 
 /**
+ * The "Base URL audited" value: the root (deploy) build's site URL and the sub-path build's, each
+ * from resolveSiteUrl over that target's env (D-22, Pitfall 8).
+ * @param {Record<string, string | undefined>} env
+ */
+export function auditedBaseUrl(env) {
+	const rootEnv = { ...env, ...targetEnv('root', env) };
+	const subEnv = { ...env, ...targetEnv('sub', env) };
+	return `${resolveSiteUrl(rootEnv)}/ (root/deploy build); ${resolveSiteUrl(subEnv)}/ (sub-path build)`;
+}
+
+/**
  * Gathers every gate result for the audit.
  * @param {{ root: string; env?: Record<string, string | undefined> }} opts
  */
 export function collect({ root, env = process.env }) {
 	const git = spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: root, encoding: 'utf8' });
-	const rootEnv = { ...env, ...targetEnv('root', env) };
-	const origin = resolveSiteOrigin(rootEnv);
 	const header = {
 		date: new Date().toISOString(),
 		commit: (git.stdout ?? '').trim() || 'unknown',
-		baseUrl: `${origin}/ (root build); ${origin}/tran_real_estate/ (sub-path build)`,
+		baseUrl: auditedBaseUrl(env),
 		buildCommand: BUILD_COMMAND,
 		node: process.version,
 		pnpm: (pnpmSpawn(['--version'], { cwd: root }).stdout ?? '').trim() || 'unknown'
@@ -1087,7 +1095,7 @@ export function collect({ root, env = process.env }) {
 	const seoTargets = ['root', 'sub'].map((t) => {
 		const tEnv = { ...env, ...targetEnv(t, env) };
 		const dir = `apps/web/${tEnv.BUILD_DIR}`;
-		const siteUrl = resolveSiteOrigin(tEnv) + resolveBasePath(tEnv);
+		const siteUrl = resolveSiteUrl(tEnv);
 		const errors = checkSeo(join(root, dir), { siteUrl, minUrls: 14 });
 		const sm = join(root, dir, 'sitemap.xml');
 		const urls = existsSync(sm)
