@@ -69,6 +69,6 @@ because it only acts on what you can see.
 
 The extension stores one setting, on or off, in your browser's extension storage. Nothing else is
 stored and nothing is sent anywhere. The full statement is in the Tran privacy policy:
-https://tranrealestate.github.io/legal/privacy/#browser-extension
+https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension
 
 Not affiliated with or endorsed by Zillow Group.

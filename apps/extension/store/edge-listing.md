@@ -50,7 +50,7 @@ requests, and its popup's content security policy sets connect-src to 'none'.
 Collects nothing, sends nothing. No personal data, browsing history, page content or usage data is
 collected, stored remotely or shared.
 
-## Privacy policy URL: https://tranrealestate.github.io/legal/privacy/#browser-extension
+## Privacy policy URL: https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension
 
 ## Search terms
 

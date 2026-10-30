@@ -26,6 +26,11 @@ const collapse = (s: string): string => s.replace(/\s+/g, ' ');
 const BANNED = /\b(block|blocks|blocker|ad-free|remove|removes|official)\b|Zillow['’]s/i;
 const OTHER_BROWSERS = /\b(chrome|chromium|firefox|brave|safari|opera)\b/i;
 const NOT_AFFILIATED = 'Not affiliated with or endorsed by Zillow Group.';
+// Phase 13: the live origin is the owner's project site. Phase 14 DEBT-03 switches this literal to
+// the shared site constant; until then the oracle pins it and rejects the retired org host.
+const PRIVACY_URL =
+	'https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension';
+const RETIRED_HOST = /tranrealestate/;
 
 // Body of a `## <heading>` section: everything up to the next `## ` heading.
 function section(markdown: string, heading: string): string {
@@ -79,6 +84,10 @@ describe('docs/EXTENSION-INSTALL.md', () => {
 		expect(doc).not.toBe('');
 		expect(doc.match(BANNED)).toBeNull();
 	});
+
+	test('gives the live privacy URL on the project site', () => {
+		expect(doc).toContain(PRIVACY_URL);
+	});
 });
 
 describe('apps/extension/store/edge-listing.md', () => {
@@ -100,11 +109,16 @@ describe('apps/extension/store/edge-listing.md', () => {
 			'## Permission justification: host access to zillow.com',
 			'## Remote code: No',
 			'## Data collection: None',
-			'## Privacy policy URL: https://tranrealestate.github.io/legal/privacy/#browser-extension'
+			`## Privacy policy URL: ${PRIVACY_URL}`
 		]) {
 			expect(listing, s).toContain(s);
 		}
 		expect(section(listing, 'Name')).toBe('Sponsored Listing Filter — for Zillow');
+	});
+
+	test('neither doc names the retired organization host', () => {
+		expect(read(INSTALL)).not.toMatch(RETIRED_HOST);
+		expect(listing).not.toMatch(RETIRED_HOST);
 	});
 
 	test('lists between 1 and 7 search terms', () => {
