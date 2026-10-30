@@ -158,15 +158,25 @@ describe('(c) the extension site URL follows PUBLIC_SITE_URL', () => {
 		expect(Object.keys(define)).toEqual(['__TRAN_SITE_URL__']);
 	});
 
-	test('TRAN_SITE_URL comes from the define; TRAN_ORIGIN and PRIVACY_URL derive from it', () => {
+	test('TRAN_SITE_URL comes from the define; PRIVACY_URL is its only consumer', () => {
 		const site = read('apps/extension/src/lib/site.ts');
 		expect(site).toContain('export const TRAN_SITE_URL: string = __TRAN_SITE_URL__;');
-		expect(site).toContain('export const TRAN_ORIGIN: string = new URL(TRAN_SITE_URL).origin;');
 		expect(site).toContain(
 			'export const PRIVACY_URL = `${TRAN_SITE_URL}/legal/privacy/#browser-extension`;'
 		);
 		// The only build-time global the module declares or reads is the site URL.
 		expect(new Set(site.match(/__[A-Z]+(?:_[A-Z]+)*__/g))).toEqual(new Set(['__TRAN_SITE_URL__']));
+		// The site URL is read once, inside the privacy path, so the bundler folds it into one
+		// literal under `${siteUrl}/`. A second read (13-02 shipped `new URL(TRAN_SITE_URL).origin`
+		// for an export nothing consumed) keeps a bare `${siteUrl}` literal in the popup chunk, which
+		// the extension oracle's trailing-slash allowlist rejects (D-04), failing `pnpm ext:assert`.
+		const code = site
+			.split('\n')
+			.filter((line) => !line.trimStart().startsWith('//'))
+			.join('\n');
+		expect(code.match(/\bTRAN_SITE_URL\b/g)).toHaveLength(2);
+		expect(code).not.toMatch(/new URL\(/);
+		expect(code).not.toContain('TRAN_ORIGIN');
 	});
 });
 
