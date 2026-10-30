@@ -90,13 +90,14 @@ jobs:
       - run: node scripts/gen-fixtures.mjs --check
       - run: pnpm test:unit
       # Deploy what you test: the owner's repository variables reach ONLY the root leg (the deploy
-      # build). An unset variable expands to '', which site-config treats as unset. BASE_PATH and
-      # BUILD_DIR come from scripts/lib/build-targets.mjs; the configured target overrides every
-      # owner setting with test values there.
+      # build), including BASE_PATH (the project-site base path, D-02). An unset variable expands to
+      # '', which site-config / base-path treat as unset. scripts/lib/build-targets.mjs passes the
+      # root leg's BASE_PATH through and fixes sub (/tran_real_estate) and configured ('') itself.
       - name: Build
         run: pnpm run build:${{ matrix.target }}
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}
           PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
@@ -105,6 +106,7 @@ jobs:
         run: node scripts/assert-csp.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}
           PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
@@ -113,6 +115,7 @@ jobs:
         run: node scripts/assert-seo.mjs apps/web/${{ matrix.build_dir }} --target ${{ matrix.target }}
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}
           PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
@@ -129,18 +132,20 @@ jobs:
         run: pnpm --filter web exec playwright test --project=${{ matrix.target }}
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}
           PUBLIC_ANALYTICS_HOST: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_HOST || '' }}
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
           PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
-      # The extension is target-independent (no BASE_PATH, no owner variables except the site origin
-      # its privacy link uses), so it runs once on the root leg. The build and the oracle read the
-      # same PUBLIC_SITE_URL. Chromium is already installed above; the E2E runs new-headless Chromium.
+      # The extension runs once, on the root leg. Its privacy link is the site URL (PUBLIC_SITE_URL +
+      # BASE_PATH through resolveSiteUrl, D-04); the build and the oracle read the same two variables.
+      # Chromium is already installed above; the E2E runs new-headless Chromium.
       - name: Extension build + manifest/zero-network oracle
         if: matrix.target == 'root'
         run: pnpm ext:build && pnpm ext:assert
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ vars.BASE_PATH }}
       - name: Extension popup axe + runtime E2E
         if: matrix.target == 'root'
         run: pnpm ext:test:browser && pnpm ext:e2e

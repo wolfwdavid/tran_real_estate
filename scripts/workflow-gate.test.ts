@@ -15,6 +15,7 @@ const playwright = readFileSync(PLAYWRIGHT_CONFIG, 'utf8');
 const GATE =
 	"github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.PAGES_ENABLED == 'true'";
 const GITLEAKS_DOWNLOAD = 'gitleaks_${GITLEAKS_VERSION}_linux_x64';
+const GATED_BASE_PATH = "BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}";
 const GITLEAKS_SHA256 = '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb';
 
 function count(haystack: string, needle: string): number {
@@ -135,7 +136,8 @@ describe('quality matrix', () => {
 	test('the Build step runs the build-targets script for the matrix target', () => {
 		const quality = job('quality');
 		expect(quality).toContain('run: pnpm run build:${{ matrix.target }}');
-		expect(quality).not.toContain('BASE_PATH:');
+		// BASE_PATH is the owner knob (D-02): gated to the root leg in the four matrix env blocks.
+		expect(count(quality, GATED_BASE_PATH)).toBe(4);
 		expect(quality).not.toContain('BUILD_DIR:');
 	});
 
@@ -147,13 +149,18 @@ describe('quality matrix', () => {
 		expect(pick('root')).toEqual(['', 'build']);
 		expect(pick('sub')).toEqual(['/tran_real_estate', 'build-sub']);
 		expect(pick('configured')).toEqual(['', 'build-configured']);
+		expect(targetEnv('root', { BASE_PATH: '/tran_real_estate' }).BASE_PATH).toBe(
+			'/tran_real_estate'
+		);
+		expect(targetEnv('sub', { BASE_PATH: '/x' }).BASE_PATH).toBe('/tran_real_estate');
+		expect(targetEnv('configured', { BASE_PATH: '/x' }).BASE_PATH).toBe('');
 	});
 
 	test('owner variables reach only the root leg, in every env block', () => {
 		const quality = job('quality');
 		const blocks = count(quality, '\n        env:\n');
-		// Build, CSP oracle, SEO oracle and E2E carry every owner setting; the fifth block, the
-		// extension build, carries only the site origin (LIVE-08).
+		// Build, CSP oracle, SEO oracle and E2E carry every owner setting and BASE_PATH; the fifth
+		// block, the extension build, carries the site origin and BASE_PATH (D-04).
 		expect(blocks).toBe(5);
 		const ownerBlocks = 4;
 		for (const name of OWNER_KEYS) {
@@ -164,6 +171,9 @@ describe('quality matrix', () => {
 		}
 		expect(count(quality, 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}')).toBe(blocks);
 		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(blocks);
+		// BASE_PATH: gated in the four matrix blocks, plain in the root-only extension step.
+		expect(count(quality, GATED_BASE_PATH)).toBe(4);
+		expect(count(text, 'vars.BASE_PATH')).toBe(5);
 	});
 
 	test('the CSP oracle and E2E run for the matching target', () => {
@@ -199,6 +209,18 @@ describe('quality matrix', () => {
 		expect(count(quality, 'scripts/assert-budget.mjs')).toBe(2);
 		// Never on the sub leg and never via matrix.build_dir (that would include build-sub).
 		expect(quality).not.toMatch(/assert-budget\.mjs apps\/web\/\$\{\{ matrix\.build_dir \}\}/);
+	});
+
+	test('the JS budget steps carry no env block (assert-budget reads only the build dir)', () => {
+		const quality = job('quality');
+		const names = [...quality.matchAll(/- name: JS budget/g)].map((m) => m.index);
+		expect(names).toHaveLength(2);
+		for (const at of names) {
+			const next = quality.indexOf('- name:', at + 1);
+			const step = quality.slice(at, next === -1 ? undefined : next);
+			expect(step).toContain('scripts/assert-budget.mjs');
+			expect(step).not.toContain('env:');
+		}
 	});
 
 	test('the full dependency audit runs once, on the root leg, right after pnpm install', () => {
@@ -277,7 +299,7 @@ describe('extension (Phase 11)', () => {
 		expect(ifAbove(quality, BUILD)).toBe("matrix.target == 'root'");
 	});
 
-	test('the extension build step carries only PUBLIC_SITE_URL', () => {
+	test('the extension build step carries only the site URL variables', () => {
 		const quality = job('quality');
 		const name = '- name: Extension build + manifest/zero-network oracle';
 		const start = quality.indexOf(name);
@@ -286,11 +308,11 @@ describe('extension (Phase 11)', () => {
 		const step = quality.slice(start, next === -1 ? undefined : next);
 		expect(step).toContain(BUILD);
 		expect(step).toContain(
-			'\n        env:\n          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}\n'
+			'\n        env:\n          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}\n          BASE_PATH: ${{ vars.BASE_PATH }}\n'
 		);
 		for (const key of OWNER_KEYS) expect(step, key).not.toContain(key);
-		// Exactly one expression in the step: the site origin.
-		expect(count(step, '${{')).toBe(1);
+		// Exactly two expressions in the step: the site origin and its base path (D-04).
+		expect(count(step, '${{')).toBe(2);
 	});
 
 	test('the root leg runs the popup axe suite and the runtime E2E', () => {
