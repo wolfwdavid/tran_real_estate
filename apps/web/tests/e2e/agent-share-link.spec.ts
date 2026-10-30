@@ -152,9 +152,8 @@ test('link carries only public fields and round-trips to the public page', async
 
 	const url = new URL(link);
 	expect(url.origin).toBe(new URL(baseURL!).origin);
-	expect(url.pathname).toBe(
-		test.info().project.name === 'sub' ? '/tran_real_estate/agent/inquire/' : '/agent/inquire/'
-	);
+	// baseURL ends with '/', so the public page sits under the project's base whatever it is.
+	expect(url.pathname).toBe(`${new URL(baseURL!).pathname}agent/inquire/`);
 	expect(url.hash).toBe('');
 
 	const names = [...url.searchParams.keys()];

@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { targetEnv } from '../../scripts/lib/build-targets.mjs';
 
 // Playwright's only way to stop a webServer on Windows is `taskkill /pid <pid> /T /F`, run through
 // cmd.exe with the runner's PATH and with its output discarded. On a machine whose PATH omits
@@ -19,6 +20,9 @@ const ROOT = Number(process.env.E2E_PORT_ROOT ?? 4273);
 const SUB = Number(process.env.E2E_PORT_SUB ?? 4274);
 const ATTACKER = Number(process.env.E2E_PORT_ATTACKER ?? 4275);
 const CONFIGURED = Number(process.env.E2E_PORT_CONFIGURED ?? 4276);
+// The root project follows BASE_PATH (D-02): CI's root leg builds with the owner's base path, so
+// it is served and tested there ('' when unset = the site root).
+const ROOT_BASE = targetEnv('root').BASE_PATH;
 
 export default defineConfig({
 	testDir: 'tests/e2e',
@@ -56,7 +60,7 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'root',
-			use: { baseURL: `http://127.0.0.1:${ROOT}/` },
+			use: { baseURL: `http://127.0.0.1:${ROOT}${ROOT_BASE}/` },
 			testIgnore: /\.configured\.spec\.ts$/
 		},
 		{

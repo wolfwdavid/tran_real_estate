@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { targetEnv } from '../../../../scripts/lib/build-targets.mjs';
 
 // FND-03: the app must refuse to render inside a third-party frame. Meta CSP cannot carry
 // frame-ancestors, so the only mitigation is <html hidden> plus static/frame-guard.js, which
@@ -9,6 +10,8 @@ import { test, expect } from '@playwright/test';
 const ATTACKER = Number(process.env.E2E_PORT_ATTACKER ?? 4275);
 const ATTACKER_URL = `http://127.0.0.1:${ATTACKER}/`;
 const ROOT = Number(process.env.E2E_PORT_ROOT ?? 4273);
+// The root build is served at the root target's BASE_PATH (D-02); serve-pages.mjs frames it there.
+const ROOT_BASE = targetEnv('root').BASE_PATH;
 
 // Tracing is off for this spec on purpose. Playwright's Chromium evaluations carry
 // userGesture:true, and the trace snapshotter evaluates in EVERY frame around every action. If a
@@ -25,9 +28,9 @@ test.use({ trace: 'off' });
 // sandboxed: sandbox without allow-scripts, so the guard never runs and hidden is never removed
 // sandboxed-scripts: sandbox with scripts + same-origin, so the guard runs but cannot navigate top
 const FRAMES: Record<string, string> = {
-	plain: `http://127.0.0.1:${ROOT}/`,
-	sandboxed: `http://127.0.0.1:${ROOT}/renter/`,
-	'sandboxed-scripts': `http://127.0.0.1:${ROOT}/agent/`
+	plain: `http://127.0.0.1:${ROOT}${ROOT_BASE}/`,
+	sandboxed: `http://127.0.0.1:${ROOT}${ROOT_BASE}/renter/`,
+	'sandboxed-scripts': `http://127.0.0.1:${ROOT}${ROOT_BASE}/agent/`
 };
 
 for (const [id, src] of Object.entries(FRAMES)) {

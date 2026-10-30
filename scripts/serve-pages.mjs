@@ -8,7 +8,8 @@
 //
 // Four loopback listeners, all ports env-overridable (the Vite preview defaults are taken by
 // another local project, so the defaults here sit 100 higher):
-//   E2E_PORT_ROOT       (4273) serves apps/web/build            mounted at /
+//   E2E_PORT_ROOT       (4273) serves apps/web/build            mounted at the root target's
+//                              BASE_PATH (default /)
 //   E2E_PORT_SUB        (4274) serves apps/web/build-sub        mounted at /tran_real_estate
 //   E2E_PORT_CONFIGURED (4276) serves apps/web/build-configured mounted at / (test owner settings)
 //   E2E_PORT_ATTACKER   (4275) a second origin with two jobs:
@@ -26,10 +27,11 @@
 // The root, sub and configured listeners start only when their build directory exists. The
 // attacker listener always starts and answers GET / with 200, which is why Playwright's readiness
 // probe targets it.
-// Dependency-free on purpose: only node: builtins.
+// Dependency-free on purpose: node: builtins plus the repo's own build-target table.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { targetEnv } from './lib/build-targets.mjs';
 
 const web = path.resolve(import.meta.dirname, '../apps/web');
 const types = {
@@ -96,8 +98,13 @@ const ROOT = Number(process.env.E2E_PORT_ROOT ?? 4273);
 const SUB = Number(process.env.E2E_PORT_SUB ?? 4274);
 const ATTACKER = Number(process.env.E2E_PORT_ATTACKER ?? 4275);
 const CONFIGURED = Number(process.env.E2E_PORT_CONFIGURED ?? 4276);
+// The root build follows BASE_PATH (D-02): CI's root leg builds with the owner's base path, so
+// the emulator mounts it there ('' when unset = the site root).
+const ROOT_BASE = targetEnv('root').BASE_PATH;
 
-if (fs.existsSync(path.join(web, 'build'))) site(ROOT, '/', path.join(web, 'build'));
+if (fs.existsSync(path.join(web, 'build'))) {
+	site(ROOT, ROOT_BASE || '/', path.join(web, 'build'));
+}
 if (fs.existsSync(path.join(web, 'build-sub'))) {
 	site(SUB, '/tran_real_estate', path.join(web, 'build-sub'));
 }
@@ -108,9 +115,9 @@ if (fs.existsSync(path.join(web, 'build-configured'))) {
 // Attacker origin: a different port is a different origin, so these frames are cross-origin.
 // The iframe ids are a contract with tests/e2e/framing.spec.ts.
 const framingPage = `<!doctype html><title>attacker</title><h2>attacker</h2>
-<iframe id="plain" src="http://127.0.0.1:${ROOT}/"></iframe>
-<iframe id="sandboxed" sandbox="allow-forms" src="http://127.0.0.1:${ROOT}/renter/"></iframe>
-<iframe id="sandboxed-scripts" sandbox="allow-scripts allow-same-origin" src="http://127.0.0.1:${ROOT}/agent/"></iframe>`;
+<iframe id="plain" src="http://127.0.0.1:${ROOT}${ROOT_BASE}/"></iframe>
+<iframe id="sandboxed" sandbox="allow-forms" src="http://127.0.0.1:${ROOT}${ROOT_BASE}/renter/"></iframe>
+<iframe id="sandboxed-scripts" sandbox="allow-scripts allow-same-origin" src="http://127.0.0.1:${ROOT}${ROOT_BASE}/agent/"></iframe>`;
 
 // The same origin doubles as the configured build's first-party analytics collector. Beacons are
 // sent fetch no-cors with a text/plain body, so the collector answers WITHOUT any CORS header: a

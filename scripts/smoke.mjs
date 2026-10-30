@@ -48,7 +48,9 @@ export function localTargets(env = process.env) {
 		// tests/e2e/site-env.ts rule: root = this env, the others = env + the target overlay.
 		const e = name === 'root' ? env : { ...env, ...overlay };
 		const port = ports[/** @type {'root' | 'sub' | 'configured'} */ (name)];
-		const base = name === 'sub' ? '/tran_real_estate/' : '/';
+		// Every overlay carries BASE_PATH ('' | '/tran_real_estate' | the root knob, D-02), so the
+		// emulator mount and the smoke base URL come from the same table serve-pages.mjs reads.
+		const base = resolveBasePath({ ...env, ...overlay }) + '/';
 		return {
 			name,
 			baseUrl: `http://127.0.0.1:${port}${base}`,
@@ -208,12 +210,17 @@ async function remote(passthrough) {
 		console.error(`smoke: ${/** @type {Error} */ (e).message}`);
 		return 2;
 	}
+	// Pitfall 3: measure how long the deploy takes to propagate; never raise the 10-minute poll.
+	const started = Date.now();
 	if ((await waitForVersion(smoke.baseUrl, smoke.expectVersion)) === 'timeout') {
 		console.error(
 			`smoke: ${smoke.baseUrl}_app/version.json never reported ${smoke.expectVersion} within 10 minutes (deploy not propagated)`
 		);
 		return 3;
 	}
+	console.log(
+		`smoke: ${smoke.expectVersion} live at ${smoke.baseUrl} after ${Math.round((Date.now() - started) / 1000)} s`
+	);
 	return runPlaywright(passthrough, process.env);
 }
 

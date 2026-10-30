@@ -3,8 +3,8 @@ import { ROUTES, EXTERNAL_HOSTS, isPrintRoute } from './routes';
 
 // FND-01 routing contract, proven against the real built output served with GitHub Pages
 // semantics (scripts/serve-pages.mjs). Every page.goto uses a RELATIVE path so the same spec
-// runs under both the root base ('/') and the sub-path base ('/tran_real_estate/').
-const SUB_BASE = '/tran_real_estate/';
+// runs under both the root base ('/' or the BASE_PATH knob) and the sub-path base
+// ('/tran_real_estate/'); base-path assertions read the project's baseURL, never its name.
 
 // The two route walks below visit every page in one test, so their budget grows with ROUTES
 // (about 2 s a page on one core) instead of the 30 s default.
@@ -75,9 +75,10 @@ test('every in-page link resolves to a trailing-slash path under the current bas
 			}
 			const { pathname } = url;
 			expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(/\/$/);
-			if (testInfo.project.name === 'sub') {
+			const base = new URL(testInfo.project.use.baseURL!).pathname;
+			if (base !== '/') {
 				expect(pathname, `${href} on ${JSON.stringify(route)}`).toMatch(
-					new RegExp(`^${SUB_BASE.replace(/[/_]/g, '\\$&')}`)
+					new RegExp(`^${base.replace(/[/_.]/g, '\\$&')}`)
 				);
 			}
 		}

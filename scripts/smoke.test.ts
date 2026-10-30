@@ -61,6 +61,23 @@ describe('localTargets', () => {
 		expect(t[0].analyticsHost).toBe('https://gateway.umami.is');
 		expect(t[1].analyticsHost).toBe('');
 	});
+
+	test('root follows BASE_PATH (D-02): the emulator base and the site URL move together', () => {
+		const knob = localTargets({ BASE_PATH: '/tran_real_estate' });
+		expect(knob[0].baseUrl).toBe('http://127.0.0.1:4273/tran_real_estate/');
+		expect(knob[0].siteUrl).toMatch(/\/tran_real_estate\/$/);
+		expect(knob[1].baseUrl).toBe('http://127.0.0.1:4274/tran_real_estate/');
+		expect(knob[2].baseUrl).toBe('http://127.0.0.1:4276/');
+		const unset = localTargets({});
+		expect(unset[0].baseUrl).toBe('http://127.0.0.1:4273/');
+		expect(unset[1].baseUrl).toBe('http://127.0.0.1:4274/tran_real_estate/');
+	});
+
+	test('a malformed BASE_PATH is rejected by name instead of producing a bad root base', () => {
+		expect(() => localTargets({ BASE_PATH: 'C:/Program Files/Git/tran_real_estate' })).toThrow(
+			/BASE_PATH must be/
+		);
+	});
 });
 
 describe('readStamp', () => {
