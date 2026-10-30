@@ -80,3 +80,8 @@
 - Rule: an instant `expect(flag).toBe(true)` on a flag set inside a Playwright route handler is a
   race under load (autofill.spec.ts:200 failed once in 2,327). Use `expect.poll` for anything set by
   an intercepted request; keep instant reads for "this must never have happened" assertions only.
+- Rule: when an executor defers a verify step because another agent holds the build/Playwright lock,
+  the post-wave orchestrator check must run that exact step before the wave is called green. Oracle
+  unit tests only see hand-fed inputs, not what the real bundler emits: `pnpm ext:assert` was red on
+  main for two full waves (13-02 added an unconsumed `new URL()` that kept the site URL as a bare
+  literal in the popup chunk) and nothing noticed until 13-10 built the real zip.
