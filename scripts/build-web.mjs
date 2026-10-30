@@ -31,7 +31,7 @@ const version = (probe.stdout ?? '').trim();
 if (version !== '11.27.0')
 	console.warn(`build-web: pnpm ${version || 'unknown'} found; pinned version is 11.27.0`);
 console.log(
-	`build-web: pnpm ${version} target=${name} BUILD_DIR=${t.BUILD_DIR} BUILD_SHA=${stamp}`
+	`build-web: pnpm ${version} target=${name} BASE_PATH=${t.BASE_PATH || "''"} BUILD_DIR=${t.BUILD_DIR} BUILD_SHA=${stamp}`
 );
 const r = spawnSync(bin, [...pre, '--filter', 'web', 'build'], {
 	stdio: 'inherit',

@@ -1,10 +1,13 @@
 // The one build-target table (10-RESEARCH Pattern 11). build-web.mjs, the CSP oracle and the E2E
 // harness all read their per-target env from here, so what CI tests is what it deploys.
 //
-//   root        the deploy build at the site root; owner settings pass through from the env
+//   root        the deploy build; BASE_PATH and owner settings pass through from the env
+//               (BASE_PATH unset = the site root)
 //   sub         the /tran_real_estate sub-path build; every owner setting is blank
 //   configured  a root-path build with a test value for every owner setting AND its own test site
 //               origin (E2E + smoke only)
+
+import { resolveBasePath } from '../../apps/web/src/lib/base-path.js';
 
 /** Web3Forms-shaped test key; never a real access key. */
 export const TEST_FORM_KEY = '00000000-0000-4000-8000-000000000000';
@@ -37,7 +40,7 @@ export function targetEnv(name, env = process.env) {
 			const v = env[k];
 			if (v !== undefined) owner[k] = v;
 		}
-		return { BASE_PATH: '', BUILD_DIR: 'build', ...owner, ...site };
+		return { BASE_PATH: resolveBasePath(env), BUILD_DIR: 'build', ...owner, ...site };
 	}
 	if (name === 'sub') {
 		return {

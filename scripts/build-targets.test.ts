@@ -124,3 +124,30 @@ describe('build targets', () => {
 		expect(targetEnv('configured', {}).BUILD_DIR).toBe('build-configured');
 	});
 });
+
+describe('BASE_PATH (D-02)', () => {
+	test('root with no BASE_PATH is the deploy build at the site root', () => {
+		expect(targetEnv('root', {})).toEqual({ BASE_PATH: '', BUILD_DIR: 'build' });
+		expect(targetEnv('root', { BASE_PATH: '' }).BASE_PATH).toBe('');
+	});
+
+	test('root passes a root-relative BASE_PATH through (the owner knob)', () => {
+		expect(targetEnv('root', { BASE_PATH: '/tran_real_estate' }).BASE_PATH).toBe(
+			'/tran_real_estate'
+		);
+	});
+
+	test('root rejects a malformed BASE_PATH by name (Git Bash path conversion)', () => {
+		expect(() => targetEnv('root', { BASE_PATH: 'C:/Program Files/Git/tran_real_estate' })).toThrow(
+			/BASE_PATH must be/
+		);
+	});
+
+	test('sub keeps its own base regardless of env.BASE_PATH', () => {
+		expect(targetEnv('sub', { BASE_PATH: '/other' }).BASE_PATH).toBe('/tran_real_estate');
+	});
+
+	test('configured keeps the site root regardless of env.BASE_PATH', () => {
+		expect(targetEnv('configured', { BASE_PATH: '/other' }).BASE_PATH).toBe('');
+	});
+});
