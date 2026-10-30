@@ -104,7 +104,7 @@ Plans:
 **Owner steps inside the phase:** set `PAGES_ENABLED=true` and the launch Variables (`PUBLIC_WEB3FORMS_KEY`, `PUBLIC_ANALYTICS_HOST` + `PUBLIC_ANALYTICS_WEBSITE_ID`, `PUBLIC_SITE_URL=https://wolfwdavid.github.io` (origin only, D-01), `BASE_PATH=/tran_real_estate` (D-02), optional `PUBLIC_CONTACT_EMAIL`); Search Console property; Umami and Web3Forms accounts; share-card debugger runs; real-key CORS checks per provider; the push-protection probe with a throwaway zero-permission PAT.
 **Research flag:** YES. Run `/gsd:research-phase 13`: the first live run of `ci.yml` on a 4-vCPU `ubuntu-24.04` runner (three-leg E2E runtime, memory, Playwright worker count) cannot be pre-verified and is planned as "run, observe, quick-fix"; verify live that Pages returns HTTP 404 (not 200) for `404.html`, that the `workflow_run` payload carries `head_sha`, and the HTTP → HTTPS redirect.
 **UI hint:** no.
-**Plans:** 9/21 plans executed
+**Plans:** 10/21 plans executed
 
 Plans:
 - [x] 13-01-PLAN.md — Wave 1: planning docs reconciled to wolfwdavid.github.io/tran_real_estate, CI baseline evidence (LIVE-02), owner decisions A/B/C (checkpoint)
@@ -115,7 +115,7 @@ Plans:
 - [x] 13-05-PLAN.md — Wave 1: one HUMAN-UAT ledger (99 + 4 rows) + no-row-dropped test; twelve per-phase files superseded (LIVE-07)
 - [x] 13-06-PLAN.md — Wave 2: root BASE_PATH knob through build-targets, emulator, Playwright root project, smoke.mjs, specs; launch-audit header (blocker)
 - [x] 13-07-PLAN.md — Wave 2: Dependabot toolchain-major ignores (D-06) + shared-origin privacy copy (decision C)
-- [ ] 13-08-PLAN.md — Wave 3: docs/RUNBOOK.md + runbook oracle (Dependabot policy per decision B); GPC-on proof-shot script (LIVE-09, D-20)
+- [x] 13-08-PLAN.md — Wave 3: docs/RUNBOOK.md + runbook oracle (Dependabot policy per decision B); GPC-on proof-shot script (LIVE-09, D-20)
 - [x] 13-09-PLAN.md — Wave 3: ci.yml + extension-release.yml BASE_PATH wiring with gate tests (uses count stays 7)
 - [ ] 13-10-PLAN.md — Wave 4: local rehearsal of the go-live config + full verify gate set (production twin)
 - [ ] 13-11-PLAN.md — Wave 5: owner push of the code wave, CI green, live-smoke skipped; Dependabot PR triage (checkpoints)
@@ -204,7 +204,7 @@ Plans:
 | 10. Launch Hardening & Go-to-Market | v1.0 | 23/23 | Complete | 2026-10-14 |
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
-| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 9/21 | In Progress|  |
+| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 10/21 | In Progress|  |
 | 14. Carried Debt | v1.1 | 0/TBD | Not started | - |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
