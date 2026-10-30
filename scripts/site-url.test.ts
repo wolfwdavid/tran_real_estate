@@ -14,7 +14,7 @@ import { DEFAULT_SITE_ORIGIN, resolveSiteOrigin } from '../apps/web/src/lib/site
 import { TEST_SITE_ORIGIN, targetEnv } from './lib/build-targets.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
-const HOST = 'tranrealestate.github.io';
+const HOST = 'wolfwdavid.github.io';
 const ORIGIN_HOME = 'apps/web/src/lib/site-config.js';
 const SHIPPED = [
 	'apps/web/src',
@@ -93,9 +93,9 @@ describe('(a) no shipped source hard-codes the site origin', () => {
 });
 
 describe('(b) web absolute URLs come from PUBLIC_SITE_URL', () => {
-	test('__SITE_URL__ is the validated origin plus the base path', () => {
+	test('__SITE_URL__ is resolveSiteUrl(): the validated origin plus the base path', () => {
 		expect(read('apps/web/vite.config.ts')).toContain(
-			'__SITE_URL__: JSON.stringify(resolveSiteOrigin() + resolveBasePath())'
+			'__SITE_URL__: JSON.stringify(resolveSiteUrl())'
 		);
 	});
 
@@ -136,7 +136,7 @@ describe('(c) the extension origin follows PUBLIC_SITE_URL', () => {
 	test('__TRAN_ORIGIN__ is the default origin when PUBLIC_SITE_URL is unset', async () => {
 		vi.stubEnv('PUBLIC_SITE_URL', undefined);
 		expect((await define()).__TRAN_ORIGIN__).toBe(JSON.stringify(DEFAULT_SITE_ORIGIN));
-		expect((await define()).__TRAN_ORIGIN__).toBe('"https://tranrealestate.github.io"');
+		expect((await define()).__TRAN_ORIGIN__).toBe('"https://wolfwdavid.github.io"');
 	});
 
 	test('TRAN_ORIGIN comes from the define and PRIVACY_URL derives from it', () => {

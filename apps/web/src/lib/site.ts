@@ -3,7 +3,7 @@
 // exceptions read the analytics defines directly: the root layout's compile-time gate and the lazy
 // lib/analytics/boot.ts (its test pins it to the values here).
 
-/** Absolute site URL: validated origin + base path, e.g. https://tranrealestate.github.io (+ /tran_real_estate on the sub build). Use for canonical, og:*, JSON-LD url, sitemap, robots. NEVER build absolute URLs from $app/paths base (relative during prerender) or page.url. */
+/** Absolute site URL: validated origin + base path, e.g. https://wolfwdavid.github.io (+ /tran_real_estate on the sub build). Use for canonical, og:*, JSON-LD url, sitemap, robots. NEVER build absolute URLs from $app/paths base (relative during prerender) or page.url. */
 export const SITE_URL: string = __SITE_URL__;
 export const SITE_ORIGIN: string = new URL(SITE_URL).origin;
 export const SITE_BASE: string = new URL(SITE_URL).pathname.replace(/\/$/, '');

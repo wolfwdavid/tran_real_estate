@@ -2,14 +2,15 @@
 // else, never through Kit's static public env module (that import fails the build when a variable
 // is unset, Pitfall 2). Every setting is optional: unset means "off", a malformed value is a named build
 // error. Rejected keys and website ids are never echoed into an error message.
+import { resolveBasePath } from './base-path.js';
 
 const ORIGIN = /^https:\/\/[a-z0-9.-]+(:\d+)?$/i;
 const LOOPBACK = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const EMAIL = /^[^\s@<>"]+@[^\s@<>"]+\.[a-z]{2,}$/i;
 
-/** The dedicated GitHub org origin (never wolfwdavid.github.io). */
-export const DEFAULT_SITE_ORIGIN = 'https://tranrealestate.github.io';
+/** Default site origin: the owner's GitHub Pages origin. The project site lives under BASE_PATH (/tran_real_estate) on it (decision 2026-10-29). */
+export const DEFAULT_SITE_ORIGIN = 'https://wolfwdavid.github.io';
 
 /**
  * The site origin from PUBLIC_SITE_URL: an https origin with no path or trailing slash. Empty means
@@ -25,6 +26,17 @@ export function resolveSiteOrigin(env = process.env) {
 		);
 	}
 	return o;
+}
+
+/**
+ * Absolute site URL with no trailing slash: the validated PUBLIC_SITE_URL origin plus the validated
+ * BASE_PATH. The one place the web app (__SITE_URL__), the extension (__TRAN_SITE_URL__) and the
+ * extension oracle agree on, so an origin/base mismatch is impossible (D-04).
+ * @param {Record<string, string | undefined>} [env]
+ * @returns {string}
+ */
+export function resolveSiteUrl(env = process.env) {
+	return resolveSiteOrigin(env) + resolveBasePath(env);
 }
 
 /**

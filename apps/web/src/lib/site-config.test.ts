@@ -4,6 +4,7 @@ import {
 	resolveAnalytics,
 	resolveContactEmail,
 	resolveSiteOrigin,
+	resolveSiteUrl,
 	resolveWeb3formsKey
 } from './site-config.js';
 
@@ -22,9 +23,9 @@ function errorText(fn: () => unknown): string {
 }
 
 describe('resolveSiteOrigin', () => {
-	test('defaults to the dedicated org origin', () => {
-		expect(resolveSiteOrigin({})).toBe('https://tranrealestate.github.io');
-		expect(DEFAULT_SITE_ORIGIN).toBe('https://tranrealestate.github.io');
+	test("defaults to the owner's Pages origin", () => {
+		expect(resolveSiteOrigin({})).toBe('https://wolfwdavid.github.io');
+		expect(DEFAULT_SITE_ORIGIN).toBe('https://wolfwdavid.github.io');
 	});
 
 	test('treats an empty value as unset (CI expands an unset repository variable to empty)', () => {
@@ -43,6 +44,42 @@ describe('resolveSiteOrigin', () => {
 			expect(() => resolveSiteOrigin({ PUBLIC_SITE_URL: value })).toThrow(/PUBLIC_SITE_URL/);
 		}
 	);
+});
+
+describe('resolveSiteUrl', () => {
+	test("defaults to the owner's Pages origin with no base path", () => {
+		expect(resolveSiteUrl({})).toBe('https://wolfwdavid.github.io');
+	});
+
+	test('joins the validated origin and the validated base path', () => {
+		expect(
+			resolveSiteUrl({ PUBLIC_SITE_URL: 'https://probe.example', BASE_PATH: '/tran_real_estate' })
+		).toBe('https://probe.example/tran_real_estate');
+	});
+
+	test('BASE_PATH alone appends to the default origin (the live project site)', () => {
+		expect(resolveSiteUrl({ BASE_PATH: '/tran_real_estate' })).toBe(
+			'https://wolfwdavid.github.io/tran_real_estate'
+		);
+	});
+
+	test('treats empty values as unset (CI expands unset repository variables to empty)', () => {
+		expect(resolveSiteUrl({ PUBLIC_SITE_URL: '', BASE_PATH: '' })).toBe(
+			'https://wolfwdavid.github.io'
+		);
+	});
+
+	test('rejects a Git Bash path-converted BASE_PATH with the base-path error', () => {
+		expect(() => resolveSiteUrl({ BASE_PATH: 'C:/Program Files/Git/tran_real_estate' })).toThrow(
+			/BASE_PATH must be/
+		);
+	});
+
+	test('does not loosen the origin validator: a path in PUBLIC_SITE_URL is still rejected', () => {
+		expect(() =>
+			resolveSiteUrl({ PUBLIC_SITE_URL: 'https://wolfwdavid.github.io/tran_real_estate' })
+		).toThrow(/PUBLIC_SITE_URL must be an https origin/);
+	});
 });
 
 describe('resolveAnalytics', () => {

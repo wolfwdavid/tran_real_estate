@@ -3,11 +3,10 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { resolveBasePath } from './src/lib/base-path.js';
 import {
 	resolveAnalytics,
 	resolveContactEmail,
-	resolveSiteOrigin,
+	resolveSiteUrl,
 	resolveWeb3formsKey
 } from './src/lib/site-config.js';
 
@@ -38,7 +37,7 @@ export default defineConfig({
 	// Top level, so dev, build, SSR/prerender and the Vitest branch all get the same constants.
 	define: {
 		__BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
-		__SITE_URL__: JSON.stringify(resolveSiteOrigin() + resolveBasePath()),
+		__SITE_URL__: JSON.stringify(resolveSiteUrl()),
 		__ANALYTICS_HOST__: JSON.stringify(analytics.host),
 		__ANALYTICS_WEBSITE_ID__: JSON.stringify(analytics.websiteId),
 		__WEB3FORMS_KEY__: JSON.stringify(resolveWeb3formsKey()),
