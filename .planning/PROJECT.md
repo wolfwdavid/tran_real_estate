@@ -148,7 +148,7 @@ Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/
 - Committing real RentCast responses to the public repo — use synthetic fixtures only
 - Auto-sending outreach emails/SMS — human-in-the-loop send only (CAN-SPAM/TCPA and reputation risk)
 - Tenant screening or housing-eligibility decisions — Fair Housing risk; restricted by LLM provider usage policies
-- Hosting under the shared `wolfwdavid.github.io` origin — browser storage is shared with every sibling Pages site, exposing stored keys
+- Hosting under the shared `wolfwdavid.github.io` origin — browser storage is shared with every sibling Pages site, exposing stored keys — ✗ Superseded 2026-10-29 (owner decision at the Phase 12 gate): the site is a project site at `https://wolfwdavid.github.io/tran_real_estate/`; browser storage shared with sibling project sites is accepted; revisit with a custom domain (D-05)
 - Paid Chrome Web Store listing in v1 — $5 fee breaks $0 budget; load-unpacked + Edge Add-ons instead
 
 ## Context
@@ -167,6 +167,14 @@ Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/
 **Shipped v1.0 MVP on 2026-10-29** (11 phases, 209 plans, 475 tasks, 1,206 commits, ~165k lines). Everything in the v1 scope is built and verified locally: three portals, the key vault and budget-guarded data layer, four BYOK LLM providers behind the Fair Housing gate, the launch surface, and the Zillow extension. Gates: 6,647 unit tests, 2,327 E2E with axe on every route, launch audit all rows PASS, dependency audit clean with four reviewed low exceptions.
 
 **Phase 12 complete, pushed, not yet deployed (2026-10-29).** The owner chose the personal account over a new org: the public repo is `wolfwdavid/tran_real_estate`, `main` + `v1.0` are pushed, the first CI run (40961373692) is green with `deploy` skipped, Pages source is GitHub Actions, secret scanning + push protection + Dependabot are on. The live origin will be `https://wolfwdavid.github.io/tran_real_estate/` (sub-path build, shared `wolfwdavid.github.io` storage origin accepted by the owner). Phase 13 sets `PUBLIC_SITE_URL`, deploys with `PAGES_ENABLED=true`, and runs the live smoke; the 77 HUMAN-UAT rows and GTM-01..04 still await that origin.
+
+**CI baseline (Phase 13 success criterion 1, observed 2026-10-29):** three `ci.yml` runs on `main` (`event: push`), all `success` with the `deploy` job skipped while `PAGES_ENABLED` is unset. Read live with `gh run view <id> --json jobs`; durations are per job (hygiene, root E2E leg, sub E2E leg, configured E2E leg).
+
+| Run | Head SHA | hygiene | root | sub | configured |
+|-----|----------|---------|------|-----|------------|
+| https://github.com/wolfwdavid/tran_real_estate/actions/runs/40961373692 | 62d9973 | 8 s | 27m03s | 21m33s | 6m08s |
+| https://github.com/wolfwdavid/tran_real_estate/actions/runs/40965347969 | 396b5aa | 8 s | 21m52s | 26m13s | 5m36s |
+| https://github.com/wolfwdavid/tran_real_estate/actions/runs/40980243892 | eed27e6 | 8 s | 26m38s | 25m29s | 5m30s |
 
 Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
@@ -204,7 +212,7 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | RentCast as listing data source instead of MLS | No sponsor → MLS not legitimately accessible; nationwide + free tier + browser CORS | — Pending |
 | BYOK for RentCast and LLM keys, stored in browser | $0 budget + no backend + public repo; RentCast keys non-shareable | — Pending |
 | No backend / accounts / billing in v1 | User chose free-only; v1 done = live demo of all 3 portals | — Pending |
-| Dedicated free GitHub org for Pages origin | Shared wolfwdavid.github.io origin would expose stored keys to sibling sites | — Pending |
+| Dedicated free GitHub org for Pages origin | Shared wolfwdavid.github.io origin would expose stored keys to sibling sites | ✗ Superseded 2026-10-29 (personal-account project site) |
 | Client-side hard stop before RentCast free limit | Overage billed at $0.20/call with no provider cap | — Pending |
 | Lead inbox = Web3Forms email delivery + paste-to-import | Free tiers have no read API | — Pending |
 | Alerts re-run on app open when cache is stale | No background server; protects call budget | — Pending |
@@ -220,6 +228,9 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | v1 depth = all three portals at capped depth | Honors "live demo of all 3 portals" without solo-build scope creep; each portal phase has demo-credible exit criteria and a named cut line | — Pending |
 | Zillow detection: ad-slot list items are the primary signal; label text is secondary | Live zillow.com (2026-10-25) shows no visible "Sponsored/Featured" label on any card; paid placements render as iframe ad-slot `li`s (`search-list-{first,second,third}-ad`). The "Showcase" paid badge stays opt-in until the owner decides (11-HUMAN-UAT row 3) | ✓ Phase 11 |
 | Audit exceptions only for code that never ships, with proof | `pnpm audit --audit-level low` moves between phases (12 advisories on unchanged pins appeared 2026-10-23). Patch-level bumps are applied; a major-only fix (Kit 2→3, build-time deepmerge) is recorded in `scripts/lib/audit-exceptions.mjs` with a grep of the shipped output and a revisit date | ✓ Phase 11 close-out |
+| Origin = `PUBLIC_SITE_URL=https://wolfwdavid.github.io` (origin only) + new repository variable `BASE_PATH=/tran_real_estate` read by the root (deploy) leg; `DEFAULT_SITE_ORIGIN` = `https://wolfwdavid.github.io`; extension privacy URL = origin + base path from one helper | D-01..D-04: the origin validator is not loosened; one function composes origin and base so web and extension cannot disagree | ✓ Phase 13 |
+| HUMAN-UAT count is 99 rows, not 77 | Counting rule: one `### ` heading under `## Tests` or one `\| X<n> \|` table row per per-phase file (`### A.` step recipes in 04/05 are not rows); 77 came from counting the 06/07 owner lists as 8 rows instead of 27 | ✓ Phase 13 |
+| Project-site `robots.txt` is ignored by crawlers | Google reads robots.txt only at the host root; `https://wolfwdavid.github.io/robots.txt` is a 404, so the project robots lines are inert. `sitemap.xml` is submitted in Search Console, and the `(app)`, `(print)`, `(public)` layouts and `+error.svelte` already emit `noindex` | ✓ Phase 13 (accepted) |
 
 ## Evolution
 
