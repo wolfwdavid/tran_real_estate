@@ -44,6 +44,36 @@ function dependabotEntries(yaml: string): Map<string, string> {
 	return out;
 }
 
+/**
+ * Dependency names under an entry's `ignore:` list whose very next line limits the ignore to
+ * `version-update:semver-major`. Any other shape (a bare ignore, a minor/patch ignore) is not
+ * returned, so the exact-list assertion below also catches an over-broad ignore.
+ */
+function majorIgnores(body: string): string[] {
+	const lines = body.split('\n');
+	const out: string[] = [];
+	lines.forEach((line, i) => {
+		const m = /^ {6}- dependency-name: '([^']+)'\s*$/.exec(line);
+		if (!m) return;
+		if (/^ {8}update-types: \['version-update:semver-major'\]\s*$/.test(lines[i + 1] ?? '')) {
+			out.push(m[1]);
+		}
+	});
+	return out;
+}
+
+// D-06 (plan 13-07): majors of the toolchain set can only land in Phase 16 (pnpm 12 -> Vitest 5 ->
+// SvelteKit 3), and @types/node majors follow the Node 24 pin until Phase 14/16 (owner decision B).
+const TOOLCHAIN_MAJOR_IGNORES = [
+	'@sveltejs/kit',
+	'@sveltejs/adapter-static',
+	'vitest',
+	'@vitest/*',
+	'vitest-browser-svelte',
+	'pnpm',
+	'@types/node'
+];
+
 describe('audit exceptions', () => {
 	test('the helper extracts GHSA ids from a synthetic audit block (non-vacuity)', () => {
 		const yaml = 'audit:\n  ignore:\n    - GHSA-aaaa-bbbb-cccc # reason\nother: 1\n';
@@ -97,6 +127,48 @@ describe('dependabot', () => {
 
 	test('npm updates are grouped', () => {
 		expect(entries.get('npm') ?? '').toMatch(/^ {4}groups:\s*$/m);
+	});
+
+	test('the ignore helper reads only semver-major ignores (non-vacuity)', () => {
+		const body = [
+			'    ignore:',
+			"      - dependency-name: 'a'",
+			"        update-types: ['version-update:semver-major']",
+			"      - dependency-name: 'b'",
+			"        update-types: ['version-update:semver-minor']",
+			"      - dependency-name: 'c'",
+			''
+		].join('\n');
+		expect(majorIgnores(body)).toEqual(['a']);
+		expect(majorIgnores('    groups:\n      g:\n        update-types: [minor, patch]\n')).toEqual(
+			[]
+		);
+	});
+
+	test('npm ignores exactly the toolchain majors of D-06 plus @types/node (decision B)', () => {
+		const npm = entries.get('npm') ?? '';
+		expect(npm).toMatch(/^ {4}ignore:\s*$/m);
+		expect(majorIgnores(npm)).toEqual(TOOLCHAIN_MAJOR_IGNORES);
+		// Every ignore entry is a semver-major one: no bare or minor/patch ignore hides in the list.
+		expect(npm.match(/^ {6}- dependency-name: /gm)?.length).toBe(TOOLCHAIN_MAJOR_IGNORES.length);
+	});
+
+	test('the npm ignore list says why: Phase 16 for the toolchain, Phase 14/16 for @types/node', () => {
+		const npm = entries.get('npm') ?? '';
+		expect(npm).toMatch(/Phase 16/);
+		expect(npm).toMatch(
+			/^ {6}# @types\/node majors: owner decision B \(Phase 13\), re-evaluated in Phase 14\/16\.$/m
+		);
+	});
+
+	test('the weekly minor/patch group stays next to the ignore list', () => {
+		const npm = entries.get('npm') ?? '';
+		expect(npm).toMatch(/^ {6}npm-minor-patch:\s*$/m);
+		expect(npm).toMatch(/^ {8}update-types: \[minor, patch\]\s*$/m);
+	});
+
+	test('github-actions has no ignore list', () => {
+		expect(entries.get('github-actions') ?? '').not.toMatch(/ignore:/);
 	});
 });
 

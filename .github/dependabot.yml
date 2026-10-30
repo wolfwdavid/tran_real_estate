@@ -5,6 +5,24 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Majors of the toolchain set belong to Phase 16 (pnpm 12 -> Vitest 5 -> SvelteKit 3); the
+    # weekly minor/patch group stays. Security updates are reviewed by the pnpm audit gate.
+    ignore:
+      - dependency-name: '@sveltejs/kit'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@sveltejs/adapter-static'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'vitest'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@vitest/*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'vitest-browser-svelte'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'pnpm'
+        update-types: ['version-update:semver-major']
+      # @types/node majors: owner decision B (Phase 13), re-evaluated in Phase 14/16.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     groups:
       npm-minor-patch:
         update-types: [minor, patch]
