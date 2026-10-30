@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-04-PLAN.md
-last_updated: "2026-10-30T11:44:10.469Z"
+stopped_at: Completed 13-05-PLAN.md
+last_updated: "2026-10-30T11:46:05.332Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 4 of 21
+Plan: 5 of 21
 
 ## Performance Metrics
 
@@ -245,6 +245,7 @@ Plan: 4 of 21
 | Phase 13 P20 | 5min | 1 tasks | 11 files |
 | Phase 13 P03 | 7min | 2 tasks | 2 files |
 | Phase 13 P04 | 8min | 2 tasks | 5 files |
+| Phase 13 P05 | 9min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -642,6 +643,8 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-03: live-smoke gate compares checkout/pnpm/setup-node pins against ci.yml text; upload-artifact is a literal pin that a Dependabot bump turns red by design
 - [Phase 13]: 13-04: LIVE-05 and LIVE-09 stay unchecked after the checklist rewrite; the GTM-04 Search Console proof and the RUNBOOK plan close them
 - [Phase 13]: 13-04: PUBLIC_SITE_URL is documented and oracle-pinned as the origin only (https://wolfwdavid.github.io); BASE_PATH carries /tran_real_estate
+- [Phase 13]: 13-05: HUMAN-UAT count is 99 under the counting rule (### heading under ## Tests or | X<n> | table id); the roadmap's 77 was a miscount of the 06/07 tables; scripts/human-uat-ledger.test.ts enforces it
+- [Phase 13]: 13-05: L92 (Showcase badge) recorded as decided 2026-10-29 from REQUIREMENTS EXT-F3; all other owner-decision rows stay pending or carried (no other decision recorded in PROJECT/REQUIREMENTS)
 
 ### Pending Todos
 
@@ -671,7 +674,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T11:44:10.464Z
-Stopped at: Completed 13-04-PLAN.md
+Last session: 2026-10-30T11:46:05.327Z
+Stopped at: Completed 13-05-PLAN.md
 Resume file: None
 Next: owner performs docs/DEPLOY-CHECKLIST.md Steps 1-6.1 (org, empty repo, Pages source, security switches, add remote, push main with PAGES_ENABLED unset), then reports the Actions run URL; resume 12-10 Task 3 verification, then phase verification, then Phase 13. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map). Still no remote; owner go-live is planned EARLY in v1.1 per owner decision 2026-10-29.
