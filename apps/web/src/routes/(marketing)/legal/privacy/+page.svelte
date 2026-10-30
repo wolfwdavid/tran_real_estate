@@ -1,10 +1,14 @@
 <script lang="ts">
 	import LegalPage from '$lib/components/legal/LegalPage.svelte';
 	import ExternalLink from '$lib/components/legal/ExternalLink.svelte';
-	import { ANALYTICS } from '$lib/site';
+	import { ANALYTICS, SITE_BASE, SITE_ORIGIN } from '$lib/site';
 
 	// Name the exact counter host so the page states where counts go, whoever runs the server.
 	const counterHost = ANALYTICS.host ? new URL(ANALYTICS.host).host : '';
+	// Under a sub-path build the browser storage area belongs to the whole host (every project site
+	// on it), so the deletion section names that host. It comes from the build's site origin, never a
+	// literal, and the paragraph disappears on an origin-root build such as a custom domain.
+	const siteHost = new URL(SITE_ORIGIN).host;
 
 	const description =
 		'How Tran Real Estate Tools handles your data: no accounts, no Tran server, and requests that go straight from your browser to the services you choose.';
@@ -23,7 +27,7 @@
 	title="Privacy policy"
 	docTitle="Privacy policy: Tran Real Estate Tools"
 	{description}
-	updated="13 October 2026"
+	updated="30 October 2026"
 >
 	<h2>The short version</h2>
 	<p>
@@ -95,9 +99,18 @@
 
 	<h2>Deleting your data</h2>
 	<p>
-		To remove everything Tran has stored, clear this site's data in your browser settings. A control
-		to forget your keys arrives with Settings.
+		To remove the keys Tran has stored, open Settings and choose <strong>Forget all keys</strong>.
+		Saved searches, deals, contacts and drafts can be deleted where you saved them, or all at once
+		by clearing site data in your browser settings.
 	</p>
+	{#if SITE_BASE}
+		<p data-shared-origin>
+			This site shares its browser storage area with other sites hosted at {siteHost}. Clearing site
+			data in your browser settings also clears what those sites stored, and a key you chose to
+			remember on this device can be read by scripts on those sites. Keys stay session-only unless
+			you choose to remember them.
+		</p>
+	{/if}
 
 	<h2>Contact</h2>
 	<p>Contact details will be posted here before public launch.</p>

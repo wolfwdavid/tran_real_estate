@@ -39,7 +39,7 @@ const DATA_COVERAGE = [
 	'They are not professional valuations of a property and can be wrong.'
 ];
 const LAST_UPDATED: Record<string, string> = {
-	'legal/privacy/': 'Last updated: 13 October 2026',
+	'legal/privacy/': 'Last updated: 30 October 2026',
 	'legal/terms/': 'Last updated: 4 October 2026',
 	'legal/fair-housing/': 'Last updated: 4 October 2026',
 	'legal/data-coverage/': 'Last updated: 4 October 2026'
