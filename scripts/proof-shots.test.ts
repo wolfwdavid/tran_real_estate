@@ -78,6 +78,10 @@ describe('proofPlan: shots', () => {
 	test('only the deep-route shot reloads the page', () => {
 		expect(shots.filter((s) => s.reload).map((s) => s.file)).toEqual(['03-deep-route-refresh.png']);
 	});
+
+	test('every page shot waits for its heading; the version.json shot has none to wait for', () => {
+		expect(shots.map((s) => s.ready ?? null)).toEqual(['h1', 'h1', 'h1', 'h1', null]);
+	});
 });
 
 describe('proofPlan: checks', () => {

@@ -19,7 +19,9 @@ const NOT_FOUND_PATH = 'proof-not-found-13/';
 
 /**
  * @typedef {{ baseUrl: string, out: string }} ProofArgs
- * @typedef {{ file: string, url: string, reload?: boolean }} Shot
+ * @typedef {{ file: string, url: string, reload?: boolean, ready?: string }} Shot
+ *   `ready` is a selector that must be visible before the shot. The 404 is the SPA fallback shell,
+ *   which renders its page client-side after `load`, so a shot taken at `load` is blank.
  * @typedef {{ endsWith?: string, startsWith?: string }} LocationExpectation
  * @typedef {{
  *   name: string,
@@ -80,10 +82,10 @@ export function parseProofArgs(argv) {
 export function proofPlan(baseUrl) {
 	return {
 		shots: [
-			{ file: '01-landing.png', url: baseUrl },
-			{ file: '02-renter.png', url: `${baseUrl}renter/` },
-			{ file: '03-deep-route-refresh.png', url: `${baseUrl}investor/`, reload: true },
-			{ file: '04-not-found.png', url: `${baseUrl}${NOT_FOUND_PATH}` },
+			{ file: '01-landing.png', url: baseUrl, ready: 'h1' },
+			{ file: '02-renter.png', url: `${baseUrl}renter/`, ready: 'h1' },
+			{ file: '03-deep-route-refresh.png', url: `${baseUrl}investor/`, reload: true, ready: 'h1' },
+			{ file: '04-not-found.png', url: `${baseUrl}${NOT_FOUND_PATH}`, ready: 'h1' },
 			{ file: '05-version-json.png', url: `${baseUrl}_app/version.json` }
 		],
 		checks: [
@@ -167,6 +169,7 @@ async function main() {
 	for (const shot of plan.shots) {
 		await page.goto(shot.url, { waitUntil: 'load' });
 		if (shot.reload) await page.reload({ waitUntil: 'load' });
+		if (shot.ready) await page.locator(shot.ready).first().waitFor();
 		// Viewport only (not fullPage): the bundle must stay small and the proof is "the page loaded".
 		await page.screenshot({ path: join(out, shot.file) });
 		console.log(`shot  ${shot.file}  ${shot.url}${shot.reload ? '  (reloaded)' : ''}`);

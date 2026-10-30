@@ -4,7 +4,7 @@
 //     any write (non-GET/HEAD) beyond the analytics beacon budget fails it, and so does any request
 //     carrying a key header
 // `testGpcOff` drops the GPC part only. analytics.smoke.ts is its one legitimate user.
-import { test as base, expect } from '@playwright/test';
+import { test as base, expect, type Page } from '@playwright/test';
 import { CONNECT } from '../../../../scripts/assert-csp.mjs';
 import { parseSmokeEnv } from './env.js';
 
@@ -83,6 +83,57 @@ export const test = withMonitor.extend<{ gpc: void }>({
 		{ auto: true }
 	]
 });
+
+/**
+ * How long a spec waits for the worker's install. The install is one atomic `cache.addAll` of the
+ * whole build (380 entries at go-live), so the cache stays empty until the last chunk lands. On the
+ * first visit after the go-live deploy (13-13) the live CDN answered most of those chunks cold and
+ * the install took 5.3 s, past Playwright's 5 s poll default (the local emulator never came close);
+ * from a residential client with four workers it measured 6.7 to 8.3 s. Sized at 2.4 times the
+ * slowest measurement, inside the 30 s test timeout, and `installedPrecache` logs every run's time.
+ */
+export const PRECACHE_INSTALL_TIMEOUT_MS = 20_000;
+
+/** The worker's registration and its precache, read from inside the page. */
+const swCache = (page: Page) =>
+	page.evaluate(async () => {
+		const reg = await navigator.serviceWorker.ready;
+		const keys = await caches.keys();
+		const urls =
+			keys.length === 1 ? (await (await caches.open(keys[0])).keys()).map((r) => r.url) : [];
+		return {
+			keys,
+			urls,
+			origin: location.origin,
+			scope: reg.scope,
+			script: reg.active?.scriptURL ?? ''
+		};
+	});
+
+/**
+ * Open the base, wait until the one precache exists and holds entries (install is asynchronous),
+ * and return the registration and precache facts. Logs the install time so a slow CDN is measured,
+ * not guessed at.
+ */
+export async function installedPrecache(page: Page) {
+	await page.goto('');
+	const started = Date.now();
+	await expect
+		.poll(
+			async () => {
+				const { keys, urls } = await swCache(page);
+				return keys.length === 1 && urls.length > 0;
+			},
+			{
+				timeout: PRECACHE_INSTALL_TIMEOUT_MS,
+				message: 'the service worker precache did not install'
+			}
+		)
+		.toBe(true);
+	const cache = await swCache(page);
+	console.log(`precache: ${cache.urls.length} entries installed after ${Date.now() - started} ms`);
+	return cache;
+}
 
 /** GPC OFF. Imported by analytics.smoke.ts ONLY (12-09 adds a static guard). */
 export const testGpcOff = withMonitor;

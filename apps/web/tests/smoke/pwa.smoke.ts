@@ -1,40 +1,12 @@
 // SMOKE-02 service-worker contract against a served build: the worker registers from the page's own
 // origin with scope = base, its single cache is keyed by this build's SHA, and everything it
 // precaches is a same-origin path under the base with no dotfile segment. Read-only: GETs only.
-import { test, expect, smoke, type Page } from './fixtures';
+import { test, expect, smoke, installedPrecache } from './fixtures';
 
 const basePath = new URL(smoke.baseUrl).pathname;
 
-/** The worker's registration and its precache, read from inside the page. */
-const swCache = (page: Page) =>
-	page.evaluate(async () => {
-		const reg = await navigator.serviceWorker.ready;
-		const keys = await caches.keys();
-		const urls =
-			keys.length === 1 ? (await (await caches.open(keys[0])).keys()).map((r) => r.url) : [];
-		return {
-			keys,
-			urls,
-			origin: location.origin,
-			scope: reg.scope,
-			script: reg.active?.scriptURL ?? ''
-		};
-	});
-
-/** Install is asynchronous: poll until the one cache exists and holds entries. */
-async function installed(page: Page) {
-	await page.goto('');
-	await expect
-		.poll(async () => {
-			const { keys, urls } = await swCache(page);
-			return keys.length === 1 && urls.length > 0;
-		})
-		.toBe(true);
-	return swCache(page);
-}
-
 test('the worker registers from this origin with scope = base', async ({ page }) => {
-	const { scope, script, origin } = await installed(page);
+	const { scope, script, origin } = await installedPrecache(page);
 	expect(scope).toBe(smoke.baseUrl);
 	expect(new URL(script).origin).toBe(origin);
 	expect(new URL(script).pathname).toBe(basePath + 'service-worker.js');
@@ -43,7 +15,7 @@ test('the worker registers from this origin with scope = base', async ({ page })
 test('precache is one tran-shell-<version> cache of same-origin GETs under the base, no dotfiles', async ({
 	page
 }) => {
-	const { keys, urls, origin } = await installed(page);
+	const { keys, urls, origin } = await installedPrecache(page);
 	expect(keys).toEqual(['tran-shell-' + smoke.expectVersion]);
 	for (const u of urls) {
 		const url = new URL(u);
