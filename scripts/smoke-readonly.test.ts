@@ -87,7 +87,7 @@ function walk(dir: string): string[] {
 	return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
 		const abs = join(dir, e.name);
 		if (e.isDirectory()) return walk(abs);
-		return /\.(ts|js)$/.test(e.name) ? [abs] : [];
+		return /\.(ts|js|mjs)$/.test(e.name) ? [abs] : [];
 	});
 }
 
@@ -118,6 +118,10 @@ describe('the real smoke suite', () => {
 		const files = realFiles();
 		expect(files.filter((f) => isSpec(f.path)).length).toBe(10); // non-vacuity
 		expect(readOnlyViolations(files)).toEqual([]);
+	});
+
+	test('the walk covers .mjs helpers too (the proof-shot script is scanned)', () => {
+		expect(realFiles().map((f) => f.path)).toContain(`${SMOKE_DIR}/proof-shots.mjs`);
 	});
 });
 
@@ -213,5 +217,12 @@ describe('readOnlyViolations', () => {
 			suite([{ path: `${SMOKE_DIR}/helpers/util.js`, text: `x.click();\n` }])
 		);
 		expect(v).toEqual([`${SMOKE_DIR}/helpers/util.js: interaction .click(`]);
+	});
+
+	test('rules apply to .mjs scripts in the smoke dir', () => {
+		const v = readOnlyViolations(
+			suite([{ path: `${SMOKE_DIR}/planted.mjs`, text: `await page.locator('a').click();\n` }])
+		);
+		expect(v).toEqual([`${SMOKE_DIR}/planted.mjs: interaction .click(`]);
 	});
 });
