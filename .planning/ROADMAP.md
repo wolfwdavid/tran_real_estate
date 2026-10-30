@@ -104,14 +104,14 @@ Plans:
 **Owner steps inside the phase:** set `PAGES_ENABLED=true` and the launch Variables (`PUBLIC_WEB3FORMS_KEY`, `PUBLIC_ANALYTICS_HOST` + `PUBLIC_ANALYTICS_WEBSITE_ID`, `PUBLIC_SITE_URL=https://wolfwdavid.github.io` (origin only, D-01), `BASE_PATH=/tran_real_estate` (D-02), optional `PUBLIC_CONTACT_EMAIL`); Search Console property; Umami and Web3Forms accounts; share-card debugger runs; real-key CORS checks per provider; the push-protection probe with a throwaway zero-permission PAT.
 **Research flag:** YES. Run `/gsd:research-phase 13`: the first live run of `ci.yml` on a 4-vCPU `ubuntu-24.04` runner (three-leg E2E runtime, memory, Playwright worker count) cannot be pre-verified and is planned as "run, observe, quick-fix"; verify live that Pages returns HTTP 404 (not 200) for `404.html`, that the `workflow_run` payload carries `head_sha`, and the HTTP → HTTPS redirect.
 **UI hint:** no.
-**Plans:** 2/21 plans executed
+**Plans:** 3/21 plans executed
 
 Plans:
 - [ ] 13-01-PLAN.md — Wave 1: planning docs reconciled to wolfwdavid.github.io/tran_real_estate, CI baseline evidence (LIVE-02), owner decisions A/B/C (checkpoint)
 - [ ] 13-02-PLAN.md — Wave 1: resolveSiteUrl helper, DEFAULT_SITE_ORIGIN, extension __TRAN_SITE_URL__ + oracle allowlist, base-path proof group (D-03/D-04)
 - [x] 13-20-PLAN.md — Wave 1: fixture-only test files substituted to the wolfwdavid.github.io origin (split from 13-02)
 - [x] 13-03-PLAN.md — Wave 1: live-smoke.yml (workflow_run + dispatch) + live-smoke-gate.test.ts, mutation-checked (SMOKE-04)
-- [ ] 13-04-PLAN.md — Wave 1: DEPLOY-CHECKLIST personal-account rewrite + extension docs privacy URL, with their oracles
+- [x] 13-04-PLAN.md — Wave 1: DEPLOY-CHECKLIST personal-account rewrite + extension docs privacy URL, with their oracles
 - [ ] 13-05-PLAN.md — Wave 1: one HUMAN-UAT ledger (99 + 4 rows) + no-row-dropped test; twelve per-phase files superseded (LIVE-07)
 - [ ] 13-06-PLAN.md — Wave 2: root BASE_PATH knob through build-targets, emulator, Playwright root project, smoke.mjs, specs; launch-audit header (blocker)
 - [ ] 13-07-PLAN.md — Wave 2: Dependabot toolchain-major ignores (D-06) + shared-origin privacy copy (decision C)
@@ -204,7 +204,7 @@ Plans:
 | 10. Launch Hardening & Go-to-Market | v1.0 | 23/23 | Complete | 2026-10-14 |
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
-| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 2/21 | In Progress|  |
+| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 3/21 | In Progress|  |
 | 14. Carried Debt | v1.1 | 0/TBD | Not started | - |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
