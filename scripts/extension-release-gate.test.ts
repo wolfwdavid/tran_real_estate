@@ -122,10 +122,12 @@ describe('steps', () => {
 		for (const s of ORDER) expect(count(text, s), s).toBe(1);
 	});
 
-	// LIVE-08: the published zip and its oracle run are built for the owner's site origin. The
-	// variable sits in each step's own env block, never at job or workflow level.
-	test('the zip and oracle steps each carry PUBLIC_SITE_URL in their own step', () => {
+	// LIVE-08 / D-04: the published zip and its oracle run are built for the owner's site URL
+	// (origin + base path). Both variables sit in each step's own env block, never at job or
+	// workflow level.
+	test('the zip and oracle steps each carry PUBLIC_SITE_URL and BASE_PATH in their own step', () => {
 		const SITE = 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}';
+		const BASE = 'BASE_PATH: ${{ vars.BASE_PATH }}';
 		const job = releaseJob();
 		const stepOf = (run: string): string => {
 			const at = job.indexOf(run);
@@ -139,10 +141,12 @@ describe('steps', () => {
 		]) {
 			const step = stepOf(run);
 			expect(step, run).toContain(`- name: ${name}\n`);
-			expect(step, run).toContain(`\n        env:\n          ${SITE}`);
+			expect(step, run).toContain(`\n        env:\n          ${SITE}\n          ${BASE}`);
 		}
 		expect(count(text, SITE)).toBe(2);
 		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(2);
+		expect(count(text, BASE)).toBe(2);
+		expect(count(text, 'vars.BASE_PATH')).toBe(2);
 		expect(text).not.toMatch(/^(?:env:| {4}env:)/m);
 	});
 
