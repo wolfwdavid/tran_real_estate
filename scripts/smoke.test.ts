@@ -16,14 +16,14 @@ describe('localTargets', () => {
 			{
 				name: 'root',
 				baseUrl: 'http://127.0.0.1:4273/',
-				siteUrl: 'https://tranrealestate.github.io/',
+				siteUrl: 'https://wolfwdavid.github.io/',
 				analyticsHost: '',
 				dir: 'apps/web/build'
 			},
 			{
 				name: 'sub',
 				baseUrl: 'http://127.0.0.1:4274/tran_real_estate/',
-				siteUrl: 'https://tranrealestate.github.io/tran_real_estate/',
+				siteUrl: 'https://wolfwdavid.github.io/tran_real_estate/',
 				analyticsHost: '',
 				dir: 'apps/web/build-sub'
 			},
@@ -121,7 +121,7 @@ describe('staleBuilds', () => {
 });
 
 describe('waitForVersion', () => {
-	const BASE = 'https://tranrealestate.github.io/';
+	const BASE = 'https://wolfwdavid.github.io/';
 
 	test('resolves ok once version.json reports the SHA, polling through errors and non-200s', async () => {
 		const get = vi
@@ -139,7 +139,7 @@ describe('waitForVersion', () => {
 		const get = vi.fn().mockResolvedValue({ status: 200, body: JSON.stringify({ version: HEAD }) });
 		await waitForVersion(BASE, HEAD, { get, timeoutMs: 50, everyMs: 5 });
 		expect(get.mock.calls[0][0]).toMatch(
-			/^https:\/\/tranrealestate\.github\.io\/_app\/version\.json\?_=\S+/
+			/^https:\/\/wolfwdavid\.github\.io\/_app\/version\.json\?_=\S+/
 		);
 	});
 

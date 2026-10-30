@@ -94,7 +94,7 @@ describe('OSM tiles are never handled (no offline use, OSM tile policy)', () => 
 		expect(sw).not.toContain('https://');
 	});
 
-	test.each(['https://tranrealestate.github.io', 'http://127.0.0.1:4273'])(
+	test.each(['https://wolfwdavid.github.io', 'http://127.0.0.1:4273'])(
 		'tile.openstreetmap.org is cross-origin to %s',
 		(origin) => {
 			expect(new URL(TILE).origin).not.toBe(new URL(origin).origin);

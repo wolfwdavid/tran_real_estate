@@ -8,7 +8,7 @@ import { crc32, deflateSync } from 'node:zlib';
 import { afterAll, describe, expect, test } from 'vitest';
 import { checkSeo } from './assert-seo.mjs';
 
-const SITE = 'https://tranrealestate.github.io/tran_real_estate';
+const SITE = 'https://wolfwdavid.github.io/tran_real_estate';
 
 /** One PNG chunk: length, type, data, CRC over type + data. */
 function chunk(type: string, data: Buffer): Buffer {

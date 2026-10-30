@@ -25,7 +25,7 @@ describe('serializeJsonLd', () => {
 		const data = webApplication({
 			name: 'Cash-on-cash & DSCR <tools>',
 			description: 'd',
-			url: 'https://tranrealestate.github.io/tools/cash-on-cash/'
+			url: 'https://wolfwdavid.github.io/tools/cash-on-cash/'
 		});
 		expect(JSON.parse(serializeJsonLd(data))).toStrictEqual(data);
 	});
@@ -35,7 +35,7 @@ describe('webApplication', () => {
 	const tool = {
 		name: 'Cap rate calculator',
 		description: 'd',
-		url: 'https://tranrealestate.github.io/tools/cap-rate/'
+		url: 'https://wolfwdavid.github.io/tools/cap-rate/'
 	};
 
 	test('has exactly the free-app fields', () => {
@@ -44,7 +44,7 @@ describe('webApplication', () => {
 			'@type': 'WebApplication',
 			name: 'Cap rate calculator',
 			description: 'd',
-			url: 'https://tranrealestate.github.io/tools/cap-rate/',
+			url: 'https://wolfwdavid.github.io/tools/cap-rate/',
 			applicationCategory: 'FinanceApplication',
 			operatingSystem: 'Any',
 			browserRequirements: 'Requires JavaScript',

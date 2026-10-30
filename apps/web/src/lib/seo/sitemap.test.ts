@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { robotsTxt, sitemapPaths, sitemapXml } from './sitemap';
 
-const SUB = 'https://tranrealestate.github.io/tran_real_estate';
-const ROOT = 'https://tranrealestate.github.io';
+const SUB = 'https://wolfwdavid.github.io/tran_real_estate';
+const ROOT = 'https://wolfwdavid.github.io';
 
 describe('sitemapPaths', () => {
 	it('keeps static (marketing) pages, sorted, and drops dynamic routes', () => {
@@ -58,13 +58,13 @@ describe('sitemapXml', () => {
 describe('robotsTxt', () => {
 	it('disallows print and the inquiry page under the base path', () => {
 		expect(robotsTxt(SUB)).toBe(
-			'User-agent: *\nAllow: /\nDisallow: /tran_real_estate/print/\nDisallow: /tran_real_estate/agent/inquire/\nSitemap: https://tranrealestate.github.io/tran_real_estate/sitemap.xml\n'
+			'User-agent: *\nAllow: /\nDisallow: /tran_real_estate/print/\nDisallow: /tran_real_estate/agent/inquire/\nSitemap: https://wolfwdavid.github.io/tran_real_estate/sitemap.xml\n'
 		);
 	});
 
 	it('uses root paths on the root build', () => {
 		expect(robotsTxt(ROOT)).toBe(
-			'User-agent: *\nAllow: /\nDisallow: /print/\nDisallow: /agent/inquire/\nSitemap: https://tranrealestate.github.io/sitemap.xml\n'
+			'User-agent: *\nAllow: /\nDisallow: /print/\nDisallow: /agent/inquire/\nSitemap: https://wolfwdavid.github.io/sitemap.xml\n'
 		);
 	});
 });

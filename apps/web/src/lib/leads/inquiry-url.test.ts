@@ -3,7 +3,7 @@ import type { InquiryConfig } from '@tran/core/leads/inquiry-params';
 import { buildInquiryUrl, readInquiryParams } from './inquiry-url';
 
 const KEY = '00000000-0000-4000-8000-000000000000';
-const ROOT = 'https://tranrealestate.github.io/agent/inquire/';
+const ROOT = 'https://wolfwdavid.github.io/agent/inquire/';
 const SUB = 'https://x.test/tran_real_estate/agent/inquire/';
 
 const MINIMAL: InquiryConfig = { key: KEY, name: 'Sample Agent', brokerage: 'Example Realty' };

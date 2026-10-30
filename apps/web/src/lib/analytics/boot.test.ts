@@ -20,8 +20,8 @@ describe('analytics boot', () => {
 		vi.stubGlobal('document', { referrer: 'https://search.example/' });
 		vi.stubGlobal('window', { innerWidth: 390 });
 		const spy = vi.spyOn(tracker, 'pageview').mockImplementation(() => {});
-		const a = new URL('https://tranrealestate.github.io/tools/');
-		const b = new URL('https://tranrealestate.github.io/tools/dscr/');
+		const a = new URL('https://wolfwdavid.github.io/tools/');
+		const b = new URL('https://wolfwdavid.github.io/tools/dscr/');
 		pageview(a);
 		pageview(b);
 		expect(spy.mock.calls).toEqual([

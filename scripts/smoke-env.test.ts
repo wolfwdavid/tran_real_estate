@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 import { parseSmokeEnv } from '../apps/web/tests/smoke/env.js';
 
 const SHA = 'a'.repeat(40);
-const BASE = 'https://tranrealestate.github.io/';
+const BASE = 'https://wolfwdavid.github.io/';
 const ok = (extra: Record<string, string | undefined> = {}) =>
 	parseSmokeEnv({ SMOKE_BASE_URL: BASE, SMOKE_EXPECT_VERSION: SHA, ...extra });
 
@@ -27,7 +27,7 @@ describe('parseSmokeEnv: SMOKE_BASE_URL', () => {
 	});
 
 	test('a base without its trailing slash throws', () => {
-		expect(() => ok({ SMOKE_BASE_URL: 'https://tranrealestate.github.io' })).toThrow(/end with \//);
+		expect(() => ok({ SMOKE_BASE_URL: 'https://wolfwdavid.github.io' })).toThrow(/end with \//);
 	});
 
 	test('http on a non-loopback host throws with or without the flag', () => {
@@ -68,14 +68,14 @@ describe('parseSmokeEnv: valid env', () => {
 	});
 
 	test('SMOKE_SITE_URL is honoured', () => {
-		const sub = 'https://tranrealestate.github.io/tran_real_estate/';
+		const sub = 'https://wolfwdavid.github.io/tran_real_estate/';
 		expect(
-			ok({ SMOKE_BASE_URL: sub, SMOKE_SITE_URL: 'https://tranrealestate.github.io/' }).siteUrl
-		).toBe('https://tranrealestate.github.io/');
+			ok({ SMOKE_BASE_URL: sub, SMOKE_SITE_URL: 'https://wolfwdavid.github.io/' }).siteUrl
+		).toBe('https://wolfwdavid.github.io/');
 	});
 
 	test('SMOKE_SITE_URL without its trailing slash throws', () => {
-		expect(() => ok({ SMOKE_SITE_URL: 'https://tranrealestate.github.io' })).toThrow(
+		expect(() => ok({ SMOKE_SITE_URL: 'https://wolfwdavid.github.io' })).toThrow(
 			/SMOKE_SITE_URL must end with \//
 		);
 	});

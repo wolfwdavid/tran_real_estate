@@ -4,7 +4,7 @@ import { buildPageview, type BeaconBody } from './payload.js';
 
 const WEBSITE_ID = '00000000-0000-4000-8000-000000000001';
 const HOST = 'https://stats.example.org';
-const SITE = 'https://tranrealestate.github.io';
+const SITE = 'https://wolfwdavid.github.io';
 
 type Call = [string, RequestInit];
 let calls: Call[];
@@ -19,7 +19,7 @@ beforeEach(() => {
 });
 
 const body: BeaconBody = buildPageview(
-	{ pathname: '/renter/', hostname: 'tranrealestate.github.io' },
+	{ pathname: '/renter/', hostname: 'wolfwdavid.github.io' },
 	'',
 	1280,
 	WEBSITE_ID
