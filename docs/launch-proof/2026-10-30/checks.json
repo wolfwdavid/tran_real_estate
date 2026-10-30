@@ -1,0 +1,50 @@
+{
+	"baseUrl": "https://wolfwdavid.github.io/tran_real_estate/",
+	"capturedAt": "2026-10-30T19:35:18.395Z",
+	"checks": [
+		{
+			"name": "landing",
+			"url": "https://wolfwdavid.github.io/tran_real_estate/",
+			"expectStatus": 200,
+			"status": 200,
+			"ok": true
+		},
+		{
+			"name": "slashless-redirect",
+			"url": "https://wolfwdavid.github.io/tran_real_estate/renter",
+			"expectStatus": 301,
+			"expectLocation": {
+				"endsWith": "/renter/"
+			},
+			"status": 301,
+			"location": "https://wolfwdavid.github.io/tran_real_estate/renter/",
+			"ok": true
+		},
+		{
+			"name": "not-found",
+			"url": "https://wolfwdavid.github.io/tran_real_estate/proof-not-found-13/",
+			"expectStatus": 404,
+			"status": 404,
+			"ok": true
+		},
+		{
+			"name": "http-upgrade",
+			"url": "http://wolfwdavid.github.io/tran_real_estate/",
+			"expectStatus": 301,
+			"expectLocation": {
+				"startsWith": "https://"
+			},
+			"status": 301,
+			"location": "https://wolfwdavid.github.io/tran_real_estate/",
+			"ok": true
+		},
+		{
+			"name": "version-json",
+			"url": "https://wolfwdavid.github.io/tran_real_estate/_app/version.json",
+			"expectStatus": 200,
+			"status": 200,
+			"version": "ad5fd08188c7cdd37cc5fcb2bc45c58c7f631684",
+			"ok": true
+		}
+	]
+}
