@@ -1,10 +1,12 @@
 ---
-status: partial
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 12-go-live-readiness-local-smoke-suite
 source: [12-VERIFICATION.md]
 started: 2026-10-29T21:08:21Z
 updated: 2026-10-29T21:45:00Z
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 ## Current Test
 

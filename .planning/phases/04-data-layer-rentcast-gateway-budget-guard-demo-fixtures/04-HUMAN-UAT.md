@@ -1,11 +1,13 @@
 ---
-status: pending
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 04-data-layer-rentcast-gateway-budget-guard-demo-fixtures
 source: [04-RESEARCH.md "Deferred real-key checks (HUMAN-UAT)", 04-CONTEXT.md, 04-VALIDATION.md "Manual-Only Verifications", Phase 6 research additions (coordinator 2026-10-04)]
 started: 2026-10-05
 updated: 2026-10-05
 blocking: false
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 # Phase 4: Real-key UAT (deferred)
 

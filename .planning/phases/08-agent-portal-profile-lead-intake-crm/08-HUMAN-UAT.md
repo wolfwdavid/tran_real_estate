@@ -1,10 +1,12 @@
 ---
-status: partial
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 08-agent-portal-profile-lead-intake-crm
 source: [08-26-PLAN.md, 08-VALIDATION.md "Manual-Only Verifications"]
 started: 2026-10-07T05:30:00Z
 updated: 2026-10-07T05:30:00Z
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 ## Current Test
 

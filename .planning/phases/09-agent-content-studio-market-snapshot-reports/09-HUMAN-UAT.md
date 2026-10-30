@@ -1,10 +1,12 @@
 ---
-status: partial
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 09-agent-content-studio-market-snapshot-reports
 source: [09-23-PLAN.md, 09-VALIDATION.md "Manual-Only Verifications", 09-RESEARCH.md "Sampling Rate" and Open Questions 3-5, 09-04/09-10/09-15/09-17/09-18/09-19/09-20/09-14 SUMMARY gate notes]
 started: 2026-10-07T17:00:00Z
 updated: 2026-10-07T17:00:00Z
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 ## Current Test
 

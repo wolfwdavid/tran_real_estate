@@ -1,12 +1,14 @@
 ---
 phase: 7
 slug: investor-portal
-status: pending-owner
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 source: [07-VALIDATION.md "Manual-Only Verifications", 07-12/07-15/07-17/07-18/07-19/07-20/07-21 executor notes, 04-HUMAN-UAT.md, 05-HUMAN-UAT.md, 06-HUMAN-UAT.md]
 created: 2026-10-06
 updated: 2026-10-06
 blocking: false
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 # Phase 7: Investor portal UAT (deferred, owner-gated)
 

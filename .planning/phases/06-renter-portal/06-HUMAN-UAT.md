@@ -1,12 +1,14 @@
 ---
 phase: 6
 slug: renter-portal
-status: pending-owner
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 source: [06-VALIDATION.md "Manual-Only Verifications", 06-14/06-19/06-20/06-22 executor notes, 04-HUMAN-UAT.md, 05-HUMAN-UAT.md]
 created: 2026-10-05
 updated: 2026-10-05
 blocking: false
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 # Phase 6: Renter portal UAT (deferred, owner-gated)
 

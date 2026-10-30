@@ -1,12 +1,14 @@
 ---
 phase: 5
 slug: ai-layer-providers-streaming-fair-housing-guardrails
-status: pending-owner
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 source: [05-RESEARCH.md "Deferred Live Checks" and "Open Questions" 1 and 5, 05-VALIDATION.md "Manual-Only Verifications", 05-15 and 05-16 executor notes]
 created: 2026-10-05
 updated: 2026-10-05
 blocking: false
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 # Phase 5: Live AI provider UAT (deferred, owner-gated)
 

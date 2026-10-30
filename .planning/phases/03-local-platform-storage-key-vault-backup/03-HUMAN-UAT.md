@@ -1,11 +1,13 @@
 ---
-status: deferred
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 03-local-platform-storage-key-vault-backup
 source: [03-VALIDATION.md "Manual-Only Verifications", 03-RESEARCH.md Pattern 6 / Pattern 7 / Pitfall 6]
 started: 2026-10-05
 updated: 2026-10-05
 blocking: false
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 # Phase 3: Real-device UAT (deferred)
 

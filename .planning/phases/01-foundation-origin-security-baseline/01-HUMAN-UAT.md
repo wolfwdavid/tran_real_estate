@@ -1,10 +1,12 @@
 ---
-status: partial
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 01-foundation-origin-security-baseline
 source: [01-VERIFICATION.md]
 started: 2026-09-22T19:30:00Z
 updated: 2026-09-22T19:30:00Z
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 ## Current Test
 

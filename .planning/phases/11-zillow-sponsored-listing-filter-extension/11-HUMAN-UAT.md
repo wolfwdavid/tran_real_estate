@@ -1,10 +1,12 @@
 ---
-status: partial
+status: superseded
+superseded_by: .planning/HUMAN-UAT.md
 phase: 11-zillow-sponsored-listing-filter-extension
 source: [11-VALIDATION.md, 11-RESEARCH.md, 11-03-SUMMARY.md, 11-07-SUMMARY.md, 11-11-SUMMARY.md]
 started: 2026-10-26T03:45:00Z
 updated: 2026-10-26T03:45:00Z
 ---
+> Superseded on 2026-10-30 by `.planning/HUMAN-UAT.md` (Phase 13 ledger). This file is kept as history; record results in the ledger.
 
 ## Current Test
 
