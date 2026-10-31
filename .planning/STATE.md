@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-17-PLAN.md (sitemap Success pending; open item carried to 13-19)
-last_updated: "2026-10-31T13:02:20.379Z"
+stopped_at: Completed 13-18-PLAN.md (launch audit regenerated at f169749, commit e9f82f2)
+last_updated: "2026-10-31T13:59:41.618Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 29
+  completed_plans: 30
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 19 of 21
+Plan: 20 of 21
 
 ## Performance Metrics
 
@@ -720,7 +720,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-31T13:02:20.373Z
-Stopped at: Completed 13-17-PLAN.md (sitemap Success pending; open item carried to 13-19)
+Last session: 2026-10-31T13:59:41.612Z
+Stopped at: Completed 13-18-PLAN.md (launch audit regenerated at f169749, commit e9f82f2)
 Resume file: None
 Next: wave 8, 13-14 (GTM-04 Umami proof with IP finding and stop condition, or cut) holding for the owner's Umami website ID; 13-21 done (push protection proven: probe rejected, PAT revoked, branch gone; RentCast CORS from the live origin passed; the four AI-provider re-probes carried to Phase 14). State at hand-off: the site is live at https://wolfwdavid.github.io/tran_real_estate/; origin/main = f070c74 (local ahead by the 13-13 and 13-21 metadata commits, carried by the next push); variables BASE_PATH, PAGES_ENABLED=true, PUBLIC_SITE_URL; GO_LIVE_SHA ad5fd08 (ci 41111039721 deploy green, live-smoke 41115004823 red on a test timeout, fixed in 79f82bc); green pair on f070c74: ci 41147247922 + live-smoke 41149881068 (121 passed, propagation 0 s, cold precache install 9.7 s on CI); LAUNCH_DATE 2026-10-30, proof bundle docs/launch-proof/2026-10-30/. Every push now deploys and triggers a real live-smoke. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
