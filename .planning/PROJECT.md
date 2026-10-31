@@ -89,7 +89,7 @@ Validated in Phase 9: Agent Content Studio & Market Snapshot Reports (2026-10-13
 - ✓ STU-03 — Founder-story reel script (hook → manual pain → before/after → results → mission → CTA) with timed beats, captions, B-roll list and an AI-disclosure checklist (Phase 9)
 - ✓ STU-04 — Branded Market Snapshot report for a ZIP code that prints to PDF, labeled not a CMA or appraisal (Phase 9)
 
-Phase 10: Launch Hardening & Go-to-Market shipped 2026-10-14 (23/23 plans, 5/5 success criteria verified locally). GTM-01..04 stay Active on purpose: their proof (Umami pageviews, Web3Forms delivery, share cards, Search Console) needs the live origin and the owner's accounts (10-HUMAN-UAT.md, 8 rows).
+Phase 10: Launch Hardening & Go-to-Market shipped 2026-10-14 (23/23 plans, 5/5 success criteria verified locally). GTM-01..04 stay Active on purpose: their proof (Umami pageviews, Web3Forms delivery, share cards, Search Console) needs the live origin and the owner's accounts (10-HUMAN-UAT.md, 8 rows). Resolved in Phase 13: GTM-01..03 validated on the live origin 2026-10-31, GTM-04 cut (see the Phase 13 block below).
 
 Validated in Phase 11: Zillow Sponsored Listing Filter Extension (2026-10-29) — 4/4 must-haves verified against the production build (241 extension unit tests, 13 popup axe tests, 7 runtime E2E incl. a zero-network monitored session, manifest/bundle/zip oracle). `human_needed`: 7 owner rows in 11-HUMAN-UAT.md (live zillow.com smoke, real-browser zero-network check, the "Showcase" badge decision, Zillow ToU read, privacy URL live, Edge Add-ons submission, `ext-v0.1.0` release once the remote exists); Firefox Add-ons cut per the roadmap cut line.
 
@@ -104,7 +104,20 @@ Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/
 - ✓ LIVE-04 — Every web build is stamped with its commit SHA (`/_app/version.json`), checked by unit, E2E and smoke (Phase 12)
 - ✓ LIVE-08 — `PUBLIC_SITE_URL` alone drives canonical, sitemap, OG URLs and the extension's origin/privacy URL; configured target pinned to a test origin on every run (Phase 12)
 - ✓ SMOKE-01/02/03/05/06 — Read-only, fail-closed smoke suite (10 specs, 363 tests, three local builds) inside `pnpm verify`; static read-only guard; single GPC-off analytics spec; axe on key routes (Phase 12)
-- ◐ LIVE-05 — Deploy checklist corrected and Search Console meta slot pinned (Phase 12); live half (property verified, sitemap read) lands in Phase 13
+- ◐ LIVE-05 — Deploy checklist corrected and Search Console meta slot pinned (Phase 12); live half: property verified 2026-10-31 by the HTML-tag method (Phase 13); sitemap submitted 2026-10-31 12:54Z, its Search Console read still pending (13-17-SUMMARY.md, ledger L86/L99)
+
+Validated in Phase 13: Live Origin, First CI Run, First Deploy, Post-deploy Smoke & UAT Burn-down (live origin, 2026-10-31) — `https://wolfwdavid.github.io/tran_real_estate/` is public: go-live push `ad5fd08` on 2026-10-30, first green ci + deploy + live-smoke trio on `f070c74`, deployed commit `f169749` audited by `docs/LAUNCH-AUDIT.md` with every row PASS. GTM proofs on the live origin, the 99-row owner ledger with results, the proof bundle and the runbook facts are on file; one item stays open (the Search Console sitemap read, see Current State).
+
+- ✓ GTM-01 — Validated in Phase 13 (live origin, 2026-10-31): fresh-profile walk portal pick -> tour -> Try sample data renders 10 sample rentals (`docs/launch-proof/2026-10-30/21-gtm01-sample-data.png`)
+- ✓ GTM-02 — Validated in Phase 13 (live origin, 2026-10-31): Web3Forms waitlist and feedback entries delivered from the live site (`20-web3forms-inbox.png`)
+- ✓ GTM-03 — Validated in Phase 13 (live origin, 2026-10-31): the cap-rate share card renders in the LinkedIn Post Inspector and the OpenGraph.xyz validator (D-18 substitution for the login-walled Facebook debugger; `30-linkedin-card.png`, `31-og-validator-card.png`)
+- ✗ GTM-04 — Cut 2026-10-30 by owner decision P13-4 (b); moved to v2 (Key Decisions)
+- ✓ LIVE-02 — First CI runs green with `deploy` skipped: 40961373692, 40965347969, 40980243892, then 41089068534 and 41099425596 on the Phase 13 code wave (Phase 13)
+- ✓ LIVE-03 — Live routing contract held at go-live and on every later deploy: D-13 facts by curl, live-smoke 41149881068 and 41202355014 green, owner fresh-profile checks passed (Phase 13)
+- ✓ LIVE-06 — GTM-01..03 proven, GTM-04 cut per its cut line, Search Console property verified (Phase 13)
+- ✓ LIVE-07 — 99 + 4 ledger rows with results (`.planning/HUMAN-UAT.md`), `docs/launch-proof/2026-10-30/` with README index, launch audit regenerated at the deployed commit (Phase 13)
+- ✓ LIVE-09 — `docs/RUNBOOK.md` with the measured first-deploy facts (Phase 13)
+- ✓ SMOKE-04 — `live-smoke.yml` runs after every deploy and fails the run on any failure; green on `f070c74` and `f169749` (Phase 13)
 
 ### Active
 
@@ -166,7 +179,7 @@ Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/
 
 **Shipped v1.0 MVP on 2026-10-29** (11 phases, 209 plans, 475 tasks, 1,206 commits, ~165k lines). Everything in the v1 scope is built and verified locally: three portals, the key vault and budget-guarded data layer, four BYOK LLM providers behind the Fair Housing gate, the launch surface, and the Zillow extension. Gates: 6,647 unit tests, 2,327 E2E with axe on every route, launch audit all rows PASS, dependency audit clean with four reviewed low exceptions.
 
-**Phase 12 complete, pushed, not yet deployed (2026-10-29).** The owner chose the personal account over a new org: the public repo is `wolfwdavid/tran_real_estate`, `main` + `v1.0` are pushed, the first CI run (40961373692) is green with `deploy` skipped, Pages source is GitHub Actions, secret scanning + push protection + Dependabot are on. The live origin will be `https://wolfwdavid.github.io/tran_real_estate/` (sub-path build, shared `wolfwdavid.github.io` storage origin accepted by the owner). Phase 13 sets `PUBLIC_SITE_URL`, deploys with `PAGES_ENABLED=true`, and runs the live smoke; the 77 HUMAN-UAT rows and GTM-01..04 still await that origin.
+**Phase 12 complete, pushed, not yet deployed (2026-10-29; superseded by the Phase 13 paragraph below).** The owner chose the personal account over a new org: the public repo is `wolfwdavid/tran_real_estate`, `main` + `v1.0` are pushed, the first CI run (40961373692) is green with `deploy` skipped, Pages source is GitHub Actions, secret scanning + push protection + Dependabot are on. The live origin will be `https://wolfwdavid.github.io/tran_real_estate/` (sub-path build, shared `wolfwdavid.github.io` storage origin accepted by the owner). Phase 13 sets `PUBLIC_SITE_URL`, deploys with `PAGES_ENABLED=true`, and runs the live smoke; the 77 HUMAN-UAT rows and GTM-01..04 still await that origin.
 
 **CI baseline (Phase 13 success criterion 1, observed 2026-10-29):** three `ci.yml` runs on `main` (`event: push`), all `success` with the `deploy` job skipped while `PAGES_ENABLED` is unset. Read live with `gh run view <id> --json jobs`; durations are per job (hygiene, root E2E leg, sub E2E leg, configured E2E leg).
 
@@ -175,6 +188,8 @@ Validated in Phase 12: Go-live Readiness & Local Smoke Suite (2026-10-29) — 5/
 | https://github.com/wolfwdavid/tran_real_estate/actions/runs/40961373692 | 62d9973 | 8 s | 27m03s | 21m33s | 6m08s |
 | https://github.com/wolfwdavid/tran_real_estate/actions/runs/40965347969 | 396b5aa | 8 s | 21m52s | 26m13s | 5m36s |
 | https://github.com/wolfwdavid/tran_real_estate/actions/runs/40980243892 | eed27e6 | 8 s | 26m38s | 25m29s | 5m30s |
+
+**Phase 13 complete except one open item (2026-10-31).** The site is live at `https://wolfwdavid.github.io/tran_real_estate/` (project site under the owner's account): go-live push `ad5fd08` on 2026-10-30, first green ci + deploy + live-smoke trio on `f070c74`, deployed commit `f169749` = the commit `docs/LAUNCH-AUDIT.md` audits (every row PASS). Records: the owner ledger `.planning/HUMAN-UAT.md` (99 origin rows + 4 Phase 13 rows: 13 passed, 5 cut, 10 carried, 70 still pending owner action, each with its result and evidence), the proof bundle `docs/launch-proof/2026-10-30/` (`README.md` indexes every file and run), and `docs/RUNBOOK.md` (redeploy, roll back, read a smoke result, worker counts, measured first-deploy facts). GTM-01..03 validated, GTM-04 cut to v2. The one open item: Search Console has not yet processed the submitted `sitemap.xml` (submitted 2026-10-31 12:54Z; the property is verified), so LIVE-05 stays unticked and ledger rows L86/L99 stay pending until the row shows Success with 14 URLs and `41-search-console-sitemap.png` is added (tracked in 13-17-SUMMARY.md and 13-19-SUMMARY.md). The rows still pending owner action (device checks, real-key journeys, counsel reviews, the contact-email decision, the four AI-provider CORS re-probes carried to Phase 14) are listed with their targets in the ledger.
 
 Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
@@ -254,4 +269,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-29 after Phase 12 (go-live readiness) completed and the owner gate closed*
+*Last updated: 2026-10-31 after the Phase 13 (live origin) close-out: GTM-01..03 validated, GTM-04 cut, one open item (Search Console sitemap read)*

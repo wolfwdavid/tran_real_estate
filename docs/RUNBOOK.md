@@ -178,4 +178,47 @@ addresses and account details from them before committing, and keep the whole bu
 
 ## First deploy facts
 
-Recorded at go-live (plan 13-19).
+Measured at the Phase 13 go-live and the two deploys that followed (plans 13-13, 13-15, 13-17;
+recorded 2026-10-31 by plan 13-19). Proof bundle and run links: `docs/launch-proof/2026-10-30/README.md`.
+
+- **Go-live.** `PAGES_ENABLED=true` set 2026-10-30T18:55:45Z; empty commit `ad5fd08` (`chore: go
+live`) pushed 18:55:47Z; `ci` run 41111039721 `deploy` job success at 19:24:26Z with
+  `Evaluated environment url: https://wolfwdavid.github.io/tran_real_estate/`. The first deploy on
+  which `ci`, `deploy` and `live-smoke` were all green is `f070c74` (ci 41147247922, live-smoke
+  41149881068, 2026-10-31T00:24Z). Deployed commit when this was written: `f169749` (ci
+  41200919587, live-smoke 41202355014).
+- **Propagation.** Every `live-smoke` found the new build on its first poll:
+  `smoke: ad5fd08188c7cdd37cc5fcb2bc45c58c7f631684 live at https://wolfwdavid.github.io/tran_real_estate/ after 0 s`
+  (run 41115004823), `after 0 s` again for `f070c74` (41149881068) and `f169749` (41202355014).
+  The 10-minute poll was never needed; keep it as the ceiling, not the expectation.
+- **Cache headers** (`curl -sI` on `/tran_real_estate/`): `Cache-Control: max-age=600`,
+  `Server: GitHub.com`; right after a deploy `X-Cache: MISS`, `X-Cache-Hits: 0`, `Age: 0` (also
+  seen 5 hours later on the landing page); the same path a minute later `X-Cache: HIT`,
+  `X-Cache-Hits: 1`; `/for-renters/` on `f169749` `X-Cache: HIT`, `Age: 2`. Expect a cold-ish
+  first visit after each deploy; that is what the precache measurement records.
+- **Unknown path.** `curl -s -o /dev/null -w "%{http_code}" .../proof-not-found-13/` -> `404`.
+  The body is the adapter-static SPA fallback shell (3,082 B, `text/html`, `<html lang="en" hidden>`,
+  no `<title>`); the branded page (title `Page not found: Tran Real Estate Tools`, h1
+  `404: Page not found`) renders client-side about 300 ms after load. The branded proof is
+  therefore browser-side (`routing.smoke.ts`, `04-not-found.png`, the owner's fresh-profile
+  check), never a grep of the body.
+- **Redirects.** `http://wolfwdavid.github.io/tran_real_estate/` -> `301`
+  `Location: https://wolfwdavid.github.io/tran_real_estate/`; `/tran_real_estate/renter` -> `301`
+  `Location: https://wolfwdavid.github.io/tran_real_estate/renter/`. `/.nojekyll` -> `200`.
+  `/_app/version.json` equalled the deploy SHA each time (`ad5fd08...`, `f070c74...`,
+  `f169749...`).
+- **`workflow_run` head_sha.** Equal to the deploy SHA on every `live-smoke` run
+  (`gh api repos/wolfwdavid/tran_real_estate/actions/runs/<id> --jq .head_sha`), so
+  `SMOKE_EXPECT_VERSION` matched the live `version.json` each time.
+- **Service-worker precache.** 380 entries in one atomic `cache.addAll`: 5.27 s on the cold CDN at
+  go-live, which failed Playwright's 5 s `expect.poll` default in the first live-smoke (exit 1,
+  120 of 121 passed). Measured by the smoke's install log since `79f82bc`: 9,731 / 4,816 /
+  2,368 ms on `f070c74`, 4,718 / 2,962 / 2,783 ms on `f169749`. The smoke waits 20 s
+  (`installedPrecache` in `tests/smoke/fixtures.ts`); the version poll was not raised.
+- **Durations.** `deploy` job 18 s (`ad5fd08`), 9 s (`f070c74`), 11 s (`f169749`); `live-smoke`
+  job 1m25s (the red run), 1m12s (121 passed, Playwright 39.3 s), 1m29s (121 passed, 45.6 s);
+  `ci` wall 28m39s, 28m08s, 19m20s. Go-live `ci` legs: hygiene 9 s, configured 6m07s, root 26m34s
+  (Playwright 21.0m), sub 28m11s.
+- **Rule confirmed.** A red live-smoke after a real deploy is fixed at the root, committed, and
+  proven by a new push and a new observed `ci` + `deploy` + `live-smoke` trio; it is never re-run
+  in place.
