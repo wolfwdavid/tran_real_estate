@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-12-PLAN.md
-last_updated: "2026-10-30T18:51:46.380Z"
+stopped_at: Completed 13-13-PLAN.md
+last_updated: "2026-10-31T00:28:44.575Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 14 of 21
+Plan: 15 of 21
 
 ## Performance Metrics
 
@@ -255,6 +255,7 @@ Plan: 14 of 21
 | Phase 13 P10 | 78min | 3 tasks | 2 files |
 | Phase 13 P11 | 185min | 3 tasks | 4 files |
 | Phase 13 P12 | 34min | 2 tasks | 4 files |
+| Phase 13 P13 | 5h 31m | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -676,6 +677,10 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-12: variables PUBLIC_SITE_URL and BASE_PATH set and rehearsal commit ab70bbb pushed by the executor only under the owner's verbatim approvals; PAGES_ENABLED and all optional variables left unset
 - [Phase 13]: 13-12: rehearsal ci run 41106746719 green with root leg BASE_PATH=/tran_real_estate, deploy and live-smoke skipped; go-live is one variable plus one empty commit
 - [Phase 13]: 13-12: the REST jobs/<id>/logs endpoint is the oracle for a completed job's full log; gh run view --job --log and step metadata lag minutes after completion
+- [Phase 13]: 13-13: GO_LIVE_SHA is ad5fd08 (site public, D-13 facts and proof bundle taken there); the SHA proven by a green live-smoke is f070c74, one deploy later, because the first live-smoke on ad5fd08 failed on a test timeout and a fix means a new push and a new observed pair
+- [Phase 13]: 13-13: smoke precache wait is 20 s (2.4x the slowest local measurement; CI cold first visit then measured 9.7 s), shared by assets.smoke.ts and pwa.smoke.ts through one fixtures helper that logs each run's install time; the version poll was not raised
+- [Phase 13]: 13-13: the raw 404 body is the SPA fallback shell with no title element; the branded title is client-rendered, so the 404 proof is the screenshot and the browser-side smoke, not a grep of the body
+- [Phase 13]: 13-13: four mutating remote commands ran in total, each under a verbatim owner approval: one gh variable set PAGES_ENABLED=true, one empty go-live commit, two pushes (go-live ad5fd08, fix f070c74)
 
 ### Pending Todos
 
@@ -705,7 +710,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-30T18:51:46.376Z
-Stopped at: Completed 13-12-PLAN.md
+Last session: 2026-10-31T00:28:20.832Z
+Stopped at: Completed 13-13-PLAN.md
 Resume file: None
-Next: 13-13 go-live. Owner sets `PAGES_ENABLED=true` (`gh variable set PAGES_ENABLED --repo wolfwdavid/tran_real_estate --body "true"`) and pushes `git commit --allow-empty -m "chore: go live"` + `git push origin main`; executor watches ci (deploy job un-gated) and the live-smoke run on the deploy SHA, then records D-13 facts. State at hand-off: origin/main = local main = ab70bbb; variables PUBLIC_SITE_URL=https://wolfwdavid.github.io and BASE_PATH=/tran_real_estate set (13-12); rehearsal ci run 41106746719 green with root leg BASE_PATH=/tran_real_estate, deploy and live-smoke skipped. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
+Next: wave 8, 13-14 (GTM-04 Umami proof with IP finding and stop condition, or cut) and 13-21 (owner push-protection probe + live-origin CORS re-probe per provider). State at hand-off: the site is live at https://wolfwdavid.github.io/tran_real_estate/; origin/main = f070c74 (local ahead by the 13-13 metadata commit, carried by the next push); variables BASE_PATH, PAGES_ENABLED=true, PUBLIC_SITE_URL; GO_LIVE_SHA ad5fd08 (ci 41111039721 deploy green, live-smoke 41115004823 red on a test timeout, fixed in 79f82bc); green pair on f070c74: ci 41147247922 + live-smoke 41149881068 (121 passed, propagation 0 s, cold precache install 9.7 s on CI); LAUNCH_DATE 2026-10-30, proof bundle docs/launch-proof/2026-10-30/. Every push now deploys and triggers a real live-smoke. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
