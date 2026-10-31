@@ -94,3 +94,19 @@
   needs data (an ID, a tag, a URL, counts), ask for it in plain chat text and reserve the menu tool for
   decisions whose options are complete in themselves. Verify any "saved to folder" answer with `ls`
   before acting on it.
+
+## 2026-10-31: Phase 13 audit at the deployed commit
+
+- Rule: under `MSYS_NO_PATHCONV=1` in Git Bash call `corepack.cmd pnpm ...`, never the POSIX `corepack` shim;
+  the shim resolves its own `$basedir` through the path translation that the flag disables and dies with
+  `Cannot find module C:\c\Program Files\nodejs\...`.
+- Rule: when regenerating audit evidence at a deployed SHA, export the deploy env (BASE_PATH, PUBLIC_SITE_URL,
+  PUBLIC_WEB3FORMS_KEY) for the builds, the E2E shards and `audit:launch` only. Run the Vitest shards without it:
+  `ci.yml` gives `test:unit` no env block, and `site.test.ts` / `assert-extension.test.ts` assert the defaults
+  (5 + 2 false reds on the first pass).
+- Rule: never write `<NAME>_KEY=<value>` in a planning doc or SUMMARY, even for a public-by-design key;
+  gitleaks `generic-api-key` fires on the assignment shape and the pre-commit hook rejects the commit. Quote the
+  value in a table cell or as a `--body` argument, or name the variable without the value.
+- Rule: a Search Console sitemap row that reads "Couldn't fetch" with 0 discovered pages right after submission is
+  the pre-processing placeholder (Googlebot-UA curl 200, robots Sitemap line present). Record "submitted, pending"
+  with the time and re-check later; never re-submit in a loop.
