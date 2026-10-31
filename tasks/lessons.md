@@ -85,3 +85,12 @@
   unit tests only see hand-fed inputs, not what the real bundler emits: `pnpm ext:assert` was red on
   main for two full waves (13-02 added an unconsumed `new URL()` that kept the site URL as a bare
   literal in the popup chunk) and nothing noticed until 13-10 built the real zip.
+
+## 2026-10-30: Phase 13 owner checkpoints
+
+- Rule: never offer a menu option that says "paste it in Other". Picking a labelled option skips the
+  free-text box, so the choice arrives without the value (this happened three times: the Umami ID, the
+  Web3Forms key, the Search Console tag; the CORS counts were lost the same way). When a checkpoint
+  needs data (an ID, a tag, a URL, counts), ask for it in plain chat text and reserve the menu tool for
+  decisions whose options are complete in themselves. Verify any "saved to folder" answer with `ls`
+  before acting on it.
