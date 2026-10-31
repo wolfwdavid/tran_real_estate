@@ -10,3 +10,4 @@ audit:
     - GHSA-pfhg-q3qv-9q6r # @sveltejs/kit <3 server-side redirect handling; the site is fully prerendered (adapter-static), no Kit server runs. Re-check on Kit upgrade.
     - GHSA-27mw-82g8-phjj # @sveltejs/kit <3 cache-control header XSS in the server runtime; not in the static bundle. Re-check on Kit upgrade.
     - GHSA-gcqx-w48m-w2h4 # deepmerge via @sveltejs/vite-plugin-svelte, build-time only, no patched version; not in build/_app or the extension output. Re-check on vite-plugin-svelte bump.
+    - GHSA-g3hv-75wg-m249 # minimatch <11.0.1 via the eslint / typescript-eslint / wxt dev toolchain, lint- and build-time only; not in build/_app or the extension output. Re-check at the first eslint release on minimatch 11.

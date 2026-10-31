@@ -35,5 +35,13 @@ export const AUDIT_EXCEPTIONS = Object.freeze([
 		path: '@sveltejs/vite-plugin-svelte@7.3.0 > deepmerge@4.3.1 (apps/web and apps/extension build tooling)',
 		why: 'Prototype poisoning in deepmerge.mergeObject(). deepmerge is used only by the Svelte Vite plugin at build time to merge compiler options from trusted config files; no patched version exists (advisory lists none). It never ships: 0 matches for deepmerge/mergeObject in apps/web/build/_app and apps/extension/.output/chrome-mv3. Re-check when vite-plugin-svelte drops or bumps deepmerge.',
 		revisitBy: '2027-01-31'
+	},
+	{
+		ghsa: 'GHSA-g3hv-75wg-m249',
+		package: 'minimatch',
+		severity: 'moderate',
+		path: 'eslint / typescript-eslint / wxt dev toolchain > minimatch@10.2.6',
+		why: 'Denial of service through globparts amplification in minimatch <11.0.1. Lint- and build-time glob matching on trusted config patterns only; minimatch is not present in apps/web/build/_app nor in the extension output (0 matches in apps/web/build/_app, apps/web/src and apps/extension/.output/chrome-mv3). eslint 10.14.0 and @eslint/config-array 0.23.5 still declare minimatch ^10.2.x, so no patched 10.x exists and no dependent accepts 11 yet. Revisit at the first eslint release that depends on minimatch >=11.0.1, and by the date below at the latest.',
+		revisitBy: '2026-11-30'
 	}
 ]);
