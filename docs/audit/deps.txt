@@ -5,7 +5,7 @@ exit code: 0
     "vulnerabilities": {
       "info": 0,
       "low": 4,
-      "moderate": 0,
+      "moderate": 1,
       "high": 0,
       "critical": 0
     },

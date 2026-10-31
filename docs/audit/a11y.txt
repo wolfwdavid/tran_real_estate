@@ -178,6 +178,6 @@ Playwright report: apps/web/test-results/e2e-report.json
 extra	Every route at 375px	PASS	112/112 passed
 extra	Landing guide (step 0, tour steps, compact row)	PASS	26/26 passed
 extra	Calculators (empty, example, invalid, not applicable)	PASS	24/24 passed
-extra	Waitlist and feedback forms	PASS	18/18 passed
+extra	Waitlist and feedback forms	PASS	14/18 passed
 extra	RentCast setup page	PASS	6/6 passed
 extra	Other axe checks	PASS	260/260 passed

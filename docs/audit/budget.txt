@@ -1,36 +1,36 @@
-feedback/index.html	js 105183	css 12004	REPORT
-for-agents/index.html	js 99012	css 12005	REPORT
-for-investors/index.html	js 99015	css 12005	REPORT
-for-renters/index.html	js 99013	css 12005	REPORT
-index.html	js 59195	css 12104	REPORT
-legal/data-coverage/index.html	js 51092	css 12248	REPORT
-legal/fair-housing/index.html	js 51296	css 12248	REPORT
-legal/privacy/index.html	js 52551	css 12248	REPORT
-legal/terms/index.html	js 49387	css 12248	REPORT
-tools/affordability/index.html	js 60171	css 11952	PASS
-tools/cap-rate/index.html	js 60037	css 11952	PASS
-tools/cash-on-cash/index.html	js 60196	css 11952	PASS
-tools/dscr/index.html	js 60179	css 11952	PASS
-tools/index.html	js 52415	css 11952	PASS
+feedback/index.html	js 105327	css 12004	REPORT
+for-agents/index.html	js 99155	css 12005	REPORT
+for-investors/index.html	js 99158	css 12005	REPORT
+for-renters/index.html	js 99156	css 12005	REPORT
+index.html	js 59304	css 12104	REPORT
+legal/data-coverage/index.html	js 51198	css 12248	REPORT
+legal/fair-housing/index.html	js 51403	css 12248	REPORT
+legal/privacy/index.html	js 52884	css 12248	REPORT
+legal/terms/index.html	js 49493	css 12248	REPORT
+tools/affordability/index.html	js 60279	css 11952	PASS
+tools/cap-rate/index.html	js 60146	css 11952	PASS
+tools/cash-on-cash/index.html	js 60305	css 11952	PASS
+tools/dscr/index.html	js 60286	css 11952	PASS
+tools/index.html	js 52522	css 11952	PASS
 apps/web/build-configured:
-feedback/index.html	js 105376	css 12004	REPORT
-for-agents/index.html	js 99204	css 12005	REPORT
-for-investors/index.html	js 99207	css 12005	REPORT
-for-renters/index.html	js 99205	css 12005	REPORT
-index.html	js 59363	css 12104	REPORT
-legal/data-coverage/index.html	js 51253	css 12248	REPORT
-legal/fair-housing/index.html	js 51458	css 12248	REPORT
-legal/privacy/index.html	js 52715	css 12248	REPORT
-legal/terms/index.html	js 49550	css 12248	REPORT
-tools/affordability/index.html	js 60343	css 11952	PASS
-tools/cap-rate/index.html	js 60206	css 11952	PASS
-tools/cash-on-cash/index.html	js 60366	css 11952	PASS
-tools/dscr/index.html	js 60347	css 11952	PASS
-tools/index.html	js 52582	css 11952	PASS
-report-only over budget: /feedback/ (apps/web/build) 102.7 KB, over by 42.7 KB
-report-only over budget: /for-agents/ (apps/web/build) 96.7 KB, over by 36.7 KB
-report-only over budget: /for-investors/ (apps/web/build) 96.7 KB, over by 36.7 KB
-report-only over budget: /for-renters/ (apps/web/build) 96.7 KB, over by 36.7 KB
+feedback/index.html	js 105393	css 12004	REPORT
+for-agents/index.html	js 99223	css 12005	REPORT
+for-investors/index.html	js 99225	css 12005	REPORT
+for-renters/index.html	js 99223	css 12005	REPORT
+index.html	js 59378	css 12104	REPORT
+legal/data-coverage/index.html	js 51275	css 12248	REPORT
+legal/fair-housing/index.html	js 51480	css 12248	REPORT
+legal/privacy/index.html	js 52958	css 12248	REPORT
+legal/terms/index.html	js 49571	css 12248	REPORT
+tools/affordability/index.html	js 60356	css 11952	PASS
+tools/cap-rate/index.html	js 60225	css 11952	PASS
+tools/cash-on-cash/index.html	js 60382	css 11952	PASS
+tools/dscr/index.html	js 60363	css 11952	PASS
+tools/index.html	js 52597	css 11952	PASS
+report-only over budget: /feedback/ (apps/web/build) 102.9 KB, over by 42.9 KB
+report-only over budget: /for-agents/ (apps/web/build) 96.8 KB, over by 36.8 KB
+report-only over budget: /for-investors/ (apps/web/build) 96.8 KB, over by 36.8 KB
+report-only over budget: /for-renters/ (apps/web/build) 96.8 KB, over by 36.8 KB
 report-only over budget: /feedback/ (apps/web/build-configured) 102.9 KB, over by 42.9 KB
 report-only over budget: /for-agents/ (apps/web/build-configured) 96.9 KB, over by 36.9 KB
 report-only over budget: /for-investors/ (apps/web/build-configured) 96.9 KB, over by 36.9 KB
