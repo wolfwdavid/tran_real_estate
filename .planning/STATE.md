@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-15-PLAN.md
-last_updated: "2026-10-31T12:56:07.567Z"
+stopped_at: Completed 13-17-PLAN.md (sitemap Success pending; open item carried to 13-19)
+last_updated: "2026-10-31T13:02:20.379Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 31
-  completed_plans: 28
+  completed_plans: 29
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 18 of 21
+Plan: 19 of 21
 
 ## Performance Metrics
 
@@ -258,6 +258,7 @@ Plan: 18 of 21
 | Phase 13 P13 | 5h 31m | 3 tasks | 11 files |
 | Phase 13 P21 | 12min | 2 tasks | 0 files |
 | Phase 13 P15 | 9h 8m wall (1h 15m executor) | 3 tasks | 6 files |
+| Phase 13 P17 | 8 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -689,6 +690,7 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-15: GTM-04 recorded as cut by owner decision P13-4 (b) before any Umami website, probe, or variable existed; no pageview data was ever collected
 - [Phase 13]: 13-15: GHSA-g3hv-75wg-m249 (minimatch <11.0.1, dev toolchain only) is a reviewed audit exception with a never-ships grep proof; revisit at the first eslint release on minimatch 11, by 2026-11-30
 - [Phase 13]: 13-15: the Task 2 proof SHA is f169749 (fix push); the red run on 5ebdf79 is recorded, not retried
+- [Phase 13]: 13-17: DEPLOYED_SHA is f16974962e3b6ace66655342387cd270f3d120b6 (live version.json; ci 41200919587 + live-smoke 41202355014 green); Search Console property verified by HTML tag ~12:52Z 2026-10-31; sitemap submitted ~12:54Z and pending (Couldn't fetch placeholder, 0 discovered); 41-search-console-sitemap.png + 'sitemap read: 14 URLs' carried to 13-19, phase not closed until then
 
 ### Pending Todos
 
@@ -718,7 +720,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-31T12:56:07.561Z
-Stopped at: Completed 13-15-PLAN.md
+Last session: 2026-10-31T13:02:20.373Z
+Stopped at: Completed 13-17-PLAN.md (sitemap Success pending; open item carried to 13-19)
 Resume file: None
 Next: wave 8, 13-14 (GTM-04 Umami proof with IP finding and stop condition, or cut) holding for the owner's Umami website ID; 13-21 done (push protection proven: probe rejected, PAT revoked, branch gone; RentCast CORS from the live origin passed; the four AI-provider re-probes carried to Phase 14). State at hand-off: the site is live at https://wolfwdavid.github.io/tran_real_estate/; origin/main = f070c74 (local ahead by the 13-13 and 13-21 metadata commits, carried by the next push); variables BASE_PATH, PAGES_ENABLED=true, PUBLIC_SITE_URL; GO_LIVE_SHA ad5fd08 (ci 41111039721 deploy green, live-smoke 41115004823 red on a test timeout, fixed in 79f82bc); green pair on f070c74: ci 41147247922 + live-smoke 41149881068 (121 passed, propagation 0 s, cold precache install 9.7 s on CI); LAUNCH_DATE 2026-10-30, proof bundle docs/launch-proof/2026-10-30/. Every push now deploys and triggers a real live-smoke. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
