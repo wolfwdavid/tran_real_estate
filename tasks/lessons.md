@@ -110,3 +110,7 @@
 - Rule: a Search Console sitemap row that reads "Couldn't fetch" with 0 discovered pages right after submission is
   the pre-processing placeholder (Googlebot-UA curl 200, robots Sitemap line present). Record "submitted, pending"
   with the time and re-check later; never re-submit in a loop.
+- Rule: a live-smoke run that fails only with HTTP 429 on `page.goto` is the Pages CDN rate-limiting the runner,
+  not a site regression. Probe the routes with curl, then dispatch `live-smoke.yml` once on the same SHA
+  (`-f base_url=... -f expect_version=<sha>`). Record both runs; never re-dispatch in a loop. 41220466187 failed
+  35 tests with 429 and the dispatch 41220812811 passed 121/121 three minutes later (2026-10-31).
