@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 13-18-PLAN.md (launch audit regenerated at f169749, commit e9f82f2)
-last_updated: "2026-10-31T13:59:41.618Z"
+stopped_at: Completed 13-19-PLAN.md (Phase 13 closed 2026-11-01; sitemap read carried to 2026-11-04)
+last_updated: "2026-11-01T17:24:30.832Z"
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 31
-  completed_plans: 30
+  completed_plans: 31
 ---
 
 # Project State
@@ -23,8 +23,8 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 
 ## Current Position
 
-Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — EXECUTING
-Plan: 20 of 21
+Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — COMPLETE (2026-11-01; one carried item: the Search Console sitemap read, target 2026-11-04)
+Plan: 21 of 21
 
 ## Performance Metrics
 
@@ -720,7 +720,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-10-31T13:59:41.612Z
-Stopped at: Completed 13-18-PLAN.md (launch audit regenerated at f169749, commit e9f82f2)
+Last session: 2026-11-01T17:24:30.826Z
+Stopped at: Completed 13-19-PLAN.md (Phase 13 closed 2026-11-01; sitemap read carried to 2026-11-04)
 Resume file: None
-Next: wave 8, 13-14 (GTM-04 Umami proof with IP finding and stop condition, or cut) holding for the owner's Umami website ID; 13-21 done (push protection proven: probe rejected, PAT revoked, branch gone; RentCast CORS from the live origin passed; the four AI-provider re-probes carried to Phase 14). State at hand-off: the site is live at https://wolfwdavid.github.io/tran_real_estate/; origin/main = f070c74 (local ahead by the 13-13 and 13-21 metadata commits, carried by the next push); variables BASE_PATH, PAGES_ENABLED=true, PUBLIC_SITE_URL; GO_LIVE_SHA ad5fd08 (ci 41111039721 deploy green, live-smoke 41115004823 red on a test timeout, fixed in 79f82bc); green pair on f070c74: ci 41147247922 + live-smoke 41149881068 (121 passed, propagation 0 s, cold precache install 9.7 s on CI); LAUNCH_DATE 2026-10-30, proof bundle docs/launch-proof/2026-10-30/. Every push now deploys and triggers a real live-smoke. History rewrite backup: ../tran_real_estate-rewrite-2026-10-29/ (bundle + commit-map).
+Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

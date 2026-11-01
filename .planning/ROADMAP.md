@@ -37,7 +37,7 @@ Every phase closed with verifier status `human_needed` (no code gaps); the owner
 **Phase Numbering:** integer phases continue from v1.0 (12-17). Decimal phases (12.1, 12.2) are urgent insertions via `/gsd:insert-phase`.
 
 - [x] **Phase 12: Go-live Readiness & Local Smoke Suite** - Clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, and a read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main` (completed 2026-10-29)
-- [ ] **Phase 13: Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down** - First green GitHub CI run, first deploy observed, `live-smoke.yml` chained behind every deploy, GTM-01..04 proven or cut, HUMAN-UAT rows reclassified, launch-proof bundle and runbook
+- [x] **Phase 13: Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down** - First green GitHub CI run, first deploy observed, `live-smoke.yml` chained behind every deploy, GTM-01..04 proven or cut, HUMAN-UAT rows reclassified, launch-proof bundle and runbook (completed 2026-11-01)
 - [ ] **Phase 14: Carried Debt** - The seven v1.0 follow-ups plus the emulator dotfile fix and the marketing-page JS trim, each closed to its sourced definition of done before the Kit 3 codemod
 - [ ] **Phase 15: Load-Deterministic Test Lanes** - Timing-budget tests in serial lanes, mechanical guard against blind timeouts and retries, capped workers, recorded evidence protocol and shuffle seed
 - [ ] **Phase 16: Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5** - Three single-purpose migration plans gated by `pnpm verify` + local smoke, closed by a deploy and a green live smoke; audit exceptions 4 → 1
@@ -104,7 +104,7 @@ Plans:
 **Owner steps inside the phase:** set `PAGES_ENABLED=true` and the launch Variables (`PUBLIC_WEB3FORMS_KEY`, `PUBLIC_ANALYTICS_HOST` + `PUBLIC_ANALYTICS_WEBSITE_ID`, `PUBLIC_SITE_URL=https://wolfwdavid.github.io` (origin only, D-01), `BASE_PATH=/tran_real_estate` (D-02), optional `PUBLIC_CONTACT_EMAIL`); Search Console property; Umami and Web3Forms accounts; share-card debugger runs; real-key CORS checks per provider; the push-protection probe with a throwaway zero-permission PAT.
 **Research flag:** YES. Run `/gsd:research-phase 13`: the first live run of `ci.yml` on a 4-vCPU `ubuntu-24.04` runner (three-leg E2E runtime, memory, Playwright worker count) cannot be pre-verified and is planned as "run, observe, quick-fix"; verify live that Pages returns HTTP 404 (not 200) for `404.html`, that the `workflow_run` payload carries `head_sha`, and the HTTP → HTTPS redirect.
 **UI hint:** no.
-**Plans:** 20/21 plans executed
+**Plans:** 21/21 plans complete
 
 Plans:
 - [x] 13-01-PLAN.md — Wave 1: planning docs reconciled to wolfwdavid.github.io/tran_real_estate, CI baseline evidence (LIVE-02), owner decisions A/B/C (checkpoint)
@@ -127,7 +127,7 @@ Plans:
 - [x] 13-16-PLAN.md — Wave 10: share cards in the debuggers; Search Console token in the pinned slot
 - [x] 13-17-PLAN.md — Wave 11: token deploy, property verified, sitemap read with 14 URLs (LIVE-05 live half)
 - [x] 13-18-PLAN.md — Wave 12: LAUNCH-AUDIT regenerated at the deployed commit with the deploy env (D-22)
-- [ ] 13-19-PLAN.md — Wave 13: ledger results, launch-proof index, runbook facts, requirement ticks, final green trio
+- [x] 13-19-PLAN.md — Wave 13: ledger results, launch-proof index, runbook facts, requirement ticks, final green trio
 
 ### Phase 14: Carried Debt
 **Goal:** Every follow-up carried out of v1.0 is closed to its sourced definition of done (ListingCard ids, save-gate reason copy, memo print with notes-only numerals, origin-parity test, UI-level backup round-trip, tailwind-merge font-size token, saved-search scheduler lock, emulator dotfile fidelity, marketing-page JS budget) while `git blame` is still clean, before the Kit 3 codemod rewrites hundreds of files.
@@ -204,7 +204,7 @@ Plans:
 | 10. Launch Hardening & Go-to-Market | v1.0 | 23/23 | Complete | 2026-10-14 |
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
-| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 20/21 | In Progress|  |
+| 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
 | 14. Carried Debt | v1.1 | 0/TBD | Not started | - |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
