@@ -1,7 +1,7 @@
 # Human UAT ledger (all phases)
 
 One file for every owner-run check from Phases 1-12, plus the Phase 13 live-origin checks.
-Updated: 2026-10-31 (Phase 13 results, plan 13-19). Live origin: https://wolfwdavid.github.io/tran_real_estate/
+Updated: 2026-11-01 (Phase 13 results, plan 13-19; L86/L99 carried for the sitemap read). Live origin: https://wolfwdavid.github.io/tran_real_estate/
 (go-live 2026-10-30, GO_LIVE_SHA ad5fd08; deployed commit f169749 at the time of writing).
 
 ## Counting rule
@@ -114,7 +114,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L83 | 10-2 | Web3Forms waitlist + feedback arrive | human | passed 2026-10-31 | `docs/launch-proof/2026-10-30/20-web3forms-inbox.png` (subjects "Tran waitlist: Renter" and "Tran feedback: Free calculators"; crop of the result rows, no addresses); deployed on f169749 (ci 41200919587, live-smoke 41202355014); 13-15-SUMMARY.md Task 3 ("forms + walk pass") |
 | L84 | 10-3 | Contact email mailto fallbacks (optional) | owner-decision | pending (owner, target next owner session) | `PUBLIC_CONTACT_EMAIL` stayed unset through every Phase 13 deploy (variable lists in 13-13..13-18); unset state already E2E-verified; set it and verify, or record "unset" |
 | L85 | 10-4 | Share cards in a link-preview debugger | human | passed 2026-10-31 | `docs/launch-proof/2026-10-30/30-linkedin-card.png` (LinkedIn Post Inspector, /tools/cap-rate/, redirect trail 206 Success, image + title) + `31-og-validator-card.png` (D-18 substitution: OpenGraph.xyz instead of the login-walled Facebook Sharing Debugger; 0 errors, og:image 1200x630 PNG 117 KB); tags by `seo.smoke.ts`; 13-16-SUMMARY.md |
-| L86 | 10-5 | Sitemap in Search Console; robots at the org root | human | pending (owner, target next owner session): sitemap submitted 2026-10-31 12:54Z, Search Console processing pending ("Couldn't fetch" placeholder, 0 discovered); property verified 2026-10-31 by the HTML-tag method; robots at the host root not applicable on a project site (Pitfall 6) | `docs/launch-proof/2026-10-30/40-search-console-verified.png` + 13-17-SUMMARY.md; Googlebot-UA curl of sitemap.xml 200 with 14 `<loc>`; `41-search-console-sitemap.png` and "sitemap read: 14 URLs" are added when Success shows |
+| L86 | 10-5 | Sitemap in Search Console; robots at the org root | human | carried (sitemap read; owner, target 2026-11-04): property verified 2026-10-31 by the HTML-tag method; sitemap submitted 2026-10-31 12:54Z, and Search Console still read "Couldn't fetch", 0 discovered, at every re-check through 2026-11-01 17:12Z (about 28 h); carried by owner decision 2026-11-01 ("Close now, sitemap carried"); robots at the host root not applicable on a project site (Pitfall 6) | `docs/launch-proof/2026-10-30/40-search-console-verified.png` + 13-17-SUMMARY.md + 13-19-SUMMARY.md; Googlebot-UA fetch of sitemap.xml (2026-10-31 20:02Z): 200, application/xml, 1272 bytes, 14 `<loc>`, every listed URL 200; URL Inspection live test of the home page: "URL is available to Google"; `41-search-console-sitemap.png` is added and the row set to passed when the read lands |
 | L87 | 10-6 | Live-origin checks (Step 7): deep route, redirect, 404 / provider keys / Safari | smoke + human | passed 2026-10-31 | routing half: `routing.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 + the owner's five fresh-profile checks "Fresh checks pass" (13-13-SUMMARY.md, D-15); keys half = L30/L36 (RentCast passed, AI providers carried to Phase 14); Safari half = L12 (still pending) |
 | L88 | 10-7 | Dependabot + push protection on; probe rejected | human | passed 2026-10-31 | 13-21-SUMMARY.md (status only: probe rejected by push protection; PAT revoked; branch never on the remote; `secret_scanning_push_protection.status` and `secret_scanning.status` = enabled via the API); Dependabot on and triaged per D-07 (13-11-SUMMARY.md: #1 merged, #2-#8 closed) |
 | L89 | 10-8 | Report-only pages over the 60 KB budget | owner-decision | carried (Phase 14 DEBT-09) | Phase 14 DEBT-09 makes it a hard gate; close as "superseded by DEBT-09" |
@@ -127,20 +127,20 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L96 | 11-7 | Enable Releases, publish `ext-v0.1.0` | human | carried (Phase 17) | — |
 | L97 | 11-8 | Firefox Add-ons listing | cut | cut: Firefox Add-ons out of v1 (ROADMAP cut line 2) | — |
 | L98 | 12-1 | Owner go-live gate | human | passed 2026-10-29 | https://github.com/wolfwdavid/tran_real_estate/actions/runs/40961373692 (personal account; first `ci` run green, deploy skipped) |
-| L99 | 12-2 | LIVE-05 live half | human | pending (owner, target next owner session): property verified 2026-10-31 (HTML tag, "You are a verified owner"); sitemap submitted 2026-10-31 12:54Z, Search Console processing pending | P13 = L86; `docs/launch-proof/2026-10-30/40-search-console-verified.png` + 13-17-SUMMARY.md |
+| L99 | 12-2 | LIVE-05 live half | human | carried (sitemap read; owner, target 2026-11-04): property verified 2026-10-31 (HTML tag, "You are a verified owner"); sitemap submitted 2026-10-31 12:54Z, still "Couldn't fetch", 0 discovered, at the 2026-11-01 17:12Z re-check; carried by owner decision 2026-11-01 | P13 = L86; `docs/launch-proof/2026-10-30/40-search-console-verified.png` + 13-17-SUMMARY.md + 13-19-SUMMARY.md; Googlebot-UA fetch of sitemap.xml 200 with 14 `<loc>` (every listed URL 200); URL Inspection live test "URL is available to Google" |
 | P13-1 | Phase 13 | GTM-01 fresh-profile walk: pick a portal, take the tour, Try sample data | human | passed 2026-10-31 | `docs/launch-proof/2026-10-30/21-gtm01-sample-data.png` (home -> Renter tour -> Try sample data -> /renter/?loc=74201 "10 rentals in 74201" with Sample data badges); performed by the orchestrator in the owner's signed-in browser under the owner's verbatim approval, in a signed-in tab rather than a private window (the new build was demonstrably served); 13-15-SUMMARY.md Task 3 |
 | P13-2 | Phase 13 | First-deploy facts (D-13): 404 status, workflow_run head_sha, HTTPS redirect, propagation seconds | smoke + human | passed 2026-10-30 | go-live ci https://github.com/wolfwdavid/tran_real_estate/actions/runs/41111039721 (deploy success) + live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 (green on f070c74); propagation 0 s in every live-smoke run (41115004823, 41149881068, 41202355014); unknown path HTTP 404 (body = SPA shell, branded title client-rendered), head_sha = deploy SHA each run, http -> https 301, /renter -> /renter/ 301; 13-13-SUMMARY.md D-13 table, `docs/launch-proof/2026-10-30/checks.json`, docs/RUNBOOK.md "First deploy facts" |
 | P13-3 | Phase 13 | Shared-origin privacy copy decision (Pitfall 7) | owner-decision | decided 2026-10-30: decision C (C-approve), the privacy "Deleting your data" copy names the shared wolfwdavid.github.io storage origin and points to Forget all keys (second paragraph rendered only under a sub-path) | `.planning/phases/13-live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down/13-01-SUMMARY.md` (verbatim "A-approve, B-ignore, C-approve"); applied by plan 13-07 |
 | P13-4 | Phase 13 | Umami "IP not stored" evidence (D-17) | owner-decision | decided 2026-10-30: owner answered "IPs not stored: proceed", then "Hold Umami for now", then chose "Cut Umami now (GTM-04 to v2)" (option b) | 13-14-SUMMARY.md (owner answers verbatim, in order; no 10-umami-ip-setting.png exists and none was created) |
 
-## Tally (2026-10-31)
+## Tally (2026-11-01)
 
 By class: smoke 5 (L01, L02, L06, L64, L94), smoke + human 1 (L87), human 73, owner-decision 15,
 cut 5 (L23, L24, L71, L82, L97) = 99 origin rows, plus 4 Phase 13 rows.
 By result: passed 13 (L01, L02, L03, L06, L26, L36 RentCast part, L64, L83, L85, L87, L88, L94, L98),
-decided 1 (L92), cut 5, carried 10 (L66, L79-L81, L89, L90, L91, L93, L95, L96; L36's AI-provider
-part is also carried to Phase 14), pending 70 origin rows (L86 and L99 wait on the Search Console
-sitemap read; L84 waits on the contact-email decision). Phase 13 rows: passed 2 (P13-1, P13-2),
+decided 1 (L92), cut 5, carried 12 (L66, L79-L81, L86, L89, L90, L91, L93, L95, L96, L99; L86 and
+L99 wait on the Search Console sitemap read, owner target 2026-11-04; L36's AI-provider part is also
+carried to Phase 14), pending 68 origin rows (L84 waits on the contact-email decision). Phase 13 rows: passed 2 (P13-1, P13-2),
 decided 2 (P13-3, P13-4).
 
 Phase 13 evidence: the green live-smoke runs are 41149881068 (f070c74, the first green trio) and

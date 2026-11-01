@@ -1,7 +1,7 @@
 ---
 phase: 13
 slug: live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down
-status: in-progress
+status: complete
 nyquist_compliant: true
 wave_0_complete: true
 created: 2026-10-29
@@ -83,15 +83,15 @@ created: 2026-10-29
 | 13-16-02 | 16 | 10 | LIVE-05 | manual | `grep -n search-console apps/web/src/app.html` | ✅ | ✅ green (marker line 6, tag line 7; 13-16) |
 | 13-16-03 | 16 | 10 | LIVE-05 | unit | `pnpm vitest run --project scripts scripts/app-html.test.ts`; `grep -cP` slot check | ✅ | ✅ green (11 tests; grep -cP 1; 13-16) |
 | 13-17-01 | 17 | 11 | LIVE-05, LIVE-06 | live evidence | `curl -s https://wolfwdavid.github.io/tran_real_estate/sitemap.xml \| grep -c "<loc>"` = 14 | n/a | ✅ green (14 on f169749; 13-17) |
-| 13-17-02 | 17 | 11 | LIVE-05 | manual | Search Console screenshots | n/a | ⬜ pending (property verified: 40-search-console-verified.png; sitemap submitted 2026-10-31 12:54Z, Search Console still shows the "Couldn't fetch" placeholder; 41-search-console-sitemap.png not yet captured; 13-17/13-19) |
+| 13-17-02 | 17 | 11 | LIVE-05 | manual | Search Console screenshots | n/a | ↪ carried (owner decision 2026-11-01, target 2026-11-04: property verified, 40-search-console-verified.png; sitemap submitted 2026-10-31 12:54Z and still "Couldn't fetch", 0 discovered, at the 2026-11-01 17:12Z re-check; Googlebot-UA fetch 200 with 14 `<loc>`; 41-search-console-sitemap.png added when the read lands; ledger L86/L99; 13-17/13-19) |
 | 13-17-03 | 17 | 11 | LIVE-05 | hygiene | `git log -1 --format=%B \| grep -ciE "co-authored-by\|claude\|anthropic"` = 0 | ✅ | ✅ green (0 on 9a3801f; 13-17) |
 | 13-18-01 | 18 | 12 | LIVE-07 | evidence chain | `node scripts/audit-evidence.mjs merge` | ✅ | ✅ green (2343 E2E: 2327 passed, 0 failed, 16 skipped; 6940 unit passed; 13-18) |
 | 13-18-02 | 18 | 12 | LIVE-07 (D-22) | generated doc | `grep -c "Base URL audited: https://wolfwdavid.github.io/tran_real_estate/ (root/deploy build)" docs/LAUNCH-AUDIT.md` | ✅ | ✅ green (1; e9f82f2; 13-18) |
 | 13-19-01 | 19 | 13 | LIVE-07 | text oracle | `pnpm vitest run --project scripts scripts/human-uat-ledger.test.ts && pnpm lint` | ✅ | ✅ green (24 tests; pnpm lint exit 0; 13-19 Task 1) |
 | 13-19-02 | 19 | 13 | LIVE-09 | text oracle | `pnpm vitest run --project scripts scripts/runbook.test.ts && pnpm lint` | ✅ | ✅ green (runbook test and pnpm lint exit 0; 13-19 Task 2) |
-| 13-19-03 | 19 | 13 | LIVE-03, SMOKE-04 | live evidence | `gh run list --repo wolfwdavid/tran_real_estate --workflow live-smoke.yml --limit 1 --json headSha,conclusion` | n/a | ⬜ pending (Task 3: owner close-out push and the final ci + deploy + live-smoke trio not yet run) |
+| 13-19-03 | 19 | 13 | LIVE-03, SMOKE-04 | live evidence | `gh run list --repo wolfwdavid/tran_real_estate --workflow live-smoke.yml --limit 1 --json headSha,conclusion` | n/a | ✅ green (owner pushed 7372b61; ci 41218226897 success with deploy success; chained live-smoke 41220466187 red on 35 HTTP 429s from the Pages CDN, kept in the record; dispatched live-smoke 41220812811 success 121/121; version.json = 7372b61; 13-19 Task 3) |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky · ↪ carried (owner-gated external evidence moved to a dated target by recorded owner decision; tracked in `.planning/HUMAN-UAT.md`, not a gap)*
 
 ---
 
@@ -133,4 +133,4 @@ Created test-first inside their own tasks (RED before GREEN), so no separate Wav
 
 **Approval:** planned 2026-10-29 (execution fills the Status column)
 
-**Execution status (2026-10-31, plan 13-19):** 49 of 51 map rows green. Not green: 13-17-02 (the Search Console sitemap read is still pending after the 12:54Z submission; the property itself is verified) and 13-19-03 (the owner's close-out push and its final ci + deploy + live-smoke trio have not run yet). `status` therefore stays `in-progress` rather than `complete`; `nyquist_compliant: true` is unchanged because every task kept its automated or Wave 0 verify and the sampling rule was followed (ledger, runbook and scripts-project tests after each 13-19 task). Both open rows flip in the follow-up commit that adds `41-search-console-sitemap.png` and records the final trio.
+**Execution status (2026-11-01, plan 13-19):** 50 of 51 map rows green and 1 carried. 13-19-03 is green on the close-out trio for `7372b61` (ci 41218226897 with deploy success; the chained live-smoke 41220466187 failed only on HTTP 429 from the Pages CDN and the dispatched re-run 41220812811 passed 121/121; `version.json` = `7372b61`). 13-17-02 is carried, not red: Search Console has not read the submitted `sitemap.xml` (still "Couldn't fetch" about 28 h after the 2026-10-31 12:54Z submission) although Googlebot fetches it 200 with 14 URLs, and the owner chose on 2026-11-01 to close the phase with the read carried to 2026-11-04 (ledger L86/L99, LIVE-05 unticked). `status: complete` follows the precedent of the 05 and 10 validation files, where owner-gated live evidence tracked in the HUMAN-UAT ledger is deferred evidence rather than a gap; the carried row is the only non-green row and no row is red. `nyquist_compliant: true` is unchanged because every task kept its automated or Wave 0 verify and the sampling rule was followed (ledger, runbook and scripts-project tests after each 13-19 task).
