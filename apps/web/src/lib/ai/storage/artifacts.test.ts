@@ -7,6 +7,7 @@ import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup
 import { TranDb } from '$lib/storage/db';
 import { META, getMeta } from '$lib/storage/meta';
 import { freshIdb } from '$lib/storage/test-utils';
+import { memoArtifactMeta, notesNumbersFromMeta } from '$lib/features/investor/memo/memo-meta';
 import {
 	AI_ARTIFACTS_LABEL,
 	AI_ARTIFACTS_TABLE,
@@ -407,6 +408,38 @@ describe('subjectId (Phase 6: per-listing draft history)', () => {
 			expect((await restored.listBySubject('renter-outreach', 'L1')).map((a) => a.id)).toEqual([
 				tagged.id
 			]);
+		} finally {
+			target.close();
+		}
+	});
+
+	it('backup export then import keeps memo meta (notes numerals, DEBT-03)', async () => {
+		const repo = createArtifactRepo(db, { now: clock() });
+		const meta = memoArtifactMeta('abc12345', 'Rents rose 12% last year.');
+		expect(meta).toHaveProperty('notesNumbers');
+		const memo = await repo.create(
+			input({
+				feature: 'investor-memo',
+				promptId: 'investor/memo.v1@1',
+				text: 'Memo',
+				subjectId: 'deal-1',
+				meta
+			})
+		);
+		// The export key scan runs over meta values; numerals are not key-shaped, so it must not throw.
+		const out = await buildBackupText(db, { now: new Date(T0 + 3_600_000), knownSecrets: [] });
+		expect(out.counts[AI_ARTIFACTS_TABLE]).toBe(1);
+
+		const target = new TranDb(freshIdb());
+		await target.open();
+		try {
+			const file = { name: 'backup.json', size: out.text.length, text: async () => out.text };
+			const preview = await previewImport(target, file);
+			expect(preview.incoming[AI_ARTIFACTS_TABLE]).toHaveLength(1);
+			await applyImport(target, preview, 'replace');
+			const restored = await createArtifactRepo(target).get(memo.id);
+			expect(restored?.meta).toEqual(meta);
+			expect(notesNumbersFromMeta(restored?.meta)).toEqual([12]);
 		} finally {
 			target.close();
 		}
