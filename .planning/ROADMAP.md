@@ -142,7 +142,20 @@ Plans:
 **Owner decisions riding along (record in Key Decisions when taken):** snapshot page count / Studio license-title scheme, the duplicate memo block reason, the Showcase badge default (needed by Phase 17).
 **Research flag:** no (standard patterns; every item has a sourced definition of done and existing test coverage).
 **UI hint:** yes. Run `/gsd:ui-phase 14` with UI/UX Pro Max before planning: DEBT-02's reason copy is spec-owned (the dedicated string lives in the UI spec), and DEBT-09 touches the marketing/feedback forms (plain form controls, lazy-loaded validation) on the pages the UI spec governs.
-**Plans:** TBD
+**Plans:** 12 plans
+Plans:
+- [ ] 14-06-PLAN.md — Wave 1: DEBT-06 shared tailwind-merge config for cn() and every tv(); unit + Chromium computed-size + axe
+- [ ] 14-04-PLAN.md — Wave 1: DEBT-04 origin-parity test on the evaluated extension module; doc tests use resolveSiteUrl; wording fix
+- [ ] 14-10-PLAN.md — Wave 1: record owner decisions D-01..D-04 in Key Decisions; close L79-L81, 09 UAT-6..8; 12-VERIFICATION org gate superseded
+- [ ] 14-09-PLAN.md — Wave 2: DEBT-09 part 1, native form controls with static classes + lazy validation (fail closed)
+- [ ] 14-08-PLAN.md — Wave 2: DEBT-08 live dotfile probe, emulator parity test, requirement rewording
+- [ ] 14-12-PLAN.md — Wave 3: DEBT-09 part 2, content-split levers as needed, feedback + for-* in the HARD budget gate and launch audit
+- [ ] 14-01-PLAN.md — Wave 4: DEBT-01 ListingCard idPrefix, no duplicate ids at 1280/375, focus contract
+- [ ] 14-02-PLAN.md — Wave 5: DEBT-02 save-gate reason copy (singular/plural/review-only), unit + E2E acknowledgement
+- [ ] 14-03-PLAN.md — Wave 6: DEBT-03 notes numerals in memo meta, print reads them, backup carries meta
+- [ ] 14-05-PLAN.md — Wave 7: DEBT-05 UI-level backup round-trip over every registered table at 0 RentCast calls
+- [ ] 14-07-PLAN.md — Wave 8: DEBT-07 bounded-wait tran-alerts lock, real-lock two-tab proofs, x10 under CPU pressure
+- [ ] 14-11-PLAN.md — Wave 9: close-out (L66/L89, requirement ticks, pnpm verify, owner push + CI, audit at DEPLOYED_SHA)
 
 ### Phase 15: Load-Deterministic Test Lanes
 **Goal:** Full `test:unit` and E2E runs are deterministic under parallel load: wall-clock budgets live in serial lanes, blind timeout raises and retries are mechanically impossible, worker counts are capped and recorded, and a dated evidence file proves it, so the Phase 16 migration has a trustworthy oracle.
