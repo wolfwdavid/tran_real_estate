@@ -6,7 +6,7 @@
 	import { tick } from 'svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import ListingCard from './ListingCard.svelte';
+	import ListingCard, { addrIdFor } from './ListingCard.svelte';
 	import { PAGE_SIZE, type RenterSearch } from './search-state.svelte';
 
 	interface Props {
@@ -46,7 +46,7 @@
 		await tick();
 		const row = search.sorted[firstNew];
 		if (row) {
-			const link = listEl?.querySelector<HTMLElement>(`#${CSS.escape(`card-${row.id}-addr`)}`);
+			const link = listEl?.querySelector<HTMLElement>(`#${CSS.escape(addrIdFor('card', row.id))}`);
 			link?.focus();
 		}
 		announce(`Showing ${shown} of ${total}.`);

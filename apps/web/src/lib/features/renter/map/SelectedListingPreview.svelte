@@ -67,7 +67,7 @@
 			{/each}
 		</ul>
 	{:else if row && provenance}
-		<ListingCard {row} {provenance} isNew={newIds.has(row.id)} selected />
+		<ListingCard {row} {provenance} idPrefix="preview" isNew={newIds.has(row.id)} selected />
 	{:else}
 		<p class="text-sm text-muted-foreground">Select a price on the map to see that rental here.</p>
 	{/if}

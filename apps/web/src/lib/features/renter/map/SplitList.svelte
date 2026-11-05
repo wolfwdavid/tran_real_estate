@@ -9,7 +9,7 @@
 	// unless the user is typing in a filter field. Everything is local: 0 calls.
 	import { tick, untrack } from 'svelte';
 	import { sortRentals } from '@tran/core/renter';
-	import ListingCard from '../search/ListingCard.svelte';
+	import ListingCard, { addrIdFor } from '../search/ListingCard.svelte';
 	import type { RenterSearch } from '../search/search-state.svelte';
 	import { rowsInBounds, type MapBounds } from './in-bounds';
 
@@ -50,7 +50,7 @@
 			if (!card) return;
 			card.scrollIntoView({ block: 'nearest', behavior: motionOK() ? 'smooth' : 'instant' });
 			card
-				.querySelector<HTMLAnchorElement>(`#${CSS.escape(`card-${id}-addr`)}`)
+				.querySelector<HTMLAnchorElement>(`#${CSS.escape(addrIdFor('split', id))}`)
 				?.focus({ preventScroll: true });
 		});
 	});
@@ -86,6 +86,7 @@
 							{row}
 							{provenance}
 							{now}
+							idPrefix="split"
 							compact
 							isNew={search.newIds.has(row.id)}
 							selected={search.selectedListingId === row.id}

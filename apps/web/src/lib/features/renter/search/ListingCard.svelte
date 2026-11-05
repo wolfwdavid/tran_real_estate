@@ -1,3 +1,10 @@
+<script lang="ts" module>
+	/** The address link id; every id a ListingCard renders carries the container's prefix (DEBT-01). */
+	export function addrIdFor(prefix: string, listingId: string): string {
+		return `${prefix}-${listingId}-addr`;
+	}
+</script>
+
 <script lang="ts">
 	// 06-UI-SPEC "ListingCard" (RENT-02): an <article> named by its address link. The whole card is
 	// clickable through the stretched address link (Phase 2 PortalCard pattern: one tab stop for the
@@ -32,6 +39,8 @@
 		compact?: boolean;
 		/** Pointer hover (hover-capable devices only) and keyboard focus within the card. */
 		onhover?: (id: string | null) => void;
+		/** Id namespace for this container: 'card' (List tab), 'split' (split list), 'preview' (map preview). */
+		idPrefix?: string;
 	}
 
 	let {
@@ -42,7 +51,8 @@
 		selected = false,
 		highlighted = false,
 		compact = false,
-		onhover
+		onhover,
+		idPrefix = 'card'
 	}: Props = $props();
 
 	// Constants: Svelte trims the leading space of literal element text.
@@ -51,7 +61,7 @@
 	const SEP = ' · ';
 	const NBSP = ' ';
 
-	const addrId = $derived(`card-${row.id}-addr`);
+	const addrId = $derived(addrIdFor(idPrefix, row.id));
 	const street = $derived(streetLine(row));
 	const place = $derived(placeLine(row));
 	const rent = $derived(formatRent(row.price));

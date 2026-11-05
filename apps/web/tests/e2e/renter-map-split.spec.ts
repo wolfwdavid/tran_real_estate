@@ -68,7 +68,7 @@ async function selectPin(page: Page) {
 	const card = split(page).locator(`article[data-listing-card="${id}"]`);
 	await expect(card).toHaveAttribute('aria-current', 'true');
 	await expect(card).toBeInViewport();
-	await expect(page.locator(':focus')).toHaveAttribute('id', `card-${id}-addr`);
+	await expect(page.locator(':focus')).toHaveAttribute('id', `split-${id}-addr`);
 	await expect(split(page).locator('article[aria-current="true"]')).toHaveCount(1);
 	await expect(page.locator('.tran-pin-selected')).toHaveCount(1);
 	return id;
@@ -180,7 +180,7 @@ test('hover links cards and pins both ways', async ({ page, net }) => {
 	// Keyboard focus links the same way.
 	await pin.focus();
 	await expect(card).toHaveClass(/outline-foreground/);
-	await card.locator(`#card-${id}-addr`).focus();
+	await card.locator(`#split-${id}-addr`).focus();
 	await expect(pin).toHaveClass(/tran-pin-highlighted/);
 	expect(rentcastCalls(net)).toBe(0);
 });
@@ -192,6 +192,28 @@ test('Enter on a pin scrolls its card into view and focuses its link', async ({ 
 	// Scroll the list away from the top first, so "in view" is a real scroll.
 	await split(page).evaluate((el) => el.scrollTo({ top: el.scrollHeight, behavior: 'instant' }));
 	await selectPin(page);
+	expect(rentcastCalls(net)).toBe(0);
+});
+
+test('no duplicate ids at 1280x800 on the Map tab with a pin selected', async ({ page, net }) => {
+	// DEBT-01: the hidden List panel, the split list and the preview all render the same
+	// listing; every ListingCard id carries its container's prefix, so no id repeats.
+	await page.setViewportSize({ width: 1280, height: 800 });
+	await sampleSearch(page);
+	await openMap(page);
+	await selectPin(page);
+	const dupes = await page.evaluate(() => {
+		const ids = [...document.querySelectorAll('[id]')].map((e) => e.id);
+		return [...new Set(ids.filter((v, i) => ids.indexOf(v) !== i))];
+	});
+	expect(dupes).toEqual([]);
+	// Each card is named by the address link inside the same card.
+	const stray = await page.evaluate(() =>
+		[...document.querySelectorAll('article[data-listing-card][aria-labelledby]')]
+			.filter((a) => !a.querySelector(`#${CSS.escape(a.getAttribute('aria-labelledby')!)}`))
+			.map((a) => a.getAttribute('aria-labelledby'))
+	);
+	expect(stray).toEqual([]);
 	expect(rentcastCalls(net)).toBe(0);
 });
 

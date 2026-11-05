@@ -249,6 +249,28 @@ test('selection at 375px: Enter on a pin shows its card and moves focus to its l
 	expect(rentcastCalls(net)).toBe(0);
 });
 
+test('no duplicate ids at 375x812 on the Map tab with a pin selected', async ({ page, net }) => {
+	// DEBT-01: below 1024px the split list stays mounted (hidden) beside the preview card and the
+	// hidden List panel; their ListingCard ids carry distinct prefixes.
+	await page.setViewportSize({ width: 375, height: 812 });
+	await sampleSearch(page);
+	await openMap(page);
+	await selectPin(page);
+	const dupes = await page.evaluate(() => {
+		const ids = [...document.querySelectorAll('[id]')].map((e) => e.id);
+		return [...new Set(ids.filter((v, i) => ids.indexOf(v) !== i))];
+	});
+	expect(dupes).toEqual([]);
+	// Each card is named by the address link inside the same card.
+	const stray = await page.evaluate(() =>
+		[...document.querySelectorAll('article[data-listing-card][aria-labelledby]')]
+			.filter((a) => !a.querySelector(`#${CSS.escape(a.getAttribute('aria-labelledby')!)}`))
+			.map((a) => a.getAttribute('aria-labelledby'))
+	);
+	expect(stray).toEqual([]);
+	expect(rentcastCalls(net)).toBe(0);
+});
+
 test('co-located units: one cluster that lists the rentals at this spot', async ({ page, net }) => {
 	const base = rentcastFixtures().rentals.find(
 		(r) => r.zipCode === '74201' && r.status === 'Active'
