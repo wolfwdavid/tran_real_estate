@@ -1,5 +1,11 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/** The --text-* tokens in app.css @theme (a new token joins this list in the same commit). */
+export const TW_MERGE_CONFIG = {
+	extend: { classGroups: { 'font-size': [{ text: ['label', 'body', 'heading', 'display'] }] } }
+};
+const twMerge = extendTailwindMerge(TW_MERGE_CONFIG);
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));

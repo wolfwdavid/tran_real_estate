@@ -1,5 +1,7 @@
 <script lang="ts" module>
-	import { type VariantProps, tv } from 'tailwind-variants';
+	import { type VariantProps, createTV } from 'tailwind-variants';
+	import { TW_MERGE_CONFIG } from '$lib/utils.js';
+	const tv = createTV({ twMergeConfig: TW_MERGE_CONFIG });
 
 	export const badgeVariants = tv({
 		base: 'inline-flex items-center gap-1 rounded-full px-2 py-1 text-label font-semibold whitespace-nowrap [&>svg]:pointer-events-none [&>svg]:shrink-0',

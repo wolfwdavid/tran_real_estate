@@ -1,5 +1,7 @@
 <script lang="ts" module>
-	import { type VariantProps, tv } from 'tailwind-variants';
+	import { type VariantProps, createTV } from 'tailwind-variants';
+	import { TW_MERGE_CONFIG } from '$lib/utils.js';
+	const tv = createTV({ twMergeConfig: TW_MERGE_CONFIG });
 
 	export const alertVariants = tv({
 		base: 'group/alert relative grid gap-1 rounded-lg p-4 text-foreground sm:p-6 has-[>svg]:grid-cols-[20px_1fr] has-[>svg]:gap-x-3 *:[svg]:row-span-2 *:[svg]:translate-y-0.5',

@@ -1,7 +1,8 @@
 <script lang="ts" module>
-	import { type VariantProps, tv } from 'tailwind-variants';
-	import { cn, type WithElementRef } from '$lib/utils.js';
+	import { type VariantProps, createTV } from 'tailwind-variants';
+	import { cn, TW_MERGE_CONFIG, type WithElementRef } from '$lib/utils.js';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
+	const tv = createTV({ twMergeConfig: TW_MERGE_CONFIG });
 
 	export const buttonVariants = tv({
 		base: 'inline-flex shrink-0 cursor-pointer touch-manipulation items-center justify-center gap-1 rounded-md text-body font-semibold whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:border disabled:border-border disabled:bg-surface disabled:text-muted-foreground aria-disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
