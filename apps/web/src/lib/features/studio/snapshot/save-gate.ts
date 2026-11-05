@@ -36,8 +36,13 @@ export const NO_DATA_REASON = "Load a ZIP code's data first.";
 export const NO_SECTION_REASON = 'Choose at least one section with market data.';
 export const NOTES_NOT_DRAFTED_REASON = 'Draft the market notes, or turn them off in step 2.';
 
+export const NOTES_REVIEW_REASON =
+	'Review the flagged phrases in the market notes and check the box in step 3 to continue.';
+
 export const notesFindingsReason = (n: number): string =>
-	`Fix the ${n} items marked Must fix in the market notes, and review any others.`;
+	n === 1
+		? 'Fix the 1 item marked Must fix in the market notes, and review any others.'
+		: `Fix the ${n} items marked Must fix in the market notes, and review any others.`;
 
 export const profileReason = (missing: readonly string[]): string =>
 	`Add your ${missing.join(', ')} in your profile so your disclosure can be added.`;
@@ -47,7 +52,8 @@ export function saveGateReason(s: SaveGateState): string | null {
 	if (!s.hasData) return NO_DATA_REASON;
 	if (s.dataSections < 1) return NO_SECTION_REASON;
 	if (s.notesOn && s.notesStatus !== 'ready') return NOTES_NOT_DRAFTED_REASON;
-	if (s.notesOn && (s.mustFix > 0 || s.unackedReview)) return notesFindingsReason(s.mustFix);
+	if (s.notesOn && s.mustFix > 0) return notesFindingsReason(s.mustFix);
+	if (s.notesOn && s.unackedReview) return NOTES_REVIEW_REASON;
 	if (s.live && s.profileMissing.length > 0) return profileReason(s.profileMissing);
 	return null;
 }
