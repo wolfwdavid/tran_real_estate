@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Phase 14 UI-SPEC approved
-last_updated: "2026-11-05T19:11:02.873Z"
+stopped_at: Completed 14-10-PLAN.md
+last_updated: "2026-11-05T20:44:07.731Z"
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 31
-  completed_plans: 31
+  total_plans: 43
+  completed_plans: 32
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 13 — live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down
+**Current focus:** Phase 14 — carried-debt
 
 ## Current Position
 
-Phase: 13 (live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down) — COMPLETE (2026-11-01; one carried item: the Search Console sitemap read, target 2026-11-04)
-Plan: 21 of 21
+Phase: 14 (carried-debt) — EXECUTING
+Plan: 2 of 12
 
 ## Performance Metrics
 
@@ -259,6 +259,7 @@ Plan: 21 of 21
 | Phase 13 P21 | 12min | 2 tasks | 0 files |
 | Phase 13 P15 | 9h 8m wall (1h 15m executor) | 3 tasks | 6 files |
 | Phase 13 P17 | 8 min | 3 tasks | 1 files |
+| Phase 14 P10 | 6min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -691,6 +692,8 @@ Recent decisions affecting current work:
 - [Phase 13]: 13-15: GHSA-g3hv-75wg-m249 (minimatch <11.0.1, dev toolchain only) is a reviewed audit exception with a never-ships grep proof; revisit at the first eslint release on minimatch 11, by 2026-11-30
 - [Phase 13]: 13-15: the Task 2 proof SHA is f169749 (fix push); the red run on 5ebdf79 is recorded, not retried
 - [Phase 13]: 13-17: DEPLOYED_SHA is f16974962e3b6ace66655342387cd270f3d120b6 (live version.json; ci 41200919587 + live-smoke 41202355014 green); Search Console property verified by HTML tag ~12:52Z 2026-10-31; sitemap submitted ~12:54Z and pending (Couldn't fetch placeholder, 0 discovered); 41-search-console-sitemap.png + 'sitemap read: 14 URLs' carried to 13-19, phase not closed until then
+- [Phase 14]: D-01..D-04 recorded in PROJECT.md Key Decisions (6-page snapshot, NY-safe Studio titles, both memo reasons, Showcase excluded); ledger L79-L81 decided 2026-11-05
+- [Phase 14]: 12-VERIFICATION org go-live gate marked superseded (D-08); only LIVE-05 remains in audit-uat for phase 12
 
 ### Pending Todos
 
@@ -720,7 +723,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-05T19:11:02.868Z
-Stopped at: Phase 14 UI-SPEC approved
-Resume file: .planning/phases/14-carried-debt/14-UI-SPEC.md
+Last session: 2026-11-05T20:44:07.724Z
+Stopped at: Completed 14-10-PLAN.md
+Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
