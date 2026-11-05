@@ -286,29 +286,33 @@ describe('two tabs', () => {
 		}
 	});
 
-	it("a lock still held when the wait times out skips as 'busy' with 0 fetches", { timeout: 2_000 }, async () => {
-		// Never grants: rejects with the signal's reason once the wait expires, as navigator.locks does.
-		const request = vi.fn(
-			(_n: string, o: LockOptions, _cb: (lock: Lock | null) => Promise<unknown>) =>
-				new Promise((_resolve, reject) => {
-					o.signal!.addEventListener('abort', () => reject(o.signal!.reason), { once: true });
-				})
-		);
-		vi.stubGlobal('navigator', { locks: { request } });
-		try {
-			const fn = vi.fn(async () => 1);
-			expect(await browserLock(20).run(fn)).toBeNull();
-			expect(fn).not.toHaveBeenCalled();
+	it(
+		"a lock still held when the wait times out skips as 'busy' with 0 fetches",
+		{ timeout: 2_000 },
+		async () => {
+			// Never grants: rejects with the signal's reason once the wait expires, as navigator.locks does.
+			const request = vi.fn(
+				(_n: string, o: LockOptions) =>
+					new Promise((_resolve, reject) => {
+						o.signal!.addEventListener('abort', () => reject(o.signal!.reason), { once: true });
+					})
+			);
+			vi.stubGlobal('navigator', { locks: { request } });
+			try {
+				const fn = vi.fn(async () => 1);
+				expect(await browserLock(20).run(fn)).toBeNull();
+				expect(fn).not.toHaveBeenCalled();
 
-			const w = await world();
-			const res = await w.run({ lock: browserLock(20) });
-			expect(res).toMatchObject({ skipped: 'busy', ran: [], due: 0 });
-			expect(w.rc.spy.calls).toHaveLength(0);
-			expect(w.confirm).not.toHaveBeenCalled();
-		} finally {
-			vi.unstubAllGlobals();
+				const w = await world();
+				const res = await w.run({ lock: browserLock(20) });
+				expect(res).toMatchObject({ skipped: 'busy', ran: [], due: 0 });
+				expect(w.rc.spy.calls).toHaveLength(0);
+				expect(w.confirm).not.toHaveBeenCalled();
+			} finally {
+				vi.unstubAllGlobals();
+			}
 		}
-	});
+	);
 
 	it('an error thrown by the pass while holding the lock propagates (it is not a busy skip)', async () => {
 		const request = vi.fn(

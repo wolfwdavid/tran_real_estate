@@ -24,22 +24,34 @@ import type { DataGateway } from './gateway';
 import type { SavedSearchRepo } from './saved-search-repo';
 import type { SavedSearchRow } from './tables';
 
-/** Runs `fn` while holding the cross-tab alerts lock; null when another tab holds it. */
+/** Runs `fn` while holding the cross-tab alerts lock; null when another tab held it for the whole wait. */
 export interface LockPort {
 	run<T>(fn: () => Promise<T>): Promise<T | null>;
 }
 
 export const noLock: LockPort = { run: (fn) => fn() };
 
-/** navigator.locks 'tran-alerts' with ifAvailable (a busy lock skips the pass), else noLock. */
-export function browserLock(): LockPort {
+/** How long a pass waits for another tab's check to finish before skipping as busy. */
+export const ALERTS_LOCK_WAIT_MS = 10_000;
+
+/** navigator.locks 'tran-alerts', waiting at most `waitMs` (then the pass skips as busy), else noLock. */
+export function browserLock(waitMs = ALERTS_LOCK_WAIT_MS): LockPort {
 	const locks = typeof navigator === 'undefined' ? undefined : navigator.locks;
 	if (!locks || typeof locks.request !== 'function') return noLock;
 	return {
-		run: <T>(fn: () => Promise<T>) =>
-			locks.request('tran-alerts', { ifAvailable: true }, (lock) =>
-				lock ? fn() : null
-			) as Promise<T | null>
+		run: async <T>(fn: () => Promise<T>) => {
+			let granted = false;
+			const signal = AbortSignal.timeout(waitMs);
+			try {
+				return (await locks.request('tran-alerts', { signal }, () => {
+					granted = true;
+					return fn();
+				})) as T;
+			} catch (e) {
+				if (!granted && signal.aborted) return null; // waited waitMs: another tab is still checking
+				throw e;
+			}
+		}
 	};
 }
 
