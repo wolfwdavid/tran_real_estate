@@ -142,7 +142,7 @@ Plans:
 **Owner decisions riding along (record in Key Decisions when taken):** snapshot page count / Studio license-title scheme, the duplicate memo block reason, the Showcase badge default (needed by Phase 17).
 **Research flag:** no (standard patterns; every item has a sourced definition of done and existing test coverage).
 **UI hint:** yes. Run `/gsd:ui-phase 14` with UI/UX Pro Max before planning: DEBT-02's reason copy is spec-owned (the dedicated string lives in the UI spec), and DEBT-09 touches the marketing/feedback forms (plain form controls, lazy-loaded validation) on the pages the UI spec governs.
-**Plans:** 10/12 plans executed
+**Plans:** 11/12 plans executed
 Plans:
 - [x] 14-06-PLAN.md — Wave 1: DEBT-06 shared tailwind-merge config for cn() and every tv(); unit + Chromium computed-size + axe
 - [x] 14-04-PLAN.md — Wave 1: DEBT-04 origin-parity test on the evaluated extension module; doc tests use resolveSiteUrl; wording fix
@@ -154,7 +154,7 @@ Plans:
 - [x] 14-02-PLAN.md — Wave 5: DEBT-02 save-gate reason copy (singular/plural/review-only), unit + E2E acknowledgement
 - [x] 14-03-PLAN.md — Wave 6: DEBT-03 notes numerals in memo meta, print reads them, backup carries meta
 - [x] 14-05-PLAN.md — Wave 7: DEBT-05 UI-level backup round-trip over every registered table at 0 RentCast calls
-- [ ] 14-07-PLAN.md — Wave 8: DEBT-07 bounded-wait tran-alerts lock, real-lock two-tab proofs, x10 under CPU pressure
+- [x] 14-07-PLAN.md — Wave 8: DEBT-07 bounded-wait tran-alerts lock, real-lock two-tab proofs, x10 under CPU pressure
 - [ ] 14-11-PLAN.md — Wave 9: close-out (L66/L89, requirement ticks, pnpm verify, owner push + CI, audit at DEPLOYED_SHA)
 
 ### Phase 15: Load-Deterministic Test Lanes
@@ -218,7 +218,7 @@ Plans:
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
-| 14. Carried Debt | v1.1 | 10/12 | In Progress|  |
+| 14. Carried Debt | v1.1 | 11/12 | In Progress|  |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
