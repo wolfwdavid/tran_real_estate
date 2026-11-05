@@ -69,7 +69,7 @@ expected: The owner either accepts 6 pages for the all-sections report (the E2E 
 typical three-section saved snapshot prints on 1-2 pages), or approves condensed print data tables
 (fewer months or a compact table) so it fits the planned 1-4 pages. Getting to 4 pages without that
 would mean dropping required content or going below the UI-SPEC type sizes.
-result: [pending — owner decision]
+result: decided 2026-11-05: accept 6 pages (Phase 14 D-01; ledger L79)
 
 ### UAT-7. Counsel/owner decision: Studio license titles vs Phase 8 per-state titles (09-10)
 steps: Compare the Studio disclosure with the Phase 8 email footer for a non-NY agent, e.g. an FL
@@ -78,7 +78,7 @@ expected: Today the Studio uses fixed NY-safe labels ("Licensed Real Estate Sale
 the Phase 8 email footer uses per-state titles ("Sales Associate" in FL). Counsel/owner decides
 whether the Studio should switch to the per-state titles; until then both are lawful in their own
 context and the Studio label is the conservative one.
-result: [pending — counsel / owner decision]
+result: decided 2026-11-05: keep NY-safe titles, pending counsel (Phase 14 D-02; ledger L80)
 
 ### UAT-8. Informational: investor memos with an advertising phrase list two block reasons (09-04)
 steps: In the investor memo, type a phrase that is both an advertising claim and advice language
@@ -86,7 +86,7 @@ steps: In the investor memo, type a phrase that is both an advertising claim and
 expected: The memo is correctly blocked and lists both the Fair Housing (advertising claim) and the
 advice-language reasons. This is harmless; the owner may ask for the duplicate to be filtered
 (drop `category === 'advertising'` members from the memo's Fair Housing group).
-result: [pending — owner acknowledgement]
+result: decided 2026-11-05: keep both reasons (Phase 14 D-03; ledger L81)
 
 ## Deferred (with reasons, not blocking)
 

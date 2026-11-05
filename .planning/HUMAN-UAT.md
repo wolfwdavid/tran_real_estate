@@ -1,7 +1,7 @@
 # Human UAT ledger (all phases)
 
 One file for every owner-run check from Phases 1-12, plus the Phase 13 live-origin checks.
-Updated: 2026-11-01 (Phase 13 results, plan 13-19; L86/L99 carried for the sitemap read). Live origin: https://wolfwdavid.github.io/tran_real_estate/
+Updated: 2026-11-05 (Phase 14 owner decisions L79-L81, plan 14-10); earlier 2026-11-01 (Phase 13 results, plan 13-19; L86/L99 carried for the sitemap read). Live origin: https://wolfwdavid.github.io/tran_real_estate/
 (go-live 2026-10-30, GO_LIVE_SHA ad5fd08; deployed commit f169749 at the time of writing).
 
 ## Counting rule
@@ -107,9 +107,9 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L76 | 09-UAT-3 | NY/CA disclosures read-through | owner-decision | pending (owner) | counsel/owner |
 | L77 | 09-UAT-4 | Equal Housing Opportunity logo | owner-decision | pending (owner) | — |
 | L78 | 09-UAT-5 | Re-check NY GBL § 396-b and platform labels | owner-decision | pending (owner) | dated check |
-| L79 | 09-UAT-6 | 6-page all-sections snapshot | owner-decision | carried (Phase 14 owner decisions) | ROADMAP Phase 14 "owner decisions riding along" |
-| L80 | 09-UAT-7 | Studio license titles vs per-state titles | owner-decision | carried (Phase 14 owner decisions) | ROADMAP Phase 14 "owner decisions riding along" |
-| L81 | 09-UAT-8 | Memo lists two block reasons | owner-decision | carried (Phase 14 owner decisions) | ROADMAP Phase 14 "duplicate memo block reason" |
+| L79 | 09-UAT-6 | 6-page all-sections snapshot | owner-decision | decided 2026-11-05: accept 6 pages (D-01) | PROJECT.md Key Decisions (Phase 14, D-01); apps/web/tests/e2e/snapshot-print.spec.ts cap stays 6 |
+| L80 | 09-UAT-7 | Studio license titles vs per-state titles | owner-decision | decided 2026-11-05: keep NY-safe titles, pending counsel (D-02) | PROJECT.md Key Decisions (Phase 14, D-02); re-open if counsel asks |
+| L81 | 09-UAT-8 | Memo lists two block reasons | owner-decision | decided 2026-11-05: keep both reasons (D-03) | PROJECT.md Key Decisions (Phase 14, D-03); memo-checks.ts unchanged |
 | L82 | 10-1 | Umami counts arrive; GPC respected; IP not stored | cut | cut: GTM-04 moved to v2 by owner decision P13-4 (b) on 2026-10-30, taken before any Umami website, probe or analytics variable existed; no pageview data was ever collected | 13-14-SUMMARY.md (owner answers verbatim; no 10-/11- screenshot exists); live connect-src has no gateway.umami.is (0); REQUIREMENTS.md "### Analytics" future entry; `analytics.smoke.ts` stays in the suite for v2 |
 | L83 | 10-2 | Web3Forms waitlist + feedback arrive | human | passed 2026-10-31 | `docs/launch-proof/2026-10-30/20-web3forms-inbox.png` (subjects "Tran waitlist: Renter" and "Tran feedback: Free calculators"; crop of the result rows, no addresses); deployed on f169749 (ci 41200919587, live-smoke 41202355014); 13-15-SUMMARY.md Task 3 ("forms + walk pass") |
 | L84 | 10-3 | Contact email mailto fallbacks (optional) | owner-decision | pending (owner, target next owner session) | `PUBLIC_CONTACT_EMAIL` stayed unset through every Phase 13 deploy (variable lists in 13-13..13-18); unset state already E2E-verified; set it and verify, or record "unset" |
@@ -120,7 +120,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L89 | 10-8 | Report-only pages over the 60 KB budget | owner-decision | carried (Phase 14 DEBT-09) | Phase 14 DEBT-09 makes it a hard gate; close as "superseded by DEBT-09" |
 | L90 | 11-1 | Live zillow.com smoke (Chrome + Edge) | human | carried (Phase 17) | — |
 | L91 | 11-2 | Zero-network real session | human | carried (Phase 17) | — |
-| L92 | 11-3 | Dim the "Showcase" badge? | owner-decision | decided 2026-10-29: Showcase stays excluded by default (REQUIREMENTS EXT-F3) | `.planning/REQUIREMENTS.md` EXT-F3 ("owner kept them excluded 2026-10-29") |
+| L92 | 11-3 | Dim the "Showcase" badge? | owner-decision | decided 2026-10-29: Showcase stays excluded by default (REQUIREMENTS EXT-F3) | `.planning/REQUIREMENTS.md` EXT-F3 ("owner kept them excluded 2026-10-29"); PROJECT.md Key Decisions (Phase 14, D-04) |
 | L93 | 11-4 | Read current Zillow ToU | human | carried (Phase 17) | blocks public release only |
 | L94 | 11-5 | Privacy URL is live | smoke | passed 2026-10-31 | `extension-link.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 (the /legal/privacy/#browser-extension anchor served from the live origin); the popup-click half from a BASE_PATH build (Pitfall 10) was not separately recorded and rides with the Phase 17 listing work (L95) |
 | L95 | 11-6 | Edge Add-ons listing | human | carried (Phase 17) | — |

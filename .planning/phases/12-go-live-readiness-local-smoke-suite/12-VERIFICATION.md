@@ -8,6 +8,7 @@ human_verification:
   - test: "Plan 12-10 Task 3 owner go-live gate"
     expected: "Follow docs/DEPLOY-CHECKLIST.md Steps 1-5 (org tranrealestate, empty public repo tranrealestate.github.io, Pages source = GitHub Actions, Dependabot, secret scanning + push protection), then git remote add origin ... and git push -u origin main with PAGES_ENABLED unset"
     why_human: "Blocking human-action: creates external GitHub resources; no agent may do it"
+    result: "superseded 2026-10-29: owner chose the personal-account project site wolfwdavid/tran_real_estate; go-live done in Phase 13 (13-13)"
   - test: "LIVE-05 live half (Phase 13)"
     expected: "Search Console verified by the meta tag, sitemap.xml submitted and read (14 URLs)"
     why_human: "Needs the live origin; owned by Phase 13 / GTM-04"
@@ -77,7 +78,7 @@ None blocking. `deferred-items.md` holds one item: precommit.test.ts failed once
 
 ### Human Verification Required
 
-1. **Owner go-live gate (12-10 Task 3).** Create org `tranrealestate`, empty public repo `tranrealestate.github.io` (no README), set Pages source = GitHub Actions, enable Dependabot, secret scanning and push protection, then `git remote add origin https://github.com/tranrealestate/tranrealestate.github.io.git` and `git push -u origin main` with `PAGES_ENABLED` unset. Why human: external account resources.
+Superseded (2026-10-29, recorded Phase 14 D-08): ~~**Owner go-live gate (12-10 Task 3).** Create org `tranrealestate`, empty public repo `tranrealestate.github.io` (no README), set Pages source = GitHub Actions, enable Dependabot, secret scanning and push protection, then `git remote add origin https://github.com/tranrealestate/tranrealestate.github.io.git` and `git push -u origin main` with `PAGES_ENABLED` unset. Why human: external account resources.~~
 2. **LIVE-05 live half** (Search Console verification and sitemap submission) after Phase 13 deploy.
 
 ### Gaps Summary

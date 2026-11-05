@@ -250,6 +250,10 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | Project-instructions Origin rule updated to the project-site origin | Owner decision A, 2026-10-30 | ✓ Phase 13 |
 | `@types/node` majors ignored by Dependabot until Phase 14/16 | Owner decision B, 2026-10-30 | ✓ Phase 13 |
 | Privacy copy names the shared storage origin and points to Forget all keys | Owner decision C, 2026-10-30; about 250 sibling project sites share wolfwdavid.github.io | ✓ Phase 13 |
+| All-sections Market Snapshot sample prints on 6 US Letter pages; `snapshot-print.spec.ts` cap stays 6; no print-CSS change | Owner decision D-01, 2026-11-05 (09-HUMAN-UAT UAT-6, ledger L79): condensing the data tables would drop required content or go below the UI-SPEC type sizes | ✓ Phase 14 (owner, 2026-11-05) |
+| Studio disclosure keeps the fixed NY-safe title "Licensed Real Estate Salesperson"; the Phase 8 email footer keeps per-state titles | Owner decision D-02, 2026-11-05 (UAT-7, L80): the conservative label is lawful everywhere; re-open L80 only if counsel asks | ✓ Phase 14 (owner, 2026-11-05; pending counsel) |
+| A phrase that is both an advertising claim and advice language keeps both reasons in the investor memo gate; `memo-checks.ts` unchanged | Owner decision D-03, 2026-11-05 (UAT-8, L81): the duplicate is harmless and both reasons are true | ✓ Phase 14 (owner, 2026-11-05) |
+| Zillow "Showcase" placements stay excluded by default from the extension's sponsored filter (REQUIREMENTS EXT-F3) | Owner decision D-04, taken 2026-10-29 (11-HUMAN-UAT row 3, ledger L92); recorded here so Phase 17 cites one place | ✓ decided 2026-10-29 (recorded Phase 14) |
 
 ## Evolution
 
