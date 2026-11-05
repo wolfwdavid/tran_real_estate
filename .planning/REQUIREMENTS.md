@@ -36,7 +36,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 - [ ] **DEBT-03**: An investor memo that quotes a number present only in the notes prints: the notes' allowed numerals are persisted in the artifact `meta` at creation and read back at `/print/memo/`; a unit test round-trips `meta`, the print spec gains the notes-only case while the Must-fix block case stays green, a mutation that drops the `meta` write turns the new test red, and backup export/import carries `meta` (07-HUMAN-UAT S2, owner chose fix)
 - [ ] **DEBT-04**: A non-vacuous scripts-project test (`scripts/origin-parity.test.ts`) evaluates the extension's `site.ts` with the bundler's define and asserts `TRAN_SITE_URL` equals `resolveSiteUrl()` for the configured `PUBLIC_SITE_URL` + `BASE_PATH`, `PRIVACY_URL` equals `TRAN_SITE_URL + '/legal/privacy/#browser-extension'`, and the `browser-extension` anchor id exists in the privacy page source; the literal URLs in the existing extension doc and bundle tests use `resolveSiteUrl()` instead (audit low finding; `TRAN_ORIGIN` was removed in 13-10, wording corrected 2026-11-05 per 14 D-06)
 - [ ] **DEBT-05**: One Playwright spec seeds at least one row in every registered backup table (renter, investor, agent, studio stores and AI artifacts with `meta`), exports through the Settings UI, wipes the profile, imports with preview, and asserts each portal shows its row at zero RentCast calls (audit low finding, PLAT-04)
-- [ ] **DEBT-06**: `cn()` and the `tv()` config use a tailwind-merge extended with the custom font-size class group so `text-label` survives merging; a unit test asserts `cn('text-label text-muted-foreground')` keeps both, a real-Chromium browser test reads the computed font-size on Badge and Button, and axe stays green across the copied-in primitives (04-14 deferred)
+- [x] **DEBT-06**: `cn()` and the `tv()` config use a tailwind-merge extended with the custom font-size class group so `text-label` survives merging; a unit test asserts `cn('text-label text-muted-foreground')` keeps both, a real-Chromium browser test reads the computed font-size on Badge and Button, and axe stays green across the copied-in primitives (04-14 deferred)
 - [ ] **DEBT-07**: The saved-search scheduler requests the `tran-alerts` lock with a bounded wait (abort signal, about ten seconds) instead of `ifAvailable`, recomputes due searches inside the lock, updates the two-tab tests, mutation-tests the concurrency guard, and `renter-saved.spec.ts` is green under `--repeat-each 10` with CPU pressure (10-23 open race, owner chose bounded wait)
 - [ ] **DEBT-08**: `scripts/serve-pages.mjs` answers 404 for dotfiles like GitHub Pages does, so a service-worker precache that lists `.nojekyll` fails locally instead of only on the live origin
 - [ ] **DEBT-09**: `/feedback/` and the three `/for-*/` pages ship under the 60 KB gzipped JS budget (plain form controls, lazy-loaded validation) and the budget becomes a hard gate for them in the launch audit (10-HUMAN-UAT 8, owner chose trim)
@@ -134,7 +134,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | DEBT-03 | Phase 14 | Pending |
 | DEBT-04 | Phase 14 | Pending |
 | DEBT-05 | Phase 14 | Pending |
-| DEBT-06 | Phase 14 | Pending |
+| DEBT-06 | Phase 14 | Complete |
 | DEBT-07 | Phase 14 | Pending |
 | DEBT-08 | Phase 14 | Pending |
 | DEBT-09 | Phase 14 | Pending |

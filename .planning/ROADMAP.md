@@ -142,9 +142,9 @@ Plans:
 **Owner decisions riding along (record in Key Decisions when taken):** snapshot page count / Studio license-title scheme, the duplicate memo block reason, the Showcase badge default (needed by Phase 17).
 **Research flag:** no (standard patterns; every item has a sourced definition of done and existing test coverage).
 **UI hint:** yes. Run `/gsd:ui-phase 14` with UI/UX Pro Max before planning: DEBT-02's reason copy is spec-owned (the dedicated string lives in the UI spec), and DEBT-09 touches the marketing/feedback forms (plain form controls, lazy-loaded validation) on the pages the UI spec governs.
-**Plans:** 2/12 plans executed
+**Plans:** 3/12 plans executed
 Plans:
-- [ ] 14-06-PLAN.md — Wave 1: DEBT-06 shared tailwind-merge config for cn() and every tv(); unit + Chromium computed-size + axe
+- [x] 14-06-PLAN.md — Wave 1: DEBT-06 shared tailwind-merge config for cn() and every tv(); unit + Chromium computed-size + axe
 - [x] 14-04-PLAN.md — Wave 1: DEBT-04 origin-parity test on the evaluated extension module; doc tests use resolveSiteUrl; wording fix
 - [x] 14-10-PLAN.md — Wave 1: record owner decisions D-01..D-04 in Key Decisions; close L79-L81, 09 UAT-6..8; 12-VERIFICATION org gate superseded
 - [ ] 14-09-PLAN.md — Wave 2: DEBT-09 part 1, native form controls with static classes + lazy validation (fail closed)
@@ -218,7 +218,7 @@ Plans:
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
-| 14. Carried Debt | v1.1 | 2/12 | In Progress|  |
+| 14. Carried Debt | v1.1 | 3/12 | In Progress|  |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
