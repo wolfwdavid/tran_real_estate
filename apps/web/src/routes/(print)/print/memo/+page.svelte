@@ -19,6 +19,7 @@
 	import MemoPrintout from '$lib/features/investor/memo/MemoPrintout.svelte';
 	import { createMemoPostChecks } from '$lib/features/investor/memo/memo-checks';
 	import { memoFactsForDeal } from '$lib/features/investor/memo/memo-facts-for-deal';
+	import { notesNumbersFromMeta } from '$lib/features/investor/memo/memo-meta';
 	import {
 		dealIsSample,
 		inputTables,
@@ -57,7 +58,10 @@
 	function isBlocked(artifact: AiArtifact, current: DealRecord): boolean {
 		const findings = runChecks(
 			artifact.text,
-			createMemoPostChecks(memoFactsForDeal(current, '').allowed)
+			createMemoPostChecks([
+				...memoFactsForDeal(current, '').allowed,
+				...notesNumbersFromMeta(artifact.meta)
+			])
 		);
 		return findings.some(
 			(f) => f.severity === 'block' || (f.severity === 'warn' && artifact.status === 'draft')

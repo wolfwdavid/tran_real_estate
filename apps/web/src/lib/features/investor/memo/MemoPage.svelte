@@ -26,6 +26,7 @@
 	import type { DealRecord } from '../deals/schema';
 	import { createMemoPostChecks, MEMO_CHECK_GROUPS, memoGateReasons } from './memo-checks';
 	import { memoFactsForDeal } from './memo-facts-for-deal';
+	import { memoArtifactMeta } from './memo-meta';
 
 	const FEATURE = 'investor-memo';
 	const NOTES_MAX = 1000;
@@ -327,7 +328,7 @@
 				{postChecks}
 				checkGroups={MEMO_CHECK_GROUPS}
 				subjectId={deal.id}
-				artifactMeta={{ analysisHash: hash }}
+				artifactMeta={memoArtifactMeta(hash, facts?.notes ?? '')}
 				{beforeGenerate}
 				onExit={() => refreshKey++}
 			/>
