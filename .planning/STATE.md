@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 14-06-PLAN.md
-last_updated: "2026-11-05T20:54:26.927Z"
+stopped_at: Completed 14-08-PLAN.md
+last_updated: "2026-11-05T21:33:20.717Z"
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 43
-  completed_plans: 34
+  completed_plans: 35
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 14 (carried-debt) — EXECUTING
-Plan: 4 of 12
+Plan: 5 of 12
 
 ## Performance Metrics
 
@@ -262,6 +262,7 @@ Plan: 4 of 12
 | Phase 14 P10 | 6min | 2 tasks | 4 files |
 | Phase 14 P04 | 15min | 2 tasks | 6 files |
 | Phase 14 P06 | 14min | 2 tasks | 8 files |
+| Phase 14 P08 | 10min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -698,6 +699,7 @@ Recent decisions affecting current work:
 - [Phase 14]: 12-VERIFICATION org go-live gate marked superseded (D-08); only LIVE-05 remains in audit-uat for phase 12
 - [Phase 14]: 14-04: extension-docs test composes PRIVACY_URL from explicit LIVE_SITE_ENV, never process.env
 - [Phase 14]: DEBT-06: copy-in tv() calls take the shared TW_MERGE_CONFIG via createTV() in each module script (Prettier-stable, blame-clean); createTV stays out of utils.ts
+- [Phase 14]: 14-08: live probe 2026-11-05 matched serve-pages on every dotfile case (/.nojekyll 200, missing dotfile 404, /.well-known(/) 404); site() unchanged, DEBT-08 closed by scripts/serve-pages.test.ts plus SERVE_PAGES_WEB_DIR override
 
 ### Pending Todos
 
@@ -727,7 +729,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-05T20:54:26.920Z
-Stopped at: Completed 14-06-PLAN.md
+Last session: 2026-11-05T21:33:20.710Z
+Stopped at: Completed 14-08-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
