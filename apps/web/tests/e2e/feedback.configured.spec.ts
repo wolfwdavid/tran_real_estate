@@ -47,7 +47,9 @@ async function open(page: Page, query = '') {
 }
 
 const main = (page: Page) => page.getByRole('main');
-const topics = (page: Page) => page.getByRole('radiogroup');
+// Native radios in the fieldset (DEBT-09): the group is named by its legend.
+const topics = (page: Page) =>
+	page.getByRole('group', { name: 'Which part of Tran is this about?' });
 const message = (page: Page) => page.getByLabel('Your feedback', { exact: true });
 const email = (page: Page) => page.getByLabel('Email (optional)', { exact: true });
 const button = (page: Page) => main(page).getByRole('button', { name: 'Send feedback' });
@@ -56,6 +58,17 @@ const announcer = (page: Page) => page.getByTestId('live-announcer');
 
 /** Runtime-built key-shaped text: matches the Anthropic key shape the backup scanner knows. */
 const keyShaped = () => 'sk-ant-api03-' + 'A'.repeat(40);
+
+/** Counts Vite's vite:preloadError events: one per failed lazy-import attempt. */
+async function countImportFailures(page: Page) {
+	await page.addInitScript(() => {
+		const w = window as unknown as { __importFailures: number };
+		w.__importFailures = 0;
+		addEventListener('vite:preloadError', () => w.__importFailures++);
+	});
+	return () =>
+		page.evaluate(() => (window as unknown as { __importFailures: number }).__importFailures);
+}
 
 async function send(page: Page) {
 	await page.clock.fastForward(3500);
@@ -275,6 +288,74 @@ test("network failure: Your message wasn't sent, with the contact address", asyn
 	await expect(main(page).locator('a[href^="mailto:hello@example.com"]')).toHaveCount(1);
 	await expect(message(page)).toHaveValue('Works well');
 	await expect(button(page)).toBeFocused();
+	expect(posts).toHaveLength(1);
+});
+
+test('Send more feedback focuses the checked topic radio', async ({ page }) => {
+	await mockSubmit(page);
+	await open(page);
+	await page.getByRole('radio', { name: 'Free calculators', exact: true }).check();
+	await message(page).fill('Works well');
+	await send(page);
+	await expect(main(page)).toContainText('Thanks. Your feedback was sent.');
+
+	await main(page).getByRole('button', { name: 'Send more feedback' }).click();
+	const checked = page.getByRole('radio', { name: 'Free calculators', exact: true });
+	await expect(checked).toBeChecked();
+	await expect(checked).toBeFocused();
+	// Arrow keys move and select within the native group.
+	await page.keyboard.press('ArrowDown');
+	await expect(page.getByRole('radio', { name: 'Something else', exact: true })).toBeChecked();
+	await expect(page.getByRole('radio', { name: 'Something else', exact: true })).toBeFocused();
+});
+
+test('lazy chunk failure: nothing is sent, the network error shows, a retry re-imports', async ({
+	page
+}) => {
+	const posts = await mockSubmit(page);
+	const failures = await countImportFailures(page);
+	const web3forms: string[] = [];
+	page.on('request', (r) => {
+		if (new URL(r.url()).host === 'api.web3forms.com') web3forms.push(r.method());
+	});
+	await open(page);
+	// After hydration, every immutable chunk fails: the key scan and sender cannot load.
+	await page.route('**/_app/immutable/**', (r) => r.abort());
+	await message(page).fill('Works well');
+	await send(page);
+
+	await expect(main(page)).toContainText("Your message wasn't sent");
+	await expect(main(page)).toContainText(
+		'Check your connection, then try again. Nothing was saved.'
+	);
+	await expect(announcer(page)).toHaveText(
+		"Your message wasn't sent. Check your connection, then try again. Nothing was saved."
+	);
+	await expect(button(page)).toBeFocused();
+	await expect(button(page)).toBeEnabled();
+	await expect(message(page)).toHaveValue('Works well');
+	await expectAxeClean(page, 'feedback lazy chunk failed');
+	await page.clock.runFor(500);
+	expect(posts).toHaveLength(0);
+	expect(web3forms).toHaveLength(0);
+
+	// The failed promise was cleared, so a second submit makes a fresh import attempt. Chromium
+	// keeps a failed module fetch in its module map for the life of the page, so that attempt
+	// fails again here (still sending nothing); a reload recovers.
+	await page.unroute('**/_app/immutable/**');
+	const before = await failures();
+	await button(page).click();
+	await expect(button(page)).toBeFocused();
+	await expect.poll(failures).toBeGreaterThan(before);
+	await expect(main(page)).toContainText("Your message wasn't sent");
+	expect(posts).toHaveLength(0);
+	expect(web3forms).toHaveLength(0);
+
+	await page.reload();
+	await expect(page.locator('main form[data-ready]')).toHaveCount(1);
+	await message(page).fill('Works well');
+	await send(page);
+	await expect(main(page)).toContainText('Thanks. Your feedback was sent.');
 	expect(posts).toHaveLength(1);
 });
 

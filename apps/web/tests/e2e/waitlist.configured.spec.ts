@@ -62,6 +62,17 @@ const button = (page: Page) =>
 	page.locator('#waitlist').getByRole('button', { name: 'Join the waitlist' });
 const announcer = (page: Page) => page.getByTestId('live-announcer');
 
+/** Counts Vite's vite:preloadError events: one per failed lazy-import attempt. */
+async function countImportFailures(page: Page) {
+	await page.addInitScript(() => {
+		const w = window as unknown as { __importFailures: number };
+		w.__importFailures = 0;
+		addEventListener('vite:preloadError', () => w.__importFailures++);
+	});
+	return () =>
+		page.evaluate(() => (window as unknown as { __importFailures: number }).__importFailures);
+}
+
 test('the configured build carries the test key and contact email', () => {
 	expect(env.web3formsKey).toBe(KEY);
 	expect(env.contactEmail).toBe('hello@example.com');
@@ -173,6 +184,57 @@ test('network failure keeps the email and offers the contact address', async ({ 
 	await expect(announcer(page)).toHaveText(
 		"Your email wasn't sent. Check your connection, then try again. Nothing was saved."
 	);
+	expect(posts).toHaveLength(1);
+});
+
+test('lazy chunk failure: nothing is sent, the network error shows, a retry re-imports', async ({
+	page
+}) => {
+	const posts = await mockSubmit(page);
+	const failures = await countImportFailures(page);
+	const web3forms: string[] = [];
+	page.on('request', (r) => {
+		if (new URL(r.url()).host === 'api.web3forms.com') web3forms.push(r.method());
+	});
+	await open(page, 'for-renters/');
+	// After hydration, every immutable chunk fails: the sender cannot load.
+	await page.route('**/_app/immutable/**', (r) => r.abort());
+	await input(page).fill(EMAIL);
+	await page.clock.fastForward(3500);
+	await button(page).click();
+
+	const section = page.locator('#waitlist');
+	await expect(section).toContainText("Your email wasn't sent");
+	await expect(section).toContainText('Check your connection, then try again. Nothing was saved.');
+	await expect(announcer(page)).toHaveText(
+		"Your email wasn't sent. Check your connection, then try again. Nothing was saved."
+	);
+	await expect(button(page)).toBeFocused();
+	await expect(button(page)).toBeEnabled();
+	await expect(input(page)).toHaveValue(EMAIL);
+	await expectAxeClean(page, 'waitlist lazy chunk failed');
+	await page.waitForTimeout(300);
+	expect(posts).toHaveLength(0);
+	expect(web3forms).toHaveLength(0);
+
+	// The failed promise was cleared, so a second submit makes a fresh import attempt. Chromium
+	// keeps a failed module fetch in its module map for the life of the page, so that attempt
+	// fails again here (still sending nothing); a reload recovers.
+	await page.unroute('**/_app/immutable/**');
+	const before = await failures();
+	await button(page).click();
+	await expect(button(page)).toBeFocused();
+	await expect.poll(failures).toBeGreaterThan(before);
+	await expect(section).toContainText("Your email wasn't sent");
+	expect(posts).toHaveLength(0);
+	expect(web3forms).toHaveLength(0);
+
+	await page.reload();
+	await expect(page.locator('#waitlist form[data-ready]')).toHaveCount(1);
+	await input(page).fill(EMAIL);
+	await page.clock.fastForward(3500);
+	await button(page).click();
+	await expect(section).toContainText("You're on the renter waitlist");
 	expect(posts).toHaveLength(1);
 });
 
