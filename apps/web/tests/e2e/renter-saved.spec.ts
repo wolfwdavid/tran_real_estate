@@ -46,6 +46,19 @@ async function open(page: Page, path = 'renter/') {
 	await expect(page.getByRole('heading', { level: 1, name: 'Find a rental' })).toBeVisible();
 }
 
+/**
+ * Moves the page clock to `t` on the marketing home page, which mounts no DataShell, then reopens
+ * the current portal URL. Jumping the clock on a portal page races that page's own check-on-open
+ * pass: a pass still in flight reads the new time, claims a search that is now due, and is torn down
+ * by the reload before it completes, so the claim (CLAIM_TTL_MS) hides the search from the next page.
+ */
+async function reopenAt(page: Page, t: number) {
+	const url = page.url();
+	await page.goto('');
+	await page.clock.setFixedTime(t);
+	await open(page, url);
+}
+
 /** A new 74201 listing (cloned from a fixture row) at `price`, listed just now so it sorts first. */
 function newListing(id: string, price: number, listedAt: number): Record<string, unknown> {
 	const base = rentcastFixtures().rentals.find(
@@ -120,8 +133,7 @@ test('save, re-run at most once per 24 hours, N new filtered, View results badge
 	await expect(savedRow(page, NAME).getByRole('heading', { level: 3 })).toBeFocused();
 
 	// Within 24 hours: not due, 0 calls.
-	await page.clock.setFixedTime(T + HOUR);
-	await page.reload();
+	await reopenAt(page, T + HOUR);
 	await expect(savedRow(page, NAME).getByText('No new listings')).toBeVisible();
 	await expectLiveMode(page);
 	expect(listingCalls(net)).toBe(1);
@@ -132,8 +144,7 @@ test('save, re-run at most once per 24 hours, N new filtered, View results badge
 		newListing('NEW-2', 1800, T + 24 * HOUR),
 		newListing('NEW-3', 3000, T + 24 * HOUR)
 	);
-	await page.clock.setFixedTime(T + 25 * HOUR);
-	await page.reload();
+	await reopenAt(page, T + 25 * HOUR);
 	await expect(savedRow(page, NAME).getByText('2 new since your last visit')).toBeVisible();
 	expect(listingCalls(net)).toBe(2);
 	await expectNoViolations(page, 'saved searches with a new count');
