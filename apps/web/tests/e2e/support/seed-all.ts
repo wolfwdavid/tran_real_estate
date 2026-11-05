@@ -12,8 +12,9 @@
 // 'investor') + a buyBoxes row. So savedSearches holds 2 rows; every other table holds 1.
 // Both saved searches have lastRunAt = now, so the check-on-open scheduler finds nothing due.
 //
-// Call on a page whose origin already has the database at its current version (any app route
-// has opened it once), then reload so the app runtime reads the rows.
+// Call on a page whose origin already has the database at its current version (an app route such
+// as settings/ has opened it once; the marketing home never opens it), then reload so the app
+// runtime reads the rows.
 import type { Page } from '@playwright/test';
 import { memoArtifactMeta } from '../../../src/lib/features/investor/memo/memo-meta';
 
@@ -75,8 +76,8 @@ export const SEEDED = Object.freeze({
 	watchedZip: '74201',
 	profileName: 'Rowan Seedwell',
 	socialBrief: 'Seeded brief for the Maple Ct open house',
-	memoNotes: 'Area rents rose 12% last year.',
-	memoText: 'Area rents rose 12% last year.'
+	memoNotes: 'Area rents rose 19% last year.',
+	memoText: 'Area rents rose 19% last year.'
 });
 
 /** Fixed row ids the app uses for singleton-style rows (copied from the source modules). */
@@ -413,6 +414,10 @@ export async function seedAllBackupTables(
 	);
 	await page.evaluate(
 		async ({ rows, stores }) => {
+			// Opening a missing database would create an empty version 1 that the app then upgrades.
+			if (!(await indexedDB.databases()).some((x) => x.name === 'tran')) {
+				throw new Error('seed-all: open an app route first; the tran database does not exist');
+			}
 			const db = await new Promise<IDBDatabase>((resolve, reject) => {
 				const req = indexedDB.open('tran');
 				req.onsuccess = () => resolve(req.result);
