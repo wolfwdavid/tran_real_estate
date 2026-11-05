@@ -26,6 +26,8 @@ const SAMPLE_SENTENCE =
 const NO_MEMO = 'This printout has no memo, only the analysis. To include one, draft a memo first.';
 const BLOCKED = 'This memo has flags to fix before printing';
 const PLANTED = 'Monthly cash flow is $184. Expect 12% growth next year.';
+const NOTES_ONLY_NOTES = 'Area rents rose 12% last year.';
+const NOTES_ONLY = `Monthly cash flow is $184. ${NOTES_ONLY_NOTES}`;
 
 const printButton = (page: Page) => page.getByRole('button', { name: 'Print or save as PDF' });
 const sheet = (page: Page) => page.locator('article.print-sheet');
@@ -164,5 +166,36 @@ test('blocked: a memo with a Must fix number is never printed', async ({ page })
 	await expect(sheet(page)).toHaveCount(0);
 	await expect(printButton(page)).toHaveCount(0);
 	await expectNoAxeViolations(page, 'print view, memo blocked');
+	expect(await printCount(page)).toBe(0);
+});
+
+// DEBT-03 (07-HUMAN-UAT S2): 12% is only in the user's notes. The memo page allows it, and the
+// print page must too (the notes numerals ride in the artifact meta); without them this shows BLOCKED.
+test('notes-only: a number present only in the notes prints', async ({ page }) => {
+	test.setTimeout(120_000);
+	await mockAnthropicText(page, NOTES_ONLY);
+	await useMockedAnthropicKey(page);
+	await stubPrint(page);
+	await saveSampleDealAndOpenMemo(page);
+	await page.getByLabel('Your notes for the memo (optional)').fill(NOTES_ONLY_NOTES);
+	await draftMemo(page);
+	await expect(
+		page.getByRole('region', { name: 'Memo draft' }).getByText('Number check passed')
+	).toBeVisible();
+
+	const dealId = new URL(page.url()).searchParams.get('id') ?? '';
+	const artifactId =
+		(await page.locator('[data-memo-print]').getAttribute('data-artifact-id')) ?? '';
+	expect(dealId).not.toBe('');
+	expect(artifactId).not.toBe('');
+
+	await page.goto(
+		`print/memo/?id=${encodeURIComponent(dealId)}&memo=${encodeURIComponent(artifactId)}`
+	);
+	await expect(page.locator('[data-ready]')).toBeAttached();
+	await expect(page.getByRole('heading', { name: BLOCKED })).toHaveCount(0);
+	expect(await sheet(page).count()).toBeGreaterThanOrEqual(1);
+	await expect(sheet(page).getByText('Area rents rose 12% last year.')).toBeVisible();
+	await expectNoAxeViolations(page, 'print view, memo with notes-only numbers');
 	expect(await printCount(page)).toBe(0);
 });
