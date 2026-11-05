@@ -37,7 +37,11 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 const MARKETS = '/v1/markets';
 const SALE = '/v1/listings/sale';
 const PLANTED = ' Median rent is $9,999.';
-const NOTES_REASON = /Fix the \d+ items marked Must fix in the market notes/;
+const NOTES_REASON = /Fix the \d+ items? marked Must fix in the market notes/;
+const REVIEW_REASON =
+	'Review the flagged phrases in the market notes and check the box in step 3 to continue.';
+const ACK_LABEL =
+	"I've reviewed the flagged phrases. They describe the property, not who should live there.";
 
 const builder = (page: Page) => page.locator('[data-snapshot-builder]');
 const stepSection = (page: Page, n: number) => page.locator(`[data-step="${n}"]`);
@@ -195,12 +199,22 @@ test('keyless: sample ZIP, notes with a planted number gate Save, then save open
 	await notesBox.fill(`${cleanNotes} Walking distance to church.`);
 	await activateGated(page);
 	await expect(saveReason(page)).toBeFocused();
-	// Match a stable substring only: for a Review-only gate the current wording reads "Fix the 0
-	// items marked Must fix..." (a tracked follow-up), so do not lock it in here.
-	await expect(saveReason(page)).toContainText('in the market notes');
+	await expect(saveReason(page)).toHaveText(REVIEW_REASON);
 	await expect(page).toHaveURL(/\/agent\/studio\/snapshot\/$/);
-	await notesBox.fill(cleanNotes);
+
+	// Review-only and unacknowledged after editing: Save stays refused until the step 3 box.
 	await notesPanel(page).getByRole('button', { name: 'Done editing' }).click();
+	await expect(saveButton(page)).toHaveAttribute('aria-disabled', 'true');
+	await expect(saveReason(page)).toHaveText(REVIEW_REASON);
+	await activateGated(page);
+	await expect(saveReason(page)).toBeFocused();
+	await expect(page).toHaveURL(/\/agent\/studio\/snapshot\/$/);
+	await notesPanel(page).getByRole('checkbox', { name: ACK_LABEL }).check();
+	await expect(saveButton(page)).not.toHaveAttribute('aria-disabled', 'true');
+	await expect(saveReason(page)).toHaveCount(0);
+
+	// Removing the phrase afterwards keeps Save open.
+	await editNotes(page, () => cleanNotes);
 	await expect(saveButton(page)).not.toHaveAttribute('aria-disabled', 'true');
 
 	await page.setViewportSize({ width: 375, height: 812 });
