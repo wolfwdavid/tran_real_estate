@@ -12,7 +12,7 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { FORMS_COPY } from '$lib/content/forms';
+	import { FEEDBACK_COPY } from '$lib/content/forms-feedback';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
@@ -35,7 +35,7 @@
 
 	let { accessKey, contactEmail }: Props = $props();
 
-	const copy = FORMS_COPY.feedback;
+	const copy = FEEDBACK_COPY;
 	const mode = $derived(formMode(accessKey ?? '', contactEmail ?? ''));
 
 	type MessageError = 'empty' | 'keyFound';

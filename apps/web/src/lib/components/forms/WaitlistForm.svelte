@@ -10,7 +10,7 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { FORMS_COPY } from '$lib/content/forms';
+	import { WAITLIST_COPY } from '$lib/content/forms-waitlist';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
@@ -33,7 +33,7 @@
 
 	let { portal, accessKey, contactEmail }: Props = $props();
 
-	const copy = FORMS_COPY.waitlist;
+	const copy = WAITLIST_COPY;
 	const mode = $derived(formMode(accessKey ?? '', contactEmail ?? ''));
 	const portalName = $derived(PORTAL_NAMES[portal]);
 	const inputId = $derived(`waitlist-email-${portal}`);

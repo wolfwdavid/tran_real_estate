@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AudiencePage from '$lib/components/marketing/AudiencePage.svelte';
-	import { audiences } from '$lib/content/audiences';
+	import { renterAudience } from '$lib/content/audiences';
 </script>
 
-<AudiencePage audience={audiences.renter} />
+<AudiencePage audience={renterAudience} />
