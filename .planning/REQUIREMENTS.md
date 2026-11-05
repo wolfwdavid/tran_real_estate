@@ -39,7 +39,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 - [x] **DEBT-06**: `cn()` and the `tv()` config use a tailwind-merge extended with the custom font-size class group so `text-label` survives merging; a unit test asserts `cn('text-label text-muted-foreground')` keeps both, a real-Chromium browser test reads the computed font-size on Badge and Button, and axe stays green across the copied-in primitives (04-14 deferred)
 - [ ] **DEBT-07**: The saved-search scheduler requests the `tran-alerts` lock with a bounded wait (abort signal, about ten seconds) instead of `ifAvailable`, recomputes due searches inside the lock, updates the two-tab tests, mutation-tests the concurrency guard, and `renter-saved.spec.ts` is green under `--repeat-each 10` with CPU pressure (10-23 open race, owner chose bounded wait)
 - [x] **DEBT-08**: `scripts/serve-pages.mjs` matches the measured GitHub Pages dotfile behaviour (probed 2026-11-05: `/.nojekyll` 200, a missing dotfile 404, a dot-directory path 404), pinned case by case by `scripts/serve-pages.test.ts`, so local E2E and smoke see what the live origin serves (re-scoped 2026-11-05 per 14 D-05: the live origin serves `/.nojekyll` with 200, so "404 for dotfiles" was the wrong premise)
-- [ ] **DEBT-09**: `/feedback/` and the three `/for-*/` pages ship under the 60 KB gzipped JS budget (plain form controls, lazy-loaded validation) and the budget becomes a hard gate for them in the launch audit (10-HUMAN-UAT 8, owner chose trim)
+- [x] **DEBT-09**: `/feedback/` and the three `/for-*/` pages ship under the 60 KB gzipped JS budget (plain form controls, lazy-loaded validation) and the budget becomes a hard gate for them in the launch audit (10-HUMAN-UAT 8, owner chose trim)
 
 ### Deterministic tests (TEST)
 
@@ -137,7 +137,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | DEBT-06 | Phase 14 | Complete |
 | DEBT-07 | Phase 14 | Pending |
 | DEBT-08 | Phase 14 | Complete |
-| DEBT-09 | Phase 14 | Pending |
+| DEBT-09 | Phase 14 | Complete |
 | TEST-01 | Phase 15 | Pending |
 | TEST-02 | Phase 15 | Pending |
 | TEST-03 | Phase 15 | Pending |
