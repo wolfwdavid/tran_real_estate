@@ -33,7 +33,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { targetEnv } from './lib/build-targets.mjs';
 
-const web = path.resolve(import.meta.dirname, '../apps/web');
+// SERVE_PAGES_WEB_DIR: test-only override (scripts/serve-pages.test.ts); unset in E2E and smoke.
+const web = path.resolve(
+	process.env.SERVE_PAGES_WEB_DIR ?? path.join(import.meta.dirname, '../apps/web')
+);
 const types = {
 	'.html': 'text/html; charset=utf-8',
 	'.js': 'text/javascript',
