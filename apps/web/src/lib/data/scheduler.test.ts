@@ -269,18 +269,111 @@ describe('two tabs', () => {
 		expect(await browserLock().run(async () => 8)).toBe(8);
 	});
 
-	it('browserLock asks navigator.locks for tran-alerts with ifAvailable', async () => {
+	it('browserLock asks navigator.locks for tran-alerts with a bounded-wait signal', async () => {
 		const request = vi.fn(
-			async (_n: string, _o: LockOptions, cb: (lock: Lock | null) => Promise<unknown>) => cb(null)
+			async (_n: string, _o: LockOptions, cb: (lock: Lock | null) => Promise<unknown>) =>
+				cb({ name: 'tran-alerts', mode: 'exclusive' } as Lock)
 		);
 		vi.stubGlobal('navigator', { locks: { request } });
 		try {
-			expect(await browserLock().run(async () => 9)).toBeNull();
+			expect(await browserLock().run(async () => 9)).toBe(9);
 			expect(request.mock.calls[0]![0]).toBe('tran-alerts');
-			expect(request.mock.calls[0]![1]).toEqual({ ifAvailable: true });
+			const options = request.mock.calls[0]![1];
+			expect(options.signal).toBeInstanceOf(AbortSignal);
+			expect('ifAvailable' in options).toBe(false);
 		} finally {
 			vi.unstubAllGlobals();
 		}
+	});
+
+	it("a lock still held when the wait times out skips as 'busy' with 0 fetches", { timeout: 2_000 }, async () => {
+		// Never grants: rejects with the signal's reason once the wait expires, as navigator.locks does.
+		const request = vi.fn(
+			(_n: string, o: LockOptions, _cb: (lock: Lock | null) => Promise<unknown>) =>
+				new Promise((_resolve, reject) => {
+					o.signal!.addEventListener('abort', () => reject(o.signal!.reason), { once: true });
+				})
+		);
+		vi.stubGlobal('navigator', { locks: { request } });
+		try {
+			const fn = vi.fn(async () => 1);
+			expect(await browserLock(20).run(fn)).toBeNull();
+			expect(fn).not.toHaveBeenCalled();
+
+			const w = await world();
+			const res = await w.run({ lock: browserLock(20) });
+			expect(res).toMatchObject({ skipped: 'busy', ran: [], due: 0 });
+			expect(w.rc.spy.calls).toHaveLength(0);
+			expect(w.confirm).not.toHaveBeenCalled();
+		} finally {
+			vi.unstubAllGlobals();
+		}
+	});
+
+	it('an error thrown by the pass while holding the lock propagates (it is not a busy skip)', async () => {
+		const request = vi.fn(
+			async (_n: string, _o: LockOptions, cb: (lock: Lock | null) => Promise<unknown>) =>
+				cb({ name: 'tran-alerts', mode: 'exclusive' } as Lock)
+		);
+		vi.stubGlobal('navigator', { locks: { request } });
+		try {
+			await expect(
+				browserLock(20).run(async () => {
+					throw new Error('boom');
+				})
+			).rejects.toThrow('boom');
+		} finally {
+			vi.unstubAllGlobals();
+		}
+	});
+
+	it('real lock: a tab opening while another holds tran-alerts waits, then runs its due searches', async () => {
+		const { b } = await twoTabs();
+		let releaseA!: () => void;
+		const held = new Promise<void>((resolve) => (releaseA = resolve));
+		let granted!: () => void;
+		const isHeld = new Promise<void>((resolve) => (granted = resolve));
+		const tabA = navigator.locks.request('tran-alerts', async () => {
+			granted();
+			await held;
+		});
+		await isHeld;
+		const timer = setTimeout(() => releaseA(), 200);
+		try {
+			const rb = await b.run({ lock: browserLock(5_000) });
+			expect(rb.skipped).toBeNull();
+			expect(rb.ran).toHaveLength(5);
+			expect(b.rc.spy.calls).toHaveLength(5);
+		} finally {
+			clearTimeout(timer);
+			releaseA();
+			await tabA;
+		}
+	});
+
+	it('real lock: two runners together make exactly 5 fetches; the second recomputes due inside the lock', async () => {
+		const { a, b } = await twoTabs();
+		const order: string[] = [];
+		// The pass reads repo.list() first thing inside the lock: record which tab got there first.
+		const tag = (tab: string, repo: SavedSearchRepo): SavedSearchRepo => ({
+			...repo,
+			list: () => {
+				order.push(tab);
+				return repo.list();
+			}
+		});
+		const [ra, rb] = await Promise.all([
+			a.run({ lock: browserLock(5_000), repo: tag('a', a.repo) }),
+			b.run({ lock: browserLock(5_000), repo: tag('b', b.repo) })
+		]);
+		expect(a.rc.spy.calls.length + b.rc.spy.calls.length).toBe(5);
+		expect(ra.ran.length + rb.ran.length).toBe(5);
+		expect(order).toHaveLength(2);
+		const [first, second] = order[0] === 'a' ? [ra, rb] : [rb, ra];
+		expect(first).toMatchObject({ due: 5, skipped: null });
+		expect(first.ran).toHaveLength(5);
+		expect(second).toMatchObject({ due: 0, skipped: null, ran: [] });
+		expect(await lastRunAts(a.repo)).toEqual(Array(5).fill(T0));
 	});
 });
 
