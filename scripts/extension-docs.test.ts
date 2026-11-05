@@ -4,6 +4,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
+import { resolveSiteUrl } from '../apps/web/src/lib/site-config.js';
 
 const ROOT = join(import.meta.dirname, '..');
 const INSTALL = join(ROOT, 'docs', 'EXTENSION-INSTALL.md');
@@ -26,10 +27,10 @@ const collapse = (s: string): string => s.replace(/\s+/g, ' ');
 const BANNED = /\b(block|blocks|blocker|ad-free|remove|removes|official)\b|Zillow['’]s/i;
 const OTHER_BROWSERS = /\b(chrome|chromium|firefox|brave|safari|opera)\b/i;
 const NOT_AFFILIATED = 'Not affiliated with or endorsed by Zillow Group.';
-// Phase 13: the live origin is the owner's project site. Phase 14 DEBT-03 switches this literal to
-// the shared site constant; until then the oracle pins it and rejects the retired org host.
-const PRIVACY_URL =
-	'https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension';
+// The docs and the Edge listing carry the live project-site URL. CI runs test:unit with no deploy
+// env, so the live env is explicit here (DEBT-04, Pitfall 5); RETIRED_HOST still rejects the org host.
+const LIVE_SITE_ENV = { BASE_PATH: '/tran_real_estate' };
+const PRIVACY_URL = `${resolveSiteUrl(LIVE_SITE_ENV)}/legal/privacy/#browser-extension`;
 const RETIRED_HOST = /tranrealestate/;
 
 // Body of a `## <heading>` section: everything up to the next `## ` heading.

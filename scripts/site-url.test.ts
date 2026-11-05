@@ -1,5 +1,5 @@
-// LIVE-08 / LIVE-03 proof. Overlap: Phase 14 item 5.4 (origin parity) is satisfied for TRAN_ORIGIN
-// by group (c); Phase 14 keeps only the docs/listing literal checks.
+// LIVE-08 / LIVE-03 proof. Origin parity of the evaluated extension module lives in
+// scripts/origin-parity.test.ts (Phase 14 DEBT-04); group (c) here pins the source shape.
 //
 // "Changing PUBLIC_SITE_URL alone changes canonical URLs, the sitemap, OG absolute URLs and the
 // extension's TRAN_SITE_URL / PRIVACY_URL." This file proves it without building anything (no builds

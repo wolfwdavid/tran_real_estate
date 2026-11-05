@@ -73,7 +73,7 @@ const goldenFiles = (): Record<string, string | Buffer> => ({
 		'const XH = "http://www.w3.org/1999/xhtml";',
 		'const MM = "http://www.w3.org/1998/Math/MathML";',
 		'const E = "https://svelte.dev/e/each_key_duplicate";',
-		`const P = "${DEFAULT_SITE_ORIGIN}/legal/privacy/#browser-extension";`,
+		`const P = "${resolveSiteUrl()}/legal/privacy/#browser-extension";`,
 		'export { NS, XL, XH, MM, E, P };'
 	].join('\n'),
 	'content-scripts/zillow.js': 'document.querySelectorAll("article").forEach((a) => a.remove);',
@@ -411,7 +411,7 @@ describe('assert-extension oracle: planted bundle faults', () => {
 		'http://www.w3.org/1999/xhtml',
 		'http://www.w3.org/1998/Math/MathML',
 		'https://svelte.dev/e/each_key_duplicate',
-		`${DEFAULT_SITE_ORIGIN}/legal/privacy/#browser-extension`,
+		`${resolveSiteUrl()}/legal/privacy/#browser-extension`,
 		'https://github.com/wxt-dev/wxt/issues/371',
 		'https://wxt.dev/guide/go-further/testing.html'
 	])('allowlisted URL %s is not a problem', (url) => {
