@@ -45,7 +45,10 @@ const R = {
 	noSection: 'Choose at least one section with market data.',
 	notes: 'Draft the market notes, or turn them off in step 2.',
 	fix: (n: number) =>
-		`Fix the ${n} items marked Must fix in the market notes, and review any others.`,
+		n === 1
+			? 'Fix the 1 item marked Must fix in the market notes, and review any others.'
+			: `Fix the ${n} items marked Must fix in the market notes, and review any others.`,
+	review: 'Review the flagged phrases in the market notes and check the box in step 3 to continue.',
 	profile: 'Add your full name, license number in your profile so your disclosure can be added.'
 };
 
@@ -57,7 +60,9 @@ describe('saveGateReason', () => {
 		['notes not drafted', { notesStatus: 'none' }, R.notes],
 		['notes streaming', { notesStatus: 'streaming' }, R.notes],
 		['must-fix findings', { mustFix: 2 }, R.fix(2)],
-		['unacknowledged review only', { unackedReview: true }, R.fix(0)],
+		['one must-fix', { mustFix: 1 }, R.fix(1)],
+		['must-fix wins over review', { mustFix: 1, unackedReview: true }, R.fix(1)],
+		['unacknowledged review only', { unackedReview: true }, R.review],
 		[
 			'live data, incomplete profile',
 			{ profileMissing: ['full name', 'license number'] },
@@ -67,6 +72,29 @@ describe('saveGateReason', () => {
 		['notes off: draft state ignored', { notesOn: false, notesStatus: 'none', mustFix: 3 }, null]
 	])('%s', (_name, patch, expected) => {
 		expect(saveGateReason({ ...CLEAR, ...patch })).toBe(expected);
+	});
+
+	test('the spec-owned strings (14-UI-SPEC DEBT-02 4a/4b/4c)', () => {
+		expect(R.fix(1)).toBe(
+			'Fix the 1 item marked Must fix in the market notes, and review any others.'
+		);
+		expect(R.fix(2)).toBe(
+			'Fix the 2 items marked Must fix in the market notes, and review any others.'
+		);
+		expect(R.review).toBe(
+			'Review the flagged phrases in the market notes and check the box in step 3 to continue.'
+		);
+	});
+
+	test('never "Fix the 0"', () => {
+		for (let n = 0; n <= 5; n++) {
+			for (const unackedReview of [true, false]) {
+				const reason = saveGateReason({ ...CLEAR, mustFix: n, unackedReview });
+				expect(reason ?? '').not.toContain('Fix the 0');
+				if (n === 0) expect(reason).toBe(unackedReview ? R.review : null);
+				else expect(reason).toBe(R.fix(n));
+			}
+		}
 	});
 
 	test('priority order holds when several reasons apply', () => {
