@@ -11,16 +11,12 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
-	import { findKeyMaterial } from '@tran/core/backup';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { FORMS_COPY } from '$lib/content/forms';
-	import { submitOwnerForm } from '$lib/leads/owner-forms';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
+	import { GHOST_BUTTON_CLASS, PRIMARY_BUTTON_CLASS } from './form-classes';
 	import { MAX_FEEDBACK, counterText, crossedThreshold, topicFromSearch } from './feedback-counter';
 	import {
 		TOPICS,
@@ -73,6 +69,33 @@
 		ready = true;
 	});
 
+	// DEBT-09: the key scan and the sender pull zod, so they load on demand instead of in the
+	// page's initial JS. A rejected import clears its cache so the next submit retries it.
+	const importScan = () => import('@tran/core/backup');
+	const importSender = () => import('$lib/leads/owner-forms');
+	let scanP: ReturnType<typeof importScan> | null = null;
+	const loadScan = () =>
+		(scanP ??= importScan().catch((e) => {
+			scanP = null;
+			throw e;
+		}));
+	let senderP: ReturnType<typeof importSender> | null = null;
+	const loadSender = () =>
+		(senderP ??= importSender().catch((e) => {
+			senderP = null;
+			throw e;
+		}));
+
+	// The first focusin or pointerdown inside the form starts both imports (once per mount), so
+	// the chunks are usually cached by the time the visitor submits.
+	let warmed = false;
+	function warmUp() {
+		if (warmed) return;
+		warmed = true;
+		loadScan().catch(() => {});
+		loadSender().catch(() => {});
+	}
+
 	function oninput(event: Event) {
 		// Read the element, not `message`: the bound value may update after this handler runs.
 		const len = (event.currentTarget as HTMLTextAreaElement).value.length;
@@ -87,7 +110,7 @@
 	}
 
 	function focusTopic() {
-		topicEl?.querySelector<HTMLElement>('[data-state="checked"]')?.focus();
+		topicEl?.querySelector<HTMLElement>('input[name="feedback-topic"]:checked')?.focus();
 	}
 
 	async function showSuccess() {
@@ -123,23 +146,46 @@
 		if (messageError !== null) return messageEl?.focus();
 		if (emailError !== null) return emailEl?.focus();
 
-		// A key-shaped string in either field blocks the send. Nothing is requested.
-		if (findKeyMaterial(JSON.stringify({ message, email }), []).length > 0) {
-			messageError = 'keyFound';
-			messageEl?.focus();
-			return;
-		}
-
-		const g = gateSubmit({ honeypot, mountedAt, now: Date.now() });
-		if (g === 'bot') return showSuccess();
-		if (g === 'too-fast') {
-			tooFast = true;
-			announce(copy.tooFast);
-			return;
-		}
-
+		// Busy from here until the request settles, including any wait on the lazy chunks.
 		sending = true;
-		const r = await submitOwnerForm(feedbackBody({ key: accessKey ?? '', topic, message, email }));
+		let send: Awaited<ReturnType<typeof importSender>>['submitOwnerForm'];
+		try {
+			// A key-shaped string in either field blocks the send. Nothing is requested.
+			const { findKeyMaterial } = await loadScan();
+			if (findKeyMaterial(JSON.stringify({ message, email }), []).length > 0) {
+				sending = false;
+				messageError = 'keyFound';
+				await tick();
+				messageEl?.focus();
+				return;
+			}
+
+			const g = gateSubmit({ honeypot, mountedAt, now: Date.now() });
+			if (g === 'bot') {
+				sending = false;
+				return showSuccess();
+			}
+			if (g === 'too-fast') {
+				sending = false;
+				tooFast = true;
+				announce(copy.tooFast);
+				await tick();
+				buttonEl?.focus();
+				return;
+			}
+
+			send = (await loadSender()).submitOwnerForm;
+		} catch {
+			// Fail closed: a chunk that did not load sends nothing and reads as a network failure.
+			sending = false;
+			failure = copy.networkError;
+			announce(`${failure.title}. ${failure.body}`);
+			await tick();
+			buttonEl?.focus();
+			return;
+		}
+
+		const r = await send(feedbackBody({ key: accessKey ?? '', topic, message, email }));
 		sending = false;
 		if (r.ok) return showSuccess();
 
@@ -166,7 +212,7 @@
 	{:else if sent}
 		<FormSuccess title={copy.successTitle} body={copy.successBody} bind:titleEl={successTitle}>
 			<div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
-				<Button variant="ghost" onclick={sendMore}>{copy.sendMore}</Button>
+				<button type="button" class={GHOST_BUTTON_CLASS} onclick={sendMore}>{copy.sendMore}</button>
 				<a
 					href={resolve('/')}
 					class="text-primary underline underline-offset-3 hover:text-primary-hover"
@@ -178,6 +224,8 @@
 		<form
 			novalidate
 			onsubmit={submit}
+			onfocusin={warmUp}
+			onpointerdown={warmUp}
 			data-ready={ready ? '' : undefined}
 			aria-busy={sending}
 			aria-label={copy.h1}
@@ -200,28 +248,31 @@
 
 			<fieldset bind:this={topicEl} disabled={sending}>
 				<legend id="feedback-topic-legend" class="font-semibold">{copy.legend}</legend>
-				<RadioGroup.Root
-					bind:value={topic}
-					aria-labelledby="feedback-topic-legend"
-					class="mt-2 gap-0"
-				>
+				<div class="mt-2 grid w-full">
 					{#each TOPICS as [id, label] (id)}
 						<label
 							for="feedback-topic-{id}"
 							class="flex min-h-11 cursor-pointer items-center gap-3 text-body"
 						>
-							<RadioGroup.Item value={id} id="feedback-topic-{id}" />
+							<input
+								type="radio"
+								name="feedback-topic"
+								value={id}
+								id="feedback-topic-{id}"
+								bind:group={topic}
+								class="size-5 shrink-0 cursor-pointer accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+							/>
 							{label}
 						</label>
 					{/each}
-				</RadioGroup.Root>
+				</div>
 			</fieldset>
 
 			<div class="grid gap-2">
 				<label for="feedback-message" class="font-semibold">{copy.messageLabel}</label>
-				<Textarea
+				<textarea
 					id="feedback-message"
-					bind:ref={messageEl}
+					bind:this={messageEl}
 					bind:value={message}
 					{oninput}
 					required
@@ -229,8 +280,8 @@
 					disabled={sending}
 					aria-invalid={messageError !== null ? 'true' : undefined}
 					aria-describedby="feedback-message-helper feedback-message-counter feedback-message-error"
-					class="min-h-40"
-				/>
+					class="block min-h-40 w-full min-w-0 resize-y rounded-md border border-input bg-card p-4 text-base leading-[1.6] text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted-foreground aria-invalid:border-destructive"
+				></textarea>
 				<p id="feedback-message-helper" class={helper}>{copy.messageHelper}</p>
 				<p id="feedback-message-counter" aria-live="off" class="{helper} tabular-nums">
 					{counterText(message.length)}
@@ -273,7 +324,12 @@
 			</div>
 
 			<div>
-				<Button type="submit" bind:ref={buttonEl} disabled={sending} class="w-full sm:w-auto">
+				<button
+					type="submit"
+					bind:this={buttonEl}
+					disabled={sending}
+					class="{PRIMARY_BUTTON_CLASS} w-full sm:w-auto"
+				>
 					<span class="grid">
 						<span
 							class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
@@ -292,7 +348,7 @@
 							/>{copy.sending}
 						</span>
 					</span>
-				</Button>
+				</button>
 			</div>
 
 			<!-- Spam trap: display:none via a class (CSP forbids inline styles), so it is out of the

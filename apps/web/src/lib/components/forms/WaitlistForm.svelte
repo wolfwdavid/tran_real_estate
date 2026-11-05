@@ -10,12 +10,11 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
 	import { FORMS_COPY } from '$lib/content/forms';
-	import { submitOwnerForm } from '$lib/leads/owner-forms';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
+	import { PRIMARY_BUTTON_CLASS } from './form-classes';
 	import {
 		PORTAL_NAMES,
 		formMode,
@@ -63,6 +62,24 @@
 		ready = true;
 	});
 
+	// DEBT-09: the sender pulls zod (lead-block), so it loads on demand instead of in the page's
+	// initial JS. A rejected import clears the cache so the next submit retries it.
+	const importSender = () => import('$lib/leads/owner-forms');
+	let senderP: ReturnType<typeof importSender> | null = null;
+	const loadSender = () =>
+		(senderP ??= importSender().catch((e) => {
+			senderP = null;
+			throw e;
+		}));
+
+	// The first focusin or pointerdown inside the form starts the import (once per mount).
+	let warmed = false;
+	function warmUp() {
+		if (warmed) return;
+		warmed = true;
+		loadSender().catch(() => {});
+	}
+
 	function onblur() {
 		// Validate on blur only once something was typed, so tabbing past is not an error.
 		if (email.trim() !== '' || fieldError !== null) fieldError = validateEmail(email, true);
@@ -95,8 +112,21 @@
 			return;
 		}
 
+		// Busy from here until the request settles, including any wait on the lazy chunk.
 		sending = true;
-		const r = await submitOwnerForm(waitlistBody({ key: accessKey ?? '', portal, email }));
+		let send: Awaited<ReturnType<typeof importSender>>['submitOwnerForm'];
+		try {
+			send = (await loadSender()).submitOwnerForm;
+		} catch {
+			// Fail closed: a chunk that did not load sends nothing and reads as a network failure.
+			sending = false;
+			failure = copy.networkError;
+			announce(`${failure.title}. ${failure.body}`);
+			await tick();
+			buttonEl?.focus();
+			return;
+		}
+		const r = await send(waitlistBody({ key: accessKey ?? '', portal, email }));
 		sending = false;
 		if (r.ok) return showSuccess();
 
@@ -138,6 +168,8 @@
 					<form
 						novalidate
 						onsubmit={submit}
+						onfocusin={warmUp}
+						onpointerdown={warmUp}
 						data-ready={ready ? '' : undefined}
 						aria-busy={sending}
 						aria-label={copy.heading(portal)}
@@ -179,7 +211,12 @@
 								aria-describedby={`${privacyId} ${errorId}`}
 								class="h-12 w-full min-w-0 flex-1 rounded-md border border-input bg-card px-4 text-body text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted-foreground aria-invalid:border-destructive"
 							/>
-							<Button type="submit" bind:ref={buttonEl} disabled={sending} class="w-full sm:w-auto">
+							<button
+								type="submit"
+								bind:this={buttonEl}
+								disabled={sending}
+								class="{PRIMARY_BUTTON_CLASS} w-full sm:w-auto"
+							>
 								<span class="grid">
 									<span
 										class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
@@ -198,7 +235,7 @@
 										/>{copy.sending}
 									</span>
 								</span>
-							</Button>
+							</button>
 						</div>
 						<p id={privacyId} class="text-label text-muted-foreground">{copy.privacy(portal)}</p>
 						<p id={errorId} class="flex items-center gap-1 text-label text-destructive">
