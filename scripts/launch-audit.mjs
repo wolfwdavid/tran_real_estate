@@ -152,7 +152,11 @@ export const PERF_ROUTES = [
 	'tools/affordability/index.html',
 	'tools/cap-rate/index.html',
 	'tools/cash-on-cash/index.html',
-	'tools/dscr/index.html'
+	'tools/dscr/index.html',
+	'feedback/index.html',
+	'for-agents/index.html',
+	'for-investors/index.html',
+	'for-renters/index.html'
 ];
 const CLS_LIMIT = 0.1;
 
@@ -160,24 +164,13 @@ const CLS_LIMIT = 0.1;
 export const CONFIGURED_BUILD = 'apps/web/build-configured';
 
 /**
- * Report-only pages (landing, audience, legal, feedback) are measured, not gated (UI-SPEC). Any of
- * them over the tool budget is called out with its measured size, the cause found when it was
- * built, and the recommended fix; keeping or trimming it is an owner decision (Human UAT).
+ * Report-only pages (the landing and legal pages) are measured, not gated (UI-SPEC). Any of them
+ * over the tool budget is called out with its measured size, the cause found when it was built, and
+ * the recommended fix; keeping or trimming it is an owner decision (Human UAT). The audience and
+ * feedback pages are HARD-gated since Phase 14 (DEBT-09), so their notes are gone; add an entry
+ * `{ match, cause, fix }` here when a report-only page goes over and its cause is known.
  */
-export const REPORT_ONLY_NOTES = [
-	{
-		match: /^feedback\//,
-		cause:
-			'Measured 10-23 (build/, gzip -9): the form uses the shadcn Button, which brings tailwind-variants + tailwind-merge (13.0 + 8.6 KB), plus zod for validation (9.2 KB), the bits-ui RadioGroup runtime for the topic picker (about 3 KB) and the shared form modules. The tool pages avoid all of these.',
-		fix: 'Use plain <button> and native <input type="radio"> elements with static classes (as the tool pages do) and load zod with a dynamic import on submit; about 34 KB of the overage is in those chunks.'
-	},
-	{
-		match: /^for-[^/]+\//,
-		cause:
-			'Measured 10-23 (build/, gzip -9): the waitlist form ships in the initial JS with the shadcn Button (tailwind-variants + tailwind-merge, 13.0 + 8.6 KB) and zod (9.2 KB), plus its own form chunks (about 8 KB).',
-		fix: 'Use a plain <button> with static classes and load zod (or the whole form) with a dynamic import on first focus or when the form scrolls into view, keeping a same-size placeholder so CLS stays below 0.1; about 31 KB of the overage is in those chunks.'
-	}
-];
+export const REPORT_ONLY_NOTES = [];
 
 const AXE_KEYLESS = /^axe reports no WCAG A\/AA violations on ("(?:[^"\\]|\\.)*")$/;
 const AXE_KEYED = /^axe \(keyed\) reports no WCAG A\/AA violations on ("(?:[^"\\]|\\.)*")$/;
@@ -786,7 +779,7 @@ export function renderAudit(data) {
 			perfRows(data).map((r) => [r.route, r.js, r.budget, r.css, r.cls, r.status])
 		),
 		'',
-		`Initial JS at gzip -9 from the built HTML (\`apps/web/build\`); tools pages are gated at ${BUDGET_BYTES / 1024} KB and the landing is reported against the same budget. CLS from \`${CLS_REPORT}\` (every row must be below ${CLS_LIMIT}).`,
+		`Initial JS at gzip -9 from the built HTML (\`apps/web/build\`); tool, audience and feedback pages are gated at ${BUDGET_BYTES / 1024} KB and the landing is reported against the same budget. CLS from \`${CLS_REPORT}\` (every row must be below ${CLS_LIMIT}).`,
 		''
 	);
 	if (data.cls) {
@@ -800,11 +793,11 @@ export function renderAudit(data) {
 	if (data.budget?.errors?.length) out.push(...data.budget.errors.map((e) => `- ${e}`), '');
 	const configured = configuredBudgetRows(data);
 	out.push(
-		`Analytics-on build (\`${CONFIGURED_BUILD}\`, what production ships when the owner sets analytics), gated tool pages:`,
+		`Analytics-on build (\`${CONFIGURED_BUILD}\`, what production ships when the owner sets analytics), gated tool, audience and feedback pages:`,
 		''
 	);
 	if (configured.length === 0)
-		out.push(`No gated tool pages measured in ${CONFIGURED_BUILD} (${FAIL}).`, '');
+		out.push(`No gated pages measured in ${CONFIGURED_BUILD} (${FAIL}).`, '');
 	else
 		out.push(
 			...table(

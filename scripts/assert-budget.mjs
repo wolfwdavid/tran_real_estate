@@ -6,21 +6,22 @@
 // Each file is gzipped at level 9 and counted once per route. A reference that does not resolve to a
 // built file is an error, never a silent 0.
 //
-// Tool pages (tools/ and tools/<slug>/) are gated at 60 KB gz; the landing, audience, legal and
-// feedback pages are measured and reported only (UI-SPEC). Every other route is skipped.
+// Tool pages (tools/ and tools/<slug>/), the three audience pages (for-*/) and feedback/ are gated at
+// 60 KB gz (Phase 14 DEBT-09); the landing and legal pages are measured and reported only (UI-SPEC).
+// Every other route is skipped.
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 
 export const BUDGET_BYTES = 60 * 1024;
-export const HARD = [/^tools\/index\.html$/, /^tools\/[^/]+\/index\.html$/];
-export const REPORT = [
-	/^index\.html$/,
+export const HARD = [
+	/^tools\/index\.html$/,
+	/^tools\/[^/]+\/index\.html$/,
 	/^for-[^/]+\/index\.html$/,
-	/^legal\/[^/]+\/index\.html$/,
 	/^feedback\/index\.html$/
 ];
+export const REPORT = [/^index\.html$/, /^legal\/[^/]+\/index\.html$/];
 
 const walk = (d) =>
 	readdirSync(d).flatMap((f) =>

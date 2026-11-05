@@ -14,6 +14,7 @@ import {
 	evidenceMapErrors,
 	parsePitfallsChecklist,
 	oversizeReportRows,
+	REPORT_ONLY_NOTES,
 	pitfallLabel,
 	renderAudit,
 	uncoveredPitfalls
@@ -222,6 +223,16 @@ const ALL_COMMANDS = Object.fromEntries(
 	COMMAND_GATES.map((g: { id: string }) => [g.id, { exitCode: 0, output: 'ok' }])
 );
 const CALCS = ['affordability', 'cap-rate', 'cash-on-cash', 'dscr'];
+/** The marketing routes gated since Phase 14 (DEBT-09), in PERF_ROUTES order. */
+const MARKETING = ['feedback', 'for-agents', 'for-investors', 'for-renters'];
+const marketingRows = (jsGz: number) =>
+	MARKETING.map((m) => ({
+		route: `${m}/index.html`,
+		jsGz,
+		cssGz: 9000,
+		budget: 61440,
+		result: 'PASS'
+	}));
 const DISCLAIMER_SPECS: PwSpec[] = [
 	{ file: 'disclaimers.spec.ts', title: 'disclaimer: footer' },
 	{ file: 'disclaimers.spec.ts', title: 'disclaimer: deal analyzer' }
@@ -274,13 +285,13 @@ function baseData(over: Record<string, unknown> = {}) {
 					cssGz: 9100,
 					budget: 61440,
 					result: 'PASS'
-				}))
+				})),
+				...marketingRows(60000)
 			],
 			errors: [] as string[]
 		},
 		budgetConfigured: {
 			rows: [
-				{ route: 'feedback/index.html', jsGz: 50000, cssGz: 9000, budget: null, result: 'REPORT' },
 				{ route: 'tools/index.html', jsGz: 55100, cssGz: 9000, budget: 61440, result: 'PASS' },
 				...CALCS.map((c) => ({
 					route: `tools/${c}/index.html`,
@@ -288,7 +299,8 @@ function baseData(over: Record<string, unknown> = {}) {
 					cssGz: 9100,
 					budget: 61440,
 					result: 'PASS'
-				}))
+				})),
+				...marketingRows(60200)
 			],
 			errors: [] as string[]
 		},
@@ -514,13 +526,36 @@ describe('renderAudit', () => {
 		expect(summary(bad)['Dependency audit'].result).toBe('FAIL');
 	});
 
-	test('performance covers the landing, /tools/ and four calculators; a budget miss or missing CLS fails', () => {
+	test('performance covers the landing, /tools/, four calculators and the gated marketing pages; a budget miss or missing CLS fails', () => {
 		const md = renderAudit(baseData());
 		const t = tables(md).find(
 			(t) => t.header.join('|') === 'Route|JS (gz)|Budget|CSS (gz)|CLS (first visit)|Result'
 		);
-		expect(t?.rows.map((r) => r[0])).toEqual(['/', '/tools/', ...CALCS.map((c) => `/tools/${c}/`)]);
+		expect(t?.rows.map((r) => r[0])).toEqual([
+			'/',
+			'/tools/',
+			...CALCS.map((c) => `/tools/${c}/`),
+			...MARKETING.map((m) => `/${m}/`)
+		]);
 		expect(t?.rows[0][4]).toBe('0.020');
+		const renters = t?.rows.find((r) => r[0] === '/for-renters/');
+		expect(renters?.[1]).toBe('58.6 KB');
+		expect(renters?.[5]).toBe('PASS');
+		const overRenters = baseData();
+		const i = overRenters.budget.rows.findIndex(
+			(r: { route: string }) => r.route === 'for-renters/index.html'
+		);
+		overRenters.budget.rows[i] = { ...overRenters.budget.rows[i], jsGz: 62000, result: 'FAIL' };
+		const overT = tables(renderAudit(overRenters)).find(
+			(t) => t.header.join('|') === 'Route|JS (gz)|Budget|CSS (gz)|CLS (first visit)|Result'
+		);
+		expect(overT?.rows.find((r) => r[0] === '/for-renters/')?.[5]).toBe('FAIL');
+		expect(summary(renderAudit(overRenters))['Performance budget'].result).toBe('FAIL');
+		const noFeedback = baseData();
+		noFeedback.budget.rows = noFeedback.budget.rows.filter(
+			(r: { route: string }) => r.route !== 'feedback/index.html'
+		);
+		expect(summary(renderAudit(noFeedback))['Performance budget'].result).toBe('FAIL');
 		const data = baseData();
 		data.budget.rows[3] = { ...data.budget.rows[3], jsGz: 70000, result: 'FAIL' };
 		data.budget.errors = ['tools/cap-rate/index.html: initial JS 68.4 KB gz exceeds the budget'];
@@ -537,8 +572,22 @@ describe('renderAudit', () => {
 	test('the analytics-on build is gated too: a miss, an error or no measurement fails Performance', () => {
 		const md = renderAudit(baseData());
 		const t = tables(md).find((t) => t.header.join('|') === 'Route|JS (gz)|Budget|CSS (gz)|Result');
-		expect(t?.rows.map((r) => r[0])).toEqual(['/tools/', ...CALCS.map((c) => `/tools/${c}/`)]);
+		expect(t?.rows.map((r) => r[0])).toEqual([
+			'/tools/',
+			...CALCS.map((c) => `/tools/${c}/`),
+			...MARKETING.map((m) => `/${m}/`)
+		]);
 		expect(t?.rows.every((r) => r[4] === 'PASS')).toBe(true);
+		const overAgents = baseData();
+		const j = overAgents.budgetConfigured.rows.findIndex(
+			(r: { route: string }) => r.route === 'for-agents/index.html'
+		);
+		overAgents.budgetConfigured.rows[j] = {
+			...overAgents.budgetConfigured.rows[j],
+			jsGz: 61500,
+			result: 'FAIL'
+		};
+		expect(summary(renderAudit(overAgents))['Performance budget'].result).toBe('FAIL');
 		const over = baseData();
 		over.budgetConfigured.rows[2] = {
 			...over.budgetConfigured.rows[2],
@@ -569,13 +618,19 @@ describe('renderAudit', () => {
 		expect(oversizeReportRows(baseData())).toEqual([]);
 		const d = baseData();
 		d.budget.rows.push({
-			route: 'for-renters/index.html',
+			route: 'legal/privacy/index.html',
 			jsGz: 98611,
 			cssGz: 9000,
 			budget: null,
 			result: 'REPORT'
 		});
-		d.budgetConfigured.rows[0] = { ...d.budgetConfigured.rows[0], jsGz: 104960 };
+		d.budgetConfigured.rows.push({
+			route: 'legal/terms/index.html',
+			jsGz: 104960,
+			cssGz: 9000,
+			budget: null,
+			result: 'REPORT'
+		});
 		const rows = oversizeReportRows(d);
 		expect(
 			rows.map((r: { route: string; build: string; js: string; over: string }) => [
@@ -585,11 +640,13 @@ describe('renderAudit', () => {
 				r.over
 			])
 		).toEqual([
-			['/for-renters/', 'apps/web/build', '96.3 KB', '36.3 KB'],
-			['/feedback/', 'apps/web/build-configured', '102.5 KB', '42.5 KB']
+			['/legal/privacy/', 'apps/web/build', '96.3 KB', '36.3 KB'],
+			['/legal/terms/', 'apps/web/build-configured', '102.5 KB', '42.5 KB']
 		]);
+		// The feedback and audience notes left with the HARD flip (DEBT-09); the generic advice remains.
+		expect(REPORT_ONLY_NOTES).toEqual([]);
 		for (const r of rows) {
-			expect(r.cause).not.toBe('Not yet analysed.');
+			expect(r.cause).toBe('Not yet analysed.');
 			expect(r.fix.length).toBeGreaterThan(20);
 		}
 		const md = renderAudit(d);

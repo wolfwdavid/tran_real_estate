@@ -152,17 +152,47 @@ describe('checkBudget', () => {
 		expect(tool?.cssGz).toBe(gz(CSS));
 	});
 
-	test('a landing page over 60 KB is a REPORT row and does not fail', () => {
+	test('an audience page over 60 KB is a HARD FAIL naming the route (DEBT-09)', () => {
+		const files = golden(randomBytes(1024));
+		files['_app/immutable/chunks/audience.js'] = randomBytes(200 * 1024);
+		files['for-renters/index.html'] = page('../', ['_app/immutable/chunks/audience.js']);
+		const { rows, errors } = checkBudget(build(files));
+		expect(errors).toHaveLength(1);
+		expect(errors[0]).toMatch(
+			/^for-renters\/index\.html: initial JS 2\d\d\.\d KB gz exceeds the 60 KB budget/
+		);
+		expect(rows.find((r) => r.route === 'for-renters/index.html')).toMatchObject({
+			budget: BUDGET_BYTES,
+			result: 'FAIL'
+		});
+	});
+
+	test('the feedback page over 60 KB is a HARD FAIL naming the route (DEBT-09)', () => {
+		const files = golden(randomBytes(1024));
+		files['_app/immutable/chunks/feedback.js'] = randomBytes(200 * 1024);
+		files['feedback/index.html'] = page('../', ['_app/immutable/chunks/feedback.js']);
+		const { rows, errors } = checkBudget(build(files));
+		expect(errors).toHaveLength(1);
+		expect(errors[0]).toMatch(/^feedback\/index\.html: initial JS .* exceeds the 60 KB budget/);
+		expect(rows.find((r) => r.route === 'feedback/index.html')).toMatchObject({
+			budget: BUDGET_BYTES,
+			result: 'FAIL'
+		});
+	});
+
+	test('the landing and legal pages over 60 KB stay REPORT rows and do not fail', () => {
 		const files = golden(randomBytes(1024));
 		files['_app/immutable/chunks/landing.js'] = randomBytes(200 * 1024);
 		files['index.html'] = page('./', ['_app/immutable/chunks/landing.js']);
-		files['for-renters/index.html'] = page('../', ['_app/immutable/chunks/landing.js']);
+		files['legal/terms/index.html'] = page('../../', ['_app/immutable/chunks/landing.js']);
 		const { rows, errors } = checkBudget(build(files));
 		expect(errors).toEqual([]);
 		const landing = rows.find((r) => r.route === 'index.html');
 		expect(landing).toMatchObject({ budget: null, result: 'REPORT' });
 		expect(landing?.jsGz).toBeGreaterThan(BUDGET_BYTES);
-		expect(rows.find((r) => r.route === 'for-renters/index.html')?.result).toBe('REPORT');
+		const legal = rows.find((r) => r.route === 'legal/terms/index.html');
+		expect(legal).toMatchObject({ budget: null, result: 'REPORT' });
+		expect(legal?.jsGz).toBeGreaterThan(BUDGET_BYTES);
 	});
 
 	test('routes outside the HARD and REPORT lists are skipped', () => {
@@ -177,6 +207,11 @@ describe('checkBudget', () => {
 
 	test('a custom limit is honoured', () => {
 		const { errors } = checkBudget(build(golden(Buffer.from('x'))), { limit: 100 });
-		expect(errors).toHaveLength(2);
+		// Every HARD route in the fixture: tools/, tools/x/ and for-renters/.
+		expect(errors.map((e) => e.split(':')[0]).sort()).toEqual([
+			'for-renters/index.html',
+			'tools/index.html',
+			'tools/x/index.html'
+		]);
 	});
 });
