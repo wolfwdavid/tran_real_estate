@@ -1,7 +1,8 @@
 ---
 phase: 14
 slug: carried-debt
-status: draft
+status: approved
+reviewed_at: 2026-11-05
 shadcn_initialized: true
 preset: none (shadcn-svelte initialized in Phase 3 with the Phase 2 token override; Phase 14 adds no registry blocks)
 created: 2026-11-05
@@ -307,11 +308,14 @@ npm: no dependency added, removed, or re-pinned `[CTX D-11, D-15]`. `extendTailw
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS (FLAG, non-blocking: no new focal point declared. Accepted because the phase adds no screen; the focal point of every touched route is unchanged from the Phase 09 and 10 UI-SPECs.)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-11-05 by gsd-ui-checker. Inherited values verified against 07/09/10-UI-SPEC; CONTEXT D-01..D-04, D-13, D-14, D-15 honored.
+
+**Planner checks carried from the review (non-blocking):**
+- The static textarea class string in the DEBT-09 replacement table uses `text-base`; the rest of the spec uses `text-body`. Confirm both resolve to 16px / 1.6 line height, or switch the table to `text-body`, before copying the string into the native control.
