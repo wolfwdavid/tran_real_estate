@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 14-12-PLAN.md
-last_updated: "2026-11-05T22:14:25.034Z"
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-11-05T22:26:02.250Z"
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 43
-  completed_plans: 37
+  completed_plans: 38
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 14 (carried-debt) — EXECUTING
-Plan: 7 of 12
+Plan: 8 of 12
 
 ## Performance Metrics
 
@@ -265,6 +265,7 @@ Plan: 7 of 12
 | Phase 14 P08 | 10min | 2 tasks | 4 files |
 | Phase 14 P09 | 22min | 3 tasks | 7 files |
 | Phase 14 P12 | 22min | 2 tasks | 18 files |
+| Phase 14 P01 | 15min | 1 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -706,6 +707,7 @@ Recent decisions affecting current work:
 - [Phase 14]: 14-09: post-trim initial JS (configured build) /feedback/ 58,004 B, /for-*/ 62,851-62,857 B (1.4 KB over 61,440); default build 57,833 / 62,682-62,685
 - [Phase 14]: Per-route content needs its own module: splitting exports inside one module does not split chunks, and an aggregator with a top-level Object.freeze keeps every module it references (14-12)
 - [Phase 14]: feedback/ and for-*/ are HARD 60 KB budget routes in assert-budget and the launch audit; headroom on the shipped build is 174-243 B on for-* (14-12)
+- [Phase 14]: ListingCard ids are namespaced per container (card/split/preview) via idPrefix and addrIdFor(); focus lookups use the same helper
 
 ### Pending Todos
 
@@ -735,7 +737,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-05T22:14:25.028Z
-Stopped at: Completed 14-12-PLAN.md
+Last session: 2026-11-05T22:26:02.244Z
+Stopped at: Completed 14-01-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

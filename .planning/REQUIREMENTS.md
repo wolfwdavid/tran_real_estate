@@ -31,7 +31,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 
 ### Carried debt (DEBT)
 
-- [ ] **DEBT-01**: `ListingCard` takes an id prefix so the hidden list, split list, and selected-listing preview render distinct ids; at 1280px on the Map tab with a pin selected the document has no duplicate ids, and focus-after-"Show more" and focus-after-pin-select still land on the right link (06 deferred-items)
+- [x] **DEBT-01**: `ListingCard` takes an id prefix so the hidden list, split list, and selected-listing preview render distinct ids; at 1280px on the Map tab with a pin selected the document has no duplicate ids, and focus-after-"Show more" and focus-after-pin-select still land on the right link (06 deferred-items)
 - [ ] **DEBT-02**: The Market Snapshot save-gate reason distinguishes must-fix items (pluralized), review-only unacknowledged phrases (dedicated string recorded in the UI spec), and clear; unit cases for review-only and singular, and an E2E on a warn-only draft asserts the text and that Save stays refused until acknowledgement (audit tech_debt 09)
 - [ ] **DEBT-03**: An investor memo that quotes a number present only in the notes prints: the notes' allowed numerals are persisted in the artifact `meta` at creation and read back at `/print/memo/`; a unit test round-trips `meta`, the print spec gains the notes-only case while the Must-fix block case stays green, a mutation that drops the `meta` write turns the new test red, and backup export/import carries `meta` (07-HUMAN-UAT S2, owner chose fix)
 - [ ] **DEBT-04**: A non-vacuous scripts-project test (`scripts/origin-parity.test.ts`) evaluates the extension's `site.ts` with the bundler's define and asserts `TRAN_SITE_URL` equals `resolveSiteUrl()` for the configured `PUBLIC_SITE_URL` + `BASE_PATH`, `PRIVACY_URL` equals `TRAN_SITE_URL + '/legal/privacy/#browser-extension'`, and the `browser-extension` anchor id exists in the privacy page source; the literal URLs in the existing extension doc and bundle tests use `resolveSiteUrl()` instead (audit low finding; `TRAN_ORIGIN` was removed in 13-10, wording corrected 2026-11-05 per 14 D-06)
@@ -129,7 +129,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | SMOKE-04 | Phase 13 | Complete |
 | SMOKE-05 | Phase 12 | Complete |
 | SMOKE-06 | Phase 12 | Complete |
-| DEBT-01 | Phase 14 | Pending |
+| DEBT-01 | Phase 14 | Complete |
 | DEBT-02 | Phase 14 | Pending |
 | DEBT-03 | Phase 14 | Pending |
 | DEBT-04 | Phase 14 | Pending |
