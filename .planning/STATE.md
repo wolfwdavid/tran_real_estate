@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Phase 14 context gathered
-last_updated: "2026-11-05T19:01:09.808Z"
+stopped_at: Phase 14 UI-SPEC approved
+last_updated: "2026-11-05T19:11:02.873Z"
 progress:
   total_phases: 6
   completed_phases: 2
@@ -720,7 +720,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-05T19:01:09.803Z
-Stopped at: Phase 14 context gathered
-Resume file: .planning/phases/14-carried-debt/14-CONTEXT.md
+Last session: 2026-11-05T19:11:02.868Z
+Stopped at: Phase 14 UI-SPEC approved
+Resume file: .planning/phases/14-carried-debt/14-UI-SPEC.md
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
