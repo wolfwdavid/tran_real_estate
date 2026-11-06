@@ -1,7 +1,7 @@
 # Human UAT ledger (all phases)
 
 One file for every owner-run check from Phases 1-12, plus the Phase 13 live-origin checks.
-Updated: 2026-11-05 (Phase 14 owner decisions L79-L81, plan 14-10); earlier 2026-11-01 (Phase 13 results, plan 13-19; L86/L99 carried for the sitemap read). Live origin: https://wolfwdavid.github.io/tran_real_estate/
+Updated: 2026-11-05 (Phase 14 close-out, L66/L89, plan 14-11); earlier 2026-11-05 (Phase 14 owner decisions L79-L81, plan 14-10); earlier 2026-11-01 (Phase 13 results, plan 13-19; L86/L99 carried for the sitemap read). Live origin: https://wolfwdavid.github.io/tran_real_estate/
 (go-live 2026-10-30, GO_LIVE_SHA ad5fd08; deployed commit f169749 at the time of writing).
 
 ## Counting rule
@@ -94,7 +94,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L63 | 07-I12 | Screen reader pass, investor | human | pending (owner) | — |
 | L64 | 07-I13 | Deployed CSP and hosts | smoke | passed 2026-10-31 | `csp.smoke.ts` + `third-party.smoke.ts` (keyless) in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 (f070c74); live connect-src = 'self' + the six provider/form hosts, no analytics host (13-14/13-15 curl checks); keyed provider hosts remain part of L30/L35 |
 | L65 | 07-S1 | Unspecified save message wording | owner-decision | pending (owner) | approve or replace |
-| L66 | 07-S2 | Notes-only numbers blocked at print | owner-decision | carried (Phase 14 DEBT-02) | Phase 14 DEBT-02 fixes the behaviour; close as "superseded by DEBT-02" |
+| L66 | 07-S2 | Notes-only numbers blocked at print | owner-decision | decided (superseded by DEBT-03, 2026-11-05) | Phase 14 DEBT-03 (14-03-SUMMARY.md): notes-only numerals persist in the memo meta and print; investor/print.spec.ts notes-only case |
 | L67 | 08-UAT-1 | Real delivery via agent's Web3Forms key | human | pending (owner) | — |
 | L68 | 08-UAT-2 | `tran_lead_v1` field visible | human | pending (owner) | with L67 |
 | L69 | 08-UAT-3 | Paste-back from Gmail/Outlook/Apple Mail | human | pending (owner) | — |
@@ -117,7 +117,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L86 | 10-5 | Sitemap in Search Console; robots at the org root | human | carried (sitemap read; owner, target 2026-11-04): property verified 2026-10-31 by the HTML-tag method; sitemap submitted 2026-10-31 12:54Z, and Search Console still read "Couldn't fetch", 0 discovered, at every re-check through 2026-11-01 17:12Z (about 28 h); carried by owner decision 2026-11-01 ("Close now, sitemap carried"); robots at the host root not applicable on a project site (Pitfall 6) | `docs/launch-proof/2026-10-30/40-search-console-verified.png` + 13-17-SUMMARY.md + 13-19-SUMMARY.md; Googlebot-UA fetch of sitemap.xml (2026-10-31 20:02Z): 200, application/xml, 1272 bytes, 14 `<loc>`, every listed URL 200; URL Inspection live test of the home page: "URL is available to Google"; `41-search-console-sitemap.png` is added and the row set to passed when the read lands |
 | L87 | 10-6 | Live-origin checks (Step 7): deep route, redirect, 404 / provider keys / Safari | smoke + human | passed 2026-10-31 | routing half: `routing.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 + the owner's five fresh-profile checks "Fresh checks pass" (13-13-SUMMARY.md, D-15); keys half = L30/L36 (RentCast passed, AI providers carried to Phase 14); Safari half = L12 (still pending) |
 | L88 | 10-7 | Dependabot + push protection on; probe rejected | human | passed 2026-10-31 | 13-21-SUMMARY.md (status only: probe rejected by push protection; PAT revoked; branch never on the remote; `secret_scanning_push_protection.status` and `secret_scanning.status` = enabled via the API); Dependabot on and triaged per D-07 (13-11-SUMMARY.md: #1 merged, #2-#8 closed) |
-| L89 | 10-8 | Report-only pages over the 60 KB budget | owner-decision | carried (Phase 14 DEBT-09) | Phase 14 DEBT-09 makes it a hard gate; close as "superseded by DEBT-09" |
+| L89 | 10-8 | Report-only pages over the 60 KB budget | owner-decision | decided (superseded by DEBT-09, 2026-11-05) | Phase 14 DEBT-09 (14-09/14-12 SUMMARY): /feedback/ and /for-*/ under 61,440 B, HARD gate in assert-budget.mjs and the launch audit |
 | L90 | 11-1 | Live zillow.com smoke (Chrome + Edge) | human | carried (Phase 17) | — |
 | L91 | 11-2 | Zero-network real session | human | carried (Phase 17) | — |
 | L92 | 11-3 | Dim the "Showcase" badge? | owner-decision | decided 2026-10-29: Showcase stays excluded by default (REQUIREMENTS EXT-F3) | `.planning/REQUIREMENTS.md` EXT-F3 ("owner kept them excluded 2026-10-29"); PROJECT.md Key Decisions (Phase 14, D-04) |
@@ -133,12 +133,12 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | P13-3 | Phase 13 | Shared-origin privacy copy decision (Pitfall 7) | owner-decision | decided 2026-10-30: decision C (C-approve), the privacy "Deleting your data" copy names the shared wolfwdavid.github.io storage origin and points to Forget all keys (second paragraph rendered only under a sub-path) | `.planning/phases/13-live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down/13-01-SUMMARY.md` (verbatim "A-approve, B-ignore, C-approve"); applied by plan 13-07 |
 | P13-4 | Phase 13 | Umami "IP not stored" evidence (D-17) | owner-decision | decided 2026-10-30: owner answered "IPs not stored: proceed", then "Hold Umami for now", then chose "Cut Umami now (GTM-04 to v2)" (option b) | 13-14-SUMMARY.md (owner answers verbatim, in order; no 10-umami-ip-setting.png exists and none was created) |
 
-## Tally (2026-11-01)
+## Tally (2026-11-05)
 
 By class: smoke 5 (L01, L02, L06, L64, L94), smoke + human 1 (L87), human 73, owner-decision 15,
 cut 5 (L23, L24, L71, L82, L97) = 99 origin rows, plus 4 Phase 13 rows.
 By result: passed 13 (L01, L02, L03, L06, L26, L36 RentCast part, L64, L83, L85, L87, L88, L94, L98),
-decided 1 (L92), cut 5, carried 12 (L66, L79-L81, L86, L89, L90, L91, L93, L95, L96, L99; L86 and
+decided 6 (L66, L79, L80, L81, L89, L92), cut 5, carried 7 (L86, L90, L91, L93, L95, L96, L99; L86 and
 L99 wait on the Search Console sitemap read, owner target 2026-11-04; L36's AI-provider part is also
 carried to Phase 14), pending 68 origin rows (L84 waits on the contact-email decision). Phase 13 rows: passed 2 (P13-1, P13-2),
 decided 2 (P13-3, P13-4).
