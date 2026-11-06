@@ -9,17 +9,17 @@ command banned: exit 0
 command deps: exit 0
 info: 0, low: 4, moderate: 1, high: 0, critical: 0
 command guard: exit 0
-Real-data guard passed (1971 all files checked)
+Real-data guard passed (2024 all files checked)
 command fixtures:check: exit 0
 Fixtures match generator output (6 files)
 command secrets:canary: exit 0
 gitleaks canary detected as expected
 command secrets:scan: exit 0
-[90m9:52AM[0m [32mINF[0m [1m1317 commits scanned.[0m
-[90m9:52AM[0m [32mINF[0m [1mscanned ~17096252 bytes (17.10 MB) in 1.17s[0m
-[90m9:52AM[0m [32mINF[0m [1mno leaks found[0m
+[90m4:32PM[0m [32mINF[0m [1m1373 commits scanned.[0m
+[90m4:32PM[0m [32mINF[0m [1mscanned ~17809786 bytes (17.81 MB) in 1.64s[0m
+[90m4:32PM[0m [32mINF[0m [1mno leaks found[0m
 PASS	RentCast client	unit "packages/core/src/budget/cap.test.ts": 43 passed; unit "apps/web/src/lib/data/gateway.budget.test.ts": 17 passed; e2e "CapAboveLimitDialog: focus on Keep, typed confirmation": 2 passed
-PASS	Saved-search alerts	unit "apps/web/src/lib/data/scheduler.test.ts": 18 passed; unit "a second pass at once, or 23 h later, spends 0": 1 passed
+PASS	Saved-search alerts	unit "apps/web/src/lib/data/scheduler.test.ts": 22 passed; unit "a second pass at once, or 23 h later, spends 0": 1 passed
 PASS	BYOK settings	unit "apps/web/src/lib/storage/secrets/testers.test.ts": 6 passed; unit "apps/web/src/lib/storage/secrets/vault.test.ts > forgetAll": 4 passed; unit "apps/web/src/lib/ai/providers/anthropic.test.ts": 22 passed; e2e "settings-keys.spec.ts": 24 passed; owner step: Human UAT 7
 PASS	LLM output rendering	unit "sanitizer module is the only place {@html} is allowed": 1 passed; unit "the same {@html} outside the sanitizer module is rejected": 1 passed; unit "HTML-like model text is escaped, never parsed": 1 passed; e2e "hostile params render as text": 2 passed
 PASS	CSP	command csp: exit 0; e2e "csp.spec.ts": 12 passed
