@@ -38,7 +38,7 @@ Every phase closed with verifier status `human_needed` (no code gaps); the owner
 
 - [x] **Phase 12: Go-live Readiness & Local Smoke Suite** - Clean history, build stamp, `PUBLIC_SITE_URL` end to end, corrected deploy checklist, and a read-only smoke suite green against the local Pages emulator; closes with the owner creating the org and pushing `main` (completed 2026-10-29)
 - [x] **Phase 13: Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down** - First green GitHub CI run, first deploy observed, `live-smoke.yml` chained behind every deploy, GTM-01..04 proven or cut, HUMAN-UAT rows reclassified, launch-proof bundle and runbook (completed 2026-11-01)
-- [ ] **Phase 14: Carried Debt** - The seven v1.0 follow-ups plus the emulator dotfile fix and the marketing-page JS trim, each closed to its sourced definition of done before the Kit 3 codemod
+- [x] **Phase 14: Carried Debt** - The seven v1.0 follow-ups plus the emulator dotfile fix and the marketing-page JS trim, each closed to its sourced definition of done before the Kit 3 codemod (completed 2026-11-06)
 - [ ] **Phase 15: Load-Deterministic Test Lanes** - Timing-budget tests in serial lanes, mechanical guard against blind timeouts and retries, capped workers, recorded evidence protocol and shuffle seed
 - [ ] **Phase 16: Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5** - Three single-purpose migration plans gated by `pnpm verify` + local smoke, closed by a deploy and a green live smoke; audit exceptions 4 → 1
 - [ ] **Phase 17: Extension Release & Edge Add-ons Submission** - Published `ext-v0.1.0` GitHub Release with checksums, changelog, hardened release workflow, Edge listing assets and submission; certification link is an owner follow-up
@@ -218,7 +218,7 @@ Plans:
 | 11. Zillow Sponsored Listing Filter Extension | v1.0 | 12/12 | Complete | 2026-10-29 |
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
-| 14. Carried Debt | v1.1 | 12/12 | Complete   | 2026-11-06 |
+| 14. Carried Debt | v1.1 | 12/12 | Complete    | 2026-11-06 |
 | 15. Load-Deterministic Test Lanes | v1.1 | 0/TBD | Not started | - |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
