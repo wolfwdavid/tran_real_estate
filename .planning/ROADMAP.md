@@ -168,7 +168,19 @@ Plans:
   4. `docs/test-evidence/<date>.md` records three consecutive clean full `pnpm verify` runs, `--repeat-each 3` green on every spec a deferred-items file names as load-sensitive, one full E2E run under artificial CPU pressure with zero failures, and one green unit run with shuffled file and test order whose seed is stored in the file.
 **Research flag:** no (standard patterns: Vitest `--project` patterns, `--no-file-parallelism`, `sequence.shuffle`/`seed`; Playwright `--repeat-each`, `--fail-on-flaky-tests`, all verified on the installed versions).
 **UI hint:** no.
-**Plans:** TBD
+**Plans:** 11 plans
+Plans:
+- [ ] 15-01-PLAN.md — Wave 1: lane manifest (tooling/vitest/lanes.ts), four file-based *-serial configs, MAX_WORKERS cap, VITEST_MAX_WORKERS fail-closed; measured ordering, threshold and dev worker value
+- [ ] 15-02-PLAN.md — Wave 1 (TDD): pure AST rules module for elapsed time, raised timeouts, measured+cause annotations and retries
+- [ ] 15-03-PLAN.md — Wave 1: Playwright retry policy comment, failOnFlakyTests, web workers CI 2 / dev 4, ci.yml --fail-on-flaky-tests + workflow-gate pin
+- [ ] 15-04-PLAN.md — Wave 2: annotate Playwright raises, partition A (studio/snapshot/agent specs + extension e2e), values unchanged
+- [ ] 15-05-PLAN.md — Wave 2: annotate Playwright raises, partition B (all other web specs, helpers, smoke), values unchanged
+- [ ] 15-06-PLAN.md — Wave 2: annotate Vitest serial-lane raises from fresh measurements; fix the ResultsView 5 s claim
+- [ ] 15-07-PLAN.md — Wave 2: tested Windows PATH/taskkill module replacing 5 inline copies; RUNBOOK worker table pinned by runbook.test.ts
+- [ ] 15-08-PLAN.md — Wave 2: behavioural proofs (lane order plain + shuffled, pass-on-retry fails) and scripts/cpu-burn.mjs
+- [ ] 15-09-PLAN.md — Wave 3: repo-wide guard test (sweep, manifest integrity, CI/config pins, non-vacuity, 7-mutant ledger)
+- [ ] 15-10-PLAN.md — Wave 4: evidence protocol (verify x3, repeat-each 3, CPU-pressure E2E, shuffled seed) in docs/test-evidence/<date>.md + doc pin
+- [ ] 15-11-PLAN.md — Wave 5: owner-approved push, CI observation of the flaky flag and 2 workers, TEST-01..06 ticked
 
 ### Phase 16: Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5
 **Goal:** The platform runs on current, supported majors (pnpm 12, SvelteKit 3.1 + adapter-static 4, Vitest 5 with its browser companions), migrated one tool per plan in that order with the full `pnpm verify` chain and the local smoke as the gate after each and a deploy plus a green live smoke closing the phase, clearing three of the four low audit exceptions before their 2027-01-31 revisit.
