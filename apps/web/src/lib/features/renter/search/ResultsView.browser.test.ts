@@ -13,13 +13,12 @@ import ResultsView from './ResultsView.svelte';
 import { createRenterSearch } from './search-state.svelte';
 
 const NOW = new Date('2026-10-05T12:00:00.000Z');
-/** Upper bound for the lazy map chunks to load (a wait for a module load, not a retry). */
+// Timeout: measured 0.69 s and 0.63 s for the whole map test in the serial lane (2026-11-09, loaded
+// dev box) and 0.88 s under full parallel load (14-11 launch-audit vitest.json).
+// Cause: the map is two chained dynamic imports (ListingMap, then Leaflet and its CSS) that the dev
+// server transforms on first open, a wait for a module load, not a retry; expect.poll defaults to
+// 1 s. 10 s keeps an 11x margin over the full-load number.
 const LAZY_MAP_MS = 10_000;
-// Per-test time limit. The paging test renders 60 cards and runs axe over them: 1.4 s alone, 3.9 s
-// in a full `vitest run` (321 files in parallel), close to Vitest's 5 s default, which is how it
-// failed under load. The map test may wait LAZY_MAP_MS for the lazy chunks. Both need more than the
-// default; the assertions themselves are unchanged.
-const TEST_MS = 20_000;
 
 function row(i: number): Listing {
 	return {
@@ -72,7 +71,10 @@ async function setup(n: number) {
 	return { search, spend, onFiltersCleared, container: screen.container };
 }
 
-describe('ResultsView', { timeout: TEST_MS }, () => {
+// No raised test timeout: the browser-mode default is 15 s and the slowest test (60 cards + axe)
+// measured 2.56 s in the serial lane (2026-11-09) and 2.64 s under full parallel load (14-11
+// launch-audit vitest.json; 3.3 s in the 15-RESEARCH full run of 2026-11-06), under one third of it.
+describe('ResultsView', () => {
 	it('pages locally and moves focus to the first new card', async () => {
 		const { search, spend, container } = await setup(60);
 		await expect
