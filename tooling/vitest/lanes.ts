@@ -93,7 +93,8 @@ export const SERIAL = {
 		{
 			file: 'flaky-gate.test.ts',
 			reason: 'behavioural flaky-gate proof: spawns Playwright once per case'
-		}
+		},
+		{ file: 'cpu-burn.test.ts', reason: 'spawns a deliberate CPU hog with a wall-clock stop' }
 	]
 } as const satisfies Record<string, readonly SerialEntry[]>;
 
