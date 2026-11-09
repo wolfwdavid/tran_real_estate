@@ -16,6 +16,11 @@ import { AI_HOSTS, countRequests, fakeKey, routeAnthropic, routeGemini } from '.
 // the test at teardown.
 
 test.use(RENTER_TEST_OPTIONS);
+// Timeout: measured 7.4 s for "renter outreach > keyless: the sample draft streams and leaves only
+// through the three exits" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of six.
+// Cause: each test opens a listing on the built site under the deny-all harness, streams a draft
+// (Fixture provider word by word, or the Anthropic/Gemini SSE mocks), then runs axe and exercises
+// the Copy, mailto and Mark as sent exits. 120 s keeps a 16.2x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
@@ -97,6 +102,11 @@ const people = (page: Page) => section(page).getByLabel('How many people will li
 const history = (page: Page) => section(page).getByRole('region', { name: 'Draft history' });
 
 async function expectDraftReady(page: Page): Promise<void> {
+	// Timeout: measured 7.4 s for the whole of "renter outreach > keyless: the sample draft streams
+	// and leaves only through the three exits" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the
+	// slowest test that waits here.
+	// Cause: the outreach draft streams word by word (Fixture provider) or through the provider SSE
+	// mocks before "Draft ready." appears. 20 s keeps a 2.7x margin on the whole test.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});

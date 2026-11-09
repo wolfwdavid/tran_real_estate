@@ -17,6 +17,12 @@ import { RENTER_ROUTES } from './routes';
 //   - sample mode spends 0 RentCast calls; live mode spends only the calls its setup makes.
 
 test.use(RENTER_TEST_OPTIONS);
+// Timeout: measured 4.4 s for "renter/listing/ (sample): axe at 1280 and 375, zero CSP violations,
+// sample chips, no horizontal scroll" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the
+// slowest of the eight cells.
+// Cause: each cell seeds its mode (sample, or a mocked key with live calls), loads the route on the
+// built site with the Leaflet map, then runs axe twice (1280 px and 375 px) plus the CSP collector.
+// 90 s keeps a 20x margin.
 test.describe.configure({ timeout: 90_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

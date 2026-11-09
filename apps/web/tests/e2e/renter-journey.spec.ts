@@ -20,6 +20,11 @@ import { AI_HOSTS, countRequests } from './helpers/ai-mocks';
 // affordability check and its CTA) spends 0. No LLM host and no third-party host is ever reached.
 
 test.use(RENTER_TEST_OPTIONS);
+// Timeout: measured 9.0 s for "a full renter journey spends exactly 3 RentCast calls and nothing
+// else" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+// Cause: one test walks the whole renter portal on the built site: search with the RentCast mock,
+// Leaflet map and pin selection, listing detail, market data, the AVM estimate, a streamed outreach
+// draft, shortlist, saved search and affordability. 180 s keeps a 20x margin.
 test.describe.configure({ timeout: 180_000 });
 
 const form = (page: Page) => page.getByRole('search', { name: 'Search rentals' });
@@ -117,6 +122,10 @@ test('a full renter journey spends exactly 3 RentCast calls and nothing else', a
 	// 7) Outreach on the Fixture provider (no AI key): draft, then Copy text. 0 calls.
 	await outreach(page).getByLabel('How many people will live there').fill('2');
 	await panel(page).getByRole('button', { name: 'Draft message', exact: true }).click();
+	// Timeout: measured 9.0 s for the whole journey test (sub, 4 workers, e2e-report 449ecc5,
+	// 2026-11-06), which waits here once.
+	// Cause: the Fixture provider streams the outreach draft word by word before "Draft ready."
+	// appears. 20 s keeps a 2.2x margin on the whole test.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});
