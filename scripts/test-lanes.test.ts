@@ -10,8 +10,16 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import ts from 'typescript';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { SERIAL, files } from '../tooling/vitest/lanes';
+import {
+	MAX_WORKERS,
+	SERIAL,
+	SERIAL_GROUP_ORDER,
+	files,
+	serialTest,
+	type Lane as LaneName
+} from '../tooling/vitest/lanes';
 import {
 	elapsedTimeFindings,
 	fileKind,
@@ -63,6 +71,39 @@ const EXPECTED_RAISES = [
 	'apps/web/src/lib/seo/og-card.server.test.ts',
 	'apps/web/src/lib/storage/agent/import-commit.test.ts'
 ];
+
+/** Lane -> project root -> serial config -> parallel sibling (15-01; browser-serial is hyphenated). */
+const LANES: Record<LaneName, { root: string; serialConfig: string; parallelSibling: string }> = {
+	core: {
+		root: 'packages/core/',
+		serialConfig: 'packages/core/vitest.serial.config.ts',
+		parallelSibling: 'packages/core/vitest.config.ts'
+	},
+	web: {
+		root: 'apps/web/',
+		serialConfig: 'apps/web/vitest.serial.config.ts',
+		parallelSibling: 'apps/web/vite.config.ts'
+	},
+	'web-browser': {
+		root: 'apps/web/',
+		serialConfig: 'apps/web/vitest.browser-serial.config.ts',
+		parallelSibling: 'apps/web/vitest.browser.config.ts'
+	},
+	scripts: {
+		root: 'scripts/',
+		serialConfig: 'scripts/vitest.serial.config.ts',
+		parallelSibling: 'scripts/vitest.config.ts'
+	}
+};
+const LANE_NAMES = Object.keys(LANES) as LaneName[];
+const ROOT_CONFIG = 'vitest.config.ts';
+const BROWSER_CONFIGS = [
+	'apps/web/vitest.browser.config.ts',
+	'apps/extension/vitest.browser.config.ts'
+];
+const WEB_PW = 'apps/web/playwright.config.ts';
+const EXT_PW = 'apps/extension/playwright.config.ts';
+const CI = '.github/workflows/ci.yml';
 
 /** Every path git knows about or would add, repo-relative POSIX, still present on disk. */
 let repoPaths: string[] = [];
@@ -162,5 +203,124 @@ describe('non-vacuity: the rules still see the known sites when lane membership 
 		expect(files('core').length + files('web').length + files('web-browser').length).toBe(
 			sortedUnique([...EXPECTED_ELAPSED, ...EXPECTED_RAISES]).length
 		);
+	});
+});
+
+describe('lane manifest', () => {
+	test('every SERIAL entry is a literal path to a file that exists, listed in exactly one lane', () => {
+		const seen = new Map<string, LaneName>();
+		for (const lane of LANE_NAMES) {
+			for (const entry of SERIAL[lane]) {
+				expect(entry.file, `${lane}: ${entry.file} must be a literal path`).not.toMatch(/[*?{[]/);
+				const repoPath = LANES[lane].root + entry.file;
+				expect(existsSync(join(ROOT, repoPath)), `${lane}: ${repoPath} does not exist`).toBe(true);
+				expect(seen.get(repoPath), `${repoPath} is listed in two lanes`).toBeUndefined();
+				seen.set(repoPath, lane);
+			}
+		}
+		expect(seen.size).toBeGreaterThanOrEqual(17);
+	});
+
+	test('each lane has a file-based serial config and a parallel sibling that excludes it', () => {
+		for (const lane of LANE_NAMES) {
+			const { serialConfig, parallelSibling } = LANES[lane];
+			expect(existsSync(join(ROOT, serialConfig)), serialConfig).toBe(true);
+			expect(read(serialConfig), serialConfig).toContain(`serialTest('${lane}')`);
+			expect(existsSync(join(ROOT, parallelSibling)), parallelSibling).toBe(true);
+			expect(read(parallelSibling), parallelSibling).toContain(`files('${lane}')`);
+		}
+	});
+
+	test('serialTest(lane) runs one file at a time in its own group, in the right order', () => {
+		for (const lane of LANE_NAMES) {
+			const t = serialTest(lane);
+			expect(t.name).toBe(`${lane}-serial`);
+			expect(t.include).toEqual(files(lane));
+			expect(t.fileParallelism).toBe(false);
+			expect(t.maxWorkers).toBe(1);
+			expect(t.sequence.groupOrder).toBe(SERIAL_GROUP_ORDER[lane]);
+			// > 0 keeps every serial lane out of the parallel group (Vitest's default order 0).
+			expect(SERIAL_GROUP_ORDER[lane], lane).toBeGreaterThan(0);
+		}
+		// The browser pool runs beside the forks pool inside one group, so web-browser must be
+		// strictly after every node lane (15-01 measured 8 cross-pool overlap pairs at a shared 1).
+		for (const lane of LANE_NAMES.filter((l) => l !== 'web-browser')) {
+			expect(SERIAL_GROUP_ORDER['web-browser'], lane).toBeGreaterThan(SERIAL_GROUP_ORDER[lane]);
+		}
+	});
+
+	test('the root projects array is string literals only and lists the four serial configs', () => {
+		const text = read(ROOT_CONFIG);
+		const sf = ts.createSourceFile(ROOT_CONFIG, text, ts.ScriptTarget.Latest, true);
+		let projects: ts.ArrayLiteralExpression | undefined;
+		const visit = (n: ts.Node) => {
+			if (
+				ts.isPropertyAssignment(n) &&
+				ts.isIdentifier(n.name) &&
+				n.name.text === 'projects' &&
+				ts.isArrayLiteralExpression(n.initializer)
+			) {
+				projects = n.initializer;
+			}
+			ts.forEachChild(n, visit);
+		};
+		visit(sf);
+		expect(projects, 'test.projects array').toBeDefined();
+		const elements = projects!.elements;
+		// Inline project objects lose groupOrder under CLI --sequence.* flags (15-RESEARCH Pitfall 1).
+		for (const el of elements) {
+			expect(ts.isStringLiteral(el), `inline project entry: ${el.getText(sf)}`).toBe(true);
+		}
+		const listed = elements.map((el) => (el as ts.StringLiteral).text);
+		for (const lane of LANE_NAMES) expect(listed).toContain(LANES[lane].serialConfig);
+		expect(new Set(listed).size).toBe(listed.length);
+	});
+});
+
+describe('worker caps', () => {
+	test('MAX_WORKERS is a positive integer applied on the root config', () => {
+		expect(Number.isInteger(MAX_WORKERS) && MAX_WORKERS > 0).toBe(true);
+		const text = read(ROOT_CONFIG);
+		expect(text).toContain('maxWorkers: MAX_WORKERS');
+		// Fail closed: the env var is applied after fileParallelism:false and would break the lane.
+		expect(text).toContain('process.env.VITEST_MAX_WORKERS');
+	});
+
+	test('both browser configs set the same cap (the browser pool ignores the root value)', () => {
+		for (const cfg of BROWSER_CONFIGS) expect(read(cfg), cfg).toContain('maxWorkers: MAX_WORKERS');
+	});
+
+	test('Playwright workers are pinned to the known-good counts', () => {
+		expect(read(WEB_PW)).toContain('workers: process.env.CI ? 2 : 4');
+		expect(read(EXT_PW)).toMatch(/^\s*workers: 1,$/m);
+	});
+});
+
+describe('CI and flaky gate', () => {
+	test('ci.yml runs the unit suite through exactly one `run: pnpm test:unit`', () => {
+		const lines = read(CI).split(/\r?\n/);
+		expect(lines.filter((l) => /^\s*-?\s*run: pnpm test:unit\s*$/.test(l))).toHaveLength(1);
+		expect(lines.filter((l) => l.includes('run: pnpm test:unit'))).toHaveLength(1);
+	});
+
+	test('package.json test:unit is exactly `vitest run`, so the lanes come from the config alone', () => {
+		const pkg = JSON.parse(read('package.json')) as { scripts: Record<string, string> };
+		expect(pkg.scripts['test:unit']).toBe('vitest run');
+	});
+
+	test('exactly one ci.yml run line passes --fail-on-flaky-tests to playwright test', () => {
+		const runLines = read(CI)
+			.split(/\r?\n/)
+			.filter((l) => /^\s*-?\s*run: /.test(l) && l.includes('--fail-on-flaky-tests'));
+		expect(runLines).toHaveLength(1);
+		expect(runLines[0]).toContain('playwright test');
+	});
+
+	test('both Playwright configs document the retry policy and fail flaky tests in CI', () => {
+		for (const cfg of [WEB_PW, EXT_PW]) {
+			const text = read(cfg);
+			expect(text, cfg).toContain('failOnFlakyTests: !!process.env.CI');
+			expect(text, cfg).toContain('Retry policy (TEST-03)');
+		}
 	});
 });
