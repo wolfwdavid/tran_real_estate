@@ -19,3 +19,41 @@
 - **Definition of done for whoever picks it up:** a 429 on any smoke navigation exits 2 (precondition,
   "CDN rate-limited, re-dispatch once per lessons 2026-10-31") instead of 1; zero retries added; a
   scripts-project unit test plants a 429 response and asserts exit 2; any other status keeps exit 1.
+
+## 15-01: browser-project startup "Failed to fetch dynamically imported module" (pre-existing, load-correlated)
+
+- **Seen:** 2026-11-09, two of five full `pnpm test:unit` runs while plans 15-02 and 15-03 executed in
+  parallel on the same machine (38-51 Chromium processes alive). Run 1: 2 files (DataShell in
+  `web-browser`, OutreachSection in `web-browser-serial`); run 2: 7 `web-browser` files. Every failing
+  file was among the first files its browser project loaded (`(0 test)` at project startup); every
+  later file in the same project passed. Tests themselves never ran.
+- **Not reproduced:** both browser projects alone, warm cache (34/34, 42 s) and cold cache
+  (`rm -rf apps/web/node_modules/.vite`, 34/34, 63.7 s); and the full suite in the next three runs
+  (360/360). Prior sighting: 09-23 SUMMARY, once, recorded as a host-suspend transient.
+- **Not caused by the lanes:** the parallel browser project ran 12 tabs before 15-01 and 8 after; the
+  serial browser project failed only once, on its very first (cold) start. The Vite optimizer logged
+  no mid-run re-bundle in either failing run.
+- **Candidate causes to test (not done here, out of 15-01 scope):** Vite dev-server request handling
+  at browser-project startup under CPU starvation (8 iframes importing the full module graph while 8
+  forks and sibling Chromium instances compete); cross-process interaction on Vitest's default browser
+  port 63315 when two Vitest processes with browser projects start at the same time.
+- **Pointer:** 15-10 evidence protocol (3 consecutive clean `pnpm verify`, CPU-pressure run) is the
+  natural place to see whether it recurs on an otherwise idle machine. If it does, root-cause before
+  classifying; never add a retry.
+
+## 15-01: happy-dom iframe warnings in the extension project (pre-existing noise)
+
+- `apps/extension/tests/brand-parity.test.ts:109` and `reconcile.test.ts:167` set `innerHTML` that
+  contains an `<iframe>`; happy-dom 21 logs `DOMException [NotSupportedError]: Failed to load iframe
+  page "about:blank". Iframe page loading is disabled.` 15 times per full run. Tests pass; the noise
+  predates Phase 15 (`.tools/unit-extension.log` from 14-11 shows the same 15 lines). Silence it in
+  the extension tests (e.g. happy-dom `settings.disableIframePageLoading` without the console error, or
+  strip iframes from the fixture) in a later plan; not a Phase 15 requirement.
+
+## 15-01: Vite "configLoader: 'native'" warning for extension-less imports in the lane configs
+
+- The new configs import `../../tooling/vitest/lanes` and `./vitest.config` without a file extension,
+  exactly as planned. Vite 8.3 prints a one-off warning that the future native config loader needs
+  extensions. Suppressed in 15-01 logs with `VITE_CONFIG_NATIVE_IGNORE_WARNING=true`; harmless today.
+  Phase 16 (Vite/Vitest upgrades) should add `.ts` extensions (needs `allowImportingTsExtensions`) or
+  `.js` specifiers in one sweep over all config files.

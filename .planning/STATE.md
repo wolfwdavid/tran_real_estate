@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 15-02-PLAN.md
-last_updated: "2026-11-09T07:11:25.368Z"
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-11-09T07:41:40.901Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 45
+  completed_plans: 46
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 3 of 11
+Plan: 4 of 11
 
 ## Performance Metrics
 
@@ -273,6 +273,7 @@ Plan: 3 of 11
 | Phase 14 P11 | 60min | 3 tasks | 7 files |
 | Phase 15 P03 | 10min | 2 tasks | 4 files |
 | Phase 15 P02 | 25min | 2 tasks | 2 files |
+| Phase 15 P01 | 55min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -727,6 +728,10 @@ Recent decisions affecting current work:
 - [Phase 15]: 15-02: test-API detection by Vitest modifier chain (test/it/describe/suite + each/for/only/skip/todo/fails/concurrent/sequential/shuffle/skipIf/runIf), never by root identifier alone; a local iterator named it is not a raise site
 - [Phase 15]: 15-02: scripts/*.mjs retry flags are read from string literals via the JS AST and workflow comment lines are skipped, so comments never trip the retry rule
 - [Phase 15]: 15-02: toPass findings point at the .toPass token of a multi-line expect chain; non-literal timeout values stay raised, declaration lookup only locates the annotation comment
+- [Phase 15]: 15-01: browser-serial config is apps/web/vitest.browser-serial.config.ts (hyphen): Vitest's project-config regex allows one dotted segment, so vitest.browser.serial.config.ts is rejected; project name web-browser-serial unchanged; 15-02/15-09 must use the hyphenated filename
+- [Phase 15]: 15-01: dev MAX_WORKERS stays 8 (median 124.3 s vs 135.1 s at 15, 2 runs each); CI 3; the browser pool ignores the root value so both browser configs set the same constant
+- [Phase 15]: 15-01: group 1 node-serial files are strictly sequential and browser-serial files strictly sequential, but the forks pool and browser pool overlap; moving the web-browser lane to groupOrder 2 is a one-line fix left for the orchestrator because 15-09's guard asserts groupOrder 1 for every lane
+- [Phase 15]: 15-01: TEST-01/TEST-04 left unchecked (lane mechanism + Vitest cap only); 15-09 guard, 15-03 Playwright workers and 15-07 PATH-guard test close them
 
 ### Pending Todos
 
@@ -756,7 +761,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T07:11:25.363Z
-Stopped at: Completed 15-02-PLAN.md
+Last session: 2026-11-09T07:41:40.883Z
+Stopped at: Completed 15-01-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
