@@ -71,6 +71,10 @@
   `test.slow`) when Prettier wraps the chain.
 - **Pointer:** 15-09 (repo sweep) should land the fix with its planted test before asserting zero
   findings, otherwise the sweep is vacuous for wrapped chains. No timeout value depends on it.
+- **RESOLVED 2026-11-09 by 15-09** (commits 17be9f2, 70da4bf): callee names are now built from the AST
+  identifier/property chain, and ten planted wrapped-chain cases guard it in
+  `scripts/test-lane-rules.test.ts`. The repo sweep in `scripts/test-lanes.test.ts` pins both formerly
+  invisible sites (ResultsView, calculators) in `EXPECTED_RAISES`.
 
 ## 15-01: Vite "configLoader: 'native'" warning for extension-less imports in the lane configs
 
