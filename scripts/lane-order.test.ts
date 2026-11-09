@@ -135,7 +135,8 @@ describe('per-lane group order (tooling/vitest/lanes.ts)', () => {
 		expect(entries.length).toBeGreaterThanOrEqual(4);
 		for (const [lane, order] of entries) expect(order, lane).toBeGreaterThan(0);
 		for (const [lane, order] of entries) {
-			if (lane !== 'web-browser') expect(BROWSER_SERIAL, `web-browser > ${lane}`).toBeGreaterThan(order);
+			if (lane !== 'web-browser')
+				expect(BROWSER_SERIAL, `web-browser > ${lane}`).toBeGreaterThan(order);
 		}
 	});
 });

@@ -40,9 +40,7 @@ const config = (outputDir: string, extra = '') =>
 
 /** process.env without VITEST* (the parent run's keys) and without CI; cases add CI back as needed. */
 const baseEnv = (): NodeJS.ProcessEnv =>
-	Object.fromEntries(
-		Object.entries(process.env).filter(([k]) => !/^VITEST/.test(k) && k !== 'CI')
-	);
+	Object.fromEntries(Object.entries(process.env).filter(([k]) => !/^VITEST/.test(k) && k !== 'CI'));
 
 function pw(configFile: string, extra: string[] = [], env: NodeJS.ProcessEnv = baseEnv()) {
 	const r = spawnSync(
