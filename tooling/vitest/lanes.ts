@@ -81,7 +81,11 @@ export const SERIAL = {
 		{ file: 'origin-parity.test.ts', reason: '7.2 s under full load (144% of 5 s)' },
 		{ file: 'site-url.test.ts', reason: '4.3 s under full load (86% of 5 s)' },
 		{ file: 'gen-fixtures.test.ts', reason: '3.7 s under full load (74% of 5 s)' },
-		{ file: 'commit-hygiene.test.ts', reason: '2.6 s under full load (51% of 5 s)' }
+		{ file: 'commit-hygiene.test.ts', reason: '2.6 s under full load (51% of 5 s)' },
+		{
+			file: 'lane-order.test.ts',
+			reason: 'behavioural lane proof: compares wall-clock start/end order of fixture files'
+		}
 	]
 } as const satisfies Record<string, readonly SerialEntry[]>;
 
