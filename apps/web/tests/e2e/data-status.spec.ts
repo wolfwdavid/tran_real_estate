@@ -13,6 +13,11 @@ import {
 // site, both bases (DATA-01, DATA-03; 04-UI-SPEC "DataStatusBar", "DueSearchesDialog").
 // RentCast is never reached: blockRentCast aborts every request, and mocked tests count requests.
 
+// Timeout: measured 3.6 s for "live at the cap: due searches wait with the "weren't checked" line,
+// no call" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of eight.
+// Cause: each test seeds the quota ledger, a key and due saved searches in IndexedDB, loads a portal
+// route on the built site, waits for the check-on-open pass and runs axe on the status bar or the
+// DueSearchesDialog. 120 s keeps a 33x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

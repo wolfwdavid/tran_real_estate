@@ -33,6 +33,11 @@ for (const route of [...MARKETING_ROUTES, ...LEGAL_ROUTES]) {
 }
 
 test('noindex on app and print pages', async ({ page }) => {
+	// Timeout: measured 4.7 s for "noindex on app and print pages" (root, 4 workers, e2e-report
+	// 449ecc5, 2026-11-06).
+	// Cause: one test loads the eight APP_ROUTES plus the print page and waits for hydration to
+	// reveal <html> before reading the robots meta on each, so the budget grows with APP_ROUTES:
+	// 9 x 6 s = 54 s keeps an 11.5x margin.
 	test.setTimeout((APP_ROUTES.length + 1) * 6_000);
 	for (const route of [...APP_ROUTES, PRINT]) {
 		await page.goto(route);

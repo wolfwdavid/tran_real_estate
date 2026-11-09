@@ -12,6 +12,10 @@ import { blockRentCast } from './helpers/data';
 // The page is only driven after the guide's onMount ran (`data-ready`): the prerendered tiles are
 // real buttons, so a click that lands before hydration does nothing.
 
+// Timeout: measured 2.8 s for "axe tour at 375px: agent steps 1-3" (root, 4 workers, e2e-report
+// 449ecc5, 2026-11-06), the slowest of the 21 tests.
+// Cause: each test waits for the guide's onMount `data-ready` on the built landing, steps through a
+// portal tour with focus checks, and runs axe at 375 px or 1280 px. 120 s keeps a 42.9x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

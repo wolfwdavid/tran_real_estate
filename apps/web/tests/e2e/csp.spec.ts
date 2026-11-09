@@ -29,7 +29,11 @@ async function installCollector(page: import('@playwright/test').Page) {
 const violations = (page: import('@playwright/test').Page) => page.evaluate(() => window.__csp);
 
 test('every route loads at top level with zero CSP violations', async ({ page }) => {
-	// One test walks every route, so its budget grows with ROUTES (about 2 s a page on one core).
+	// Timeout: measured 12.7 s for "every route loads at top level with zero CSP violations" (sub,
+	// 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: one test loads all 44 ROUTES at top level with the securitypolicyviolation collector and
+	// waits for the frame guard to reveal <html> and the h1 on each, so the budget grows with ROUTES:
+	// 44 x 4 s = 176 s keeps a 13.9x margin.
 	test.setTimeout(ROUTES.length * 4_000);
 	await installCollector(page);
 	for (const route of ROUTES) {

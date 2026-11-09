@@ -5,6 +5,12 @@ import { blockRentCast, saveRentCastKey } from './helpers/data';
 // Planner Note 7) and the DataStatusBar rule for /setup/rentcast/. Real built site, both bases;
 // RentCast is never reached.
 
+// Timeout: measured 2.7 s for "with a saved key, renter/?source=sample switches to sample data,
+// cleans the URL and announces" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of
+// five.
+// Cause: each test saves a key or seeds the CRM in IndexedDB, loads a portal route on the built site
+// with ?source=sample and waits for the (app) layout's hand-off and announcer. 120 s keeps a 44x
+// margin.
 test.describe.configure({ timeout: 120_000 });
 
 const statusBar = (page: Page) => page.getByRole('region', { name: 'Data source' });

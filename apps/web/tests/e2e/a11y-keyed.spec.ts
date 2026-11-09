@@ -23,6 +23,11 @@ import { RENTER_TEST_OPTIONS, expect, test } from './support/network';
 //   call an AI provider: AI only runs on a user's click.
 
 test.use(RENTER_TEST_OPTIONS);
+// Timeout: measured 3.2 s for "axe (keyed) reports no WCAG A/AA violations on "settings/"" (root,
+// 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of the 45 routes.
+// Cause: each route loads in live mode with five fake provider keys and a due saved search seeded,
+// the (app) layout's check-on-open pass hits the aborting recorder, then axe runs the full WCAG
+// A/AA tag set. 60 s keeps an 18.8x margin.
 test.describe.configure({ timeout: 60_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

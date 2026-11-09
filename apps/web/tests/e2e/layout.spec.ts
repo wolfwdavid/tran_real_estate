@@ -96,7 +96,10 @@ for (const route of CHROME_ROUTES) {
 }
 
 test('every route makes only same-origin requests and loads both brand fonts', async ({ page }) => {
-	// One test walks every route, so its budget grows with ROUTES (about 2 s a page on one core).
+	// Timeout: measured 5.9 s for "every route makes only same-origin requests and loads both brand
+	// fonts" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: one test loads all 44 ROUTES and awaits `document.fonts.ready` on each while recording
+	// every request, so the budget grows with ROUTES: 44 x 4 s = 176 s keeps a 29.8x margin.
 	test.setTimeout(ROUTES.length * 4_000);
 	const urls: string[] = [];
 	page.on('request', (r) => urls.push(r.url()));

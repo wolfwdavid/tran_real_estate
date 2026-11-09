@@ -9,6 +9,10 @@ import { FAKE_RENTCAST_KEY, RENTCAST_ROUTE, mockRentCast } from './helpers/data'
 // the title, "setup" in the path) and cover the three UI-SPEC states: no key, a saved untested key,
 // and a tested key.
 
+// Timeout: measured 2.4 s for "axe setup: no key - three steps, To do and Default: 40 badges, finish
+// row for ?portal=investor" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of ten.
+// Cause: each test loads the built setup page under the RentCast catch-all recorder, seeds or tests
+// a key through the UI and runs axe over the three-step guide. 120 s keeps a 50x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

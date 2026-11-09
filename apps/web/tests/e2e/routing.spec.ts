@@ -6,8 +6,12 @@ import { ROUTES, EXTERNAL_HOSTS, isPrintRoute } from './routes';
 // runs under both the root base ('/' or the BASE_PATH knob) and the sub-path base
 // ('/tran_real_estate/'); base-path assertions read the project's baseURL, never its name.
 
-// The two route walks below visit every page in one test, so their budget grows with ROUTES
-// (about 2 s a page on one core) instead of the 30 s default.
+// Timeout: measured 14.8 s for "every in-page link resolves to a trailing-slash path under the
+// current base" and 9.4 s for "every prerendered route responds 200 with a visible h1" (root,
+// 4 workers, e2e-report 449ecc5, 2026-11-06).
+// Cause: the two route walks below visit all 44 ROUTES in one test each, the link walk also
+// evaluating every anchor on each page, so the budget grows with ROUTES instead of the 30 s
+// default: 44 x 4 s = 176 s keeps an 11.9x margin.
 const WALK_TIMEOUT = ROUTES.length * 4_000;
 
 test('every prerendered route responds 200 with a visible h1', async ({ page }) => {

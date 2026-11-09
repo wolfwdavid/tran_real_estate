@@ -35,7 +35,11 @@ function record(context: BrowserContext): Seen[] {
 }
 
 test('keyless: every request on every route is same-origin', async ({ page, context }) => {
-	// One test walks every route, so its budget grows with ROUTES.
+	// Timeout: measured 28.0 s for "keyless: every request on every route is same-origin" (sub,
+	// 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: one test loads all 44 ROUTES and waits for `networkidle` on each (a 500 ms quiet window
+	// per page on top of the load), so the budget grows with ROUTES: 44 x 5 s = 220 s keeps a 7.9x
+	// margin.
 	test.setTimeout(ROUTES.length * 5_000);
 	const env = siteEnv(test.info().project.name);
 	const beaconOrigin = env.analyticsHost ? new URL(env.analyticsHost).origin : null;
@@ -60,6 +64,10 @@ test('keyless: every request on every route is same-origin', async ({ page, cont
 });
 
 test('no third-party <script src> in any built page', async ({ page }) => {
+	// Timeout: measured 7.2 s for "no third-party <script src> in any built page" (root, 4 workers,
+	// e2e-report 449ecc5, 2026-11-06).
+	// Cause: one test loads all 44 ROUTES and reads every script[src] in each document, so the budget
+	// grows with ROUTES: 44 x 4 s = 176 s keeps a 24x margin.
 	test.setTimeout(ROUTES.length * 4_000);
 	let scripts = 0;
 	for (const route of ROUTES) {
