@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 15-05-PLAN.md
-last_updated: "2026-11-09T08:01:37.999Z"
+stopped_at: Completed 15-04-PLAN.md
+last_updated: "2026-11-09T08:02:08.001Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 48
+  completed_plans: 49
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 6 of 11
+Plan: 7 of 11
 
 ## Performance Metrics
 
@@ -276,6 +276,7 @@ Plan: 6 of 11
 | Phase 15 P01 | 55min | 3 tasks | 12 files |
 | Phase 15 P07 | 12min | 3 tasks | 10 files |
 | Phase 15 P05 | 13min | 2 tasks | 28 files |
+| Phase 15 P04 | 13min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -738,6 +739,9 @@ Recent decisions affecting current work:
 - [Phase 15]: ensureSystem32OnPath normalises forward slashes to backslashes so C:/Windows/System32/ counts as present (behaviour b); the Pattern 6 snippet only stripped trailing separators
 - [Phase 15]: A scripts/lib .mjs consumed by a package without allowJs gets a sibling .d.mts (windows-path.d.mts for apps/extension) rather than editing the wxt-generated tsconfig
 - [Phase 15]: RUNBOOK worker values are read back from tooling/vitest/lanes.ts and apps/web/playwright.config.ts by runbook.test.ts, never retyped as literals in the test
+- [Phase 15]: Playwright raise annotations cite the governing test's total duration from e2e-report 449ecc5 and state the margin is over the whole test; helper waits name their slowest caller
+- [Phase 15]: Repeated Playwright raises are hoisted into one annotated UPPER_SNAKE _MS const per file (AI_FLOW_MS, RUN_WAIT_MS, SINGLE_RUN_MS, MULTI_RUN_MS, PACK_FLOW_MS, LONG_PACK_MS); values never change in Phase 15
+- [Phase 15]: A test.slow() immediately followed by test.setTimeout is annotated as superseded rather than removed (annotate-only scope)
 
 ### Pending Todos
 
@@ -767,7 +771,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T08:01:26.909Z
-Stopped at: Completed 15-05-PLAN.md
+Last session: 2026-11-09T08:02:07.995Z
+Stopped at: Completed 15-04-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
