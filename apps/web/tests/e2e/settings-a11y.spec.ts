@@ -10,6 +10,11 @@ import { fileFrom, makeBackup } from './helpers/backup-files';
 // reset could make an overlay silently transparent), focus placement inside and after dialogs,
 // and no horizontal page scroll at 375px.
 
+// Timeout: measured 6.8 s for "10. cooldown countdown is axe clean" (root, 4 workers, e2e-report
+// 449ecc5, 2026-11-06), the slowest of the eleven states.
+// Cause: every state is reached through the Settings UI (saving keys, deriving a passphrase vault,
+// opening a dialog) before axe runs; the cooldown state enters five wrong passphrases first. 120 s
+// keeps a 17.6x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

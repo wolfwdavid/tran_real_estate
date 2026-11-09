@@ -16,6 +16,10 @@ import {
 // "CallMeter", "CapAboveLimitDialog"). RentCast is never reached: blockRentCast aborts every
 // request, and the Test key tests answer from mockRentCast and count requests.
 
+// Timeout: measured 4.3 s for "meter Near: cap 40, 36 used, axe clean" (sub, 4 workers, e2e-report
+// 449ecc5, 2026-11-06), the slowest of the thirteen cases.
+// Cause: each case seeds the quota ledger and a saved key in IndexedDB, loads the built Settings
+// page, drives the Test key probe through mockRentCast and runs axe. 120 s keeps a 27.9x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];

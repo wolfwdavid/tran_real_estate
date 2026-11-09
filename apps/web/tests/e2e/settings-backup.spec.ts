@@ -156,6 +156,11 @@ test('cancel closes the preview and changes nothing', async ({ page }) => {
 });
 
 test('wrong files are rejected and the input resets', async ({ page }) => {
+	// Timeout: measured 10.5 s for "wrong files are rejected and the input resets" (root, 4 workers,
+	// e2e-report 449ecc5, 2026-11-06).
+	// Cause: five rejected files are uploaded twice each with setInputFiles, including a 26 MB buffer
+	// that is transferred to the browser and read before the size check rejects it. 90 s keeps an
+	// 8.6x margin.
 	test.setTimeout(90_000);
 	await openSettings(page);
 	const input = page.locator('#backup-file');

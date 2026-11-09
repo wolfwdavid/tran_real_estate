@@ -5,6 +5,11 @@ import { announcer, fakeKey, openSettings, saveKey, stubStorage } from './helper
 // lock: encrypted at rest, locked after reopening, persisted rate limit, lock/change/remove,
 // cross-tab lock). Keys are planted fakeKey() values and passphrases are assembled at runtime.
 
+// Timeout: measured 6.0 s for "cooldown after 5 wrong passphrases persists across reload, then
+// doubles" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of the eleven tests.
+// Cause: setting or entering a passphrase derives the vault key with PBKDF2 and re-encrypts every
+// stored key; the cooldown test does that five times wrong, reloads, and fast-forwards the clock
+// twice. 120 s keeps a 20x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const PASS = ['quiet', 'harbor', 'lantern', 'seven'].join(' ');

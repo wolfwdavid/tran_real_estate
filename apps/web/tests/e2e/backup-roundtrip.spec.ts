@@ -90,6 +90,11 @@ test('every backup table survives a Settings export, wipe and import, at 0 RentC
 	page,
 	net
 }, testInfo) => {
+	// Timeout: measured 9.3 s for "every backup table survives a Settings export, wipe and import, at
+	// 0 RentCast calls" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: one test seeds every backup table through the shipped UI against the RentCast mock,
+	// downloads the export, wipes with confirmation, imports the file and reloads to compare each
+	// table. 180 s keeps a 19.4x margin.
 	test.setTimeout(180_000);
 	await withRentCastKey(page);
 	await mockRentCast(page, net);

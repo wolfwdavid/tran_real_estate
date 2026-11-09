@@ -8,6 +8,11 @@ import { fileFrom, makeBackup } from './helpers/backup-files';
 // "Your keys are locked" and a link to Key security, which beats the backup reminder even when
 // that is overdue too. Settings itself never shows the locked notice (the unlock form is there).
 
+// Timeout: measured 6.4 s for "locked keys notice beats the backup reminder, links to Settings and
+// clears on unlock" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+// Cause: the test remembers keys behind a passphrase (PBKDF2 vault derivation), seeds an overdue
+// backup, opens a second locked tab, runs axe on the notice and unlocks through the Settings form.
+// 120 s keeps an 18.8x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
