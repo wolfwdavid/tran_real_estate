@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 15-08-PLAN.md
-last_updated: "2026-11-09T08:12:57.574Z"
+stopped_at: Completed 15-09-PLAN.md
+last_updated: "2026-11-09T08:34:44.571Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 51
+  completed_plans: 52
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 9 of 11
+Plan: 10 of 11
 
 ## Performance Metrics
 
@@ -279,6 +279,7 @@ Plan: 9 of 11
 | Phase 15 P04 | 13min | 2 tasks | 12 files |
 | Phase 15 P06 | 13min | 2 tasks | 8 files |
 | Phase 15 P08 | 25min | 3 tasks | 7 files |
+| Phase 15 P09 | 18min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -750,6 +751,8 @@ Recent decisions affecting current work:
 - [Phase 15]: 15-08: SERIAL_GROUP_ORDER is a per-lane map (core/web/scripts 1, web-browser 2) read by serialTest; the browser pool runs in its own group after every node-serial file (0 cross-pool overlap measured, about +21 s per run)
 - [Phase 15]: 15-08: cpu-burn hot loop is pure arithmetic; Date.now() polling serialises on V8's Windows clock mutex (2.8 of 16 cores)
 - [Phase 15]: 15-08: TEST-01/TEST-05 stay unchecked until 15-09 (guard) and 15-10 (evidence); lane-order proof uses a node stand-in for the browser group
+- [Phase 15]: 15-09: the lane guard stays in the parallel scripts project; its sweep measured 1.88 s max under full load, under the 2.5 s Pitfall 10 threshold
+- [Phase 15]: 15-09: test-lane-rules.mjs derives callee names from the AST property chain (calleeName) so Prettier-wrapped expect.poll / expect.element / vi.waitFor chains are guarded; group order asserted per lane via SERIAL_GROUP_ORDER[lane]
 
 ### Pending Todos
 
@@ -779,7 +782,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T08:12:57.568Z
-Stopped at: Completed 15-08-PLAN.md
+Last session: 2026-11-09T08:34:44.564Z
+Stopped at: Completed 15-09-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

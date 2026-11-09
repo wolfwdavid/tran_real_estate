@@ -168,7 +168,7 @@ Plans:
   4. `docs/test-evidence/<date>.md` records three consecutive clean full `pnpm verify` runs, `--repeat-each 3` green on every spec a deferred-items file names as load-sensitive, one full E2E run under artificial CPU pressure with zero failures, and one green unit run with shuffled file and test order whose seed is stored in the file.
 **Research flag:** no (standard patterns: Vitest `--project` patterns, `--no-file-parallelism`, `sequence.shuffle`/`seed`; Playwright `--repeat-each`, `--fail-on-flaky-tests`, all verified on the installed versions).
 **UI hint:** no.
-**Plans:** 8/11 plans executed
+**Plans:** 9/11 plans executed
 Plans:
 - [x] 15-01-PLAN.md — Wave 1: lane manifest (tooling/vitest/lanes.ts), four file-based *-serial configs, MAX_WORKERS cap, VITEST_MAX_WORKERS fail-closed; measured ordering, threshold and dev worker value
 - [x] 15-02-PLAN.md — Wave 1 (TDD): pure AST rules module for elapsed time, raised timeouts, measured+cause annotations and retries
@@ -178,7 +178,7 @@ Plans:
 - [x] 15-06-PLAN.md — Wave 2: annotate Vitest serial-lane raises from fresh measurements; fix the ResultsView 5 s claim
 - [x] 15-07-PLAN.md — Wave 2: tested Windows PATH/taskkill module replacing 5 inline copies; RUNBOOK worker table pinned by runbook.test.ts
 - [x] 15-08-PLAN.md — Wave 2: behavioural proofs (lane order plain + shuffled, pass-on-retry fails) and scripts/cpu-burn.mjs
-- [ ] 15-09-PLAN.md — Wave 3: repo-wide guard test (sweep, manifest integrity, CI/config pins, non-vacuity, 7-mutant ledger)
+- [x] 15-09-PLAN.md — Wave 3: repo-wide guard test (sweep, manifest integrity, CI/config pins, non-vacuity, 7-mutant ledger)
 - [ ] 15-10-PLAN.md — Wave 4: evidence protocol (verify x3, repeat-each 3, CPU-pressure E2E, shuffled seed) in docs/test-evidence/<date>.md + doc pin
 - [ ] 15-11-PLAN.md — Wave 5: owner-approved push, CI observation of the flaky flag and 2 workers, TEST-01..06 ticked
 
@@ -231,6 +231,6 @@ Plans:
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
 | 14. Carried Debt | v1.1 | 12/12 | Complete    | 2026-11-06 |
-| 15. Load-Deterministic Test Lanes | v1.1 | 8/11 | In Progress|  |
+| 15. Load-Deterministic Test Lanes | v1.1 | 9/11 | In Progress|  |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
