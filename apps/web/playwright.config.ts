@@ -27,7 +27,16 @@ const ROOT_BASE = targetEnv('root').BASE_PATH;
 export default defineConfig({
 	testDir: 'tests/e2e',
 	forbidOnly: !!process.env.CI,
+	// Retry policy (TEST-03): CI retries once ONLY to classify a failure. With failOnFlakyTests a test
+	// that fails and then passes on the retry is reported "flaky" and still fails the job (ci.yml also
+	// passes --fail-on-flaky-tests), so a retry can never turn red into green. Locally retries are 0.
+	// Never raise retries or add toPass loops to hide a flake: root-cause it (tasks/lessons.md).
 	retries: process.env.CI ? 1 : 0,
+	failOnFlakyTests: !!process.env.CI,
+	// Known-good worker counts (TEST-04): CI ubuntu-24.04 has 4 vCPUs and ran green at 2 ("using 2
+	// workers", run 42289609809); the 16-CPU dev machine is green at 4 and gave six 30 s timeouts at 8
+	// (10-23). Pinned so the count no longer follows the machine's CPU count.
+	workers: process.env.CI ? 2 : 4,
 	reporter: process.env.CI ? [['github'], ['list']] : 'list',
 	// Reduced motion for every spec: app.css sets html { scroll-behavior: smooth } under
 	// no-preference, which animates Playwright's scroll-into-view. Settings fills in late (RentCast
