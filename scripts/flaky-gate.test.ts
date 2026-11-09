@@ -1,7 +1,7 @@
 // Behavioural proof of the flaky gate (TEST-03) on the installed Playwright: a throwaway spec under
 // apps/web/.tools passes only on its retry (test.info().retry === 1). Without the gate that run is
-// green and merely reports "1 flaky"; with --fail-on-flaky-tests, or with the configs' own
-// `failOnFlakyTests: !!process.env.CI` under CI=1, the same run exits non-zero. No browser is launched
+// green and merely reports "1 flaky"; with --fail-on-flaky-tests, or with the Playwright configs'
+// CI-only failOnFlakyTests under CI=1, the same run exits non-zero. No browser is launched
 // (the spec uses no page fixture). Lives in scripts-serial: it spawns Playwright once per case.
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -84,7 +84,7 @@ describe('a test that passes only on its retry', () => {
 		expect(r.status, r.out).not.toBe(0);
 	});
 
-	test('fails the run with failOnFlakyTests: !!process.env.CI under CI=1 (the Playwright configs)', () => {
+	test("fails the run with the configs' CI-only failOnFlakyTests under CI=1", () => {
 		const r = pw('ci.config.ts', [], { ...baseEnv(), CI: '1' });
 		expect(r.out, r.out).toMatch(/1 flaky/);
 		expect(r.status, r.out).not.toBe(0);
