@@ -1,18 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 import { targetEnv } from '../../scripts/lib/build-targets.mjs';
+import { ensureSystem32OnPath } from '../../scripts/lib/windows-path.mjs';
 
-// Playwright's only way to stop a webServer on Windows is `taskkill /pid <pid> /T /F`, run through
-// cmd.exe with the runner's PATH and with its output discarded. On a machine whose PATH omits
-// %SystemRoot%\System32 the call fails silently, the server survives, and every run appears to
-// hang for minutes at teardown. This module is evaluated inside the runner process, so prepending
-// System32 here makes taskkill resolvable for that call without touching the machine.
-if (process.platform === 'win32') {
-	const system32 = `${process.env.SystemRoot ?? 'C:\\Windows'}\\System32`;
-	const entries = (process.env.PATH ?? '').split(';');
-	if (!entries.some((e) => e.toLowerCase() === system32.toLowerCase())) {
-		process.env.PATH = [system32, ...entries].join(';');
-	}
-}
+// Windows: Playwright tears child processes down with taskkill via cmd.exe; the guard puts the
+// system directory on PATH first or teardown hangs silently (scripts/lib/windows-path.mjs).
+ensureSystem32OnPath();
 
 // Ports are env-overridable. The defaults sit 100 above the Vite preview defaults because those
 // belong to another local project on the development machine (never reuse or kill its servers).

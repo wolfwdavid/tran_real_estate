@@ -1,6 +1,7 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
+import { ensureSystem32OnPath } from '../../scripts/lib/windows-path.mjs';
 import { MAX_WORKERS } from '../../tooling/vitest/lanes';
 import { resolveSiteUrl } from '../web/src/lib/site-config.js';
 
@@ -9,15 +10,9 @@ import { resolveSiteUrl } from '../web/src/lib/site-config.js';
 // browser-free; run with `pnpm --filter extension test:browser`. App.svelte receives its browser
 // wiring as a prop, so no WXT plugin is needed and wxt/browser is never imported here.
 
-// Same Windows PATH guard as apps/web: Chromium teardown shells out to taskkill, which fails
-// silently when PATH omits System32 and leaves the run hanging.
-if (process.platform === 'win32') {
-	const system32 = `${process.env.SystemRoot ?? 'C:\\Windows'}\\System32`;
-	const entries = (process.env.PATH ?? '').split(';');
-	if (!entries.some((e) => e.toLowerCase() === system32.toLowerCase())) {
-		process.env.PATH = [system32, ...entries].join(';');
-	}
-}
+// Windows: Playwright tears child processes down with taskkill via cmd.exe; the guard puts the
+// system directory on PATH first or teardown hangs silently (scripts/lib/windows-path.mjs).
+ensureSystem32OnPath();
 
 export default defineConfig({
 	plugins: [svelte()],

@@ -80,7 +80,9 @@ describe('the five configs call the module instead of carrying an inline copy', 
 	test.each(CONFIGS)('(g) %s imports ensureSystem32OnPath and calls it at top level', (p) => {
 		const src = read(p);
 		expect(src, 'import line').toContain(IMPORT_LINE);
-		expect(src.match(/^ensureSystem32OnPath\(\);$/gm), 'exactly one top-level call').toHaveLength(1);
+		expect(src.match(/^ensureSystem32OnPath\(\);$/gm), 'exactly one top-level call').toHaveLength(
+			1
+		);
 		// No inline copy: outside the identifier itself the literal never appears, and the old
 		// `if (process.platform === 'win32')` branch is gone.
 		const stripped = src.replace(/ensureSystem32OnPath/g, '');

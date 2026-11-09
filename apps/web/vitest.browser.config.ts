@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { playwright } from '@vitest/browser-playwright';
 import { fileURLToPath } from 'node:url';
 import { configDefaults, defineConfig } from 'vitest/config';
+import { ensureSystem32OnPath } from '../../scripts/lib/windows-path.mjs';
 import { files, MAX_WORKERS } from '../../tooling/vitest/lanes';
 
 // Component tests in real Chromium (UI-SPEC: primitives get vitest-browser-svelte tests that assert
@@ -10,15 +11,9 @@ import { files, MAX_WORKERS } from '../../tooling/vitest/lanes';
 // each file runs in exactly one project. The shared no-network setup file stays active here too:
 // module loading uses native import, not fetch, so the ban coexists with browser mode.
 
-// Same Windows PATH guard as playwright.config.ts: Chromium teardown shells out to taskkill, which
-// fails silently when PATH omits System32 and leaves the run hanging.
-if (process.platform === 'win32') {
-	const system32 = `${process.env.SystemRoot ?? 'C:\\Windows'}\\System32`;
-	const entries = (process.env.PATH ?? '').split(';');
-	if (!entries.some((e) => e.toLowerCase() === system32.toLowerCase())) {
-		process.env.PATH = [system32, ...entries].join(';');
-	}
-}
+// Windows: Playwright tears child processes down with taskkill via cmd.exe; the guard puts the
+// system directory on PATH first or teardown hangs silently (scripts/lib/windows-path.mjs).
+ensureSystem32OnPath();
 
 export default defineConfig({
 	plugins: [tailwindcss(), svelte()],

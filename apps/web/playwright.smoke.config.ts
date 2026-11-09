@@ -1,16 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
+import { ensureSystem32OnPath } from '../../scripts/lib/windows-path.mjs';
 import { parseSmokeEnv } from './tests/smoke/env.js';
 
-// Playwright's only way to stop a child process on Windows is `taskkill`, resolved through the
-// runner's PATH. Prepending %SystemRoot%\System32 keeps a machine PATH that omits it from stalling
-// teardown (playwright.config.ts has the full story; this block is copied from there verbatim).
-if (process.platform === 'win32') {
-	const system32 = `${process.env.SystemRoot ?? 'C:\\Windows'}\\System32`;
-	const entries = (process.env.PATH ?? '').split(';');
-	if (!entries.some((e) => e.toLowerCase() === system32.toLowerCase())) {
-		process.env.PATH = [system32, ...entries].join(';');
-	}
-}
+// Windows: Playwright tears child processes down with taskkill via cmd.exe; the guard puts the
+// system directory on PATH first or teardown hangs silently (scripts/lib/windows-path.mjs).
+ensureSystem32OnPath();
 
 // Fail closed: a missing or unsafe SMOKE_BASE_URL throws here, before any test is listed or run.
 const smoke = parseSmokeEnv(process.env);
