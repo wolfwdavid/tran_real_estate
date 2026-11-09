@@ -1,9 +1,13 @@
 /*
  * Test lanes (Phase 15, TEST-01/TEST-04).
  *
- * The parallel lane is every Vitest project in vitest.config.ts; the serial lane is the *-serial
- * projects, which run after the parallel group finishes (sequence.groupOrder 1) one file at a time
- * (fileParallelism false).
+ * The parallel lane is every Vitest project in vitest.config.ts (sequence.groupOrder 0, Vitest's
+ * default); the serial lane is the *-serial projects, which run one file at a time (fileParallelism
+ * false) in later groups: the node lanes (core, web, scripts) at SERIAL_GROUP_ORDER 1, after the
+ * parallel group finishes, and web-browser at 2, after every node-serial file has finished. The
+ * browser lane gets its own group because Vitest's forks pool and browser pool run side by side
+ * inside one group (15-01 measured 8 overlap pairs, e.g. ResultsView.browser beside 6.4 s of ESLint),
+ * which defeats load-determinism for exactly the files that flaked.
  *
  * Lane-safety threshold: a test stays in the parallel lane only if its max duration in a full
  * parallel `vitest run` is <= 50% of that lane's default timeout (node 5 s, browser 15 s).
@@ -90,7 +94,13 @@ export const SERIAL = {
 } as const satisfies Record<string, readonly SerialEntry[]>;
 
 export type Lane = keyof typeof SERIAL;
-export const SERIAL_GROUP_ORDER = 1;
+/** sequence.groupOrder per serial lane; every value is > 0 and web-browser is the greatest. */
+export const SERIAL_GROUP_ORDER = {
+	core: 1,
+	web: 1,
+	scripts: 1,
+	'web-browser': 2
+} as const satisfies Record<Lane, number>;
 export const files = (lane: Lane): string[] => SERIAL[lane].map((e) => e.file);
 
 /** The `test` overrides every *-serial project shares. Spread AFTER the base config's `test`. */
@@ -101,7 +111,7 @@ export function serialTest(lane: Lane) {
 		exclude: [...configDefaults.exclude],
 		fileParallelism: false,
 		maxWorkers: 1,
-		sequence: { groupOrder: SERIAL_GROUP_ORDER }
+		sequence: { groupOrder: SERIAL_GROUP_ORDER[lane] }
 	};
 }
 

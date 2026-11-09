@@ -10,9 +10,10 @@ if (process.env.VITEST_MAX_WORKERS) {
 }
 
 // Parallel lane: the first six projects (sequence.groupOrder 0). Serial lane: the four
-// *.serial.config.ts files (groupOrder 1, one file at a time), which start only after the parallel
-// group finishes. Serial projects MUST stay file-based: CLI --sequence.* flags drop groupOrder from
-// inline project objects (15-RESEARCH.md Pitfall 1).
+// *serial.config.ts files, one file at a time, in later groups (SERIAL_GROUP_ORDER: node lanes 1,
+// web-browser 2) so each group starts only after the previous one finishes. Serial projects MUST
+// stay file-based: CLI --sequence.* flags drop groupOrder from inline project objects
+// (15-RESEARCH.md Pitfall 1).
 export default defineConfig({
 	test: {
 		maxWorkers: MAX_WORKERS,
