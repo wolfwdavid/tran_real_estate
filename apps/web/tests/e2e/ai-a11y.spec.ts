@@ -18,6 +18,11 @@ import { announcer } from './helpers/settings';
 // settings-a11y.spec.ts. The popover and the Gemini dialog are also checked at 375px for no
 // horizontal page scroll.
 
+// Timeout: measured 11.6 s for "10. Draft history with all three statuses is axe clean" (root,
+// 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of the 24 states.
+// Cause: each state is built on the live Settings page by saving keys and streaming drafts from the
+// provider SSE mocks before axe runs; state 10 streams three drafts and marks each one. 120 s keeps
+// a 10.3x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
@@ -48,6 +53,11 @@ const BLOCKED =
 const GEMINI_TITLE = 'Send client details to Gemini?';
 
 async function expectDraftReady(page: Page): Promise<void> {
+	// Timeout: measured 11.6 s for the whole of "10. Draft history with all three statuses is axe
+	// clean" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), which streams three drafts through this
+	// wait.
+	// Cause: a draft streams word by word from the Fixture provider or the Anthropic/Gemini SSE mocks
+	// before "Draft ready." appears, so one draft is under 4 s. 20 s keeps a 5x margin per draft.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});

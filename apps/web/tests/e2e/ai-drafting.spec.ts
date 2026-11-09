@@ -109,6 +109,10 @@ test.describe('AI drafting', () => {
 		await openAiSettings(page);
 		await runButton(page, 'Generate draft').click();
 
+		// Timeout: measured 4.6 s for the whole of "AI drafting > sample output runs to completion with
+		// a clean Fair Housing check and open exits" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+		// Cause: the Fixture provider streams the sample draft word by word before "Draft ready."
+		// appears. 15 s keeps a 3.3x margin on the whole test.
 		await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 			timeout: 15_000
 		});

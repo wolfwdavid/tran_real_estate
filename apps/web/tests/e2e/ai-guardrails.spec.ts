@@ -20,6 +20,12 @@ import { announcer } from './helpers/settings';
 // - Draft history statuses, Mark as not sent, and the delete confirmation.
 // - The sample output toggle overrides a saved key: no provider request at all.
 
+// Timeout: measured 11.4 s for "AI guardrails > Draft history shows Draft, Reviewed and Marked as
+// sent, and deletes with confirmation" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the
+// slowest of four.
+// Cause: each test saves keys through Settings and streams one or more drafts from the Anthropic
+// or Gemini SSE mocks, then drives the exits, the Gemini consent dialog and the history list on the
+// built site. 120 s keeps a 10.5x margin.
 test.describe.configure({ timeout: 120_000 });
 
 const section = (page: Page) => page.locator('#ai-drafting');
@@ -54,6 +60,11 @@ async function readClipboard(page: Page): Promise<string> {
 
 /** Waits for a finished sample or live draft. */
 async function expectDraftReady(page: Page): Promise<void> {
+	// Timeout: measured 11.4 s for the whole of "AI guardrails > Draft history shows Draft, Reviewed
+	// and Marked as sent, and deletes with confirmation" (sub, 4 workers, e2e-report 449ecc5,
+	// 2026-11-06), which streams three drafts through this wait.
+	// Cause: a draft streams word by word from the Fixture provider or the Anthropic/Gemini SSE mocks
+	// before "Draft ready." appears, so one draft is under 4 s. 20 s keeps a 5x margin per draft.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});
