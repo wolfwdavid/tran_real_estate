@@ -91,6 +91,11 @@ export const test = withMonitor.extend<{ gpc: void }>({
  * the install took 5.3 s, past Playwright's 5 s poll default (the local emulator never came close);
  * from a residential client with four workers it measured 6.7 to 8.3 s. Sized at 2.4 times the
  * slowest measurement, inside the 30 s test timeout, and `installedPrecache` logs every run's time.
+ *
+ * Timeout: measured 8.3 s at most for the precache install (live origin, 4 workers, 13-13); the
+ * latest live-smoke run (42292936697 at 449ecc5, 14-11) passed all 121 specs in 49.6 s total.
+ * Cause: the service worker's single `cache.addAll` fetches every build chunk from the Pages CDN
+ * before the poll can see a non-empty cache. 20 s keeps a 2.4x margin.
  */
 export const PRECACHE_INSTALL_TIMEOUT_MS = 20_000;
 
