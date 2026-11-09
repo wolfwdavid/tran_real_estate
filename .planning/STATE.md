@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 15-03-PLAN.md
-last_updated: "2026-11-09T06:56:31.729Z"
+stopped_at: Completed 15-02-PLAN.md
+last_updated: "2026-11-09T07:11:25.368Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 44
+  completed_plans: 45
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 2 of 11
+Plan: 3 of 11
 
 ## Performance Metrics
 
@@ -272,6 +272,7 @@ Plan: 2 of 11
 | Phase 14 P07 | 30 min | 2 tasks | 3 files |
 | Phase 14 P11 | 60min | 3 tasks | 7 files |
 | Phase 15 P03 | 10min | 2 tasks | 4 files |
+| Phase 15 P02 | 25min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -723,6 +724,9 @@ Recent decisions affecting current work:
 - [Phase 14]: 14-11: Phase 14 head 449ecc5 deployed green (ci 42289609809, live-smoke 42292936697); launch audit regenerated at 449ecc5 with /feedback/ and /for-*/ HARD PASS
 - [Phase 15]: 15-03: workflow-gate pins the flaky flag by counting run: lines carrying it (exactly one) plus a substring count of 2, because the comment above the E2E step also names the flag
 - [Phase 15]: 15-03: extension Playwright comments describe the real launch shape (one persistent context in beforeAll for a serial describe) with measured 0.447 s and a Cause line; 60_000 unchanged
+- [Phase 15]: 15-02: test-API detection by Vitest modifier chain (test/it/describe/suite + each/for/only/skip/todo/fails/concurrent/sequential/shuffle/skipIf/runIf), never by root identifier alone; a local iterator named it is not a raise site
+- [Phase 15]: 15-02: scripts/*.mjs retry flags are read from string literals via the JS AST and workflow comment lines are skipped, so comments never trip the retry rule
+- [Phase 15]: 15-02: toPass findings point at the .toPass token of a multi-line expect chain; non-literal timeout values stay raised, declaration lookup only locates the annotation comment
 
 ### Pending Todos
 
@@ -752,7 +756,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T06:56:31.716Z
-Stopped at: Completed 15-03-PLAN.md
+Last session: 2026-11-09T07:11:25.363Z
+Stopped at: Completed 15-02-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

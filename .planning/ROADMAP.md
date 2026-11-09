@@ -168,10 +168,10 @@ Plans:
   4. `docs/test-evidence/<date>.md` records three consecutive clean full `pnpm verify` runs, `--repeat-each 3` green on every spec a deferred-items file names as load-sensitive, one full E2E run under artificial CPU pressure with zero failures, and one green unit run with shuffled file and test order whose seed is stored in the file.
 **Research flag:** no (standard patterns: Vitest `--project` patterns, `--no-file-parallelism`, `sequence.shuffle`/`seed`; Playwright `--repeat-each`, `--fail-on-flaky-tests`, all verified on the installed versions).
 **UI hint:** no.
-**Plans:** 1/11 plans executed
+**Plans:** 2/11 plans executed
 Plans:
 - [ ] 15-01-PLAN.md — Wave 1: lane manifest (tooling/vitest/lanes.ts), four file-based *-serial configs, MAX_WORKERS cap, VITEST_MAX_WORKERS fail-closed; measured ordering, threshold and dev worker value
-- [ ] 15-02-PLAN.md — Wave 1 (TDD): pure AST rules module for elapsed time, raised timeouts, measured+cause annotations and retries
+- [x] 15-02-PLAN.md — Wave 1 (TDD): pure AST rules module for elapsed time, raised timeouts, measured+cause annotations and retries
 - [x] 15-03-PLAN.md — Wave 1: Playwright retry policy comment, failOnFlakyTests, web workers CI 2 / dev 4, ci.yml --fail-on-flaky-tests + workflow-gate pin
 - [ ] 15-04-PLAN.md — Wave 2: annotate Playwright raises, partition A (studio/snapshot/agent specs + extension e2e), values unchanged
 - [ ] 15-05-PLAN.md — Wave 2: annotate Playwright raises, partition B (all other web specs, helpers, smoke), values unchanged
@@ -231,6 +231,6 @@ Plans:
 | 12. Go-live Readiness & Local Smoke Suite | v1.1 | 10/10 | Complete    | 2026-10-29 |
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
 | 14. Carried Debt | v1.1 | 12/12 | Complete    | 2026-11-06 |
-| 15. Load-Deterministic Test Lanes | v1.1 | 1/11 | In Progress|  |
+| 15. Load-Deterministic Test Lanes | v1.1 | 2/11 | In Progress|  |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 0/TBD | Not started | - |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
