@@ -102,9 +102,11 @@ export function serialTest(lane: Lane) {
 }
 
 // Known-good, measured. CI ubuntu-24.04 = 4 vCPU: Vitest's previous default (cpus-1) = 3 ran 359
-// files green in 93.7-108.2 s (run 42289609809). Dev = 16 logical CPUs: <filled by Task 3>. The
-// browser pool ignores the root value, so vitest.browser.config.ts files set it too, from this
-// constant (Vitest throws on mismatched maxWorkers in one group).
+// files green in 93.7-108.2 s (run 42289609809). Dev = 16 logical CPUs: `pnpm test:unit` median
+// 124.3 s at 8 workers vs 135.1 s at 15 (2 runs each, 2026-11-09, two sibling executor agents loading
+// the machine throughout; aggregate transform time doubled at 15); 8 leaves headroom for E2E and
+// Chromium beside the unit run. The browser pool ignores the root value, so vitest.browser.config.ts
+// files set it too, from this constant (Vitest throws on mismatched maxWorkers in one group).
 export const MAX_WORKERS = process.env.CI ? 3 : 8;
 
 /** E2E specs a deferred-items file names as load-sensitive (paths relative to apps/web/tests/e2e). */
