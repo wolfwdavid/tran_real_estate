@@ -5,8 +5,11 @@
 //
 // Detection is the TypeScript compiler API (precedent: apps/web/src/lib/ai/import-graph.ts), not
 // regex, except for the retry flags in package.json scripts, workflow lines and scripts/*.mjs.
-// Non-literal timeout values (identifiers, arithmetic) always count as raised: the guard cannot
-// prove them small, so it fails closed. All paths are repo-relative POSIX; `line` is 1-based.
+// Callee names come from the AST property chain (calleeName), never from raw source text, so a
+// Prettier-wrapped `expect\n\t.poll(...)` is the same site as `expect.poll(...)` (15-06 found two
+// raise sites hidden that way). Non-literal timeout values (identifiers, arithmetic) always count
+// as raised: the guard cannot prove them small, so it fails closed. All paths are repo-relative
+// POSIX; `line` is 1-based.
 import ts from 'typescript';
 
 /**
@@ -148,6 +151,32 @@ const isRaised = (value, max) => value === null || value > max;
 
 /** @param {ts.Node} n @param {ts.SourceFile} sf */
 const valueText = (n, sf) => (ts.isNumericLiteral(n) ? n.text : `${n.getText(sf)} (non-literal)`);
+
+/**
+ * Dotted name of a callee, built from the AST so a Prettier-wrapped chain (`expect\n\t.poll`)
+ * reads `expect.poll`. A plain identifier/property chain joins its names; anything else
+ * (`expect(loc).toBeVisible`, `fn()()`) falls back to the source text with whitespace removed.
+ * @param {ts.Expression} e
+ * @param {ts.SourceFile} sf
+ * @returns {string}
+ */
+function calleeName(e, sf) {
+	/** @type {string[]} */
+	const parts = [];
+	let cur = e;
+	for (;;) {
+		if (ts.isIdentifier(cur)) {
+			parts.unshift(cur.text);
+			return parts.join('.');
+		}
+		if (ts.isPropertyAccessExpression(cur) && ts.isIdentifier(cur.name)) {
+			parts.unshift(cur.name.text);
+			cur = cur.expression;
+			continue;
+		}
+		return e.getText(sf).replace(/\s+/g, '');
+	}
+}
 
 /**
  * Walks `a.b.c(...)(...)` down to its root identifier name, or null.
@@ -322,10 +351,10 @@ export function elapsedTimeFindings(path, text) {
 	/** @type {Finding[]} */
 	const out = [];
 	const isDateNow = (/** @type {ts.Node} */ n) =>
-		ts.isCallExpression(n) && n.expression.getText(sf) === 'Date.now';
+		ts.isCallExpression(n) && calleeName(n.expression, sf) === 'Date.now';
 	walk(sf, (n) => {
 		if (ts.isCallExpression(n)) {
-			const callee = n.expression.getText(sf);
+			const callee = calleeName(n.expression, sf);
 			if (ELAPSED_CALLEES.has(callee)) {
 				out.push({ path, line: lineOf(sf, n), rule: 'elapsed-time', detail: `${callee}()` });
 			}
@@ -383,7 +412,7 @@ function vitestRaiseSites(sf, lane) {
 	walk(sf, (n) => {
 		if (!ts.isCallExpression(n)) return;
 		const callee = n.expression;
-		const calleeText = callee.getText(sf);
+		const calleeText = calleeName(callee, sf);
 		const args = n.arguments;
 
 		if (calleeText === 'vi.setConfig') {
@@ -489,7 +518,7 @@ export function playwrightTimeoutFindings(path, text) {
 	walk(sf, (n) => {
 		if (!ts.isCallExpression(n)) return;
 		const callee = n.expression;
-		const calleeText = callee.getText(sf);
+		const calleeText = calleeName(callee, sf);
 		const root = rootName(callee);
 		const args = n.arguments;
 
@@ -670,7 +699,7 @@ export function retryFindings(path, text) {
 			return;
 		}
 		if (!ts.isCallExpression(n)) return;
-		const calleeText = n.expression.getText(sf);
+		const calleeText = calleeName(n.expression, sf);
 		if (kind === 'playwright') {
 			if (calleeText.endsWith('describe.configure')) {
 				const opts = n.arguments[0];
