@@ -40,6 +40,19 @@
 - **Pointer:** 15-10 evidence protocol (3 consecutive clean `pnpm verify`, CPU-pressure run) is the
   natural place to see whether it recurs on an otherwise idle machine. If it does, root-cause before
   classifying; never add a retry.
+- **ROOT CAUSE FOUND 2026-11-09 by 15-10 (host network, not the repository):** the dev machine's
+  Intel Wi-Fi 7 BE201 adapter (Netwaw18 driver 24.20.0.4, 2026-01-06) drops and re-joins the WLAN
+  every 1-3 minutes under load (WLAN-AutoConfig event 8003 "The network is disconnected by the
+  driver", 8001 reconnect 3-5 s later; 42 drops in the 5 h before 09:17Z). Each drop fires a Windows
+  network-state change and Chromium's NetworkChangeNotifier aborts every in-flight request, loopback
+  included, with `net::ERR_NETWORK_CHANGED`; a module graph loading at that instant fails with
+  `Failed to fetch dynamically imported module`. 15-10's first `pnpm verify` had 12 E2E failures
+  (pages stuck on `<html hidden>` or SvelteKit's `Internal Error` page) and every one started within
+  0.5-1.7 s of a logged drop; 15-01's three sightings (06:50Z, 06:59Z, 07:29Z) match drops at
+  06:50:42, 06:59:44 and 07:29:18. Neither Vitest browser mode nor the lanes are involved. No repo
+  fix (a retry would hide it); the protocol needs a stable host network. Longer-term the app could
+  recover from a failed chunk load (SvelteKit's version-skew reload only fires on navigation), which
+  is a product decision for a later phase, not a test change.
 
 ## 15-01: happy-dom iframe warnings in the extension project (pre-existing noise)
 
