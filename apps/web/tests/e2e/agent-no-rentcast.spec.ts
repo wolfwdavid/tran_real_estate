@@ -67,8 +67,12 @@ async function expectNoSms(page: Page, label: string) {
 }
 
 test('every agent flow makes zero RentCast requests and offers no sms: links', async ({ page }) => {
-	// A long walk (PAGE_LOADS page loads plus a draft): the budget scales with the pages walked, like
-	// the 09-09 route walks, instead of a fixed multiple of the default timeout.
+	// Timeout: measured 13.3 s for "every agent flow makes zero RentCast requests and offers no sms:
+	// links" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: a long walk of PAGE_LOADS (21) full page loads plus a streamed keyless draft and the
+	// import, profile and inquiry forms; the budget scales with the pages walked, like the 09-09 route
+	// walks, instead of a fixed multiple of the default timeout. 21 x 4 s + 40 s = 124 s keeps a 9x
+	// margin.
 	test.setTimeout(PAGE_LOADS * PER_PAGE_MS + FLOWS_MS);
 	visited.length = 0;
 	const hits = await rentcastTripwire(page);
@@ -114,6 +118,10 @@ test('every agent flow makes zero RentCast requests and offers no sms: links', a
 	await expect(page.getByRole('heading', { level: 1, name: CONTACT })).toBeVisible();
 	await page.getByRole('button', { name: 'Draft follow-up email', exact: true }).click();
 	const panel = page.getByRole('region', { name: 'Follow-up draft' });
+	// Timeout: measured 13.3 s for "every agent flow makes zero RentCast requests and offers no sms:
+	// links" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the whole walk.
+	// Cause: the keyless Fixture provider streams the follow-up draft word by word. 20 s bounds this
+	// one wait inside the 124 s walk.
 	await expect(panel.getByText('Draft ready.', { exact: true })).toBeVisible({ timeout: 20_000 });
 	const exits = panel.getByTestId('generation-exits');
 	await expect(exits.getByRole('link', { name: 'Open in email app' })).toHaveAttribute(

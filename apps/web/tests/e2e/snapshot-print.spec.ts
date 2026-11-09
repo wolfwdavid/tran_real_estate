@@ -134,7 +134,10 @@ function figureLayouts(page: Page): Promise<FigureLayout[]> {
 }
 
 async function expectChartsDrawn(page: Page, label: string): Promise<void> {
-	// LayerChart draws after hydration; wait for both plots before measuring.
+	// Timeout: measured 2.5 s for "sample report: labels, prominence and charts on screen and in print,
+	// a PDF within budget" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the only caller.
+	// Cause: LayerChart draws the two foreignObject print plots after hydration, and this poll runs
+	// three times (screen, print, print at 672px). 15 s keeps a 6x margin over the whole test.
 	await expect
 		.poll(
 			async () =>
@@ -173,6 +176,10 @@ async function expectChartsDrawn(page: Page, label: string): Promise<void> {
 test('sample report: labels, prominence and charts on screen and in print, a PDF within budget', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 2.5 s for "sample report: labels, prominence and charts
+	// on screen and in print, a PDF within budget" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: three chart-draw polls, print-media emulation at two widths and a Chromium page.pdf()
+	// render of the full sample. 90 s keeps a 36x margin.
 	test.slow();
 	const outbound = collectRequests(page, [...AI_HOSTS, 'api.rentcast.io']);
 	await stubPrint(page);
@@ -240,6 +247,9 @@ test('sample report: labels, prominence and charts on screen and in print, a PDF
 });
 
 test('sample report: axe in screen media', async ({ page }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 2.5 s for "sample report: axe in screen media" (sub, 4
+	// workers, e2e-report 449ecc5, 2026-11-06). Cause: one axe pass over the full sample printout with
+	// both 24-month data tables open. 90 s keeps a 36x margin.
 	test.slow();
 	await openReady(page, 'print/snapshot/?id=sample');
 	await expectNoAxeViolations(page, 'snapshot print, sample');
@@ -347,6 +357,10 @@ function savedRecord(id: string) {
 test('saved record: prints from this browser with EHO and the Tran footer off', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 2.4 s for "saved record: prints from this browser with
+	// EHO and the Tran footer off" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: an IndexedDB write of the record, print-media emulation at 672px, a page.pdf() render and
+	// an axe pass. 90 s keeps a 37x margin.
 	test.slow();
 	const outbound = collectRequests(page, [...AI_HOSTS, 'api.rentcast.io']);
 	// Opening an unknown id opens the app database at its current version.

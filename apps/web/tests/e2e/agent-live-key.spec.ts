@@ -8,6 +8,10 @@ import { blockRentCast, mockRentCast, saveRentCastKey, seedSavedSearches } from 
 // a non-agent page (Renter) runs the check-on-open pass there, once per app open. Complements the
 // keyless walk in agent-no-rentcast.spec.ts. RentCast is mocked (404 for every GET), never reached.
 
+// Timeout: measured 10.0 s for "live key, 2 due: agent pages spend nothing; the first Renter arrival
+// checks once" (root, 4 workers, e2e-report 449ecc5, 2026-11-06); the 5-due test measured 8.9 s.
+// Cause: walkAgent does a full load of all seven agent routes, then a client-side pass with two
+// 1.5 s negative-assertion windows, then Renter arrivals with 1 s waits. 120 s keeps a 12x margin.
 test.describe.configure({ timeout: 120_000 });
 
 test.beforeEach(async ({ page }) => {

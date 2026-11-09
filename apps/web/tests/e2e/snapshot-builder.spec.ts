@@ -113,7 +113,10 @@ async function activateGated(page: Page): Promise<void> {
 
 async function draftNotes(page: Page): Promise<void> {
 	await draftButton(page).click();
-	// The sample notes stream word by word, so allow for a long draft.
+	// Timeout: measured 12.3 s for "keyless: sample ZIP, notes with a planted number gate Save, then
+	// save opens the print view" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest caller.
+	// Cause: the sample market notes stream word by word at a reading pace before "Draft ready."
+	// appears. 60 s keeps a 4.9x margin over the whole test.
 	await expect(notesPanel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 60_000
 	});
@@ -129,6 +132,10 @@ async function editNotes(page: Page, edit: (text: string) => string): Promise<vo
 test('keyless: sample ZIP, notes with a planted number gate Save, then save opens the print view', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 12.3 s for "keyless: sample ZIP, notes with a planted
+	// number gate Save, then save opens the print view" (sub, 4 workers, e2e-report 449ecc5,
+	// 2026-11-06). Cause: streamed sample notes, four axe passes, three gated-Save edits and the save
+	// that renders the print sheet. 90 s keeps a 7x margin.
 	test.slow();
 	const outbound = collectRequests(page, [...AI_HOSTS, 'api.rentcast.io']);
 	await openBuilder(page);
@@ -239,6 +246,9 @@ test('keyless: sample ZIP, notes with a planted number gate Save, then save open
 });
 
 test('Choose a different ZIP drops the old figures and notes and gates Save', async ({ page }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 4.8 s for "Choose a different ZIP drops the old figures
+	// and notes and gates Save" (root and sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: streamed sample notes, then a ZIP reset and a second load. 90 s keeps an 18x margin.
 	test.slow();
 	await openBuilder(page);
 	const zip = await loadFirstSampleZip(page);
@@ -271,6 +281,10 @@ test('Choose a different ZIP drops the old figures and notes and gates Save', as
 test('save gate: no data section; Delete asks first, removes the row and announces it', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 3.7 s for "save gate: no data section; Delete asks
+	// first, removes the row and announces it" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: six section toggles, two axe passes, a save that opens the print view and the Delete
+	// dialog. 90 s keeps a 24x margin.
 	test.slow();
 	await openBuilder(page);
 	await loadFirstSampleZip(page);
@@ -323,6 +337,10 @@ test('mocked key: new ZIP 1 call, listings summary 1 more, cached reload 0 (2 in
 	page,
 	net
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 3.0 s for "mocked key: new ZIP 1 call, listings summary
+	// 1 more, cached reload 0 (2 in total)" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: two mocked RentCast loads, an axe pass and a reload that re-reads the cache. 90 s keeps a
+	// 30x margin.
 	test.slow();
 	const rc = await liveRentCast(page, net);
 	await openBuilder(page);

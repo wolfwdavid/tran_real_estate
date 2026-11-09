@@ -242,6 +242,10 @@ test('copy link', async ({ page, context, browserName }) => {
 
 // Axe over the long profile page is slow on a single core, so each state gets its own test.
 test('axe clean and no horizontal scroll while blocked, at 1280 and 375', async ({ page }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 5.2 s for "axe clean and no horizontal scroll while
+	// blocked, at 1280 and 375" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: three axe passes over the long profile page (blocked, key error, 375px). 90 s keeps a
+	// 17x margin.
 	test.slow();
 	await page.setViewportSize({ width: 1280, height: 900 });
 	await open(page);
@@ -260,6 +264,10 @@ test('axe clean and no horizontal scroll while blocked, at 1280 and 375', async 
 });
 
 test('axe clean and no horizontal scroll with a ready link, at 1280 and 375', async ({ page }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 3.9 s for "axe clean and no horizontal scroll with a
+	// ready link, at 1280 and 375" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: a full profile save and key save, then two axe passes over the long profile page. 90 s
+	// keeps a 23x margin.
 	test.slow();
 	await page.setViewportSize({ width: 1280, height: 900 });
 	await open(page);

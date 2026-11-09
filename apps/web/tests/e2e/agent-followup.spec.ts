@@ -77,6 +77,10 @@ async function openContact(page: Page, name: string) {
 
 async function draftNow(page: Page) {
 	await draftButton(page).click();
+	// Timeout: measured 12.2 s for "axe clean at 1280px in every follow-up state" (sub, 4 workers,
+	// e2e-report 449ecc5, 2026-11-06), the slowest caller; the single-draft tests measured at most
+	// 6.8 s. Cause: the keyless Fixture provider streams the follow-up draft word by word before
+	// "Draft ready." appears. 20 s keeps a 2.9x margin over the slowest single-draft test.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});
@@ -271,6 +275,10 @@ test('no sms links and zero AI or RentCast requests', async ({ page }) => {
 
 for (const width of [1280, 375]) {
 	test(`axe clean at ${width}px in every follow-up state`, async ({ page }) => {
+		// Timeout: measured 12.2 s for "axe clean at 1280px in every follow-up state" (sub, 4 workers,
+		// e2e-report 449ecc5, 2026-11-06).
+		// Cause: a lead added through the dialog, three contact opens from the pipeline, four axe passes
+		// and one streamed draft. 120 s keeps a 9.8x margin.
 		test.setTimeout(120_000);
 		await page.setViewportSize({ width, height: width === 375 ? 812 : 900 });
 		const check = async (label: string) => {
