@@ -50,6 +50,28 @@
   the extension tests (e.g. happy-dom `settings.disableIframePageLoading` without the console error, or
   strip iframes from the fixture) in a later plan; not a Phase 15 requirement.
 
+## 15-06: the rules module skips multi-line `expect\n.poll(...)` / `expect\n.element(...)` chains
+
+- **Seen:** 2026-11-09 while listing what 15-06 had to annotate. `vitestRaiseSites` in
+  `scripts/lib/test-lane-rules.mjs` matches waits with `WAITS.has(callee.getText(sf))`, and `getText()`
+  keeps the source whitespace, so a Prettier-wrapped chain (`await expect\n\t\t\t.poll(fn, { timeout })`)
+  yields the callee text `expect\n\t\t\t.poll`, which is not in `WAITS`. Two of the eight Inventory A
+  raise sites were therefore invisible to the guard: `ResultsView.browser.test.ts` (`timeout: LAZY_MAP_MS`)
+  and `calculators.browser.test.ts` (`timeout: 2000`). The checker reported 6 findings, not 8.
+- **Proved, not fixed here:** 15-06 annotated both sites anyway and re-ran the rules on a copy of each
+  file with the whitespace between `expect` and `.poll` collapsed: 0 findings as annotated, 1 finding
+  each with the annotation lines stripped (scratch `collapsed-check.mjs`). So the annotations satisfy
+  the rule once the module sees the site.
+- **Why not fixed in 15-06:** the plan's files are the seven test files; the module belongs to 15-02 and
+  15-09's planted-violation tests assert its behaviour. The fix is one line: build the callee text for
+  the `WAITS`/`vi.setConfig` comparison from the AST (`PropertyAccessExpression` -> `root.name`) or
+  strip whitespace (`calleeText.replace(/\s+/g, '')`), plus a planted multi-line `expect.poll` case in
+  `scripts/test-lane-rules.test.ts`. The same applies to any raise detected by `calleeText ===` /
+  `calleeText.endsWith(...)` in the Playwright rules (`describe.configure`, `test.setTimeout`,
+  `test.slow`) when Prettier wraps the chain.
+- **Pointer:** 15-09 (repo sweep) should land the fix with its planted test before asserting zero
+  findings, otherwise the sweep is vacuous for wrapped chains. No timeout value depends on it.
+
 ## 15-01: Vite "configLoader: 'native'" warning for extension-less imports in the lane configs
 
 - The new configs import `../../tooling/vitest/lanes` and `./vitest.config` without a file extension,

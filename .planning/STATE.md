@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: unknown
-stopped_at: Completed 15-04-PLAN.md
-last_updated: "2026-11-09T08:02:08.001Z"
+stopped_at: Completed 15-06-PLAN.md
+last_updated: "2026-11-09T08:03:06.944Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 49
+  completed_plans: 50
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 7 of 11
+Plan: 8 of 11
 
 ## Performance Metrics
 
@@ -277,6 +277,7 @@ Plan: 7 of 11
 | Phase 15 P07 | 12min | 3 tasks | 10 files |
 | Phase 15 P05 | 13min | 2 tasks | 28 files |
 | Phase 15 P04 | 13min | 2 tasks | 12 files |
+| Phase 15 P06 | 13min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -742,6 +743,9 @@ Recent decisions affecting current work:
 - [Phase 15]: Playwright raise annotations cite the governing test's total duration from e2e-report 449ecc5 and state the margin is over the whole test; helper waits name their slowest caller
 - [Phase 15]: Repeated Playwright raises are hoisted into one annotated UPPER_SNAKE _MS const per file (AI_FLOW_MS, RUN_WAIT_MS, SINGLE_RUN_MS, MULTI_RUN_MS, PACK_FLOW_MS, LONG_PACK_MS); values never change in Phase 15
 - [Phase 15]: A test.slow() immediately followed by test.setTimeout is annotated as superseded rather than removed (annotate-only scope)
+- [Phase 15]: 15-06: ResultsView TEST_MS removed; every test <= 2.64 s (serial x2 and 14-11) against the 15 s browser default; LAZY_MAP_MS stays, annotated
+- [Phase 15]: 15-06: the 14-11 launch-audit vitest.json is the full-load source for every serial-lane timeout annotation
+- [Phase 15]: 15-06: rules module misses Prettier-wrapped expect.poll chains (2 of 8 sites); logged in deferred-items for 15-09, annotations proven to satisfy the rule once seen
 
 ### Pending Todos
 
@@ -771,7 +775,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T08:02:07.995Z
-Stopped at: Completed 15-04-PLAN.md
+Last session: 2026-11-09T08:03:06.937Z
+Stopped at: Completed 15-06-PLAN.md
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
