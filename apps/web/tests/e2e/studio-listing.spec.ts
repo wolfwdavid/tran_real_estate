@@ -79,6 +79,10 @@ async function fillSample(page: Page): Promise<void> {
 
 async function writeDraft(page: Page): Promise<void> {
 	await writeButton(page).click();
+	// Timeout: measured 10.3 s for "axe at 1280px > empty, sample-filled, findings, edit mode and Clear
+	// confirm are axe-clean" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest caller.
+	// Cause: the keyless Fixture provider streams the description word by word at a reading pace
+	// before "Draft ready." appears. 30 s keeps a 2.9x margin over the whole test.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 30_000
 	});
@@ -143,6 +147,10 @@ test('sample facts: a checked draft, the disclosure on Copy, and a gated problem
 	browserName
 }) => {
 	test.skip(browserName !== 'chromium', 'clipboard permissions can only be granted in Chromium');
+	// Timeout: measured 4.8 s for "sample facts: a checked draft, the disclosure on Copy, and a gated
+	// problem phrase" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: one streamed sample description, a clipboard read, a draft edit and the Use alternative
+	// dialog. 180 s keeps a 37x margin.
 	test.setTimeout(180_000);
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	await openStudio(page);
@@ -228,7 +236,12 @@ for (const width of [1280, 375]) {
 		test(`empty, sample-filled, findings, edit mode and Clear confirm are axe-clean`, async ({
 			page
 		}) => {
+			// Timeout: test.slow() (3x = 90 s), superseded by the 240 s below; measured 10.3 s for "axe at
+			// 1280px > empty, sample-filled, findings, edit mode and Clear confirm are axe-clean" (sub, 4
+			// workers, e2e-report 449ecc5, 2026-11-06). Cause: one streamed description, then axe at five
+			// states with a scroll check after each.
 			test.slow();
+			// Timeout: measured 10.3 s (same test and run). Cause: as above. 240 s keeps a 23x margin.
 			test.setTimeout(240_000);
 			await openStudio(page);
 			await expectAxe(page, `empty form (${width}px)`);

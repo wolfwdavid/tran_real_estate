@@ -25,6 +25,25 @@ const PROVIDER_HOSTS = [
 ];
 const LOCAL_HOSTS = new Set(['127.0.0.1', 'localhost']);
 
+// Timeout: measured 27.4 s for "sample beats: timed table and cards, the placeholder rule, the copied
+// script and the checklist" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), which streams three
+// scripts; the one-script tests below measured 9.7 s and 9.1 s in total.
+// Cause: the keyless Fixture provider streams each reel script word by word at a reading pace, and
+// the panel resolves the provider and builds the prompt before aria-busy flips. Each wait bounds one
+// run, so 30 s keeps a 3x margin over a whole one-script test.
+const RUN_WAIT_MS = 30_000;
+// Timeout: measured 9.7 s for "the Studio hub counts the reel draft under studio-reel" (root and
+// sub, 4 workers, e2e-report 449ecc5, 2026-11-06); the own-beats test measured 9.1 s.
+// Cause: one streamed sample script, then a hub navigation or the profile-gate edits. 120 s keeps a
+// 12x margin.
+const SINGLE_RUN_MS = 120_000;
+// Timeout: measured 27.4 s for "sample beats: timed table and cards, the placeholder rule, the copied
+// script and the checklist" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+// Cause: three streamed sample scripts (30 s, 60 s and the empty-results run) with edits, clipboard
+// reads and a reload between them; the axe tests stream two with an axe pass after each. 240 s keeps
+// an 8x margin.
+const MULTI_RUN_MS = 240_000;
+
 const MID = String.fromCharCode(0xb7);
 const PLACEHOLDER = '[Add a real result you can document]';
 const RESULTS_NOTICE =
@@ -94,12 +113,12 @@ async function writeScript(page: Page): Promise<void> {
 	// The panel resolves the provider and builds the prompt before the run starts; until then the
 	// previous run's "Draft ready." is still shown and no Stop exists. Wait for this run to start
 	// (the keyless sample streams for several seconds), so the checks below see this run's end.
-	await expect(panel(page)).toHaveAttribute('aria-busy', 'true', { timeout: 30_000 });
+	await expect(panel(page)).toHaveAttribute('aria-busy', 'true', { timeout: RUN_WAIT_MS });
 	await expect(panel(page).getByRole('button', { name: 'Stop', exact: true })).toHaveCount(0, {
-		timeout: 30_000
+		timeout: RUN_WAIT_MS
 	});
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
-		timeout: 30_000
+		timeout: RUN_WAIT_MS
 	});
 }
 
@@ -151,7 +170,7 @@ test('sample beats: timed table and cards, the placeholder rule, the copied scri
 	browserName
 }) => {
 	test.skip(browserName !== 'chromium', 'clipboard permissions can only be granted in Chromium');
-	test.setTimeout(240_000);
+	test.setTimeout(MULTI_RUN_MS);
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	await page.setViewportSize({ width: 1280, height: 900 });
 	await openStudio(page);
@@ -247,7 +266,7 @@ test('sample beats: timed table and cards, the placeholder rule, the copied scri
 });
 
 test('the Studio hub counts the reel draft under studio-reel', async ({ page }) => {
-	test.setTimeout(120_000);
+	test.setTimeout(SINGLE_RUN_MS);
 	await openStudio(page);
 	await fillSample(page);
 	await writeScript(page);
@@ -265,7 +284,7 @@ test('the Studio hub counts the reel draft under studio-reel', async ({ page }) 
 test("the agent's own beats with no profile: no disclosure shown, every exit gated", async ({
 	page
 }) => {
-	test.setTimeout(120_000);
+	test.setTimeout(SINGLE_RUN_MS);
 	await openStudio(page);
 	await fillSample(page);
 	await writeScript(page);
@@ -316,8 +335,12 @@ for (const width of [1280, 375]) {
 		test('filled results, empty results (placeholder), the beat view and the checklist are axe-clean', async ({
 			page
 		}) => {
+			// Timeout: test.slow() (3x = 90 s), superseded by the 240 s below; measured 20.8 s for "axe at
+			// 1280px > filled results, empty results (placeholder), the beat view and the checklist are
+			// axe-clean" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06). Cause: two streamed sample
+			// scripts with an axe pass and a scroll check after each.
 			test.slow();
-			test.setTimeout(240_000);
+			test.setTimeout(MULTI_RUN_MS);
 			await openStudio(page);
 			await fillSample(page);
 			await writeScript(page);

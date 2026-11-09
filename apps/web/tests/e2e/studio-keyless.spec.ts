@@ -41,6 +41,14 @@ const H1: Record<string, string> = {
 };
 const PAGES: readonly string[] = [...STUDIO_ROUTES, SAMPLE_PRINT];
 
+// Timeout: measured 9.1 s for "reel: the sample beats stream a Sample output script; the parse
+// failure never flashes" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of the five
+// flows that use it (the others measured 7.4 s, 5.0 s, 2.1 s and 2.0 s).
+// Cause: each flow drives the keyless Studio end to end: a draft streamed word by word by the
+// Fixture provider, or a builder save that renders the print sheet with its charts, then axe at two
+// viewports. 240 s keeps a 26x margin.
+const AI_FLOW_MS = 240_000;
+
 const SHORT_LABEL =
 	'Market information only. Not a comparative market analysis or a professional valuation of any property.';
 const EHO_TITLE = 'Equal Housing Opportunity.';
@@ -111,6 +119,10 @@ const panelByTitle = (page: Page, name: string) => page.getByRole('region', { na
 /** After a keyless run: the Sample output chip is shown and nothing is marked Must fix. */
 async function expectSampleRun(page: Page, panelName: string): Promise<void> {
 	const p = panelByTitle(page, panelName);
+	// Timeout: measured 9.1 s for "reel: the sample beats stream a Sample output script; the parse
+	// failure never flashes" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest caller.
+	// Cause: the keyless Fixture provider streams the whole sample draft word by word at a reading
+	// pace before "Draft ready." appears. 60 s keeps a 6x margin over the whole test.
 	await expect(p.getByText('Draft ready.', { exact: true })).toBeVisible({ timeout: 60_000 });
 	await expect(p.getByRole('button', { name: 'Stop', exact: true })).toHaveCount(0);
 	await expect(p.getByText('Sample output', { exact: true }).first()).toBeVisible();
@@ -228,7 +240,11 @@ for (const [width, height] of [
 		test(`STUDIO_ROUTES and the sample printout: 200, h1, axe-clean, no sideways scroll`, async ({
 			page
 		}) => {
-			// About 6 s per page on one core (load, hydration, axe): budget by the pages walked.
+			// Timeout: measured 11.5 s for "every Studio page at 1280px > STUDIO_ROUTES and the sample
+			// printout: 200, h1, axe-clean, no sideways scroll" (sub, 4 workers, e2e-report 449ecc5,
+			// 2026-11-06). Cause: each of the PAGES.length (6) pages is loaded, hydrated and scanned by
+			// axe, about 6 s per page on one core, so the budget scales with the pages walked.
+			// 6 x 20 s = 120 s keeps a 10x margin.
 			test.setTimeout(PAGES.length * 20_000);
 			expect(PAGES.length).toBe(STUDIO_ROUTES.length + 1);
 			for (const path of PAGES) {
@@ -243,7 +259,7 @@ for (const [width, height] of [
 test('hub: empty meta lines and incomplete disclosure, then "1 draft saved" after a listing draft', async ({
 	page
 }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(AI_FLOW_MS);
 	await open(page, 'agent/studio/');
 	await expect(toolMeta(page, 'listing')).toHaveText('No drafts yet');
 	await expect(toolMeta(page, 'social')).toHaveText('No drafts yet');
@@ -285,7 +301,7 @@ test('hub: empty meta lines and incomplete disclosure, then "1 draft saved" afte
 test('social: the sample brief streams three Sample output cards with no Must fix', async ({
 	page
 }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(AI_FLOW_MS);
 	await open(page, 'agent/studio/social/');
 	await page.getByRole('button', { name: 'Use a sample brief' }).click();
 	await expect(page.locator('[data-social-studio] [data-sample-chip]')).toBeVisible();
@@ -304,7 +320,7 @@ test('social: the sample brief streams three Sample output cards with no Must fi
 test('reel: the sample beats stream a Sample output script; the parse failure never flashes', async ({
 	page
 }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(AI_FLOW_MS);
 	// Records every state the Script at a glance view shows while the script streams in.
 	await page.addInitScript(() => {
 		const w = window as Window & { __reelStates?: string[] };
@@ -341,7 +357,7 @@ test('reel: the sample beats stream a Sample output script; the parse failure ne
 test('saved record: EHO, the Tran footer and Market notes turned off are honored in print', async ({
 	page
 }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(AI_FLOW_MS);
 	await saveSampleSnapshot(page, [
 		'Include the Equal Housing Opportunity statement',
 		'Include "Prepared with Tran Real Estate Tools" at the bottom'
@@ -364,6 +380,10 @@ test('saved record: EHO, the Tran footer and Market notes turned off are honored
 test('brand colors that fail contrast never reach the printout; a passing primary is kept', async ({
 	page
 }) => {
+	// Timeout: measured 4.8 s for "brand colors that fail contrast never reach the printout; a passing
+	// primary is kept" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: two profile saves, a hub axe pass and two builder saves that each render the print sheet
+	// with its charts. 300 s keeps a 62x margin.
 	test.setTimeout(300_000);
 	await saveProfile(page, { primary: '#FFFF00', accent: '#000000' });
 	// The profile form keeps the typed colors and says reports use Tran's colors instead.
@@ -453,7 +473,7 @@ function logoRecord(id: string) {
 test('a saved record with a logo loads the profile logo and enables printing once it decodes', async ({
 	page
 }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(AI_FLOW_MS);
 	await page.addInitScript(() => {
 		const w = window as Window & { __csp?: string[] };
 		w.__csp = [];

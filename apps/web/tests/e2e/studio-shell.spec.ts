@@ -180,6 +180,10 @@ test('client-side navigation: the Data source bar appears on the snapshot builde
 test('the Sample contacts notice stays on the CRM pages and off the Studio routes', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 1.0 s for "the Sample contacts notice stays on the CRM
+	// pages and off the Studio routes" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: loadSampleContacts seeds the CRM through the Contacts page, then three client-side
+	// navigations each wait for the live contacts query and the notice. 90 s keeps a 90x margin.
 	test.slow();
 	await loadSampleContacts(page);
 	const notice = page.getByRole('region', { name: 'Sample contacts' });
@@ -200,6 +204,10 @@ test('the Sample contacts notice stays on the CRM pages and off the Studio route
 test('a full load of a Studio route still runs the check-on-open saved-search pass', async ({
 	page
 }) => {
+	// Timeout: test.slow() (3x = 90 s); measured 1.7 s for "a full load of a Studio route still runs the
+	// check-on-open saved-search pass" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: a mocked key save, a cap save and five seeded saved searches from the home page before
+	// the full load that opens the DueSearchesDialog. 90 s keeps a 53x margin.
 	test.slow();
 	const calls = await mockRentCast(page, () => ({ status: 404 }));
 	await saveRentCastKey(page);

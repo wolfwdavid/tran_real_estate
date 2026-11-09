@@ -24,6 +24,19 @@ const PLATFORMS = ['Instagram', 'Facebook', 'LinkedIn'] as const;
 const COUNT_LINE = /\d[\d,]* (of [\d,]+ )?characters, including your disclosure/;
 const PROFILE_REASON_END = 'in your profile so your disclosure can be added.';
 
+// Timeout: measured 6.0 s for "the sample brief writes three checked posts, each ending with the
+// disclosure" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest of its three tests
+// (the others measured 1.9 s and 4.0 s).
+// Cause: one streamed pack (the keyless Fixture word by word, or the mocked Anthropic SSE), then
+// card edits, a clipboard read and a hub navigation. 240 s keeps a 40x margin.
+const PACK_FLOW_MS = 240_000;
+// Timeout: measured 48.6 s for "an Instagram post over 2,200 characters cannot be copied; Facebook
+// still can" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the slowest test in that report.
+// Cause: the 1,990-character brief makes the keyless Fixture stream a pack whose Instagram post runs
+// past 2,200 characters, word by word at a reading pace; the writePack call there waits 180 s for
+// it. 300 s keeps a 6x margin.
+const LONG_PACK_MS = 300_000;
+
 /** 1,990 characters of fictional, clean brief text with no digits. */
 const LONG_BRIEF = 'New counters, wide windows and a covered porch. '.repeat(42).slice(0, 1990);
 
@@ -113,6 +126,11 @@ async function useSample(page: Page): Promise<void> {
 /** Runs the pack. The keyless Fixture streams at a reading pace, so a long brief takes a while. */
 async function writePack(page: Page, timeout = 30_000): Promise<void> {
 	await writeButton(page).click();
+	// Timeout: measured 48.6 s for "an Instagram post over 2,200 characters cannot be copied; Facebook
+	// still can" (sub, 4 workers, e2e-report 449ecc5, 2026-11-06), the caller that passes 180 s; the
+	// callers that keep the 30 s parameter default measured at most 6.0 s.
+	// Cause: the keyless Fixture provider streams the whole pack word by word at a reading pace, so
+	// the wait grows with the brief.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({ timeout });
 }
 
@@ -183,7 +201,7 @@ test('the sample brief writes three checked posts, each ending with the disclosu
 	browserName
 }) => {
 	test.skip(browserName !== 'chromium', 'clipboard permissions can only be granted in Chromium');
-	test.setTimeout(240_000);
+	test.setTimeout(PACK_FLOW_MS);
 	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	await openStudio(page);
 	await expect(page.locator('[data-disclosure-status="incomplete"]')).toBeVisible();
@@ -260,7 +278,7 @@ test('the sample brief writes three checked posts, each ending with the disclosu
 test('an Instagram post over 2,200 characters cannot be copied; Facebook still can', async ({
 	page
 }) => {
-	test.setTimeout(300_000);
+	test.setTimeout(LONG_PACK_MS);
 	await saveProfile(page);
 	await openStudio(page);
 	await expect(page.locator('[data-disclosure-status="ready"]')).toBeVisible();
@@ -299,7 +317,7 @@ test('an incomplete profile gates every Copy once the brief is the agent own', a
 });
 
 test('a missing section shows the parse error on that card only', async ({ page }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(PACK_FLOW_MS);
 	const calls = await useMockedProvider(page, PACK_NO_FACEBOOK);
 	await openStudio(page);
 	await useSample(page);
@@ -339,7 +357,7 @@ test('the brief is validated before any request', async ({ page }) => {
 });
 
 test('a listing description can start the brief, without its disclosure', async ({ page }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(PACK_FLOW_MS);
 	// One listing description in Draft history (keyless).
 	await page.goto('agent/studio/listing/');
 	await expect(page.locator('[data-listing-studio]')).toBeVisible();
@@ -348,6 +366,10 @@ test('a listing description can start the brief, without its disclosure', async 
 	await page.getByRole('button', { name: 'Fill with sample facts' }).click();
 	await page.getByRole('button', { name: 'Write description', exact: true }).click();
 	const listingPanel = page.getByRole('region', { name: 'Listing description' });
+	// Timeout: measured 4.0 s for "a listing description can start the brief, without its disclosure"
+	// (sub, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: the keyless Fixture provider streams the listing description word by word. 30 s keeps a
+	// 7x margin over the whole test.
 	await expect(listingPanel.getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 30_000
 	});
@@ -377,8 +399,12 @@ for (const width of [1280, 375]) {
 		test('before a run, and after a run with one card over the limit and one parse error', async ({
 			page
 		}) => {
+			// Timeout: test.slow() (3x = 90 s), superseded by the 300 s below; measured 4.5 s for "axe at
+			// 1280px > before a run, and after a run with one card over the limit and one parse error"
+			// (sub, 4 workers, e2e-report 449ecc5, 2026-11-06). Cause: a mocked Anthropic pack with an
+			// over-limit Instagram post and a missing section, then axe at three states.
 			test.slow();
-			test.setTimeout(300_000);
+			test.setTimeout(LONG_PACK_MS);
 			await useMockedProvider(page, PACK_LONG_NO_FACEBOOK);
 			await openStudio(page);
 			await expectAxe(page, `before a run (${width}px)`);
