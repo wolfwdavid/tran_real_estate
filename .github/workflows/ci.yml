@@ -128,8 +128,9 @@ jobs:
       - name: JS budget (analytics-on build)
         if: matrix.target == 'configured'
         run: node scripts/assert-budget.mjs apps/web/build-configured --require-tools
+      # --fail-on-flaky-tests: a test that passes only on its CI retry fails the job (TEST-03).
       - name: E2E + axe
-        run: pnpm --filter web exec playwright test --project=${{ matrix.target }}
+        run: pnpm --filter web exec playwright test --project=${{ matrix.target }} --fail-on-flaky-tests
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
           BASE_PATH: ${{ matrix.target == 'root' && vars.BASE_PATH || '' }}

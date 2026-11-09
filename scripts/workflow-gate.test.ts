@@ -184,6 +184,18 @@ describe('quality matrix', () => {
 		expect(quality).toContain('playwright test --project=${{ matrix.target }}');
 	});
 
+	test('E2E fails on a test that passes only on retry (TEST-03)', () => {
+		const quality = job('quality');
+		expect(quality).toContain(
+			'run: pnpm --filter web exec playwright test --project=${{ matrix.target }} --fail-on-flaky-tests'
+		);
+		// Exactly one run line carries the flag (the comment above the step names it once more).
+		expect(quality.match(/^ +run: .*--fail-on-flaky-tests.*$/gm)).toHaveLength(1);
+		expect(count(quality, '--fail-on-flaky-tests')).toBe(2);
+		// The unit line is pinned unchanged (Phase 15 criterion 1).
+		expect(count(text, 'run: pnpm test:unit')).toBe(1);
+	});
+
 	test('the SEO oracle runs on every leg for the matching target, after the build', () => {
 		const quality = job('quality');
 		const seo =
