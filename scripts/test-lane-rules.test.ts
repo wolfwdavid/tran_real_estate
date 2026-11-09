@@ -369,9 +369,9 @@ describe('vitestTimeoutFindings in a parallel browser lane', () => {
 
 	test('flags a test timeout above the browser default', () => {
 		const src = `test('a', { timeout: 20_000 }, () => {});`;
-		expect(rl(vitestTimeoutFindings('apps/web/src/lib/D.browser.test.ts', src, BROWSER))).toEqual(
-			[['raised-timeout-outside-serial', 1]]
-		);
+		expect(rl(vitestTimeoutFindings('apps/web/src/lib/D.browser.test.ts', src, BROWSER))).toEqual([
+			['raised-timeout-outside-serial', 1]
+		]);
 	});
 
 	test('does not flag a hook at the 30 s browser hook default', () => {
@@ -472,9 +472,7 @@ describe('playwrightTimeoutFindings', () => {
 	});
 
 	test('flags conditional test.slow(cond, reason)', () => {
-		expect(rl(playwrightTimeoutFindings(PW, `test.slow(isMobile, 'reason');`))).toEqual([
-			[UN, 1]
-		]);
+		expect(rl(playwrightTimeoutFindings(PW, `test.slow(isMobile, 'reason');`))).toEqual([[UN, 1]]);
 	});
 
 	test('accepts an annotated test.slow()', () => {
