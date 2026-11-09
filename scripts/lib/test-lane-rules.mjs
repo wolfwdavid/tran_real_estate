@@ -51,11 +51,24 @@ export const PINNED_RETRIES = Object.freeze({
 const TEST_FILE = /\.(?:test|spec)\.[cm]?[jt]s$/;
 const BROWSER_FILE = /\.browser\.test\.[cm]?[jt]s$/;
 const TEST_ROOTS = new Set(['test', 'it', 'describe', 'suite']);
+/** Chain members that keep `test.<x>(...)` a Vitest test API (`it.next().then` is not one). */
+const TEST_MODIFIERS = new Set([
+	'each',
+	'for',
+	'only',
+	'skip',
+	'todo',
+	'fails',
+	'concurrent',
+	'sequential',
+	'shuffle',
+	'skipIf',
+	'runIf'
+]);
 const HOOKS = new Set(['beforeAll', 'beforeEach', 'afterAll', 'afterEach']);
 const WAITS = new Set(['vi.waitFor', 'vi.waitUntil', 'expect.poll', 'expect.element']);
 const ELAPSED_CALLEES = new Set(['performance.now', 'process.hrtime', 'process.hrtime.bigint']);
 const RETRY_FLAG = /--retr(?:y|ies)\b/;
-const QUOTED_RETRY_FLAG = /['"`]--retr(?:y|ies)\b/;
 
 /**
  * Vitest project roots in resolution order. `browser` projects claim `.browser.test.ts` files;
@@ -150,6 +163,30 @@ function rootName(e) {
 			continue;
 		}
 		if (ts.isNonNullExpression(cur) || ts.isParenthesizedExpression(cur)) {
+			cur = cur.expression;
+			continue;
+		}
+		return null;
+	}
+}
+
+/**
+ * The root test API name (`test`, `it`, `describe`, `suite`) when `e` is that identifier or a
+ * chain of known modifiers over it (`it.each([..])`, `test.skipIf(c)`, `describe.only`); null for
+ * anything else, including a local variable that happens to be called `it`.
+ * @param {ts.Expression} e
+ * @returns {string | null}
+ */
+function testApiRoot(e) {
+	let cur = e;
+	for (;;) {
+		if (ts.isIdentifier(cur)) return TEST_ROOTS.has(cur.text) ? cur.text : null;
+		if (ts.isPropertyAccessExpression(cur)) {
+			if (!TEST_MODIFIERS.has(cur.name.text)) return null;
+			cur = cur.expression;
+			continue;
+		}
+		if (ts.isCallExpression(cur)) {
 			cur = cur.expression;
 			continue;
 		}
@@ -347,7 +384,6 @@ function vitestRaiseSites(sf, lane) {
 		if (!ts.isCallExpression(n)) return;
 		const callee = n.expression;
 		const calleeText = callee.getText(sf);
-		const root = rootName(callee);
 		const args = n.arguments;
 
 		if (calleeText === 'vi.setConfig') {
@@ -372,14 +408,15 @@ function vitestRaiseSites(sf, lane) {
 			}
 			return;
 		}
-		if (root !== null && TEST_ROOTS.has(root)) {
+		const testRoot = testApiRoot(callee);
+		if (testRoot !== null) {
 			const fnIndex = args.findIndex(isFunction);
 			args.forEach((a, i) => {
 				if (ts.isObjectLiteralExpression(a)) {
 					const t = propOf(a, 'timeout');
-					if (t) push(n, t.prop, t.value, testMax, `${root} option timeout`);
-				} else if (fnIndex >= 0 && i > fnIndex) {
-					push(n, null, a, testMax, `${root} trailing timeout`);
+					if (t) push(n, t.prop, t.value, testMax, `${testRoot} option timeout`);
+				} else if (fnIndex >= 0 && i > fnIndex && !isFunction(a)) {
+					push(n, null, a, testMax, `${testRoot} trailing timeout`);
 				}
 			});
 		}
@@ -576,8 +613,8 @@ function isProjectEntry(/** @type {ts.Node} */ owner) {
 
 /**
  * Retries anywhere: Vitest `retry` options and config keys, Playwright `describe.configure({
- * retries })`, Playwright config `retries` that differ from PINNED_RETRIES, and `--retry` /
- * `--retries` flags in package.json scripts, workflow lines and scripts/*.mjs spawn arguments.
+ * retries })`, Playwright config `retries` that differ from PINNED_RETRIES, and the retry CLI
+ * flags (RETRY_FLAG) in package.json scripts, workflow lines and scripts/*.mjs string literals.
  * @param {string} path
  * @param {string} text
  * @returns {Finding[]}
@@ -592,10 +629,25 @@ export function retryFindings(path, text) {
 	if (kind === 'package-json') {
 		return packageJsonRetries(path, text);
 	}
-	if (kind === 'workflow' || kind === 'script-mjs') {
-		const re = kind === 'workflow' ? RETRY_FLAG : QUOTED_RETRY_FLAG;
+	if (kind === 'workflow') {
+		// Plain text, one finding per non-comment line that carries the flag.
 		text.split(/\r?\n/).forEach((l, i) => {
-			if (re.test(l)) at(i + 1, `${l.trim()}`);
+			if (!/^\s*#/.test(l) && RETRY_FLAG.test(l)) at(i + 1, l.trim());
+		});
+		return out;
+	}
+	if (kind === 'script-mjs') {
+		// String literals only (parsed as JS), so a comment that mentions the flag is not a finding.
+		const sf = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+		walk(sf, (n) => {
+			if (
+				(ts.isStringLiteral(n) ||
+					ts.isNoSubstitutionTemplateLiteral(n) ||
+					ts.isTemplateLiteralToken(n)) &&
+				RETRY_FLAG.test(n.text)
+			) {
+				at(lineOf(sf, n), `string ${JSON.stringify(n.text)}`);
+			}
 		});
 		return out;
 	}
@@ -629,8 +681,8 @@ export function retryFindings(path, text) {
 			return;
 		}
 		// vitest-test
-		const root = rootName(n.expression);
-		if (root === null || !TEST_ROOTS.has(root)) return;
+		const root = testApiRoot(n.expression);
+		if (root === null) return;
 		for (const a of n.arguments) {
 			if (ts.isObjectLiteralExpression(a) && propOf(a, 'retry')) {
 				at(lineOf(sf, n), `${root} option retry`);
@@ -641,8 +693,8 @@ export function retryFindings(path, text) {
 }
 
 /**
- * `--retry` / `--retries` in any package.json script value. Falls back to a line scan when the
- * file does not parse as JSON.
+ * The retry CLI flag (RETRY_FLAG) in any package.json script value. Falls back to a line scan when
+ * the file does not parse as JSON.
  * @param {string} path
  * @param {string} text
  * @returns {Finding[]}

@@ -359,6 +359,16 @@ describe('vitestTimeoutFindings in a parallel node lane', () => {
 	test('does not flag setTimeout', () => {
 		expect(vitestTimeoutFindings(VT, `setTimeout(r, 30_000);`, NODE)).toEqual([]);
 	});
+
+	test('does not flag a local variable named it used as an iterator', () => {
+		const src = `const r = await it.next().then(() => undefined, (e: unknown) => e);`;
+		expect(vitestTimeoutFindings(VT, src, NODE)).toEqual([]);
+	});
+
+	test('still flags a trailing timeout through a skipIf modifier chain', () => {
+		const src = `test.skipIf(cond)('a', () => {}, 30_000);`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
 });
 
 describe('vitestTimeoutFindings in a parallel browser lane', () => {
@@ -642,6 +652,21 @@ describe('retryFindings', () => {
 	test('flags a quoted --retries spawn argument in scripts/*.mjs', () => {
 		const src = `spawn('npx', ['playwright', 'test', '--retries=1']);`;
 		expect(rl(retryFindings('scripts/smoke.mjs', src))).toEqual([['retry', 1]]);
+	});
+
+	test('flags --retries inside a template literal in scripts/*.mjs', () => {
+		const src = 'const cmd = `playwright test --retries=${n}`;';
+		expect(rl(retryFindings('scripts/smoke.mjs', src))).toEqual([['retry', 1]]);
+	});
+
+	test('does not flag --retries mentioned in a scripts/*.mjs comment', () => {
+		const src = `// never pass --retries=1 here\n/** or \`--retry\` either */\nconst x = 1;`;
+		expect(retryFindings('scripts/smoke.mjs', src)).toEqual([]);
+	});
+
+	test('does not flag --retries in a workflow comment line', () => {
+		const src = `steps:\n  # --fail-on-flaky-tests: no --retries here\n  - run: pnpm test:unit`;
+		expect(retryFindings('.github/workflows/ci.yml', src)).toEqual([]);
 	});
 
 	test('does not flag product code named retry in a Vitest test', () => {
