@@ -1,6 +1,7 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
+import { MAX_WORKERS } from '../../tooling/vitest/lanes';
 import { resolveSiteUrl } from '../web/src/lib/site-config.js';
 
 // Popup component tests in real Chromium (UI-SPEC Accessibility Contract: axe on every popup
@@ -29,6 +30,9 @@ export default defineConfig({
 	test: {
 		name: 'extension-browser',
 		include: ['tests/browser/**/*.browser.test.ts'],
+		// The browser pool ignores the root maxWorkers; same constant, or Vitest rejects the group
+		// (tooling/vitest/lanes.ts).
+		maxWorkers: MAX_WORKERS,
 		setupFiles: ['../../tooling/vitest/no-network.ts'],
 		browser: {
 			enabled: true,

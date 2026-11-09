@@ -2,7 +2,8 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { playwright } from '@vitest/browser-playwright';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
+import { files, MAX_WORKERS } from '../../tooling/vitest/lanes';
 
 // Component tests in real Chromium (UI-SPEC: primitives get vitest-browser-svelte tests that assert
 // exact text, icon presence and an axe scan). The Node `web` project excludes *.browser.test.ts, so
@@ -37,6 +38,10 @@ export default defineConfig({
 	test: {
 		name: 'web-browser',
 		include: ['src/**/*.browser.test.ts'],
+		exclude: [...configDefaults.exclude, ...files('web-browser')],
+		// The browser pool ignores the root maxWorkers; same constant, or Vitest rejects the group
+		// (tooling/vitest/lanes.ts).
+		maxWorkers: MAX_WORKERS,
 		setupFiles: ['../../tooling/vitest/no-network.ts'],
 		browser: {
 			enabled: true,

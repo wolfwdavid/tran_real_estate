@@ -3,6 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
+import { files } from '../../tooling/vitest/lanes';
 import {
 	resolveAnalytics,
 	resolveContactEmail,
@@ -47,8 +48,9 @@ export default defineConfig({
 		name: 'web',
 		environment: 'node',
 		include: ['src/**/*.{test,spec}.ts'],
-		// *.browser.test.ts belong to the web-browser project (vitest.browser.config.ts).
-		exclude: ['src/**/*.browser.test.ts', 'node_modules/**'],
+		// *.browser.test.ts belong to the web-browser project (vitest.browser.config.ts); files('web')
+		// run in web-serial (tooling/vitest/lanes.ts).
+		exclude: ['src/**/*.browser.test.ts', 'node_modules/**', ...files('web')],
 		setupFiles: ['../../tooling/vitest/no-network.ts']
 	}
 });
