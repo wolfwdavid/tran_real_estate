@@ -89,6 +89,10 @@ export const SERIAL = {
 		{
 			file: 'lane-order.test.ts',
 			reason: 'behavioural lane proof: compares wall-clock start/end order of fixture files'
+		},
+		{
+			file: 'flaky-gate.test.ts',
+			reason: 'behavioural flaky-gate proof: spawns Playwright once per case'
 		}
 	]
 } as const satisfies Record<string, readonly SerialEntry[]>;
