@@ -45,8 +45,8 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 
 - [ ] **TEST-01**: Tests that assert wall-clock budgets (ReDoS scans, property-test timing, studio boundaries, precommit hook duration, the load-sensitive ResultsView browser test) live in `*-serial` Vitest projects that run with file parallelism off as a separate stage; the parallel `test:unit` lane contains zero elapsed-time assertions, enforced by a guard test that fails when a timing assertion or raised timeout appears outside the serial lane
 - [ ] **TEST-02**: Any raised test or expect timeout above the default carries a measured number and a root cause comment, enforced by the same guard; no blind retries are added anywhere
-- [ ] **TEST-03**: Playwright runs in CI with `--fail-on-flaky-tests` so a test that passes only on retry fails the job, and the retry policy is documented in the config
-- [ ] **TEST-04**: Worker counts are capped (`maxWorkers` for Vitest, workers for Playwright) with the known-good values recorded, and the Windows PATH/taskkill teardown guard from Phase 1 is covered by a test
+- [x] **TEST-03**: Playwright runs in CI with `--fail-on-flaky-tests` so a test that passes only on retry fails the job, and the retry policy is documented in the config
+- [x] **TEST-04**: Worker counts are capped (`maxWorkers` for Vitest, workers for Playwright) with the known-good values recorded, and the Windows PATH/taskkill teardown guard from Phase 1 is covered by a test
 - [ ] **TEST-05**: An evidence protocol records three consecutive clean full `pnpm verify` runs, `--repeat-each 3` green on every spec a deferred-items file names as load-sensitive, and one full E2E run under artificial CPU pressure with zero failures, written to a dated `docs/test-evidence/<date>.md`
 - [ ] **TEST-06**: One unit run with shuffled file and test order and a recorded seed is green, and the seed is stored in the evidence file
 
@@ -140,8 +140,8 @@ Which phases cover which requirements. Filled during roadmap creation.
 | DEBT-09 | Phase 14 | Complete |
 | TEST-01 | Phase 15 | Pending |
 | TEST-02 | Phase 15 | Pending |
-| TEST-03 | Phase 15 | Pending |
-| TEST-04 | Phase 15 | Pending |
+| TEST-03 | Phase 15 | Complete |
+| TEST-04 | Phase 15 | Complete |
 | TEST-05 | Phase 15 | Pending |
 | TEST-06 | Phase 15 | Pending |
 | TOOL-01 | Phase 16 | Pending |
