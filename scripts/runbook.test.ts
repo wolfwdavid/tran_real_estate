@@ -199,6 +199,25 @@ describe('Run the suites locally', () => {
 		}
 		expect(s).toContain('MSYS_NO_PATHCONV=1 BASE_PATH=/tran_real_estate');
 	});
+
+	test('Vitest worker cap and serial lane match tooling/vitest/lanes.ts (TEST-04)', () => {
+		const lanes = read('tooling/vitest/lanes.ts');
+		const cap = /MAX_WORKERS = process\.env\.CI \? \d+ : \d+/.exec(lanes)?.[0];
+		expect(cap).toBeDefined();
+		expect(s).toContain(cap);
+		for (const p of ['core-serial', 'web-serial', 'web-browser-serial', 'scripts-serial'])
+			expect(s).toContain(p);
+		expect(s).toContain('VITEST_MAX_WORKERS');
+	});
+
+	test('web E2E worker and flaky-gate lines match apps/web/playwright.config.ts (TEST-03/04)', () => {
+		const cfg = read('apps/web/playwright.config.ts');
+		const workers = /workers: process\.env\.CI \? \d+ : \d+/.exec(cfg)?.[0];
+		expect(workers).toBeDefined();
+		expect(s).toContain(workers);
+		expect(s).toContain('failOnFlakyTests');
+		expect(s).toContain('--fail-on-flaky-tests');
+	});
 });
 
 describe('Fresh-profile rule', () => {
