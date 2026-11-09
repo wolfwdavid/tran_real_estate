@@ -371,6 +371,67 @@ describe('vitestTimeoutFindings in a parallel node lane', () => {
 	});
 });
 
+describe('vitestTimeoutFindings on Prettier-wrapped wait chains', () => {
+	// Prettier breaks a long `await expect.poll(...)` into `await expect\n\t.poll(...)`. The callee
+	// is still the same property chain, so the raise must be reported at the chain's first line.
+	const OUT = 'raised-timeout-outside-serial';
+
+	test('flags expect.poll whose chain is wrapped onto the next line', () => {
+		const src = `await expect\n\t.poll(() => container.querySelector('.leaflet-container'), { timeout: 2000 })\n\t.not.toBeNull();`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('flags expect.element whose chain is wrapped onto the next line', () => {
+		const src = `await expect\n\t.element(page.getByRole('button', { name: 'Try again' }), { timeout: 4000 })\n\t.toBeEnabled();`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('flags vi.waitFor whose chain is wrapped onto the next line', () => {
+		const src = `await vi\n\t.waitFor(() => expect(messages.length).toBeGreaterThan(0), { timeout: 20_000 });`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('a wrapped expect.poll with an identifier value is raised too', () => {
+		const src = `const LAZY_MAP_MS = 10_000;\nawait expect\n\t.poll(() => x(), { timeout: LAZY_MAP_MS })\n\t.toBe(1);`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 2]]);
+	});
+
+	test('a wrapped expect.poll at the default is not flagged', () => {
+		const src = `await expect\n\t.poll(() => x(), { timeout: 1000 })\n\t.toBe(1);`;
+		expect(vitestTimeoutFindings(VT, src, NODE)).toEqual([]);
+	});
+
+	test('a wrapped vi.setConfig is still always flagged', () => {
+		const src = `vi\n\t.setConfig({ testTimeout: 1 });`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('in the serial lane a wrapped raise still needs the annotation above the statement', () => {
+		const SP = 'apps/web/src/lib/b.test.ts';
+		const raise = `await expect\n\t.poll(() => x(), { timeout: 2000 })\n\t.toBe(1);`;
+		expect(rl(vitestTimeoutFindings(SP, raise, SERIAL_NODE))).toEqual([['unannotated-raise', 1]]);
+		expect(vitestTimeoutFindings(SP, NOTE + raise, SERIAL_NODE)).toEqual([]);
+	});
+});
+
+describe('playwright rules on Prettier-wrapped chains', () => {
+	test('flags a wrapped describe.configure timeout above 30 s', () => {
+		const src = `test.describe\n\t.configure({ mode: 'serial', timeout: 300_000 });`;
+		expect(rl(playwrightTimeoutFindings(PW, src))).toEqual([['unannotated-raise', 1]]);
+	});
+
+	test('flags a wrapped describe.configure retries', () => {
+		const src = `test.describe\n\t.configure({ retries: 2 });`;
+		expect(rl(retryFindings(PW, src))).toEqual([['retry', 1]]);
+	});
+
+	test('flags a wrapped test.setTimeout above 30 s', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `test\n\t.setTimeout(240_000);`))).toEqual([
+			['unannotated-raise', 1]
+		]);
+	});
+});
+
 describe('vitestTimeoutFindings in a parallel browser lane', () => {
 	test('does not flag a test timeout at the 15 s browser default', () => {
 		const src = `test('a', { timeout: 15_000 }, () => {});`;
