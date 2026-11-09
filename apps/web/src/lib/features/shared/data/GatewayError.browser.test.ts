@@ -221,6 +221,11 @@ describe('GatewayError rate-limit countdown', () => {
 		expect(vi.mocked(announce)).not.toHaveBeenCalledWith('You can try again now.');
 
 		const ready = page.getByRole('button', { name: 'Try again (1 call)' });
+		// Timeout: measured 2.10 s and 2.08 s for this test in the serial lane (2026-11-09, loaded dev
+		// box) and 2.27 s under full parallel load (14-11 launch-audit vitest.json).
+		// Cause: the component counts down a real 2 s retry window (retryInMs 2000, one setInterval tick
+		// per 1000 ms in GatewayError.svelte) before enabling "Try again"; expect.element defaults to
+		// 1 s. 4 s = 2x the countdown.
 		await expect.element(ready, { timeout: 4000 }).toBeEnabled();
 		expect(vi.mocked(announce)).toHaveBeenLastCalledWith('You can try again now.');
 		// Only mount + start + end: the per-second ticks are never announced.

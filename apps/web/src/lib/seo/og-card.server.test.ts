@@ -96,7 +96,11 @@ const RIGHT_PADDING: Box = { x0: 1120, y0: 0, x1: W, y1: 600 };
 // Bounding square of the 320px mark disc centred at (960, 300).
 const DISC: Box = { x0: 800, y0: 140, x1: 1120, y1: 460 };
 
-// Each case rasterises 1200x630 twice and scans the pixels; allow for a loaded CI runner.
+// Timeout: measured 0.48 s and 0.51 s for the slowest case in the serial lane (2026-11-09, loaded dev
+// box) and 0.86 s under full parallel load (14-11 launch-audit vitest.json).
+// Cause: each case rasterises a 1200x630 card twice with resvg and scans every pixel (the describe
+// body renders once more at collection). 30 s keeps a 35x margin over the full-load number, room for
+// a loaded CI runner; node default is 5 s.
 describe('renderOgCard', { timeout: 30_000 }, () => {
 	const fonted = renderOgCard(capRate);
 	const png = fonted.asPng();

@@ -222,6 +222,12 @@ describe('commitImport', () => {
 		expect((await getContact(a.id))!.phone).toBe('');
 	});
 
+	// Timeout: measured 1.10 s and 1.15 s in the serial lane (2026-11-09, loaded dev box) and 1.43 s
+	// under full parallel load (14-11 launch-audit vitest.json).
+	// Cause: 5000 contacts + 5000 activities written through Dexie into fake-indexeddb in one
+	// transaction. The in-test `< 10_000` budget is the timing assertion this serial lane exists for;
+	// the 30 s trailing timeout is 3x that budget, so a slow commit fails on the budget assertion, not
+	// on the timeout. Node default is 5 s.
 	it('commits a 5000-lead plan in one call', async () => {
 		const adds = Array.from({ length: 5000 }, (_, i) => lead(i + 1, { source: 'csv' }));
 		const started = Date.now();

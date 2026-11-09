@@ -27,6 +27,11 @@ describe('calculators (browser)', () => {
 		await expect.element(page.getByText('$22,800')).toBeVisible();
 		await expect.element(page.getByText('Example numbers, not market data.')).toBeVisible();
 		await expect.element(page.getByRole('button', { name: 'Fill in an example' })).toHaveFocus();
+		// Timeout: measured 1.12 s and 1.12 s for this test in the serial lane (2026-11-09, loaded dev
+		// box) and 1.72 s under full parallel load (14-11 launch-audit vitest.json).
+		// Cause: the polite summary is debounced ANNOUNCE_DELAY_MS = 750 ms after the last change
+		// (calculator-form.svelte.ts), then set on the next animation frame; expect.poll defaults to
+		// 1 s. 2 s = 2.7x the debounce.
 		await expect
 			.poll(announcerMessage, { timeout: 2000 })
 			.toBe('Cap rate 6.24%. Net operating income $15,600 a year.');

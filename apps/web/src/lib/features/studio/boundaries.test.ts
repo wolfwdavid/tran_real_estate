@@ -59,9 +59,12 @@ const reachesData = (entries: string[], lib: string) =>
 		(f) => under(posix.join(lib, 'data'))(f) && f !== posix.join(lib, 'data/tables.ts')
 	);
 
-// Each test walks the real import graph of src/lib with synchronous file reads: 1.9 s alone with 40
-// CPU burners running, 2.5 s in a full `vitest run`, against Vitest's 5 s default, which a heavier
-// parallel run exceeded (10-23). The limit is explicit; the walk and the assertions are unchanged.
+// Timeout: measured 1.06 s and 1.16 s in the serial lane (2026-11-09, loaded dev box), 0.68 s under
+// full parallel load (14-11 launch-audit vitest.json), 1.9 s alone with 40 CPU burners running and
+// 2.5 s in a full `vitest run` (10-23).
+// Cause: each test walks the real import graph of src/lib with synchronous file reads, which a
+// heavier parallel run pushed past the 5 s node default (10-23). 30 s keeps a 12x margin over the
+// worst number; the walk and the assertions are unchanged.
 const GRAPH_WALK_MS = 30_000;
 
 describe('Content Studio import-graph boundaries', { timeout: GRAPH_WALK_MS }, () => {

@@ -61,6 +61,12 @@ const emailLink = () =>
 /** Draft message, then wait for the finished (keyless sample) draft: the exits ungate then. */
 async function draftAndWait(container: Element): Promise<void> {
 	await draftButton().click();
+	// Timeout: measured 4.48 s and 4.34 s per draft test in the serial lane (2026-11-09, loaded dev
+	// box) and 4.60 s under full parallel load (14-11 launch-audit vitest.json; 4.4-5.5 s in the
+	// 15-RESEARCH runs of 2026-11-06).
+	// Cause: the keyless sample draft streams to "Draft ready." through the real streaming path, one
+	// word every 20-60 ms (ai/providers/fixture.ts), about 4 s of wall time by design; vi.waitFor
+	// defaults to 1 s. 20 s keeps a 4x margin over the full-load number.
 	await vi.waitFor(() => expect(container.textContent).toContain('Draft ready.'), {
 		timeout: 20_000
 	});
