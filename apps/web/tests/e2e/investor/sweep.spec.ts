@@ -168,7 +168,11 @@ async function seed(page: Page, mode: 'keyless' | 'mocked'): Promise<Seeded> {
 	await expect(page.locator('[data-memo-page]')).toBeVisible();
 	const panel = page.getByRole('region', { name: 'Memo draft' });
 	await panel.getByRole('button', { name: 'Draft memo', exact: true }).click();
-	// The keyless sample memo streams word by word (20-60ms each).
+	// Timeout: measured 31.9 s for the whole keyless sweep test (root, 4 workers, e2e-report 449ecc5,
+	// 2026-11-06), which seeds through this wait once.
+	// Cause: the keyless sample memo streams word by word (20-60 ms each) through the Fixture provider
+	// before "Draft ready." appears; the mocked mode answers from the Anthropic SSE mock. 60 s keeps a
+	// 1.9x margin on the whole test and a far larger one on the stream alone.
 	await expect(panel.getByText('Draft ready.', { exact: true })).toBeVisible({ timeout: 60_000 });
 	await expect(panel.getByText('Number check passed')).toBeVisible();
 	await expect(page.locator('[data-memo-print-link]')).toHaveAttribute('href', /&memo=/);
@@ -372,8 +376,16 @@ async function sweep(page: Page, s: Seeded, mode: 'keyless' | 'mocked'): Promise
 	return chips;
 }
 
+// Timeout: measured 31.9 s for "keyless > every investor route and the print route: axe, CSP, 375px,
+// sample chips, 0 calls" and 21.1 s for the mocked twin (root, 4 workers, e2e-report 449ecc5,
+// 2026-11-06).
+// Cause: one test seeds two deals, a streamed memo, a watched ZIP and a checked buy box through the
+// UI, then walks nine URLs running axe twice (1280 px and 375 px with text-spacing overrides) and
+// the CSP collector on each. 300 s keeps a 9.4x margin.
+const SWEEP_MS = 300_000;
+
 test.describe('keyless', () => {
-	test.describe.configure({ mode: 'serial', timeout: 300_000 });
+	test.describe.configure({ mode: 'serial', timeout: SWEEP_MS });
 
 	test('every investor route and the print route: axe, CSP, 375px, sample chips, 0 calls', async ({
 		page
@@ -396,7 +408,7 @@ test.describe('keyless', () => {
 });
 
 test.describe('mocked', () => {
-	test.describe.configure({ mode: 'serial', timeout: 300_000 });
+	test.describe.configure({ mode: 'serial', timeout: SWEEP_MS });
 
 	test('every investor route and the print route: axe, CSP, 375px, the sweep spends 0 calls', async ({
 		page,

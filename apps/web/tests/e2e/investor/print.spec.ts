@@ -29,6 +29,13 @@ const PLANTED = 'Monthly cash flow is $184. Expect 12% growth next year.';
 const NOTES_ONLY_NOTES = 'Area rents rose 12% last year.';
 const NOTES_ONLY = `Monthly cash flow is $184. ${NOTES_ONLY_NOTES}`;
 
+// Timeout: measured 2.8 s for "notes-only: a number present only in the notes prints" and 2.2 s for
+// "blocked: a memo with a Must fix number is never printed" (root, 4 workers, e2e-report 449ecc5,
+// 2026-11-06). Cause: each test saves the sample deal through the analyzer UI, drafts a memo
+// through the mocked Anthropic SSE stream and then renders the print page with axe. 120 s keeps a
+// 43x margin.
+const MOCKED_MEMO_MS = 120_000;
+
 const printButton = (page: Page) => page.getByRole('button', { name: 'Print or save as PDF' });
 const sheet = (page: Page) => page.locator('article.print-sheet');
 
@@ -48,11 +55,18 @@ async function saveSampleDealAndOpenMemo(page: Page): Promise<void> {
 async function draftMemo(page: Page): Promise<void> {
 	const panel = page.getByRole('region', { name: 'Memo draft' });
 	await panel.getByRole('button', { name: 'Draft memo', exact: true }).click();
-	// The keyless sample memo streams word by word (20-60ms each).
+	// Timeout: measured 13.8 s for the whole of "ready: print view from a checked sample memo,
+	// printed only on click" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), which waits here once.
+	// Cause: the keyless sample memo streams word by word (20-60 ms each) through the Fixture provider
+	// before "Draft ready." appears. 60 s keeps a 4.3x margin on the whole test.
 	await expect(panel.getByText('Draft ready.', { exact: true })).toBeVisible({ timeout: 60_000 });
 }
 
 test('ready: print view from a checked sample memo, printed only on click', async ({ page }) => {
+	// Timeout: measured 13.8 s for "ready: print view from a checked sample memo, printed only on
+	// click" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+	// Cause: the sample memo streams word by word, then the print page runs axe, page.pdf() renders
+	// the sheet in print media and the test switches media twice. 150 s keeps a 10.9x margin.
 	test.setTimeout(150_000);
 	const outbound = collectRequests(page, [...AI_HOSTS, 'api.rentcast.io']);
 	await stubPrint(page);
@@ -142,7 +156,7 @@ test('not found: an unknown deal id shows the not-found panel', async ({ page })
 });
 
 test('blocked: a memo with a Must fix number is never printed', async ({ page }) => {
-	test.setTimeout(120_000);
+	test.setTimeout(MOCKED_MEMO_MS);
 	await mockAnthropicText(page, PLANTED);
 	await useMockedAnthropicKey(page);
 	await stubPrint(page);
@@ -172,7 +186,7 @@ test('blocked: a memo with a Must fix number is never printed', async ({ page })
 // DEBT-03 (07-HUMAN-UAT S2): 12% is only in the user's notes. The memo page allows it, and the
 // print page must too (the notes numerals ride in the artifact meta); without them this shows BLOCKED.
 test('notes-only: a number present only in the notes prints', async ({ page }) => {
-	test.setTimeout(120_000);
+	test.setTimeout(MOCKED_MEMO_MS);
 	await mockAnthropicText(page, NOTES_ONLY);
 	await useMockedAnthropicKey(page);
 	await stubPrint(page);

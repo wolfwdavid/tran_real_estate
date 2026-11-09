@@ -97,6 +97,11 @@ test('empty deals list offers to analyze or try the sample', async ({ page }) =>
 });
 
 test('list, sort, select up to 3, compare at 1280 and 375, remove, delete', async ({ page }) => {
+	// Timeout: test.slow() triples the 30 s default to 90 s; measured 7.1 s for "list, sort, select
+	// up to 3, compare at 1280 and 375, remove, delete" (root, 4 workers, e2e-report 449ecc5,
+	// 2026-11-06).
+	// Cause: four deals are created through the analyzer UI, then the compare table is checked at
+	// 1280 px and 375 px with axe on each layout. 90 s keeps a 12.7x margin.
 	test.slow();
 	const rentcast = collectRequests(page, ['api.rentcast.io']);
 	await createFourDeals(page);

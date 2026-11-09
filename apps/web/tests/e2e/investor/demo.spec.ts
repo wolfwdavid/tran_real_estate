@@ -35,6 +35,13 @@ const MARKETS = '/v1/markets';
 const CLEAN_MEMO =
 	'This memo describes the rental property analysis saved in Tran Real Estate Tools. The table lists the figures from that analysis.';
 
+// Timeout: measured 16.0 s for "keyless full flow uses only sample data" and 14.4 s for "mocked key
+// flow stays within 6 calls" (root, 4 workers, e2e-report 449ecc5, 2026-11-06).
+// Cause: one composed journey through nine investor pages (analyze, autofill, save twice, compare,
+// buy box check, Deep analyze, watch ZIP, dashboard charts, streamed memo, print view), and the
+// mocked flow reloads every visited page again. 240 s keeps a 15x margin.
+const FULL_FLOW_MS = 240_000;
+
 // ------------------------------------------------------------------ shared steps
 
 async function openAnalyzer(page: Page, query = ''): Promise<void> {
@@ -141,7 +148,10 @@ async function memoToPrint(page: Page, dealName: string): Promise<string> {
 	const memoUrl = page.url();
 	const panel = page.getByRole('region', { name: 'Memo draft' });
 	await panel.getByRole('button', { name: 'Draft memo', exact: true }).click();
-	// The keyless sample memo streams word by word (20-60ms each).
+	// Timeout: measured 16.0 s for the whole of "keyless full flow uses only sample data" (root,
+	// 4 workers, e2e-report 449ecc5, 2026-11-06), which waits here once.
+	// Cause: the keyless sample memo streams word by word (20-60 ms each) through the Fixture provider
+	// before "Draft ready." appears. 60 s keeps a 3.7x margin on the whole test.
 	await expect(panel.getByText('Draft ready.', { exact: true })).toBeVisible({ timeout: 60_000 });
 	await expect(panel.getByText('Number check passed')).toBeVisible();
 	await expect(panel.getByText('Advice language check passed')).toBeVisible();
@@ -164,7 +174,7 @@ async function expectSampleSource(page: Page, where: string): Promise<void> {
 // ------------------------------------------------------------------ keyless
 
 test('keyless full flow uses only sample data', async ({ page }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(FULL_FLOW_MS);
 	const external = collectRequests(page, ['api.rentcast.io', ...AI_HOSTS]);
 	const blocked = await blockRentCast(page);
 
@@ -230,7 +240,7 @@ test('keyless full flow uses only sample data', async ({ page }) => {
 // ------------------------------------------------------------------ mocked key
 
 test('mocked key flow stays within 6 calls', async ({ page, net }) => {
-	test.setTimeout(240_000);
+	test.setTimeout(FULL_FLOW_MS);
 	const rentBody = await rentEstimateBody();
 	const valueBody = await valueEstimateBody();
 	// Estimates answer any address (the subject and the Deep analyze listing) with fixture bodies.

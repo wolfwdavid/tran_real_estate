@@ -34,7 +34,10 @@ const draftButton = (page: Page) =>
 	panel(page).getByRole('button', { name: 'Draft memo', exact: true });
 
 async function expectDraftReady(page: Page): Promise<void> {
-	// The sample memo streams word by word (20-60ms each), so allow for a long draft.
+	// Timeout: measured 13.8 s for the whole of "keyless: the sample memo passes every check and
+	// unlocks the print link" (root, 4 workers, e2e-report 449ecc5, 2026-11-06), which waits here once.
+	// Cause: the sample memo streams word by word (20-60 ms each) through the Fixture provider before
+	// "Draft ready." appears. 60 s keeps a 4.3x margin on the whole test.
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 60_000
 	});
