@@ -114,3 +114,15 @@
   not a site regression. Probe the routes with curl, then dispatch `live-smoke.yml` once on the same SHA
   (`-f base_url=... -f expect_version=<sha>`). Record both runs; never re-dispatch in a loop. 41220466187 failed
   35 tests with 429 and the dispatch 41220812811 passed 121/121 three minutes later (2026-10-31).
+
+## 2026-11-10: Phase 15 evidence protocol
+
+- Rule: before any long Playwright or `pnpm verify` run on the dev laptop, require 10 consecutive minutes with
+  no WLAN-AutoConfig event 8003. The Intel Wi-Fi 7 BE201 driver drops the WLAN every 1-3 minutes in bad
+  stretches, and each drop makes Chromium abort every in-flight request, loopback included, with
+  `net::ERR_NETWORK_CHANGED` (pages stuck on `<html hidden>`, "Failed to fetch dynamically imported module").
+  When a browser run fails, check the 8003 log for the run window before root-causing anything in the repo.
+- Rule: a CPU-pressure level is a measured choice, not a constant. 16 burner threads plus four Playwright
+  browsers on 16 CPUs starved Chromium's network path (2.5-5 s per small chunk while the server answered in
+  3 ms) and failed default 5 s expectations around lazy imports. Prove the server is not the bottleneck, reproduce
+  with an artificial delay, then lower the pressure (12 threads, 75% of CPUs) rather than raise timeouts.

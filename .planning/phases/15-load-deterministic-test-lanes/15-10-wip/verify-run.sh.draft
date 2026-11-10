@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage: verify-run.sh N  -> runs the full `pnpm verify` chain, logging to .tools/test-evidence/verify-N.log
+set -u
+N="$1"
+cd "$(git rev-parse --show-toplevel)" || exit 9
+LOG=".tools/test-evidence/verify-$N.log"
+echo "start=$(date -u +%Y-%m-%dT%H:%M:%SZ) head=$(git rev-parse HEAD)" > "$LOG"
+MSYS_NO_PATHCONV=1 corepack.cmd pnpm verify >> "$LOG" 2>&1
+code=$?
+echo "exit=$code" >> "$LOG"
+echo "end=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG"
+exit $code

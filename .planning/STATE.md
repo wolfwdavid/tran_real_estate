@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: unknown
-stopped_at: Completed 15-09-PLAN.md
-last_updated: "2026-11-09T08:34:44.571Z"
+status: paused
+stopped_at: 15-10 Task 2 step 3 (pressure re-run at 12 threads), blocked on host network
+last_updated: "2026-11-10T21:06:52.270Z"
 progress:
   total_phases: 6
   completed_phases: 3
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 15 (load-deterministic-test-lanes) — EXECUTING
-Plan: 10 of 11
+Plan: 10 of 11 — PAUSED in Task 2 step 3 (see .planning/phases/15-load-deterministic-test-lanes/.continue-here.md)
 
 ## Performance Metrics
 
@@ -782,7 +782,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-09T08:34:44.564Z
-Stopped at: Completed 15-09-PLAN.md
-Resume file: None
+Last session: 2026-11-10T21:06:52.270Z
+Stopped at: 15-10 Task 2 step 3. Verify x3, repeat-each, serial x3 and shuffle are green at 194b07f; the 16-thread pressure run failed on fetch starvation (attempt 2), plan amended to 12 threads (f2cd341), re-run blocked on Wi-Fi driver drops.
+Resume file: .planning/phases/15-load-deterministic-test-lanes/.continue-here.md (and .planning/HANDOFF.json)
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

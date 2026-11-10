@@ -1,0 +1,23 @@
+param(
+  [int]$Minutes = 10,
+  [int]$MaxPolls = 6,
+  [string]$Since = ''
+)
+# Counts WLAN-AutoConfig 8003 ("disconnected by the driver") events.
+# Without -Since: polls once a minute until the trailing $Minutes window has 0 events (or $MaxPolls).
+# With -Since <ISO UTC>: one-shot count of events from that UTC instant until now, listing their times.
+$log = 'Microsoft-Windows-WLAN-AutoConfig/Operational'
+if ($Since -ne '') {
+  $start = ([datetime]::Parse($Since)).ToUniversalTime().ToLocalTime()
+  $events = @(Get-WinEvent -FilterHashtable @{LogName = $log; Id = 8003; StartTime = $start } -ErrorAction SilentlyContinue)
+  Write-Output ("window since {0} (UTC) -> now {1}: {2} x 8003" -f $Since, (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'), $events.Count)
+  foreach ($e in $events) { Write-Output ("  8003 at " + $e.TimeCreated.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')) }
+  exit 0
+}
+for ($i = 0; $i -lt $MaxPolls; $i++) {
+  $c = @(Get-WinEvent -FilterHashtable @{LogName = $log; Id = 8003; StartTime = (Get-Date).AddMinutes(-$Minutes) } -ErrorAction SilentlyContinue).Count
+  Write-Output ((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') + " 8003 in last $Minutes min: $c")
+  if ($c -eq 0) { break }
+  Start-Sleep 60
+}
+Get-NetAdapter -Name Wi-Fi | Select-Object Name, Status, LinkSpeed, InterfaceDescription, DriverVersion | Format-List

@@ -1,0 +1,20 @@
+#!/bin/bash
+# Usage: pressure-run.sh  -> 12-thread cpu-burn, then full `pnpm test:e2e`; stops the burner afterwards
+set -u
+cd "$(git rev-parse --show-toplevel)" || exit 9
+EV=.tools/test-evidence
+rm -f "$EV/stop"
+node scripts/cpu-burn.mjs --threads 12 --stop-file "$EV/stop" --max-seconds 7200 > "$EV/burn.log" 2>&1 &
+BURN=$!
+sleep 15
+LOG="$EV/pressure-e2e.log"
+echo "start=$(date -u +%Y-%m-%dT%H:%M:%SZ) head=$(git rev-parse HEAD) burner_pid=$BURN" > "$LOG"
+echo '$ pnpm test:e2e' >> "$LOG"
+MSYS_NO_PATHCONV=1 corepack.cmd pnpm test:e2e >> "$LOG" 2>&1
+code=$?
+echo "exit=$code" >> "$LOG"
+echo "end=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG"
+touch "$EV/stop"
+wait $BURN
+echo "burner exit=$? at $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG"
+exit $code

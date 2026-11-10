@@ -1,0 +1,24 @@
+import { test, expect } from '@playwright/test';
+
+// Diagnostic only (never committed): reproduces guide.spec.ts:46 under an artificial delay on the
+// lazily imported tour-panel chunks. DELAY_MS controls how late the chunks arrive after the click.
+const DELAY_MS = Number(process.env.DELAY_MS ?? 5100);
+
+test(`guide investor tour with tour chunks delayed ${DELAY_MS} ms`, async ({ page }) => {
+	let armed = false;
+	await page.route(/\/_app\/immutable\/chunks\/[^/]+\.js$/, async (route) => {
+		if (armed) await new Promise((r) => setTimeout(r, DELAY_MS));
+		await route.continue();
+	});
+	await page.goto('');
+	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expect(page.locator('#get-started')).toBeVisible();
+	await expect(page.locator('#get-started')).toHaveAttribute('data-ready', '');
+	armed = true;
+	await page.locator('#get-started').getByRole('button', { name: 'Investor Start the tour' }).click();
+	const heading = page
+		.locator('#get-started')
+		.getByRole('heading', { level: 3, name: 'What the investor portal does' });
+	await expect(heading).toBeFocused();
+	await expect(page.locator('#get-started')).toContainText('Step 1 of 3');
+});

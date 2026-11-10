@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-11-10T21:06:52.270Z",
+  "phase": "15",
+  "phase_name": "load-deterministic-test-lanes",
+  "phase_dir": ".planning/phases/15-load-deterministic-test-lanes",
+  "plan": 10,
+  "task": 2,
+  "total_tasks": 3,
+  "status": "paused",
+  "code_under_test": "194b07f858b913a3118c393f68f5625b8362e272",
+  "completed_tasks": [
+    { "id": 1, "name": "Pre-flight and three consecutive pnpm verify runs", "status": "done", "commit": "none (logs only, gitignored)" },
+    { "id": 2, "name": "Repeat-each, serial lane x3, CPU-pressure E2E, shuffled unit run", "status": "in_progress", "progress": "steps 1, 2 and 4 green; step 3 failed at 16 threads (attempt 2), plan amended to 12 threads in f2cd341, re-run not started" }
+  ],
+  "remaining_tasks": [
+    { "id": 2, "name": "Task 2 step 3: full E2E under 12 burner threads, 4 workers, 0 failed / 0 flaky", "status": "not_started" },
+    { "id": 3, "name": "Write the evidence file and pin it with scripts/test-evidence.test.ts", "status": "drafted", "progress": "draft and pin test in 15-10-wip/, six pressure-row cells unfilled" }
+  ],
+  "blockers": [
+    { "description": "Host Wi-Fi driver (Intel Wi-Fi 7 BE201, 24.20.0.4) drops the WLAN every 1-3 minutes; each drop aborts in-flight Chromium requests with net::ERR_NETWORK_CHANGED", "type": "human_action", "workaround": "wired link with Wi-Fi disabled, or driver update/rollback and adapter power saving off; gate on 0 WLAN 8003 events in 10 minutes" }
+  ],
+  "human_actions_pending": [
+    { "action": "Stabilise the dev machine's network", "context": "The pressure run cannot start until 10 consecutive minutes pass with no WLAN-AutoConfig 8003 event", "blocking": true },
+    { "action": "Watch the CI run triggered by the 2026-11-10 push of main", "context": "Plan 15-11 records the --fail-on-flaky-tests flag and the 2-worker cap from a CI log", "blocking": false }
+  ],
+  "decisions": [
+    { "decision": "Attempt 1 failures attributed to host Wi-Fi drops, no repo change", "rationale": "Every failure began 0.5-1.7 s after a logged 8003 disconnect", "phase": "15" },
+    { "decision": "Pressure level lowered from 16 to 12 burner threads (Option A)", "rationale": "16 threads plus four browsers on 16 CPUs starved Chromium's network path (2.5-5 s per small chunk, server at 3 ms median); timeout raises and retries are forbidden", "phase": "15" }
+  ],
+  "uncommitted_files": [],
+  "next_action": "Follow next_action in .planning/phases/15-load-deterministic-test-lanes/.continue-here.md: restore runners from 15-10-wip, run the network gate, run pressure-run.sh at 12 threads, then Task 3",
+  "context_notes": "Steps 1, 2 and 4 of the protocol stay valid while only docs commits land after 194b07f. A code commit restarts the protocol from Task 1 step 1."
+}

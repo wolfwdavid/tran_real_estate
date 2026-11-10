@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage: repeat-run.sh CHUNK spec1 spec2 ...  -> repeat-each 3 on root+sub, list+json reporters
+set -u
+CHUNK="$1"; shift
+cd "$(git rev-parse --show-toplevel)" || exit 9
+LOG=".tools/test-evidence/repeat-$CHUNK.log"
+echo "start=$(date -u +%Y-%m-%dT%H:%M:%SZ) head=$(git rev-parse HEAD) specs=$*" > "$LOG"
+PLAYWRIGHT_JSON_OUTPUT_FILE="../../.tools/test-evidence/repeat-$CHUNK.json" MSYS_NO_PATHCONV=1 corepack.cmd pnpm --filter web exec playwright test "$@" --repeat-each 3 --project root --project sub --workers 4 --fail-on-flaky-tests --reporter=list,json >> "$LOG" 2>&1
+code=$?
+echo "exit=$code" >> "$LOG"
+echo "end=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG"
+exit $code

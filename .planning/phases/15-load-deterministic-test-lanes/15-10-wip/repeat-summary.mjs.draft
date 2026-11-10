@@ -1,0 +1,26 @@
+// Usage: node repeat-summary.mjs <report.json>...  -> per spec file: projects, passed/failed/flaky/skipped
+import { readFileSync } from 'node:fs';
+
+const totals = new Map();
+function walk(suite, file) {
+	const f = suite.file ?? file;
+	for (const spec of suite.specs ?? []) {
+		const specFile = (spec.file ?? f).replace(/\\/g, '/');
+		const row = totals.get(specFile) ?? { projects: new Set(), expected: 0, unexpected: 0, flaky: 0, skipped: 0 };
+		for (const t of spec.tests ?? []) {
+			row.projects.add(t.projectName);
+			row[t.status] = (row[t.status] ?? 0) + 1;
+		}
+		totals.set(specFile, row);
+	}
+	for (const s of suite.suites ?? []) walk(s, f);
+}
+for (const path of process.argv.slice(2)) {
+	const report = JSON.parse(readFileSync(path, 'utf8'));
+	for (const s of report.suites ?? []) walk(s, s.file);
+	console.log(`# ${path}: stats`, JSON.stringify(report.stats));
+}
+console.log('| Spec | Projects | Passed | Failed | Flaky | Skipped |');
+for (const [file, r] of [...totals].sort()) {
+	console.log(`| ${file} | ${[...r.projects].sort().join(', ')} | ${r.expected} | ${r.unexpected} | ${r.flaky} | ${r.skipped} |`);
+}
