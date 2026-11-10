@@ -54,6 +54,37 @@
   recover from a failed chunk load (SvelteKit's version-skew reload only fires on navigation), which
   is a product decision for a later phase, not a test change.
 
+## 15-10: the 16-thread pressure run fails five tests at the 5 s edge of a lazy chunk load
+
+- **Seen:** 2026-11-10, 15-10 attempt 2 at 194b07f on a stable network (0 WLAN 8003 events from
+  17:01Z to 19:54Z). Steps 1 (three `pnpm verify`, all green), 2 (repeat-each 3 on all 12
+  load-sensitive specs, 0 failed / 0 flaky; serial lane x3 green) and 4 (shuffle, seed
+  `1794340461`, green) passed. Step 3, `pnpm test:e2e` under `cpu-burn --threads 16` on 16 CPUs
+  with 4 workers: `5 failed`, `4 skipped`, `2345 passed (43.3m)`. Failures: guide.spec.ts:46 (root),
+  renter-map.spec.ts:141 and :350 (root), ai-drafting.spec.ts:106 (sub), studio-keyless.spec.ts:380
+  (sub). Every one is a default 5 s expectation that spans the delivery of lazily imported module
+  chunks (tour panel, Leaflet, data layer, settings hydration, the print route's nodes).
+- **Root cause (host starvation, not the repository):** in the guide trace the click fired at
+  +3.31 s and `import('./TourPanel.svelte')` requested three chunks (318-4681 bytes, loopback) that
+  Chromium recorded at 2583, 5012 and 5013 ms, so the import resolved about 30 ms after the expect
+  expired; the first 28 chunks of the same page load took about 15 ms each under the same burner.
+  The static server is exonerated: with the 16-thread burner running and four concurrent 383-file
+  precache storms (fresh TCP connection per request) `scripts/serve-pages.mjs` answered a probe
+  chunk at p50 3.0 ms / p90 3.9 ms / max 119 ms (`.tools/test-evidence/diag-server-latency.log`).
+  The 2.5-5 s request times sit in Chromium's network path under 16 burner threads plus four
+  browsers on 16 CPUs: the starvation class 15-RESEARCH called "not a fair zero-failure target" at
+  40 burners, reached at 16 on this machine with the current 2354-test suite (10-23 saw 0 failures
+  at 16 with a smaller suite).
+- **Reproduced under artificial delay (lessons 2026-10-13):** a scratch spec that `page.route`-delays
+  every `_app/immutable/chunks/*.js` request after the tile click fails identically at 5100 ms
+  (`toBeFocused` ... element(s) not found, 5000 ms) and passes at 4000 ms. No race, no stale write;
+  the `version` guard in `GetStartedGuide.svelte` is intact and the click is by design gated on the
+  lazy panel import.
+- **Not fixed here:** a timeout raise or a retry is forbidden by 15-10; a serve-pages change is
+  refuted by the measurement; a lower burner count changes the pressure level written into the
+  plan's must-haves and is an owner decision (options recorded in the 15-10 checkpoint). Full facts
+  in `.tools/test-evidence/attempt-2.md` (gitignored).
+
 ## 15-01: happy-dom iframe warnings in the extension project (pre-existing noise)
 
 - `apps/extension/tests/brand-parity.test.ts:109` and `reconcile.test.ts:167` set `innerHTML` that
