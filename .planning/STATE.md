@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: ready_to_plan
-stopped_at: Completed 16-01-PLAN.md; next is 16-02 (not started)
-last_updated: "2026-11-11T06:52:51.984Z"
+status: executing
+stopped_at: Completed 16-02-PLAN.md; next is 16-03 (not started)
+last_updated: "2026-11-11T07:33:58.558Z"
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 67
-  completed_plans: 55
+  completed_plans: 56
   percent: 67
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
-Plan: 2 of 13
+Plan: 3 of 13
 
 ## Performance Metrics
 
@@ -281,6 +281,7 @@ Plan: 2 of 13
 | Phase 15 P06 | 13min | 2 tasks | 8 files |
 | Phase 15 P08 | 25min | 3 tasks | 7 files |
 | Phase 15 P09 | 18min | 2 tasks | 3 files |
+| Phase 16 P02 | n/a | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -754,6 +755,8 @@ Recent decisions affecting current work:
 - [Phase 15]: 15-08: TEST-01/TEST-05 stay unchecked until 15-09 (guard) and 15-10 (evidence); lane-order proof uses a node stand-in for the browser group
 - [Phase 15]: 15-09: the lane guard stays in the parallel scripts project; its sweep measured 1.88 s max under full load, under the 2.5 s Pitfall 10 threshold
 - [Phase 15]: 15-09: test-lane-rules.mjs derives callee names from the AST property chain (calleeName) so Prettier-wrapped expect.poll / expect.element / vi.waitFor chains are guarded; group order asserted per lane via SERIAL_GROUP_ORDER[lane]
+- [Phase 16-02]: Behavioural lane-exclusion pin lives in scripts/lane-configs.test.ts (scripts-serial); importing the web vite config costs 3.2 s cold. Config-root identifier spreads are not flagged; serialTest() is scanned instead.
+- [Phase 16-02]: Repo-sweep slowdown fixed with a one-slot parse cache in test-lane-rules.mjs (4.9 s to 2.2 s), never by raising a timeout.
 
 ### Pending Todos
 
@@ -783,7 +786,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-11T06:52:51.965Z
-Stopped at: Phase 16 context gathered
+Last session: 2026-11-11T07:33:58.521Z
+Stopped at: Completed 16-02-PLAN.md; next is 16-03 (not started)
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).

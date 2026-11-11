@@ -213,7 +213,7 @@ Plans:
 
 **Research flag:** YES. Run `/gsd:research-phase 16`: whether `/_app/version.json` keeps its path and shape under Kit 3 (the smoke's poll depends on it); whether `svelte-kit sync` is still needed in `prepare`; Rolldown chunking against the 60 KB per-page budget (0.5-1.9 KB headroom today); shadcn-svelte CLI 1.7.1 `#lib` behaviour on one `add` dry run; whether `fileParallelism` / `maxWorkers` is per-project in Vitest 5 (the `groupOrder` single-invocation experiment); WXT 0.21.5 under Vitest 5 (`pnpm vitest run --project extension` first); the `--outputFile.json=` CLI form; `eslint-plugin-svelte` 3.23.1 Kit-3 rule changes.
 **UI hint:** no (a full axe and visual pass over the migrated app is part of the gate, not new UI).
-**Plans:** 1/13 plans executed
+**Plans:** 2/13 plans executed
 Plans:
 
 **Wave 1**
@@ -222,7 +222,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 16-02-PLAN.md — Wave 2: pre-flight (research 16-00b): guard hardening CR-01, WR-02, WR-03, WR-04 plus WR-05/WR-06 slice/WR-08, each mutation-tested
+- [x] 16-02-PLAN.md — Wave 2: pre-flight (research 16-00b): guard hardening CR-01, WR-02, WR-03, WR-04 plus WR-05/WR-06 slice/WR-08, each mutation-tested
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -307,5 +307,5 @@ Plans:
 | 13. Live Origin: First CI Run, First Deploy, Post-Deploy Smoke & UAT Burn-down | v1.1 | 21/21 | Complete   | 2026-11-01 |
 | 14. Carried Debt | v1.1 | 12/12 | Complete    | 2026-11-06 |
 | 15. Load-Deterministic Test Lanes | v1.1 | 11/11 | Complete    | 2026-11-11 |
-| 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 1/13 | In Progress|  |
+| 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 2/13 | In Progress|  |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
