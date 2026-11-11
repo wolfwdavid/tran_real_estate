@@ -27,6 +27,7 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { pnpmCommand } from './lib/pnpm-cmd.mjs';
 
 export const EVIDENCE_DIR = '.tools/audit-evidence';
 export const RESULTS_DIR = 'apps/web/test-results';
@@ -204,11 +205,10 @@ export function mergeEvidence(root) {
 }
 
 function pnpm(args, opts) {
-	const execPath = process.env.npm_execpath;
-	const [bin, pre] = execPath ? [process.execPath, [execPath]] : ['corepack', ['pnpm']];
+	const { bin, pre, shell } = pnpmCommand();
 	return spawnSync(bin, [...pre, ...args], {
 		stdio: 'inherit',
-		shell: !execPath && process.platform === 'win32',
+		shell,
 		...opts
 	});
 }

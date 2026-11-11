@@ -18,6 +18,7 @@ import { collectFiles } from './banned-terms.mjs';
 import { AUDIT_EXCEPTIONS } from './lib/audit-exceptions.mjs';
 import { findBanned } from './lib/banned-terms-rules.mjs';
 import { TARGETS, targetEnv } from './lib/build-targets.mjs';
+import { pnpmCommand } from './lib/pnpm-cmd.mjs';
 import { HUMAN_UAT, PITFALLS_EVIDENCE } from './lib/pitfalls-evidence.mjs';
 
 const CHECKLIST_HEADING = `## "Looks Done But Isn't" Checklist`;
@@ -966,9 +967,7 @@ export function evidenceFiles(data) {
 
 /** The pinned pnpm: the one that invoked this script, else corepack (build-web.mjs rule). */
 function pnpmSpawn(args, opts = {}) {
-	const execPath = process.env.npm_execpath;
-	const [bin, pre] = execPath ? [process.execPath, [execPath]] : ['corepack', ['pnpm']];
-	const shell = !execPath && process.platform === 'win32';
+	const { bin, pre, shell } = pnpmCommand();
 	return spawnSync(bin, [...pre, ...args], { encoding: 'utf8', shell, ...opts });
 }
 

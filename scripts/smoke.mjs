@@ -25,6 +25,7 @@ import { resolveBasePath } from '../apps/web/src/lib/base-path.js';
 import { resolveAnalytics, resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
 import { parseSmokeEnv } from '../apps/web/tests/smoke/env.js';
 import { TARGETS, targetEnv } from './lib/build-targets.mjs';
+import { pnpmCommand } from './lib/pnpm-cmd.mjs';
 
 const REPO = path.resolve(import.meta.dirname, '..');
 const BUDGET_S = 300;
@@ -193,9 +194,7 @@ export function countRateLimited(text) {
  * @returns {number}
  */
 function runPlaywright(passthrough, env) {
-	const execPath = process.env.npm_execpath;
-	const [bin, pre] = execPath ? [process.execPath, [execPath]] : ['corepack', ['pnpm']];
-	const shell = !execPath && process.platform === 'win32';
+	const { bin, pre, shell } = pnpmCommand();
 	const args = [
 		...pre,
 		...['--filter', 'web', 'exec', 'playwright', 'test', '-c', 'playwright.smoke.config.ts'],
