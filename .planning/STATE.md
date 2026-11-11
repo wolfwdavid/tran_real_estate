@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: ready_to_plan
-stopped_at: Phase 16 planned (13 plans, 13 serial waves); next is /gsd-execute-phase 16
-last_updated: "2026-11-11T05:15:04.188Z"
+stopped_at: Completed 16-01-PLAN.md; next is 16-02 (not started)
+last_updated: "2026-11-11T06:52:51.984Z"
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 67
-  completed_plans: 54
+  completed_plans: 55
   percent: 67
 ---
 
@@ -20,12 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-29)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 16 — toolchain: pnpm 12 → sveltekit 3 → vitest 5
+**Current focus:** Phase 16 — toolchain-pnpm-12-sveltekit-3-vitest-5
 
 ## Current Position
 
-Phase: 16
-Plan: Not started
+Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
+Plan: 2 of 13
 
 ## Performance Metrics
 
@@ -783,7 +783,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-11T03:36:34.587Z
+Last session: 2026-11-11T06:52:51.965Z
 Stopped at: Phase 16 context gathered
-Resume file: .planning/phases/16-toolchain-pnpm-12-sveltekit-3-vitest-5/16-CONTEXT.md
+Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
