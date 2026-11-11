@@ -21,10 +21,13 @@ This repository is a pnpm workspace:
 ## Prerequisites
 
 - **Node 24** (`.nvmrc`). The `engines` field pins `>=24 <25`.
-- **pnpm 12.18.0** through corepack (a global pnpm 11 or 12 also switches itself to the pinned
-  version). `package.json` pins `packageManager`; use `corepack pnpm` for every command below so
-  the pinned version is the one that runs. pnpm 12 is a native binary, and `pnpm-lock.yaml` now
-  starts with a small boot document for pnpm itself, followed by the project document.
+- **pnpm 12.18.0**. `package.json` pins `packageManager`. A plain `pnpm` (global 11 or 12) reads the
+  pin and switches itself to 12.18.0; `corepack pnpm` also runs 12.18.0, but the package scripts
+  call `pnpm` internally, so with corepack the `pnpm` on `PATH` must be 12.x too (a global pnpm 11
+  refuses to run under corepack with a version-mismatch error). Every `corepack pnpm` command
+  below works the same as plain `pnpm` once that holds. pnpm 12 is a native binary, and
+  `pnpm-lock.yaml` now starts with a small boot document for pnpm itself, followed by the
+  project document.
 - **gitleaks 8.30.1** on `PATH`. The pre-commit hook and the unit suite fail closed without it.
   On Windows: `winget install --id Gitleaks.Gitleaks -e`. On other platforms use the release
   binary for that exact version.

@@ -135,3 +135,7 @@
 - Rule: a pnpm 12 lockfile has two YAML documents (boot document first, project document last). Regenerate it
   once with a non-frozen install in the same commit as the pin, and check that the second document is
   byte-identical to the previous lockfile.
+- Rule: on a machine whose global pnpm is still 11, `corepack.cmd pnpm <script>` fails inside any script that
+  runs `pnpm ...` (audit:deps, verify): the inner PATH `pnpm` is the global 11 and refuses to run under
+  corepack ("Your current pnpm is v11.27.0"). Run the gate with a plain `pnpm`, which self-switches to the pin
+  and puts pnpm 12 in the children's environment. Do not change the global tool to fix it.
