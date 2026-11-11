@@ -204,7 +204,7 @@ function lockfileProblems(lock: string): string[] {
 		if (!/^lockfileVersion:/m.test(doc)) problems.push('a document lacks lockfileVersion');
 	if (!/^importers:/m.test(project)) problems.push('last document lacks importers');
 	for (const importer of ['apps/web', 'apps/extension'])
-		if (!new RegExp(`^ {2}${importer}:\s*$`, 'm').test(project))
+		if (!new RegExp(`^ {2}${importer}:\\s*$`, 'm').test(project))
 			problems.push(`last document lacks the ${importer} importer`);
 	if (!/^ {2}packages\/[\w-]+:\s*$/m.test(project))
 		problems.push('last document lacks a packages/ importer');
