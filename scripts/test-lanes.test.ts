@@ -110,7 +110,11 @@ let repoPaths: string[] = [];
 /** The subset the rules apply to, with its text read once. */
 let entries: Entry[] = [];
 
-const CONFIG_FILE = /(^|\/)(?:vite|vitest|playwright)[\w.-]*\.config\.ts$/;
+// Same widening as fileKind: .ts/.mts/.cts/.js/.mjs/.cjs configs, vitest.workspace files, and the
+// lane manifest that supplies every serial project's `test` block.
+const CONFIG_FILE =
+	/(^|\/)(?:(?:vite|vitest|playwright)[\w.-]*\.config\.[cm]?[jt]s|vitest\.workspace(?:\.[\w-]+)*\.[cm]?[jt]s)$/;
+const LANES_MANIFEST = 'tooling/vitest/lanes.ts';
 const kindOf = (k: Kind) => entries.filter((e) => e.kind === k);
 const sortedUnique = (xs: string[]) => [...new Set(xs)].sort();
 
@@ -144,7 +148,13 @@ describe('repo sweep', () => {
 		expect(kindOf('vitest-test').length).toBeGreaterThanOrEqual(300);
 		expect(kindOf('playwright').length).toBeGreaterThanOrEqual(40);
 
-		const configsInRepo = repoPaths.filter((p) => CONFIG_FILE.test(p));
+		// WR-04: serialTest() in the lane manifest builds every serial project's `test` block, so the
+		// sweep must scan it as a config.
+		expect(fileKind(LANES_MANIFEST)).toBe('vitest-config');
+		const configsInRepo = [
+			...repoPaths.filter((p) => CONFIG_FILE.test(p)),
+			...repoPaths.filter((p) => p === LANES_MANIFEST)
+		];
 		const configsScanned = [...kindOf('vitest-config'), ...kindOf('playwright-config')].map(
 			(e) => e.path
 		);
@@ -162,7 +172,18 @@ describe('repo sweep', () => {
 			expect(configsScanned).toContain(must);
 		}
 
-		const packages = kindOf('package-json').map((e) => e.path);
+		// Every package.json and workflow in the repo is scanned (CLI flags, workflow re-runs).
+		const scannedPackages = kindOf('package-json').map((e) => e.path);
+		expect(sortedUnique(scannedPackages)).toEqual(
+			sortedUnique(repoPaths.filter((p) => /(^|\/)package\.json$/.test(p)))
+		);
+		const scannedWorkflows = kindOf('workflow').map((e) => e.path);
+		expect(sortedUnique(scannedWorkflows)).toEqual(
+			sortedUnique(repoPaths.filter((p) => /^\.github\/workflows\/.+\.ya?ml$/.test(p)))
+		);
+		expect(scannedWorkflows.length).toBeGreaterThanOrEqual(3);
+
+		const packages = scannedPackages;
 		expect(packages).toContain('package.json');
 		expect(packages).toContain('apps/web/package.json');
 		expect(packages).toContain('apps/extension/package.json');

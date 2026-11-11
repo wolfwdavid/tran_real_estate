@@ -45,7 +45,7 @@ export const PINNED_RETRIES = Object.freeze({
 });
 
 /**
- * @typedef {{ path: string; line: number; rule: 'elapsed-time'|'raised-timeout-outside-serial'|'unannotated-raise'|'retry'|'to-pass'; detail: string }} Finding
+ * @typedef {{ path: string; line: number; rule: 'elapsed-time'|'raised-timeout-outside-serial'|'unannotated-raise'|'retry'|'to-pass'|'cli-timeout-or-workers'|'workflow-rerun'; detail: string }} Finding
  * @typedef {{ project: string; serial: boolean; browser: boolean }} Lane
  * @typedef {Record<string, readonly { file: string }[]>} SerialManifest shape of SERIAL in tooling/vitest/lanes.ts
  * @typedef {'vitest-test'|'playwright'|'vitest-config'|'playwright-config'|'package-json'|'workflow'|'script-mjs'} FileKind
@@ -71,7 +71,26 @@ const TEST_MODIFIERS = new Set([
 const HOOKS = new Set(['beforeAll', 'beforeEach', 'afterAll', 'afterEach']);
 const WAITS = new Set(['vi.waitFor', 'vi.waitUntil', 'expect.poll', 'expect.element']);
 const ELAPSED_CALLEES = new Set(['performance.now', 'process.hrtime', 'process.hrtime.bigint']);
-const RETRY_FLAG = /--retr(?:y|ies)\b/;
+/**
+ * Runner CLI flags that change retries, timeouts or worker counts. Vitest's CLI (cac) takes both
+ * camelCase and kebab-case; `(?![\w-])` keeps `--timeout-minutes` out.
+ */
+const CLI_FLAG =
+	/--(retry|retries|testTimeout|test-timeout|hookTimeout|hook-timeout|timeout|workers|maxWorkers|max-workers)(?![\w-])/;
+/** Shell commands that run a test suite: `||` after one of these can re-run or mask it. */
+const TEST_RUNNER =
+	/\bpnpm\b[^|&;]*?(?<![A-Za-z])(?:test|smoke|verify|e2e)|\b(?:vitest|playwright|smoke|verify)\b/;
+
+/**
+ * Rule label for a CLI flag found in `s`, or null.
+ * @param {string} s
+ * @returns {'retry' | 'cli-timeout-or-workers' | null}
+ */
+function flagRule(s) {
+	const m = CLI_FLAG.exec(s);
+	if (!m) return null;
+	return m[1] === 'retry' || m[1] === 'retries' ? 'retry' : 'cli-timeout-or-workers';
+}
 
 /**
  * Playwright web-first matchers that take an options object, with the argument index it sits at.
@@ -149,8 +168,11 @@ export function laneOf(path, serial) {
  */
 export function fileKind(path) {
 	if (path.includes('node_modules/')) return null;
-	if (/(^|\/)playwright[\w.-]*\.config\.ts$/.test(path)) return 'playwright-config';
-	if (/(^|\/)vite(?:st)?(?:\.[\w-]+)*\.config\.ts$/.test(path)) return 'vitest-config';
+	if (/(^|\/)playwright[\w.-]*\.config\.[cm]?[jt]s$/.test(path)) return 'playwright-config';
+	if (/(^|\/)vite(?:st)?(?:\.[\w-]+)*\.config\.[cm]?[jt]s$/.test(path)) return 'vitest-config';
+	if (/(^|\/)vitest\.workspace(?:\.[\w-]+)*\.[cm]?[jt]s$/.test(path)) return 'vitest-config';
+	// serialTest() supplies the `test` block of every *-serial project, so it is config.
+	if (path === 'tooling/vitest/lanes.ts') return 'vitest-config';
 	if (/^apps\/web\/tests\/.+\.ts$/.test(path) || /^apps\/extension\/e2e\/.+\.ts$/.test(path)) {
 		return 'playwright';
 	}
@@ -504,6 +526,16 @@ function vitestRaiseSites(sf, lane) {
 			sites.push({ site: n, prop: null, value: null, raised: true, detail: 'vi.setConfig()' });
 			return;
 		}
+		if (/^(?:test|it|describe|suite)\.extend$/.test(calleeText)) {
+			sites.push({
+				site: n,
+				prop: null,
+				value: null,
+				raised: true,
+				detail: `${calleeText}() result is an alias of the test API (fail closed)`
+			});
+			return;
+		}
 		if (WAITS.has(calleeText)) {
 			const second = args[1];
 			if (second && ts.isObjectLiteralExpression(second)) {
@@ -549,7 +581,30 @@ function vitestRaiseSites(sf, lane) {
 					`${testRoot} options or callback passed by reference (fail closed)`
 				);
 			}
+			return;
 		}
+		if (lane.browser) {
+			// Browser-mode locator actions and matchers (`page.getByRole(..).click({ timeout })`,
+			// `expect.element(loc).toBeVisible({ timeout })`) take their own timeout option.
+			for (const a of args) {
+				if (!ts.isObjectLiteralExpression(a)) continue;
+				const t = propOf(a, 'timeout');
+				if (t) push(n, t.prop, t.value, DEFAULTS.wait, `${calleeText} timeout`);
+			}
+		}
+	});
+	// `import { test as t } from 'vitest'`: calls through `t` would escape every rule above.
+	walk(sf, (n) => {
+		if (!ts.isImportSpecifier(n) || !n.propertyName) return;
+		const original = n.propertyName.text;
+		if (!TEST_ROOTS.has(original) && !HOOKS.has(original)) return;
+		sites.push({
+			site: n,
+			prop: null,
+			value: null,
+			raised: true,
+			detail: `import { ${original} as ${n.name.text} } is an alias of the test API (fail closed)`
+		});
 	});
 	return sites;
 }
@@ -632,11 +687,24 @@ export function playwrightTimeoutFindings(path, text) {
 		const root = rootName(callee);
 		const args = n.arguments;
 
-		if (root === 'test' && calleeText.endsWith('.setTimeout')) {
+		const testLike = root === 'test' || root === 'testInfo' || root === 'info';
+		if (testLike && calleeText.endsWith('.setTimeout')) {
 			const v = args[0];
 			const num = numberOf(v);
 			if (v && isRaised(num, DEFAULTS.pwTest)) {
-				report(n, null, v, `test.setTimeout ${valueText(v, sf)} > ${DEFAULTS.pwTest}`);
+				report(n, null, v, `${calleeText} ${valueText(v, sf)} > ${DEFAULTS.pwTest}`);
+			}
+			return;
+		}
+		if (
+			ts.isPropertyAccessExpression(callee) &&
+			(callee.name.text === 'setDefaultTimeout' ||
+				callee.name.text === 'setDefaultNavigationTimeout')
+		) {
+			// Any receiver: page.setDefaultTimeout, context.setDefaultNavigationTimeout, ...
+			const v = args[0];
+			if (v && isRaised(numberOf(v), DEFAULTS.pwTest)) {
+				report(n, null, v, `${calleeText} ${valueText(v, sf)} > ${DEFAULTS.pwTest}`);
 			}
 			return;
 		}
@@ -658,8 +726,8 @@ export function playwrightTimeoutFindings(path, text) {
 			}
 			return;
 		}
-		if (root === 'test' && calleeText.endsWith('.slow')) {
-			report(n, null, null, 'test.slow()');
+		if (testLike && calleeText.endsWith('.slow')) {
+			report(n, null, null, `${calleeText}()`);
 			return;
 		}
 		const member = calleeText.slice(calleeText.lastIndexOf('.') + 1);
@@ -763,7 +831,10 @@ export function configTimeoutFindings(path, text) {
 		const obj = n.parent;
 		if (!ts.isObjectLiteralExpression(obj)) return;
 		const owner = obj.parent;
-		if (ts.isPropertyAssignment(owner) && propName(owner) === 'expect') {
+		if (
+			ts.isPropertyAssignment(owner) &&
+			(propName(owner) === 'expect' || propName(owner) === 'toPass')
+		) {
 			report(n, DEFAULTS.pwExpect);
 		} else if (isConfigRoot(owner, obj) || isProjectEntry(owner)) {
 			report(n, DEFAULTS.pwTest);
@@ -797,7 +868,8 @@ function isProjectEntry(/** @type {ts.Node} */ owner) {
 /**
  * Retries anywhere: Vitest `retry` options and config keys, Playwright `describe.configure({
  * retries })`, Playwright config `retries` that differ from PINNED_RETRIES, and the retry CLI
- * flags (RETRY_FLAG) in package.json scripts, workflow lines and scripts/*.mjs string literals.
+ * flags (CLI_FLAG) in package.json scripts, workflow lines and scripts/*.mjs string literals;
+ * timeout/worker CLI flags report as 'cli-timeout-or-workers', workflow re-runs as 'workflow-rerun'.
  * @param {string} path
  * @param {string} text
  * @returns {Finding[]}
@@ -806,17 +878,17 @@ export function retryFindings(path, text) {
 	const kind = fileKind(path);
 	/** @type {Finding[]} */
 	const out = [];
-	const at = (/** @type {number} */ line, /** @type {string} */ detail) =>
-		out.push({ path, line, rule: 'retry', detail });
+	const at = (
+		/** @type {number} */ line,
+		/** @type {string} */ detail,
+		/** @type {Finding['rule']} */ rule = 'retry'
+	) => out.push({ path, line, rule, detail });
 
 	if (kind === 'package-json') {
 		return packageJsonRetries(path, text);
 	}
 	if (kind === 'workflow') {
-		// Plain text, one finding per non-comment line that carries the flag.
-		text.split(/\r?\n/).forEach((l, i) => {
-			if (!/^\s*#/.test(l) && RETRY_FLAG.test(l)) at(i + 1, l.trim());
-		});
+		for (const f of workflowFindings(text)) at(f.line, f.detail, f.rule);
 		return out;
 	}
 	if (kind === 'script-mjs') {
@@ -827,9 +899,9 @@ export function retryFindings(path, text) {
 				(ts.isStringLiteral(n) ||
 					ts.isNoSubstitutionTemplateLiteral(n) ||
 					ts.isTemplateLiteralToken(n)) &&
-				RETRY_FLAG.test(n.text)
+				flagRule(n.text) !== null
 			) {
-				at(lineOf(sf, n), `string ${JSON.stringify(n.text)}`);
+				at(lineOf(sf, n), `string ${JSON.stringify(n.text)}`, flagRule(n.text) ?? 'retry');
 			}
 		});
 		return out;
@@ -891,7 +963,50 @@ export function retryFindings(path, text) {
 }
 
 /**
- * The retry CLI flag (RETRY_FLAG) in any package.json script value. Falls back to a line scan when
+ * Workflow YAML, read as text. One finding per non-comment line that carries a CLI flag; a step
+ * with `continue-on-error` other than `false`; and a `||` on a `run:` shell line (single-line or
+ * block scalar) that invokes a test runner, after masking `${{ ... }}` expressions.
+ * @param {string} text
+ * @returns {{ line: number; rule: 'retry' | 'cli-timeout-or-workers' | 'workflow-rerun'; detail: string }[]}
+ */
+function workflowFindings(text) {
+	/** @type {{ line: number; rule: 'retry' | 'cli-timeout-or-workers' | 'workflow-rerun'; detail: string }[]} */
+	const out = [];
+	/** Column of the `run:` key while inside its block scalar, else -1. */
+	let blockCol = -1;
+	const shell = (/** @type {string} */ l, /** @type {number} */ line) => {
+		const masked = l.replace(/\$\{\{.*?\}\}/g, (m) => ' '.repeat(m.length));
+		if (masked.includes('||') && TEST_RUNNER.test(masked)) {
+			out.push({ line, rule: 'workflow-rerun', detail: `"||" after a test command: ${l.trim()}` });
+		}
+	};
+	text.split(/\r?\n/).forEach((l, i) => {
+		if (/^\s*#/.test(l)) return;
+		const line = i + 1;
+		const rule = flagRule(l);
+		if (rule) out.push({ line, rule, detail: l.trim() });
+		if (/^\s*(?:-\s+)?continue-on-error\s*:\s*(?!false\s*(?:#.*)?$)\S/.test(l)) {
+			out.push({ line, rule: 'workflow-rerun', detail: l.trim() });
+		}
+		const indent = l.length - l.trimStart().length;
+		if (blockCol >= 0) {
+			if (l.trim() === '') return;
+			if (indent > blockCol) {
+				shell(l, line);
+				return;
+			}
+			blockCol = -1;
+		}
+		const m = /^(\s*(?:-\s+)?)run:\s*(.*)$/.exec(l);
+		if (!m) return;
+		if (/^[|>][+-]?\d*\s*(?:#.*)?$/.test(m[2])) blockCol = m[1].length;
+		else shell(m[2], line);
+	});
+	return out;
+}
+
+/**
+ * The CLI flags (CLI_FLAG) in any package.json script value. Falls back to a line scan when
  * the file does not parse as JSON.
  * @param {string} path
  * @param {string} text
@@ -908,17 +1023,19 @@ function packageJsonRetries(path, text) {
 		scripts = parsed && typeof parsed.scripts === 'object' ? parsed.scripts : {};
 	} catch {
 		lines.forEach((l, i) => {
-			if (RETRY_FLAG.test(l)) out.push({ path, line: i + 1, rule: 'retry', detail: l.trim() });
+			const rule = flagRule(l);
+			if (rule) out.push({ path, line: i + 1, rule, detail: l.trim() });
 		});
 		return out;
 	}
 	for (const [name, cmd] of Object.entries(scripts)) {
-		if (typeof cmd !== 'string' || !RETRY_FLAG.test(cmd)) continue;
-		const idx = lines.findIndex((l) => l.includes(`"${name}"`) && RETRY_FLAG.test(l));
+		const rule = typeof cmd === 'string' ? flagRule(cmd) : null;
+		if (typeof cmd !== 'string' || rule === null) continue;
+		const idx = lines.findIndex((l) => l.includes(`"${name}"`) && flagRule(l) !== null);
 		out.push({
 			path,
 			line: idx >= 0 ? idx + 1 : 1,
-			rule: 'retry',
+			rule,
 			detail: `script "${name}": ${cmd}`
 		});
 	}

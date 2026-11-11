@@ -974,6 +974,202 @@ describe('WR-02: timeouts and retries passed by reference, spread or shorthand',
 	});
 });
 
+// ---------------------------------------------------------------------------------------------
+// Plan 16-02, task 2: WR-03 (timeout-raising APIs) and WR-04 (lanes.ts, runner flags, workflow
+// re-runs). Planted sources are template literals; each flagged case has a negative control.
+
+describe('WR-03: timeout-raising APIs outside test.setTimeout', () => {
+	const UN = 'unannotated-raise';
+	const OUT = 'raised-timeout-outside-serial';
+	const BROWSER_PATH = 'apps/web/src/lib/D.browser.test.ts';
+
+	test.each([
+		['page.setDefaultTimeout', `await page.setDefaultTimeout(600000);`],
+		['page.setDefaultNavigationTimeout', `page.setDefaultNavigationTimeout(600000);`],
+		['context.setDefaultTimeout', `context.setDefaultTimeout(600000);`],
+		['testInfo.setTimeout', `testInfo.setTimeout(600000);`],
+		['testInfo.slow', `testInfo.slow();`],
+		['test.info().setTimeout', `test.info().setTimeout(600000);`],
+		['setDefaultTimeout(0)', `page.setDefaultTimeout(0);`]
+	])('%s is flagged by the Playwright rule', (_name, src) => {
+		expect(rl(playwrightTimeoutFindings(PW, src))).toEqual([[UN, 1]]);
+	});
+
+	test('a Prettier-wrapped setDefaultTimeout is flagged', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `page\n\t.setDefaultTimeout(600000);`))).toEqual([
+			[UN, 1]
+		]);
+	});
+
+	test('negative controls: defaults and unrelated setTimeout stay silent', () => {
+		expect(playwrightTimeoutFindings(PW, `page.setDefaultTimeout(5000);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `page.setDefaultNavigationTimeout(1);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `testInfo.setTimeout(30_000);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `window.setTimeout(r, 60_000);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `setTimeout(r, 60_000);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `const n = testInfo.retry;`)).toEqual([]);
+	});
+
+	test('an annotated setDefaultTimeout is accepted', () => {
+		expect(playwrightTimeoutFindings(PW, `${NOTE}page.setDefaultTimeout(600000);`)).toEqual([]);
+	});
+
+	test('a Playwright config expect.toPass.timeout above 5 s is flagged', () => {
+		const src = `export default defineConfig({ expect: { toPass: { timeout: 600000 } } });`;
+		expect(rl(configTimeoutFindings(PCFG, src))).toEqual([[UN, 1]]);
+		const ok = `export default defineConfig({ expect: { toPass: { timeout: 5000 } } });`;
+		expect(configTimeoutFindings(PCFG, ok)).toEqual([]);
+	});
+
+	test('a Vitest browser expect.element matcher with a raised timeout is flagged', () => {
+		const src = `await expect.element(loc).toBeVisible({ timeout: 60000 });`;
+		expect(rl(vitestTimeoutFindings(BROWSER_PATH, src, BROWSER))).toEqual([[OUT, 1]]);
+		const ok = `await expect.element(loc).toBeVisible({ timeout: 500 });`;
+		expect(vitestTimeoutFindings(BROWSER_PATH, ok, BROWSER)).toEqual([]);
+	});
+
+	test('a Vitest browser locator action with a raised timeout is flagged', () => {
+		const src = `await page.getByRole('x').click({ timeout: 60000 });`;
+		expect(rl(vitestTimeoutFindings(BROWSER_PATH, src, BROWSER))).toEqual([[OUT, 1]]);
+		const wrapped = `await page\n\t.getByRole('x')\n\t.click({ timeout: 60000 });`;
+		expect(rl(vitestTimeoutFindings(BROWSER_PATH, wrapped, BROWSER))).toEqual([[OUT, 1]]);
+	});
+
+	test('a Vitest browser timeout option of 0 is flagged; a node-lane spawn option is not', () => {
+		const zero = `await page.getByRole('x').click({ timeout: 0 });`;
+		expect(rl(vitestTimeoutFindings(BROWSER_PATH, zero, BROWSER))).toEqual([[OUT, 1]]);
+		expect(vitestTimeoutFindings(VT, `spawnSync('git', [], { timeout: 30_000 });`, NODE)).toEqual(
+			[]
+		);
+	});
+
+	test('an alias of the test API is reported (fail closed)', () => {
+		const ext = `const t = test.extend({});\nt('a', fn, 600000);`;
+		expect(rl(vitestTimeoutFindings(VT, ext, NODE))).toEqual([[OUT, 1]]);
+		const imp = `import { test as t } from 'vitest';\nt('a', fn, 600000);`;
+		expect(rl(vitestTimeoutFindings(VT, imp, NODE))).toEqual([[OUT, 1]]);
+		const hook = `import { beforeAll as setup } from 'vitest';`;
+		expect(rl(vitestTimeoutFindings(VT, hook, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('negative control: plain vitest imports are not aliases', () => {
+		const src = `import { test, expect, vi as mock } from 'vitest';\ntest('a', () => {});`;
+		expect(vitestTimeoutFindings(VT, src, NODE)).toEqual([]);
+	});
+});
+
+describe('WR-04: lanes.ts, config extensions and runner flags', () => {
+	const UN = 'unannotated-raise';
+	const CLI = 'cli-timeout-or-workers';
+	const WF = '.github/workflows/ci.yml';
+
+	test('tooling/vitest/lanes.ts is a vitest-config, so serialTest() is scanned', () => {
+		expect(fileKind('tooling/vitest/lanes.ts')).toBe('vitest-config');
+		const src = `export const serialTest = () => ({ testTimeout: 600000, retry: 3 });`;
+		expect(rl(configTimeoutFindings('tooling/vitest/lanes.ts', src))).toEqual([[UN, 1]]);
+		expect(rl(retryFindings('tooling/vitest/lanes.ts', src))).toEqual([['retry', 1]]);
+		const clean = `export const serialTest = () => ({ fileParallelism: false, maxWorkers: 1 });`;
+		expect(scanFile('tooling/vitest/lanes.ts', clean, SERIAL)).toEqual([]);
+	});
+
+	test('mts, cts, js and mjs configs and vitest.workspace files are classified', () => {
+		expect(fileKind('vitest.config.mts')).toBe('vitest-config');
+		expect(fileKind('apps/web/vitest.config.js')).toBe('vitest-config');
+		expect(fileKind('apps/web/vite.config.cts')).toBe('vitest-config');
+		expect(fileKind('packages/core/vitest.serial.config.mjs')).toBe('vitest-config');
+		expect(fileKind('vitest.workspace.ts')).toBe('vitest-config');
+		expect(fileKind('vitest.workspace.mts')).toBe('vitest-config');
+		expect(fileKind('apps/web/playwright.config.mts')).toBe('playwright-config');
+		expect(fileKind('apps/web/playwright.smoke.config.js')).toBe('playwright-config');
+	});
+
+	test('negative controls: a test about a config is still a test, a plain ts file is null', () => {
+		expect(fileKind('scripts/vitest.config.test.ts')).toBe('vitest-test');
+		expect(fileKind('tooling/vitest/no-network.ts')).toBeNull();
+		expect(fileKind('apps/web/src/lib/vitest-helpers.ts')).toBeNull();
+	});
+
+	test.each([
+		['--testTimeout=60000', CLI],
+		['--testTimeout 60000', CLI],
+		['--hookTimeout=60000', CLI],
+		['--test-timeout=60000', CLI],
+		['--hook-timeout=60000', CLI],
+		['--timeout=60000', CLI],
+		['--workers=8', CLI],
+		['--maxWorkers=8', CLI],
+		['--max-workers=8', CLI],
+		['--retry=2', 'retry'],
+		['--retries=2', 'retry']
+	])('%s in a package.json script is flagged as %s', (flag, rule) => {
+		const src = `{\n\t"scripts": {\n\t\t"t": "vitest run ${flag}"\n\t}\n}`;
+		expect(rl(retryFindings('package.json', src))).toEqual([[rule, 3]]);
+	});
+
+	test('the same flags are flagged in a workflow line and in a scripts/*.mjs string', () => {
+		const wf = `steps:\n  - run: pnpm exec playwright test --workers=8`;
+		expect(rl(retryFindings(WF, wf))).toEqual([[CLI, 2]]);
+		const mjs = `spawn('npx', ['playwright', 'test', '--timeout=60000']);`;
+		expect(rl(retryFindings('scripts/smoke.mjs', mjs))).toEqual([[CLI, 1]]);
+		const tpl = 'const cmd = `vitest run --testTimeout=${ms}`;';
+		expect(rl(retryFindings('scripts/smoke.mjs', tpl))).toEqual([[CLI, 1]]);
+	});
+
+	test('negative controls: similar flags and plain scripts stay silent', () => {
+		expect(retryFindings('package.json', `{"scripts":{"t":"vitest run"}}`)).toEqual([]);
+		expect(
+			retryFindings('package.json', `{"scripts":{"t":"gh run watch --timeout-minutes 5"}}`)
+		).toEqual([]);
+		expect(retryFindings('package.json', `{"scripts":{"t":"x --workersX"}}`)).toEqual([]);
+		expect(retryFindings('scripts/smoke.mjs', `// never pass --workers=8\nconst x = 1;`)).toEqual(
+			[]
+		);
+		expect(retryFindings(WF, `steps:\n  # no --workers=8 here\n  - run: pnpm test:unit`)).toEqual(
+			[]
+		);
+	});
+
+	test('continue-on-error on a step is flagged; false is not', () => {
+		const on = `steps:\n  - run: pnpm test:unit\n    continue-on-error: true`;
+		expect(rl(retryFindings(WF, on))).toEqual([['workflow-rerun', 3]]);
+		const expr = `steps:\n  - run: pnpm test:unit\n    continue-on-error: \${{ matrix.x }}`;
+		expect(rl(retryFindings(WF, expr))).toEqual([['workflow-rerun', 3]]);
+		const off = `steps:\n  - run: pnpm test:unit\n    continue-on-error: false`;
+		expect(retryFindings(WF, off)).toEqual([]);
+		const note = `steps:\n  # continue-on-error: true would hide failures\n  - run: pnpm test:unit`;
+		expect(retryFindings(WF, note)).toEqual([]);
+	});
+
+	test('a "||" re-run on a test run line is flagged', () => {
+		const one = `steps:\n  - run: pnpm test:unit || pnpm test:unit`;
+		expect(rl(retryFindings(WF, one))).toEqual([['workflow-rerun', 2]]);
+		const masked = `steps:\n  run: pnpm exec playwright test || true`;
+		expect(rl(retryFindings(WF, masked))).toEqual([['workflow-rerun', 2]]);
+		const block = `steps:\n  - run: |\n      pnpm install\n      pnpm test:unit || pnpm test:unit`;
+		expect(rl(retryFindings(WF, block))).toEqual([['workflow-rerun', 4]]);
+		const smoke = `steps:\n  - run: pnpm smoke || pnpm smoke`;
+		expect(rl(retryFindings(WF, smoke))).toEqual([['workflow-rerun', 2]]);
+	});
+
+	test('negative controls: "||" in expressions, non-test commands and package.json prepare', () => {
+		const expr = `jobs:\n  a:\n    if: \${{ a && b || c }}\n    steps:\n      - run: pnpm test:unit`;
+		expect(retryFindings(WF, expr)).toEqual([]);
+		const inRun = `steps:\n  - run: pnpm test:unit --reporter \${{ vars.R || 'dot' }}`;
+		expect(retryFindings(WF, inRun)).toEqual([]);
+		const notTest = `steps:\n  - run: pnpm install || echo ''`;
+		expect(retryFindings(WF, notTest)).toEqual([]);
+		const env = `steps:\n  - run: pnpm test:unit\n    env:\n      X: \${{ vars.A || '' }}`;
+		expect(retryFindings(WF, env)).toEqual([]);
+		const prepare = `{"scripts":{"prepare":"wxt prepare || echo ''"}}`;
+		expect(retryFindings('apps/extension/package.json', prepare)).toEqual([]);
+	});
+
+	test('a block scalar ends at the next key, so a later "||" line is not a run line', () => {
+		const src = `steps:\n  - run: |\n      pnpm test:unit\n    name: x\n    other: pnpm test:unit || true`;
+		expect(retryFindings(WF, src)).toEqual([]);
+	});
+});
+
 describe('scanFile routing', () => {
 	const rulesOf = (f: Finding[]) => [...new Set(f.map((x) => x.rule))].sort();
 	const VITEST_SRC = [
