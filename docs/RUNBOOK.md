@@ -91,13 +91,13 @@ pnpm --filter web exec playwright show-trace <trace.zip>
 
 Exit codes of `scripts/smoke.mjs` (the step's exit code is the job's):
 
-| Code | Meaning                                                                                                                                        |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0    | ok                                                                                                                                             |
-| 1    | suite failed: a read-only contract broke on the deployed site; open the traces                                                                 |
-| 2    | precondition: the env gate rejected the run (URL, SHA or analytics host malformed, or a variable unset); fix the variables, redeploy           |
-| 3    | version not propagated: `_app/version.json` never reported the deployed SHA within 10 minutes; the deploy failed or the CDN did not pick it up |
-| 4    | over the 5-minute budget (local three-target mode only; the remote run has no budget)                                                          |
+| Code | Meaning                                                                                                                                                                                                                            |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0    | ok                                                                                                                                                                                                                                 |
+| 1    | suite failed: a read-only contract broke on the deployed site; open the traces                                                                                                                                                     |
+| 2    | precondition: the env gate rejected the run (URL, SHA or analytics host malformed, or a variable unset); fix the variables, redeploy. Also a 429 on a smoke navigation (Pages CDN rate-limited): re-dispatch once, never in a loop |
+| 3    | version not propagated: `_app/version.json` never reported the deployed SHA within 10 minutes; the deploy failed or the CDN did not pick it up                                                                                     |
+| 4    | over the 5-minute budget (local three-target mode only; the remote run has no budget)                                                                                                                                              |
 
 A skipped run means Pages is off (`PAGES_ENABLED` is not `true`) or the `ci` run it followed was
 not a green push to `main`; nothing was deployed, so there was nothing to smoke.

@@ -4,6 +4,7 @@
 //     any write (non-GET/HEAD) beyond the analytics beacon budget fails it, and so does any request
 //     carrying a key header
 // `testGpcOff` drops the GPC part only. analytics.smoke.ts is its one legitimate user.
+import { appendFileSync } from 'node:fs';
 import { test as base, expect, type Page } from '@playwright/test';
 import { CONNECT } from '../../../../scripts/assert-csp.mjs';
 import { parseSmokeEnv } from './env.js';
@@ -71,8 +72,25 @@ const withMonitor = base.extend<{ beaconBudget: number; monitor: void }>({
 	]
 });
 
-export const test = withMonitor.extend<{ gpc: void }>({
+export const test = withMonitor.extend<{ gpc: void; rateLimit429: void }>({
 	extraHTTPHeaders: { 'Sec-GPC': '1' },
+	// scripts/smoke.mjs sets SMOKE_429_LOG for the live run: a navigation answered with HTTP 429 is
+	// the Pages CDN rate-limiting the runner, and the orchestrator relabels that failure as exit 2.
+	// Observe-only: appends the URL (one line per hit, workers are separate processes) and nothing else.
+	rateLimit429: [
+		async ({ context }, use) => {
+			const log = process.env.SMOKE_429_LOG;
+			if (log) {
+				context.on('response', (response) => {
+					if (response.status() === 429 && response.request().isNavigationRequest()) {
+						appendFileSync(log, response.url() + '\n');
+					}
+				});
+			}
+			await use();
+		},
+		{ auto: true }
+	],
 	gpc: [
 		async ({ context }, use) => {
 			await context.addInitScript(() =>

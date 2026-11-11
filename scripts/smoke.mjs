@@ -9,12 +9,14 @@
 //   ... --target <root|sub|configured>   (local, repeatable) run only the named targets
 //   ... -- <args>                    passed through to `playwright test`
 //
-// Exit codes: 0 ok, 1 suite failed, 2 precondition (env, stale/missing build, emulator),
-// 3 version not propagated, 4 over the 5-minute budget.
+// Exit codes: 0 ok, 1 suite failed, 2 precondition (env, stale/missing build, emulator) or a 429 on
+// a smoke navigation (CDN rate-limited, re-dispatch once), 3 version not propagated, 4 over the
+// 5-minute budget.
 //
 // Dependency-free: node: builtins only (the repo bans bare fetch).
 import { spawn, spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { appendFileSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import http from 'node:http';
 import https from 'node:https';
 import path from 'node:path';
@@ -162,6 +164,29 @@ export async function waitForVersion(
 }
 
 /**
+ * Map a finished suite's exit status and the number of recorded 429 navigations to the exit code.
+ * A green run is never relabelled; a failed run with 429 evidence is the Pages CDN rate-limiting
+ * the runner (exit 2, re-dispatch once); any other failure keeps its status.
+ * @param {number} status
+ * @param {number} rateLimitedCount
+ * @returns {number}
+ */
+export function classifySuiteExit(status, rateLimitedCount) {
+	if (status === 0) return 0;
+	return rateLimitedCount > 0 ? 2 : status;
+}
+
+/**
+ * Count the evidence lines (one URL per 429 navigation) in the SMOKE_429_LOG text.
+ * @param {string | undefined} text
+ * @returns {number}
+ */
+export function countRateLimited(text) {
+	if (!text) return 0;
+	return text.split('\n').filter((l) => l.trim() !== '').length;
+}
+
+/**
  * Run the smoke Playwright config through the pinned pnpm (scripts/build-web.mjs pattern).
  * @param {string[]} passthrough
  * @param {Record<string, string | undefined>} env
@@ -221,7 +246,24 @@ async function remote(passthrough) {
 	console.log(
 		`smoke: ${smoke.expectVersion} live at ${smoke.baseUrl} after ${Math.round((Date.now() - started) / 1000)} s`
 	);
-	return runPlaywright(passthrough, process.env);
+	// The fixtures append the URL of every 429 navigation to this file (workers are separate
+	// processes); the file only ever holds public smoke-target URLs and is removed below.
+	const dir = mkdtempSync(path.join(tmpdir(), 'smoke-429-'));
+	const log = path.join(dir, 'rate-limited.log');
+	try {
+		appendFileSync(log, '');
+		const status = runPlaywright(passthrough, { ...process.env, SMOKE_429_LOG: log });
+		const n = countRateLimited(readFileSync(log, 'utf8'));
+		const code = classifySuiteExit(status, n);
+		if (code === 2 && status !== 2) {
+			console.error(
+				`smoke: HTTP 429 from the Pages CDN on ${n} navigation(s): CDN rate-limited, re-dispatch once (never in a loop; see docs/RUNBOOK.md)`
+			);
+		}
+		return code;
+	} finally {
+		rmSync(dir, { recursive: true, force: true });
+	}
 }
 
 /**

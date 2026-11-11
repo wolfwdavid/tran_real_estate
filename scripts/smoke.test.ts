@@ -1,12 +1,20 @@
 // scripts/smoke.mjs: target table, build-stamp reads, the stale-build gate and the version poll.
 // Importing the module must never run its CLI (it would start serve-pages or spawn Playwright).
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+// Also pins the 429 relabel (classifySuiteExit + the SMOKE_429_LOG fixture): a rate-limited Pages CDN exits 2.
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, test, vi } from 'vitest';
 import { resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
 import { targetEnv } from './lib/build-targets.mjs';
-import { localTargets, readStamp, staleBuilds, waitForVersion } from './smoke.mjs';
+import {
+	classifySuiteExit,
+	countRateLimited,
+	localTargets,
+	readStamp,
+	staleBuilds,
+	waitForVersion
+} from './smoke.mjs';
 
 const HEAD = 'b'.repeat(40);
 
@@ -169,5 +177,48 @@ describe('waitForVersion', () => {
 			'timeout'
 		);
 		expect(get.mock.calls.length).toBeGreaterThan(1);
+	});
+});
+
+describe('classifySuiteExit (429 relabel)', () => {
+	test('a failed suite with 429 navigations is exit 2 (CDN rate-limited)', () => {
+		expect(classifySuiteExit(1, 3)).toBe(2);
+	});
+	test('a failed suite without 429 evidence keeps exit 1 (a 500 or an assertion)', () => {
+		expect(classifySuiteExit(1, 0)).toBe(1);
+	});
+	test('a green run is never relabelled, even with 429 evidence', () => {
+		expect(classifySuiteExit(0, 0)).toBe(0);
+		expect(classifySuiteExit(0, 5)).toBe(0);
+	});
+	test('any non-zero status with 429 evidence is 2', () => {
+		expect(classifySuiteExit(4, 2)).toBe(2);
+	});
+	test('a single 429 is enough, so the comparison is not a larger threshold', () => {
+		expect(classifySuiteExit(1, 1)).toBe(2);
+	});
+});
+
+describe('countRateLimited', () => {
+	test('counts non-empty evidence lines; empty or undefined is 0', () => {
+		expect(countRateLimited(undefined)).toBe(0);
+		expect(countRateLimited('')).toBe(0);
+		expect(countRateLimited('https://a/\n\nhttps://b/\n')).toBe(2);
+	});
+});
+
+describe('429 evidence fixture pin', () => {
+	const read = (rel: string) =>
+		readFileSync(join(import.meta.dirname, '..', rel), 'utf8').replace(/\r\n/g, '\n');
+	/** What the fixture must contain; returns the missing needles. */
+	const missing = (src: string) =>
+		['SMOKE_429_LOG', 'isNavigationRequest()', '429'].filter((n) => !src.includes(n));
+
+	test('fixtures.ts records 429 navigations to SMOKE_429_LOG', () => {
+		expect(missing(read('apps/web/tests/smoke/fixtures.ts'))).toEqual([]);
+	});
+	test('non-vacuity: the pin reports a fixture without the env var', () => {
+		const src = read('apps/web/tests/smoke/fixtures.ts').replaceAll('SMOKE_429_LOG', 'X');
+		expect(missing(src)).toEqual(['SMOKE_429_LOG']);
 	});
 });
