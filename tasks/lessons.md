@@ -126,3 +126,12 @@
   browsers on 16 CPUs starved Chromium's network path (2.5-5 s per small chunk while the server answered in
   3 ms) and failed default 5 s expectations around lazy imports. Prove the server is not the bottleneck, reproduce
   with an artificial delay, then lower the pressure (12 threads, 75% of CPUs) rather than raise timeouts.
+
+## 2026-11-11: pnpm 12 is a native binary
+
+- Rule: pnpm 12 sets `npm_execpath` to `pnpm.exe`, so `node $npm_execpath ...` dies with
+  ERR_UNKNOWN_FILE_EXTENSION. Scripts that spawn pnpm go through `scripts/lib/pnpm-cmd.mjs`
+  (`pnpmCommand()`); never re-inline the `[process.execPath, [execPath]]` pair (a sweep test fails on it).
+- Rule: a pnpm 12 lockfile has two YAML documents (boot document first, project document last). Regenerate it
+  once with a non-frozen install in the same commit as the pin, and check that the second document is
+  byte-identical to the previous lockfile.

@@ -1,8 +1,9 @@
 // Supply-chain guards (plan 10-04). The audit exceptions list and pnpm's audit.ignore must not
-// drift apart, Dependabot must watch both npm and GitHub Actions, and the lockfile must stay a
-// single YAML document (Dependabot reads only the first document of a multi-document pnpm 11
-// lockfile and then reports every alert as fixed: RESEARCH Pitfall 12). Files are read as text on
-// purpose so no YAML parser joins the dependency graph.
+// drift apart, Dependabot must watch both npm and GitHub Actions, and the lockfile must keep the
+// pnpm 12 shape: exactly two YAML documents, a leading boot document (packageManagerDependencies)
+// and the project document last. Dependabot's handling of that shape was fixed upstream on
+// 2026-11-03 (dependabot-core #15904); the owner confirms the dependency graph after each push.
+// Files are read as text on purpose so no YAML parser joins the dependency graph.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
@@ -172,10 +173,72 @@ describe('dependabot', () => {
 	});
 });
 
+/**
+ * Split a multi-document YAML text on `---` lines (a leading marker opens the first document and
+ * produces no empty document). Text-only on purpose: no YAML parser joins the dependency graph.
+ */
+function lockDocuments(lock: string): string[] {
+	return lock
+		.split('\n')
+		.reduce<string[][]>(
+			(docs, line) => {
+				if (line.trimEnd() === '---') docs.push([]);
+				else docs[docs.length - 1].push(line);
+				return docs;
+			},
+			[[]]
+		)
+		.map((d) => d.join('\n'))
+		.filter((d) => d.trim() !== '');
+}
+
+/** The shape rules: exactly two documents, boot first, project importers last. */
+function lockfileProblems(lock: string): string[] {
+	const docs = lockDocuments(lock);
+	if (docs.length !== 2) return [`expected exactly 2 YAML documents, found ${docs.length}`];
+	const [boot, project] = docs;
+	const problems: string[] = [];
+	if (!/^packageManagerDependencies:|^ {4}packageManagerDependencies:/m.test(boot))
+		problems.push('first document lacks packageManagerDependencies');
+	for (const doc of docs)
+		if (!/^lockfileVersion:/m.test(doc)) problems.push('a document lacks lockfileVersion');
+	if (!/^importers:/m.test(project)) problems.push('last document lacks importers');
+	for (const importer of ['apps/web', 'apps/extension'])
+		if (!new RegExp(`^ {2}${importer}:\s*$`, 'm').test(project))
+			problems.push(`last document lacks the ${importer} importer`);
+	if (!/^ {2}packages\/[\w-]+:\s*$/m.test(project))
+		problems.push('last document lacks a packages/ importer');
+	return problems;
+}
+
 describe('lockfile', () => {
-	test('pnpm-lock.yaml is a single YAML document', () => {
+	test('pnpm-lock.yaml is the pnpm 12 two-document lockfile with the project document last', () => {
+		expect(lockfileProblems(read('pnpm-lock.yaml'))).toEqual([]);
+	});
+
+	test('the first document is the boot document and holds the pinned pnpm', () => {
+		const pm = (JSON.parse(read('package.json')).packageManager as string).replace(/^pnpm@/, '');
+		const [boot] = lockDocuments(read('pnpm-lock.yaml'));
+		expect(boot).toContain(`specifier: ${pm}`);
+		expect(boot).toContain(`version: ${pm}`);
+	});
+
+	test('non-vacuity: a third document is rejected', () => {
 		const lock = read('pnpm-lock.yaml');
-		expect(lock).toMatch(/^lockfileVersion:/m);
-		expect(lock.split('\n').filter((l) => l.trimEnd() === '---')).toEqual([]);
+		expect(lockfileProblems(lock + "\n---\nlockfileVersion: '9.0'\n")).toEqual([
+			'expected exactly 2 YAML documents, found 3'
+		]);
+	});
+
+	test('non-vacuity: a single document and a last document without the web importer are rejected', () => {
+		const [boot, project] = lockDocuments(read('pnpm-lock.yaml'));
+		expect(lockfileProblems(project)).toEqual(['expected exactly 2 YAML documents, found 1']);
+		const noWeb = project.replace(/^ {2}apps\/web:\s*$/m, '  apps/not-web:');
+		expect(lockfileProblems(`---\n${boot}\n---\n${noWeb}`)).toContain(
+			'last document lacks the apps/web importer'
+		);
+		expect(lockfileProblems(`---\n${project}\n---\n${boot}`)).toContain(
+			'first document lacks packageManagerDependencies'
+		);
 	});
 });

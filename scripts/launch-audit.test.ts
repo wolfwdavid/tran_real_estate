@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { AUDIT_EXCEPTIONS } from './lib/audit-exceptions.mjs';
 import { HUMAN_UAT, PITFALLS_EVIDENCE } from './lib/pitfalls-evidence.mjs';
+import { pinnedPnpmVersion } from './lib/pnpm-cmd.mjs';
 import {
 	COMMAND_GATES,
 	PITFALLS_DOC,
@@ -247,7 +248,7 @@ function baseData(over: Record<string, unknown> = {}) {
 			baseUrl: 'https://wolfwdavid.github.io/',
 			buildCommand: 'pnpm build:root && pnpm build:sub && pnpm build:configured',
 			node: 'v24.21.0',
-			pnpm: '11.27.0'
+			pnpm: pinnedPnpmVersion()
 		},
 		e2eReport: pwReport([...axeSpecs(), ...ev.e2e, ...DISCLAIMER_SPECS]),
 		unitReport: vitestReport(ev.unit),

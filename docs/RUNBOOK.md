@@ -150,7 +150,10 @@ decision B (Phase 13), re-evaluated in Phase 14/16. If a major PR for one of the
 before the ignore list landed, close it by hand with a comment naming Phase 16.
 
 Weekly minor/patch updates arrive as one grouped PR. Review it through the `pnpm audit` gate and a
-green `ci` run; it is never merged blind. A `github-actions` PR (an action pin bump) is merged only
+green `ci` run; it is never merged blind. `pnpm-lock.yaml` has two YAML documents since pnpm 12
+(a boot document, then the project document); Dependabot's handling of that shape was fixed
+upstream on 2026-11-03, and the dependency graph under Insights is checked after each lockfile
+change. A `github-actions` PR (an action pin bump) is merged only
 when its own CI is green: the workflow gate tests compare the pins across all workflows, so a bump
 that lands in one workflow and not another turns red by design and the PR needs a hand edit.
 

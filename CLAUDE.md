@@ -34,7 +34,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | `@sveltejs/vite-plugin-svelte` | **7.3.0** | Svelte compilation in Vite | Required by Kit + Vite 8. Engines: Node `^20.19 \|\| ^22.12 \|\| >=24`. | HIGH |
 | TypeScript | **6.0.3** (pin `~6.0.3`) | Types | See Headline 3. **Do not install 7.x.** | HIGH |
 | Node.js (CI + local) | **24 LTS** (24.21.0, "Krypton") | Runtime for tooling | Active LTS. WXT requires Node `>=22`; the OpenAI SDK's Node minimum is 22. 24 satisfies everything. | HIGH |
-| pnpm | **11.27.0** (pin via `packageManager`) | Package manager + workspace | User preference. Workspaces host the web app and extension in one repo. pnpm 12 (Rust rewrite, released 2026-08-26) keeps the pnpm 11 lockfile/commands, so upgrading later is trivial. Let it settle a few more patch releases first. | MEDIUM |
+| pnpm | **12.18.0** (pin via `packageManager`) | Package manager + workspace | User preference. Workspaces host the web app and extension in one repo. pnpm 12 is a native binary (Rust rewrite): `npm_execpath` points at `pnpm.exe`, so scripts spawn it through `scripts/lib/pnpm-cmd.mjs`, and `pnpm-lock.yaml` has a leading boot document (`packageManagerDependencies`) before the project document. | MEDIUM |
 | Tailwind CSS (+ `@tailwindcss/vite`) | **4.3.3** | Styling | Required by shadcn-svelte and LayerChart (depends on `@layerstack/tailwind`). v4's CSS-first `@theme` block *is* a design-token system, so "Tailwind vs vanilla CSS tokens" is a false choice: define warm editorial tokens (colors, serif/sans families, radii, spacing) once in `@theme` and they are both CSS variables and utilities. | HIGH |
 | bits-ui | **2.19.2** | Headless accessible primitives (Dialog, Popover, Tabs, Select, Combobox…) | Svelte 5-native, WAI-ARIA compliant. The primitive layer under shadcn-svelte. | HIGH |
 | shadcn-svelte (CLI) | **1.6.1** | Copy-in component source built on bits-ui + Tailwind v4 | Components live in *your* repo (`$lib/components/ui`), so the UI/UX Pro Max warm-editorial restyle is plain source edits, not theme-override fights. Supports Svelte 5 + Tailwind v4. | HIGH |
@@ -126,7 +126,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | Web3Forms (250/mo) | Formspree free (50/mo account-wide, 2 linked emails, 30-day history) | If an agent needs Formspree's dashboard/integrations. CORS verified live (echoes origin). Keep the form adapter pluggable so an agent can choose either. |
 | WXT 0.21.4 | CRXJS `@crxjs/vite-plugin` 2.7.1 | If you prefer a hand-written `manifest.json` in a plain Vite project. Actively maintained (pushed 2026-09-13), but no built-in SPA location-change helper or zip/publish tooling. |
 | Browser-direct RentCast | Cloudflare Workers free tier (`wrangler` 4.131.1) thin pass-through | **Only if RentCast ever removes CORS.** A stateless Worker forwarding the user's `X-Api-Key` without logging. Not needed today. |
-| pnpm 11.27 | pnpm 12.4.1 | After pnpm 12 has a few more weeks of patch releases. Lockfile and commands carry over. |
+| pnpm 12.18 | pnpm 11.27 | Only if pnpm 12 regresses. Lockfile and commands carry over; roll back by reverting the pin commit. |
 ## What NOT to Use
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
