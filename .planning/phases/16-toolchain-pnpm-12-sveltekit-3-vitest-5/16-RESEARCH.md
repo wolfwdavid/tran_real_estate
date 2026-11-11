@@ -350,17 +350,17 @@ The repo already runs its lanes this way (`vitest.config.ts` + `serialTest()`), 
 | A5 | `$app/tsconfig` dropping `allowJs`/`checkJs` reduces type coverage of the repo's `.js` modules | Pitfall 7 | If `$app/tsconfig` already sets them, no action; check in the first Kit task |
 | A6 | `shadcn-svelte` 1.6.1 `add` handles a `#lib/...` `components.json` without writing `$lib` back | Standard Stack (Supporting) | Not dry-run (changelog says auto-detect since 1.6.0); one `add --dry-run` in the Kit plan settles the roadmap flag |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **How to recover 4.2 KB of initial JS after Kit 3?**
+1. **How to recover 4.2 KB of initial JS after Kit 3?** (RESOLVED: owned by plan 16-09, a forensic task then a behaviour-preserving trim, with an owner escalation checkpoint if the trim falls short; D-04 forbids raising the budget)
    - What we know: growth is in the Kit client chunk (+4.1 KB gz), identical on 3.1.1 and 3.2.0, unaffected by `pollInterval`.
    - What's unclear: which app-side imports in the shared initial chunk can be deferred, and whether any Kit config flag drops client code.
    - Recommendation: dedicated forensic task with sourcemap attribution before any other Kit work is declared done; escalate to the owner with numbers if blocked.
-2. **Does the live Pages CDN's 429 threshold allow the paced run?**
+2. **Does the live Pages CDN's 429 threshold allow the paced run?** (RESOLVED: plan 16-01 measures request counts, blocks the worker outside the two worker specs and relabels 429 as exit 2; the 16-03 D-09 baseline gate is the verification)
    - Recommendation: 16-00a measures request counts locally, applies `serviceWorkers: 'block'`, then dispatches `live-smoke` on the pre-flight commit until it is green on its own (the D-09 baseline gate is the verification).
-3. **Reword TOOL-05 and ROADMAP criterion 5/3.** TOOL-05 should read "five -> two (deepmerge, minimatch)"; minimatch cannot clear (ESLint 10.14.0 and typescript-estree 8.72.2 still depend on `minimatch ^10.2.x`; minimatch 11.0.7 exists). Its `revisitBy` of 2026-11-30 falls inside the phase window: refresh it with the check date. Needs owner awareness (requirement text), not a decision.
-4. **`typescript-eslint` / ESLint family bumps** (routine plan): `typescript-eslint` is at 8.70.0 and 8.72.2 exists; unrelated to the migration, keep out of the three major plans.
-5. **Dependabot dependency-graph proof** after the pnpm 12 push is an owner-visible check (cannot be read from the repo).
+3. **Reword TOOL-05 and ROADMAP criterion 5/3.** (RESOLVED: plan 16-10 Task 2 rewords ROADMAP and REQUIREMENTS to five -> two; plan 16-12 rewords again to the final count if minimatch clears) TOOL-05 should read "five -> two (deepmerge, minimatch)"; minimatch cannot clear (ESLint 10.14.0 and typescript-estree 8.72.2 still depend on `minimatch ^10.2.x`; minimatch 11.0.7 exists). Its `revisitBy` of 2026-11-30 falls inside the phase window: refresh it with the check date. Needs owner awareness (requirement text), not a decision.
+4. **`typescript-eslint` / ESLint family bumps** (RESOLVED: plan 16-12 Task 2, kept out of the three major plans) (routine plan): `typescript-eslint` is at 8.70.0 and 8.72.2 exists; unrelated to the migration, keep out of the three major plans.
+5. **Dependabot dependency-graph proof** (RESOLVED: owner row in plan 16-04 Task 4, repeated in plan 16-13 Task 5 if the answer was empty) after the pnpm 12 push is an owner-visible check (cannot be read from the repo).
 
 ## Environment Availability
 

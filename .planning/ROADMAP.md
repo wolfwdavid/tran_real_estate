@@ -207,13 +207,66 @@ Plans:
 
   1. `packageManager` pins pnpm 12, the lockfile was regenerated exactly once, the supply-chain test, `build-web.mjs` and the launch-audit test no longer hardcode `11.27.0`, and `pnpm install --frozen-lockfile` passes locally and in CI.
   2. The web app runs on SvelteKit 3.1 with adapter-static 4 (migrated with `sv migrate sveltekit-3`, one task group per commit): Kit options live in `vite.config.ts` with a plugin-free `kit.options.js` that the CSP, models and service-worker guard tests import; greps for `$lib`, `$service-worker` and `@migration-task` return zero with `#lib` (explicit extensions) across source, ESLint import groups, `components.json`, the Vitest alias and the still-non-vacuous boundary tests; `resolve()` pathnames, `$app/env` and shallow routing follow the Kit 3 forms; all three builds pass `csp:assert`, `seo:assert` and `budget:assert`.
-  3. After the Kit 3 deploy, the live smoke shows the service worker (rewritten on `$app/manifest` with the dotfile filter inside the worker) registering on `https://tranrealestate.github.io/` and precaching only same-origin, non-dotfile GETs (`caches.keys()` contains `tran-shell-<sha>`).
+  3. After the Kit 3 deploy, the live smoke shows the service worker (rewritten on `$app/manifest` with the dotfile filter inside the worker) registering on `https://wolfwdavid.github.io/tran_real_estate/` (scope `/tran_real_estate/`, owner decision 2026-10-29) and precaching only same-origin, non-dotfile GETs under that path (`caches.keys()` contains `tran-shell-<sha>`).
   4. Unit and browser tests run on Vitest 5 with `@vitest/browser-playwright` 5 and `vitest-browser-svelte` 3: every `render` is awaited (zero bare `render(`), exact-text matchers and the `clearMocks` default are accounted for, the JSON reporter path used by `audit-evidence.mjs` still works, and the full `pnpm verify` is green.
   5. The recorded audit exceptions shrink from four to one (build-time deepmerge, revisit 2027-01-31) in both `scripts/lib/audit-exceptions.mjs` and `pnpm-workspace.yaml`, `pnpm audit --audit-level low` is clean apart from it, and the phase history shows each toolchain step as its own plan gated by `pnpm verify` + `pnpm smoke:local`, closed by a deploy with a green live smoke.
 
 **Research flag:** YES. Run `/gsd:research-phase 16`: whether `/_app/version.json` keeps its path and shape under Kit 3 (the smoke's poll depends on it); whether `svelte-kit sync` is still needed in `prepare`; Rolldown chunking against the 60 KB per-page budget (0.5-1.9 KB headroom today); shadcn-svelte CLI 1.7.1 `#lib` behaviour on one `add` dry run; whether `fileParallelism` / `maxWorkers` is per-project in Vitest 5 (the `groupOrder` single-invocation experiment); WXT 0.21.5 under Vitest 5 (`pnpm vitest run --project extension` first); the `--outputFile.json=` CLI form; `eslint-plugin-svelte` 3.23.1 Kit-3 rule changes.
 **UI hint:** no (a full axe and visual pass over the migrated app is part of the gate, not new UI).
-**Plans:** TBD
+**Plans:** 0/13 plans executed
+Plans:
+
+**Wave 1**
+
+- [ ] 16-01-PLAN.md — Wave 1: pre-flight (research 16-00a): smoke 429 relabel to exit 2 with planted-429 test, measured request volume, service worker blocked outside the two worker specs, owner-approved push and first paced live-smoke run
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 16-02-PLAN.md — Wave 2: pre-flight (research 16-00b): guard hardening CR-01, WR-02, WR-03, WR-04 plus WR-05/WR-06 slice/WR-08, each mutation-tested
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 16-03-PLAN.md — Wave 3: D-09 baseline gate: full pnpm verify on Kit 2 / Vitest 4 / pnpm 11, owner-approved push, one green live-smoke run recorded
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 16-04-PLAN.md — Wave 4: pnpm 12.18.0: shared pnpm-cmd helper for four spawners, pin, one lockfile regeneration, two-document lockfile test, gate, push, live smoke (TOOL-01)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 16-05-PLAN.md — Wave 5: Kit 3 part 1 (plans 05-10 are one Kit major with one push at 10; no push before): exact pins, kit.options.js + vite.config.ts, small codemod groups, shallow routing (TOOL-02)
+
+**Wave 6** *(blocked on Wave 5 completion)*
+
+- [ ] 16-06-PLAN.md — Wave 6: Kit 3 part 2: lib-alias codemod commit, hand fixes, Kit 3 paths stub (TOOL-02)
+
+**Wave 7** *(blocked on Wave 6 completion)*
+
+- [ ] 16-07-PLAN.md — Wave 7: Kit 3 part 3: ESLint groups on `\#lib`, import-graph walkers and boundary tests with planted cases, components.json, kit3-migration gate (TOOL-02)
+
+**Wave 8** *(blocked on Wave 7 completion)*
+
+- [ ] 16-08-PLAN.md — Wave 8: Kit 3 part 4: service worker on `$app/manifest` with in-worker dotfile filter, flipped guard, first Kit 3 builds and local oracles (TOOL-02, TOOL-03)
+
+**Wave 9** *(blocked on Wave 8 completion)*
+
+- [ ] 16-09-PLAN.md — Wave 9: Kit 3 part 5: bundle-budget forensic and trim to 60 KB with owner escalation checkpoint (TOOL-02, D-04)
+
+**Wave 10** *(blocked on Wave 9 completion)*
+
+- [ ] 16-10-PLAN.md — Wave 10: Kit 3 part 6: audit exceptions five to two, roadmap/requirement wording, RUNBOOK range-revert rollback recipe, full gate, the one Kit push, live worker proof (TOOL-02, TOOL-03, TOOL-05)
+
+**Wave 11** *(blocked on Wave 10 completion)*
+
+- [ ] 16-11-PLAN.md — Wave 11: Vitest 5.1.0 + browser-playwright 5 + vitest-browser-svelte 3: awaited renders, exact-text fixes, reporter path, gate, push, live smoke (TOOL-04)
+
+**Wave 12** *(blocked on Wave 11 completion)*
+
+- [ ] 16-12-PLAN.md — Wave 12: routine bumps (Playwright, axe, wxt, ESLint family, bits-ui, layerchart, shadcn CLI), minimatch check, supersede Dependabot PRs #9/#10
+
+**Wave 13** *(blocked on Wave 12 completion)*
+
+- [ ] 16-13-PLAN.md — Wave 13: Vitest 5 evidence protocol re-run, launch audit at the deployed commit, final deploy and green live smoke, TOOL-01..06 ticked (TOOL-04, TOOL-06)
 
 ### Phase 17: Extension Release & Edge Add-ons Submission
 
