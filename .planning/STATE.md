@@ -3,13 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: Completed 15-10-PLAN.md
-last_updated: "2026-11-11T02:45:00.000Z"
+stopped_at: Completed 15-11-PLAN.md (awaiting phase verification)
+last_updated: "2026-11-11T03:12:06.366Z"
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 54
-  completed_plans: 53
+  completed_plans: 54
+  percent: 67
 ---
 
 # Project State
@@ -782,7 +783,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-10T21:06:52.270Z
+Last session: 2026-11-11T03:12:06.329Z
 Stopped at: 15-10 Task 2 step 3. Verify x3, repeat-each, serial x3 and shuffle are green at 194b07f; the 16-thread pressure run failed on fetch starvation (attempt 2), plan amended to 12 threads (f2cd341), re-run blocked on Wi-Fi driver drops.
-Resume file: none (15-10 complete; next is plan 15-11)
+Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
