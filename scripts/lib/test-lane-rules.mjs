@@ -30,6 +30,12 @@ export const DEFAULTS = Object.freeze({
 export const MEASURED = /\bmeasured\b[^\n]*?\d+(?:\.\d+)?\s*(?:ms|s|min)\b/i;
 /** ...and the word "cause" somewhere in the same comment block. */
 export const CAUSE = /\bcause\b/i;
+/**
+ * A comment that says the opposite ("not measured; 60 s is a guess", "unmeasured", "never measured",
+ * "wasn't measured") satisfies MEASURED by wording alone, so it is rejected outright (WR-06).
+ */
+export const NOT_MEASURED =
+	/\b(?:not|never|un|non)[\s-]*(?:(?:yet|been)\s+)*measured\b|n[^\w\s]t\s+(?:been\s+|yet\s+)?measured\b/i;
 
 /** Pre-existing, justified `.toPass()` sites (Inventory C). Anything beyond these is a finding. */
 export const TO_PASS_ALLOWLIST = Object.freeze({
@@ -186,9 +192,20 @@ export function fileKind(path) {
 // ---------------------------------------------------------------------------------------------
 // AST helpers
 
+/**
+ * One-slot parse cache: `scanFile` runs several rules over the same file, and parsing dominates the
+ * repo sweep's run time. A SourceFile is never mutated here, so sharing it is safe.
+ * @type {{ path: string; text: string; sf: ts.SourceFile } | null}
+ */
+let lastParse = null;
+
 /** @param {string} path @param {string} text */
-const parse = (path, text) =>
-	ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+const parse = (path, text) => {
+	if (lastParse && lastParse.path === path && lastParse.text === text) return lastParse.sf;
+	const sf = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+	lastParse = { path, text, sf };
+	return sf;
+};
 
 /** @param {ts.SourceFile} sf @param {ts.Node} n */
 const lineOf = (sf, n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
@@ -430,7 +447,7 @@ function hasAnnotation(sf, text, site, prop, value) {
 	}
 	return candidates.some((n) => {
 		const c = commentsAround(text, n);
-		return MEASURED.test(c) && CAUSE.test(c);
+		return MEASURED.test(c) && CAUSE.test(c) && !NOT_MEASURED.test(c);
 	});
 }
 

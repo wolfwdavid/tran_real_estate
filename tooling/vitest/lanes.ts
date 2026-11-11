@@ -16,7 +16,7 @@
  * can prove each one exists.
  *
  * Do not set VITEST_MAX_WORKERS: it is applied after fileParallelism:false and would run serial
- * files concurrently (vitest.config.ts throws).
+ * files concurrently (vitest.config.ts and serialTest() throw).
  */
 import { configDefaults } from 'vitest/config';
 
@@ -94,7 +94,12 @@ export const SERIAL = {
 			file: 'flaky-gate.test.ts',
 			reason: 'behavioural flaky-gate proof: spawns Playwright once per case'
 		},
-		{ file: 'cpu-burn.test.ts', reason: 'spawns a deliberate CPU hog with a wall-clock stop' }
+		{ file: 'cpu-burn.test.ts', reason: 'spawns a deliberate CPU hog with a wall-clock stop' },
+		{
+			file: 'lane-configs.test.ts',
+			reason:
+				'imports apps/web/vite.config.ts (Kit, Tailwind, Svelte plugins): 3.2 s cold, 64% of 5 s'
+		}
 	]
 } as const satisfies Record<string, readonly SerialEntry[]>;
 
@@ -110,6 +115,15 @@ export const files = (lane: Lane): string[] => SERIAL[lane].map((e) => e.file);
 
 /** The `test` overrides every *-serial project shares. Spread AFTER the base config's `test`. */
 export function serialTest(lane: Lane) {
+	// VITEST_MAX_WORKERS is applied after fileParallelism:false and would run the serial files
+	// concurrently (verified on Vitest 4.1.12). Every serial config calls this function, so each one
+	// refuses to load, including `vitest run --config <lane>/vitest.serial.config.ts` run on its own;
+	// the root vitest.config.ts keeps its own check for the projects run.
+	if (process.env.VITEST_MAX_WORKERS !== undefined) {
+		throw new Error(
+			`VITEST_MAX_WORKERS is set: the ${lane}-serial lane is capped at one worker (fileParallelism:false) and VITEST_MAX_WORKERS would run its files concurrently; unset it (tooling/vitest/lanes.ts).`
+		);
+	}
 	return {
 		name: `${lane}-serial`,
 		include: files(lane),

@@ -101,7 +101,28 @@ const BROWSER_CONFIGS = [
 	'apps/web/vitest.browser.config.ts',
 	'apps/extension/vitest.browser.config.ts'
 ];
+/** Initializer text of the first `name: <value>` property in a parsed source (comments are trivia). */
+function propertyInitOf(sf: ts.SourceFile, name: string): string | undefined {
+	let found: string | undefined;
+	const visit = (n: ts.Node) => {
+		if (
+			found === undefined &&
+			ts.isPropertyAssignment(n) &&
+			(ts.isIdentifier(n.name) || ts.isStringLiteral(n.name)) &&
+			n.name.text === name
+		) {
+			found = n.initializer.getText(sf);
+		}
+		ts.forEachChild(n, visit);
+	};
+	visit(sf);
+	return found;
+}
+const propertyInit = (rel: string, name: string): string | undefined =>
+	propertyInitOf(ts.createSourceFile(rel, read(rel), ts.ScriptTarget.Latest, true), name);
+
 const WEB_PW = 'apps/web/playwright.config.ts';
+const SMOKE_PW = 'apps/web/playwright.smoke.config.ts';
 const EXT_PW = 'apps/extension/playwright.config.ts';
 const CI = '.github/workflows/ci.yml';
 
@@ -242,14 +263,18 @@ describe('lane manifest', () => {
 		expect(seen.size).toBeGreaterThanOrEqual(17);
 	});
 
-	test('each lane has a file-based serial config and a parallel sibling that excludes it', () => {
+	// WR-05: the exclusion itself is proven behaviourally in scripts/lane-configs.test.ts (it imports
+	// each parallel sibling and reads the resolved test.exclude); a comment naming files('web') used
+	// to satisfy the old substring pin after the real exclusion was deleted. Here: the files exist
+	// and the manifest names a behavioural pin for every lane.
+	test('each lane has a serial config and a parallel sibling on disk, both pinned behaviourally', () => {
 		for (const lane of LANE_NAMES) {
 			const { serialConfig, parallelSibling } = LANES[lane];
 			expect(existsSync(join(ROOT, serialConfig)), serialConfig).toBe(true);
-			expect(read(serialConfig), serialConfig).toContain(`serialTest('${lane}')`);
 			expect(existsSync(join(ROOT, parallelSibling)), parallelSibling).toBe(true);
-			expect(read(parallelSibling), parallelSibling).toContain(`files('${lane}')`);
 		}
+		expect(files('scripts')).toContain('lane-configs.test.ts');
+		expect(read('scripts/lane-configs.test.ts')).toContain('PARALLEL_CONFIGS');
 	});
 
 	test('serialTest(lane) runs one file at a time in its own group, in the right order', () => {
@@ -302,18 +327,39 @@ describe('worker caps', () => {
 	test('MAX_WORKERS is a positive integer applied on the root config', () => {
 		expect(Number.isInteger(MAX_WORKERS) && MAX_WORKERS > 0).toBe(true);
 		const text = read(ROOT_CONFIG);
-		expect(text).toContain('maxWorkers: MAX_WORKERS');
+		expect(propertyInit(ROOT_CONFIG, 'maxWorkers')).toBe('MAX_WORKERS');
 		// Fail closed: the env var is applied after fileParallelism:false and would break the lane.
 		expect(text).toContain('process.env.VITEST_MAX_WORKERS');
 	});
 
 	test('both browser configs set the same cap (the browser pool ignores the root value)', () => {
-		for (const cfg of BROWSER_CONFIGS) expect(read(cfg), cfg).toContain('maxWorkers: MAX_WORKERS');
+		for (const cfg of BROWSER_CONFIGS)
+			expect(propertyInit(cfg, 'maxWorkers'), cfg).toBe('MAX_WORKERS');
 	});
 
 	test('Playwright workers are pinned to the known-good counts', () => {
-		expect(read(WEB_PW)).toContain('workers: process.env.CI ? 2 : 4');
-		expect(read(EXT_PW)).toMatch(/^\s*workers: 1,$/m);
+		expect(propertyInit(WEB_PW, 'workers')).toBe('process.env.CI ? 2 : 4');
+		expect(propertyInit(EXT_PW, 'workers')).toBe('1');
+	});
+
+	// WR-08: every serial config goes through serialTest(), so the refusal lives there too.
+	test('serialTest() refuses VITEST_MAX_WORKERS, whatever its value, and loads without it', () => {
+		const saved = process.env.VITEST_MAX_WORKERS;
+		try {
+			for (const value of ['4', '1', '0', '']) {
+				process.env.VITEST_MAX_WORKERS = value;
+				for (const lane of LANE_NAMES) {
+					expect(() => serialTest(lane), `${lane} with ${JSON.stringify(value)}`).toThrow(
+						/VITEST_MAX_WORKERS.*capped at one worker/
+					);
+				}
+			}
+			delete process.env.VITEST_MAX_WORKERS;
+			for (const lane of LANE_NAMES) expect(() => serialTest(lane)).not.toThrow();
+		} finally {
+			if (saved === undefined) delete process.env.VITEST_MAX_WORKERS;
+			else process.env.VITEST_MAX_WORKERS = saved;
+		}
 	});
 });
 
@@ -339,9 +385,24 @@ describe('CI and flaky gate', () => {
 
 	test('both Playwright configs document the retry policy and fail flaky tests in CI', () => {
 		for (const cfg of [WEB_PW, EXT_PW]) {
-			const text = read(cfg);
-			expect(text, cfg).toContain('failOnFlakyTests: !!process.env.CI');
-			expect(text, cfg).toContain('Retry policy (TEST-03)');
+			// Property lookups on the parsed config, so a commented-out line cannot satisfy the pin.
+			expect(propertyInit(cfg, 'failOnFlakyTests'), cfg).toBe('!!process.env.CI');
+			expect(read(cfg), cfg).toContain('Retry policy (TEST-03)');
 		}
+	});
+
+	test('the smoke config never retries and always fails flaky tests', () => {
+		expect(propertyInit(SMOKE_PW, 'retries')).toBe('0');
+		expect(propertyInit(SMOKE_PW, 'failOnFlakyTests')).toBe('true');
+	});
+
+	test('non-vacuity: propertyInit ignores a commented-out property', () => {
+		const sf = ts.createSourceFile(
+			'x.ts',
+			'// failOnFlakyTests: true,\nexport default {};',
+			ts.ScriptTarget.Latest,
+			true
+		);
+		expect(propertyInitOf(sf, 'failOnFlakyTests')).toBeUndefined();
 	});
 });

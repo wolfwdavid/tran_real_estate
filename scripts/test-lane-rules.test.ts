@@ -1170,6 +1170,37 @@ describe('WR-04: lanes.ts, config extensions and runner flags', () => {
 	});
 });
 
+// ---------------------------------------------------------------------------------------------
+// Plan 16-02, task 3: WR-06 slice. An annotation that says the opposite is not an annotation.
+
+describe('WR-06: a negated "measured" annotation is rejected', () => {
+	const SP = 'apps/web/src/lib/b.test.ts';
+	const RAISE = `test('a', { timeout: 30_000 }, () => {});`;
+	const UN = 'unannotated-raise';
+
+	test.each([
+		['not measured', '// not measured; 60 s is a guess, cause unknown\n'],
+		['un-measured', '// Timeout: un-measured, 60 s guess. Cause: cold parser.\n'],
+		['never measured', '// never measured, 60 s guess, cause unknown\n'],
+		['negated contraction', "// wasn't measured; 60 s guess, cause unknown\n"],
+		['has not been measured', '// has not been measured; 60 s guess, cause unknown\n']
+	])('%s is rejected in a serial raise', (_name, note) => {
+		expect(rl(vitestTimeoutFindings(SP, note + RAISE, SERIAL_NODE))).toEqual([[UN, 2]]);
+	});
+
+	test('the accepted form stays accepted, in Vitest, Playwright and config annotations', () => {
+		expect(vitestTimeoutFindings(SP, NOTE + RAISE, SERIAL_NODE)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `${NOTE}test.slow();`)).toEqual([]);
+		const note = '// Timeout: 60 s; measured 13.5 s under load. Cause: cold parser.\n';
+		expect(vitestTimeoutFindings(SP, note + RAISE, SERIAL_NODE)).toEqual([]);
+	});
+
+	test('a negated annotation is rejected for a Playwright raise too', () => {
+		const note = '// not measured; 60 s is a guess, cause unknown\n';
+		expect(rl(playwrightTimeoutFindings(PW, `${note}test.slow();`))).toEqual([[UN, 2]]);
+	});
+});
+
 describe('scanFile routing', () => {
 	const rulesOf = (f: Finding[]) => [...new Set(f.map((x) => x.rule))].sort();
 	const VITEST_SRC = [
