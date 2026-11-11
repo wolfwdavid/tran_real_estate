@@ -761,6 +761,219 @@ describe('toPassFindings', () => {
 	});
 });
 
+// ---------------------------------------------------------------------------------------------
+// Plan 16-02, task 1: CR-01 (zero and negative timeouts) and WR-02 (options by reference).
+// Every planted source is a template literal. Each "flagged" case has a negative control.
+
+describe('CR-01: a timeout of 0 (or below) is the largest raise', () => {
+	const OUT = 'raised-timeout-outside-serial';
+	const UN = 'unannotated-raise';
+
+	test('Vitest test options timeout: 0 is flagged; timeout: 1 is not', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', { timeout: 0 }, () => {});`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+		expect(vitestTimeoutFindings(VT, `test('a', { timeout: 1 }, () => {});`, NODE)).toEqual([]);
+	});
+
+	test('a trailing Vitest timeout of 0 is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', () => {}, 0);`, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('expect.poll with timeout: 0 is flagged', () => {
+		const src = `await expect.poll(() => x(), { timeout: 0 }).toBe(1);`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('a negative Vitest timeout is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', { timeout: -1 }, () => {});`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+	});
+
+	test('a hook trailing timeout of 0 is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `beforeAll(async () => {}, 0);`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+	});
+
+	test('Playwright test.setTimeout(0) is flagged; setTimeout(30_000) is not', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `test.setTimeout(0);`))).toEqual([[UN, 1]]);
+		expect(playwrightTimeoutFindings(PW, `test.setTimeout(30_000);`)).toEqual([]);
+	});
+
+	test('Playwright expect timeout: 0 is flagged', () => {
+		const src = `await expect(l).toBeVisible({ timeout: 0 });`;
+		expect(rl(playwrightTimeoutFindings(PW, src))).toEqual([[UN, 1]]);
+		expect(
+			playwrightTimeoutFindings(PW, `await expect(l).toBeVisible({ timeout: 1_000 });`)
+		).toEqual([]);
+	});
+
+	test('Playwright describe.configure timeout: 0 is flagged', () => {
+		const src = `test.describe.configure({ timeout: 0 });`;
+		expect(rl(playwrightTimeoutFindings(PW, src))).toEqual([[UN, 1]]);
+	});
+
+	test('Vitest config testTimeout: 0 and hookTimeout: 0 are flagged', () => {
+		const cfg = (b: string) => `export default defineConfig({\n\ttest: {\n${b}\n\t}\n});`;
+		expect(rl(configTimeoutFindings(VCFG, cfg(`\t\ttestTimeout: 0`)))).toEqual([[UN, 3]]);
+		expect(rl(configTimeoutFindings(VCFG, cfg(`\t\thookTimeout: 0`)))).toEqual([[UN, 3]]);
+		expect(configTimeoutFindings(VCFG, cfg(`\t\ttestTimeout: 1`))).toEqual([]);
+	});
+
+	test('Playwright config timeout: 0 and expect timeout: 0 are flagged', () => {
+		expect(rl(configTimeoutFindings(PCFG, `export default defineConfig({ timeout: 0 });`))).toEqual(
+			[[UN, 1]]
+		);
+		expect(
+			rl(configTimeoutFindings(PCFG, `export default defineConfig({ expect: { timeout: 0 } });`))
+		).toEqual([[UN, 1]]);
+		expect(
+			configTimeoutFindings(PCFG, `export default defineConfig({ expect: { timeout: 1 } });`)
+		).toEqual([]);
+	});
+
+	test('an annotated serial raise to 0 still needs the annotation', () => {
+		const SP = 'apps/web/src/lib/b.test.ts';
+		const src = `test('a', { timeout: 0 }, () => {});`;
+		expect(rl(vitestTimeoutFindings(SP, src, SERIAL_NODE))).toEqual([[UN, 1]]);
+		expect(vitestTimeoutFindings(SP, NOTE + src, SERIAL_NODE)).toEqual([]);
+	});
+});
+
+describe('WR-02: timeouts and retries passed by reference, spread or shorthand', () => {
+	const OUT = 'raised-timeout-outside-serial';
+	const UN = 'unannotated-raise';
+
+	test('Vitest options held in a const are flagged', () => {
+		const src = `const o = { timeout: 600000 };\ntest('a', o, fn);`;
+		expect(rl(vitestTimeoutFindings(VT, src, NODE))).toEqual([[OUT, 2]]);
+	});
+
+	test('a spread inside the inline Vitest options is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', { ...o }, fn);`, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('a callback held in an identifier with a trailing timeout is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', run, 600000);`, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('a wrapped callback with a trailing timeout is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', wrap(fn), 600000);`, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('a hook whose callback is an identifier keeps its trailing timeout checked', () => {
+		expect(rl(vitestTimeoutFindings(VT, `beforeAll(setup, 600000);`, NODE))).toEqual([[OUT, 1]]);
+		expect(vitestTimeoutFindings(VT, `beforeAll(setup, 5000);`, NODE)).toEqual([]);
+		expect(vitestTimeoutFindings(VT, `beforeAll(setup);`, NODE)).toEqual([]);
+	});
+
+	test('expect.poll with options passed by reference is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `await expect.poll(fn, opts).toBe(1);`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+	});
+
+	test('a trailing timeout held in an identifier after an identifier callback is flagged', () => {
+		expect(rl(vitestTimeoutFindings(VT, `test('a', run, MS);`, NODE))).toEqual([[OUT, 1]]);
+	});
+
+	test('negative controls: no options at all stays silent', () => {
+		expect(vitestTimeoutFindings(VT, `test('a', fn);`, NODE)).toEqual([]);
+		expect(vitestTimeoutFindings(VT, `test('a', () => {});`, NODE)).toEqual([]);
+		expect(vitestTimeoutFindings(VT, `test('a', { timeout: 1000 }, run);`, NODE)).toEqual([]);
+		expect(vitestTimeoutFindings(VT, `test.each([1])('a', run);`, NODE)).toEqual([]);
+		expect(vitestTimeoutFindings(VT, `await expect.poll(fn).toBe(1);`, NODE)).toEqual([]);
+	});
+
+	test('Prettier-wrapped variants are flagged on the first line of the chain', () => {
+		expect(
+			rl(vitestTimeoutFindings(VT, `await expect\n\t.poll(fn, opts)\n\t.toBe(1);`, NODE))
+		).toEqual([[OUT, 1]]);
+		expect(rl(vitestTimeoutFindings(VT, `test\n\t.concurrent('a', run, 600000);`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+		expect(rl(vitestTimeoutFindings(VT, `beforeAll(\n\tsetup,\n\t600000\n);`, NODE))).toEqual([
+			[OUT, 1]
+		]);
+		expect(
+			rl(vitestTimeoutFindings(VT, `test\n\t.skipIf(c)('a', {\n\t\t...o\n\t}, fn);`, NODE))
+		).toEqual([[OUT, 1]]);
+	});
+
+	test('in the serial lane a by-reference option still needs the annotation', () => {
+		const SP = 'apps/web/src/lib/b.test.ts';
+		const src = `test('a', run, 600000);`;
+		expect(rl(vitestTimeoutFindings(SP, src, SERIAL_NODE))).toEqual([[UN, 1]]);
+		expect(vitestTimeoutFindings(SP, NOTE + src, SERIAL_NODE)).toEqual([]);
+	});
+
+	test('retry options held in a const or spread are flagged', () => {
+		expect(rl(retryFindings(VT, `const o = { retry: 3 };\ntest('a', o, fn);`))).toContainEqual([
+			'retry',
+			2
+		]);
+		expect(rl(retryFindings(VT, `test('a', { ...o }, fn);`))).toEqual([['retry', 1]]);
+		expect(retryFindings(VT, `test('a', fn);`)).toEqual([]);
+		expect(retryFindings(VT, `test('a', { timeout: 100 }, run);`)).toEqual([]);
+	});
+
+	test('a shorthand retry or retries property is flagged', () => {
+		expect(rl(retryFindings(VCFG, `export default defineConfig({ test: { retry } });`))).toEqual([
+			['retry', 1]
+		]);
+		expect(rl(retryFindings(PCFG, `export default defineConfig({ retries });`))).toEqual([
+			['retry', 1]
+		]);
+		expect(retryFindings(PCFG, `export default defineConfig({ workers: 1 });`)).toEqual([]);
+	});
+
+	test('a shorthand testTimeout is flagged in a Vitest config', () => {
+		const src = `const testTimeout = 99999;\nexport default defineConfig({ test: { testTimeout } });`;
+		expect(rl(configTimeoutFindings(VCFG, src))).toEqual([[UN, 2]]);
+	});
+
+	test('a defineConfig argument that is not an object literal is a finding', () => {
+		const src = `const c = { retries: 5 };\nexport default defineConfig(c);`;
+		expect(rl(configTimeoutFindings(PCFG, src))).toEqual([[UN, 2]]);
+		expect(rl(retryFindings(PCFG, src))).toEqual([['retry', 1]]);
+		expect(
+			configTimeoutFindings(VCFG, `export default defineConfig({ test: { name: 'x' } });`)
+		).toEqual([]);
+	});
+
+	test('Playwright matcher options passed by reference are flagged', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `await expect(l).toBeVisible(opts);`))).toEqual([
+			[UN, 1]
+		]);
+		expect(rl(playwrightTimeoutFindings(PW, `await expect(l).toHaveText('x', opts);`))).toEqual([
+			[UN, 1]
+		]);
+		expect(rl(playwrightTimeoutFindings(PW, `await expect(l).toBeVisible({ ...o });`))).toEqual([
+			[UN, 1]
+		]);
+		expect(playwrightTimeoutFindings(PW, `await expect(l).toBeVisible();`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `expect(value).toBe(opts);`)).toEqual([]);
+		expect(playwrightTimeoutFindings(PW, `await expect(l).toHaveText('x');`)).toEqual([]);
+	});
+
+	test('Playwright describe.configure and expect.configure with a reference are flagged', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `test.describe.configure(opts);`))).toEqual([[UN, 1]]);
+		expect(rl(retryFindings(PW, `test.describe.configure(opts);`))).toEqual([['retry', 1]]);
+		expect(rl(playwrightTimeoutFindings(PW, `expect.configure(opts);`))).toEqual([[UN, 1]]);
+		expect(playwrightTimeoutFindings(PW, `test.describe.configure({ mode: 'serial' });`)).toEqual(
+			[]
+		);
+	});
+
+	test('Prettier-wrapped Playwright describe.configure(reference) is flagged', () => {
+		expect(rl(playwrightTimeoutFindings(PW, `test.describe\n\t.configure(opts);`))).toEqual([
+			[UN, 1]
+		]);
+	});
+});
+
 describe('scanFile routing', () => {
 	const rulesOf = (f: Finding[]) => [...new Set(f.map((x) => x.rule))].sort();
 	const VITEST_SRC = [

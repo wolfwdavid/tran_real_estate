@@ -74,6 +74,40 @@ const ELAPSED_CALLEES = new Set(['performance.now', 'process.hrtime', 'process.h
 const RETRY_FLAG = /--retr(?:y|ies)\b/;
 
 /**
+ * Playwright web-first matchers that take an options object, with the argument index it sits at.
+ * `expect(l).toBeVisible(opts)` reads as an options argument held in a variable; `expect(v).toBe(x)`
+ * is not in the table, so a plain value argument is never mistaken for options.
+ * @type {Readonly<Record<string, number>>}
+ */
+const MATCHER_OPTION_INDEX = Object.freeze({
+	toBeAttached: 0,
+	toBeChecked: 0,
+	toBeDisabled: 0,
+	toBeEditable: 0,
+	toBeEmpty: 0,
+	toBeEnabled: 0,
+	toBeFocused: 0,
+	toBeHidden: 0,
+	toBeInViewport: 0,
+	toBeVisible: 0,
+	toContainText: 1,
+	toHaveAccessibleDescription: 1,
+	toHaveAccessibleName: 1,
+	toHaveClass: 1,
+	toHaveCount: 1,
+	toHaveId: 1,
+	toHaveRole: 1,
+	toHaveText: 1,
+	toHaveTitle: 1,
+	toHaveURL: 1,
+	toHaveValue: 1,
+	toHaveValues: 1,
+	toHaveAttribute: 2,
+	toHaveCSS: 2,
+	toHaveJSProperty: 2
+});
+
+/**
  * Vitest project roots in resolution order. `browser` projects claim `.browser.test.ts` files;
  * the sibling node project claims the rest under the same prefix.
  * @type {ReadonlyArray<readonly [prefix: string, node: string, browser: string | null]>}
@@ -146,8 +180,13 @@ const lineOf = (sf, n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line 
 const numberOf = (n) =>
 	n !== undefined && ts.isNumericLiteral(n) ? Number(n.text.replace(/_/g, '')) : null;
 
-/** @param {number | null} value @param {number} max */
-const isRaised = (value, max) => value === null || value > max;
+/**
+ * 0 and negative values disable the timeout in both Vitest (the runner skips the timer when
+ * `timeout <= 0`) and Playwright ("zero means no timeout"), so they are the largest raise of all.
+ * @param {number | null} value
+ * @param {number} max
+ */
+const isRaised = (value, max) => value === null || value <= 0 || value > max;
 
 /** @param {ts.Node} n @param {ts.SourceFile} sf */
 const valueText = (n, sf) => (ts.isNumericLiteral(n) ? n.text : `${n.getText(sf)} (non-literal)`);
@@ -253,6 +292,52 @@ function propName(p) {
 
 /** @param {ts.Node} n */
 const isFunction = (n) => ts.isArrowFunction(n) || ts.isFunctionExpression(n);
+
+/**
+ * First `...x` element of an object literal, or undefined. A spread can carry any option, so the
+ * guard cannot prove it small and reports it (fail closed).
+ * @param {ts.ObjectLiteralExpression} obj
+ * @returns {ts.SpreadAssignment | undefined}
+ */
+const spreadOf = (obj) => obj.properties.find(ts.isSpreadAssignment);
+
+/**
+ * Splits the arguments of a Vitest `test`/`it`/`describe` call into the places a timeout or retry
+ * can hide: inline option objects, numeric trailing timeouts, and a single `reference` for
+ * anything else the guard cannot read (an options object held in a variable, a spread, a wrapped
+ * callback followed by a non-literal timeout). Callback positions that are plainly a callback
+ * (`test('a', run)`, `test('a', { ... }, run)`, `test('a', run, 5000)`) are not references.
+ * @param {readonly ts.Expression[]} args
+ * @returns {{ objects: ts.ObjectLiteralExpression[]; trailing: ts.Expression[]; reference: ts.Expression | null }}
+ */
+function testCallArgs(args) {
+	/** @type {ts.ObjectLiteralExpression[]} */
+	const objects = [];
+	/** @type {ts.Expression[]} */
+	const trailing = [];
+	/** @type {ts.Expression | null} */
+	let reference = null;
+	args.forEach((a, i) => {
+		if (i === 0 || isFunction(a)) return;
+		if (ts.isObjectLiteralExpression(a)) {
+			objects.push(a);
+			return;
+		}
+		if (ts.isNumericLiteral(a)) {
+			trailing.push(a);
+			return;
+		}
+		if (!ts.isSpreadElement(a)) {
+			const callbackSlot =
+				(i === 1 && args.length === 2) ||
+				(i === 2 && ts.isObjectLiteralExpression(args[1])) ||
+				(i === 1 && args.slice(2).some((x) => ts.isNumericLiteral(x)));
+			if (callbackSlot) return;
+		}
+		reference ??= a;
+	});
+	return { objects, trailing, reference };
+}
 
 /**
  * The statement that owns `n`: the ancestor whose parent is the SourceFile, a Block or a
@@ -424,14 +509,22 @@ function vitestRaiseSites(sf, lane) {
 			if (second && ts.isObjectLiteralExpression(second)) {
 				const t = propOf(second, 'timeout');
 				if (t) push(n, t.prop, t.value, DEFAULTS.wait, `${calleeText} timeout`);
-			} else if (second && calleeText.startsWith('vi.')) {
-				push(n, null, second, DEFAULTS.wait, `${calleeText} timeout`);
+				const sp = spreadOf(second);
+				if (sp)
+					push(n, sp, sp.expression, DEFAULTS.wait, `${calleeText} options spread (fail closed)`);
+			} else if (second) {
+				// A number, or options held in a variable: either way the guard reads it as raised
+				// unless it is a literal at or below the default.
+				const label = ts.isNumericLiteral(second)
+					? `${calleeText} timeout`
+					: `${calleeText} options passed by reference (fail closed)`;
+				push(n, null, second, DEFAULTS.wait, label);
 			}
 			return;
 		}
 		if (ts.isIdentifier(callee) && HOOKS.has(callee.text)) {
-			const fnIndex = args.findIndex(isFunction);
-			const trailing = fnIndex >= 0 ? args[fnIndex + 1] : undefined;
+			// hook(fn, timeout): the timeout is the second argument whether fn is inline or a name.
+			const trailing = args[1];
 			if (trailing && !ts.isObjectLiteralExpression(trailing)) {
 				push(n, null, trailing, hookMax, `${callee.text} trailing timeout`);
 			}
@@ -439,15 +532,23 @@ function vitestRaiseSites(sf, lane) {
 		}
 		const testRoot = testApiRoot(callee);
 		if (testRoot !== null) {
-			const fnIndex = args.findIndex(isFunction);
-			args.forEach((a, i) => {
-				if (ts.isObjectLiteralExpression(a)) {
-					const t = propOf(a, 'timeout');
-					if (t) push(n, t.prop, t.value, testMax, `${testRoot} option timeout`);
-				} else if (fnIndex >= 0 && i > fnIndex && !isFunction(a)) {
-					push(n, null, a, testMax, `${testRoot} trailing timeout`);
-				}
-			});
+			const { objects, trailing, reference } = testCallArgs(args);
+			for (const o of objects) {
+				const t = propOf(o, 'timeout');
+				if (t) push(n, t.prop, t.value, testMax, `${testRoot} option timeout`);
+				const sp = spreadOf(o);
+				if (sp) push(n, sp, sp.expression, testMax, `${testRoot} options spread (fail closed)`);
+			}
+			for (const a of trailing) push(n, null, a, testMax, `${testRoot} trailing timeout`);
+			if (reference) {
+				push(
+					n,
+					null,
+					reference,
+					testMax,
+					`${testRoot} options or callback passed by reference (fail closed)`
+				);
+			}
 		}
 	});
 	return sites;
@@ -515,6 +616,15 @@ export function playwrightTimeoutFindings(path, text) {
 			detail: `${detail} without measured+cause comment`
 		});
 	};
+	/** Spread elements and by-reference options cannot be proven small: report them. */
+	const reportSpread = (
+		/** @type {ts.Node} */ site,
+		/** @type {ts.ObjectLiteralExpression} */ obj,
+		/** @type {string} */ what
+	) => {
+		const sp = spreadOf(obj);
+		if (sp) report(site, sp, sp.expression, `${what} options spread (fail closed)`);
+	};
 	walk(sf, (n) => {
 		if (!ts.isCallExpression(n)) return;
 		const callee = n.expression;
@@ -542,6 +652,9 @@ export function playwrightTimeoutFindings(path, text) {
 						`describe.configure timeout ${valueText(t.value, sf)} > ${DEFAULTS.pwTest}`
 					);
 				}
+				reportSpread(n, opts, 'describe.configure');
+			} else if (opts) {
+				report(n, null, opts, 'describe.configure options passed by reference (fail closed)');
 			}
 			return;
 		}
@@ -549,6 +662,23 @@ export function playwrightTimeoutFindings(path, text) {
 			report(n, null, null, 'test.slow()');
 			return;
 		}
+		const member = calleeText.slice(calleeText.lastIndexOf('.') + 1);
+		const optionIndex =
+			root === 'expect' && Object.hasOwn(MATCHER_OPTION_INDEX, member)
+				? MATCHER_OPTION_INDEX[member]
+				: undefined;
+		if (optionIndex !== undefined) {
+			const o = args[optionIndex];
+			if (o && !ts.isObjectLiteralExpression(o)) {
+				report(n, null, o, `${member} options passed by reference (fail closed)`);
+			}
+		} else if (calleeText === 'expect.configure') {
+			const o = args[0];
+			if (o && !ts.isObjectLiteralExpression(o)) {
+				report(n, null, o, 'expect.configure options passed by reference (fail closed)');
+			}
+		}
+		const optionTaking = optionIndex !== undefined || calleeText === 'expect.configure';
 		for (const a of args) {
 			if (!ts.isObjectLiteralExpression(a)) continue;
 			const t = propOf(a, 'timeout');
@@ -560,6 +690,7 @@ export function playwrightTimeoutFindings(path, text) {
 					`${calleeText} timeout ${valueText(t.value, sf)} > ${DEFAULTS.pwExpect}`
 				);
 			}
+			if (optionTaking) reportSpread(n, a, calleeText);
 		}
 	});
 	return out;
@@ -585,18 +716,41 @@ export function configTimeoutFindings(path, text) {
 	const browser = path.includes('browser');
 	/** @type {Finding[]} */
 	const out = [];
-	const report = (/** @type {ts.PropertyAssignment} */ p, /** @type {number} */ max) => {
-		if (!isRaised(numberOf(p.initializer), max)) return;
-		if (hasAnnotation(sf, text, p, p, p.initializer)) return;
+	const report = (
+		/** @type {ts.PropertyAssignment | ts.ShorthandPropertyAssignment} */ p,
+		/** @type {number} */ max
+	) => {
+		// `{ testTimeout }` is a shorthand: its value is the identifier, which is non-literal.
+		const value = ts.isShorthandPropertyAssignment(p) ? p.name : p.initializer;
+		if (!isRaised(numberOf(value), max)) return;
+		if (hasAnnotation(sf, text, p, p, value)) return;
 		out.push({
 			path,
 			line: lineOf(sf, p),
 			rule: 'unannotated-raise',
-			detail: `${propName(p)} ${valueText(p.initializer, sf)} > ${max} without measured+cause comment`
+			detail: `${propName(p)} ${valueText(value, sf)} > ${max} without measured+cause comment`
 		});
 	};
 	walk(sf, (n) => {
-		if (!ts.isPropertyAssignment(n)) return;
+		if (ts.isCallExpression(n)) {
+			// `defineConfig(c)` or `defineConfig(() => ...)`: the guard cannot read the options.
+			const arg = n.arguments[0];
+			if (
+				ts.isIdentifier(n.expression) &&
+				n.expression.text === 'defineConfig' &&
+				arg &&
+				!ts.isObjectLiteralExpression(arg)
+			) {
+				out.push({
+					path,
+					line: lineOf(sf, n),
+					rule: 'unannotated-raise',
+					detail: 'defineConfig() argument is not an object literal (fail closed)'
+				});
+			}
+			return;
+		}
+		if (!ts.isPropertyAssignment(n) && !ts.isShorthandPropertyAssignment(n)) return;
 		const name = propName(n);
 		if (kind === 'vitest-config') {
 			if (name === 'testTimeout') report(n, browser ? DEFAULTS.browserTest : DEFAULTS.nodeTest);
@@ -683,17 +837,26 @@ export function retryFindings(path, text) {
 	if (kind === null) return out;
 
 	const sf = parse(path, text);
+	/** The value of `{ retry: 1 }`, or of the shorthand `{ retry }` (the identifier). */
+	const valueOf = (/** @type {ts.PropertyAssignment | ts.ShorthandPropertyAssignment} */ n) =>
+		ts.isShorthandPropertyAssignment(n) ? n.name : n.initializer;
 	walk(sf, (n) => {
 		if (kind === 'vitest-config') {
-			if (ts.isPropertyAssignment(n) && propName(n) === 'retry') {
-				at(lineOf(sf, n), `retry: ${n.initializer.getText(sf)} in Vitest config`);
+			if (
+				(ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n)) &&
+				propName(n) === 'retry'
+			) {
+				at(lineOf(sf, n), `retry: ${valueOf(n).getText(sf)} in Vitest config`);
 			}
 			return;
 		}
 		if (kind === 'playwright-config') {
-			if (ts.isPropertyAssignment(n) && propName(n) === 'retries') {
+			if (
+				(ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n)) &&
+				propName(n) === 'retries'
+			) {
 				const pinned = /** @type {Record<string, string>} */ (PINNED_RETRIES)[path] ?? '0';
-				const actual = n.initializer.getText(sf);
+				const actual = valueOf(n).getText(sf);
 				if (actual !== pinned) at(lineOf(sf, n), `retries: ${actual} (pinned: ${pinned})`);
 			}
 			return;
@@ -703,8 +866,13 @@ export function retryFindings(path, text) {
 		if (kind === 'playwright') {
 			if (calleeText.endsWith('describe.configure')) {
 				const opts = n.arguments[0];
-				if (opts && ts.isObjectLiteralExpression(opts) && propOf(opts, 'retries')) {
-					at(lineOf(sf, n), 'describe.configure({ retries })');
+				if (opts && ts.isObjectLiteralExpression(opts)) {
+					if (propOf(opts, 'retries')) at(lineOf(sf, n), 'describe.configure({ retries })');
+					else if (spreadOf(opts)) {
+						at(lineOf(sf, n), 'describe.configure({ ...spread }) (fail closed)');
+					}
+				} else if (opts) {
+					at(lineOf(sf, n), 'describe.configure(options by reference) (fail closed)');
 				}
 			}
 			return;
@@ -712,11 +880,12 @@ export function retryFindings(path, text) {
 		// vitest-test
 		const root = testApiRoot(n.expression);
 		if (root === null) return;
-		for (const a of n.arguments) {
-			if (ts.isObjectLiteralExpression(a) && propOf(a, 'retry')) {
-				at(lineOf(sf, n), `${root} option retry`);
-			}
+		const { objects, reference } = testCallArgs(n.arguments);
+		for (const o of objects) {
+			if (propOf(o, 'retry')) at(lineOf(sf, n), `${root} option retry`);
+			else if (spreadOf(o)) at(lineOf(sf, n), `${root} options spread (fail closed)`);
 		}
+		if (reference) at(lineOf(sf, n), `${root} options passed by reference (fail closed)`);
 	});
 	return out;
 }
