@@ -5,6 +5,9 @@ import { test, expect, smoke, installedPrecache } from './fixtures';
 
 const basePath = new URL(smoke.baseUrl).pathname;
 
+// The suite default blocks the worker (playwright.smoke.config.ts); installedPrecache needs it.
+test.use({ serviceWorkers: 'allow' });
+
 test('the worker registers from this origin with scope = base', async ({ page }) => {
 	const { scope, script, origin } = await installedPrecache(page);
 	expect(scope).toBe(smoke.baseUrl);

@@ -1,7 +1,7 @@
 // scripts/smoke.mjs: target table, build-stamp reads, the stale-build gate and the version poll.
 // Importing the module must never run its CLI (it would start serve-pages or spawn Playwright).
 // Also pins the 429 relabel (classifySuiteExit + the SMOKE_429_LOG fixture): a rate-limited Pages CDN exits 2.
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, test, vi } from 'vitest';
@@ -220,5 +220,46 @@ describe('429 evidence fixture pin', () => {
 	test('non-vacuity: the pin reports a fixture without the env var', () => {
 		const src = read('apps/web/tests/smoke/fixtures.ts').replaceAll('SMOKE_429_LOG', 'X');
 		expect(missing(src)).toEqual(['SMOKE_429_LOG']);
+	});
+});
+
+describe('service worker is blocked outside the two worker specs (live CDN request volume)', () => {
+	const root = join(import.meta.dirname, '..');
+	const read = (rel: string) => readFileSync(join(root, rel), 'utf8').replace(/\r\n/g, '\n');
+	const stripComments = (src: string) => src.replace(/\/\/.*$/gm, '');
+	/** Violations of the contract in a config text. */
+	const configProblems = (cfg: string) => {
+		const code = stripComments(cfg);
+		const out: string[] = [];
+		if (!code.includes("serviceWorkers: 'block'")) out.push("missing serviceWorkers: 'block'");
+		if (!/retries: 0\b/.test(code)) out.push('retries is not 0');
+		return out;
+	};
+	const CONFIG = 'apps/web/playwright.smoke.config.ts';
+	const WORKER_SPECS = ['pwa.smoke.ts', 'assets.smoke.ts'];
+
+	test("the suite default is serviceWorkers 'block' with retries still 0", () => {
+		expect(configProblems(read(CONFIG))).toEqual([]);
+	});
+
+	test('non-vacuity: the check reports a config without the block line', () => {
+		const cfg = read(CONFIG).replace("serviceWorkers: 'block',", '');
+		expect(configProblems(cfg)).toEqual(["missing serviceWorkers: 'block'"]);
+	});
+
+	test("the two worker specs opt back in with serviceWorkers 'allow'", () => {
+		for (const f of WORKER_SPECS) {
+			expect(read(`apps/web/tests/smoke/${f}`), f).toContain("serviceWorkers: 'allow'");
+		}
+	});
+
+	test('no other smoke spec installs the worker through installedPrecache', () => {
+		const dir = join(root, 'apps/web/tests/smoke');
+		const users = readdirSync(dir)
+			.filter((f) => f.endsWith('.smoke.ts'))
+			.filter((f) =>
+				stripComments(read(`apps/web/tests/smoke/${f}`)).includes('installedPrecache')
+			);
+		expect(users.sort()).toEqual([...WORKER_SPECS].sort());
 	});
 });

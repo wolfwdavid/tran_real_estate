@@ -5,6 +5,9 @@ import { test, expect, installedPrecache } from './fixtures';
 
 const CHUNK = 25;
 
+// The suite default blocks the worker (playwright.smoke.config.ts); installedPrecache needs it.
+test.use({ serviceWorkers: 'allow' });
+
 test('every hashed asset in the precache answers 200', async ({ page, request }) => {
 	const { urls } = await installedPrecache(page);
 	const hashed = urls.filter((u) => u.includes('/_app/immutable/'));
