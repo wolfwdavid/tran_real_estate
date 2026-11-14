@@ -2,12 +2,12 @@
 	// Browser-only modules the backup sub-groups need. Loaded by dynamic import after hydration so
 	// Dexie, the backup service and the Storage API helpers never enter the prerendered page graph.
 	export interface BackupKit {
-		exportBackup: (typeof import('#lib/storage/backup'))['exportBackup'];
-		previewImport: (typeof import('#lib/storage/backup'))['previewImport'];
-		applyImport: (typeof import('#lib/storage/backup'))['applyImport'];
-		readReminderInput: (typeof import('#lib/storage/meta'))['readReminderInput'];
-		live: (typeof import('#lib/storage/live.svelte'))['live'];
-		requestPersistence: (typeof import('#lib/storage/persistence'))['requestPersistence'];
+		exportBackup: (typeof import('#lib/storage/backup.ts'))['exportBackup'];
+		previewImport: (typeof import('#lib/storage/backup.ts'))['previewImport'];
+		applyImport: (typeof import('#lib/storage/backup.ts'))['applyImport'];
+		readReminderInput: (typeof import('#lib/storage/meta.ts'))['readReminderInput'];
+		live: (typeof import('#lib/storage/live.svelte.ts'))['live'];
+		requestPersistence: (typeof import('#lib/storage/persistence.ts'))['requestPersistence'];
 		lastBackupAge: (typeof import('@tran/core'))['lastBackupAge'];
 	}
 

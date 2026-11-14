@@ -60,7 +60,7 @@
 	data-hydrated={hydrated || undefined}
 >
 	<a
-		href={resolve('')}
+		href={resolve('/(marketing)')}
 		class="mr-auto inline-flex min-h-16 items-center font-display text-body font-semibold sm:text-heading"
 		>Tran Real Estate Tools</a
 	>

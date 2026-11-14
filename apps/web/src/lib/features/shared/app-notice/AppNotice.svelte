@@ -4,18 +4,18 @@
 	type Kit = {
 		db: import('#lib/storage/db.ts').TranDb | null;
 		vault: import('#lib/storage/secrets/index.ts').Vault | null;
-		exportBackup: (typeof import('#lib/storage/backup'))['exportBackup'];
-		readReminderInput: (typeof import('#lib/storage/meta'))['readReminderInput'];
-		setMeta: (typeof import('#lib/storage/meta'))['setMeta'];
-		META: (typeof import('#lib/storage/meta'))['META'];
-		live: (typeof import('#lib/storage/live.svelte'))['live'];
+		exportBackup: (typeof import('#lib/storage/backup.ts'))['exportBackup'];
+		readReminderInput: (typeof import('#lib/storage/meta.ts'))['readReminderInput'];
+		setMeta: (typeof import('#lib/storage/meta.ts'))['setMeta'];
+		META: (typeof import('#lib/storage/meta.ts'))['META'];
+		live: (typeof import('#lib/storage/live.svelte.ts'))['live'];
 		backupReminderDue: (typeof import('@tran/core'))['backupReminderDue'];
 	};
 </script>
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { base, resolve } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import Lock from '@lucide/svelte/icons/lock';
 	import HardDriveDownload from '@lucide/svelte/icons/hard-drive-download';
@@ -97,7 +97,7 @@
 	const kind = $derived(
 		kit
 			? selectNotice({
-					isSettings: isSettingsPath(page.url.pathname, base),
+					isSettings: isSettingsPath(page.url.pathname, resolve('/(marketing)').slice(0, -1)),
 					vault: vaultStatus,
 					reminder: reminder?.error ? null : (reminder?.current ?? null)
 				})

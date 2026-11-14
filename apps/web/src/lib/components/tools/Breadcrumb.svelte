@@ -31,7 +31,7 @@
 
 <nav aria-label="Breadcrumb" class="pt-6">
 	<ol class="flex flex-wrap items-center gap-1 text-label">
-		<li><a href={resolve('')} class={link}>{CRUMBS.home}</a></li>
+		<li><a href={resolve('/(marketing)')} class={link}>{CRUMBS.home}</a></li>
 		<li aria-hidden="true" class="inline-flex text-muted-foreground">
 			{@render chevron()}
 		</li>

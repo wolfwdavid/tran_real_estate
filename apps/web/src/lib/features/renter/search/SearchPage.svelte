@@ -55,7 +55,7 @@
 	async function restore(): Promise<void> {
 		const savedId = page.url.searchParams.get('saved');
 		if (savedId && (await openSaved(savedId))) return;
-		await search.restoreFromUrl(page.url.searchParams);
+		await search.restoreFromUrl(new URL(page.url.href).searchParams);
 	}
 
 	/** The saved id already opened (each View results marks seen exactly once). */

@@ -28,7 +28,7 @@
 			{/if}
 		</p>
 		<div class="mt-6">
-			<ButtonLink href={resolve('')} variant="primary">Go to the home page</ButtonLink>
+			<ButtonLink href={resolve('/(marketing)')} variant="primary">Go to the home page</ButtonLink>
 		</div>
 	</div>
 </main>

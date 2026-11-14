@@ -8,7 +8,7 @@ import { buildCsp } from './src/lib/csp-policy.js';
 import { resolveBuildStamp } from './src/lib/build-stamp.js';
 import { resolveAnalytics, resolveSiteOrigin } from './src/lib/site-config.js';
 
-const base = resolveBasePath();
+const base = /** @type {'' | `/${string}`} */ (resolveBasePath());
 const out = resolveBuildDir();
 const readHead = () =>
 	(spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).stdout ?? '').trim();
@@ -57,5 +57,7 @@ export default {
 	},
 	// Policy literal lives in src/lib/csp-policy.js; scripts/assert-csp.mjs keeps an independent
 	// literal copy — change both in one commit.
-	csp: buildCsp({ analyticsHost: resolveAnalytics().host })
+	csp: /** @type {import('@sveltejs/kit/vite').Config['csp']} */ (
+		buildCsp({ analyticsHost: resolveAnalytics().host })
+	)
 };

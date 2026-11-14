@@ -23,10 +23,11 @@
 	const current = $derived(
 		currentItemIndex(items, currentPath ?? routeIdToPath(page.route.id) ?? '', '')
 	);
-	// Items carry base-less pathnames; resolve() adds the base (relative while prerendering). Its
+	// Items carry base-less rooted pathnames; Kit 3 resolve() takes the pathname without its leading
+	// slash (a leading slash means a route ID) and adds the base. Its
 	// typed overloads accept one literal route at a time, so a portal-agnostic list widens it.
 	const resolvePath = resolve as (path: string) => string;
-	const hrefOf = (item: SubNavItem) => resolvePath(item.href);
+	const hrefOf = (item: SubNavItem) => resolvePath(item.href.replace(/^\//, ''));
 </script>
 
 <nav aria-label={label} class="mb-6 border-b border-border">

@@ -87,7 +87,10 @@
 		void (async () => {
 			try {
 				const [{ getVault, createVaultState }, { getDb, openDb, StorageBlockedError }] =
-					await Promise.all([import('#lib/storage/secrets'), import('$lib/storage/db')]);
+					await Promise.all([
+						import('#lib/storage/secrets/index.ts'),
+						import('#lib/storage/db.ts')
+					]);
 
 				try {
 					ctx.db = await openDb(getDb());

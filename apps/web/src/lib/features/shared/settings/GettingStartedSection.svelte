@@ -8,7 +8,7 @@
 	import { readOnboarding, writeOnboarding } from '#lib/components/onboarding/onboarding-state.ts';
 	import { SETTINGS_COPY as COPY } from '#lib/content/onboarding.ts';
 
-	const tourHref = `${resolve('')}#get-started`;
+	const tourHref = `${resolve('/(marketing)')}#get-started`;
 
 	function resetTour() {
 		writeOnboarding({ status: 'new', lastPortal: readOnboarding().lastPortal });

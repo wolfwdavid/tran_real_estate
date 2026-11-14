@@ -68,7 +68,7 @@
 
 	// First arrival: read during init (browser only; the prerender has no query).
 	let firstHandOff: Promise<void> = Promise.resolve();
-	if (browser && consumeSampleParam(page.url).sample) {
+	if (browser && consumeSampleParam(new URL(page.url.href)).sample) {
 		firstHandOff = handOffSample().catch(() => undefined);
 	}
 
