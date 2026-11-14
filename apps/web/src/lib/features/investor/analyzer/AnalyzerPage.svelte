@@ -135,7 +135,7 @@
 	const analyzePath = () => resolve('investor/analyze/');
 	function setUrl(id: string | null) {
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own ?id=
-		goto(id ? `${analyzePath()}?id=${encodeURIComponent(id)}` : analyzePath(), {
+		void goto(id ? `${analyzePath()}?id=${encodeURIComponent(id)}` : analyzePath(), {
 			shallow: true,
 			replace: true,
 			state: page.state

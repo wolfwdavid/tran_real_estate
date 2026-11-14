@@ -89,7 +89,7 @@
 		limit = PAGE;
 		const href = resolve('agent/contacts/') + withParams(page.url.search, { list, q });
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- href is resolve() plus this page's own query string
-		goto(href, { shallow: true, replace: true, state: page.state });
+		void goto(href, { shallow: true, replace: true, state: page.state });
 	}
 
 	function onListChange(next: SmartList) {

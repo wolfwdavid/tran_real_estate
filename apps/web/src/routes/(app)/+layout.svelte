@@ -62,8 +62,7 @@
 		}
 		// The current URL, which a page may have changed meanwhile, minus ?source.
 		const { sample, cleaned } = consumeSampleParam(new URL(location.href));
-		// eslint-disable-next-line svelte/no-navigation-without-resolve -- the current URL minus ?source
-		if (sample) goto(cleaned, { shallow: true, replace: true, state: page.state });
+		if (sample) void goto(cleaned, { shallow: true, replace: true, state: page.state });
 		announce('Showing sample data.');
 	}
 
