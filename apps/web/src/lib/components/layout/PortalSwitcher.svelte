@@ -37,7 +37,10 @@
 		wide.addEventListener('change', close);
 		return () => wide.removeEventListener('change', close);
 	});
-	afterNavigate(() => (open = false));
+	afterNavigate(({ shallow, type }) => {
+		if (shallow && type === 'goto') return;
+		open = false;
+	});
 
 	function onkeydown(e: KeyboardEvent) {
 		if (e.key === 'Escape' && open) {

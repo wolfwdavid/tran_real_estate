@@ -7,7 +7,7 @@
 	import UserPlus from '@lucide/svelte/icons/user-plus';
 	import { onMount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import { replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import {
@@ -108,7 +108,7 @@
 	function changeList(next: SmartList) {
 		const href = `${resolve('agent/pipeline/')}${withParams(location.search, { list: next })}`;
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- href is resolve() plus this page's own ?list=
-		replaceState(href, page.state);
+		goto(href, { shallow: true, replace: true, state: page.state });
 		const n = counts[next] ?? 0;
 		announce(`Showing ${SMART_LIST_LABELS[next]}: ${n} ${n === 1 ? 'contact' : 'contacts'}.`);
 	}

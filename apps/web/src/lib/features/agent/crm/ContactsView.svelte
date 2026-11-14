@@ -8,7 +8,7 @@
 	import UserPlus from '@lucide/svelte/icons/user-plus';
 	import { onMount, tick } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
-	import { replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import type { Contact, Task } from '@tran/core/agent';
@@ -89,7 +89,7 @@
 		limit = PAGE;
 		const href = resolve('agent/contacts/') + withParams(page.url.search, { list, q });
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- href is resolve() plus this page's own query string
-		replaceState(href, page.state);
+		goto(href, { shallow: true, replace: true, state: page.state });
 	}
 
 	function onListChange(next: SmartList) {

@@ -36,7 +36,8 @@
 	const profile = useProfile();
 	const today = todayLocal();
 
-	afterNavigate(() => {
+	afterNavigate(({ shallow, type }) => {
+		if (shallow && type === 'goto') return;
 		id = new URLSearchParams(location.search).get('id') || null;
 		leaving = null;
 		editing = false;

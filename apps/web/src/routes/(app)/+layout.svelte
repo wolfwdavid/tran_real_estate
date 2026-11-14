@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
 	import { browser } from '$app/env';
-	import { afterNavigate, replaceState } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { announce } from '$lib/components/a11y/announcer.svelte';
 	import { consumeSampleParam } from '$lib/components/onboarding/setup-params';
@@ -63,7 +63,7 @@
 		// The current URL, which a page may have changed meanwhile, minus ?source.
 		const { sample, cleaned } = consumeSampleParam(new URL(location.href));
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- the current URL minus ?source
-		if (sample) replaceState(cleaned, page.state);
+		if (sample) goto(cleaned, { shallow: true, replace: true, state: page.state });
 		announce('Showing sample data.');
 	}
 
@@ -80,6 +80,7 @@
 
 	// Later in-app arrivals (this layout stays mounted), e.g. the setup page's sample link.
 	afterNavigate((nav) => {
+		if (nav.shallow && nav.type === 'goto') return;
 		if (nav.type === 'enter' || !nav.to || !consumeSampleParam(nav.to.url).sample) return;
 		handOffSample().catch(() => undefined);
 	});

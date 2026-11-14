@@ -123,7 +123,8 @@
 	// arrival the router's focus reset queues a timeout that re-applies the #fragment
 	// (location.replace), which moves focus off the h2 to the body. A timeout queued here runs after
 	// that one, so the focus sticks.
-	afterNavigate(({ to }) => {
+	afterNavigate(({ to, shallow, type }) => {
+		if (shallow && type === 'goto') return;
 		if (to?.url.hash === HASH) setTimeout(() => void focusEl(() => headingEl));
 	});
 </script>

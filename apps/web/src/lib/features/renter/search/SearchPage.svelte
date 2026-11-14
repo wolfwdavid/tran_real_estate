@@ -6,7 +6,7 @@
 	// spent solely from the Search / Narrow / Refresh click handlers (search-state.svelte.ts).
 	import { onMount, untrack } from 'svelte';
 	import { page } from '$app/state';
-	import { replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import type { Listing } from '@tran/core/listings';
 	import { getDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
@@ -102,7 +102,11 @@
 		untrack(() => {
 			if (new URLSearchParams(page.url.search).toString() === qs) return;
 			// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own query string
-			replaceState(`${resolve('renter/')}${qs ? `?${qs}` : ''}`, page.state);
+			goto(`${resolve('renter/')}${qs ? `?${qs}` : ''}`, {
+				shallow: true,
+				replace: true,
+				state: page.state
+			});
 		});
 	});
 

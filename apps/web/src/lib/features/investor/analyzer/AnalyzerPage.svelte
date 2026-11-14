@@ -12,7 +12,7 @@
 	// empty analyzer.
 	import { tick, type Snippet } from 'svelte';
 	import { page } from '$app/state';
-	import { replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
@@ -135,7 +135,11 @@
 	const analyzePath = () => resolve('investor/analyze/');
 	function setUrl(id: string | null) {
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own ?id=
-		replaceState(id ? `${analyzePath()}?id=${encodeURIComponent(id)}` : analyzePath(), page.state);
+		goto(id ? `${analyzePath()}?id=${encodeURIComponent(id)}` : analyzePath(), {
+			shallow: true,
+			replace: true,
+			state: page.state
+		});
 	}
 
 	// ------------------------------------------------------------------ open (route onMount)

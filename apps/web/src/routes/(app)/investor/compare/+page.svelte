@@ -4,7 +4,7 @@
 	// and buildComparison marks the top figure per row. Unknown ids are dropped with a note; fewer
 	// than 2 valid deals shows the empty state. 0 calls.
 	import { onMount, tick } from 'svelte';
-	import { replaceState } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { analyze, buildComparison, MIN_COMPARE } from '@tran/core/finance';
 	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
@@ -62,7 +62,7 @@
 		const name = records[i].name;
 		records = records.filter((r) => r.id !== id);
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- compareHref resolves the base
-		replaceState(compareHref(records.map((r) => r.id)), {});
+		goto(compareHref(records.map((r) => r.id)), { shallow: true, replace: true });
 		announce(`${name} removed from the comparison.`);
 		await tick();
 		const next = records.length >= MIN_COMPARE ? records[i] : undefined;

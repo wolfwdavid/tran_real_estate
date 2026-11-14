@@ -31,7 +31,10 @@
 	);
 
 	// An Undo never outlives the page it was offered on.
-	afterNavigate(() => clearSamplesState());
+	afterNavigate(({ shallow, type }) => {
+		if (shallow && type === 'goto') return;
+		clearSamplesState();
+	});
 
 	let restoring = false;
 

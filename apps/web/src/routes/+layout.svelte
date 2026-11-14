@@ -16,7 +16,8 @@
 	// the first afterNavigate, and holds the referrer / width logic so this block stays tiny (tool
 	// pages sit close to the 60 KB gz budget). The tracker checks GPC / Do Not Track before every send.
 	if (__ANALYTICS_HOST__ && __ANALYTICS_WEBSITE_ID__) {
-		afterNavigate(({ to }) => {
+		afterNavigate(({ to, shallow, type }) => {
+			if (shallow && type === 'goto') return;
 			if (to) import('$lib/analytics/boot').then((m) => m.pageview(to.url)).catch(() => {});
 		});
 	}
