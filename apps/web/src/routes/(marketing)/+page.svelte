@@ -63,21 +63,21 @@
 				<PortalCard
 					title="Renter"
 					body="Search rentals anywhere in the US, track what's new, and compare asking rent to the local market."
-					href={resolve('/for-renters/')}
+					href={resolve('for-renters/')}
 					linkLabel="Explore renter tools"
 					mark={RenterMark}
 				/>
 				<PortalCard
 					title="Investor"
 					body="Analyze a property's cash flow, cap rate, and DSCR, then save deals and compare them side by side."
-					href={resolve('/for-investors/')}
+					href={resolve('for-investors/')}
 					linkLabel="Explore investor tools"
 					mark={InvestorMark}
 				/>
 				<PortalCard
 					title="Agent"
 					body="Keep leads, follow-ups, and listing content in one place, with your disclosures added for you."
-					href={resolve('/for-agents/')}
+					href={resolve('for-agents/')}
 					linkLabel="Explore agent tools"
 					mark={AgentMark}
 				/>

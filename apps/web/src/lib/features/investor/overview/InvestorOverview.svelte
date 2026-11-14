@@ -28,21 +28,21 @@
 		{
 			key: 'deals',
 			title: 'Saved deals',
-			href: resolve('/investor/deals/'),
+			href: resolve('investor/deals/'),
 			linkLabel: 'Open saved deals',
 			icon: FolderOpen
 		},
 		{
 			key: 'buyBoxes',
 			title: 'Buy boxes',
-			href: resolve('/investor/buy-boxes/'),
+			href: resolve('investor/buy-boxes/'),
 			linkLabel: 'Open buy boxes',
 			icon: SearchCheck
 		},
 		{
 			key: 'markets',
 			title: 'Markets',
-			href: resolve('/investor/markets/'),
+			href: resolve('investor/markets/'),
 			linkLabel: 'Open markets',
 			icon: ChartLine
 		}
@@ -55,7 +55,7 @@
 		Analyze a property, save the deals you want to revisit, and watch the ZIP codes you care about.
 	</p>
 	<div class="mt-6">
-		<ButtonLink href={resolve('/investor/analyze/')} variant="primary">
+		<ButtonLink href={resolve('investor/analyze/')} variant="primary">
 			<Calculator size={16} aria-hidden="true" />
 			Analyze a deal
 		</ButtonLink>

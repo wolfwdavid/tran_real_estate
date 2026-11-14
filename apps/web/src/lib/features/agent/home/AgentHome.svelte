@@ -41,7 +41,7 @@
 
 	const inquiryUrl = () =>
 		inquiryConfig
-			? buildInquiryUrl(new URL(resolve('/agent/inquire/'), location.origin).href, inquiryConfig)
+			? buildInquiryUrl(new URL(resolve('agent/inquire/'), location.origin).href, inquiryConfig)
 			: null;
 
 	async function copyLink() {
@@ -74,9 +74,9 @@
 	const linkClass =
 		'inline-flex min-h-11 items-center text-body text-foreground underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
 	const h2Class = 'font-display text-heading font-semibold text-foreground';
-	const profileHref = resolve('/agent/profile/');
-	const inquiryPageHref = resolve('/agent/profile/') + '#inquiry-page';
-	const pipelineHref = (stage: string) => resolve('/agent/pipeline/') + '#stage-' + stage;
+	const profileHref = resolve('agent/profile/');
+	const inquiryPageHref = resolve('agent/profile/') + '#inquiry-page';
+	const pipelineHref = (stage: string) => resolve('agent/pipeline/') + '#stage-' + stage;
 </script>
 
 {#snippet setup()}
@@ -120,7 +120,7 @@
 			<Button variant="outline" class="min-h-11" onclick={() => (addOpen = true)}>Add a lead</Button
 			>
 			<a
-				href={resolve('/agent/import/')}
+				href={resolve('agent/import/')}
 				class={buttonVariants({ variant: 'outline', class: 'min-h-11' })}>Import leads</a
 			>
 			{#if inquiryConfig}

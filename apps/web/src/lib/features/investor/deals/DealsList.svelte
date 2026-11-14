@@ -123,10 +123,10 @@
 			side.
 		</p>
 		<div class="mt-4 flex flex-wrap gap-2">
-			<a href={resolve('/investor/analyze/')} class={buttonVariants()}>Analyze a deal</a>
+			<a href={resolve('investor/analyze/')} class={buttonVariants()}>Analyze a deal</a>
 			<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus ?sample=1 -->
 			<a
-				href={`${resolve('/investor/analyze/')}?sample=1`}
+				href={`${resolve('investor/analyze/')}?sample=1`}
 				class={buttonVariants({ variant: 'outline' })}>Try a sample deal</a
 			>
 			<!-- eslint-enable svelte/no-navigation-without-resolve -->

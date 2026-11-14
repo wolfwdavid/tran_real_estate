@@ -87,7 +87,7 @@
 
 	function syncUrl() {
 		limit = PAGE;
-		const href = resolve('/agent/contacts/') + withParams(page.url.search, { list, q });
+		const href = resolve('agent/contacts/') + withParams(page.url.search, { list, q });
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- href is resolve() plus this page's own query string
 		replaceState(href, page.state);
 	}

@@ -57,7 +57,7 @@
 	);
 
 	const detailHref = $derived(
-		resolve('/renter/listing/') + '?' + new URLSearchParams({ id: item.listingId }).toString()
+		resolve('renter/listing/') + '?' + new URLSearchParams({ id: item.listingId }).toString()
 	);
 
 	const provenance = $derived<Provenance>({

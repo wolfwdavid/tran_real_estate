@@ -57,7 +57,7 @@
 		announce(`Deleted ${name}.`);
 		setFlash(`Deleted ${name}.`);
 		// Not awaited: the dialog closes at once and the Contacts page focuses its status line.
-		void goto(resolve('/agent/contacts/'));
+		void goto(resolve('agent/contacts/'));
 	}
 </script>
 

@@ -8,13 +8,13 @@
 	// (the PortalSwitcher pattern). The listing detail belongs to Search.
 	const links = [
 		{
-			href: resolve('/renter/'),
+			href: resolve('renter/'),
 			label: 'Search',
 			ids: ['/(app)/renter', '/(app)/renter/listing']
 		},
-		{ href: resolve('/renter/shortlist/'), label: 'Shortlist', ids: ['/(app)/renter/shortlist'] },
+		{ href: resolve('renter/shortlist/'), label: 'Shortlist', ids: ['/(app)/renter/shortlist'] },
 		{
-			href: resolve('/renter/affordability/'),
+			href: resolve('renter/affordability/'),
 			label: 'Affordability',
 			ids: ['/(app)/renter/affordability']
 		}

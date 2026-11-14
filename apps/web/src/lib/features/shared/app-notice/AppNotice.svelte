@@ -167,7 +167,7 @@
 					<p class="text-body">Your remembered keys stay locked until you enter your passphrase.</p>
 					<div class="flex flex-col gap-2 sm:flex-row sm:gap-4">
 						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-						<a href={`${resolve('/settings/')}#key-security`} class="text-body underline"
+						<a href={`${resolve('settings/')}#key-security`} class="text-body underline"
 							>Unlock in Settings</a
 						>
 					</div>

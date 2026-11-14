@@ -29,7 +29,7 @@
 	const dollars = (v: number | null | undefined) =>
 		v === null || v === undefined ? DASH : usd(Math.round(v) * 100);
 	const href = $derived(
-		`${resolve('/investor/market/')}?${new URLSearchParams({ zip }).toString()}`
+		`${resolve('investor/market/')}?${new URLSearchParams({ zip }).toString()}`
 	);
 </script>
 

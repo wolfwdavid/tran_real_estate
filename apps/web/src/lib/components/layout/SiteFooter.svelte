@@ -8,40 +8,40 @@
 	// `satisfies` (not a `: FooterLink[]` annotation) keeps the resolve() calls traceable for
 	// eslint svelte/no-navigation-without-resolve.
 	const portals = [
-		{ href: resolve('/renter/'), label: 'Renter', id: '/(app)/renter' },
-		{ href: resolve('/investor/'), label: 'Investor', id: '/(app)/investor' },
-		{ href: resolve('/agent/'), label: 'Agent', id: '/(app)/agent' }
+		{ href: resolve('renter/'), label: 'Renter', id: '/(app)/renter' },
+		{ href: resolve('investor/'), label: 'Investor', id: '/(app)/investor' },
+		{ href: resolve('agent/'), label: 'Agent', id: '/(app)/agent' }
 	] satisfies FooterLink[];
 	const learn = [
-		{ href: resolve('/for-renters/'), label: 'For renters', id: '/(marketing)/for-renters' },
-		{ href: resolve('/for-investors/'), label: 'For investors', id: '/(marketing)/for-investors' },
-		{ href: resolve('/for-agents/'), label: 'For agents', id: '/(marketing)/for-agents' }
+		{ href: resolve('for-renters/'), label: 'For renters', id: '/(marketing)/for-renters' },
+		{ href: resolve('for-investors/'), label: 'For investors', id: '/(marketing)/for-investors' },
+		{ href: resolve('for-agents/'), label: 'For agents', id: '/(marketing)/for-agents' }
 	] satisfies FooterLink[];
 	const tools = [
 		{
-			href: resolve('/tools/affordability/'),
+			href: resolve('tools/affordability/'),
 			label: 'Rent affordability',
 			id: '/(marketing)/tools/affordability'
 		},
-		{ href: resolve('/tools/cap-rate/'), label: 'Cap rate', id: '/(marketing)/tools/cap-rate' },
+		{ href: resolve('tools/cap-rate/'), label: 'Cap rate', id: '/(marketing)/tools/cap-rate' },
 		{
-			href: resolve('/tools/cash-on-cash/'),
+			href: resolve('tools/cash-on-cash/'),
 			label: 'Cash-on-cash return',
 			id: '/(marketing)/tools/cash-on-cash'
 		},
-		{ href: resolve('/tools/dscr/'), label: 'DSCR', id: '/(marketing)/tools/dscr' },
-		{ href: resolve('/tools/'), label: 'All calculators', id: '/(marketing)/tools' }
+		{ href: resolve('tools/dscr/'), label: 'DSCR', id: '/(marketing)/tools/dscr' },
+		{ href: resolve('tools/'), label: 'All calculators', id: '/(marketing)/tools' }
 	] satisfies FooterLink[];
 	const legal = [
-		{ href: resolve('/legal/privacy/'), label: 'Privacy', id: '/(marketing)/legal/privacy' },
-		{ href: resolve('/legal/terms/'), label: 'Terms', id: '/(marketing)/legal/terms' },
+		{ href: resolve('legal/privacy/'), label: 'Privacy', id: '/(marketing)/legal/privacy' },
+		{ href: resolve('legal/terms/'), label: 'Terms', id: '/(marketing)/legal/terms' },
 		{
-			href: resolve('/legal/fair-housing/'),
+			href: resolve('legal/fair-housing/'),
 			label: 'Fair Housing',
 			id: '/(marketing)/legal/fair-housing'
 		},
 		{
-			href: resolve('/legal/data-coverage/'),
+			href: resolve('legal/data-coverage/'),
 			label: 'Data coverage',
 			id: '/(marketing)/legal/data-coverage'
 		}
@@ -53,7 +53,7 @@
 		/^\/\(app\)\/(renter|investor|agent)(?:\/|$)/.exec(page.route.id ?? '')?.[1]
 	);
 	const feedbackHref = $derived(
-		resolve('/feedback/') + (feedbackPortal ? `?portal=${feedbackPortal}` : '')
+		resolve('feedback/') + (feedbackPortal ? `?portal=${feedbackPortal}` : '')
 	);
 
 	const current = (id: string) => (page.route.id === id ? 'page' : undefined);
@@ -93,7 +93,7 @@
 								<li><a href={l.href} aria-current={current(l.id)} class={link}>{l.label}</a></li>
 							{/each}
 							<li>
-								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve('/feedback/') + ?portal= -->
+								<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve('feedback/') + ?portal= -->
 								<a href={feedbackHref} aria-current={current('/(marketing)/feedback')} class={link}
 									>Send feedback</a
 								>

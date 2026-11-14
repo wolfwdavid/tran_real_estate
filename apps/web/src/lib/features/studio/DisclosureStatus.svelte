@@ -42,7 +42,7 @@
 				? composeDisclosure(profile, { variant: 'ad-inline' }).text
 				: ''
 	);
-	const profileHref = resolve('/agent/profile/');
+	const profileHref = resolve('agent/profile/');
 </script>
 
 <div class="flex flex-col gap-2" data-disclosure-status={mode}>

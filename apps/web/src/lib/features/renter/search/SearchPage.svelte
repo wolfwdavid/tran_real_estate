@@ -102,7 +102,7 @@
 		untrack(() => {
 			if (new URLSearchParams(page.url.search).toString() === qs) return;
 			// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own query string
-			replaceState(`${resolve('/renter/')}${qs ? `?${qs}` : ''}`, page.state);
+			replaceState(`${resolve('renter/')}${qs ? `?${qs}` : ''}`, page.state);
 		});
 	});
 

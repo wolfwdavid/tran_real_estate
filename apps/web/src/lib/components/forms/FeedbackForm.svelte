@@ -214,7 +214,7 @@
 			<div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
 				<button type="button" class={GHOST_BUTTON_CLASS} onclick={sendMore}>{copy.sendMore}</button>
 				<a
-					href={resolve('/')}
+					href={resolve('')}
 					class="text-primary underline underline-offset-3 hover:text-primary-hover"
 					>{copy.backHome}</a
 				>

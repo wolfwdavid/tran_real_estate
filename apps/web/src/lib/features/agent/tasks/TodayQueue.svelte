@@ -94,8 +94,8 @@
 	const ids = (ts: Task[]) => ts.map((t) => t.id);
 	const headingClass =
 		'font-display text-heading font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
-	const pipelineHref = resolve('/agent/pipeline/');
-	const todayHref = resolve('/agent/today/');
+	const pipelineHref = resolve('agent/pipeline/');
+	const todayHref = resolve('agent/today/');
 </script>
 
 {#snippet rows(group: GroupKey, tasks: Task[])}

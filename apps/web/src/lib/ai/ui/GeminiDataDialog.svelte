@@ -87,8 +87,7 @@
 			<Label for={checkId} class="cursor-pointer text-base leading-[1.6]">{DONT_ASK}</Label>
 		</div>
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-		<a href={`${resolve('/settings/')}#ai-drafting`} class="text-base underline">{OTHER_PROVIDER}</a
-		>
+		<a href={`${resolve('settings/')}#ai-drafting`} class="text-base underline">{OTHER_PROVIDER}</a>
 		<AlertDialog.Footer class="mt-2">
 			<Button bind:ref={cancelEl} onclick={cancel} class="w-full sm:w-auto">{DONT_SEND}</Button>
 			<Button variant="outline" onclick={send} class="w-full sm:w-auto">{SEND}</Button>

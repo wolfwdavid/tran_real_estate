@@ -73,8 +73,8 @@
 
 	let pendingFocus = $state<{ deleted: string; target: string | null } | null>(null);
 
-	const printHref = (id: string) => `${resolve('/print/snapshot/')}?id=${encodeURIComponent(id)}`;
-	const sampleHref = `${resolve('/print/snapshot/')}?id=sample`;
+	const printHref = (id: string) => `${resolve('print/snapshot/')}?id=${encodeURIComponent(id)}`;
+	const sampleHref = `${resolve('print/snapshot/')}?id=sample`;
 
 	async function removeOne(id: string): Promise<void> {
 		if (remove) return remove(id);

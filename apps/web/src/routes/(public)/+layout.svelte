@@ -31,7 +31,7 @@
 			</p>
 			<p>
 				<a
-					href={resolve('/legal/privacy/')}
+					href={resolve('legal/privacy/')}
 					class="inline-flex min-h-11 items-center text-foreground underline">Privacy</a
 				>
 			</p>

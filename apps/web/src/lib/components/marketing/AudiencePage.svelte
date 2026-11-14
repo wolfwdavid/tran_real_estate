@@ -23,9 +23,9 @@
 	// Typed literal paths keep resolve() checked. "Try sample data" adds ?source=sample, which the
 	// (app) layout turns into sample mode (UI-SPEC Planner Note 3).
 	const portalHref = {
-		renter: resolve('/renter/'),
-		investor: resolve('/investor/'),
-		agent: resolve('/agent/')
+		renter: resolve('renter/'),
+		investor: resolve('investor/'),
+		agent: resolve('agent/')
 	};
 	const href = $derived(portalHref[audience.portal]);
 

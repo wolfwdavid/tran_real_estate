@@ -292,7 +292,7 @@
 	const notice = $derived(
 		sel?.kind === 'sample' ? sampleNotice(sel.reason, st.providerLabel) : null
 	);
-	const settingsHref = (hash: string) => `${resolve('/settings/')}#${hash}`;
+	const settingsHref = (hash: string) => `${resolve('settings/')}#${hash}`;
 
 	// One reason line per distinct reason; each gated exit points at its own.
 	const EXITS: ExitKind[] = ['copy', 'email', 'marked-sent'];

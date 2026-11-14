@@ -89,7 +89,7 @@
 			It may have been deleted, or the link is from another browser. Contacts live only in the
 			browser where you added them.
 		</p>
-		<a href={resolve('/agent/contacts/')} class={buttonVariants({ class: 'mt-6 min-h-11' })}
+		<a href={resolve('agent/contacts/')} class={buttonVariants({ class: 'mt-6 min-h-11' })}
 			>Go to contacts</a
 		>
 	{:else if c}

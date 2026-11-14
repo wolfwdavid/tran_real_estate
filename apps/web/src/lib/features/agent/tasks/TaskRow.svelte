@@ -39,9 +39,7 @@
 	const done = $derived(task.status === 'done');
 	let pending = $state(false);
 
-	const contactHref = $derived(
-		resolve('/agent/contact/') + '?id=' + encodeURIComponent(contact.id)
-	);
+	const contactHref = $derived(resolve('agent/contact/') + '?id=' + encodeURIComponent(contact.id));
 
 	async function toggle(checked: boolean) {
 		if (pending || checked === done) return;

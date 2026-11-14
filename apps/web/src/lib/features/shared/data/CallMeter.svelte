@@ -151,7 +151,7 @@
 				<span class="text-label font-semibold text-foreground tabular-nums">{word}</span>
 			{/if}
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-			<a href={`${resolve('/settings/')}#rentcast-usage`} class={linkClass}>{USAGE_LINK}</a>
+			<a href={`${resolve('settings/')}#rentcast-usage`} class={linkClass}>{USAGE_LINK}</a>
 		</span>
 	</div>
 {/if}

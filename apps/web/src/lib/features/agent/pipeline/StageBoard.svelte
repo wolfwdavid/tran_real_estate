@@ -106,7 +106,7 @@
 	});
 
 	function changeList(next: SmartList) {
-		const href = `${resolve('/agent/pipeline/')}${withParams(location.search, { list: next })}`;
+		const href = `${resolve('agent/pipeline/')}${withParams(location.search, { list: next })}`;
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- href is resolve() plus this page's own ?list=
 		replaceState(href, page.state);
 		const n = counts[next] ?? 0;

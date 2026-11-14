@@ -367,7 +367,7 @@
 		{/each}
 		<p>
 			<a
-				href={resolve('/agent/profile/')}
+				href={resolve('agent/profile/')}
 				class="inline-flex min-h-11 items-center text-base leading-[1.6] text-foreground underline underline-offset-2"
 				>Edit logo and colors in your profile</a
 			>

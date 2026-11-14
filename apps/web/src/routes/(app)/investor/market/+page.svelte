@@ -190,7 +190,7 @@
 			<NotFoundPanel
 				title="Pick a ZIP code to see its dashboard"
 				body="Open a dashboard from your watched ZIP codes."
-				href={resolve('/investor/markets/')}
+				href={resolve('investor/markets/')}
 				linkLabel="Go to markets"
 			/>
 		</div>

@@ -78,11 +78,11 @@
 
 	const printHref = $derived(
 		deal && artifactId
-			? `${resolve('/print/memo/')}?id=${encodeURIComponent(deal.id)}&memo=${encodeURIComponent(artifactId)}`
+			? `${resolve('print/memo/')}?id=${encodeURIComponent(deal.id)}&memo=${encodeURIComponent(artifactId)}`
 			: null
 	);
 	const analysisOnlyHref = $derived(
-		deal ? `${resolve('/print/memo/')}?id=${encodeURIComponent(deal.id)}` : ''
+		deal ? `${resolve('print/memo/')}?id=${encodeURIComponent(deal.id)}` : ''
 	);
 	const printEnabled = $derived(canExit && artifactId !== null && printHref !== null);
 	// No href while the panel has an unchecked edit: a middle-click or new-tab open skips onPrint.
@@ -209,8 +209,8 @@
 				Memos are written from a saved deal. Analyze a property and save it, then come back here.
 			</p>
 			<p class="mt-2 flex flex-wrap gap-x-6">
-				<a href={resolve('/investor/analyze/')} class={inlineLink}>Analyze a deal</a>
-				<a href={resolve('/investor/deals/')} class={inlineLink}>Go to saved deals</a>
+				<a href={resolve('investor/analyze/')} class={inlineLink}>Analyze a deal</a>
+				<a href={resolve('investor/deals/')} class={inlineLink}>Go to saved deals</a>
 			</p>
 		</div>
 	</div>
@@ -219,7 +219,7 @@
 		<NotFoundPanel
 			title="We couldn't find that deal in this browser"
 			body="It may have been deleted, or saved in another browser. Deals are stored only where you saved them."
-			href={resolve('/investor/deals/')}
+			href={resolve('investor/deals/')}
 			linkLabel="Back to saved deals"
 		/>
 	</div>
@@ -254,7 +254,7 @@
 			<p>
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus a query string -->
 				<a
-					href={`${resolve('/investor/analyze/')}?id=${encodeURIComponent(deal.id)}`}
+					href={`${resolve('investor/analyze/')}?id=${encodeURIComponent(deal.id)}`}
 					class={buttonVariants({ variant: 'ghost' })}>Open in analyzer</a
 				>
 				<!-- eslint-enable svelte/no-navigation-without-resolve -->

@@ -8,10 +8,10 @@
 
 	// Typed literal paths keep resolve() checked.
 	const hrefs: Record<ToolSlug, string> = {
-		affordability: resolve('/tools/affordability/'),
-		'cap-rate': resolve('/tools/cap-rate/'),
-		'cash-on-cash': resolve('/tools/cash-on-cash/'),
-		dscr: resolve('/tools/dscr/')
+		affordability: resolve('tools/affordability/'),
+		'cap-rate': resolve('tools/cap-rate/'),
+		'cash-on-cash': resolve('tools/cash-on-cash/'),
+		dscr: resolve('tools/dscr/')
 	};
 	const slugs = TOOL_SLUGS.filter((s) => AFFORDABILITY_READY || s !== 'affordability');
 </script>

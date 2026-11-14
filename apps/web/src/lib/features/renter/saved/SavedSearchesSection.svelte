@@ -38,7 +38,7 @@
 
 	function viewHref(s: RenterSavedSearch): string {
 		const saved = `saved=${encodeURIComponent(s.id)}`;
-		return `${resolve('/renter/')}?${s.query ? `${s.query}&` : ''}${saved}`;
+		return `${resolve('renter/')}?${s.query ? `${s.query}&` : ''}${saved}`;
 	}
 
 	function startRename(s: RenterSavedSearch) {

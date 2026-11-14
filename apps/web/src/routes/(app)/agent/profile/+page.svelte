@@ -86,7 +86,7 @@
 				<BrandPreview profile={draft} />
 				<!-- The Studio's branded report starts from these details (09-UI-SPEC Planner Note 8). -->
 				<a
-					href={resolve('/agent/studio/snapshot/')}
+					href={resolve('agent/studio/snapshot/')}
 					class={buttonVariants({ variant: 'outline', class: 'mt-4 w-full gap-2 sm:w-auto' })}
 				>
 					<ChartColumn size={16} aria-hidden="true" />

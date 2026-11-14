@@ -132,7 +132,7 @@
 		s.savedAt ? formatRelative(Date.parse(s.savedAt), Math.max(now, Date.parse(s.savedAt))) : ''
 	);
 
-	const analyzePath = () => resolve('/investor/analyze/');
+	const analyzePath = () => resolve('investor/analyze/');
 	function setUrl(id: string | null) {
 		// eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus this page's own ?id=
 		replaceState(id ? `${analyzePath()}?id=${encodeURIComponent(id)}` : analyzePath(), page.state);
@@ -336,7 +336,7 @@
 		<NotFoundPanel
 			title="We couldn't find that deal in this browser"
 			body="It may have been deleted, or saved in another browser. Deals are stored only where you saved them."
-			href={resolve('/investor/deals/')}
+			href={resolve('investor/deals/')}
 			linkLabel="Back to saved deals"
 		/>
 	</div>
@@ -361,7 +361,7 @@
 			{#if !s.unsaved}
 				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus the deal's ?id= -->
 				<a
-					href={`${resolve('/investor/memo/')}?id=${encodeURIComponent(s.dealId)}`}
+					href={`${resolve('investor/memo/')}?id=${encodeURIComponent(s.dealId)}`}
 					class={buttonVariants({ variant: 'outline' })}>Draft a memo</a
 				>
 				<!-- eslint-enable svelte/no-navigation-without-resolve -->

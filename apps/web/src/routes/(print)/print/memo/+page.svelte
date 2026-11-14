@@ -41,8 +41,8 @@
 	const analysis = $derived(deal ? analyze(deal.inputs) : null);
 	const backHref = $derived(
 		dealId
-			? `${resolve('/investor/memo/')}?id=${encodeURIComponent(dealId)}`
-			: resolve('/investor/memo/')
+			? `${resolve('investor/memo/')}?id=${encodeURIComponent(dealId)}`
+			: resolve('investor/memo/')
 	);
 	const memoMeta = $derived(
 		memo
@@ -163,7 +163,7 @@
 				<NotFoundPanel
 					title="We couldn't find that deal in this browser"
 					body="It may have been deleted, or saved in another browser. Deals are stored only where you saved them."
-					href={resolve('/investor/deals/')}
+					href={resolve('investor/deals/')}
 					linkLabel="Back to saved deals"
 				/>
 			</div>

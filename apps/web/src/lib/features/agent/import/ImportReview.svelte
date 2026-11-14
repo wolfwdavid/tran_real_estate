@@ -433,7 +433,7 @@
 			{result.added} added, {result.updated} updated, {result.skipped} skipped.
 		</p>
 		<div class="mt-4 flex flex-wrap gap-3">
-			<a href={resolve('/agent/pipeline/')} class={buttonVariants({ variant: 'outline' })}
+			<a href={resolve('agent/pipeline/')} class={buttonVariants({ variant: 'outline' })}
 				>Open your pipeline</a
 			>
 			<Button variant="ghost" class="min-h-11" onclick={onmore}>Import more</Button>

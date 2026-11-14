@@ -47,7 +47,7 @@
 	const bg = $derived(sample ? 'bg-accent-surface' : 'bg-background');
 	const linkClass =
 		'inline-flex min-h-11 items-center text-body text-primary underline underline-offset-3 hover:text-primary-hover';
-	const href = (link: SettingsLink) => `${resolve('/settings/')}${link.hash}`;
+	const href = (link: SettingsLink) => `${resolve('settings/')}${link.hash}`;
 </script>
 
 {#snippet settingsLink(link: SettingsLink)}

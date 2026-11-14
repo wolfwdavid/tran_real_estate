@@ -143,7 +143,7 @@
 					</p>
 				</div>
 				<a
-					href={resolve('/agent/profile/')}
+					href={resolve('agent/profile/')}
 					class={buttonVariants({ variant: 'outline', class: 'min-h-11 self-start' })}
 					>Finish your profile</a
 				>
@@ -206,7 +206,7 @@
 				<SampleChip />
 				<span
 					>Using a sample agent profile for this sample contact. <a
-						href={resolve('/agent/profile/')}
+						href={resolve('agent/profile/')}
 						class="text-primary underline">Set up your profile</a
 					> to use your own details.</span
 				>

@@ -69,7 +69,7 @@
 	const listed = $derived(relativeListed(row.listedDate, now));
 	const sqft = $derived(formatSqft(row.squareFootage));
 	const href = $derived(
-		`${resolve('/renter/listing/')}?${new URLSearchParams({ id: row.id }).toString()}`
+		`${resolve('renter/listing/')}?${new URLSearchParams({ id: row.id }).toString()}`
 	);
 
 	const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;

@@ -162,7 +162,7 @@
 		await save();
 	}
 
-	const openHref = (id: string) => resolve('/agent/contact/') + '?id=' + encodeURIComponent(id);
+	const openHref = (id: string) => resolve('agent/contact/') + '?id=' + encodeURIComponent(id);
 	const labelClass = 'text-base leading-[1.6] font-semibold';
 	const dtClass = 'text-label font-semibold text-muted-foreground';
 	const linkClass =

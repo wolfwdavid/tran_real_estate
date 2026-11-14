@@ -91,7 +91,7 @@ export function parseCompareIds(search: string): string[] {
 }
 
 export function compareHref(ids: readonly string[]): string {
-	return `${resolve('/investor/compare/')}?ids=${ids.map(encodeURIComponent).join(',')}`;
+	return `${resolve('investor/compare/')}?ids=${ids.map(encodeURIComponent).join(',')}`;
 }
 
 export function droppedNote(n: number): string {

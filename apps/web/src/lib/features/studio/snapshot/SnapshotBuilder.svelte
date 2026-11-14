@@ -383,7 +383,7 @@
 			await autosave.flush();
 			announce(SAVED_ANNOUNCEMENT);
 			// eslint-disable-next-line svelte/no-navigation-without-resolve -- built from resolve()
-			await goto(`${resolve('/print/snapshot/')}?id=${encodeURIComponent(id)}`);
+			await goto(`${resolve('print/snapshot/')}?id=${encodeURIComponent(id)}`);
 		} catch {
 			saveFailed = true;
 		} finally {

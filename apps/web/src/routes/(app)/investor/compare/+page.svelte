@@ -114,7 +114,7 @@
 				<p class="mt-2 text-base leading-[1.6] text-foreground">
 					Choose 2 or 3 deals from your saved deals.
 				</p>
-				<a href={resolve('/investor/deals/')} class="mt-4 {buttonVariants({ variant: 'outline' })}"
+				<a href={resolve('investor/deals/')} class="mt-4 {buttonVariants({ variant: 'outline' })}"
 					>Go to saved deals</a
 				>
 			</section>

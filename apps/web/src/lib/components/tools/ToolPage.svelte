@@ -24,18 +24,18 @@
 
 	// Typed literal maps keep every resolve() call checked.
 	const primaryHrefs = {
-		'/investor/analyze/': resolve('/investor/analyze/'),
-		'/renter/': resolve('/renter/')
+		'/investor/analyze/': resolve('investor/analyze/'),
+		'/renter/': resolve('renter/')
 	};
 	const sampleHrefs = {
-		'/investor/': `${resolve('/investor/')}?source=sample`,
-		'/renter/': `${resolve('/renter/')}?source=sample`
+		'/investor/': `${resolve('investor/')}?source=sample`,
+		'/renter/': `${resolve('renter/')}?source=sample`
 	};
 	const toolHrefs: Record<ToolSlug, string> = {
-		affordability: resolve('/tools/affordability/'),
-		'cap-rate': resolve('/tools/cap-rate/'),
-		'cash-on-cash': resolve('/tools/cash-on-cash/'),
-		dscr: resolve('/tools/dscr/')
+		affordability: resolve('tools/affordability/'),
+		'cap-rate': resolve('tools/cap-rate/'),
+		'cash-on-cash': resolve('tools/cash-on-cash/'),
+		dscr: resolve('tools/dscr/')
 	};
 
 	// ButtonLink's classes, inlined: ButtonLink and its Lucide arrow are two extra chunks on a
@@ -154,7 +154,7 @@
 		<!-- eslint-enable svelte/no-navigation-without-resolve -->
 		<li>
 			<a
-				href={resolve('/tools/')}
+				href={resolve('tools/')}
 				class="inline-flex min-h-11 items-center font-semibold text-primary underline decoration-1 underline-offset-[3px]"
 				>{C.allCalculators}</a
 			>

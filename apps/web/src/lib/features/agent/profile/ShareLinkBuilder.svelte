@@ -78,7 +78,7 @@
 	const blockers = $derived(shareLinkBlockers(profile));
 	const url = $derived.by(() => {
 		if (!mounted || !profile || blockers.length > 0) return null;
-		const page = new URL(resolve('/agent/inquire/'), location.origin).href;
+		const page = new URL(resolve('agent/inquire/'), location.origin).href;
 		return buildInquiryUrl(page, inquiryConfigFromProfile(profile, { property }));
 	});
 
@@ -142,8 +142,8 @@
 	const keyDescribedBy = $derived(
 		[id('key-help'), keyError ? id('key-error') : ''].filter(Boolean).join(' ')
 	);
-	const demoHref = resolve('/agent/inquire/') + '?demo=1';
-	const importHref = resolve('/agent/import/') + '#paste';
+	const demoHref = resolve('agent/inquire/') + '?demo=1';
+	const importHref = resolve('agent/import/') + '#paste';
 	const helpClass = 'text-label text-muted-foreground';
 </script>
 

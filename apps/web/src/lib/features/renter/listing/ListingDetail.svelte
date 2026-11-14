@@ -46,7 +46,7 @@
 	/** The mapped PriceEvent list back into RentCast's date-keyed shape for PriceHistory. */
 	const history = $derived<RawHistory>(toRawHistory(row.history));
 
-	const searchHref = resolve('/renter/');
+	const searchHref = resolve('renter/');
 
 	/** Back to the results the renter came from (keeps their filters and scroll), else to Search. */
 	function back(e: MouseEvent): void {

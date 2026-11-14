@@ -12,16 +12,16 @@
 	// PortalSwitcher / RenterNav pattern). The contact detail belongs to Contacts; the /agent/ home
 	// marks no item. Studio (Phase 9) is current on the hub and on every /agent/studio/* tool.
 	const links = [
-		{ href: resolve('/agent/today/'), label: 'Today', ids: ['/(app)/agent/today'] },
-		{ href: resolve('/agent/pipeline/'), label: 'Pipeline', ids: ['/(app)/agent/pipeline'] },
+		{ href: resolve('agent/today/'), label: 'Today', ids: ['/(app)/agent/today'] },
+		{ href: resolve('agent/pipeline/'), label: 'Pipeline', ids: ['/(app)/agent/pipeline'] },
 		{
-			href: resolve('/agent/contacts/'),
+			href: resolve('agent/contacts/'),
 			label: 'Contacts',
 			ids: ['/(app)/agent/contacts', '/(app)/agent/contact']
 		},
-		{ href: resolve('/agent/import/'), label: 'Import', ids: ['/(app)/agent/import'] },
-		{ href: resolve('/agent/profile/'), label: 'Profile', ids: ['/(app)/agent/profile'] },
-		{ href: resolve('/agent/studio/'), label: 'Studio', ids: [STUDIO_ID], prefix: `${STUDIO_ID}/` }
+		{ href: resolve('agent/import/'), label: 'Import', ids: ['/(app)/agent/import'] },
+		{ href: resolve('agent/profile/'), label: 'Profile', ids: ['/(app)/agent/profile'] },
+		{ href: resolve('agent/studio/'), label: 'Studio', ids: [STUDIO_ID], prefix: `${STUDIO_ID}/` }
 	];
 
 	const current = ({ ids, prefix }: { ids: string[]; prefix?: string }) => {

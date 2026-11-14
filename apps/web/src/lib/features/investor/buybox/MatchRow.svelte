@@ -151,7 +151,7 @@
 				confirmCap: async () => true,
 				writeDraft
 			});
-			await goto(resolve('/investor/analyze/'));
+			await goto(resolve('investor/analyze/'));
 		} catch (error) {
 			failure = { error: asGatewayError(error), from: 'deep' };
 			void refreshDeepCost();

@@ -89,6 +89,6 @@
 		/>
 		<span>{NO_KEY_LINE}</span>
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-		<a href={`${resolve('/settings/')}${link.hash}`} class={linkClass}>{link.text}</a>
+		<a href={`${resolve('settings/')}${link.hash}`} class={linkClass}>{link.text}</a>
 	</p>
 {/if}

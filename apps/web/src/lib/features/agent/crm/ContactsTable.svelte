@@ -23,7 +23,7 @@
 		nextTask: (contact: Contact) => Task | null;
 	} = $props();
 
-	const href = (c: Contact) => resolve('/agent/contact/') + '?id=' + encodeURIComponent(c.id);
+	const href = (c: Contact) => resolve('agent/contact/') + '?id=' + encodeURIComponent(c.id);
 	const th = 'py-2 pr-4 text-left font-semibold whitespace-nowrap';
 </script>
 

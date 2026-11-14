@@ -24,11 +24,11 @@
 	const HASH = '#get-started';
 
 	const portalHref: Record<OnboardingPortal, string> = {
-		renter: resolve('/renter/'),
-		investor: resolve('/investor/'),
-		agent: resolve('/agent/')
+		renter: resolve('renter/'),
+		investor: resolve('investor/'),
+		agent: resolve('agent/')
 	};
-	const setupHref = (p: OnboardingPortal) => `${resolve('/setup/rentcast/')}?portal=${p}`;
+	const setupHref = (p: OnboardingPortal) => `${resolve('setup/rentcast/')}?portal=${p}`;
 
 	let view = $state<OnboardingState>({ status: 'new' });
 	let TourPanel = $state<typeof TourPanelType>();

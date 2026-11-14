@@ -43,7 +43,7 @@
 	const cards = [
 		{
 			key: 'listing',
-			href: resolve('/agent/studio/listing/'),
+			href: resolve('agent/studio/listing/'),
 			title: 'Listing description',
 			description:
 				'Turn the facts you enter into a description in your tone, checked before you copy it.',
@@ -52,7 +52,7 @@
 		},
 		{
 			key: 'social',
-			href: resolve('/agent/studio/social/'),
+			href: resolve('agent/studio/social/'),
 			title: 'Social post pack',
 			description:
 				'One brief becomes an Instagram, Facebook, and LinkedIn post, each with your disclosure and a character count.',
@@ -61,7 +61,7 @@
 		},
 		{
 			key: 'reel',
-			href: resolve('/agent/studio/reel/'),
+			href: resolve('agent/studio/reel/'),
 			title: 'Reel script',
 			description:
 				'A short founder-story video script with timed beats, captions, a B-roll list, and an AI-disclosure checklist.',
@@ -70,7 +70,7 @@
 		},
 		{
 			key: 'snapshot',
-			href: resolve('/agent/studio/snapshot/'),
+			href: resolve('agent/studio/snapshot/'),
 			title: 'Market Snapshot',
 			description: 'A branded market report for a ZIP code that you print or save as a PDF.',
 			linkText: 'Build a Market Snapshot',
@@ -78,7 +78,7 @@
 		}
 	] as const satisfies readonly { key: CardKey; [k: string]: unknown }[];
 
-	const sampleReportHref = `${resolve('/print/snapshot/')}?id=sample`;
+	const sampleReportHref = `${resolve('print/snapshot/')}?id=sample`;
 
 	// null = still loading. A count that cannot be read shows an empty meta line rather than a
 	// wrong "No drafts yet"; the tool page shows the real Draft history.

@@ -26,7 +26,7 @@
 	} = $props();
 
 	const nameId = $derived(`contact-${contact.id}-name`);
-	const href = $derived(resolve('/agent/contact/') + '?id=' + encodeURIComponent(contact.id));
+	const href = $derived(resolve('agent/contact/') + '?id=' + encodeURIComponent(contact.id));
 	const meta = $derived.by(() => {
 		if (moving) return 'Moving…';
 		const last = contact.lastContactedAt

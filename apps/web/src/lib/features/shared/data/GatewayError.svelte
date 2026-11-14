@@ -117,7 +117,7 @@
 
 {#snippet checkKeyLink()}
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-	<a href={`${resolve('/settings/')}#api-keys`} class={outlineLink}>{ACTION_LABELS.checkKey}</a>
+	<a href={`${resolve('settings/')}#api-keys`} class={outlineLink}>{ACTION_LABELS.checkKey}</a>
 {/snippet}
 
 <section
@@ -176,7 +176,7 @@
 						>{ACTION_LABELS.continuePastCap}</Button
 					>
 					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
-					<a href={`${resolve('/settings/')}#rentcast-usage`} class={textLink}
+					<a href={`${resolve('settings/')}#rentcast-usage`} class={textLink}
 						>{ACTION_LABELS.changeCap}</a
 					>
 				{:else if error.kind === 'NoResults'}

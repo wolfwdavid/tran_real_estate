@@ -50,7 +50,7 @@
 					<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus the ?id= query, built as ListingCard builds it -->
 					<a
 						data-preview-link
-						href={`${resolve('/renter/listing/')}?${new URLSearchParams({ id: r.id }).toString()}`}
+						href={`${resolve('renter/listing/')}?${new URLSearchParams({ id: r.id }).toString()}`}
 						class="inline-flex min-h-11 items-center text-base leading-[1.6] font-semibold text-foreground underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 						>{streetLine(r)}</a
 					>

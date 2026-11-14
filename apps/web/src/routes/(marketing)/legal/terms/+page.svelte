@@ -42,7 +42,7 @@
 	<h2>Fair Housing</h2>
 	<p>
 		You agree not to use the tools to discriminate against anyone. Read our <a
-			href={resolve('/legal/fair-housing/')}>Fair Housing statement</a
+			href={resolve('legal/fair-housing/')}>Fair Housing statement</a
 		>.
 	</p>
 

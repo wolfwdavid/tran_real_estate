@@ -116,7 +116,7 @@
 			<p class="text-base leading-[1.6] text-muted-foreground">
 				Save listings from your search results to compare them and track where each one stands.
 			</p>
-			<ButtonLink href={resolve('/renter/')}>Search rentals</ButtonLink>
+			<ButtonLink href={resolve('renter/')}>Search rentals</ButtonLink>
 		</section>
 	{:else}
 		<div class="mt-8 grid gap-6" data-shortlist-board>

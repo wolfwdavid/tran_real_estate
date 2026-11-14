@@ -106,7 +106,7 @@
 		provenance={dataSourcesSentence(record)}
 		disclaimer={SHORT_LABEL}
 		disclaimerFull={fullLabel(record.fetchedAt, withNotes ? { agentName } : null)}
-		backHref={resolve('/agent/studio/snapshot/')}
+		backHref={resolve('agent/studio/snapshot/')}
 		backLabel="Back to Studio"
 		{onprint}
 		{preparing}

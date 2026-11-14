@@ -18,7 +18,7 @@
 
 <div class="mx-auto max-w-page px-6 pb-12 md:px-8 md:pb-16">
 	<a
-		href={resolve('/agent/studio/')}
+		href={resolve('agent/studio/')}
 		class={buttonVariants({ variant: 'ghost', class: 'h-11 gap-2 px-2' })}
 	>
 		<ArrowLeft size={16} aria-hidden="true" />

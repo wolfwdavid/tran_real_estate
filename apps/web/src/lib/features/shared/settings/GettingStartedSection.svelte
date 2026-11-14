@@ -8,7 +8,7 @@
 	import { readOnboarding, writeOnboarding } from '$lib/components/onboarding/onboarding-state';
 	import { SETTINGS_COPY as COPY } from '$lib/content/onboarding';
 
-	const tourHref = `${resolve('/')}#get-started`;
+	const tourHref = `${resolve('')}#get-started`;
 
 	function resetTour() {
 		writeOnboarding({ status: 'new', lastPortal: readOnboarding().lastPortal });
@@ -22,11 +22,11 @@
 	<p class="mt-4 text-body">{COPY.paragraph}</p>
 	<div class="mt-6 flex flex-col gap-2 sm:flex-row sm:gap-4">
 		<ButtonLink href={tourHref} variant="secondary" onclick={resetTour}>{COPY.showTour}</ButtonLink>
-		<ButtonLink href={resolve('/setup/rentcast/')} variant="secondary">{COPY.setupKey}</ButtonLink>
+		<ButtonLink href={resolve('setup/rentcast/')} variant="secondary">{COPY.setupKey}</ButtonLink>
 	</div>
 	<p class="mt-6 text-body">
 		{COPY.feedbackBefore}<a
-			href={resolve('/feedback/')}
+			href={resolve('feedback/')}
 			class="text-primary underline underline-offset-3 hover:text-primary-hover"
 			>{COPY.feedbackLink}</a
 		>{COPY.feedbackAfter}

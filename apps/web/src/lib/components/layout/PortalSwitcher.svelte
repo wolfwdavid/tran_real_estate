@@ -15,11 +15,11 @@
 	let button: HTMLButtonElement | undefined = $state();
 
 	const portals = [
-		{ href: resolve('/renter/'), label: 'Renter', id: '/(app)/renter' },
-		{ href: resolve('/investor/'), label: 'Investor', id: '/(app)/investor' },
-		{ href: resolve('/agent/'), label: 'Agent', id: '/(app)/agent' }
+		{ href: resolve('renter/'), label: 'Renter', id: '/(app)/renter' },
+		{ href: resolve('investor/'), label: 'Investor', id: '/(app)/investor' },
+		{ href: resolve('agent/'), label: 'Agent', id: '/(app)/agent' }
 	];
-	const settings = { href: resolve('/settings/'), label: 'Settings', id: '/(app)/settings' };
+	const settings = { href: resolve('settings/'), label: 'Settings', id: '/(app)/settings' };
 
 	// Compare route ids so aria-current is already present in the prerendered HTML under any base.
 	// A portal's own sub-pages (e.g. /renter/shortlist/) mark it as the current section with
@@ -57,7 +57,7 @@
 	data-hydrated={hydrated || undefined}
 >
 	<a
-		href={resolve('/')}
+		href={resolve('')}
 		class="mr-auto inline-flex min-h-16 items-center font-display text-body font-semibold sm:text-heading"
 		>Tran Real Estate Tools</a
 	>

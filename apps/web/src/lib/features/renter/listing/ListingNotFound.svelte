@@ -51,7 +51,7 @@
 
 	<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
 		<a
-			href={resolve('/renter/')}
+			href={resolve('renter/')}
 			class="inline-flex min-h-12 items-center justify-center gap-1 rounded-md border border-border-strong px-6 text-base leading-[1.6] font-semibold text-foreground hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 		>
 			<Search size={16} aria-hidden="true" />

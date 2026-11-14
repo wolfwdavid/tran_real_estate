@@ -141,11 +141,11 @@
 	<div class="mt-auto flex flex-wrap gap-2">
 		<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus the deal's ?id= -->
 		<a
-			href={`${resolve('/investor/analyze/')}${idQuery}`}
+			href={`${resolve('investor/analyze/')}${idQuery}`}
 			class={buttonVariants({ variant: 'outline' })}
 			>Open<span class="sr-only"> {record.name}</span></a
 		>
-		<a href={`${resolve('/investor/memo/')}${idQuery}`} class={buttonVariants({ variant: 'ghost' })}
+		<a href={`${resolve('investor/memo/')}${idQuery}`} class={buttonVariants({ variant: 'ghost' })}
 			>Memo<span class="sr-only"> for {record.name}</span></a
 		>
 		<!-- eslint-enable svelte/no-navigation-without-resolve -->

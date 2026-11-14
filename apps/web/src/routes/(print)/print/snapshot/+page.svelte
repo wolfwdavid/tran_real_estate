@@ -22,7 +22,7 @@
 	let logoUrl = $state<string | null>(null);
 	let preparing = $state(true);
 
-	const studioHref = resolve('/agent/studio/snapshot/');
+	const studioHref = resolve('agent/studio/snapshot/');
 
 	async function printNow(): Promise<void> {
 		await document.fonts.ready;

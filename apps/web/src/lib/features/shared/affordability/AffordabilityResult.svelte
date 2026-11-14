@@ -99,7 +99,7 @@
 			: ''
 	);
 
-	const searchHref = $derived(result ? resolve('/renter/') + '?max=' + result.high : '');
+	const searchHref = $derived(result ? resolve('renter/') + '?max=' + result.high : '');
 
 	function onRentInput(event: Event & { currentTarget: HTMLInputElement }) {
 		const value = event.currentTarget.valueAsNumber;

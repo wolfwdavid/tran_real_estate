@@ -17,7 +17,7 @@
 
 	// The known model id is wrapped in <code>; everything else is plain text.
 	const parts = $derived(model ? body.split(model) : [body]);
-	const href = $derived(action ? `${resolve('/settings/')}#${action.hash}` : '');
+	const href = $derived(action ? `${resolve('settings/')}#${action.hash}` : '');
 </script>
 
 <Alert variant="destructive" role={null} data-generation-error="">

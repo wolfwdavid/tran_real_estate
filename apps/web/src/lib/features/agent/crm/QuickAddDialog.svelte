@@ -134,7 +134,7 @@
 		await save();
 	}
 
-	const openHref = (id: string) => resolve('/agent/contact/') + '?id=' + encodeURIComponent(id);
+	const openHref = (id: string) => resolve('agent/contact/') + '?id=' + encodeURIComponent(id);
 </script>
 
 <Dialog.Root bind:open>

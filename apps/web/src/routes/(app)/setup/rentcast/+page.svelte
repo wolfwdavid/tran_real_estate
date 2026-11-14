@@ -38,9 +38,9 @@
 	const dataRuntime = getDataRuntime();
 
 	const PORTAL_HREFS: Record<OnboardingPortal, string> = {
-		renter: resolve('/renter/'),
-		investor: resolve('/investor/'),
-		agent: resolve('/agent/')
+		renter: resolve('renter/'),
+		investor: resolve('investor/'),
+		agent: resolve('agent/')
 	};
 
 	let portal = $state<OnboardingPortal>('renter');
@@ -122,7 +122,7 @@
 
 	const numeral =
 		'flex size-10 shrink-0 items-center justify-center rounded-full border border-primary font-display text-body font-semibold text-primary tabular-nums';
-	const keySecurityHref = `${resolve('/settings/')}#key-security`;
+	const keySecurityHref = `${resolve('settings/')}#key-security`;
 	const inlineLink = 'text-primary underline underline-offset-3 hover:text-primary-hover';
 </script>
 
@@ -193,9 +193,9 @@
 				</div>
 				<p class="mt-4 text-body">{COPY.step2.paragraph}</p>
 				<div class="mt-6">
-					<ProviderKeyCard provider={rentcast} settingsBase={resolve('/settings/')} />
+					<ProviderKeyCard provider={rentcast} settingsBase={resolve('settings/')} />
 				</div>
-				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve('/settings/') + #fragment -->
+				<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve('settings/') + #fragment -->
 				<p class="mt-4 text-label text-muted-foreground">
 					{COPY.step2.storageBefore}<a href={keySecurityHref} class={inlineLink}
 						>{COPY.step2.storageLink}</a

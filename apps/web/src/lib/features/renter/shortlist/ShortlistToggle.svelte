@@ -39,7 +39,7 @@
 	let buttonEl = $state<HTMLElement | null>(null);
 
 	const shortlistHref = $derived(
-		resolve('/renter/shortlist/') + '#item-' + encodeURIComponent(row.id)
+		resolve('renter/shortlist/') + '#item-' + encodeURIComponent(row.id)
 	);
 
 	const REMOVE_TITLE = 'Remove this listing from your shortlist?';

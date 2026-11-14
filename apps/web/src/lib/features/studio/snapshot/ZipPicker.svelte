@@ -433,7 +433,7 @@
 						ZIP code.
 						<!-- eslint-disable svelte/no-navigation-without-resolve -- resolve() plus a same-page fragment -->
 						<a
-							href={`${resolve('/settings/')}#api-keys`}
+							href={`${resolve('settings/')}#api-keys`}
 							class="inline-flex min-h-11 items-center text-foreground underline underline-offset-2"
 							>Add a RentCast key</a
 						>

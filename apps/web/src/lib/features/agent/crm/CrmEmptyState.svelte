@@ -30,8 +30,7 @@
 	body="Add your first lead, import a list, or load sample contacts to see how the pipeline works. Everything stays in this browser."
 >
 	<Button class="min-h-11" onclick={onaddlead}>Add a lead</Button>
-	<a href={resolve('/agent/import/')} class={buttonVariants({ variant: 'outline' })}>Import leads</a
-	>
+	<a href={resolve('agent/import/')} class={buttonVariants({ variant: 'outline' })}>Import leads</a>
 	<Button variant="outline" class="min-h-11" disabled={loading} onclick={load}>
 		{loading ? 'Loading…' : 'Load sample contacts'}
 	</Button>
