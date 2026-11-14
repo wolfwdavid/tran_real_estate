@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { afterNavigate, replaceState } from '$app/navigation';
 	import { page } from '$app/state';
 	import { announce } from '$lib/components/a11y/announcer.svelte';

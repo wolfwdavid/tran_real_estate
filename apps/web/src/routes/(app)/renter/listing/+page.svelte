@@ -7,7 +7,7 @@
 	// only). The single spending path is the "Look it up again (1 call)" click handler, plus the live
 	// header's "Refresh (1 call)"; both go through runtime.requestSpend so the cap prompt applies.
 	import { untrack } from 'svelte';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import type { Listing } from '@tran/core/listings';
 	import {
