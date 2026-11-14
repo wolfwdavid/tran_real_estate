@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { files } from '../../tooling/vitest/lanes';
+import kitOptions from './kit.options.js';
 import {
 	resolveAnalytics,
 	resolveContactEmail,
@@ -12,7 +13,7 @@ import {
 } from './src/lib/site-config.js';
 
 // Kit's Vite plugin pins Vite's root to process.cwd() at import time. Under the root Vitest
-// `projects` harness (cwd = repo root) it would then look for svelte.config.js and src/app.html
+// `projects` harness (cwd = repo root) it would then look for src/app.html
 // in the wrong directory and hide this package's tests. Unit tests only need the Svelte compiler
 // and the $lib alias, so they use the plain plugin; dev, build and check keep the Kit plugin.
 const isVitest = process.env.VITEST === 'true';
@@ -22,7 +23,7 @@ const isVitest = process.env.VITEST === 'true';
 const analytics = resolveAnalytics();
 
 export default defineConfig({
-	plugins: isVitest ? [svelte()] : [tailwindcss(), sveltekit()],
+	plugins: isVitest ? [svelte()] : [tailwindcss(), sveltekit(kitOptions)],
 	resolve: isVitest
 		? {
 				alias: {

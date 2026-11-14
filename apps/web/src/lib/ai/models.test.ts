@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { pricingAt } from '@tran/core/ai';
+import kitOptions from '../../../kit.options.js';
 import { buildCsp } from '../csp-policy.js';
+import { resolveAnalytics } from '../site-config.js';
 import {
 	PROVIDERS,
 	PROVIDER_LABELS,
@@ -102,12 +104,20 @@ describe('pricingFor', () => {
 });
 
 describe('CSP coverage', () => {
-	// svelte.config.js builds its policy with buildCsp (src/lib/csp-policy.js), the single source.
+	// kit.options.js builds its policy with buildCsp (src/lib/csp-policy.js), the single source.
 	it('every registry host is listed in the CSP connect-src', () => {
 		const connect = buildCsp().directives['connect-src'];
 		for (const id of PROVIDER_ORDER) {
 			expect(connect, id).toContain(`https://${PROVIDERS[id].host}`);
 		}
+	});
+
+	it('every registry host is in the connect-src that kit.options.js ships', () => {
+		const connect = kitOptions.csp?.directives?.['connect-src'] ?? [];
+		for (const id of PROVIDER_ORDER) {
+			expect(connect, id).toContain(`https://${PROVIDERS[id].host}`);
+		}
+		expect(kitOptions.csp).toEqual(buildCsp({ analyticsHost: resolveAnalytics().host }));
 	});
 });
 

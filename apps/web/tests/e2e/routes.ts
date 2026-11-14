@@ -41,7 +41,7 @@ export const APP_ROUTES = [
 /**
  * The investor portal's sub-pages (Phase 7). `investor/` itself stays in APP_ROUTES. Compare, memo
  * and market take query params read in onMount (?ids=, ?id=, ?zip=), so they are prerendered
- * shells listed in svelte.config.js prerender.entries.
+ * shells listed in kit.options.js prerender.entries.
  */
 export const INVESTOR_ROUTES = [
 	'investor/analyze/',
@@ -54,7 +54,7 @@ export const INVESTOR_ROUTES = [
 ] as const;
 /**
  * The agent portal's sub-pages (Phase 8). `agent/` itself stays in APP_ROUTES. The contact detail
- * reads ?id= in onMount, so it is a prerendered shell listed in svelte.config.js prerender.entries.
+ * reads ?id= in onMount, so it is a prerendered shell listed in kit.options.js prerender.entries.
  */
 export const AGENT_ROUTES = [
 	'agent/today/',

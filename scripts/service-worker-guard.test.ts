@@ -1,12 +1,13 @@
 // Static guard over apps/web/src/service-worker.ts. The worker runs on an origin that holds
 // provider keys, so its shape is pinned here: it may only answer same-origin GETs for files in
 // the build's own precache list, and it may never write to a cache at runtime, take over open
-// pages early, or load code from anywhere. The svelte.config.js dotfile filter is checked by
-// importing the real config and calling it.
+// pages early, or load code from anywhere. The precache dotfile filter is checked by
+// calling apps/web/src/lib/precache-filter.ts, the pure filter the worker applies.
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
+import { isPrecacheable } from '../apps/web/src/lib/precache-filter';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SW_PATH = join(REPO_ROOT, 'apps', 'web', 'src', 'service-worker.ts');
@@ -63,16 +64,13 @@ describe('service-worker.ts shape', () => {
 	});
 });
 
-describe('svelte.config.js serviceWorker.files dotfile filter', () => {
-	test('excludes dotfiles anywhere in the path and keeps real assets', async () => {
-		const { default: config } = await import('../apps/web/svelte.config.js');
-		const files = config.kit?.serviceWorker?.files;
-		expect(typeof files).toBe('function');
+describe('precache dotfile filter', () => {
+	test('excludes dotfiles anywhere in the path and keeps real assets', () => {
 		for (const f of ['.nojekyll', 'sub/.hidden', '.well-known/x', 'sub\\.hidden']) {
-			expect(files!(f), f).toBe(false);
+			expect(isPrecacheable(f), f).toBe(false);
 		}
 		for (const f of ['frame-guard.js', 'icons/icon-192.png', 'manifest.webmanifest']) {
-			expect(files!(f), f).toBe(true);
+			expect(isPrecacheable(f), f).toBe(true);
 		}
 	});
 });

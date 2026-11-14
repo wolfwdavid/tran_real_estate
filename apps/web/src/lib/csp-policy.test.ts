@@ -1,7 +1,9 @@
 // The CSP builder must reproduce the pre-Phase-10 policy byte-for-byte when no analytics host is
 // configured, and add exactly one connect-src origin when one is (10-RESEARCH Pattern 11).
 import { describe, expect, test } from 'vitest';
+import kitOptions from '../../kit.options.js';
 import { buildCsp } from './csp-policy.js';
+import { resolveAnalytics } from './site-config.js';
 
 // Loaded through a computed URL so svelte-check (checkJs) does not type-check the untyped Node
 // oracle as part of the web project; the oracle is type-free plain JS by design.
@@ -67,6 +69,10 @@ describe('buildCsp', () => {
 		expect(rest['form-action']).toEqual(['self', 'https://api.web3forms.com']);
 		expect(rest['script-src']).toEqual(['self']);
 		expect(buildCsp({ analyticsHost: HOST }).mode).toBe('hash');
+	});
+
+	test('kit.options.js carries the buildCsp policy for the configured analytics host', () => {
+		expect(kitOptions.csp).toEqual(buildCsp({ analyticsHost: resolveAnalytics().host }));
 	});
 
 	test('each call returns a fresh object', () => {

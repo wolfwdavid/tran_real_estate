@@ -1,7 +1,7 @@
 // Build stamp (LIVE-04): Kit version.name = the commit the build was made from, so
 // /_app/version.json identifies a deploy and a post-deploy check can wait for it behind the
 // Pages CDN cache. scripts/build-web.mjs passes BUILD_SHA; CI also sets GITHUB_SHA; tools that
-// load svelte.config.js directly (svelte-kit sync, svelte-check, vite dev) fall back to git HEAD.
+// load kit.options.js directly (svelte-kit sync, svelte-check, vite dev) fall back to git HEAD.
 const SHA = /^[0-9a-f]{40}$/;
 
 /**

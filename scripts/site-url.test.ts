@@ -107,8 +107,17 @@ describe('(b) web absolute URLs come from PUBLIC_SITE_URL', () => {
 		);
 	});
 
-	test('the prerender crawl origin is the validated origin', () => {
-		expect(read('apps/web/svelte.config.js')).toContain('origin: resolveSiteOrigin()');
+	test('the prerender crawl origin is the validated origin, set under paths (Kit 3)', () => {
+		const fragment = 'paths: { base, origin: resolveSiteOrigin() }';
+		const src = read('apps/web/kit.options.js');
+		expect(src).toContain(fragment);
+		expect(src.slice(src.indexOf('prerender:'))).not.toContain('origin:');
+		// non-vacuity: the Kit 2 placement (origin under prerender) fails the same assertion
+		const moved = src
+			.replace(fragment, 'paths: { base }')
+			.replace('prerender: {', 'prerender: { origin: resolveSiteOrigin(),');
+		expect(moved).not.toContain(fragment);
+		expect(moved.slice(moved.indexOf('prerender:'))).toContain('origin:');
 	});
 
 	test('resolveSiteOrigin follows PUBLIC_SITE_URL and defaults when unset or empty', () => {

@@ -1,6 +1,6 @@
 // Independent CSP / security-carrier oracle over a prerendered build directory.
 //
-// The allowlist below is a deliberate literal duplicate of apps/web/svelte.config.js:
+// The allowlist below is a deliberate literal duplicate of apps/web/kit.options.js:
 // changing the policy must produce a reviewed two-file diff, never a silent pass.
 // The Phase 10 first-party analytics host is accepted only through the validated env
 // (resolveAnalytics, optionally overlaid with a --target build env): the same rule the build uses
