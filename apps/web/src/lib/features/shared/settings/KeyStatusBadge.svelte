@@ -2,8 +2,8 @@
 	import Check from '@lucide/svelte/icons/check';
 	import HardDrive from '@lucide/svelte/icons/hard-drive';
 	import Lock from '@lucide/svelte/icons/lock';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import type { KeyState } from '$lib/storage/secrets';
+	import { Badge } from '#lib/components/ui/badge/index.js';
+	import type { KeyState } from '#lib/storage/secrets/index.ts';
 
 	// The text alone carries the state; color and icon are reinforcement only.
 	let { state }: { state: KeyState } = $props();

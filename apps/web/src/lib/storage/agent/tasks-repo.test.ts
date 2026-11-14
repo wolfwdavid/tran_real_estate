@@ -1,8 +1,8 @@
 // Tasks repository (08-14): validation, completion with its activity, reopen, undoable delete
 // and the [status+dueDate] open-task query. fake-indexeddb, fresh factory per test, fixed `now`.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
+import { _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { addContact, listActivities, type NewContact } from './contacts-repo';
 import {
 	addTask,

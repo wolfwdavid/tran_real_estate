@@ -3,9 +3,9 @@
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { Badge } from '#lib/components/ui/badge/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	// Dependency-free Storage API wrapper: a static import keeps requestPersistence() callable on
 	// the first line of the click handler (Firefox only honours persist() with user activation).
 	import {
@@ -14,7 +14,7 @@
 		requestPersistence,
 		storageEstimate,
 		type PersistStatus
-	} from '$lib/storage/persistence';
+	} from '#lib/storage/persistence.ts';
 	import { getSettingsContext } from './settings-context.svelte';
 
 	// Rendered by StorageSection once ctx.ready, so ctx.db is final here. Dexie (live, meta) and
@@ -39,8 +39,8 @@
 			const db = ctx.db;
 			if (!db) return;
 			const [{ live }, { getMeta, META }, { lastBackupAge }] = await Promise.all([
-				import('$lib/storage/live.svelte'),
-				import('$lib/storage/meta'),
+				import('#lib/storage/live.svelte.ts'),
+				import('#lib/storage/meta.ts'),
 				import('@tran/core')
 			]);
 			if (disposed) return;

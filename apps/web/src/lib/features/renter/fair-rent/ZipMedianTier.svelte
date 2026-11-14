@@ -17,11 +17,11 @@
 		type GatewayError as GatewayErrorType,
 		type GatewayResult,
 		type Provenance
-	} from '$lib/data';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
+	} from '#lib/data/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import { marketsRequest } from '../data/requests';
 	import ZipMedianResult from './ZipMedianResult.svelte';
 

@@ -4,7 +4,7 @@
 	import ImportPreview from '../ImportPreview.svelte';
 	import type { BackupKit } from '../BackupSection.svelte';
 	import { createSettingsContext, setSettingsContext } from '../settings-context.svelte';
-	import type { ImportPreview as Preview } from '$lib/storage/backup';
+	import type { ImportPreview as Preview } from '#lib/storage/backup.ts';
 
 	let { preview }: { preview: Preview } = $props();
 

@@ -5,11 +5,11 @@ import { canonicalKey, GatewayError, type DataRequest } from '@tran/core/request
 import type { MarketStats } from '@tran/core/listings';
 import { rentTrendSeries } from '@tran/core/markets';
 // eslint-disable-next-line no-restricted-imports -- test-only: the committed synthetic fixtures prove the real mapper output
-import markets from '$lib/data/fixtures/markets.json';
+import markets from '#lib/data/fixtures/markets.json';
 // eslint-disable-next-line no-restricted-imports -- test-only: maps the fixture exactly as the gateway does
-import { mapPayload } from '$lib/data/rentcast/mappers';
+import { mapPayload } from '#lib/data/rentcast/mappers.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: validates the fixture exactly as the gateway does
-import { parsePayload } from '$lib/data/rentcast/schemas';
+import { parsePayload } from '#lib/data/rentcast/schemas.ts';
 import {
 	createMarketsPort,
 	DataRuntimeNotStartedError,

@@ -18,7 +18,7 @@
 		type ListingFactErrors,
 		type ListingFacts
 	} from '@tran/core/studio';
-	import NativeSelect from '$lib/features/agent/ui/NativeSelect.svelte';
+	import NativeSelect from '#lib/features/agent/ui/NativeSelect.svelte';
 	import InputFairHousingNote from '../InputFairHousingNote.svelte';
 	import {
 		fieldId,

@@ -21,8 +21,8 @@ import {
 } from '@tran/core/agent/types';
 import { cleanText, normEmail, normPhoneUS } from '@tran/core/leads/normalize';
 import Dexie from 'dexie';
-import { getDb, type TranDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import { AGENT_RECORD_SCHEMA_VERSION, activitiesTable, contactsTable, tasksTable } from './tables';
 
 export type NewContact = Pick<

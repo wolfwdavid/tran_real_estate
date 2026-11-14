@@ -6,10 +6,10 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Search from '@lucide/svelte/icons/search';
 	import { resolve } from '$app/paths';
-	import type { CostEstimate, GatewayError as GatewayErrorType } from '$lib/data';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import { Button } from '$lib/features/shared/data/platform-ui';
+	import type { CostEstimate, GatewayError as GatewayErrorType } from '#lib/data/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
 
 	interface Props {
 		variant: 'missing-id' | 'not-found';

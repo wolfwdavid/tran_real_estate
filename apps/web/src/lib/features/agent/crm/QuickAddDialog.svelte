@@ -11,16 +11,16 @@
 	import { STAGES, STAGE_LABELS, type Contact, type Stage } from '@tran/core/agent/types';
 	import { MAX_CONTACT_NOTES } from '@tran/core/agent/schemas';
 	import { firstName } from '@tran/core/leads/normalize';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import * as Dialog from '#lib/components/ui/dialog/index.js';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
 	import {
 		Button,
 		buttonVariants,
 		Input,
 		Label,
 		announce
-	} from '$lib/features/shared/data/platform-ui';
-	import { addContact, findDuplicates } from '$lib/storage/agent/contacts-repo';
+	} from '#lib/features/shared/data/platform-ui.ts';
+	import { addContact, findDuplicates } from '#lib/storage/agent/contacts-repo.ts';
 	import NativeSelect from '../ui/NativeSelect.svelte';
 	import { duplicateMessage, validateQuickAdd, type QuickAddField } from './quick-add';
 

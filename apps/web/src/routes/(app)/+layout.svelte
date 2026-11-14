@@ -3,12 +3,12 @@
 	import { browser } from '$app/env';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { consumeSampleParam } from '$lib/components/onboarding/setup-params';
-	import SiteHeader from '$lib/components/layout/SiteHeader.svelte';
-	import SiteFooter from '$lib/components/layout/SiteFooter.svelte';
-	import AppNotice from '$lib/features/shared/app-notice/AppNotice.svelte';
-	import DataShell from '$lib/features/shared/data/DataShell.svelte';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { consumeSampleParam } from '#lib/components/onboarding/setup-params.ts';
+	import SiteHeader from '#lib/components/layout/SiteHeader.svelte';
+	import SiteFooter from '#lib/components/layout/SiteFooter.svelte';
+	import AppNotice from '#lib/features/shared/app-notice/AppNotice.svelte';
+	import DataShell from '#lib/features/shared/data/DataShell.svelte';
 
 	let { children } = $props();
 
@@ -57,7 +57,7 @@
 		const rt = await runtimeReady;
 		await rt.setSourcePreference('sample');
 		if (page.route.id === '/(app)/agent') {
-			const crm = await import('$lib/features/agent/samples/samples');
+			const crm = await import('#lib/features/agent/samples/samples.ts');
 			if (!(await crm.hasAnyContacts())) await crm.loadSampleContacts();
 		}
 		// The current URL, which a page may have changed meanwhile, minus ?source.

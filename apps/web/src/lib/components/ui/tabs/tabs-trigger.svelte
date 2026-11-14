@@ -3,7 +3,7 @@
 	// `foreground` bottom border (the non-color cue is the weight + underline). No pill fill, no
 	// shadow, color-only transition (no movement), and the Phase 2 outline focus ring.
 	import { Tabs as TabsPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '#lib/utils.js';
 
 	let {
 		ref = $bindable(null),

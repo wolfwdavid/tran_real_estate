@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount, untrack } from 'svelte';
 	import type { LiveProviderId } from '@tran/core/ai';
-	import { aiPrefs } from '$lib/ai/prefs.svelte';
-	import { PROVIDER_LABELS } from '$lib/ai/models';
-	import { DEMO_INPUTS } from '$lib/ai/prompts/shared/demo.v1';
-	import { defaultPreferred, toAiKeyState, type AiKeyState } from '$lib/ai/setup';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import { getSettingsContext } from '$lib/features/shared/settings/settings-context.svelte';
+	import { aiPrefs } from '#lib/ai/prefs.svelte.ts';
+	import { PROVIDER_LABELS } from '#lib/ai/models.ts';
+	import { DEMO_INPUTS } from '#lib/ai/prompts/shared/demo.v1.ts';
+	import { defaultPreferred, toAiKeyState, type AiKeyState } from '#lib/ai/setup.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import { getSettingsContext } from '#lib/features/shared/settings/settings-context.svelte.ts';
 	import AiProviderPicker from './AiProviderPicker.svelte';
 	import DraftHistory from './DraftHistory.svelte';
 	import GenerationPanel from './GenerationPanel.svelte';
@@ -65,9 +65,9 @@
 
 		void (async () => {
 			const [setup, testers, artifacts] = await Promise.all([
-				import('$lib/ai/setup'),
-				import('$lib/storage/secrets/testers'),
-				import('$lib/ai/storage/artifacts')
+				import('#lib/ai/setup.ts'),
+				import('#lib/storage/secrets/testers.ts'),
+				import('#lib/ai/storage/artifacts.ts')
 			]);
 			if (disposed) return;
 			// Test connection for the four AI cards, registered only while Settings is mounted.

@@ -2,12 +2,12 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { GatewayError as GatewayErr, type GatewayErrorInfo } from '@tran/core/request';
-import { announce } from '$lib/components/a11y/announcer.svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
 import GatewayError from './GatewayError.svelte';
 
 // Spy on the real announcer (the component reaches it through platform-ui).
-vi.mock('$lib/components/a11y/announcer.svelte', { spy: true });
+vi.mock('#lib/components/a11y/announcer.svelte.ts', { spy: true });
 
 const NOV_1 = Date.parse('2026-11-01T00:00:00Z');
 const err = (info: GatewayErrorInfo) => new GatewayErr(info);

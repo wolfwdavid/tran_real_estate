@@ -4,7 +4,7 @@
 	// <section aria-labelledby="results-heading">.
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { isSortId, resultsHeading, SORT_OPTIONS } from '@tran/core/renter';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
 	import SaveSearchButton from '../saved/SaveSearchButton.svelte';
 	import type { RenterSearch } from './search-state.svelte';
 

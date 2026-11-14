@@ -10,10 +10,10 @@
 // Persistence: the click handler that saves the first deal calls requestPersistence() itself.
 import { newSyncable, tombstone } from '@tran/core';
 import { ANALYZER_VERSION } from '@tran/core/finance';
-import { createArtifactRepo, type ArtifactRepo } from '$lib/ai/storage/artifacts';
-import { getDb, type TranDb } from '$lib/storage/db';
-import { live } from '$lib/storage/live.svelte';
-import { META } from '$lib/storage/meta';
+import { createArtifactRepo, type ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
+import { live } from '#lib/storage/live.svelte.ts';
+import { META } from '#lib/storage/meta.ts';
 import { dealRecordSchema, type DealData, type DealRecord } from './schema';
 import { dealsTable, INVESTOR_RECORD_SCHEMA_VERSION } from './tables';
 

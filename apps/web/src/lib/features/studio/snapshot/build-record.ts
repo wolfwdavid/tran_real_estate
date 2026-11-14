@@ -9,14 +9,17 @@
 import type { ProfileInput } from '@tran/core/agent/types';
 import type { MarketStats } from '@tran/core/listings';
 import { buildSnapshotMetrics, type AggregatedSample } from '@tran/core/studio';
-import { effectiveBrandColors, toDisclosureProfile } from '$lib/features/shared/agent-profile';
-import { toMarketStatsInput } from '$lib/features/shared/markets/market-input';
+import {
+	effectiveBrandColors,
+	toDisclosureProfile
+} from '#lib/features/shared/agent-profile/index.ts';
+import { toMarketStatsInput } from '#lib/features/shared/markets/market-input.ts';
 import type {
 	SnapshotNarrative,
 	SnapshotOptions,
 	SnapshotRecord,
 	SnapshotSeries
-} from '$lib/storage/studio/types';
+} from '#lib/storage/studio/types.ts';
 
 export interface BuildSnapshotArgs {
 	id: string;

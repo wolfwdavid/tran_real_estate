@@ -8,8 +8,8 @@
 	import { MAX_TASK_TITLE } from '@tran/core/agent/schemas';
 	import type { Contact, Task } from '@tran/core/agent/types';
 	import { quickDates } from '@tran/core/crm';
-	import { Button, Input, Label, announce } from '$lib/features/shared/data/platform-ui';
-	import { TaskValidationError, addTask } from '$lib/storage/agent/tasks-repo';
+	import { Button, Input, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { TaskValidationError, addTask } from '#lib/storage/agent/tasks-repo.ts';
 	import { formatMonDay } from '../dates';
 	import DateField from '../ui/DateField.svelte';
 	import { taskErrorMessage } from './task-ui';

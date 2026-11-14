@@ -6,20 +6,25 @@
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
 	import { PROVIDERS } from '@tran/core';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import { SETUP_COPY as COPY } from '$lib/content/onboarding';
-	import type { OnboardingPortal } from '$lib/components/onboarding/onboarding-state';
-	import { writeOnboarding } from '$lib/components/onboarding/onboarding-state';
-	import { parseSetupPortal } from '$lib/components/onboarding/setup-params';
-	import { enableRentCastKeyTest, getDataRuntime, hasSavedCap, rentCastKeyTest } from '$lib/data';
-	import CapEditor from '$lib/features/shared/data/CapEditor.svelte';
-	import ProviderKeyCard from '$lib/features/shared/settings/ProviderKeyCard.svelte';
-	import StorageBlockedAlert from '$lib/features/shared/settings/StorageBlockedAlert.svelte';
+	import { Badge } from '#lib/components/ui/badge/index.js';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
+	import { SETUP_COPY as COPY } from '#lib/content/onboarding.ts';
+	import type { OnboardingPortal } from '#lib/components/onboarding/onboarding-state.ts';
+	import { writeOnboarding } from '#lib/components/onboarding/onboarding-state.ts';
+	import { parseSetupPortal } from '#lib/components/onboarding/setup-params.ts';
+	import {
+		enableRentCastKeyTest,
+		getDataRuntime,
+		hasSavedCap,
+		rentCastKeyTest
+	} from '#lib/data/index.ts';
+	import CapEditor from '#lib/features/shared/data/CapEditor.svelte';
+	import ProviderKeyCard from '#lib/features/shared/settings/ProviderKeyCard.svelte';
+	import StorageBlockedAlert from '#lib/features/shared/settings/StorageBlockedAlert.svelte';
 	import {
 		createSettingsContext,
 		setSettingsContext
-	} from '$lib/features/shared/settings/settings-context.svelte';
+	} from '#lib/features/shared/settings/settings-context.svelte.ts';
 
 	// Guided free RentCast key setup (GTM-01; 10-UI-SPEC "/setup/rentcast/"). Not a wizard: all three
 	// steps are visible at once, and every badge comes from real state (vault, key test, ledger), so
@@ -82,7 +87,7 @@
 		void (async () => {
 			try {
 				const [{ getVault, createVaultState }, { getDb, openDb, StorageBlockedError }] =
-					await Promise.all([import('$lib/storage/secrets'), import('$lib/storage/db')]);
+					await Promise.all([import('#lib/storage/secrets'), import('$lib/storage/db')]);
 
 				try {
 					ctx.db = await openDb(getDb());

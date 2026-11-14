@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { announcerMessage } from '$lib/components/a11y/announcer.svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { announcerMessage } from '#lib/components/a11y/announcer.svelte.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
 import ProvenanceChip from './ProvenanceChip.svelte';
 import ProvenanceRow from './ProvenanceRow.svelte';
 import { REFRESH_DONE } from './copy/provenance';

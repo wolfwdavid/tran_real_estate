@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { REFERENCE_CASES, analyze, buildMemoFacts } from '@tran/core/finance';
 import { checkFairHousing } from '@tran/core/fair-housing';
-import { WARN_REASON, blockReason, computeGate, runChecks } from '$lib/ai/ui/panel-controller';
+import { WARN_REASON, blockReason, computeGate, runChecks } from '#lib/ai/ui/panel-controller.ts';
 import { createMemoPostChecks, MEMO_CHECK_GROUPS, memoGateReasons } from './memo-checks';
 
 const A = REFERENCE_CASES.find((c) => c.id === 'A')!;

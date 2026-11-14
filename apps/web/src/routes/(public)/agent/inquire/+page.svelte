@@ -9,9 +9,9 @@
 	import { SAMPLE_AGENT_PROFILE } from '@tran/core/agent/fixtures/sample-profile';
 	import type { InquiryConfig } from '@tran/core/leads/inquiry-params';
 	import { formatPhoneUS } from '@tran/core/leads/normalize';
-	import InquiryForm from '$lib/components/inquiry/InquiryForm.svelte';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { readInquiryParams } from '$lib/leads/inquiry-url';
+	import InquiryForm from '#lib/components/inquiry/InquiryForm.svelte';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import { readInquiryParams } from '#lib/leads/inquiry-url.ts';
 
 	type View =
 		| { kind: 'loading' }

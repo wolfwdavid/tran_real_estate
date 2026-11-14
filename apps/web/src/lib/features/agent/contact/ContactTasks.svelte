@@ -8,8 +8,8 @@
 	import { tick } from 'svelte';
 	import type { Contact, Task } from '@tran/core/agent/types';
 	import { firstName } from '@tran/core/leads/normalize';
-	import { announce } from '$lib/features/shared/data/platform-ui';
-	import { deleteTask, restoreTask } from '$lib/storage/agent/tasks-repo';
+	import { announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { deleteTask, restoreTask } from '#lib/storage/agent/tasks-repo.ts';
 	import AddTaskForm from '../tasks/AddTaskForm.svelte';
 	import TaskRow from '../tasks/TaskRow.svelte';
 	import { nextFocusTarget } from '../tasks/task-ui';

@@ -13,14 +13,14 @@ import {
 	defaultExpenseLines,
 	type DealInputs
 } from '@tran/core/finance';
-import { createArtifactRepo } from '$lib/ai/storage/artifacts';
+import { createArtifactRepo } from '#lib/ai/storage/artifacts.ts';
 import {
 	BACKUP_EXCLUDED_TABLES,
 	listBackupTables,
 	_resetBackupRegistry
-} from '$lib/storage/backup-registry';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import { TranDb } from '$lib/storage/db';
+} from '#lib/storage/backup-registry.ts';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import { createDealsRepo } from './dealsRepo';
 import { dealRecordSchema, type DealData } from './schema';
 import { INVESTOR_STORES } from './tables';

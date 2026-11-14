@@ -1,7 +1,7 @@
 <script lang="ts">
 	// Native date input with input styling. The value is a local calendar date (YYYY-MM-DD) and is
 	// passed through untouched; compare it with the helpers in ../dates.ts, never via UTC parsing.
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 
 	let {
 		id,

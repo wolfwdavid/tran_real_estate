@@ -1,6 +1,6 @@
 // DEBT-09: static form button classes stay token-equal to buttonVariants(); mutation proof in 14-09-SUMMARY.md.
 import { describe, expect, it } from 'vitest';
-import { buttonVariants } from '$lib/components/ui/button/button.svelte';
+import { buttonVariants } from '#lib/components/ui/button/button.svelte';
 import { GHOST_BUTTON_CLASS, PRIMARY_BUTTON_CLASS } from './form-classes';
 
 const tokens = (s: string) => new Set(s.split(' ').filter(Boolean));

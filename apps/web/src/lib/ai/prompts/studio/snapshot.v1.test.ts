@@ -7,8 +7,8 @@ import {
 	type AggregatedSample,
 	type SnapshotMetrics
 } from '@tran/core/studio';
-import { runChecks } from '$lib/ai/ui/panel-controller';
-import { numberPostCheck, numberWordsPostCheck } from '$lib/features/studio/post-checks';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
+import { numberPostCheck, numberWordsPostCheck } from '#lib/features/studio/post-checks.ts';
 import { HOUSING_COPY_GUARDRAIL } from '../guardrail.js';
 import { buildPrompt, getPrompt } from '../registry.js';
 import {

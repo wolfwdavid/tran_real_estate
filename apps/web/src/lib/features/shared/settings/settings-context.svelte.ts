@@ -1,7 +1,7 @@
 import { getContext, setContext } from 'svelte';
 // Types only: a value import would pull the vault and Dexie into the prerendered page graph.
-import type { Vault, VaultStatus } from '$lib/storage/secrets';
-import type { TranDb } from '$lib/storage/db';
+import type { Vault, VaultStatus } from '#lib/storage/secrets/index.ts';
+import type { TranDb } from '#lib/storage/db.ts';
 
 /** Shared state for every Settings section. Filled by the page's onMount (dynamic imports). */
 export interface SettingsContext {

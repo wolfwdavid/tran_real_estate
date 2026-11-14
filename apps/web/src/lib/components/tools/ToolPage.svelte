@@ -4,9 +4,9 @@
 	// visible FAQ and the FAQPage JSON-LD read the same `tool.faq`, so they cannot drift.
 	import type { Snippet } from 'svelte';
 	import { resolve } from '$app/paths';
-	import SeoHead from '$lib/seo/SeoHead.svelte';
-	import { faqPage, webApplication } from '$lib/seo/jsonld';
-	import { SITE_URL } from '$lib/site';
+	import SeoHead from '#lib/seo/SeoHead.svelte';
+	import { faqPage, webApplication } from '#lib/seo/jsonld.ts';
+	import { SITE_URL } from '#lib/site.ts';
 	import {
 		AFFORDABILITY_READY,
 		SHARED_TOOL_COPY as C,
@@ -14,7 +14,7 @@
 		TOOL_SLUGS,
 		type ToolContent,
 		type ToolSlug
-	} from '$lib/content/tools/shared';
+	} from '#lib/content/tools/shared.ts';
 	import Breadcrumb from './Breadcrumb.svelte';
 	import ToolIcon from './ToolIcon.svelte';
 

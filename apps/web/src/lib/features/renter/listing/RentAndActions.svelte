@@ -3,7 +3,7 @@
 	// detail shortlist toggle, and "Days on market: {n}" when RentCast reported it.
 	import type { Listing } from '@tran/core/listings';
 	import { formatRent } from '@tran/core/renter/format';
-	import type { Provenance } from '$lib/data';
+	import type { Provenance } from '#lib/data/index.ts';
 	import ShortlistToggle from '../shortlist/ShortlistToggle.svelte';
 
 	interface Props {

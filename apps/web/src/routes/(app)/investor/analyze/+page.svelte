@@ -3,9 +3,9 @@
 	// the static HTML; a saved deal (?id=) or the sample link (?sample=1) is read in onMount from
 	// new URL(location.href), never from the prerendered page store.
 	import { onMount } from 'svelte';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import AnalyzerForm from '$lib/features/investor/analyzer/AnalyzerForm.svelte';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import AnalyzerForm from '#lib/features/investor/analyzer/AnalyzerForm.svelte';
 
 	let analyzer = $state<AnalyzerForm | null>(null);
 

@@ -7,10 +7,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { contactSchema, activitySchema, taskSchema } from '@tran/core/agent/schemas';
 import { groupTasks } from '@tran/core/crm';
 import { normPhoneUS } from '@tran/core/leads/normalize';
-import { _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
-import { addContact, listContacts } from '$lib/storage/agent/contacts-repo';
-import { activitiesTable, contactsTable, tasksTable } from '$lib/storage/agent/tables';
+import { _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
+import { addContact, listContacts } from '#lib/storage/agent/contacts-repo.ts';
+import { activitiesTable, contactsTable, tasksTable } from '#lib/storage/agent/tables.ts';
 import { localDateOf } from '../dates';
 import { buildSampleData } from '../fixtures/sample-contacts';
 import {

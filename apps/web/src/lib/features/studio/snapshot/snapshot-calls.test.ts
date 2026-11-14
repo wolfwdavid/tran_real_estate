@@ -6,19 +6,19 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isGatewayError } from '@tran/core/request';
 import { AGGREGATED_SAMPLE_KEYS, BEDROOM_AGGREGATE_KEYS } from '@tran/core/studio';
-import { createDataRuntime, type DataRuntime } from '$lib/data';
+import { createDataRuntime, type DataRuntime } from '#lib/data/index.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: committed synthetic market fixture, re-keyed to a fictional ZIP
-import markets from '$lib/data/fixtures/markets.json';
+import markets from '#lib/data/fixtures/markets.json';
 // eslint-disable-next-line no-restricted-imports -- test-only: the real sample-mode fixture loader
-import { loadFixtureSet } from '$lib/data/fixtures/load';
+import { loadFixtureSet } from '#lib/data/fixtures/load.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: the Phase 4 key-port contract for a fake key
-import type { KeyPort } from '$lib/data/runtime.svelte';
+import type { KeyPort } from '#lib/data/runtime.svelte.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: isolated fake-indexeddb, fetch spy, fixed clock
-import { jsonResponse, makeDb, spyFetch, T0, TEST_KEY } from '$lib/data/testing/harness';
+import { jsonResponse, makeDb, spyFetch, T0, TEST_KEY } from '#lib/data/testing/harness.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: synthetic listing rows (fictional addresses)
-import { listingRows } from '$lib/data/testing/gateway-harness';
-import { loadMarket } from '$lib/features/shared/markets/market-load';
-import { createMarketsPort, type PortRuntime } from '$lib/features/shared/markets/markets-port';
+import { listingRows } from '#lib/data/testing/gateway-harness.ts';
+import { loadMarket } from '#lib/features/shared/markets/market-load.ts';
+import { createMarketsPort, type PortRuntime } from '#lib/features/shared/markets/markets-port.ts';
 import { createSnapshotData, listingsSummaryRequest } from './snapshot-data';
 
 const ZIP = '00199';

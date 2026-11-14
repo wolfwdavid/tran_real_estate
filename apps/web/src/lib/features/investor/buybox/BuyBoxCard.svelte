@@ -7,11 +7,11 @@
 	// rows' click handlers.
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import type { GatewayError as GatewayErrorType } from '@tran/core/request';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import NewSinceBadge from '$lib/features/shared/data/NewSinceBadge.svelte';
-	import { Button, ConfirmDialog } from '$lib/features/shared/data/platform-ui';
-	import type { MarketsPort } from '$lib/features/shared/markets/markets-port';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import NewSinceBadge from '#lib/features/shared/data/NewSinceBadge.svelte';
+	import { Button, ConfirmDialog } from '#lib/features/shared/data/platform-ui.ts';
+	import type { MarketsPort } from '#lib/features/shared/markets/markets-port.ts';
 	import type { CostEstimate, InvestorDataPort } from '../data/investor-port';
 	import type { BuyBoxView } from './buyBoxRepo';
 	import { criteriaSummary } from './buybox-form';

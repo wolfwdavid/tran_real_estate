@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TOOLS, type ToolField } from '$lib/content/tools';
+import { TOOLS, type ToolField } from '#lib/content/tools.ts';
 import {
 	capRateCalc,
 	cashOnCashCalc,

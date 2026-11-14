@@ -3,8 +3,8 @@
 	// Caller-owned open state; the Name input takes initial focus (limit mode: Close). Saving never
 	// spends: the caller writes storage only.
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Button, Input, Label } from '$lib/features/shared/data/platform-ui';
+	import * as Dialog from '#lib/components/ui/dialog/index.js';
+	import { Button, Input, Label } from '#lib/features/shared/data/platform-ui.ts';
 
 	export type SaveDialogMode = 'save' | 'rename' | 'limit';
 

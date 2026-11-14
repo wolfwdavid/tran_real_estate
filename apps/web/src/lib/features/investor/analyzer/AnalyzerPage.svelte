@@ -26,11 +26,11 @@
 		Button,
 		buttonVariants,
 		ConfirmDialog
-	} from '$lib/features/shared/data/platform-ui';
-	import { formatRelative } from '$lib/features/shared/data/relative-time';
-	import NotFoundPanel from '$lib/features/shared/NotFoundPanel.svelte';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { requestPersistence } from '$lib/storage/persistence';
+	} from '#lib/features/shared/data/platform-ui.ts';
+	import { formatRelative } from '#lib/features/shared/data/relative-time.ts';
+	import NotFoundPanel from '#lib/features/shared/NotFoundPanel.svelte';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { requestPersistence } from '#lib/storage/persistence.ts';
 	import { createDeal, getDeal, updateDeal } from '../deals/dealsRepo';
 	import type { DealSources, FieldSourceKey } from '../deals/schema';
 	import { AnalyzerPageState } from './analyzer-page.svelte';

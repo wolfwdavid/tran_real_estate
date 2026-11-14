@@ -20,7 +20,7 @@ export { logoObjectUrl } from './logo-url';
  * can import this module.
  */
 export async function loadAgentProfile(): Promise<AgentProfile | null> {
-	const { getProfile } = await import('$lib/storage/agent/profile-repo');
+	const { getProfile } = await import('#lib/storage/agent/profile-repo.ts');
 	return getProfile();
 }
 

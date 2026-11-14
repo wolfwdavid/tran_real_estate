@@ -3,7 +3,7 @@
 	// the AgentHome with the due-today queue first. Prerendered with the loading line; the
 	// browser-stored data decides what renders after hydration. After a quick add, focus moves to
 	// the h1 (the home has no contact list to land on).
-	import AgentHome from '$lib/features/agent/home/AgentHome.svelte';
+	import AgentHome from '#lib/features/agent/home/AgentHome.svelte';
 
 	let h1El = $state<HTMLHeadingElement | null>(null);
 </script>

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import SiteHeader from '$lib/components/layout/SiteHeader.svelte';
-	import SiteFooter from '$lib/components/layout/SiteFooter.svelte';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
+	import SiteHeader from '#lib/components/layout/SiteHeader.svelte';
+	import SiteFooter from '#lib/components/layout/SiteFooter.svelte';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
 
 	const notFound = $derived(page.status === 404);
 </script>

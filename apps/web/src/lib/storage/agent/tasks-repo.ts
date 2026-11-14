@@ -11,7 +11,7 @@ import { MAX_ACTIVITY_TEXT, MAX_TASK_TITLE } from '@tran/core/agent/schemas';
 import { isLive, type Activity, type Task } from '@tran/core/agent/types';
 import { cleanText } from '@tran/core/leads/normalize';
 import Dexie from 'dexie';
-import { getDb, type TranDb } from '$lib/storage/db';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
 import { AGENT_RECORD_SCHEMA_VERSION, activitiesTable, contactsTable, tasksTable } from './tables';
 
 export type TaskValidationCode = 'title-empty' | 'title-long' | 'due-invalid';

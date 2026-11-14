@@ -8,10 +8,10 @@ import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
 import type { Listing } from '@tran/core/listings';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { MAX_NOTES, shortlistItemSchema, type RentalFilters } from '@tran/core/renter';
-import { listBackupTables, _resetBackupRegistry } from '$lib/storage/backup-registry';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import { META, getMeta } from '$lib/storage/meta';
-import { TranDb } from '$lib/storage/db';
+import { listBackupTables, _resetBackupRegistry } from '#lib/storage/backup-registry.ts';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import { META, getMeta } from '#lib/storage/meta.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import {
 	RENTER_SEARCH_META_LABEL,
 	RENTER_SEARCH_META_TABLE,

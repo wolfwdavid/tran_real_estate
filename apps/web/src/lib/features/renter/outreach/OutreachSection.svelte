@@ -10,14 +10,14 @@
 	import { onMount, untrack } from 'svelte';
 	import type { Listing } from '@tran/core/listings';
 	import { mailtoHref } from '@tran/core/renter/contact-links';
-	import type { Provenance } from '$lib/data';
+	import type { Provenance } from '#lib/data/index.ts';
 	import {
 		buildOutreachInputs,
 		type RenterOutreachListing
-	} from '$lib/ai/prompts/renter/outreach.v1';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
+	} from '#lib/ai/prompts/renter/outreach.v1.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
 	import { streetLine } from '../listing/address';
 	import OutreachForm from './OutreachForm.svelte';
 	import { newOutreachForm } from './outreach-form';
@@ -69,7 +69,7 @@
 
 	onMount(() => {
 		let disposed = false;
-		void import('$lib/ai/storage/artifacts').then((m) => {
+		void import('#lib/ai/storage/artifacts.ts').then((m) => {
 			if (!disposed) repo = m.createArtifactRepo();
 		});
 		return () => {

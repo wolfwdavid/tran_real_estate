@@ -43,10 +43,10 @@
 	// series tokens.
 	import { formatDisclosure } from '@tran/core/studio';
 	import { resolve } from '$app/paths';
-	import PriceToRentChart from '$lib/features/shared/markets/PriceToRentChart.svelte';
-	import ZipTrendChart from '$lib/features/shared/markets/ZipTrendChart.svelte';
-	import PrintReport from '$lib/features/shared/print/PrintReport.svelte';
-	import type { SnapshotRecord } from '$lib/storage/studio/types';
+	import PriceToRentChart from '#lib/features/shared/markets/PriceToRentChart.svelte';
+	import ZipTrendChart from '#lib/features/shared/markets/ZipTrendChart.svelte';
+	import PrintReport from '#lib/features/shared/print/PrintReport.svelte';
+	import type { SnapshotRecord } from '#lib/storage/studio/types.ts';
 	import BrandBand, { bandColors } from './BrandBand.svelte';
 	import ListingsSummaryTable from './ListingsSummaryTable.svelte';
 	import SnapshotKeyFigures from './SnapshotKeyFigures.svelte';

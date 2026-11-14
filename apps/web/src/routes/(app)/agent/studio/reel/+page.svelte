@@ -4,8 +4,8 @@
 	// shows "Loading your studio..." until its browser reads finish, then the tool body.
 	import { resolve } from '$app/paths';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import ReelStudio from '$lib/features/studio/reel/ReelStudio.svelte';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
+	import ReelStudio from '#lib/features/studio/reel/ReelStudio.svelte';
 </script>
 
 <svelte:head>

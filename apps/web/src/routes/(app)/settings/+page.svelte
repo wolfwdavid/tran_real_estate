@@ -1,22 +1,22 @@
 <script lang="ts">
 	import { onMount, type Component } from 'svelte';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { enableRentCastKeyTest, getDataRuntime } from '$lib/data';
-	import RentCastUsageSection from '$lib/features/shared/data/RentCastUsageSection.svelte';
-	import AiDraftingSection from '$lib/ai/ui/AiDraftingSection.svelte';
-	import { availableSections } from '$lib/features/shared/settings/sections';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { enableRentCastKeyTest, getDataRuntime } from '#lib/data/index.ts';
+	import RentCastUsageSection from '#lib/features/shared/data/RentCastUsageSection.svelte';
+	import AiDraftingSection from '#lib/ai/ui/AiDraftingSection.svelte';
+	import { availableSections } from '#lib/features/shared/settings/sections.ts';
 	import {
 		createSettingsContext,
 		setSettingsContext
-	} from '$lib/features/shared/settings/settings-context.svelte';
-	import SettingsNav from '$lib/features/shared/settings/SettingsNav.svelte';
-	import StorageBlockedAlert from '$lib/features/shared/settings/StorageBlockedAlert.svelte';
-	import ApiKeysSection from '$lib/features/shared/settings/ApiKeysSection.svelte';
-	import KeySecuritySection from '$lib/features/shared/settings/KeySecuritySection.svelte';
-	import BackupSection from '$lib/features/shared/settings/BackupSection.svelte';
-	import StorageSection from '$lib/features/shared/settings/StorageSection.svelte';
-	import InstallSection from '$lib/features/shared/settings/InstallSection.svelte';
-	import GettingStartedSection from '$lib/features/shared/settings/GettingStartedSection.svelte';
+	} from '#lib/features/shared/settings/settings-context.svelte.ts';
+	import SettingsNav from '#lib/features/shared/settings/SettingsNav.svelte';
+	import StorageBlockedAlert from '#lib/features/shared/settings/StorageBlockedAlert.svelte';
+	import ApiKeysSection from '#lib/features/shared/settings/ApiKeysSection.svelte';
+	import KeySecuritySection from '#lib/features/shared/settings/KeySecuritySection.svelte';
+	import BackupSection from '#lib/features/shared/settings/BackupSection.svelte';
+	import StorageSection from '#lib/features/shared/settings/StorageSection.svelte';
+	import InstallSection from '#lib/features/shared/settings/InstallSection.svelte';
+	import GettingStartedSection from '#lib/features/shared/settings/GettingStartedSection.svelte';
 
 	// Prerendered shell: every section's static copy renders at build time. The vault, IndexedDB
 	// and Storage API code load only after hydration, through dynamic import() in onMount, so they
@@ -58,7 +58,7 @@
 		void (async () => {
 			try {
 				const [{ getVault, createVaultState }, { getDb, openDb, StorageBlockedError }] =
-					await Promise.all([import('$lib/storage/secrets'), import('$lib/storage/db')]);
+					await Promise.all([import('#lib/storage/secrets'), import('$lib/storage/db')]);
 
 				try {
 					ctx.db = await openDb(getDb());

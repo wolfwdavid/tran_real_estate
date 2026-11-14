@@ -1,6 +1,6 @@
 <script lang="ts" module>
-	import type { AiArtifact } from '$lib/ai/storage/artifacts';
-	import { PROVIDER_LABELS } from '$lib/ai/models';
+	import type { AiArtifact } from '#lib/ai/storage/artifacts.ts';
+	import { PROVIDER_LABELS } from '#lib/ai/models.ts';
 
 	export const PAGE_SIZE = 10;
 	const PREVIEW_CHARS = 120;
@@ -48,10 +48,10 @@
 
 <script lang="ts">
 	import { tick, untrack } from 'svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import ConfirmDialog from '$lib/features/shared/settings/ConfirmDialog.svelte';
-	import type { ArtifactRepo } from '$lib/ai/storage/artifacts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import ConfirmDialog from '#lib/features/shared/settings/ConfirmDialog.svelte';
+	import type { ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
 	import ArtifactStatusBadge from './ArtifactStatusBadge.svelte';
 
 	// Stored drafts for one feature (05-UI-SPEC DraftHistory anatomy). Rows load in the browser

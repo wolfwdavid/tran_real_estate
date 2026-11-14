@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getDataRuntime, type DataRequest } from '$lib/data';
+	import { getDataRuntime, type DataRequest } from '#lib/data/index.ts';
 
 	// Test-only stand-in for a portal page: one click handler that spends through the runtime the
 	// (app) layout's DataShell provides. Records how the spend settled.

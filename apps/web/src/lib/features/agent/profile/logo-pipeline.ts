@@ -50,7 +50,7 @@ export function bytesToBase64(bytes: Uint8Array): string {
 }
 
 // The decoder lives with logoObjectUrl in features/shared/agent-profile (Studio reports use it too).
-export { base64ToBytes } from '$lib/features/shared/agent-profile/logo-url';
+export { base64ToBytes } from '#lib/features/shared/agent-profile/logo-url.ts';
 
 /** Browser rasterizer: Blob -> object URL -> decoded <img> -> canvas -> PNG blob -> bytes. */
 async function rasterizeOnCanvas(

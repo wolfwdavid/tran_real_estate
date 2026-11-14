@@ -5,8 +5,8 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import type { Listing } from '@tran/core/listings';
-import { createDataRuntime, type DataGateway, type DataRuntime } from '$lib/data';
-import { TranDb } from '$lib/storage/db';
+import { createDataRuntime, type DataGateway, type DataRuntime } from '#lib/data/index.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import { createShortlistRepo } from '../storage/shortlist-repo';
 import { searchRequest } from '../data/requests';
 import { fetchListingById, resolveListing, type ResolveDeps } from './resolve';

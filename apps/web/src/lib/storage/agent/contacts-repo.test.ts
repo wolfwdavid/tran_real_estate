@@ -3,8 +3,8 @@
 // cascade. fake-indexeddb with a fresh IDBFactory per test and fixed `now` strings.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Task } from '@tran/core/agent/types';
-import { _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
+import { _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import {
 	ADDED_TEXT,
 	addContact,

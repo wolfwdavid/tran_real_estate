@@ -10,12 +10,12 @@ import {
 	type LedgerRow,
 	type SavedSearchRow,
 	type SearchSnapshotRow
-} from '$lib/data/tables';
-import { AI_STORES, type AiArtifact } from '$lib/ai/storage/tables';
+} from '#lib/data/tables.ts';
+import { AI_STORES, type AiArtifact } from '#lib/ai/storage/tables.ts';
 import type { RenterSearchMeta, ShortlistItem } from '@tran/core/renter';
-import { INVESTOR_STORES } from '$lib/features/investor/deals/tables';
-import type { DealRecord } from '$lib/features/investor/deals/schema';
-import type { WatchedZipRecord } from '$lib/features/shared/markets/watched-zip-record';
+import { INVESTOR_STORES } from '#lib/features/investor/deals/tables.ts';
+import type { DealRecord } from '#lib/features/investor/deals/schema.ts';
+import type { WatchedZipRecord } from '#lib/features/shared/markets/watched-zip-record.ts';
 import type { Activity, Contact, Task } from '@tran/core/agent/types';
 import { AGENT_STORES, type AgentProfileRow } from './agent/tables';
 import { STUDIO_STORES, type SnapshotRow, type StudioDraftRow } from './studio/tables';

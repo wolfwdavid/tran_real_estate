@@ -8,7 +8,7 @@ import { describe, expect, test } from 'vitest';
 import type { ProfileInput } from '@tran/core/agent/types';
 import { composeDisclosure } from '@tran/core/disclosure';
 import { checkFairHousing } from '@tran/core/fair-housing';
-import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
+import { SAMPLE_AGENT_PROFILE } from '#lib/features/shared/agent-profile/index.ts';
 import CharacterCount from './CharacterCount.svelte';
 import DisclosureStatus from './DisclosureStatus.svelte';
 import StudioHub, { draftsLine, snapshotsLine, STUDIO_LOADING } from './StudioHub.svelte';

@@ -9,9 +9,9 @@
 </script>
 
 <script lang="ts">
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { aiPrefs } from '$lib/ai/prefs.svelte';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { aiPrefs } from '#lib/ai/prefs.svelte.ts';
 
 	// "Use sample output instead of my AI key" (05-UI-SPEC SampleOutputToggle). When checked every
 	// panel uses the keyless sample provider even with a key saved. Persists per device in aiPrefs.

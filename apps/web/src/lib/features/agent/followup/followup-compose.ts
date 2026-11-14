@@ -15,7 +15,7 @@ import {
 import { SAMPLE_AGENT_PROFILE } from '@tran/core/agent/fixtures/sample-profile';
 import { PROFILE_FIELD_LABELS, composeEmailFooter, missingForDrafts } from '@tran/core/disclosure';
 import { firstName } from '@tran/core/leads/normalize';
-import type { ExitDisabled } from '$lib/ai/ui/panel-controller';
+import type { ExitDisabled } from '#lib/ai/ui/panel-controller.ts';
 import type { FollowupInputs } from './followup-prompt';
 
 export const FOOTER_LABEL = 'Added to the end of every follow-up';

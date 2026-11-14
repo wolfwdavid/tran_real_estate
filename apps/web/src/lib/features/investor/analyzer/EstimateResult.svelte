@@ -7,9 +7,9 @@
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import { NOT_AVAILABLE, usd, usdRange } from '@tran/core/format';
 	import { parseMoneyInput } from '@tran/core/finance';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import { Button } from '$lib/features/shared/data/platform-ui';
-	import { formatRelative } from '$lib/features/shared/data/relative-time';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
+	import { formatRelative } from '#lib/features/shared/data/relative-time.ts';
 	import type { Estimate } from '../data/investor-port';
 	import { priceComparison, type AutofillTarget } from './autofill';
 

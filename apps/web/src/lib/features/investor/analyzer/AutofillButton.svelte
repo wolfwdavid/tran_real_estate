@@ -22,9 +22,9 @@
 	import { usd } from '@tran/core/format';
 	import { parseMoneyInput } from '@tran/core/finance';
 	import { GatewayError as GatewayErrorValue, isGatewayError } from '@tran/core/request';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import { announce, Button } from '$lib/features/shared/data/platform-ui';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import { announce, Button } from '#lib/features/shared/data/platform-ui.ts';
 	import type { CostEstimate, Estimate, InvestorDataPort } from '../data/investor-port';
 	import type { GatewayErrorKind } from '@tran/core/request';
 	import type { AnalyzerPageState } from './analyzer-page.svelte';

@@ -8,12 +8,12 @@
 	// logo has decoded.
 	import { onMount, tick } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import NotFoundPanel from '$lib/features/shared/NotFoundPanel.svelte';
-	import { SAMPLE_SNAPSHOT_RECORD } from '$lib/features/studio/fixtures/sample-snapshot';
-	import SnapshotReport from '$lib/features/studio/snapshot/SnapshotReport.svelte';
-	import { snapshotDocumentTitle } from '$lib/features/studio/snapshot/report-copy';
-	import type { SnapshotRecord } from '$lib/storage/studio/types';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
+	import NotFoundPanel from '#lib/features/shared/NotFoundPanel.svelte';
+	import { SAMPLE_SNAPSHOT_RECORD } from '#lib/features/studio/fixtures/sample-snapshot.ts';
+	import SnapshotReport from '#lib/features/studio/snapshot/SnapshotReport.svelte';
+	import { snapshotDocumentTitle } from '#lib/features/studio/snapshot/report-copy.ts';
+	import type { SnapshotRecord } from '#lib/storage/studio/types.ts';
 
 	type View = 'hydrating' | 'missing' | 'not-found' | 'ready';
 
@@ -90,7 +90,7 @@
 			if (id === 'sample') {
 				rec = SAMPLE_SNAPSHOT_RECORD;
 			} else {
-				const { getSnapshot } = await import('$lib/storage/studio/snapshots-repo');
+				const { getSnapshot } = await import('#lib/storage/studio/snapshots-repo.ts');
 				rec = await getSnapshot(id);
 			}
 			if (disposed) return;
@@ -103,7 +103,7 @@
 			// sample record: the sample agent is not the person using this browser.
 			if (!rec.sample && rec.agent.hasLogo) {
 				const { loadAgentProfile, logoObjectUrl } =
-					await import('$lib/features/shared/agent-profile');
+					await import('#lib/features/shared/agent-profile/index.ts');
 				const profile = await loadAgentProfile().catch(() => null);
 				if (disposed) return;
 				if (profile?.logo) {

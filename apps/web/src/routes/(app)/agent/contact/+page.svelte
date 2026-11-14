@@ -13,17 +13,17 @@
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import type { Contact } from '@tran/core/agent/types';
-	import ActivityLog from '$lib/features/agent/contact/ActivityLog.svelte';
-	import ContactHeader from '$lib/features/agent/contact/ContactHeader.svelte';
-	import ContactInfo from '$lib/features/agent/contact/ContactInfo.svelte';
-	import ContactNotes from '$lib/features/agent/contact/ContactNotes.svelte';
-	import ContactTasks from '$lib/features/agent/contact/ContactTasks.svelte';
-	import { todayLocal } from '$lib/features/agent/dates';
-	import FollowUpComposer from '$lib/features/agent/followup/FollowUpComposer.svelte';
-	import { createBoardState } from '$lib/features/agent/pipeline/board-state.svelte';
-	import { buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import { useActivities, useContact, useProfile } from '$lib/storage/agent/live.svelte';
-	import { useTasksFor } from '$lib/storage/agent/tasks-live.svelte';
+	import ActivityLog from '#lib/features/agent/contact/ActivityLog.svelte';
+	import ContactHeader from '#lib/features/agent/contact/ContactHeader.svelte';
+	import ContactInfo from '#lib/features/agent/contact/ContactInfo.svelte';
+	import ContactNotes from '#lib/features/agent/contact/ContactNotes.svelte';
+	import ContactTasks from '#lib/features/agent/contact/ContactTasks.svelte';
+	import { todayLocal } from '#lib/features/agent/dates.ts';
+	import FollowUpComposer from '#lib/features/agent/followup/FollowUpComposer.svelte';
+	import { createBoardState } from '#lib/features/agent/pipeline/board-state.svelte.ts';
+	import { buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
+	import { useActivities, useContact, useProfile } from '#lib/storage/agent/live.svelte.ts';
+	import { useTasksFor } from '#lib/storage/agent/tasks-live.svelte.ts';
 
 	/** undefined until the first navigation settles; null when the URL carries no id. */
 	let id = $state<string | null | undefined>(undefined);

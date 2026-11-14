@@ -23,7 +23,7 @@ import {
 	type GatewayResult,
 	type Provenance,
 	type SavedSearchRepo
-} from '$lib/data';
+} from '#lib/data/index.ts';
 import type { PropertyType } from '../deals/schema';
 
 export type { CostEstimate, Provenance };

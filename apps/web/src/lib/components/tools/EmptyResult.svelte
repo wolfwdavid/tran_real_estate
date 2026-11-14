@@ -1,7 +1,7 @@
 <script lang="ts">
 	// Results empty state: icon + one sentence naming what's missing. Never zeros or dashes.
 	import ToolIcon from './ToolIcon.svelte';
-	import { SHARED_TOOL_COPY } from '$lib/content/tools/shared';
+	import { SHARED_TOOL_COPY } from '#lib/content/tools/shared.ts';
 
 	let { body }: { body: string } = $props();
 </script>

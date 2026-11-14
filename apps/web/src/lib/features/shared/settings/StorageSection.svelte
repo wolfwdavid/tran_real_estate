@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
 	import { getSettingsContext } from './settings-context.svelte';
 	import StorageStatus from './StorageStatus.svelte';
 

@@ -4,7 +4,7 @@
 	// thumb with a 2px `primary` border inside a 44px hit area, and the Phase 2 outline focus ring.
 	// `thumbProps` passes ARIA (aria-valuetext, aria-labelledby) through to the role="slider" thumb.
 	import { Slider as SliderPrimitive } from 'bits-ui';
-	import { cn, type WithoutChildrenOrChild } from '$lib/utils.js';
+	import { cn, type WithoutChildrenOrChild } from '#lib/utils.js';
 
 	/** ARIA passed to the role="slider" thumb (the primitive owns valuemin/max/now). */
 	interface ThumbAria {

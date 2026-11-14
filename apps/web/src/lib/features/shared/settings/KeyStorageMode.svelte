@@ -1,8 +1,8 @@
 <script lang="ts">
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import * as RadioGroup from '#lib/components/ui/radio-group/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	// Tiny and browser-safe at import time (no vault, no Dexie).
-	import { requestPersistence } from '$lib/storage/persistence';
+	import { requestPersistence } from '#lib/storage/persistence.ts';
 	import SectionError from './SectionError.svelte';
 	import { getSettingsContext } from './settings-context.svelte';
 

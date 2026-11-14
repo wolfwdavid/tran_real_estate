@@ -13,8 +13,8 @@
  */
 import { STAGE_LABELS, type Stage } from '@tran/core/agent/types';
 import type { KnownPii } from '@tran/core/privacy';
-import { getPrompt, registerPrompt } from '$lib/ai/prompts/registry';
-import type { PromptDef } from '$lib/ai/prompts/types';
+import { getPrompt, registerPrompt } from '#lib/ai/prompts/registry.ts';
+import type { PromptDef } from '#lib/ai/prompts/types.ts';
 
 export const FOLLOWUP_PROMPT_ID = 'agent/followup';
 export const FOLLOWUP_FEATURE = 'agent-followup';

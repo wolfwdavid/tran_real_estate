@@ -9,8 +9,8 @@
 import type { Finding } from '@tran/core/fair-housing';
 import { checkAdviceLanguage } from '@tran/core/finance';
 import { checkNumbers, type AllowedNumber } from '@tran/core/numbers';
-import { WARN_REASON, blockReason, type PostCheck } from '$lib/ai/ui/panel-controller';
-import { createPostCheck, groupFindings, type CheckGroupCopy } from '$lib/ai/ui/post-check';
+import { WARN_REASON, blockReason, type PostCheck } from '#lib/ai/ui/panel-controller.ts';
+import { createPostCheck, groupFindings, type CheckGroupCopy } from '#lib/ai/ui/post-check.ts';
 
 export const NUMBER_CATEGORY_LABEL = 'Number not in your analysis';
 export const NUMBER_EXPLANATION =

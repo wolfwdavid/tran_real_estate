@@ -11,7 +11,7 @@ import {
 	validateToolField,
 	type FieldError
 } from '@tran/core/finance/tool-inputs';
-import { NEGATIVE_SUFFIX, SHARED_TOOL_COPY, type ToolField } from '$lib/content/tools/shared';
+import { NEGATIVE_SUFFIX, SHARED_TOOL_COPY, type ToolField } from '#lib/content/tools/shared.ts';
 
 const V = SHARED_TOOL_COPY.validation;
 const ANNOUNCE_DELAY_MS = 750;

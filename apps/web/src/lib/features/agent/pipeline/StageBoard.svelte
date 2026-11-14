@@ -28,7 +28,7 @@
 		type ListCtx,
 		type SmartList
 	} from '@tran/core/crm';
-	import { announce, Button } from '$lib/features/shared/data/platform-ui';
+	import { announce, Button } from '#lib/features/shared/data/platform-ui.ts';
 	import { readListParam, withParams } from '../crm/list-state';
 	import SmartListFilter from '../crm/SmartListFilter.svelte';
 	import { localDateOf, todayLocal } from '../dates';

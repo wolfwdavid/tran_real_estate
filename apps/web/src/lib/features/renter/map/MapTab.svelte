@@ -11,9 +11,9 @@
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
 	import type { Listing } from '@tran/core/listings';
 	import { formatRent } from '@tran/core/renter/format';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import LazyMap from '$lib/features/shared/listings/map/LazyMap.svelte';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import LazyMap from '#lib/features/shared/listings/map/LazyMap.svelte';
 	import { streetLine } from '../listing/address';
 	import type { RenterSearch } from '../search/search-state.svelte';
 	import type { MapBounds } from './in-bounds';

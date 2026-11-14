@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import { type VariantProps, createTV } from 'tailwind-variants';
-	import { cn, TW_MERGE_CONFIG, type WithElementRef } from '$lib/utils.js';
+	import { cn, TW_MERGE_CONFIG, type WithElementRef } from '#lib/utils.js';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 	const tv = createTV({ twMergeConfig: TW_MERGE_CONFIG });
 

@@ -3,9 +3,9 @@
 // Samples are hard-deleted on remove: they are not user data, so no tombstones are kept. Zero
 // keys, zero network: everything comes from the in-repo synthetic fixture.
 import type { Activity, Contact, Task } from '@tran/core/agent/types';
-import { getDb } from '$lib/storage/db';
-import { listContacts } from '$lib/storage/agent/contacts-repo';
-import { activitiesTable, contactsTable, tasksTable } from '$lib/storage/agent/tables';
+import { getDb } from '#lib/storage/db.ts';
+import { listContacts } from '#lib/storage/agent/contacts-repo.ts';
+import { activitiesTable, contactsTable, tasksTable } from '#lib/storage/agent/tables.ts';
 import { localDateOf } from '../dates';
 import { SAMPLE_ID_PREFIX, buildSampleData } from '../fixtures/sample-contacts';
 

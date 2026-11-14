@@ -11,10 +11,10 @@
 		isGatewayError,
 		type CostEstimate,
 		type GatewayError as GatewayErrorType
-	} from '$lib/data';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import { Button, Input, Label, announce } from '$lib/features/shared/data/platform-ui';
+	} from '#lib/data/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import { Button, Input, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import { loadMarket, type LoadOutcome } from './market-load';
 	import type { MarketResult, MarketsPort } from './markets-port';
 	import { watchZip } from './watchedZipsRepo';

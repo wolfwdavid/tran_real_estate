@@ -2,13 +2,13 @@
 	import type { ReminderResult } from '@tran/core';
 
 	type Kit = {
-		db: import('$lib/storage/db').TranDb | null;
-		vault: import('$lib/storage/secrets').Vault | null;
-		exportBackup: (typeof import('$lib/storage/backup'))['exportBackup'];
-		readReminderInput: (typeof import('$lib/storage/meta'))['readReminderInput'];
-		setMeta: (typeof import('$lib/storage/meta'))['setMeta'];
-		META: (typeof import('$lib/storage/meta'))['META'];
-		live: (typeof import('$lib/storage/live.svelte'))['live'];
+		db: import('#lib/storage/db.ts').TranDb | null;
+		vault: import('#lib/storage/secrets/index.ts').Vault | null;
+		exportBackup: (typeof import('#lib/storage/backup'))['exportBackup'];
+		readReminderInput: (typeof import('#lib/storage/meta'))['readReminderInput'];
+		setMeta: (typeof import('#lib/storage/meta'))['setMeta'];
+		META: (typeof import('#lib/storage/meta'))['META'];
+		live: (typeof import('#lib/storage/live.svelte'))['live'];
 		backupReminderDue: (typeof import('@tran/core'))['backupReminderDue'];
 	};
 </script>
@@ -20,9 +20,9 @@
 	import Lock from '@lucide/svelte/icons/lock';
 	import HardDriveDownload from '@lucide/svelte/icons/hard-drive-download';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
 	import { backupCopy, isSettingsPath, selectNotice, SNOOZE_MS } from './notice-logic';
 
 	// One in-flow notice for every (app) page (03-UI-SPEC "App notice slot"): locked keys first,
@@ -39,11 +39,11 @@
 
 		void (async () => {
 			const [db, meta, backup, liveMod, secrets, core] = await Promise.all([
-				import('$lib/storage/db'),
-				import('$lib/storage/meta'),
-				import('$lib/storage/backup'),
-				import('$lib/storage/live.svelte'),
-				import('$lib/storage/secrets'),
+				import('#lib/storage/db.ts'),
+				import('#lib/storage/meta.ts'),
+				import('#lib/storage/backup.ts'),
+				import('#lib/storage/live.svelte.ts'),
+				import('#lib/storage/secrets/index.ts'),
 				import('@tran/core')
 			]);
 

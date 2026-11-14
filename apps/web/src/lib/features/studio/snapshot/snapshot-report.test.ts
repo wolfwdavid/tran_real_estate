@@ -4,8 +4,8 @@
 // browser print layout is proven by tests/e2e/snapshot-print.spec.ts.
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
-import type { SnapshotRecord, SnapshotSectionKey } from '$lib/storage/studio/types';
-import { printBlocks, splitRows } from '$lib/features/shared/markets/ChartDataTable.svelte';
+import type { SnapshotRecord, SnapshotSectionKey } from '#lib/storage/studio/types.ts';
+import { printBlocks, splitRows } from '#lib/features/shared/markets/ChartDataTable.svelte';
 import { SAMPLE_SNAPSHOT_RECORD } from '../fixtures/sample-snapshot';
 import BrandBand, { bandColors } from './BrandBand.svelte';
 import SnapshotReport from './SnapshotReport.svelte';

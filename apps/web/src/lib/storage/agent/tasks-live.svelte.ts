@@ -2,7 +2,7 @@
 // loaded }` shape as live.svelte.ts). Recreate a view when its input changes:
 // `const tasks = $derived(useTasksFor(id))`.
 import type { Task } from '@tran/core/agent/types';
-import { live } from '$lib/storage/live.svelte';
+import { live } from '#lib/storage/live.svelte.ts';
 import type { LiveView } from './live.svelte';
 import { listDoneSince, listOpenTasks, listTasksFor } from './tasks-repo';
 

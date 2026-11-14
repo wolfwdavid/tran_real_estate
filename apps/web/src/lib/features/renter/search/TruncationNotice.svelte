@@ -4,9 +4,9 @@
 	// with those filters server-side; its cost shows before the click.
 	import Info from '@lucide/svelte/icons/info';
 	import { hasLocalFilters } from '@tran/core/renter';
-	import type { DataGateway } from '$lib/data';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
+	import type { DataGateway } from '#lib/data/index.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
 	import { createCostEstimate } from './cost-estimate.svelte';
 	import type { RenterSearch } from './search-state.svelte';
 

@@ -4,7 +4,7 @@
 	// labelled section, NOT a live region: the form announces one debounced summary instead.
 	import type { Snippet } from 'svelte';
 	import ToolIcon from './ToolIcon.svelte';
-	import { SHARED_TOOL_COPY as C, type ToolField } from '$lib/content/tools/shared';
+	import { SHARED_TOOL_COPY as C, type ToolField } from '#lib/content/tools/shared.ts';
 	import type { CalculatorForm } from './calculator-form.svelte';
 	import NumberField from './NumberField.svelte';
 

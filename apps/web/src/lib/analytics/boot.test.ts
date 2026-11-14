@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { ANALYTICS, SITE_BASE } from '$lib/site';
+import { ANALYTICS, SITE_BASE } from '#lib/site.ts';
 import { pageview, tracker, trackerConfig } from './boot.js';
 
 afterEach(() => {

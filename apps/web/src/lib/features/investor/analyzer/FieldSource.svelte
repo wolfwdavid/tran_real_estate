@@ -5,7 +5,7 @@
 	// "Edited by you" once the user changes a filled value. Typed values get no chip.
 	import Pencil from '@lucide/svelte/icons/pencil';
 	import Tag from '@lucide/svelte/icons/tag';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 	import type { FieldSource } from '../deals/schema';
 
 	let { source, now }: { source: FieldSource | undefined; now?: number } = $props();

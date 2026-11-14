@@ -12,9 +12,9 @@
 		type ShortlistItem,
 		type ShortlistStatus
 	} from '@tran/core/renter/records';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import type { DataGateway } from '$lib/data';
-	import { live } from '$lib/storage/live.svelte';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
+	import type { DataGateway } from '#lib/data/index.ts';
+	import { live } from '#lib/storage/live.svelte.ts';
 	import { getShortlistRepo } from '../storage/shortlist-repo';
 	import ShortlistCard from './ShortlistCard.svelte';
 	import { STATUS_ICONS } from './status-icons';

@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import type { CheckGroupCopy } from '$lib/ai/ui/post-check';
+	import type { CheckGroupCopy } from '#lib/ai/ui/post-check.ts';
 	import { STUDIO_CHECKERS } from '../post-checks';
 
 	const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
@@ -66,21 +66,21 @@
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import { composeDisclosure } from '@tran/core/disclosure';
 	import { DISCLOSURE_FIELD_LABELS, missingFor, type ListingFacts } from '@tran/core/studio';
-	import { PROVIDER_LABELS } from '$lib/ai/models';
-	import { aiPrefs } from '$lib/ai/prefs.svelte';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import type { ExitDisabled } from '$lib/ai/ui/panel-controller';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
+	import { PROVIDER_LABELS } from '#lib/ai/models.ts';
+	import { aiPrefs } from '#lib/ai/prefs.svelte.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import type { ExitDisabled } from '#lib/ai/ui/panel-controller.ts';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
 	import {
 		SAMPLE_AGENT_PROFILE,
 		isProfileComplete,
 		loadAgentProfile,
 		toDisclosureProfile
-	} from '$lib/features/shared/agent-profile';
-	import { announce, Button, ConfirmDialog } from '$lib/features/shared/data/platform-ui';
-	import type { StudioAutosave } from '$lib/storage/studio/autosave.svelte';
+	} from '#lib/features/shared/agent-profile/index.ts';
+	import { announce, Button, ConfirmDialog } from '#lib/features/shared/data/platform-ui.ts';
+	import type { StudioAutosave } from '#lib/storage/studio/autosave.svelte.ts';
 	import CharacterCount from '../CharacterCount.svelte';
 	import DisclosureStatus from '../DisclosureStatus.svelte';
 	import { SAMPLE_LISTING_FACTS } from '../fixtures/sample-listing-facts';
@@ -255,8 +255,8 @@
 		let disposed = false;
 		void (async () => {
 			const [autosaveMod, artifacts, saved] = await Promise.all([
-				import('$lib/storage/studio/autosave.svelte'),
-				import('$lib/ai/storage/artifacts'),
+				import('#lib/storage/studio/autosave.svelte.ts'),
+				import('#lib/ai/storage/artifacts.ts'),
 				loadAgentProfile().catch(() => null)
 			]);
 			if (disposed) return;

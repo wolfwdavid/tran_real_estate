@@ -14,7 +14,7 @@ import {
 	type QuickMetrics
 } from '@tran/core/finance';
 import type { MarketStatsInput } from '@tran/core/markets';
-import type { MarketsPort } from '$lib/features/shared/markets/markets-port';
+import type { MarketsPort } from '#lib/features/shared/markets/markets-port.ts';
 import type { InvestorDataPort, SaleListing } from '../data/investor-port';
 import type { BuyBoxCriteria, BuyBoxInput, BuyBoxView } from './buyBoxRepo';
 

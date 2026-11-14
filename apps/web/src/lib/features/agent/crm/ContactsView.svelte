@@ -20,8 +20,8 @@
 		type ListCtx,
 		type SmartList
 	} from '@tran/core/crm';
-	import { Button, Input, Label, announce } from '$lib/features/shared/data/platform-ui';
-	import { useOpenTasks } from '$lib/storage/agent/tasks-live.svelte';
+	import { Button, Input, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { useOpenTasks } from '#lib/storage/agent/tasks-live.svelte.ts';
 	import { localDateOf, todayLocal } from '../dates';
 	import CsvExportButton from '../import/CsvExportButton.svelte';
 	import UndoStatus from '../ui/UndoStatus.svelte';

@@ -12,8 +12,8 @@
 import Dexie from 'dexie';
 import { newSyncable, tombstone } from '@tran/core';
 import type { Finding } from '@tran/core/fair-housing';
-import type { TranDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import type { TranDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import {
 	AI_ARTIFACTS_TABLE,
 	AI_ARTIFACT_SCHEMA_VERSION,
@@ -126,7 +126,7 @@ export function createArtifactRepo(db?: TranDb, o: ArtifactRepoOptions = {}): Ar
 	const getDb = (): Promise<TranDb> =>
 		(resolved ??= db
 			? Promise.resolve(db)
-			: import('$lib/storage/db').then(({ getDb: appDb }) => appDb()));
+			: import('#lib/storage/db.ts').then(({ getDb: appDb }) => appDb()));
 	const table = async () => (await getDb()).table<AiArtifact, string>(AI_ARTIFACTS_TABLE);
 
 	/** Read-modify-write of one row in a single transaction; a missing id is a no-op. */

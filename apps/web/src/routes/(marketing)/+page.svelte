@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import PortalCard from '$lib/components/marketing/PortalCard.svelte';
-	import HowItWorks from '$lib/components/marketing/HowItWorks.svelte';
-	import TrustStrip from '$lib/components/marketing/TrustStrip.svelte';
-	import RenterMark from '$lib/components/brand/marks/RenterMark.svelte';
-	import InvestorMark from '$lib/components/brand/marks/InvestorMark.svelte';
-	import AgentMark from '$lib/components/brand/marks/AgentMark.svelte';
-	import SeoHead from '$lib/seo/SeoHead.svelte';
-	import GetStartedGuide from '$lib/components/onboarding/GetStartedGuide.svelte';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
+	import PortalCard from '#lib/components/marketing/PortalCard.svelte';
+	import HowItWorks from '#lib/components/marketing/HowItWorks.svelte';
+	import TrustStrip from '#lib/components/marketing/TrustStrip.svelte';
+	import RenterMark from '#lib/components/brand/marks/RenterMark.svelte';
+	import InvestorMark from '#lib/components/brand/marks/InvestorMark.svelte';
+	import AgentMark from '#lib/components/brand/marks/AgentMark.svelte';
+	import SeoHead from '#lib/seo/SeoHead.svelte';
+	import GetStartedGuide from '#lib/components/onboarding/GetStartedGuide.svelte';
 
 	const description =
 		'Browser-based real estate tools for renters, investors, and agents. Listing data from RentCast, your own API keys, and no Tran server.';

@@ -7,7 +7,7 @@
 // ownerId 'local', ISO timestamps, deletedAt omitted. Callers pass plain data (`$state.snapshot`),
 // never a Svelte proxy: IndexedDB structured-clones the value.
 import { newSyncable, type Syncable } from '@tran/core';
-import { getDb, type TranDb } from '$lib/storage/db';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
 import type { DealSources } from '../deals/schema';
 import { INVESTOR_RECORD_SCHEMA_VERSION } from '../deals/tables';
 import { defaultForm, type AnalyzerForm } from './form-model';

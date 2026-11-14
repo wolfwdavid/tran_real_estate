@@ -2,10 +2,10 @@
 // the aggregate-only privacy guard, and the backup registration ('Studio forms', 'Market
 // Snapshots'). fake-indexeddb, a fresh IDBFactory per test.
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import { listBackupTables, _resetBackupRegistry } from '$lib/storage/backup-registry';
-import { TranDb, _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import { listBackupTables, _resetBackupRegistry } from '#lib/storage/backup-registry.ts';
+import { TranDb, _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import {
 	SnapshotPrivacyError,
 	addSnapshot,

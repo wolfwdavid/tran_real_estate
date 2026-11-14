@@ -35,7 +35,7 @@ import {
 	type GatewayError,
 	type GatewayResult,
 	type Provenance
-} from '$lib/data';
+} from '#lib/data/index.ts';
 import { searchRequest } from '../data/requests';
 
 /** Cards rendered per page ("Show 24 more"). */

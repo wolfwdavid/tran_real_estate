@@ -8,10 +8,10 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import type { StoredLogo } from '@tran/core/agent/types';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
 	import { prepareLogo } from './logo-pipeline';
-	import { logoObjectUrl } from '$lib/features/shared/agent-profile/logo-url';
+	import { logoObjectUrl } from '#lib/features/shared/agent-profile/logo-url.ts';
 
 	interface Props {
 		logo: StoredLogo | null;

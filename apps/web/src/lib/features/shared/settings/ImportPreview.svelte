@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import type { ImportPreview as Preview } from '$lib/storage/backup';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import type { ImportPreview as Preview } from '#lib/storage/backup.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import * as RadioGroup from '#lib/components/ui/radio-group/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import { getSettingsContext } from './settings-context.svelte';
 	import ConfirmDialog from './ConfirmDialog.svelte';
 	import SectionError from './SectionError.svelte';

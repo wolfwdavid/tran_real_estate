@@ -3,7 +3,7 @@
 	// lives in this component's $state only. Nothing is written to IndexedDB, prefs, the URL or
 	// backups, so a reload starts empty. Reused on a marketing page in Phase 10, so it imports only
 	// core math, UI primitives and icons (lint-enforced by the shared/affordability boundary).
-	import { announce } from '$lib/components/a11y/announcer.svelte.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.js';
 	import {
 		affordability,
 		parseMoneyInput,

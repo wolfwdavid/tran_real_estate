@@ -1,8 +1,8 @@
 <script lang="ts">
 	// 06-UI-SPEC empty state before any search. In sample mode, "Try a sample search" fills in the
 	// first fixture metro and runs it at 0 calls.
-	import PropertyTypeMark from '$lib/features/shared/listings/PropertyTypeMark.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import PropertyTypeMark from '#lib/features/shared/listings/PropertyTypeMark.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
 
 	let { sample, onSample }: { sample: boolean; onSample: () => void } = $props();
 </script>

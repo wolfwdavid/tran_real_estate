@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Upload from '@lucide/svelte/icons/upload';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import type { ImportPreview as Preview } from '$lib/storage/backup';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import type { ImportPreview as Preview } from '#lib/storage/backup.ts';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import { getSettingsContext } from './settings-context.svelte';
 	import SectionError from './SectionError.svelte';
 	import ImportPreview from './ImportPreview.svelte';

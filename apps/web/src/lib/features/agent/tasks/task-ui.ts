@@ -2,7 +2,7 @@
 // grouping itself is @tran/core/crm groupTasks; these decide what the queue shows and says.
 import { isLive, type Task } from '@tran/core/agent/types';
 import { isDueToday, isOverdue, type TaskGroups } from '@tran/core/crm';
-import type { TaskValidationCode } from '$lib/storage/agent/tasks-repo';
+import type { TaskValidationCode } from '#lib/storage/agent/tasks-repo.ts';
 
 /** The home page's compact queue shows at most this many rows (UI-SPEC "AgentHome"). */
 export const COMPACT_MAX = 5;

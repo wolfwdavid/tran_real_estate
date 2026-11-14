@@ -5,10 +5,10 @@
 	import { resolve } from '$app/paths';
 	import { ratio, usd } from '@tran/core/format';
 	import { currentStats } from '@tran/core/markets';
-	import type { GatewayError as GatewayErrorType } from '$lib/data';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import { Button, buttonVariants } from '$lib/features/shared/data/platform-ui';
+	import type { GatewayError as GatewayErrorType } from '#lib/data/index.ts';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import { Button, buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
 	import type { MarketResult } from './markets-port';
 
 	interface Props {

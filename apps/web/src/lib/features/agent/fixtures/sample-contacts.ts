@@ -8,8 +8,8 @@
 import { addDays } from '@tran/core/crm';
 import type { Activity, Contact, Stage, Task } from '@tran/core/agent/types';
 import { STAGE_LABELS } from '@tran/core/agent/types';
-import { AGENT_RECORD_SCHEMA_VERSION } from '$lib/storage/agent/tables';
-import { buildContactRecord, ADDED_TEXT } from '$lib/storage/agent/contacts-repo';
+import { AGENT_RECORD_SCHEMA_VERSION } from '#lib/storage/agent/tables.ts';
+import { buildContactRecord, ADDED_TEXT } from '#lib/storage/agent/contacts-repo.ts';
 
 export interface SampleData {
 	contacts: Contact[];

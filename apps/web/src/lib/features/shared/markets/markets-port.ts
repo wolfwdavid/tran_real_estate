@@ -16,7 +16,7 @@ import {
 	type DataRequest,
 	type DataRuntime,
 	type Provenance
-} from '$lib/data';
+} from '#lib/data/index.ts';
 import { toMarketStatsInput } from './market-input';
 
 export type { CostEstimate, Provenance };

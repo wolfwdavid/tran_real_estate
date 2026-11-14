@@ -13,15 +13,15 @@
 		type AgentProfile,
 		type ProfileInput
 	} from '@tran/core/agent/types';
-	import BrandColorField from '$lib/features/agent/profile/BrandColorField.svelte';
-	import BrandPreview from '$lib/features/shared/agent-profile/BrandPreview.svelte';
-	import DisclosurePreview from '$lib/features/agent/profile/DisclosurePreview.svelte';
-	import LogoUpload from '$lib/features/agent/profile/LogoUpload.svelte';
-	import ProfileForm from '$lib/features/agent/profile/ProfileForm.svelte';
-	import ShareLinkBuilder from '$lib/features/agent/profile/ShareLinkBuilder.svelte';
-	import { toProfileInput } from '$lib/features/agent/profile/profile-form';
-	import { useProfile, type LiveView } from '$lib/storage/agent/live.svelte';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import BrandColorField from '#lib/features/agent/profile/BrandColorField.svelte';
+	import BrandPreview from '#lib/features/shared/agent-profile/BrandPreview.svelte';
+	import DisclosurePreview from '#lib/features/agent/profile/DisclosurePreview.svelte';
+	import LogoUpload from '#lib/features/agent/profile/LogoUpload.svelte';
+	import ProfileForm from '#lib/features/agent/profile/ProfileForm.svelte';
+	import ShareLinkBuilder from '#lib/features/agent/profile/ShareLinkBuilder.svelte';
+	import { toProfileInput } from '#lib/features/agent/profile/profile-form.ts';
+	import { useProfile, type LiveView } from '#lib/storage/agent/live.svelte.ts';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
 
 	let view = $state.raw<LiveView<AgentProfile | null> | null>(null);
 	onMount(() => {

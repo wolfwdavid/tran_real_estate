@@ -1,7 +1,7 @@
 // 06-UI-SPEC "OutreachForm" validation (RENT-07). Pure: runs when the renter presses
 // **Draft message**, before the panel generates anything. The count is the only household detail
 // the form collects, so it accepts a plain whole number and nothing else (no "3 adults").
-import type { RenterOutreachForm } from '$lib/ai/prompts/renter/outreach.v1';
+import type { RenterOutreachForm } from '#lib/ai/prompts/renter/outreach.v1.ts';
 
 export const OCCUPANTS_ERROR = 'Enter a number from 1 to 12, or leave it blank.';
 export const TOPICS_ERROR = 'Choose at least one topic, or type a question below.';

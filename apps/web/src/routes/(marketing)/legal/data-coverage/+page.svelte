@@ -1,6 +1,6 @@
 <script lang="ts">
-	import LegalPage from '$lib/components/legal/LegalPage.svelte';
-	import ExternalLink from '$lib/components/legal/ExternalLink.svelte';
+	import LegalPage from '#lib/components/legal/LegalPage.svelte';
+	import ExternalLink from '#lib/components/legal/ExternalLink.svelte';
 
 	const description =
 		'Where Tran Real Estate Tools gets listing data, what is not included, and the limits of automated estimates.';

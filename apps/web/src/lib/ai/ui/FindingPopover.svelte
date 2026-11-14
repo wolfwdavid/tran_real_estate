@@ -3,7 +3,7 @@
 	// action (Use alternative / Remove phrase), Escape closes and bits-ui returns focus to the trigger.
 	import type { Snippet } from 'svelte';
 	import type { Finding } from '@tran/core/fair-housing';
-	import * as Popover from '$lib/components/ui/popover/index.js';
+	import * as Popover from '#lib/components/ui/popover/index.js';
 	import FindingDetails from './FindingDetails.svelte';
 	import type { CheckGroupCopy } from './post-check';
 

@@ -5,13 +5,13 @@
 	// are re-read when the buy-box list changes (the Phase 4 check-on-open pass in DataShell
 	// updates it) or the data source switches. No gateway get/refresh anywhere on this page.
 	import { onMount, untrack } from 'svelte';
-	import { getDataRuntime } from '$lib/data';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import { useBuyBoxRepo, type BuyBoxView } from '$lib/features/investor/buybox/buyBoxRepo';
-	import InvestorOverview from '$lib/features/investor/overview/InvestorOverview.svelte';
-	import type { OverviewCounts } from '$lib/features/investor/overview/overview-counts';
-	import { live } from '$lib/storage/live.svelte';
+	import { getDataRuntime } from '#lib/data/index.ts';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import { useBuyBoxRepo, type BuyBoxView } from '#lib/features/investor/buybox/buyBoxRepo.ts';
+	import InvestorOverview from '#lib/features/investor/overview/InvestorOverview.svelte';
+	import type { OverviewCounts } from '#lib/features/investor/overview/overview-counts.ts';
+	import { live } from '#lib/storage/live.svelte.ts';
 
 	// Built during component init: the buy-box repo's port reads the data runtime from context.
 	const runtime = getDataRuntime();
@@ -25,9 +25,9 @@
 		let alive = true;
 		boxesLive = live<BuyBoxView[] | undefined>(() => buyBoxes.listBuyBoxes(), undefined);
 		void Promise.all([
-			import('$lib/features/investor/overview/overview-counts'),
-			import('$lib/features/investor/deals/dealsRepo'),
-			import('$lib/features/shared/markets/watchedZipsRepo')
+			import('#lib/features/investor/overview/overview-counts.ts'),
+			import('#lib/features/investor/deals/dealsRepo.ts'),
+			import('#lib/features/shared/markets/watchedZipsRepo.ts')
 		]).then(([{ overviewCounts }, { listDeals }, { listWatchedZips }]) => {
 			if (!alive) return;
 			read = () => overviewCounts({ listDeals, listWatchedZips, buyBoxes });

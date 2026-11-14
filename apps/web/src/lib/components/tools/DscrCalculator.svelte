@@ -4,8 +4,8 @@
 	// doesn't cover), never a verdict on the property.
 	import { dscrCalc, type DscrInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolRatio } from '@tran/core/finance/tool-inputs';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { dscr as dscrContent } from '$lib/content/tools/dscr';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { dscr as dscrContent } from '#lib/content/tools/dscr.ts';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';

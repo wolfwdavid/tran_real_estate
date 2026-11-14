@@ -12,10 +12,10 @@ import {
 	type RentalFilters,
 	type RenterLocation
 } from '@tran/core/renter';
-import { savedSearchRepo, type DataGateway, type Provenance } from '$lib/data';
+import { savedSearchRepo, type DataGateway, type Provenance } from '#lib/data/index.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only isolated DataDb (DataShell.browser.test precedent); the port never exposes createDataDb
-import { makeDb, T0 } from '$lib/data/testing/harness';
-import { TranDb } from '$lib/storage/db';
+import { makeDb, T0 } from '#lib/data/testing/harness.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import { createSearchMetaRepo } from '../storage/search-meta-repo';
 import { searchRequest } from '../data/requests';
 import { createRenterSavedSearches } from './saved-searches';

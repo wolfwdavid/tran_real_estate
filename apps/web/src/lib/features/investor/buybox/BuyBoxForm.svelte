@@ -8,9 +8,9 @@
 	import { onMount, tick, untrack } from 'svelte';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { Button } from '$lib/features/shared/data/platform-ui';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
 	import type { CostEstimate, InvestorDataPort } from '../data/investor-port';
 	import { BUY_BOX_PROPERTY_TYPES, type BuyBoxRepo, type BuyBoxView } from './buyBoxRepo';
 	import {

@@ -8,18 +8,18 @@
 	// live open tasks (overdue or due today, local date).
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
-	import SampleContactsNotice from '$lib/features/agent/crm/SampleContactsNotice.svelte';
-	import { todayLocal } from '$lib/features/agent/dates';
-	import { restoreSampleContacts } from '$lib/features/agent/samples/samples';
+	import SampleContactsNotice from '#lib/features/agent/crm/SampleContactsNotice.svelte';
+	import { todayLocal } from '#lib/features/agent/dates.ts';
+	import { restoreSampleContacts } from '#lib/features/agent/samples/samples.ts';
 	import {
 		clearSamplesState,
 		samplesState
-	} from '$lib/features/agent/samples/samples-state.svelte';
-	import { dueCount } from '$lib/features/agent/tasks/task-ui';
-	import AgentNav from '$lib/features/agent/ui/AgentNav.svelte';
-	import UndoStatus from '$lib/features/agent/ui/UndoStatus.svelte';
-	import { announce } from '$lib/features/shared/data/platform-ui';
-	import { useOpenTasks } from '$lib/storage/agent/tasks-live.svelte';
+	} from '#lib/features/agent/samples/samples-state.svelte.ts';
+	import { dueCount } from '#lib/features/agent/tasks/task-ui.ts';
+	import AgentNav from '#lib/features/agent/ui/AgentNav.svelte';
+	import UndoStatus from '#lib/features/agent/ui/UndoStatus.svelte';
+	import { announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { useOpenTasks } from '#lib/storage/agent/tasks-live.svelte.ts';
 
 	let { children } = $props();
 

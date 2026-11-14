@@ -8,11 +8,11 @@
 <script lang="ts">
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
 	import type { LiveProviderId } from '@tran/core/ai';
-	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { aiPrefs } from '$lib/ai/prefs.svelte';
-	import { PROVIDER_LABELS, PROVIDER_ORDER } from '$lib/ai/models';
-	import { defaultPreferred, type AiKeyState } from '$lib/ai/setup';
+	import * as RadioGroup from '#lib/components/ui/radio-group/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { aiPrefs } from '#lib/ai/prefs.svelte.ts';
+	import { PROVIDER_LABELS, PROVIDER_ORDER } from '#lib/ai/models.ts';
+	import { defaultPreferred, type AiKeyState } from '#lib/ai/setup.ts';
 
 	// "Draft with" (05-UI-SPEC AiProviderPicker). Four options in fixed order; each states its key
 	// state and current model. Choosing applies immediately, persists in aiPrefs and is announced.

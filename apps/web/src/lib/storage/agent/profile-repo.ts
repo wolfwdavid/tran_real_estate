@@ -17,8 +17,8 @@ import {
 } from '@tran/core/agent/types';
 import { ACCESS_KEY_RE } from '@tran/core/leads/inquiry-params';
 import { cleanText } from '@tran/core/leads/normalize';
-import { getDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import { getDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import {
 	AGENT_RECORD_SCHEMA_VERSION,
 	PROFILE_ROW_ID,

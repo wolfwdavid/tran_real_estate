@@ -2,10 +2,10 @@
 	// /agent/import/ (UI-SPEC "Import page"; AGT-03, AGT-07). Three ways in: paste a lead email,
 	// choose a CSV file, or add one lead by hand. Both imports run a dry-run review and commit in
 	// one transaction; everything stays in this browser.
-	import QuickAddDialog from '$lib/features/agent/crm/QuickAddDialog.svelte';
-	import CsvImport from '$lib/features/agent/import/CsvImport.svelte';
-	import PasteImport from '$lib/features/agent/import/PasteImport.svelte';
-	import { Button } from '$lib/features/shared/data/platform-ui';
+	import QuickAddDialog from '#lib/features/agent/crm/QuickAddDialog.svelte';
+	import CsvImport from '#lib/features/agent/import/CsvImport.svelte';
+	import PasteImport from '#lib/features/agent/import/PasteImport.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
 
 	let addOpen = $state(false);
 	let h1El = $state<HTMLHeadingElement | null>(null);

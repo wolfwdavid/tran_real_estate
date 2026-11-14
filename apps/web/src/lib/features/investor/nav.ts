@@ -1,7 +1,7 @@
 // The investor portal's sub-navigation items (07-UI-SPEC "PortalSubNav"). Hrefs are base-less
 // pathnames; PortalSubNav resolves them at render time. Compare and memo belong to Deals, the
 // one-ZIP dashboard belongs to Markets.
-import type { SubNavItem } from '$lib/features/shared/nav/nav';
+import type { SubNavItem } from '#lib/features/shared/nav/nav.ts';
 
 export const INVESTOR_NAV: readonly SubNavItem[] = [
 	{ href: '/investor/', label: 'Overview', match: [] },

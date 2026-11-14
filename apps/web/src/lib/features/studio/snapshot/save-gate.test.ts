@@ -3,7 +3,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
 import type { Finding } from '@tran/core/fair-housing';
-import type { SnapshotRecord } from '$lib/storage/studio/types';
+import type { SnapshotRecord } from '#lib/storage/studio/types.ts';
 import { SAMPLE_SNAPSHOT_RECORD } from '../fixtures/sample-snapshot';
 import {
 	builderGateState,

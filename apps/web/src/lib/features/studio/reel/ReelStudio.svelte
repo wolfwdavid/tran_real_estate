@@ -1,9 +1,12 @@
 <script lang="ts" module>
-	import type { CheckGroupCopy } from '$lib/ai/ui/post-check';
+	import type { CheckGroupCopy } from '#lib/ai/ui/post-check.ts';
 	import { STUDIO_CHECKERS } from '../post-checks';
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import { composeDisclosure } from '@tran/core/disclosure';
-	import { SAMPLE_AGENT_PROFILE, isProfileComplete } from '$lib/features/shared/agent-profile';
+	import {
+		SAMPLE_AGENT_PROFILE,
+		isProfileComplete
+	} from '#lib/features/shared/agent-profile/index.ts';
 	import { REEL_CHECKERS } from './reel-checks';
 	import { reelFooter } from './reel-export';
 
@@ -95,15 +98,18 @@
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import { DISCLOSURE_FIELD_LABELS, missingFor, type ReelLength } from '@tran/core/studio';
-	import type { ReelInputs } from '$lib/ai/prompts/studio/reel.v1';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import type { ExitDisabled } from '$lib/ai/ui/panel-controller';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { loadAgentProfile, toDisclosureProfile } from '$lib/features/shared/agent-profile';
-	import { announce, Button, ConfirmDialog } from '$lib/features/shared/data/platform-ui';
-	import type { StudioAutosave } from '$lib/storage/studio/autosave.svelte';
+	import type { ReelInputs } from '#lib/ai/prompts/studio/reel.v1.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import type { ExitDisabled } from '#lib/ai/ui/panel-controller.ts';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import {
+		loadAgentProfile,
+		toDisclosureProfile
+	} from '#lib/features/shared/agent-profile/index.ts';
+	import { announce, Button, ConfirmDialog } from '#lib/features/shared/data/platform-ui.ts';
+	import type { StudioAutosave } from '#lib/storage/studio/autosave.svelte.ts';
 	import DisclosureStatus from '../DisclosureStatus.svelte';
 	import { SAMPLE_REEL_BEATS, SAMPLE_REEL_BEATS_NO_RESULTS } from '../fixtures/sample-reel-beats';
 	import { numberPostCheck, numberWordsPostCheck, reelAllowedNumbers } from '../post-checks';
@@ -258,8 +264,8 @@
 		let disposed = false;
 		void (async () => {
 			const [autosaveMod, artifacts, saved] = await Promise.all([
-				import('$lib/storage/studio/autosave.svelte'),
-				import('$lib/ai/storage/artifacts'),
+				import('#lib/storage/studio/autosave.svelte.ts'),
+				import('#lib/ai/storage/artifacts.ts'),
 				loadAgentProfile().catch(() => null)
 			]);
 			if (disposed) return;

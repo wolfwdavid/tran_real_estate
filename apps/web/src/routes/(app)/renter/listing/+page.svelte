@@ -16,18 +16,18 @@
 		type CostEstimate,
 		type GatewayError,
 		type GatewayResult
-	} from '$lib/data';
-	import { listingByIdRequest } from '$lib/features/renter/data/requests';
-	import { streetLine } from '$lib/features/renter/listing/address';
-	import ListingDetail from '$lib/features/renter/listing/ListingDetail.svelte';
-	import ListingNotFound from '$lib/features/renter/listing/ListingNotFound.svelte';
+	} from '#lib/data/index.ts';
+	import { listingByIdRequest } from '#lib/features/renter/data/requests.ts';
+	import { streetLine } from '#lib/features/renter/listing/address.ts';
+	import ListingDetail from '#lib/features/renter/listing/ListingDetail.svelte';
+	import ListingNotFound from '#lib/features/renter/listing/ListingNotFound.svelte';
 	import {
 		fetchListingById,
 		resolveListing,
 		type ResolveDeps,
 		type ResolvedListing
-	} from '$lib/features/renter/listing/resolve';
-	import { getShortlistRepo } from '$lib/features/renter/storage/shortlist-repo';
+	} from '#lib/features/renter/listing/resolve.ts';
+	import { getShortlistRepo } from '#lib/features/renter/storage/shortlist-repo.ts';
 
 	const runtime = getDataRuntime();
 

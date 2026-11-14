@@ -35,7 +35,7 @@ function baseFor(
 	spec: string,
 	o: { webSrc: string; coreSrc: string }
 ): string | null {
-	if (spec === '$lib' || spec.startsWith('$lib/')) return `${o.webSrc}/lib${spec.slice(4)}`;
+	if (spec === '#lib' || spec.startsWith('#lib/')) return `${o.webSrc}/lib${spec.slice(4)}`;
 	if (spec.startsWith('./') || spec.startsWith('../') || spec === '.' || spec === '..') {
 		// join, not resolve: resolve would prefix the process cwd to a Windows "C:/…" path.
 		return posix.join(posix.dirname(from), spec);

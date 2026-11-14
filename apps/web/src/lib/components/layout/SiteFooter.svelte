@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { BUILD_YEAR } from '$lib/build-info';
+	import { BUILD_YEAR } from '#lib/build-info.ts';
 
 	type FooterLink = { href: string; label: string; id: string };
 

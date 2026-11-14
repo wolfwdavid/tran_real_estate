@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { checkFairHousing } from '@tran/core/fair-housing';
 import { pickListingFacts, type ListingFacts } from '@tran/core/studio';
-import { runChecks } from '$lib/ai/ui/panel-controller';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
 import {
 	listingAllowedNumbers,
 	numberPostCheck,
 	numberWordsPostCheck,
 	unsupportedFeaturePostCheck
-} from '$lib/features/studio/post-checks';
+} from '#lib/features/studio/post-checks.ts';
 import { HOUSING_COPY_GUARDRAIL } from '../guardrail.js';
 import { buildPrompt, getPrompt } from '../registry.js';
 import {

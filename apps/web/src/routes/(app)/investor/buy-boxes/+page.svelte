@@ -12,18 +12,23 @@
 	import { onMount, tick, untrack } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import Plus from '@lucide/svelte/icons/plus';
-	import { getDataRuntime, isGatewayError, type CostEstimate, type GatewayError } from '$lib/data';
+	import {
+		getDataRuntime,
+		isGatewayError,
+		type CostEstimate,
+		type GatewayError
+	} from '#lib/data/index.ts';
 	import { GatewayError as GatewayErrorValue } from '@tran/core/request';
-	import { announce, Button } from '$lib/features/shared/data/platform-ui';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import { useInvestorPort } from '$lib/features/investor/data/investor-port';
-	import { useMarketsPort } from '$lib/features/shared/markets/markets-port';
-	import { useBuyBoxRepo, type BuyBoxView } from '$lib/features/investor/buybox/buyBoxRepo';
-	import { loadMatches, type LoadedMatches } from '$lib/features/investor/buybox/matches';
-	import BuyBoxCard from '$lib/features/investor/buybox/BuyBoxCard.svelte';
-	import BuyBoxForm from '$lib/features/investor/buybox/BuyBoxForm.svelte';
-	import { live } from '$lib/storage/live.svelte';
+	import { announce, Button } from '#lib/features/shared/data/platform-ui.ts';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import { useInvestorPort } from '#lib/features/investor/data/investor-port.ts';
+	import { useMarketsPort } from '#lib/features/shared/markets/markets-port.ts';
+	import { useBuyBoxRepo, type BuyBoxView } from '#lib/features/investor/buybox/buyBoxRepo.ts';
+	import { loadMatches, type LoadedMatches } from '#lib/features/investor/buybox/matches.ts';
+	import BuyBoxCard from '#lib/features/investor/buybox/BuyBoxCard.svelte';
+	import BuyBoxForm from '#lib/features/investor/buybox/BuyBoxForm.svelte';
+	import { live } from '#lib/storage/live.svelte.ts';
 
 	interface BoxData {
 		matches?: LoadedMatches;

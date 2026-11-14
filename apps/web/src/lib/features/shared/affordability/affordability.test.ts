@@ -222,9 +222,9 @@ describe('zero I/O and honest copy', () => {
 	});
 
 	test.each([
-		'$lib/storage',
-		'$lib/data',
-		'$lib/ai',
+		'#lib/storage',
+		'#lib/data/index.ts',
+		'#lib/ai',
 		'localStorage',
 		'sessionStorage',
 		'PersistedState',

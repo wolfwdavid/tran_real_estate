@@ -8,9 +8,9 @@
 	import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import type { Finding } from '@tran/core/fair-housing';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 	import { findingsTitle } from './panel-controller';
 	import { groupCopyFor, groupFindings, type CheckGroupCopy } from './post-check';
 

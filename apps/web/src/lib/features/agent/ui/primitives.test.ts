@@ -4,7 +4,7 @@ import { render } from 'svelte/server';
 import { createRawSnippet } from 'svelte';
 import { describe, expect, test } from 'vitest';
 import Inbox from '@lucide/svelte/icons/inbox';
-import SampleChip from '$lib/components/sample/SampleChip.svelte';
+import SampleChip from '#lib/components/sample/SampleChip.svelte';
 import StageBadge from './StageBadge.svelte';
 import NativeSelect from './NativeSelect.svelte';
 import DateField from './DateField.svelte';

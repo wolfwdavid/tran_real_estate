@@ -3,8 +3,8 @@
 import { describe, expect, test } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { announcerMessage } from '$lib/components/a11y/announcer.svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { announcerMessage } from '#lib/components/a11y/announcer.svelte.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
 import CapRateCalculator from './CapRateCalculator.svelte';
 import CashOnCashCalculator from './CashOnCashCalculator.svelte';
 import DscrCalculator from './DscrCalculator.svelte';

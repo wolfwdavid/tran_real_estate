@@ -6,14 +6,14 @@ import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { BackupError, findKeyMaterial } from '@tran/core';
 import type { Activity, Contact, Task } from '@tran/core/agent/types';
 import { SAMPLE_AGENT_PROFILE } from '@tran/core/agent/fixtures/sample-profile';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
 import {
 	BACKUP_EXCLUDED_TABLES,
 	listBackupTables,
 	_resetBackupRegistry
-} from '$lib/storage/backup-registry';
-import { TranDb, _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
+} from '#lib/storage/backup-registry.ts';
+import { TranDb, _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { fakeKey } from '../../../../tests/support/fake-keys';
 import { getProfile, saveProfile } from './profile-repo';
 import { PROFILE_ROW_ID } from './tables';

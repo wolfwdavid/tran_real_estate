@@ -2,12 +2,12 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { BackupError, SyncableSchema, parseBackup } from '@tran/core';
 import type { Finding } from '@tran/core/fair-housing';
 import { fakeKey } from '../../../../tests/support/fake-keys';
-import { _resetBackupRegistry, listBackupTables } from '$lib/storage/backup-registry';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import { TranDb } from '$lib/storage/db';
-import { META, getMeta } from '$lib/storage/meta';
-import { freshIdb } from '$lib/storage/test-utils';
-import { memoArtifactMeta, notesNumbersFromMeta } from '$lib/features/investor/memo/memo-meta';
+import { _resetBackupRegistry, listBackupTables } from '#lib/storage/backup-registry.ts';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import { TranDb } from '#lib/storage/db.ts';
+import { META, getMeta } from '#lib/storage/meta.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
+import { memoArtifactMeta, notesNumbersFromMeta } from '#lib/features/investor/memo/memo-meta.ts';
 import {
 	AI_ARTIFACTS_LABEL,
 	AI_ARTIFACTS_TABLE,

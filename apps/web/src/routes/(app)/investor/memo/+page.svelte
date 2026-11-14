@@ -1,9 +1,9 @@
 <script lang="ts">
 	// /investor/memo/ (INV-06). Prerendered shell: the deal id travels as ?id= and is read in
 	// MemoPage's onMount from new URL(location.href), never from the prerendered page store.
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import MemoPage from '$lib/features/investor/memo/MemoPage.svelte';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import MemoPage from '#lib/features/investor/memo/MemoPage.svelte';
 </script>
 
 <svelte:head>

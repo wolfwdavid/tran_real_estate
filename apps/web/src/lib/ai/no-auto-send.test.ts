@@ -22,7 +22,7 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 	test('follows a dynamic import through a second file into lib/leads', () => {
 		const io = memoryIo({
 			'/v/web/lib/ai/a.ts': "import { b } from './b';\nexport const a = b;\n",
-			'/v/web/lib/ai/b.ts': "export const b = () => import('$lib/leads/web3forms');\n",
+			'/v/web/lib/ai/b.ts': "export const b = () => import('#lib/leads/web3forms');\n",
 			'/v/web/lib/leads/web3forms.ts': 'export const send = () => 1;\n'
 		});
 		const g = collectImportGraph(['/v/web/lib/ai/a.ts'], { io, ...V });
@@ -57,7 +57,7 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 
 	test('type-only imports are followed (the boundary is module coupling)', () => {
 		const io = memoryIo({
-			'/v/web/lib/ai/t.ts': "import type { T } from '$lib/leads/types';\nexport type U = T;\n",
+			'/v/web/lib/ai/t.ts': "import type { T } from '#lib/leads/types';\nexport type U = T;\n",
 			'/v/web/lib/leads/types.ts': 'export type T = string;\n'
 		});
 		const g = collectImportGraph(['/v/web/lib/ai/t.ts'], { io, ...V });

@@ -1,6 +1,6 @@
 <script lang="ts">
 	// 06-UI-SPEC "Good to know" callout (Phase 3 HonestyCallout pattern). Static copy only.
-	import ToolIcon from '$lib/components/tools/ToolIcon.svelte';
+	import ToolIcon from '#lib/components/tools/ToolIcon.svelte';
 
 	const POINTS = [
 		'This is a general guideline based on common rules of thumb, not financial advice.',

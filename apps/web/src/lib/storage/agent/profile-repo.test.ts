@@ -3,8 +3,8 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { EMPTY_PROFILE_INPUT, type ProfileInput } from '@tran/core/agent/types';
 import { SAMPLE_AGENT_PROFILE } from '@tran/core/agent/fixtures/sample-profile';
-import { _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
+import { _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { getProfile, saveAccessKey, saveProfile } from './profile-repo';
 import { PROFILE_ROW_ID } from './tables';
 

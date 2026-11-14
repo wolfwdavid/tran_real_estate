@@ -13,7 +13,7 @@ import type { Table } from 'dexie';
 import * as z from 'zod/mini';
 import { SyncableSchema, type Syncable } from '@tran/core';
 import { AGGREGATED_SAMPLE_KEYS, BEDROOM_AGGREGATE_KEYS } from '@tran/core/studio';
-import type { TranDb } from '$lib/storage/db';
+import type { TranDb } from '#lib/storage/db.ts';
 import { STUDIO_TOOLS, type SnapshotRecord, type StudioTool } from './types';
 
 export const STUDIO_DRAFT_TABLE = 'studioDraft';

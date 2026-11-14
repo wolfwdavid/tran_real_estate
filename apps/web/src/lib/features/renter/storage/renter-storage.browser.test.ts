@@ -1,7 +1,7 @@
 // liveCount in real Chromium IndexedDB: Dexie liveQuery does not emit under fake-indexeddb in the
 // Node project, so the nav-badge observable is proven here.
 import { afterEach, describe, expect, it } from 'vitest';
-import { TranDb } from '$lib/storage/db';
+import { TranDb } from '#lib/storage/db.ts';
 import { createShortlistRepo } from './shortlist-repo';
 
 const T0 = Date.parse('2026-10-15T12:00:00.000Z');

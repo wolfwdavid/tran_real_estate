@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import RenterNav from '$lib/features/renter/RenterNav.svelte';
-	import { getShortlistRepo } from '$lib/features/renter/storage/shortlist-repo';
+	import RenterNav from '#lib/features/renter/RenterNav.svelte';
+	import { getShortlistRepo } from '#lib/features/renter/storage/shortlist-repo.ts';
 
 	let { children } = $props();
 

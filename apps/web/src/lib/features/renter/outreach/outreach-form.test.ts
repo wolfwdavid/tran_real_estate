@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RenterOutreachForm } from '$lib/ai/prompts/renter/outreach.v1';
+import type { RenterOutreachForm } from '#lib/ai/prompts/renter/outreach.v1.ts';
 import {
 	DEFAULT_OUTREACH_FORM,
 	OCCUPANTS_ERROR,

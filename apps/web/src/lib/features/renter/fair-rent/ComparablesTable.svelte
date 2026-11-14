@@ -4,7 +4,7 @@
 	// not links: comparables are not in Tran's listing store.
 	import type { Comparable } from '@tran/core/listings';
 	import { formatDistance, formatRent, formatSqft } from '@tran/core/renter/format';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 
 	/** `sample` puts the Sample chip in the caption row (06-UI-SPEC Sample Data Contract). */
 	let { rows, sample = false }: { rows: readonly Comparable[]; sample?: boolean } = $props();

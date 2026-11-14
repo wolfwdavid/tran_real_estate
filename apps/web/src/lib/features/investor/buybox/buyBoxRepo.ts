@@ -18,7 +18,7 @@ import { newSyncable, tombstone, type Syncable } from '@tran/core';
 import { buildSnapshot, type ObservedItem, type SnapshotLike } from '@tran/core/alerts';
 import { BUY_BOX_EXPENSE_BPS, type BuyBoxTargets } from '@tran/core/finance';
 import { normalizeLocation } from '@tran/core/location';
-import { getDb, type TranDb } from '$lib/storage/db';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
 import {
 	saleListingsRequest,
 	savedSearchRepo,

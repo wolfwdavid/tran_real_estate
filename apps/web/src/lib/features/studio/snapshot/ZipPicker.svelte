@@ -1,10 +1,14 @@
 <script lang="ts" module>
 	import { validateZip } from '@tran/core/markets';
 	import { buildSnapshotMetrics, snapshotFigureValues } from '@tran/core/studio';
-	import { isGatewayError, SAMPLE_METROS, type GatewayError as GatewayErrorType } from '$lib/data';
+	import {
+		isGatewayError,
+		SAMPLE_METROS,
+		type GatewayError as GatewayErrorType
+	} from '#lib/data/index.ts';
 	import type { Provenance } from '@tran/core/request';
-	import type { CostEstimate } from '$lib/features/shared/data/copy/provenance';
-	import { formatRelative } from '$lib/features/shared/data/relative-time';
+	import type { CostEstimate } from '#lib/features/shared/data/copy/provenance.ts';
+	import { formatRelative } from '#lib/features/shared/data/relative-time.ts';
 	import type { CostPreview, SnapshotData, ZipData } from './snapshot-data';
 
 	/** One radio row: a watched ZIP (live) or a fixture ZIP (sample). */
@@ -124,18 +128,18 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import type { MarketStats } from '@tran/core/listings';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { getDataRuntime } from '$lib/data';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import { Button, Input, Label, announce } from '$lib/features/shared/data/platform-ui';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import { getDataRuntime } from '#lib/data/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import { Button, Input, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import {
 		createMarketsPort,
 		marketStatsRequest,
 		type PortRuntime
-	} from '$lib/features/shared/markets/markets-port';
-	import { listWatchedZips } from '$lib/features/shared/markets/watchedZipsRepo';
+	} from '#lib/features/shared/markets/markets-port.ts';
+	import { listWatchedZips } from '#lib/features/shared/markets/watchedZipsRepo.ts';
 	import SnapshotKeyFigures from './SnapshotKeyFigures.svelte';
 	import { createSnapshotData } from './snapshot-data';
 

@@ -7,8 +7,8 @@
 // the card there, it lands on the status line instead.
 import { tick } from 'svelte';
 import { STAGE_LABELS, type Contact, type Stage } from '@tran/core/agent/types';
-import { announce } from '$lib/components/a11y/announcer.svelte';
-import { moveStage, undoMove, type MoveUndo } from '$lib/storage/agent/contacts-repo';
+import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+import { moveStage, undoMove, type MoveUndo } from '#lib/storage/agent/contacts-repo.ts';
 
 /** The last reversible move: the status copy plus what Undo needs. */
 export interface BoardUndo {

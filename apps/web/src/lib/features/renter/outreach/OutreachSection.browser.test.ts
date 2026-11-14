@@ -6,8 +6,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import type { Listing } from '@tran/core/listings';
-import type { Provenance } from '$lib/data';
-import { axeViolations } from '$lib/testing/axe';
+import type { Provenance } from '#lib/data/index.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
 import OutreachSection from './OutreachSection.svelte';
 
 const PROV: Provenance = {

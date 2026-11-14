@@ -3,15 +3,15 @@
 // the runtime's requestSpend are spied, so "0 calls" means nothing could have spent.
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { DataRequest } from '@tran/core/request';
-import type { TranDb } from '$lib/storage/db';
+import type { TranDb } from '#lib/storage/db.ts';
 // Test-only harnesses from the data layer (same precedent as the buy-box repo tests).
 // eslint-disable-next-line no-restricted-imports
-import { jsonResponse, makeDb, spyFetch, T0 } from '$lib/data/testing/harness';
+import { jsonResponse, makeDb, spyFetch, T0 } from '#lib/data/testing/harness.ts';
 // eslint-disable-next-line no-restricted-imports
-import { makeGateway } from '$lib/data/testing/gateway-harness';
+import { makeGateway } from '#lib/data/testing/gateway-harness.ts';
 // eslint-disable-next-line no-restricted-imports
-import { runDueSearches } from '$lib/data/scheduler';
-import { createWatchedZipsRepo } from '$lib/features/shared/markets/watchedZipsRepo';
+import { runDueSearches } from '#lib/data/scheduler.ts';
+import { createWatchedZipsRepo } from '#lib/features/shared/markets/watchedZipsRepo.ts';
 import { formToDealData } from '../analyzer/deal-data';
 import { sampleDealCopy } from '../analyzer/sample-deal';
 import { createBuyBoxRepo, emptyBuyBox, type BuyBoxInput } from '../buybox/buyBoxRepo';

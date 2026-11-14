@@ -15,7 +15,7 @@ import {
 	listingFreeText,
 	type ListingFacts
 } from '@tran/core/studio';
-import { createPostCheck, type PostCheck } from '$lib/ai/ui/post-check';
+import { createPostCheck, type PostCheck } from '#lib/ai/ui/post-check.ts';
 
 export type { PostCheck };
 

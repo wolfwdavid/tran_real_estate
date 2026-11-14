@@ -16,7 +16,7 @@
 		type NullReason
 	} from '@tran/core/finance';
 	import { NOT_AVAILABLE, pct, ratio, usd } from '@tran/core/format';
-	import { Button } from '$lib/features/shared/data/platform-ui';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
 	import { fieldName, type AnalyzerForm, type ParsedForm } from './form-model';
 
 	interface Props {

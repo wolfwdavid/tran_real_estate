@@ -8,7 +8,7 @@
 	import { resolve } from '$app/paths';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { analyze } from '@tran/core/finance';
-	import { announce, buttonVariants } from '$lib/features/shared/data/platform-ui';
+	import { announce, buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
 	import CompareBar from './CompareBar.svelte';
 	import DealCard from './DealCard.svelte';
 	import {

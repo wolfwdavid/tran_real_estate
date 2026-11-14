@@ -6,7 +6,7 @@
 // structured-clones the value. The autosave helper (autosave.svelte.ts) snapshots for its callers.
 // Browser callers only (onMount / event handlers / the autosave timer).
 import { newSyncable } from '@tran/core';
-import { getDb } from '$lib/storage/db';
+import { getDb } from '#lib/storage/db.ts';
 import {
 	STUDIO_DRAFT_IDS,
 	STUDIO_RECORD_SCHEMA_VERSION,

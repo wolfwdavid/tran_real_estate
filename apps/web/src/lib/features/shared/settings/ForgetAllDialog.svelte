@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import ConfirmDialog from './ConfirmDialog.svelte';
 	import { getSettingsContext } from './settings-context.svelte';
 

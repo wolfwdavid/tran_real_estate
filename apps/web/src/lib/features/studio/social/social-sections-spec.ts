@@ -16,8 +16,8 @@ import {
 	splitTrailingHashtags,
 	type Platform
 } from '@tran/core/studio';
-import type { SectionSpec } from '$lib/ai/ui/PlatformCard.svelte';
-import type { CheckGroupCopy } from '$lib/ai/ui/post-check';
+import type { SectionSpec } from '#lib/ai/ui/PlatformCard.svelte';
+import type { CheckGroupCopy } from '#lib/ai/ui/post-check.ts';
 import {
 	STUDIO_CHECKERS,
 	briefAllowedNumbers,

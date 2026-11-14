@@ -10,7 +10,7 @@
 		type ConfirmInput,
 		type DataRuntime,
 		type SchedulerResult
-	} from '$lib/data';
+	} from '#lib/data/index.ts';
 	import CapConfirmDialog from './CapConfirmDialog.svelte';
 	import DataStatusBar, { type DataStatus } from './DataStatusBar.svelte';
 	import DueSearchesDialog from './DueSearchesDialog.svelte';

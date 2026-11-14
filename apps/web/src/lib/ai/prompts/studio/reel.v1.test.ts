@@ -8,14 +8,14 @@ import {
 	parseReel,
 	timeBeats
 } from '@tran/core/studio';
-import { runChecks } from '$lib/ai/ui/panel-controller';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
 import {
 	numberPostCheck,
 	numberWordsPostCheck,
 	reelAllowedNumbers
-} from '$lib/features/studio/post-checks';
-import { quotePostCheck, resultsBeatPostCheck } from '$lib/features/studio/reel/reel-checks';
-import { STUDIO_DRAFT_FEATURES } from '$lib/features/studio/StudioHub.svelte';
+} from '#lib/features/studio/post-checks.ts';
+import { quotePostCheck, resultsBeatPostCheck } from '#lib/features/studio/reel/reel-checks.ts';
+import { STUDIO_DRAFT_FEATURES } from '#lib/features/studio/StudioHub.svelte';
 import { HOUSING_COPY_GUARDRAIL } from '../guardrail.js';
 import { buildPrompt, getPrompt } from '../registry.js';
 import {

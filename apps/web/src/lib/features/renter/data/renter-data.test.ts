@@ -6,9 +6,9 @@ import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { canonicalKey } from '@tran/core/request';
 import { applyFilters, DEFAULT_FILTERS, type RentalFilters } from '@tran/core/renter';
 import type { Listing } from '@tran/core/listings';
-import { createDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
-import { TranDb } from '$lib/storage/db';
-import { marketStatsRequest } from '$lib/features/shared/markets/markets-port';
+import { createDataRuntime, SAMPLE_METROS, type DataGateway } from '#lib/data/index.ts';
+import { TranDb } from '#lib/storage/db.ts';
+import { marketStatsRequest } from '#lib/features/shared/markets/markets-port.ts';
 import { listingByIdRequest, marketsRequest, rentEstimateRequest, searchRequest } from './requests';
 
 const FILTERED: RentalFilters = {

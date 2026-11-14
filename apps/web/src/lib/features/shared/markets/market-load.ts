@@ -7,7 +7,7 @@
 // (detail 'dismissed'): nothing was spent, so callers keep what is on screen. Any other
 // BudgetCapReached (a second over-cap request while a prompt is open) is shown with GatewayError,
 // whose "Continue past cap" action calls `retry`, which asks again through the same prompt.
-import { isGatewayError, type GatewayError } from '$lib/data';
+import { isGatewayError, type GatewayError } from '#lib/data/index.ts';
 import type { MarketResult, MarketsPort } from './markets-port';
 
 export type LoadOutcome =

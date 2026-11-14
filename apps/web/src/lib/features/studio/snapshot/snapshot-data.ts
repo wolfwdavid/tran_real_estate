@@ -19,13 +19,18 @@ import {
 	type MarketStats
 } from '@tran/core/listings';
 import { aggregateListings, type AggregatedSample } from '@tran/core/studio';
-import { getDataRuntime, SAMPLE_METROS, type CostEstimate, type DataRequest } from '$lib/data';
+import {
+	getDataRuntime,
+	SAMPLE_METROS,
+	type CostEstimate,
+	type DataRequest
+} from '#lib/data/index.ts';
 import {
 	createMarketsPort,
 	DataRuntimeNotStartedError,
 	marketStatsRequest,
 	type PortRuntime
-} from '$lib/features/shared/markets/markets-port';
+} from '#lib/features/shared/markets/markets-port.ts';
 
 /** Drives the CostLabel text: what the next load would spend. */
 export interface CostPreview {

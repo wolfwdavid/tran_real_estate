@@ -2,8 +2,8 @@
 	import { FALLBACK_NAMES, type BrandRole } from '@tran/brand/brand-color';
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import type { AggregatedSample } from '@tran/core/studio';
-	import { effectiveBrandColors } from '$lib/features/shared/agent-profile';
-	import { SNAPSHOT_SECTION_KEYS, type SnapshotSectionKey } from '$lib/storage/studio/types';
+	import { effectiveBrandColors } from '#lib/features/shared/agent-profile/index.ts';
+	import { SNAPSHOT_SECTION_KEYS, type SnapshotSectionKey } from '#lib/storage/studio/types.ts';
 	import type { ListingsKind } from './snapshot-data';
 
 	export interface SnapshotIncludeValue {
@@ -118,12 +118,16 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { EMPTY_PROFILE_INPUT, type AgentProfile } from '@tran/core/agent/types';
-	import { getDataRuntime, isGatewayError, type GatewayError as GatewayErrorType } from '$lib/data';
-	import { BrandPreview } from '$lib/features/shared/agent-profile';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
+	import {
+		getDataRuntime,
+		isGatewayError,
+		type GatewayError as GatewayErrorType
+	} from '#lib/data/index.ts';
+	import { BrandPreview } from '#lib/features/shared/agent-profile/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import ListingsSummaryTable from './ListingsSummaryTable.svelte';
 	import { createSnapshotData, type CostPreview, type SnapshotData } from './snapshot-data';
 	import { toEstimate } from './ZipPicker.svelte';

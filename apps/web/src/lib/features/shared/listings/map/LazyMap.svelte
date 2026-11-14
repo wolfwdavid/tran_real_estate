@@ -6,7 +6,7 @@
 	// selection. This file must never import leaflet or supercluster statically.
 	import { onMount, type ComponentProps } from 'svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
 	import type ListingMap from './ListingMap.svelte';
 
 	type Props = ComponentProps<typeof ListingMap> & {

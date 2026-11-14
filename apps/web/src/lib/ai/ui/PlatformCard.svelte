@@ -150,8 +150,8 @@
 	import SearchX from '@lucide/svelte/icons/search-x';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import { applyAlternative } from '@tran/core/fair-housing';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
 	import { copyText } from '../exits';
 	import FairHousingText from './FairHousingText.svelte';
 	import FindingsSummary from './FindingsSummary.svelte';

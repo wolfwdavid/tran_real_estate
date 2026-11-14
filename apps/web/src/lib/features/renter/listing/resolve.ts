@@ -5,8 +5,13 @@
 //   3. not found: fetchable only in live mode and only for a valid-looking id
 // resolveListing NEVER spends. fetchListingById is the only spending path, and it runs from the
 // "Look it up again (1 call)" click handler, never from an effect.
-import { GatewayError, isGatewayError, type DataRequest, type Provenance } from '$lib/data';
-import type { DataGateway, GatewayResult } from '$lib/data';
+import {
+	GatewayError,
+	isGatewayError,
+	type DataRequest,
+	type Provenance
+} from '#lib/data/index.ts';
+import type { DataGateway, GatewayResult } from '#lib/data/index.ts';
 import type { Listing } from '@tran/core/listings';
 import { looksLikeListingId } from '@tran/core/renter/contact-links';
 import { listingByIdRequest } from '../data/requests';

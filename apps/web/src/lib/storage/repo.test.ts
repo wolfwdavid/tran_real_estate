@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { freshIdb } from '$lib/storage/test-utils';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { _resetBackupRegistry, registerBackupTable } from './backup-registry';
 import { TranDb, type PrefRecord } from './db';
 import { META, getMeta, readReminderInput, setMeta } from './meta';

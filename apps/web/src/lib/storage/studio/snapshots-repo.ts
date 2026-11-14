@@ -7,7 +7,7 @@
 // (address, agent, office, photos, MLS number), a `logo` key or any binary value anywhere is
 // refused and nothing is written. Browser callers only (onMount / event handlers).
 import { SyncableSchema } from '@tran/core';
-import { getDb } from '$lib/storage/db';
+import { getDb } from '#lib/storage/db.ts';
 import {
 	STUDIO_RECORD_SCHEMA_VERSION,
 	snapshotViolations,

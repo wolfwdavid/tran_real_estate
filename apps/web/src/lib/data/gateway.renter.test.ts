@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { HOUR_MS } from '@tran/core/request';
 import type { Listing } from '@tran/core/listings';
-import { listingByIdRequest, searchRequest } from '$lib/features/renter/data/requests';
+import { listingByIdRequest, searchRequest } from '#lib/features/renter/data/requests.ts';
 import { jsonResponse, spyFetch, T0 } from './testing/harness';
 import { listingRows, makeGateway } from './testing/gateway-harness';
 

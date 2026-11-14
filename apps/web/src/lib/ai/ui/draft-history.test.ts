@@ -4,7 +4,7 @@
 import type { Component } from 'svelte';
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
-import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
+import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
 import ArtifactStatusBadge from './ArtifactStatusBadge.svelte';
 import DraftHistory, { formatWhen, preview, sourceLine, flagsLine } from './DraftHistory.svelte';
 

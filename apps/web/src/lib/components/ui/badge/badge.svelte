@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import { type VariantProps, createTV } from 'tailwind-variants';
-	import { TW_MERGE_CONFIG } from '$lib/utils.js';
+	import { TW_MERGE_CONFIG } from '#lib/utils.js';
 	const tv = createTV({ twMergeConfig: TW_MERGE_CONFIG });
 
 	export const badgeVariants = tv({
@@ -21,7 +21,7 @@
 </script>
 
 <script lang="ts">
-	import { cn, type WithElementRef } from '$lib/utils.js';
+	import { cn, type WithElementRef } from '#lib/utils.js';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	let {

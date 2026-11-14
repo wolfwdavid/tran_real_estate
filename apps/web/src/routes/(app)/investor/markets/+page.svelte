@@ -5,19 +5,19 @@
 	// on a card's Refresh (1 call), both click handlers.
 	import { onMount, tick, untrack } from 'svelte';
 	import { MAX_WATCHED_ZIPS } from '@tran/core/markets';
-	import { getDataRuntime, isGatewayError, type GatewayError } from '$lib/data';
-	import { announce } from '$lib/features/shared/data/platform-ui';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import { loadMarket, readMarketOnMount } from '$lib/features/shared/markets/market-load';
-	import { useMarketsPort, type MarketResult } from '$lib/features/shared/markets/markets-port';
-	import WatchZipForm from '$lib/features/shared/markets/WatchZipForm.svelte';
-	import ZipCard from '$lib/features/shared/markets/ZipCard.svelte';
+	import { getDataRuntime, isGatewayError, type GatewayError } from '#lib/data/index.ts';
+	import { announce } from '#lib/features/shared/data/platform-ui.ts';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import { loadMarket, readMarketOnMount } from '#lib/features/shared/markets/market-load.ts';
+	import { useMarketsPort, type MarketResult } from '#lib/features/shared/markets/markets-port.ts';
+	import WatchZipForm from '#lib/features/shared/markets/WatchZipForm.svelte';
+	import ZipCard from '#lib/features/shared/markets/ZipCard.svelte';
 	import {
 		unwatchZip,
 		watchedZipsLive,
 		type WatchedZip
-	} from '$lib/features/shared/markets/watchedZipsRepo';
+	} from '#lib/features/shared/markets/watchedZipsRepo.ts';
 
 	type CardData = { result?: MarketResult; error?: GatewayError };
 

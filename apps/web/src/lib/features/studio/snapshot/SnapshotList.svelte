@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import { longDate } from '@tran/core/format';
-	import type { SnapshotRecord } from '$lib/storage/studio/types';
+	import type { SnapshotRecord } from '#lib/storage/studio/types.ts';
 
 	export const LIST_HEADING = 'Your snapshots';
 	export const EMPTY_LINE = 'No saved snapshots yet. Build one above, or look at a sample first.';
@@ -49,13 +49,13 @@
 	// the section heading.
 	import { resolve } from '$app/paths';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
 	import {
 		announce,
 		Button,
 		buttonVariants,
 		ConfirmDialog
-	} from '$lib/features/shared/data/platform-ui';
+	} from '#lib/features/shared/data/platform-ui.ts';
 
 	interface Props {
 		/** Newest first; null while the browser read is pending. */
@@ -78,7 +78,7 @@
 
 	async function removeOne(id: string): Promise<void> {
 		if (remove) return remove(id);
-		const { deleteSnapshot } = await import('$lib/storage/studio/snapshots-repo');
+		const { deleteSnapshot } = await import('#lib/storage/studio/snapshots-repo.ts');
 		return deleteSnapshot(id);
 	}
 

@@ -1,10 +1,10 @@
 <script lang="ts">
 	// /feedback/ (GTM-02, UI-SPEC "Feedback (/feedback/)"). Open with the owner's Web3Forms key built
 	// in; otherwise FeedbackForm shows its coming-soon panel. ?portal= pre-selects the topic.
-	import FeedbackForm from '$lib/components/forms/FeedbackForm.svelte';
-	import { FEEDBACK_COPY } from '$lib/content/forms-feedback';
-	import SeoHead from '$lib/seo/SeoHead.svelte';
-	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '$lib/site';
+	import FeedbackForm from '#lib/components/forms/FeedbackForm.svelte';
+	import { FEEDBACK_COPY } from '#lib/content/forms-feedback.ts';
+	import SeoHead from '#lib/seo/SeoHead.svelte';
+	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '#lib/site.ts';
 
 	const copy = FEEDBACK_COPY;
 </script>

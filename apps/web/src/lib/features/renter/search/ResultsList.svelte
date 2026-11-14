@@ -4,8 +4,8 @@
 	// address link and announces the new count. No infinite scroll. While a search is in flight for
 	// more than 300ms, six card-shaped skeletons hold the space.
 	import { tick } from 'svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import ListingCard, { addrIdFor } from './ListingCard.svelte';
 	import { PAGE_SIZE, type RenterSearch } from './search-state.svelte';
 

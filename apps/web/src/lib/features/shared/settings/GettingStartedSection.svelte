@@ -4,9 +4,9 @@
 	// "Show the tour again" resets the guide to `new` (keeping the last portal) and then follows its
 	// href to /#get-started, where the guide focuses its h2 on arrival (10-15).
 	import { resolve } from '$app/paths';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import { readOnboarding, writeOnboarding } from '$lib/components/onboarding/onboarding-state';
-	import { SETTINGS_COPY as COPY } from '$lib/content/onboarding';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
+	import { readOnboarding, writeOnboarding } from '#lib/components/onboarding/onboarding-state.ts';
+	import { SETTINGS_COPY as COPY } from '#lib/content/onboarding.ts';
 
 	const tourHref = `${resolve('')}#get-started`;
 

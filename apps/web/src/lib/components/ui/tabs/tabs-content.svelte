@@ -1,7 +1,7 @@
 <script lang="ts">
 	// Reconciled: the panel is focusable (Tab moves into it) with the Phase 2 outline focus ring.
 	import { Tabs as TabsPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '#lib/utils.js';
 
 	let {
 		ref = $bindable(null),

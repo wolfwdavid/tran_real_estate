@@ -3,7 +3,7 @@
 // from these beats (studio/reel.v1 sample()) passes every reel check with zero findings, with and
 // without results (reel.v1.test.ts and reel-view.test.ts assert it). The results line has no
 // digits, so the E2E can plant "I helped 47 families." as a Must fix.
-import type { ReelInputs } from '$lib/ai/prompts/studio/reel.v1';
+import type { ReelInputs } from '#lib/ai/prompts/studio/reel.v1.ts';
 
 /** The reel form's value: every beat as a string (empty when not filled) plus the length. */
 export type ReelBeats = Required<ReelInputs>;

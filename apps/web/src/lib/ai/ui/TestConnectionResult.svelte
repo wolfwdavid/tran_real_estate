@@ -33,8 +33,8 @@
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import type { LiveProviderId } from '@tran/core/ai';
-	import type { TestConnectionResult } from '$lib/ai/ports';
-	import { PROVIDER_LABELS, hostFor } from '$lib/ai/models';
+	import type { TestConnectionResult } from '#lib/ai/ports.ts';
+	import { PROVIDER_LABELS, hostFor } from '#lib/ai/models.ts';
 	import { testResultCopy } from './ai-copy';
 
 	// (g) Test connection result for an AI provider key card: the five outcomes from testResultCopy

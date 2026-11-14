@@ -8,11 +8,11 @@
 	import { resolve } from '$app/paths';
 	import Bookmark from '@lucide/svelte/icons/bookmark';
 	import BookmarkCheck from '@lucide/svelte/icons/bookmark-check';
-	import type { Provenance } from '$lib/data';
+	import type { Provenance } from '#lib/data/index.ts';
 	import { needsRemoveConfirm, type ShortlistItem } from '@tran/core/renter/records';
-	import { Button, ConfirmDialog, announce } from '$lib/features/shared/data/platform-ui';
-	import { live } from '$lib/storage/live.svelte';
-	import { requestPersistence } from '$lib/storage/persistence';
+	import { Button, ConfirmDialog, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { live } from '#lib/storage/live.svelte.ts';
+	import { requestPersistence } from '#lib/storage/persistence.ts';
 	import { getShortlistRepo, type ShortlistListing } from '../storage/shortlist-repo';
 
 	interface Props {

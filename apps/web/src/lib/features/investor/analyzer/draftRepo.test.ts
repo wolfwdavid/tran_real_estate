@@ -3,9 +3,9 @@
 // IDBFactory per test; the autosaver gets an injected fake timer (never vi.useFakeTimers with Dexie).
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
-import { _resetBackupRegistry } from '$lib/storage/backup-registry';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import { TranDb } from '$lib/storage/db';
+import { _resetBackupRegistry } from '#lib/storage/backup-registry.ts';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import { looseRecordSchema } from '../deals/schema';
 import { createAutosaver, createDraftRepo, DRAFT_ID, type DraftInput } from './draftRepo';
 import { dealSnapshot, EMPTY_SNAPSHOT, formToDealData, isUnsaved } from './deal-data';

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { checkFairHousing } from '@tran/core/fair-housing';
 import { validateListingFacts } from '@tran/core/studio';
-import { sampleListing } from '$lib/ai/prompts/studio/listing.v1';
-import { runChecks } from '$lib/ai/ui/panel-controller';
+import { sampleListing } from '#lib/ai/prompts/studio/listing.v1.ts';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
 import { SAMPLE_LISTING_FACTS } from '../fixtures/sample-listing-facts';
 import {
 	listingAllowedNumbers,

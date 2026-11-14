@@ -3,7 +3,7 @@
 	// tool cards and the sample report link are static anchors, so the crawler reaches every
 	// Phase 9 route (handleUnseenRoutes: 'fail'). The drafts and snapshot counts and the agent
 	// profile load in the browser after mount (Dexie by dynamic import, zero RentCast calls).
-	import StudioHub from '$lib/features/studio/StudioHub.svelte';
+	import StudioHub from '#lib/features/studio/StudioHub.svelte';
 </script>
 
 <svelte:head>

@@ -1,7 +1,7 @@
 // Every RentCast request the renter portal makes is built here (06-RESEARCH: a renter task that
 // starts writing a fetch, a cache or a request shape elsewhere is in the wrong layer). These are
 // pure descriptions; only the gateway (through $lib/data) decides whether one costs a call.
-import type { DataRequest } from '$lib/data';
+import type { DataRequest } from '#lib/data/index.ts';
 import {
 	DEFAULT_FILTERS,
 	toServerParams,
@@ -35,7 +35,7 @@ export function listingByIdRequest(id: string): DataRequest {
  * fair-rent tier, Phase 7 watched ZIPs and Phase 9 reports share one 30-day cache entry:
  * `markets?dataType=All&historyRange=24&zipCode=<zip>`.
  */
-export { marketStatsRequest as marketsRequest } from '$lib/features/shared/markets/markets-port';
+export { marketStatsRequest as marketsRequest } from '#lib/features/shared/markets/markets-port.ts';
 
 /** The listing facts a rent estimate is keyed on (a structural subset of the mapped Listing). */
 export interface RentEstimateSubject {

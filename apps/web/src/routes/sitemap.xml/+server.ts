@@ -1,5 +1,5 @@
-import { sitemapPaths, sitemapXml } from '$lib/seo/sitemap';
-import { SITE_URL } from '$lib/site';
+import { sitemapPaths, sitemapXml } from '#lib/seo/sitemap.ts';
+import { SITE_URL } from '#lib/site.ts';
 
 export const prerender = true;
 

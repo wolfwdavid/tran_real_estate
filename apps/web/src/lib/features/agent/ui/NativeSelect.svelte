@@ -2,7 +2,7 @@
 	// Native <select> with input styling. The chevron is an icon element, never a CSS background
 	// image (CSP img-src refuses data: URLs).
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 
 	let {
 		id,

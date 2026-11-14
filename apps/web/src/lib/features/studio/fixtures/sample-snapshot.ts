@@ -5,9 +5,9 @@
 // in every mode. Never stored: addSnapshot refuses the non-uuid id 'sample'.
 import type { MarketHistoryPoint, MarketSide, MarketStats } from '@tran/core/listings';
 import { buildSnapshotMetrics, type AggregatedSample } from '@tran/core/studio';
-import { sampleSnapshotNotes } from '$lib/ai/prompts/studio/snapshot.v1';
-import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
-import { SNAPSHOT_SECTION_KEYS, type SnapshotRecord } from '$lib/storage/studio/types';
+import { sampleSnapshotNotes } from '#lib/ai/prompts/studio/snapshot.v1.ts';
+import { SAMPLE_AGENT_PROFILE } from '#lib/features/shared/agent-profile/index.ts';
+import { SNAPSHOT_SECTION_KEYS, type SnapshotRecord } from '#lib/storage/studio/types.ts';
 import { buildSnapshotRecord } from '../snapshot/build-record';
 
 export const SAMPLE_SNAPSHOT_ID = 'sample';

@@ -3,7 +3,7 @@
 	// focus). The Compare link is a real link only with 2 or 3 deals selected; otherwise it renders
 	// aria-disabled with no href and the reason linked by aria-describedby.
 	import { MAX_COMPARE, MIN_COMPARE } from '@tran/core/finance';
-	import { buttonVariants, Button } from '$lib/features/shared/data/platform-ui';
+	import { buttonVariants, Button } from '#lib/features/shared/data/platform-ui.ts';
 	import {
 		COMPARE_CAP_REASON,
 		COMPARE_MIN_REASON,

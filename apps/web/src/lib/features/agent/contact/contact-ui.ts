@@ -2,7 +2,7 @@
 // live-region table). No Svelte, no storage: the components render these strings next to the
 // 08-12 repo calls. Kept ASCII: the middle dot is built from its code point.
 import { SOURCE_LABELS, type Contact } from '@tran/core/agent/types';
-import type { LogType } from '$lib/storage/agent/contacts-repo';
+import type { LogType } from '#lib/storage/agent/contacts-repo.ts';
 import { formatMonDayYear } from '../dates';
 
 const MIDDOT = String.fromCharCode(0xb7);

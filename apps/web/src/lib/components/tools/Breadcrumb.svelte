@@ -3,7 +3,7 @@
 	// IS "Tools", so the trail is Home → Tools (current) with no Tools link. Shared by the hub and
 	// the calculator pages, so it imports only the tiny meta module (see content/tools/meta.ts).
 	import { resolve } from '$app/paths';
-	import { CRUMBS } from '$lib/content/tools/meta';
+	import { CRUMBS } from '#lib/content/tools/meta.ts';
 
 	let { current }: { current: string } = $props();
 

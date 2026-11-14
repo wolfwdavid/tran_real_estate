@@ -6,7 +6,7 @@ import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import type { Listing } from '@tran/core/listings';
 import type { ShortlistItem } from '@tran/core/renter/records';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import { getShortlistRepo } from '../storage/shortlist-repo';
 import ShortlistCard from './ShortlistCard.svelte';
 

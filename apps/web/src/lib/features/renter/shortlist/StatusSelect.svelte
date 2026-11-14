@@ -11,7 +11,7 @@
 		type ShortlistItem,
 		type ShortlistStatus
 	} from '@tran/core/renter/records';
-	import { announce } from '$lib/features/shared/data/platform-ui';
+	import { announce } from '#lib/features/shared/data/platform-ui.ts';
 	import { getShortlistRepo } from '../storage/shortlist-repo';
 	import { STATUS_BADGE, STATUS_ICONS } from './status-icons';
 

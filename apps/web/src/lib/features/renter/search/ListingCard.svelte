@@ -18,10 +18,10 @@
 	import { formatRent, formatSqft, relativeListed } from '@tran/core/renter/format';
 	import { propertyTypeLabel } from '@tran/core/renter';
 	import { listingStatus } from '@tran/core/renter/listing-status';
-	import type { Provenance } from '$lib/data';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import ListingStatusChip from '$lib/features/shared/listings/ListingStatusChip.svelte';
-	import PropertyTypeMark from '$lib/features/shared/listings/PropertyTypeMark.svelte';
+	import type { Provenance } from '#lib/data/index.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import ListingStatusChip from '#lib/features/shared/listings/ListingStatusChip.svelte';
+	import PropertyTypeMark from '#lib/features/shared/listings/PropertyTypeMark.svelte';
 	import { placeLine, streetLine } from '../listing/address';
 	import ShortlistToggle from '../shortlist/ShortlistToggle.svelte';
 

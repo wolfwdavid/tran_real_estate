@@ -9,17 +9,17 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import { providerById, type ProviderId } from '@tran/core';
 	import { analyze } from '@tran/core/finance';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import type { AiArtifact } from '$lib/ai/storage/artifacts';
-	import { runChecks } from '$lib/ai/ui/panel-controller';
-	import NotFoundPanel from '$lib/features/shared/NotFoundPanel.svelte';
-	import PrintReport from '$lib/features/shared/print/PrintReport.svelte';
-	import { getDeal } from '$lib/features/investor/deals/dealsRepo';
-	import type { DealRecord } from '$lib/features/investor/deals/schema';
-	import MemoPrintout from '$lib/features/investor/memo/MemoPrintout.svelte';
-	import { createMemoPostChecks } from '$lib/features/investor/memo/memo-checks';
-	import { memoFactsForDeal } from '$lib/features/investor/memo/memo-facts-for-deal';
-	import { notesNumbersFromMeta } from '$lib/features/investor/memo/memo-meta';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
+	import type { AiArtifact } from '#lib/ai/storage/artifacts.ts';
+	import { runChecks } from '#lib/ai/ui/panel-controller.ts';
+	import NotFoundPanel from '#lib/features/shared/NotFoundPanel.svelte';
+	import PrintReport from '#lib/features/shared/print/PrintReport.svelte';
+	import { getDeal } from '#lib/features/investor/deals/dealsRepo.ts';
+	import type { DealRecord } from '#lib/features/investor/deals/schema.ts';
+	import MemoPrintout from '#lib/features/investor/memo/MemoPrintout.svelte';
+	import { createMemoPostChecks } from '#lib/features/investor/memo/memo-checks.ts';
+	import { memoFactsForDeal } from '#lib/features/investor/memo/memo-facts-for-deal.ts';
+	import { notesNumbersFromMeta } from '#lib/features/investor/memo/memo-meta.ts';
 	import {
 		dealIsSample,
 		inputTables,
@@ -28,7 +28,7 @@
 		PRINT_DISCLAIMER_FULL,
 		printTitle,
 		provenanceSentence
-	} from '$lib/features/investor/memo/print-model';
+	} from '#lib/features/investor/memo/print-model.ts';
 
 	type View = 'hydrating' | 'not-found' | 'blocked' | 'ready';
 
@@ -92,7 +92,7 @@
 			}
 			let artifact: AiArtifact | null = null;
 			if (memoId) {
-				const { createArtifactRepo } = await import('$lib/ai/storage/artifacts');
+				const { createArtifactRepo } = await import('#lib/ai/storage/artifacts.ts');
 				const found = await createArtifactRepo().get(memoId);
 				if (disposed) return;
 				if (found && !found.deletedAt && found.subjectId === id) artifact = found;

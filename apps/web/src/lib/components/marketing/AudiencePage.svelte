@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
-	import SeoHead from '$lib/seo/SeoHead.svelte';
-	import WaitlistForm from '$lib/components/forms/WaitlistForm.svelte';
-	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '$lib/site';
-	import type { Audience, FeatureIcon } from '$lib/content/audiences';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
+	import SeoHead from '#lib/seo/SeoHead.svelte';
+	import WaitlistForm from '#lib/components/forms/WaitlistForm.svelte';
+	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '#lib/site.ts';
+	import type { Audience, FeatureIcon } from '#lib/content/audiences.ts';
 	import Search from '@lucide/svelte/icons/search';
 	import Bell from '@lucide/svelte/icons/bell';
 	import Scale from '@lucide/svelte/icons/scale';

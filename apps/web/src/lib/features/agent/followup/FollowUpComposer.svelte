@@ -14,17 +14,17 @@
 	import { onMount, untrack } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { STAGES, type Contact, type ProfileInput, type Stage } from '@tran/core/agent/types';
-	import { PROVIDER_LABELS } from '$lib/ai/models';
-	import { aiPrefs } from '$lib/ai/prefs.svelte';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import type { ExitKind } from '$lib/ai/ui/panel-controller';
-	import { Alert } from '$lib/components/ui/alert/index.js';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { buttonVariants, Input, Label } from '$lib/features/shared/data/platform-ui';
-	import { markFollowupSent } from '$lib/storage/agent/contacts-repo';
+	import { PROVIDER_LABELS } from '#lib/ai/models.ts';
+	import { aiPrefs } from '#lib/ai/prefs.svelte.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import type { ExitKind } from '#lib/ai/ui/panel-controller.ts';
+	import { Alert } from '#lib/components/ui/alert/index.js';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import { buttonVariants, Input, Label } from '#lib/features/shared/data/platform-ui.ts';
+	import { markFollowupSent } from '#lib/storage/agent/contacts-repo.ts';
 	import NativeSelect from '../ui/NativeSelect.svelte';
 	import {
 		MAX_POINTS,
@@ -104,7 +104,7 @@
 
 	onMount(() => {
 		let disposed = false;
-		void import('$lib/ai/storage/artifacts').then((m) => {
+		void import('#lib/ai/storage/artifacts.ts').then((m) => {
 			if (!disposed) repo = m.createArtifactRepo();
 		});
 		return () => {

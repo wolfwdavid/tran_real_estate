@@ -4,7 +4,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import type { Listing } from '@tran/core/listings';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import ListingMap from './ListingMap.svelte';
 import { buildClusterElement, buildPinElement } from './pins';
 

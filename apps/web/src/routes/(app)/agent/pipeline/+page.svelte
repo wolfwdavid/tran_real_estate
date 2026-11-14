@@ -6,12 +6,12 @@
 	// filter hides it. A #stage-{stage} hash scrolls that section into view once the board renders.
 	import { tick } from 'svelte';
 	import { STAGES, type Contact } from '@tran/core/agent/types';
-	import CrmEmptyState from '$lib/features/agent/crm/CrmEmptyState.svelte';
-	import QuickAddDialog from '$lib/features/agent/crm/QuickAddDialog.svelte';
-	import { createBoardState } from '$lib/features/agent/pipeline/board-state.svelte';
-	import StageBoard from '$lib/features/agent/pipeline/StageBoard.svelte';
-	import { useContacts } from '$lib/storage/agent/live.svelte';
-	import { useOpenTasks } from '$lib/storage/agent/tasks-live.svelte';
+	import CrmEmptyState from '#lib/features/agent/crm/CrmEmptyState.svelte';
+	import QuickAddDialog from '#lib/features/agent/crm/QuickAddDialog.svelte';
+	import { createBoardState } from '#lib/features/agent/pipeline/board-state.svelte.ts';
+	import StageBoard from '#lib/features/agent/pipeline/StageBoard.svelte';
+	import { useContacts } from '#lib/storage/agent/live.svelte.ts';
+	import { useOpenTasks } from '#lib/storage/agent/tasks-live.svelte.ts';
 
 	const contacts = useContacts();
 	const tasks = useOpenTasks();

@@ -8,7 +8,7 @@ import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import type { Listing } from '@tran/core/listings';
 import { DEFAULT_FILTERS } from '@tran/core/renter';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import ResultsView from './ResultsView.svelte';
 import { createRenterSearch } from './search-state.svelte';
 

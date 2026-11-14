@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import LegalPage from '$lib/components/legal/LegalPage.svelte';
+	import LegalPage from '#lib/components/legal/LegalPage.svelte';
 
 	const description =
 		'Terms of use for Tran Real Estate Tools, a software tool. Not a brokerage, and not investment, legal, or tax advice.';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AlertsDeps, DataRequest, DataRuntime } from '$lib/data';
+	import type { AlertsDeps, DataRequest, DataRuntime } from '#lib/data/index.ts';
 	import DataShell from '../DataShell.svelte';
 	import SpendProbe from './SpendProbe.svelte';
 

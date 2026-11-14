@@ -20,9 +20,9 @@
 	} from '@tran/core/csv';
 	import { diffLeads, type LeadDiff } from '@tran/core/leads/diff-leads';
 	import { cleanText } from '@tran/core/leads/normalize';
-	import { announce, buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { listContacts } from '$lib/storage/agent/contacts-repo';
+	import { announce, buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { listContacts } from '#lib/storage/agent/contacts-repo.ts';
 	import ColumnMapper from './ColumnMapper.svelte';
 	import ImportReview from './ImportReview.svelte';
 	import { decodeCsvBytes } from './decode';

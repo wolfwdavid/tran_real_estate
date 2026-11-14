@@ -4,8 +4,8 @@
 	// nothing to export, nothing downloads and the empty line is shown and announced. Reads this
 	// browser's IndexedDB at click time; no network.
 	import Download from '@lucide/svelte/icons/download';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
-	import { listContacts } from '$lib/storage/agent/contacts-repo';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { listContacts } from '#lib/storage/agent/contacts-repo.ts';
 	import { todayLocal } from '../dates';
 	import { buildExport, downloadText } from './csv-export';
 

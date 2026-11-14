@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { RESULTS_PLACEHOLDER } from '@tran/core/studio';
-import { computeGate, runChecks } from '$lib/ai/ui/panel-controller';
+import { computeGate, runChecks } from '#lib/ai/ui/panel-controller.ts';
 import { numberPostCheck, reelAllowedNumbers } from '../post-checks';
 import { REEL_CHECKLIST, REEL_CHECKLIST_FOOTNOTE } from './checklist';
 import {

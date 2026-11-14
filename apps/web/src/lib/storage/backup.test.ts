@@ -13,7 +13,7 @@ import {
 	type Syncable
 } from '@tran/core';
 import { fakeKey } from '../../../tests/support/fake-keys';
-import { freshIdb } from '$lib/storage/test-utils';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { _resetBackupRegistry, listBackupTables, registerBackupTable } from './backup-registry';
 import { TranDb, type DbOptions, type PrefRecord } from './db';
 import { META, getMeta, setMeta } from './meta';

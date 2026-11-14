@@ -6,10 +6,10 @@
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { resolve } from '$app/paths';
 	import type { Contact, Task } from '@tran/core/agent/types';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
-	import { completeTask, reopenTask } from '$lib/storage/agent/tasks-repo';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { completeTask, reopenTask } from '#lib/storage/agent/tasks-repo.ts';
 	import DueBadge from '../crm/DueBadge.svelte';
 	import StageBadge from '../ui/StageBadge.svelte';
 

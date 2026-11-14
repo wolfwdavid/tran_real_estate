@@ -1,5 +1,5 @@
 // Test-only helpers for the web Vitest project. NOT imported by app code: it lives under src/lib
-// only so `$lib` resolves in tests. Each call returns fully isolated state.
+// only so `#lib` resolves in tests. Each call returns fully isolated state.
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 
 export type MemoryStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> & {

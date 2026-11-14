@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { validateModelId } from '$lib/ai/models';
+	import { validateModelId } from '#lib/ai/models.ts';
 
 	/** Inline validation copy (05-UI-SPEC), or null when the model ID is acceptable. */
 	export function modelFieldError(value: string, providerLabel: string): string | null {
@@ -25,11 +25,11 @@
 	import { tick } from 'svelte';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import type { LiveProviderId } from '@tran/core/ai';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { PROVIDER_LABELS, defaultModel } from '$lib/ai/models';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { PROVIDER_LABELS, defaultModel } from '#lib/ai/models.ts';
 
 	// (f) Model override inside an AI provider key card (05-UI-SPEC ProviderKeyCard additions).
 	// Free text because model lists change. Saves on blur or Enter when valid and changed; Use

@@ -14,7 +14,7 @@ import {
 	type Provenance,
 	type SavedSearchInput,
 	type SavedSearchRepo
-} from '$lib/data';
+} from '#lib/data/index.ts';
 import type { Listing } from '@tran/core/listings';
 import { buildSnapshot, isDue } from '@tran/core/alerts';
 import {

@@ -6,7 +6,7 @@
 // proven in the browser project / E2E. When an input changes (a contact id), recreate the view:
 // `const contact = $derived(useContact(id))`. Plan 08-14 adds useTasks() in its own module.
 import type { Activity, AgentProfile, Contact } from '@tran/core/agent/types';
-import { live } from '$lib/storage/live.svelte';
+import { live } from '#lib/storage/live.svelte.ts';
 import { getContact, listActivities, listContacts } from './contacts-repo';
 import { getProfile } from './profile-repo';
 

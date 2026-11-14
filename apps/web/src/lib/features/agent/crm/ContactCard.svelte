@@ -5,7 +5,7 @@
 	import { resolve } from '$app/paths';
 	import MailX from '@lucide/svelte/icons/mail-x';
 	import { SOURCE_LABELS, type Contact, type Task } from '@tran/core/agent';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
 	import DueBadge from './DueBadge.svelte';
 	import { relativeDays } from '../dates';
 

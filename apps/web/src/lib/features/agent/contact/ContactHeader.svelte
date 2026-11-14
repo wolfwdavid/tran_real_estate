@@ -11,9 +11,9 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { STAGES, STAGE_LABELS, type Contact, type Stage } from '@tran/core/agent/types';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
-	import { Button, ConfirmDialog, announce } from '$lib/features/shared/data/platform-ui';
-	import { deleteContact } from '$lib/storage/agent/contacts-repo';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
+	import { Button, ConfirmDialog, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { deleteContact } from '#lib/storage/agent/contacts-repo.ts';
 	import { setFlash } from '../crm/flash.svelte';
 	import { BOARD_UNDO_ID, type BoardState } from '../pipeline/board-state.svelte';
 	import NativeSelect from '../ui/NativeSelect.svelte';

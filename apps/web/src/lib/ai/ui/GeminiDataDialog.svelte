@@ -5,10 +5,10 @@
 	// - the checkbox starts unchecked and is session-only (the caller writes sessionStorage through
 	//   gemini-gate.ts). There is no "never ask again" option.
 	import { resolve } from '$app/paths';
-	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import * as AlertDialog from '#lib/components/ui/alert-dialog/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 
 	let {
 		open = $bindable(false),

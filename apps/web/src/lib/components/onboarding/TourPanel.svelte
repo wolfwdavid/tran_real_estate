@@ -3,7 +3,7 @@
 	// the tour copy and markup stay out of the landing's initial JS.
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import { GUIDE_COPY as G, TOURS, type TourStep } from '$lib/content/onboarding';
+	import { GUIDE_COPY as G, TOURS, type TourStep } from '#lib/content/onboarding.ts';
 	import TourProgress from './TourProgress.svelte';
 	import { BTN } from './guide-buttons';
 	import type { OnboardingPortal } from './onboarding-state';

@@ -18,20 +18,20 @@
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import { composeDisclosure } from '@tran/core/disclosure';
 	import { DISCLOSURE_FIELD_LABELS, PLATFORM_LABELS, missingFor } from '@tran/core/studio';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import type { ExitDisabled } from '$lib/ai/ui/panel-controller';
-	import { copiedNote } from '$lib/ai/ui/PlatformCard.svelte';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import type { ExitDisabled } from '#lib/ai/ui/panel-controller.ts';
+	import { copiedNote } from '#lib/ai/ui/PlatformCard.svelte';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
 	import {
 		SAMPLE_AGENT_PROFILE,
 		isProfileComplete,
 		loadAgentProfile,
 		toDisclosureProfile
-	} from '$lib/features/shared/agent-profile';
-	import { announce, Button, ConfirmDialog } from '$lib/features/shared/data/platform-ui';
-	import type { StudioAutosave } from '$lib/storage/studio/autosave.svelte';
+	} from '#lib/features/shared/agent-profile/index.ts';
+	import { announce, Button, ConfirmDialog } from '#lib/features/shared/data/platform-ui.ts';
+	import type { StudioAutosave } from '#lib/storage/studio/autosave.svelte.ts';
 	import DisclosureStatus from '../DisclosureStatus.svelte';
 	import { SAMPLE_SOCIAL_BRIEF } from '../fixtures/sample-social-brief';
 	import SocialBriefForm from './SocialBriefForm.svelte';
@@ -182,8 +182,8 @@
 		let disposed = false;
 		void (async () => {
 			const [autosaveMod, artifacts, saved] = await Promise.all([
-				import('$lib/storage/studio/autosave.svelte'),
-				import('$lib/ai/storage/artifacts'),
+				import('#lib/storage/studio/autosave.svelte.ts'),
+				import('#lib/ai/storage/artifacts.ts'),
 				loadAgentProfile().catch(() => null)
 			]);
 			if (disposed) return;

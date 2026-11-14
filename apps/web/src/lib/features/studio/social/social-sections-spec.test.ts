@@ -4,9 +4,9 @@
 import { describe, expect, test } from 'vitest';
 import { checkFairHousing } from '@tran/core/fair-housing';
 import { composeDisclosure } from '@tran/core/disclosure';
-import { runChecks } from '$lib/ai/ui/panel-controller';
-import { sampleSocialPack } from '$lib/ai/prompts/studio/social.v1';
-import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
+import { sampleSocialPack } from '#lib/ai/prompts/studio/social.v1.ts';
+import { SAMPLE_AGENT_PROFILE } from '#lib/features/shared/agent-profile/index.ts';
 import { SAMPLE_SOCIAL_BRIEF } from '../fixtures/sample-social-brief';
 import {
 	SOCIAL_CHECK_GROUPS,

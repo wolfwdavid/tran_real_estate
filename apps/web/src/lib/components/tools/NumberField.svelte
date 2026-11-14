@@ -3,7 +3,7 @@
 	// an aria-hidden adornment, optional helper and a text + icon error slot linked by
 	// aria-describedby. Plain elements only, no headless primitives.
 	import ToolIcon from './ToolIcon.svelte';
-	import type { ToolField } from '$lib/content/tools/shared';
+	import type { ToolField } from '#lib/content/tools/shared.ts';
 
 	interface Props {
 		field: ToolField;

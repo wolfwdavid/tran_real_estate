@@ -1,9 +1,9 @@
 // Shared agent-profile access (09-10): the Studio's sanctioned path to the profile.
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ProfileInput } from '@tran/core/agent/types';
-import { _resetDb, getDb } from '$lib/storage/db';
-import { freshIdb } from '$lib/storage/test-utils';
-import { saveProfile } from '$lib/storage/agent/profile-repo';
+import { _resetDb, getDb } from '#lib/storage/db.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
+import { saveProfile } from '#lib/storage/agent/profile-repo.ts';
 import {
 	BrandPreview,
 	SAMPLE_AGENT_PROFILE,

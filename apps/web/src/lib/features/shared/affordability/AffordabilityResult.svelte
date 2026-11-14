@@ -12,8 +12,8 @@
 	// runtime in through its arrow icon).
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import ToolIcon from '$lib/components/tools/ToolIcon.svelte';
-	import type { Slider as SliderComponent } from '$lib/components/ui/slider/index.js';
+	import ToolIcon from '#lib/components/tools/ToolIcon.svelte';
+	import type { Slider as SliderComponent } from '#lib/components/ui/slider/index.js';
 	import {
 		landlordIncome,
 		moveInCash,
@@ -36,7 +36,7 @@
 
 	let Slider = $state<typeof SliderComponent | null>(null);
 	onMount(() => {
-		void import('$lib/components/ui/slider/index.js').then((m) => (Slider = m.Slider));
+		void import('#lib/components/ui/slider/index.js').then((m) => (Slider = m.Slider));
 	});
 
 	const EMPTY = 'Enter your income to see a rent range.';

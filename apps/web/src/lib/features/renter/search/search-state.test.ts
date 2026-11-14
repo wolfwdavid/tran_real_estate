@@ -6,8 +6,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { encodeSearchParams } from '@tran/core/renter';
 import type { Listing } from '@tran/core/listings';
-import { createDataRuntime, type DataGateway, type DataRequest } from '$lib/data';
-import { TranDb } from '$lib/storage/db';
+import { createDataRuntime, type DataGateway, type DataRequest } from '#lib/data/index.ts';
+import { TranDb } from '#lib/storage/db.ts';
 import { createRenterSearch, FILTER_ANNOUNCE_MS } from './search-state.svelte';
 
 const T0 = Date.parse('2026-10-15T12:00:00.000Z');

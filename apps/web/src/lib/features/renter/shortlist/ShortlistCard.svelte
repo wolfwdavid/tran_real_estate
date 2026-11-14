@@ -15,11 +15,11 @@
 		type ShortlistItem,
 		type ShortlistStatus
 	} from '@tran/core/renter/records';
-	import type { DataGateway, Provenance } from '$lib/data';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import { Button, ConfirmDialog, announce } from '$lib/features/shared/data/platform-ui';
-	import ListingStatusChip from '$lib/features/shared/listings/ListingStatusChip.svelte';
-	import PropertyTypeMark from '$lib/features/shared/listings/PropertyTypeMark.svelte';
+	import type { DataGateway, Provenance } from '#lib/data/index.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import { Button, ConfirmDialog, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import ListingStatusChip from '#lib/features/shared/listings/ListingStatusChip.svelte';
+	import PropertyTypeMark from '#lib/features/shared/listings/PropertyTypeMark.svelte';
 	import { streetLine as toStreetLine } from '../listing/address';
 	import { getShortlistRepo } from '../storage/shortlist-repo';
 	import NotesEditor from './NotesEditor.svelte';

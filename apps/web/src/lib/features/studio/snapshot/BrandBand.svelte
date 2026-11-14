@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { effectiveBrandColors } from '$lib/features/shared/agent-profile';
+	import { effectiveBrandColors } from '#lib/features/shared/agent-profile/index.ts';
 
 	const HEX6 = /^#[0-9A-Fa-f]{6}$/;
 
@@ -35,7 +35,7 @@
 	// reads whether or not the fill prints. Prominence (RES A.4): the brokerage line is Heading
 	// 24/600, the agent line Body 16/600.
 	import { brokerageLine } from '@tran/core/studio';
-	import type { SnapshotAgent } from '$lib/storage/studio/types';
+	import type { SnapshotAgent } from '#lib/storage/studio/types.ts';
 
 	let { agent, logoUrl = null }: { agent: SnapshotAgent; logoUrl?: string | null } = $props();
 

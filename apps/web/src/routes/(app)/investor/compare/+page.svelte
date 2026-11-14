@@ -7,19 +7,19 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { analyze, buildComparison, MIN_COMPARE } from '@tran/core/finance';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { announce, buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { announce, buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
 	import CompareTable, {
 		type CompareColumn
-	} from '$lib/features/investor/compare/CompareTable.svelte';
-	import { getDeal } from '$lib/features/investor/deals/dealsRepo';
+	} from '#lib/features/investor/compare/CompareTable.svelte';
+	import { getDeal } from '#lib/features/investor/deals/dealsRepo.ts';
 	import {
 		compareHref,
 		droppedNote,
 		parseCompareIds
-	} from '$lib/features/investor/deals/deals-view';
-	import type { DealRecord } from '$lib/features/investor/deals/schema';
+	} from '#lib/features/investor/deals/deals-view.ts';
+	import type { DealRecord } from '#lib/features/investor/deals/schema.ts';
 
 	let loaded = $state(false);
 	let records = $state<DealRecord[]>([]);

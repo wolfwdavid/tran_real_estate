@@ -7,7 +7,7 @@
 	import { resolve } from '$app/paths';
 	import type { Listing } from '@tran/core/listings';
 	import { formatRent } from '@tran/core/renter/format';
-	import type { Provenance } from '$lib/data';
+	import type { Provenance } from '#lib/data/index.ts';
 	import { placeLine, streetLine } from '../listing/address';
 	import ListingCard from '../search/ListingCard.svelte';
 

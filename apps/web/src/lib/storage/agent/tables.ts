@@ -13,7 +13,7 @@
 // OMITTED on live rows), because the backup envelope validates every exported row that way.
 import type { Table } from 'dexie';
 import type { Activity, AgentProfile, Contact, Task } from '@tran/core/agent/types';
-import type { TranDb } from '$lib/storage/db';
+import type { TranDb } from '#lib/storage/db.ts';
 
 export const CONTACTS_TABLE = 'contacts';
 export const TASKS_TABLE = 'tasks';

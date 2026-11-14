@@ -9,8 +9,8 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { WAITLIST_COPY } from '$lib/content/forms-waitlist';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { WAITLIST_COPY } from '#lib/content/forms-waitlist.ts';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
@@ -64,7 +64,7 @@
 
 	// DEBT-09: the sender pulls zod (lead-block), so it loads on demand instead of in the page's
 	// initial JS. A rejected import clears the cache so the next submit retries it.
-	const importSender = () => import('$lib/leads/owner-forms');
+	const importSender = () => import('#lib/leads/owner-forms.ts');
 	let senderP: ReturnType<typeof importSender> | null = null;
 	const loadSender = () =>
 		(senderP ??= importSender().catch((e) => {

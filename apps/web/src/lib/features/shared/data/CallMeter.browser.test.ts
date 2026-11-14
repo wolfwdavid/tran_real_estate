@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import CallMeter from './CallMeter.svelte';
 
 const NOV_1 = Date.parse('2026-11-01T00:00:00Z');

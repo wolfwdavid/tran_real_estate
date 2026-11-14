@@ -1,7 +1,7 @@
 // Reactive install state for the Install the app section. static/pwa-capture.js (a head script)
 // catches Chromium's beforeinstallprompt before hydration, stores it on window.__tranInstallPrompt
 // and dispatches tran:installable; appinstalled clears it and dispatches tran:installed.
-import { announce } from '$lib/components/a11y/announcer.svelte';
+import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 import { isIos, isStandalone } from './detect';
 
 /** Chromium's install prompt event (not in lib.dom). */

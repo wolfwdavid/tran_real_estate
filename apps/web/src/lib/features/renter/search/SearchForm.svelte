@@ -6,10 +6,10 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import SlidersHorizontal from '@lucide/svelte/icons/sliders-horizontal';
-	import type { DataGateway } from '$lib/data';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import LocationField from '$lib/features/shared/listings/LocationField.svelte';
+	import type { DataGateway } from '#lib/data/index.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import LocationField from '#lib/features/shared/listings/LocationField.svelte';
 	import { createCostEstimate } from './cost-estimate.svelte';
 	import FilterFields from './FilterFields.svelte';
 	import type { RenterSearch } from './search-state.svelte';

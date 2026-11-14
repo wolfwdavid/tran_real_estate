@@ -11,8 +11,8 @@
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Send from '@lucide/svelte/icons/send';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { FEEDBACK_COPY } from '$lib/content/forms-feedback';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { FEEDBACK_COPY } from '#lib/content/forms-feedback.ts';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
 	import FormError from './FormError.svelte';
 	import FormSuccess from './FormSuccess.svelte';
@@ -72,7 +72,7 @@
 	// DEBT-09: the key scan and the sender pull zod, so they load on demand instead of in the
 	// page's initial JS. A rejected import clears its cache so the next submit retries it.
 	const importScan = () => import('@tran/core/backup');
-	const importSender = () => import('$lib/leads/owner-forms');
+	const importSender = () => import('#lib/leads/owner-forms.ts');
 	let scanP: ReturnType<typeof importScan> | null = null;
 	const loadScan = () =>
 		(scanP ??= importScan().catch((e) => {

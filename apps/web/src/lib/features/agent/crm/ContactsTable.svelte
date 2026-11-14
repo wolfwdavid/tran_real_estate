@@ -5,7 +5,7 @@
 	// the same id ContactCard uses, so a parent can move focus to a contact either way.
 	import { resolve } from '$app/paths';
 	import type { Contact, Task } from '@tran/core/agent';
-	import SampleChip from '$lib/components/sample/SampleChip.svelte';
+	import SampleChip from '#lib/components/sample/SampleChip.svelte';
 	import StageBadge from '../ui/StageBadge.svelte';
 	import DueBadge from './DueBadge.svelte';
 	import { formatMonDay, localDateOf, relativeDays } from '../dates';

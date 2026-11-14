@@ -1,7 +1,7 @@
 <script lang="ts">
 	// /agent/today/ (AGT-05): the full due-today queue. Prerendered with the heading and the loading
 	// line; the browser-stored tasks render after hydration.
-	import TodayQueue from '$lib/features/agent/tasks/TodayQueue.svelte';
+	import TodayQueue from '#lib/features/agent/tasks/TodayQueue.svelte';
 </script>
 
 <svelte:head>

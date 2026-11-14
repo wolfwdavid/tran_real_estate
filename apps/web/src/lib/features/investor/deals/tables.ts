@@ -5,9 +5,9 @@
 // Every Phase 7 row is a Phase 3 Syncable record (uuid id, ownerId 'local', ISO timestamps,
 // deletedAt OMITTED on live rows and set on tombstones), because the backup envelope validates
 // every exported record as Syncable and merges by id.
-import type { TranDb } from '$lib/storage/db';
+import type { TranDb } from '#lib/storage/db.ts';
 import type { Table } from 'dexie';
-import { watchedZipRecordSchema } from '$lib/features/shared/markets/watched-zip-record';
+import { watchedZipRecordSchema } from '#lib/features/shared/markets/watched-zip-record.ts';
 import { dealRecordSchema, looseRecordSchema, type DealRecord } from './schema';
 
 export const DEALS_TABLE = 'deals';

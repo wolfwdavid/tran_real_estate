@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { getDataRuntime, type DataRuntime } from '$lib/data';
+	import { getDataRuntime, type DataRuntime } from '#lib/data/index.ts';
 	import CallMeter from './CallMeter.svelte';
 	import CapEditor from './CapEditor.svelte';
 	import DataSourceChoice from './DataSourceChoice.svelte';

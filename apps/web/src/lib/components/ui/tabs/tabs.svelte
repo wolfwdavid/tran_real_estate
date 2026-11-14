@@ -3,7 +3,7 @@
 	// 06-UI-SPEC "View tabs": bits-ui owns the WAI-ARIA tabs pattern (roving tabindex, arrow keys,
 	// Home/End, automatic activation). Horizontal only; no dark mode.
 	import { Tabs as TabsPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '#lib/utils.js';
 
 	let {
 		ref = $bindable(null),

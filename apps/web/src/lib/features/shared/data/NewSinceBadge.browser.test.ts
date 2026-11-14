@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import NewSinceBadge from './NewSinceBadge.svelte';
 import { toIso } from './relative-time';
 

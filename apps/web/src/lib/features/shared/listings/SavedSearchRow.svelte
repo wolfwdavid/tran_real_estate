@@ -5,9 +5,9 @@
 	// Nothing here spends: View results is a link (the page restores from the cache) and
 	// Rename/Delete are storage-only callbacks.
 	import CirclePause from '@lucide/svelte/icons/circle-pause';
-	import NewSinceBadge from '$lib/features/shared/data/NewSinceBadge.svelte';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import { Button, ConfirmDialog, buttonVariants } from '$lib/features/shared/data/platform-ui';
+	import NewSinceBadge from '#lib/features/shared/data/NewSinceBadge.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import { Button, ConfirmDialog, buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
 
 	interface Props {
 		/** Heading id (focus target for "Manage in Saved searches"). */

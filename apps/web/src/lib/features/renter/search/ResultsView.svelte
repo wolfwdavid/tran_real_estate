@@ -10,7 +10,7 @@
 	import ListIcon from '@lucide/svelte/icons/list';
 	import MapIcon from '@lucide/svelte/icons/map';
 	import type { ResultsView } from '@tran/core/renter';
-	import * as Tabs from '$lib/components/ui/tabs/index.js';
+	import * as Tabs from '#lib/components/ui/tabs/index.js';
 	import MapTab from '../map/MapTab.svelte';
 	import FilteredEmptyState from './FilteredEmptyState.svelte';
 	import ResultsList from './ResultsList.svelte';

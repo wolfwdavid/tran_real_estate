@@ -10,12 +10,12 @@ import {
 	type Platform,
 	type SocialSection
 } from '@tran/core/studio';
-import { runChecks } from '$lib/ai/ui/panel-controller';
+import { runChecks } from '#lib/ai/ui/panel-controller.ts';
 import {
 	briefAllowedNumbers,
 	numberPostCheck,
 	numberWordsPostCheck
-} from '$lib/features/studio/post-checks';
+} from '#lib/features/studio/post-checks.ts';
 import { HOUSING_COPY_GUARDRAIL } from '../guardrail.js';
 import { buildPrompt, getPrompt } from '../registry.js';
 import {

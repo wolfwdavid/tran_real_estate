@@ -4,7 +4,7 @@
 	// nowhere else). Loading writes the in-repo fixture to this browser's IndexedDB; no network.
 	import Users from '@lucide/svelte/icons/users';
 	import { resolve } from '$app/paths';
-	import { Button, buttonVariants, announce } from '$lib/features/shared/data/platform-ui';
+	import { Button, buttonVariants, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import EmptyState from '../ui/EmptyState.svelte';
 	import { SAMPLE_COUNT, loadSampleContacts } from '../samples/samples';
 

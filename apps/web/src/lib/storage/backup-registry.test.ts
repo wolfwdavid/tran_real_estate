@@ -5,10 +5,10 @@ import {
 	listBackupTables,
 	registerBackupTable
 } from './backup-registry';
-import { AI_BACKUP_TABLES } from '$lib/ai/storage/tables';
-import { PHASE4_BACKUP_TABLES } from '$lib/data/tables';
-import { RENTER_BACKUP_TABLES } from '$lib/features/renter/storage/tables';
-import { INVESTOR_BACKUP_TABLES } from '$lib/features/investor/deals/tables';
+import { AI_BACKUP_TABLES } from '#lib/ai/storage/tables.ts';
+import { PHASE4_BACKUP_TABLES } from '#lib/data/tables.ts';
+import { RENTER_BACKUP_TABLES } from '#lib/features/renter/storage/tables.ts';
+import { INVESTOR_BACKUP_TABLES } from '#lib/features/investor/deals/tables.ts';
 import { AGENT_BACKUP_TABLES } from './agent/backup';
 import { STUDIO_BACKUP_TABLES } from './studio/tables';
 import { TranDb } from './db';

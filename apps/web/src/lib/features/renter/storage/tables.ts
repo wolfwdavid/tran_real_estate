@@ -12,7 +12,7 @@
 // first could silently omit the shortlist; the built-in list makes the coverage test enforce it.
 import type { ShortlistItem, RenterSearchMeta } from '@tran/core/renter';
 import type { Table } from 'dexie';
-import type { TranDb } from '$lib/storage/db';
+import type { TranDb } from '#lib/storage/db.ts';
 
 export const RENTER_SHORTLIST_TABLE = 'renterShortlist';
 export const RENTER_SHORTLIST_LABEL = 'Rental shortlist';

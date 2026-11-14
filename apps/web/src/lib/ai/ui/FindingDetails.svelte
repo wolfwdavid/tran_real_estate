@@ -4,7 +4,7 @@
 	import OctagonAlert from '@lucide/svelte/icons/octagon-alert';
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import { STATE_SCOPE_NOTE, type Finding, type FindingMember } from '@tran/core/fair-housing';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
 	import { groupCopyFor, type CheckGroupCopy } from './post-check';
 
 	let {

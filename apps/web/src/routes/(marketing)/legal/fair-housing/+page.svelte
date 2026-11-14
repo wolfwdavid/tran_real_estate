@@ -1,6 +1,6 @@
 <script lang="ts">
-	import LegalPage from '$lib/components/legal/LegalPage.svelte';
-	import ExternalLink from '$lib/components/legal/ExternalLink.svelte';
+	import LegalPage from '#lib/components/legal/LegalPage.svelte';
+	import ExternalLink from '#lib/components/legal/ExternalLink.svelte';
 
 	const description =
 		'Tran Real Estate Tools supports the Fair Housing Act. How the tools avoid protected characteristics, and how to report a concern.';

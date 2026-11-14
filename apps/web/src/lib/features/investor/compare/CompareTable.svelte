@@ -21,8 +21,8 @@
 	import ChevronsUp from '@lucide/svelte/icons/chevrons-up';
 	import X from '@lucide/svelte/icons/x';
 	import type { CompareRow } from '@tran/core/finance';
-	import { Button } from '$lib/features/shared/data/platform-ui';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 
 	interface Props {
 		deals: readonly CompareColumn[];

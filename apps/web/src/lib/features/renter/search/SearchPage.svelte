@@ -9,9 +9,9 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import type { Listing } from '@tran/core/listings';
-	import { getDataRuntime, SAMPLE_METROS, type DataGateway } from '$lib/data';
-	import { announce, announcementSequence } from '$lib/components/a11y/announcer.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
+	import { getDataRuntime, SAMPLE_METROS, type DataGateway } from '#lib/data/index.ts';
+	import { announce, announcementSequence } from '#lib/components/a11y/announcer.svelte.ts';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
 	import SavedSearchesSection from '../saved/SavedSearchesSection.svelte';
 	import ActiveFilterChips from './ActiveFilterChips.svelte';
 	import ResultsHeader from './ResultsHeader.svelte';

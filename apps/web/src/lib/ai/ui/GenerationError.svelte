@@ -5,7 +5,7 @@
 	// LiveAnnouncer, so this renders with role removed from the Phase 3 alert.
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
 	import { resolve } from '$app/paths';
-	import { Alert, AlertDescription, AlertTitle } from '$lib/components/ui/alert/index.js';
+	import { Alert, AlertDescription, AlertTitle } from '#lib/components/ui/alert/index.js';
 	import type { CopyLink } from './ai-copy';
 
 	let {

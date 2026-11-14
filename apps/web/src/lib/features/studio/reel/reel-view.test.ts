@@ -7,7 +7,7 @@ import { describe, expect, test } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { RESULTS_PLACEHOLDER } from '@tran/core/studio';
-import { sampleReel } from '$lib/ai/prompts/studio/reel.v1';
+import { sampleReel } from '#lib/ai/prompts/studio/reel.v1.ts';
 import { numberPostCheck, numberWordsPostCheck, reelAllowedNumbers } from '../post-checks';
 import { SAMPLE_REEL_BEATS, SAMPLE_REEL_BEATS_NO_RESULTS } from '../fixtures/sample-reel-beats';
 import AiDisclosureChecklist from './AiDisclosureChecklist.svelte';
@@ -24,7 +24,7 @@ import ReelScriptView, { scriptView } from './ReelScriptView.svelte';
 import { REEL_FOOTER_LABEL, reelEmailFooter } from './ReelStudio.svelte';
 import type { ProfileInput } from '@tran/core/agent/types';
 import { composeDisclosure } from '@tran/core/disclosure';
-import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
+import { SAMPLE_AGENT_PROFILE } from '#lib/features/shared/agent-profile/index.ts';
 
 const MID = String.fromCharCode(0xb7);
 

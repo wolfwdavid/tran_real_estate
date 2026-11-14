@@ -5,8 +5,8 @@
 	// self-contained, so Tier 2 can be cut without touching Tier 1. The copy is a comparison only; it
 	// never judges the price.
 	import type { Listing } from '@tran/core/listings';
-	import { getDataRuntime, type Provenance } from '$lib/data';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import { getDataRuntime, type Provenance } from '#lib/data/index.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 	import RentEstimateTier from './RentEstimateTier.svelte';
 	import ZipMedianTier from './ZipMedianTier.svelte';
 

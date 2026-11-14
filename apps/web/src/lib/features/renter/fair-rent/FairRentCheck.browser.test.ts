@@ -6,12 +6,17 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import type { Listing, MarketStats, RentEstimate } from '@tran/core/listings';
-import { GatewayError, type DataRequest, type DataRuntime, type Provenance } from '$lib/data';
-import { announce } from '$lib/components/a11y/announcer.svelte';
-import { axeViolations } from '$lib/testing/axe';
+import {
+	GatewayError,
+	type DataRequest,
+	type DataRuntime,
+	type Provenance
+} from '#lib/data/index.ts';
+import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
 import FairRentHarness from './testing/FairRentHarness.svelte';
 
-vi.mock('$lib/components/a11y/announcer.svelte', { spy: true });
+vi.mock('#lib/components/a11y/announcer.svelte.ts', { spy: true });
 
 const LIVE: Provenance = { source: 'rentcast', fetchedAt: Date.now(), stale: false };
 

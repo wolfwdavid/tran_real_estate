@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ListingFacts } from '@tran/core/studio';
-import { computeGate, runChecks } from '$lib/ai/ui/panel-controller';
+import { computeGate, runChecks } from '#lib/ai/ui/panel-controller.ts';
 import {
 	NUMBER_CATEGORIES,
 	briefAllowedNumbers,

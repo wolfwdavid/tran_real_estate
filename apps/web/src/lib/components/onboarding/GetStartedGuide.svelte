@@ -8,8 +8,8 @@
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import X from '@lucide/svelte/icons/x';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { GUIDE_INTRO_COPY as G } from '$lib/content/onboarding-guide';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { GUIDE_INTRO_COPY as G } from '#lib/content/onboarding-guide.ts';
 	import PortalTile from './PortalTile.svelte';
 	import { BTN } from './guide-buttons';
 	import {

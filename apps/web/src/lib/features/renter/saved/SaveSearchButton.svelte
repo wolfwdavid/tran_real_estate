@@ -6,11 +6,11 @@
 	import { tick } from 'svelte';
 	import BookmarkCheck from '@lucide/svelte/icons/bookmark-check';
 	import BookmarkPlus from '@lucide/svelte/icons/bookmark-plus';
-	import { getDataRuntime } from '$lib/data';
+	import { getDataRuntime } from '#lib/data/index.ts';
 	import { defaultSearchName } from '@tran/core/renter';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
-	import { live } from '$lib/storage/live.svelte';
-	import { requestPersistence } from '$lib/storage/persistence';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { live } from '#lib/storage/live.svelte.ts';
+	import { requestPersistence } from '#lib/storage/persistence.ts';
 	import type { RenterSearch } from '../search/search-state.svelte';
 	import SaveSearchDialog from './SaveSearchDialog.svelte';
 	import {

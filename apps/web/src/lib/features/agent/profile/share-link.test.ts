@@ -2,8 +2,8 @@
 // fields the inquiry page needs; everything else on the profile must stay out of the URL.
 import { describe, expect, test } from 'vitest';
 import { EMPTY_PROFILE_INPUT, type AgentProfile, type ProfileInput } from '@tran/core/agent/types';
-import { inquiryConfigFor } from '$lib/features/agent/home/setup-checklist';
-import { buildInquiryUrl, readInquiryParams } from '$lib/leads/inquiry-url';
+import { inquiryConfigFor } from '#lib/features/agent/home/setup-checklist.ts';
+import { buildInquiryUrl, readInquiryParams } from '#lib/leads/inquiry-url.ts';
 import { inquiryConfigFromProfile, shareLinkBlockers } from './share-link';
 
 const KEY = '00000000-0000-4000-8000-000000000000';

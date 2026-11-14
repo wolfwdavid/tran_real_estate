@@ -17,15 +17,15 @@
 	} from '@tran/core/agent/types';
 	import { MAX_EMAIL, MAX_NAME, MAX_PHONE, MAX_PROPERTY } from '@tran/core/agent/schemas';
 	import { cleanText, firstName, normPhoneUS } from '@tran/core/leads/normalize';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
 	import {
 		Button,
 		buttonVariants,
 		Input,
 		Label,
 		announce
-	} from '$lib/features/shared/data/platform-ui';
-	import { findDuplicates, setOptOut, updateContact } from '$lib/storage/agent/contacts-repo';
+	} from '#lib/features/shared/data/platform-ui.ts';
+	import { findDuplicates, setOptOut, updateContact } from '#lib/storage/agent/contacts-repo.ts';
 	import { duplicateMessage, validateQuickAdd, type QuickAddField } from '../crm/quick-add';
 	import NativeSelect from '../ui/NativeSelect.svelte';
 	import UndoStatus from '../ui/UndoStatus.svelte';

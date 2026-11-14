@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
 
 	type Portal = 'renter' | 'investor' | 'agent';
 

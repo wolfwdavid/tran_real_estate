@@ -10,7 +10,7 @@
 		type MappingError,
 		type MappingTarget
 	} from '@tran/core/csv';
-	import { Button } from '$lib/features/shared/data/platform-ui';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
 	import NativeSelect from '../ui/NativeSelect.svelte';
 
 	let {

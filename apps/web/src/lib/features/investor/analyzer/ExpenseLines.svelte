@@ -11,7 +11,7 @@
 	import X from '@lucide/svelte/icons/x';
 	import type { DealAnalysis } from '@tran/core/finance';
 	import { usd } from '@tran/core/format';
-	import { announce as defaultAnnounce } from '$lib/components/a11y/announcer.svelte';
+	import { announce as defaultAnnounce } from '#lib/components/a11y/announcer.svelte.ts';
 	import {
 		FIELD_ERROR_COPY,
 		addCustomLine,

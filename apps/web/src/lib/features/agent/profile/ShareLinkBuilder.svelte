@@ -14,14 +14,14 @@
 	import { resolve } from '$app/paths';
 	import type { AgentProfile } from '@tran/core/agent/types';
 	import { ACCESS_KEY_RE } from '@tran/core/leads/inquiry-params';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import ExternalLink from '$lib/components/legal/ExternalLink.svelte';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { buildInquiryUrl } from '$lib/leads/inquiry-url';
-	import { saveAccessKey } from '$lib/storage/agent/profile-repo';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import ExternalLink from '#lib/components/legal/ExternalLink.svelte';
+	import { Button, buttonVariants } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { buildInquiryUrl } from '#lib/leads/inquiry-url.ts';
+	import { saveAccessKey } from '#lib/storage/agent/profile-repo.ts';
 	import {
 		MAX_SHARE_PROPERTY,
 		inquiryConfigFromProfile,

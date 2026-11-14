@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import ForgetAllDialog from './ForgetAllDialog.svelte';
 	import PassphraseDialog from './PassphraseDialog.svelte';
 	import SecretInput from './SecretInput.svelte';

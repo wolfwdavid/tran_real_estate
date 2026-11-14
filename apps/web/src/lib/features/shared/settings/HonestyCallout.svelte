@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ShieldCheck from '@lucide/svelte/icons/shield-check';
-	import { Alert } from '$lib/components/ui/alert/index.js';
+	import { Alert } from '#lib/components/ui/alert/index.js';
 
 	// Static honesty statement (UI-SPEC HonestyCallout). Not a status message, so no role="alert".
 </script>

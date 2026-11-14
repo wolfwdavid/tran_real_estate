@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LegalPage from '$lib/components/legal/LegalPage.svelte';
-	import ExternalLink from '$lib/components/legal/ExternalLink.svelte';
-	import { ANALYTICS, SITE_BASE, SITE_ORIGIN } from '$lib/site';
+	import LegalPage from '#lib/components/legal/LegalPage.svelte';
+	import ExternalLink from '#lib/components/legal/ExternalLink.svelte';
+	import { ANALYTICS, SITE_BASE, SITE_ORIGIN } from '#lib/site.ts';
 
 	// Name the exact counter host so the page states where counts go, whoever runs the server.
 	const counterHost = ANALYTICS.host ? new URL(ANALYTICS.host).host : '';

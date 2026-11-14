@@ -9,9 +9,9 @@
 	import type { Listing } from '@tran/core/listings';
 	import type { RawHistory } from '@tran/core/renter/history';
 	import { toRawHistory } from './history';
-	import type { GatewayError as GatewayErrorType, Provenance } from '$lib/data';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import PriceHistory from '$lib/features/shared/listings/PriceHistory.svelte';
+	import type { GatewayError as GatewayErrorType, Provenance } from '#lib/data/index.ts';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import PriceHistory from '#lib/features/shared/listings/PriceHistory.svelte';
 	import FairRentCheck from '../fair-rent/FairRentCheck.svelte';
 	import OutreachSection from '../outreach/OutreachSection.svelte';
 	import { streetLine } from './address';

@@ -1,6 +1,6 @@
 // market-load (07-13): the view read never spends; the click load maps over-cap and errors.
 import { describe, expect, it, vi } from 'vitest';
-import { GatewayError } from '$lib/data';
+import { GatewayError } from '#lib/data/index.ts';
 import type { MarketResult, MarketsPort } from './markets-port';
 import { loadMarket, readMarketOnMount } from './market-load';
 

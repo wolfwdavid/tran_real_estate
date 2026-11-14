@@ -5,8 +5,8 @@
 	import { tick } from 'svelte';
 	import StickyNote from '@lucide/svelte/icons/sticky-note';
 	import { MAX_NOTES, notesPreview } from '@tran/core/renter/records';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
 	import { getShortlistRepo } from '../storage/shortlist-repo';
 
 	interface Props {

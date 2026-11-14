@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { freshIdb } from '$lib/storage/test-utils';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import {
 	CHECK_AAD,
 	DEK_AAD,

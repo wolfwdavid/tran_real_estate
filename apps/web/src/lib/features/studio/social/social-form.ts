@@ -10,7 +10,7 @@ import {
 	SOCIAL_TONES,
 	type SocialPackInputs,
 	type SocialTone
-} from '$lib/ai/prompts/studio/social.v1';
+} from '#lib/ai/prompts/studio/social.v1.ts';
 
 export const BRIEF_MAX = 2000;
 export const CITY_MAX = 40;

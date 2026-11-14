@@ -438,7 +438,7 @@ describe('cleanup', () => {
 // Public port ($lib/data)
 // ---------------------------------------------------------------------------------------------
 
-describe('$lib/data public port', () => {
+describe('#lib/data public port', () => {
 	it('exports the runtime, peek store, sample metros and error helpers only', async () => {
 		const port: Record<string, unknown> = await import('./index');
 		for (const name of [

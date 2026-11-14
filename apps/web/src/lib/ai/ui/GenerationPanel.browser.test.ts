@@ -5,7 +5,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import type { AiProviderId } from '@tran/core/ai';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import type { LlmEvent, LlmProvider, LlmRequest } from '../ports';
 import { DEMO_INPUTS } from '../prompts/shared/demo.v1';
 import type { Selection } from '../setup';

@@ -2,7 +2,7 @@
 	// 06-UI-SPEC "AffordabilityForm" (RENT-08). Three money fields with the Phase 3 field anatomy and
 	// the income period chips. Props and local state only: no storage, no data layer, no network.
 	// Values are bound to the parent calculator, which owns all state in $state and saves nothing.
-	import ToolIcon from '$lib/components/tools/ToolIcon.svelte';
+	import ToolIcon from '#lib/components/tools/ToolIcon.svelte';
 	import { parseMoneyInput, type IncomePeriod } from '@tran/core/renter/affordability';
 
 	interface Props {

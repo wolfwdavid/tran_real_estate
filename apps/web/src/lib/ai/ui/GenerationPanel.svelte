@@ -37,9 +37,9 @@
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import type { Finding } from '@tran/core/fair-housing';
 	import { resolve } from '$app/paths';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { Button, buttonVariants } from '#lib/components/ui/button/index.js';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
 	import { hostFor } from '../models';
 	import type { AiArtifact, ArtifactRepo } from '../storage/artifacts';
 	import { sampleNotice, statusCopy } from './ai-copy';
@@ -164,7 +164,7 @@
 	async function resolveLive(): Promise<Resolved> {
 		const [setup, secrets, prefs] = await Promise.all([
 			import('../setup'),
-			import('$lib/storage/secrets'),
+			import('#lib/storage/secrets/index.ts'),
 			import('../prefs.svelte')
 		]);
 		const vault = await secrets.getVault();

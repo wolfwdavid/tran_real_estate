@@ -4,8 +4,8 @@
 	// records and hands the snapshot to samples-state, where the layout offers Undo; no confirm
 	// dialog, because the action is undoable and the data is reloadable.
 	import FlaskConical from '@lucide/svelte/icons/flask-conical';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
-	import { useContacts } from '$lib/storage/agent/live.svelte';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { useContacts } from '#lib/storage/agent/live.svelte.ts';
 	import { removeSampleContacts } from '../samples/samples';
 	import { samplesState } from '../samples/samples-state.svelte';
 

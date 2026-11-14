@@ -2,8 +2,8 @@
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import MonitorDown from '@lucide/svelte/icons/monitor-down';
 	import Share from '@lucide/svelte/icons/share';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import type { InstallOutcome, InstallState } from '$lib/pwa/install.svelte';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import type { InstallOutcome, InstallState } from '#lib/pwa/install.svelte.ts';
 
 	// Exactly one state renders. The state object is created by InstallSection after hydration.
 	let {

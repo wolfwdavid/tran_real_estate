@@ -13,7 +13,7 @@ import {
 	splitTrailingHashtags,
 	type Platform
 } from '@tran/core/studio';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import type { LlmEvent, LlmProvider } from '../ports';
 import { sampleSocialPack, type SocialPackInputs } from '../prompts/studio/social.v1';
 import GenerationPanel from './GenerationPanel.svelte';

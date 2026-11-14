@@ -1,5 +1,5 @@
-import { DEFAULT_OG } from '$lib/content/tools';
-import { renderOgCard } from '$lib/seo/og-card.server';
+import { DEFAULT_OG } from '#lib/content/tools.ts';
+import { renderOgCard } from '#lib/seo/og-card.server.ts';
 
 // Share card, rendered once at build time (no dynamic [slug] route: every route is prerendered).
 // Copied into a plain Uint8Array: the Node Buffer type is not a BodyInit under TS 6 DOM types.

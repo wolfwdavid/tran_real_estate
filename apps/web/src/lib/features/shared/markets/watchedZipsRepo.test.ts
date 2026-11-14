@@ -4,7 +4,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { MAX_WATCHED_ZIPS } from '@tran/core/markets';
-import { TranDb } from '$lib/storage/db';
+import { TranDb } from '#lib/storage/db.ts';
 import { watchedZipId, watchedZipRecordSchema } from './watched-zip-record';
 import { createWatchedZipsRepo } from './watchedZipsRepo';
 

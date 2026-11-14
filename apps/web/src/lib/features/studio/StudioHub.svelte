@@ -34,7 +34,7 @@
 	import MessagesSquare from '@lucide/svelte/icons/messages-square';
 	import { resolve } from '$app/paths';
 	import type { ProfileInput } from '@tran/core/agent/types';
-	import { loadAgentProfile } from '$lib/features/shared/agent-profile';
+	import { loadAgentProfile } from '#lib/features/shared/agent-profile/index.ts';
 	import DisclosureStatus from './DisclosureStatus.svelte';
 	import StudioToolCard from './StudioToolCard.svelte';
 
@@ -90,8 +90,8 @@
 		let alive = true;
 		const safe = (p: Promise<number>, line: (n: number) => string) => p.then(line).catch(() => '');
 		void Promise.all([
-			import('$lib/ai/storage/artifacts'),
-			import('$lib/storage/studio/snapshots-repo')
+			import('#lib/ai/storage/artifacts.ts'),
+			import('#lib/storage/studio/snapshots-repo.ts')
 		])
 			.then(([{ createArtifactRepo }, { countSnapshots }]) => {
 				const repo = createArtifactRepo();

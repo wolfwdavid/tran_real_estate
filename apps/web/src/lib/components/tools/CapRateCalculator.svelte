@@ -2,8 +2,8 @@
 	// Cap rate calculator (GTM-03). All math is @tran/core capRateCalc; zero network.
 	import { capRateCalc, type CapRateInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolPercent } from '@tran/core/finance/tool-inputs';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { capRate } from '$lib/content/tools/cap-rate';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { capRate } from '#lib/content/tools/cap-rate.ts';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';

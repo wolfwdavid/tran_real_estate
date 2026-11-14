@@ -14,9 +14,12 @@
 	import type { ProfileInput } from '@tran/core/agent/types';
 	import { composeDisclosure } from '@tran/core/disclosure';
 	import { DISCLOSURE_FIELD_LABELS, missingFor, type DisclosureProfile } from '@tran/core/studio';
-	import { Alert } from '$lib/components/ui/alert/index.js';
-	import { buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import { SAMPLE_AGENT_PROFILE, toDisclosureProfile } from '$lib/features/shared/agent-profile';
+	import { Alert } from '#lib/components/ui/alert/index.js';
+	import { buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
+	import {
+		SAMPLE_AGENT_PROFILE,
+		toDisclosureProfile
+	} from '#lib/features/shared/agent-profile/index.ts';
 
 	let { profile, usingSample }: { profile: ProfileInput | null; usingSample: boolean } = $props();
 

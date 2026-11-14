@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SearchPage from '$lib/features/renter/search/SearchPage.svelte';
+	import SearchPage from '#lib/features/renter/search/SearchPage.svelte';
 </script>
 
 <svelte:head>

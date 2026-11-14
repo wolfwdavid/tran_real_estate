@@ -2,7 +2,7 @@
 	// 06-UI-SPEC "ConfidenceBadge": shown when the estimate rests on fewer than 3 comparables
 	// (the caller decides with @tran/core estimateConfidence), with a one-line explanation.
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
-	import { Badge } from '$lib/features/shared/data/platform-ui';
+	import { Badge } from '#lib/features/shared/data/platform-ui.ts';
 
 	let { count }: { count: number } = $props();
 

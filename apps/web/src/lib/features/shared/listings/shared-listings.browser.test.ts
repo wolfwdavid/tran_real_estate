@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import ListingStatusChip from './ListingStatusChip.svelte';
 import PriceHistory from './PriceHistory.svelte';
 import PropertyTypeMark from './PropertyTypeMark.svelte';

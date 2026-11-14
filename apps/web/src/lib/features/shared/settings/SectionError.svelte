@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import { Alert, AlertDescription, AlertTitle } from '$lib/components/ui/alert/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import { Alert, AlertDescription, AlertTitle } from '#lib/components/ui/alert/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 
 	// Error panel for a failed sub-group (UI-SPEC SectionError). Phase 3 never uses role="alert" or
 	// assertive regions: the message is announced once through the polite LiveAnnouncer instead.

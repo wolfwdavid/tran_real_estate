@@ -11,7 +11,7 @@
 	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { backoffMs, type GatewayError } from '@tran/core/request';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '#lib/utils.js';
 	import { Button, announce, buttonVariants } from './platform-ui';
 	import { ACTION_LABELS, countdownLabel, errorCopy, rateLimitAnnouncements } from './copy/errors';
 

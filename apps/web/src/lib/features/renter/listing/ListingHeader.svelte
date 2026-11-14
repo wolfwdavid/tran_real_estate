@@ -3,11 +3,11 @@
 	// place line, then the chips row (Sample chip, or the live ProvenanceRow with Refresh (1 call),
 	// and the honest recency chip). The root carries data-provenance for the sample-chip check.
 	import type { Listing } from '@tran/core/listings';
-	import type { Provenance } from '$lib/data';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import ListingStatusChip from '$lib/features/shared/listings/ListingStatusChip.svelte';
-	import PropertyTypeMark from '$lib/features/shared/listings/PropertyTypeMark.svelte';
+	import type { Provenance } from '#lib/data/index.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import ListingStatusChip from '#lib/features/shared/listings/ListingStatusChip.svelte';
+	import PropertyTypeMark from '#lib/features/shared/listings/PropertyTypeMark.svelte';
 	import { placeLine, streetLine } from './address';
 
 	interface Props {

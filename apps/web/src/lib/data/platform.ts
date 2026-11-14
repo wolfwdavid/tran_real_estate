@@ -9,12 +9,12 @@
 // scope. The vault is loaded with a dynamic import() the first time a key accessor runs in a
 // browser, so prerendered pages never pull it in.
 import type { ProviderId } from '@tran/core';
-import { announce as announceLive } from '$lib/components/a11y/announcer.svelte';
-import { TranDb, getDb } from '$lib/storage/db';
-import type { KeyState, KeyTestResult, KeyTestStatus } from '$lib/storage/secrets';
-import { registerKeyTester } from '$lib/storage/secrets/testers';
+import { announce as announceLive } from '#lib/components/a11y/announcer.svelte.ts';
+import { TranDb, getDb } from '#lib/storage/db.ts';
+import type { KeyState, KeyTestResult, KeyTestStatus } from '#lib/storage/secrets/index.ts';
+import { registerKeyTester } from '#lib/storage/secrets/testers.ts';
 
-export { BACKUP_EXCLUDED_TABLES, listBackupTables } from '$lib/storage/backup-registry';
+export { BACKUP_EXCLUDED_TABLES, listBackupTables } from '#lib/storage/backup-registry.ts';
 
 const RENTCAST: ProviderId = 'rentcast';
 
@@ -92,7 +92,7 @@ export async function bindRentCastVault(vault: RentCastVaultLike): Promise<() =>
 export function connectRentCastKey(): Promise<void> {
 	if (bound) return Promise.resolve();
 	if (typeof window === 'undefined') return Promise.resolve();
-	connecting ??= import('$lib/storage/secrets')
+	connecting ??= import('#lib/storage/secrets/index.ts')
 		.then(({ getVault }) => getVault())
 		.then(async (vault) => {
 			if (!bound) await bindRentCastVault(vault);

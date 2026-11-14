@@ -5,9 +5,9 @@
 	// neither may build a canonical or og:* URL. Kit crawls the absolute og:image link, so a
 	// missing share card fails the build.
 	import { page } from '$app/state';
-	import { DEFAULT_OG_ALT } from '$lib/content/og';
-	import type { ToolSlug } from '$lib/content/tools/shared';
-	import { SITE_URL } from '$lib/site';
+	import { DEFAULT_OG_ALT } from '#lib/content/og.ts';
+	import type { ToolSlug } from '#lib/content/tools/shared.ts';
+	import { SITE_URL } from '#lib/site.ts';
 	import { serializeJsonLd } from './jsonld';
 	import { canonicalPath } from './paths';
 

@@ -19,8 +19,8 @@
 	import UserPlus from '@lucide/svelte/icons/user-plus';
 	import Users from '@lucide/svelte/icons/users';
 	import type { Activity, ActivityType, Contact } from '@tran/core/agent/types';
-	import { Button, Input, Label, announce } from '$lib/features/shared/data/platform-ui';
-	import { logContact, type LogType } from '$lib/storage/agent/contacts-repo';
+	import { Button, Input, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { logContact, type LogType } from '#lib/storage/agent/contacts-repo.ts';
 	import { formatActivityTime } from '../dates';
 	import NativeSelect from '../ui/NativeSelect.svelte';
 	import { LOG_TYPES, logAnnouncement } from './contact-ui';

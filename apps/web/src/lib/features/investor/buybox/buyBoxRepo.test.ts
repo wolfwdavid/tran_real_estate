@@ -4,15 +4,15 @@
 // that counts RentCast calls and an injected clock (never fake timers).
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { DataRequest } from '@tran/core/request';
-import { applyImport, buildBackupText, previewImport } from '$lib/storage/backup';
-import type { TranDb } from '$lib/storage/db';
+import { applyImport, buildBackupText, previewImport } from '#lib/storage/backup.ts';
+import type { TranDb } from '#lib/storage/db.ts';
 // Test-only harnesses from the data layer (same precedent as the renter saved-search tests).
 // eslint-disable-next-line no-restricted-imports
-import { jsonResponse, makeDb, spyFetch, T0 } from '$lib/data/testing/harness';
+import { jsonResponse, makeDb, spyFetch, T0 } from '#lib/data/testing/harness.ts';
 // eslint-disable-next-line no-restricted-imports
-import { makeGateway } from '$lib/data/testing/gateway-harness';
+import { makeGateway } from '#lib/data/testing/gateway-harness.ts';
 // eslint-disable-next-line no-restricted-imports
-import { runDueSearches } from '$lib/data/scheduler';
+import { runDueSearches } from '#lib/data/scheduler.ts';
 import { createInvestorPort, savedSearchRepo, type InvestorRuntime } from '../data/investor-port';
 import {
 	BuyBoxNotFoundError,

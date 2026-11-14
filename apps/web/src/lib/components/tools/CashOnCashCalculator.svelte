@@ -4,8 +4,8 @@
 	// sign never depends on color.
 	import { cashOnCashCalc, type CashOnCashInput } from '@tran/core/finance/calculators';
 	import { toolMoney, toolPercent } from '@tran/core/finance/tool-inputs';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { cashOnCash } from '$lib/content/tools/cash-on-cash';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { cashOnCash } from '#lib/content/tools/cash-on-cash.ts';
 	import CalculatorShell from './CalculatorShell.svelte';
 	import EmptyResult from './EmptyResult.svelte';
 	import Headline from './Headline.svelte';

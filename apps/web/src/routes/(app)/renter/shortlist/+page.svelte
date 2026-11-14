@@ -1,8 +1,8 @@
 <script lang="ts">
 	// /renter/shortlist/ (RENT-05). Prerendered with the heading and lead only; the board reads the
 	// shortlist in the browser. The gateway is passed for the cache-only rent-change check.
-	import { getDataRuntime } from '$lib/data';
-	import ShortlistBoard from '$lib/features/renter/shortlist/ShortlistBoard.svelte';
+	import { getDataRuntime } from '#lib/data/index.ts';
+	import ShortlistBoard from '#lib/features/renter/shortlist/ShortlistBoard.svelte';
 
 	const runtime = getDataRuntime();
 </script>

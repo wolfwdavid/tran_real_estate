@@ -2,9 +2,9 @@
 	import Eye from '@lucide/svelte/icons/eye';
 	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 
 	// Masked secret entry (API keys, passphrases). Visible label, show/hide toggle, helper and error.
 	// No placeholder: the label and helper carry all the guidance. Password managers are told to

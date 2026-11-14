@@ -16,9 +16,9 @@ import {
 	type ShortlistItem,
 	type ShortlistStatus
 } from '@tran/core/renter';
-import type { Provenance } from '$lib/data';
-import { getDb, type TranDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import type { Provenance } from '#lib/data/index.ts';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import { RENTER_RECORD_SCHEMA_VERSION, shortlistTable } from './tables';
 
 /**

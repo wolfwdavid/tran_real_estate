@@ -9,8 +9,8 @@
 	import Phone from '@lucide/svelte/icons/phone';
 	import type { Listing } from '@tran/core/listings';
 	import { formatPhone, mailtoHref, safeHttpUrl, telHref } from '@tran/core/renter/contact-links';
-	import type { Provenance } from '$lib/data';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import type { Provenance } from '#lib/data/index.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 
 	let { row, provenance }: { row: Listing; provenance: Provenance } = $props();
 

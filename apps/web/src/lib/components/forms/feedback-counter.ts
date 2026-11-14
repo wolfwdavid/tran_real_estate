@@ -1,6 +1,6 @@
 // Pure helpers for the feedback form (GTM-02, UI-SPEC FeedbackForm): the character counter, the
 // one-time "100 characters left" crossing, and the default topic from ?portal=.
-import { FEEDBACK_COPY } from '$lib/content/forms-feedback';
+import { FEEDBACK_COPY } from '#lib/content/forms-feedback.ts';
 import { TOPICS, type Topic } from './form-gate';
 
 export const MAX_FEEDBACK = 2000;

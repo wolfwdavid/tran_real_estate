@@ -10,9 +10,9 @@
 	import { resolve } from '$app/paths';
 	import { STAGES, STAGE_LABELS } from '@tran/core/agent/types';
 	import { stageCounts } from '@tran/core/crm';
-	import { Button, buttonVariants, announce } from '$lib/features/shared/data/platform-ui';
-	import { buildInquiryUrl } from '$lib/leads/inquiry-url';
-	import { useContacts, useProfile } from '$lib/storage/agent/live.svelte';
+	import { Button, buttonVariants, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { buildInquiryUrl } from '#lib/leads/inquiry-url.ts';
+	import { useContacts, useProfile } from '#lib/storage/agent/live.svelte.ts';
 	import CrmEmptyState from '../crm/CrmEmptyState.svelte';
 	import QuickAddDialog from '../crm/QuickAddDialog.svelte';
 	import TodayQueue from '../tasks/TodayQueue.svelte';

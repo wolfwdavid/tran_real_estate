@@ -9,7 +9,7 @@
 	// copies the description text (never the disclosure) into the brief.
 	import Check from '@lucide/svelte/icons/check';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import NativeSelect from '$lib/features/agent/ui/NativeSelect.svelte';
+	import NativeSelect from '#lib/features/agent/ui/NativeSelect.svelte';
 	import InputFairHousingNote from '../InputFairHousingNote.svelte';
 	import {
 		BRIEF_MAX,

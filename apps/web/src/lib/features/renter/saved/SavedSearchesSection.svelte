@@ -5,10 +5,10 @@
 	// nothing here spends; View results restores from the cache on /renter/?saved={id}.
 	import { tick } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { getDataRuntime } from '$lib/data';
-	import { announce } from '$lib/features/shared/data/platform-ui';
-	import SavedSearchRow from '$lib/features/shared/listings/SavedSearchRow.svelte';
-	import { live } from '$lib/storage/live.svelte';
+	import { getDataRuntime } from '#lib/data/index.ts';
+	import { announce } from '#lib/features/shared/data/platform-ui.ts';
+	import SavedSearchRow from '#lib/features/shared/listings/SavedSearchRow.svelte';
+	import { live } from '#lib/storage/live.svelte.ts';
 	import type { RenterSearch } from '../search/search-state.svelte';
 	import SaveSearchDialog from './SaveSearchDialog.svelte';
 	import { savedSearchHeadingId } from './focus';

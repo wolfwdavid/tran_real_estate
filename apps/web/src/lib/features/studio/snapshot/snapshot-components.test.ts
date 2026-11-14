@@ -13,8 +13,8 @@ import {
 	type AggregatedSample,
 	type SnapshotMetrics
 } from '@tran/core/studio';
-import { SAMPLE_AGENT_PROFILE } from '$lib/features/shared/agent-profile';
-import { SNAPSHOT_SECTION_KEYS } from '$lib/storage/studio/types';
+import { SAMPLE_AGENT_PROFILE } from '#lib/features/shared/agent-profile/index.ts';
+import { SNAPSHOT_SECTION_KEYS } from '#lib/storage/studio/types.ts';
 import {
 	SAMPLE_FETCHED_AT,
 	SAMPLE_MARKET_STATS,

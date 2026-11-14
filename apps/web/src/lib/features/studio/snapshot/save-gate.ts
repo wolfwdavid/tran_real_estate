@@ -5,8 +5,8 @@
 // UI-SPEC's priority order, is the visible reason line. null means Save is allowed.
 import type { Finding } from '@tran/core/fair-housing';
 import { DISCLOSURE_FIELD_LABELS, type DisclosureField } from '@tran/core/studio';
-import { formatCost } from '$lib/features/shared/data/copy/provenance';
-import { SNAPSHOT_SECTION_KEYS, type SnapshotSectionKey } from '$lib/storage/studio/types';
+import { formatCost } from '#lib/features/shared/data/copy/provenance.ts';
+import { SNAPSHOT_SECTION_KEYS, type SnapshotSectionKey } from '#lib/storage/studio/types.ts';
 import type { ListingsKind } from './snapshot-data';
 import {
 	DATA_SECTION_KEYS,

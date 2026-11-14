@@ -11,7 +11,7 @@
 		type RawHistory
 	} from '@tran/core/renter/history';
 	import { formatMonthDayYear, formatRent } from '@tran/core/renter/format';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
 	import Sparkline from './Sparkline.svelte';
 
 	interface Props {

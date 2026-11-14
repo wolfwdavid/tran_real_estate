@@ -3,7 +3,7 @@
 	// accent-surface disc. Card: 48px mark in a 64px disc. Detail and empty states: 64px in 96px.
 	// Decorative: the surrounding card text names the property type. Shared with Phase 7 (sales).
 	import type { Component } from 'svelte';
-	import RenterMark from '$lib/components/brand/marks/RenterMark.svelte';
+	import RenterMark from '#lib/components/brand/marks/RenterMark.svelte';
 	import CondoMark from './marks/CondoMark.svelte';
 	import HomeMark from './marks/HomeMark.svelte';
 	import ManufacturedMark from './marks/ManufacturedMark.svelte';

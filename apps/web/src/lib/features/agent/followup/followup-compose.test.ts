@@ -11,9 +11,9 @@ import {
 } from '@tran/core/disclosure';
 import { checkFairHousing } from '@tran/core/fair-housing';
 import { redactPii } from '@tran/core/privacy';
-import { getPrompt } from '$lib/ai/prompts/registry';
-import { FIXTURE_OUTPUTS } from '$lib/ai/providers/fixture-outputs';
-import { exitPayload } from '$lib/ai/ui/panel-controller';
+import { getPrompt } from '#lib/ai/prompts/registry.ts';
+import { FIXTURE_OUTPUTS } from '#lib/ai/providers/fixture-outputs.ts';
+import { exitPayload } from '#lib/ai/ui/panel-controller.ts';
 import {
 	PURPOSES,
 	SUBJECT_DEFAULTS,

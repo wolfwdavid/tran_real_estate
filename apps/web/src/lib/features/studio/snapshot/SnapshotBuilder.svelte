@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import type { CheckGroupCopy } from '$lib/ai/ui/post-check';
+	import type { CheckGroupCopy } from '#lib/ai/ui/post-check.ts';
 
 	export const FEATURE = 'studio-snapshot';
 	export const PROMPT_ID = 'studio/snapshot.v1';
@@ -65,20 +65,20 @@
 	import type { Finding } from '@tran/core/fair-housing';
 	import { longDate } from '@tran/core/format';
 	import { buildSnapshotMetrics, missingFor, snapshotAllowedNumbers } from '@tran/core/studio';
-	import { getDataRuntime } from '$lib/data';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import { runChecks } from '$lib/ai/ui/panel-controller';
-	import { announce, Button } from '$lib/features/shared/data/platform-ui';
+	import { getDataRuntime } from '#lib/data/index.ts';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import { runChecks } from '#lib/ai/ui/panel-controller.ts';
+	import { announce, Button } from '#lib/features/shared/data/platform-ui.ts';
 	import {
 		loadAgentProfile,
 		SAMPLE_AGENT_PROFILE,
 		toDisclosureProfile
-	} from '$lib/features/shared/agent-profile';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { createStudioAutosave } from '$lib/storage/studio/autosave.svelte';
-	import type { SnapshotNarrative, SnapshotRecord } from '$lib/storage/studio/types';
+	} from '#lib/features/shared/agent-profile/index.ts';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { createStudioAutosave } from '#lib/storage/studio/autosave.svelte.ts';
+	import type { SnapshotNarrative, SnapshotRecord } from '#lib/storage/studio/types.ts';
 	import { numberPostCheck, numberWordsPostCheck } from '../post-checks';
 	import { buildSnapshotRecord } from './build-record';
 	import {
@@ -231,13 +231,13 @@
 			.then((p) => {
 				if (alive) profile = p;
 			});
-		void import('$lib/storage/studio/snapshots-repo')
+		void import('#lib/storage/studio/snapshots-repo.ts')
 			.then((m) => m.listSnapshots())
 			.catch(() => [])
 			.then((r) => {
 				if (alive) records = r;
 			});
-		void import('$lib/ai/storage/artifacts').then((m) => {
+		void import('#lib/ai/storage/artifacts.ts').then((m) => {
 			if (alive) repo = m.createArtifactRepo();
 		});
 		return () => {
@@ -378,7 +378,7 @@
 				profile: recordProfile,
 				sample: loaded.source === 'sample'
 			});
-			const { addSnapshot } = await import('$lib/storage/studio/snapshots-repo');
+			const { addSnapshot } = await import('#lib/storage/studio/snapshots-repo.ts');
 			await addSnapshot(record);
 			await autosave.flush();
 			announce(SAVED_ANNOUNCEMENT);

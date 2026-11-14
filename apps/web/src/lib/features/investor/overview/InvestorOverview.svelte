@@ -9,7 +9,7 @@
 	import ChartLine from '@lucide/svelte/icons/chart-line';
 	import FolderOpen from '@lucide/svelte/icons/folder-open';
 	import SearchCheck from '@lucide/svelte/icons/search-check';
-	import ButtonLink from '$lib/components/ui/ButtonLink.svelte';
+	import ButtonLink from '#lib/components/ui/ButtonLink.svelte';
 	import { OVERVIEW_LOADING, overviewLines, type OverviewCounts } from './overview-counts';
 
 	let { counts }: { counts: OverviewCounts | null } = $props();

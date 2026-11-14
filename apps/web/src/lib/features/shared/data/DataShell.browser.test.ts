@@ -5,16 +5,21 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { announce } from '$lib/components/a11y/announcer.svelte';
-import { axeViolations } from '$lib/testing/axe';
-import { createDataRuntime, savedSearchRepo, type DataRequest, type DataRuntime } from '$lib/data';
+import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+import { axeViolations } from '#lib/testing/axe.ts';
+import {
+	createDataRuntime,
+	savedSearchRepo,
+	type DataRequest,
+	type DataRuntime
+} from '#lib/data/index.ts';
 // eslint-disable-next-line no-restricted-imports -- test-only: an isolated real IndexedDB per test
-import { createDataDb, type DataDb } from '$lib/data/platform';
+import { createDataDb, type DataDb } from '#lib/data/platform.ts';
 import { DUE_DECLINED } from './copy/source';
 import DataShellHarness from './testing/DataShellHarness.svelte';
 
 // Spy on the real announcer (DataShell and the dialogs reach it through platform-ui).
-vi.mock('$lib/components/a11y/announcer.svelte', { spy: true });
+vi.mock('#lib/components/a11y/announcer.svelte.ts', { spy: true });
 
 const T0 = Date.parse('2026-10-15T12:00:00.000Z');
 const clock = () => T0;

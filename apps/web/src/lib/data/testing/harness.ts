@@ -1,6 +1,6 @@
 // Test-only. Inject a clock; never use Vitest fake timers with fake-indexeddb (RESEARCH Pitfall 1).
 // Fake keys stay low-entropy (Pitfall 13). Not imported by app code: it lives under src/lib only so
-// `$lib` resolves in tests. Every makeDb() call is fully isolated.
+// `#lib` resolves in tests. Every makeDb() call is fully isolated.
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import { createDataDb, type DataDb } from '../platform';
 

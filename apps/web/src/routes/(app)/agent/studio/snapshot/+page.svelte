@@ -6,13 +6,13 @@
 	import { onMount, type Component } from 'svelte';
 	import { resolve } from '$app/paths';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
 
 	let Builder = $state<Component | null>(null);
 
 	onMount(() => {
 		let alive = true;
-		void import('$lib/features/studio/snapshot/SnapshotBuilder.svelte').then((m) => {
+		void import('#lib/features/studio/snapshot/SnapshotBuilder.svelte').then((m) => {
 			if (alive) Builder = m.default;
 		});
 		return () => {

@@ -14,14 +14,14 @@
 	import type { Finding } from '@tran/core/fair-housing';
 	import { analysisHash, analyze } from '@tran/core/finance';
 	import { NOT_AVAILABLE, pct, ratio, usd } from '@tran/core/format';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import type { AiArtifact, ArtifactRepo } from '$lib/ai/storage/artifacts';
-	import DraftHistory from '$lib/ai/ui/DraftHistory.svelte';
-	import GenerationPanel from '$lib/ai/ui/GenerationPanel.svelte';
-	import { runChecks } from '$lib/ai/ui/panel-controller';
-	import NotFoundPanel from '$lib/features/shared/NotFoundPanel.svelte';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import type { AiArtifact, ArtifactRepo } from '#lib/ai/storage/artifacts.ts';
+	import DraftHistory from '#lib/ai/ui/DraftHistory.svelte';
+	import GenerationPanel from '#lib/ai/ui/GenerationPanel.svelte';
+	import { runChecks } from '#lib/ai/ui/panel-controller.ts';
+	import NotFoundPanel from '#lib/features/shared/NotFoundPanel.svelte';
 	import { getDeal } from '../deals/dealsRepo';
 	import type { DealRecord } from '../deals/schema';
 	import { createMemoPostChecks, MEMO_CHECK_GROUPS, memoGateReasons } from './memo-checks';
@@ -117,7 +117,7 @@
 			return;
 		}
 		void (async () => {
-			const [rec, m] = await Promise.all([getDeal(id), import('$lib/ai/storage/artifacts')]);
+			const [rec, m] = await Promise.all([getDeal(id), import('#lib/ai/storage/artifacts.ts')]);
 			if (disposed) return;
 			if (!rec) {
 				view = 'not-found';

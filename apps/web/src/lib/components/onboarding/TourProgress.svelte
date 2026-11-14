@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { GUIDE_COPY } from '$lib/content/onboarding';
+	import { GUIDE_COPY } from '#lib/content/onboarding.ts';
 
 	let { step }: { step: 1 | 2 | 3 } = $props();
 </script>

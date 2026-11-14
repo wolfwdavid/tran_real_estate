@@ -79,7 +79,7 @@ describe('onboarding-state', () => {
 
 describe('onboarding copy', () => {
 	it('contains no banned terms', async () => {
-		const { ONBOARDING_COPY } = await import('$lib/content/onboarding');
+		const { ONBOARDING_COPY } = await import('#lib/content/onboarding.ts');
 		const rendered = JSON.stringify(ONBOARDING_COPY, (_k, v) =>
 			typeof v === 'function' ? String(v('renter')) : v
 		);

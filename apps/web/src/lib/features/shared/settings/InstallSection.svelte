@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { createInstallState } from '$lib/pwa/install.svelte';
+	import { createInstallState } from '#lib/pwa/install.svelte.ts';
 	import { getSettingsContext } from './settings-context.svelte';
 	import InstallApp from './InstallApp.svelte';
 

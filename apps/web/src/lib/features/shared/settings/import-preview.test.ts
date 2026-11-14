@@ -6,7 +6,7 @@
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
 import { planMerge, planReplace, newSyncable, type Syncable } from '@tran/core';
-import type { ImportPreview } from '$lib/storage/backup';
+import type { ImportPreview } from '#lib/storage/backup.ts';
 import Harness from './testing/ImportPreviewHarness.svelte';
 
 const MIGRATION_LINE =

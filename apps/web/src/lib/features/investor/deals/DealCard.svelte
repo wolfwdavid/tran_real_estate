@@ -12,9 +12,9 @@
 		Button,
 		buttonVariants,
 		ConfirmDialog
-	} from '$lib/features/shared/data/platform-ui';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import { formatRelative } from '$lib/features/shared/data/relative-time';
+	} from '#lib/features/shared/data/platform-ui.ts';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import { formatRelative } from '#lib/features/shared/data/relative-time.ts';
 	import { deleteDeal } from './dealsRepo';
 	import type { DealRow } from './deals-view';
 

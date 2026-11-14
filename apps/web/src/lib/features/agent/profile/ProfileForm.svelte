@@ -15,13 +15,13 @@
 		type LicenseType,
 		type ProfileInput
 	} from '@tran/core/agent/types';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import NativeSelect from '$lib/features/agent/ui/NativeSelect.svelte';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
-	import { saveProfile } from '$lib/storage/agent/profile-repo';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
+	import NativeSelect from '#lib/features/agent/ui/NativeSelect.svelte';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
+	import { saveProfile } from '#lib/storage/agent/profile-repo.ts';
 	import {
 		isDirty,
 		normalizeWebsite,

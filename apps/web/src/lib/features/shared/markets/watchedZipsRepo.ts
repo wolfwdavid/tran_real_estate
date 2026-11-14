@@ -8,8 +8,8 @@
 // cache: the cached RentCast response stays until its TTL, so re-watching is free.
 import { newSyncable, tombstone } from '@tran/core';
 import { addWatchedZip, validateZip } from '@tran/core/markets';
-import { getDb, type TranDb } from '$lib/storage/db';
-import { live } from '$lib/storage/live.svelte';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
+import { live } from '#lib/storage/live.svelte.ts';
 import {
 	WATCHED_ZIP_SCHEMA_VERSION,
 	watchedZipId,

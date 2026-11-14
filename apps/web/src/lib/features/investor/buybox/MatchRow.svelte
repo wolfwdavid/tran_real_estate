@@ -16,12 +16,12 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { usd } from '@tran/core/format';
 	import { GatewayError as GatewayErrorValue, isGatewayError } from '@tran/core/request';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceChip from '$lib/features/shared/data/ProvenanceChip.svelte';
-	import { announce, Button } from '$lib/features/shared/data/platform-ui';
-	import { loadMarket, type LoadOutcome } from '$lib/features/shared/markets/market-load';
-	import type { MarketsPort } from '$lib/features/shared/markets/markets-port';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceChip from '#lib/features/shared/data/ProvenanceChip.svelte';
+	import { announce, Button } from '#lib/features/shared/data/platform-ui.ts';
+	import { loadMarket, type LoadOutcome } from '#lib/features/shared/markets/market-load.ts';
+	import type { MarketsPort } from '#lib/features/shared/markets/markets-port.ts';
 	import { writeDraft } from '../analyzer/draftRepo';
 	import type { CostEstimate, InvestorDataPort } from '../data/investor-port';
 	import { deepAnalyze, listingQuery } from './deep-analyze';

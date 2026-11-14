@@ -6,7 +6,7 @@
 	import { tick } from 'svelte';
 	import Check from '@lucide/svelte/icons/check';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import type { RenterOutreachForm } from '$lib/ai/prompts/renter/outreach.v1';
+	import type { RenterOutreachForm } from '#lib/ai/prompts/renter/outreach.v1.ts';
 	import { EXTRA_QUESTION_MAX, validateOutreachForm, type OutreachErrors } from './outreach-form';
 
 	interface Props {

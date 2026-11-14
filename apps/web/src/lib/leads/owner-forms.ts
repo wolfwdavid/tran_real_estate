@@ -2,7 +2,7 @@
 // Web3Forms key, baked in at build time (lib/site.ts WEB3FORMS_KEY); without it the forms render
 // as coming-soon panels and this is never called. Same single request and response mapping as the
 // agent inquiry sink. Nothing is stored in the browser.
-import type { FeedbackBody, WaitlistBody } from '$lib/components/forms/form-gate';
+import type { FeedbackBody, WaitlistBody } from '#lib/components/forms/form-gate.ts';
 import { postWeb3Forms, type SinkResult } from './web3forms-sink';
 
 export type OwnerFormBody = WaitlistBody | FeedbackBody;

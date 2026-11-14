@@ -10,8 +10,8 @@ import {
 	type RenterSearchMeta,
 	type RenterSortId
 } from '@tran/core/renter';
-import { getDb, type TranDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import { getDb, type TranDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import { RENTER_RECORD_SCHEMA_VERSION, searchMetaTable } from './tables';
 
 /** What the renter UI holds (06-07 url-state shapes); validated and copied on write. */

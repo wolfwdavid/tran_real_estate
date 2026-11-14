@@ -9,20 +9,20 @@ import {
 	type AggregatedSample
 } from '@tran/core/studio';
 import type { ProfileInput } from '@tran/core/agent/types';
-import { studioSnapshotV1 } from '$lib/ai/prompts/studio/snapshot.v1';
-import { numberPostCheck, numberWordsPostCheck } from '$lib/features/studio/post-checks';
+import { studioSnapshotV1 } from '#lib/ai/prompts/studio/snapshot.v1.ts';
+import { numberPostCheck, numberWordsPostCheck } from '#lib/features/studio/post-checks.ts';
 import {
 	effectiveBrandColors,
 	SAMPLE_AGENT_PROFILE,
 	toDisclosureProfile
-} from '$lib/features/shared/agent-profile';
-import { toMarketStatsInput } from '$lib/features/shared/markets/market-input';
+} from '#lib/features/shared/agent-profile/index.ts';
+import { toMarketStatsInput } from '#lib/features/shared/markets/market-input.ts';
 import {
 	FORBIDDEN_SNAPSHOT_KEYS,
 	SNAPSHOT_RECORD_KEYS,
 	snapshotViolations
-} from '$lib/storage/studio/tables';
-import { SNAPSHOT_SECTION_KEYS } from '$lib/storage/studio/types';
+} from '#lib/storage/studio/tables.ts';
+import { SNAPSHOT_SECTION_KEYS } from '#lib/storage/studio/types.ts';
 import {
 	SAMPLE_FETCHED_AT,
 	SAMPLE_LISTINGS_SUMMARY,

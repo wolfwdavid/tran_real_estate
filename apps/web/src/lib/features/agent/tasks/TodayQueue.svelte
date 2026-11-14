@@ -10,8 +10,8 @@
 	import { resolve } from '$app/paths';
 	import type { Task } from '@tran/core/agent/types';
 	import { groupTasks } from '@tran/core/crm';
-	import { useContacts } from '$lib/storage/agent/live.svelte';
-	import { useDoneToday, useOpenTasks } from '$lib/storage/agent/tasks-live.svelte';
+	import { useContacts } from '#lib/storage/agent/live.svelte.ts';
+	import { useDoneToday, useOpenTasks } from '#lib/storage/agent/tasks-live.svelte.ts';
 	import { formatWeekdayLong, localDateOf, parseLocalDate, todayLocal } from '../dates';
 	import TaskRow from './TaskRow.svelte';
 	import { compactQueue, nextFocusTarget, taskCountLabel } from './task-ui';

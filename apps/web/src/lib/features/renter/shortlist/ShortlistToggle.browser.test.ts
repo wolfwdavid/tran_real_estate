@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import { getShortlistRepo } from '../storage/shortlist-repo';
 import ShortlistToggle from './ShortlistToggle.svelte';
 import ProxiedToggle from './testing/ProxiedToggle.svelte';

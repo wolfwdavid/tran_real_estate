@@ -2,8 +2,8 @@
 	import CircleCheck from '@lucide/svelte/icons/circle-check';
 	import FilePen from '@lucide/svelte/icons/file-pen';
 	import MailCheck from '@lucide/svelte/icons/mail-check';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import type { ArtifactStatus } from '$lib/ai/storage/artifacts';
+	import { Badge } from '#lib/components/ui/badge/index.js';
+	import type { ArtifactStatus } from '#lib/ai/storage/artifacts.ts';
 
 	// Stored-draft status (05-UI-SPEC ArtifactStatusBadge). The text alone carries the state; color
 	// and icon are reinforcement only. draft → Draft, acknowledged → Reviewed, sent → Marked as sent.

@@ -12,8 +12,8 @@ import { contactSchema, MAX_ACTIVITY_TEXT } from '@tran/core/agent/schemas';
 import { isLive, type Activity, type Contact, type IncomingLead } from '@tran/core/agent/types';
 import type { FillableField, LeadDiffRow } from '@tran/core/leads/diff-leads';
 import { cleanText, normEmail, normPhoneUS } from '@tran/core/leads/normalize';
-import { getDb } from '$lib/storage/db';
-import { META } from '$lib/storage/meta';
+import { getDb } from '#lib/storage/db.ts';
+import { META } from '#lib/storage/meta.ts';
 import { ADDED_TEXT, buildContactRecord } from './contacts-repo';
 import { AGENT_RECORD_SCHEMA_VERSION, activitiesTable, contactsTable } from './tables';
 

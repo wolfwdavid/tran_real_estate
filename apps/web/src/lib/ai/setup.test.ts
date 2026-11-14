@@ -2,14 +2,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LlmError } from '@tran/core/ai';
 import type { LiveProviderId } from '@tran/core/ai';
 import { fakeKey } from '../../../tests/support/fake-keys';
-import { memoryStorage } from '$lib/storage/test-utils';
+import { memoryStorage } from '#lib/storage/test-utils.ts';
 import {
 	_resetKeyTesters,
 	getKeyTester,
 	hasKeyTester,
 	registerKeyTester,
 	type KeyTester
-} from '$lib/storage/secrets/testers';
+} from '#lib/storage/secrets/testers.ts';
 import { PROVIDER_ORDER } from './models';
 import type { LlmRequest, TestConnectionResult } from './ports';
 import { createAiPrefs, AI_PREF_KEYS } from './prefs.svelte';

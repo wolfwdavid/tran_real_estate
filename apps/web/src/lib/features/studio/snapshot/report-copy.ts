@@ -6,7 +6,7 @@
 import { providerById, type ProviderId } from '@tran/core';
 import { formatCount } from '@tran/core/budget';
 import { longDate, NOT_AVAILABLE } from '@tran/core/format';
-import type { SnapshotRecord } from '$lib/storage/studio/types';
+import type { SnapshotRecord } from '#lib/storage/studio/types.ts';
 
 export const SHORT_LABEL =
 	'Market information only. Not a comparative market analysis or a professional valuation of any property.';

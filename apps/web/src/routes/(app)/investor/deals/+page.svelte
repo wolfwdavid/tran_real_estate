@@ -1,10 +1,10 @@
 <script lang="ts">
 	// /investor/deals/ (INV-03). Prerendered shell: the list reads Dexie in the browser through a
 	// liveQuery, so a delete (or a save in another tab) updates it without a reload. 0 calls.
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import DealsList from '$lib/features/investor/deals/DealsList.svelte';
-	import { dealsLive } from '$lib/features/investor/deals/dealsRepo';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import DealsList from '#lib/features/investor/deals/DealsList.svelte';
+	import { dealsLive } from '#lib/features/investor/deals/dealsRepo.ts';
 
 	const deals = dealsLive();
 </script>

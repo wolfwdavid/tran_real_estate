@@ -2,10 +2,10 @@
 	import { tick } from 'svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
+	import * as Dialog from '#lib/components/ui/dialog/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import SecretInput from './SecretInput.svelte';
 	import { getSettingsContext } from './settings-context.svelte';
 

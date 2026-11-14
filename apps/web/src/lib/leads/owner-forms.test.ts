@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 import { submitOwnerForm } from './owner-forms';
-import { feedbackBody, waitlistBody } from '$lib/components/forms/form-gate';
+import { feedbackBody, waitlistBody } from '#lib/components/forms/form-gate.ts';
 
 // Fake fetch only: these tests never touch the real network. Low-entropy test key.
 const K = '00000000-0000-4000-8000-000000000000';

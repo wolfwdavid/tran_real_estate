@@ -1,7 +1,7 @@
 // The live cost of one action for its button's CostLabel (DATA-02/04: every call-spending action
 // shows its cost first). Reads gateway.estimateCost only (cache lookup, 0 calls); it never calls
 // get/refresh, so it is safe inside $effect. Call during component initialisation.
-import type { CostEstimate, DataGateway, DataRequest } from '$lib/data';
+import type { CostEstimate, DataGateway, DataRequest } from '#lib/data/index.ts';
 
 export interface CostSource {
 	gateway: DataGateway | null;

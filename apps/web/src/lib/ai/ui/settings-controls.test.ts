@@ -4,8 +4,8 @@ import type { Component } from 'svelte';
 import { render } from 'svelte/server';
 import { describe, expect, test } from 'vitest';
 import type { LiveProviderId } from '@tran/core/ai';
-import type { AiKeyState } from '$lib/ai/setup';
-import { defaultModel } from '$lib/ai/models';
+import type { AiKeyState } from '#lib/ai/setup.ts';
+import { defaultModel } from '#lib/ai/models.ts';
 import AiProviderPicker, { providerAnnouncement } from './AiProviderPicker.svelte';
 import SampleOutputToggle, { sampleAnnouncement } from './SampleOutputToggle.svelte';
 

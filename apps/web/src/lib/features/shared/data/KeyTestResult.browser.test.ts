@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import type { KeyTestOutcome } from '@tran/core/request';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import KeyTestResult from './KeyTestResult.svelte';
 
 const NOW = Date.parse('2026-10-05T12:00:00Z');

@@ -8,13 +8,13 @@
 	import Hourglass from '@lucide/svelte/icons/hourglass';
 	import Send from '@lucide/svelte/icons/send';
 	import ShieldCheck from '@lucide/svelte/icons/shield-check';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Alert, AlertDescription, AlertTitle } from '$lib/components/ui/alert/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { submitInquiry } from '$lib/leads/web3forms-sink';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { Alert, AlertDescription, AlertTitle } from '#lib/components/ui/alert/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import { submitInquiry } from '#lib/leads/web3forms-sink.ts';
 	import {
 		evaluateGate,
 		MAX_INQUIRY_MESSAGE,

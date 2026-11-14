@@ -14,7 +14,7 @@
 	import { resolve } from '$app/paths';
 	import type { RowReason } from '@tran/core/csv';
 	import type { FillableField, LeadDiff, LeadDiffRow } from '@tran/core/leads/diff-leads';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
+	import { Checkbox } from '#lib/components/ui/checkbox/index.js';
 	import {
 		Badge,
 		Button,
@@ -22,14 +22,14 @@
 		Input,
 		Label,
 		announce
-	} from '$lib/features/shared/data/platform-ui';
-	import SectionError from '$lib/features/shared/settings/SectionError.svelte';
+	} from '#lib/features/shared/data/platform-ui.ts';
+	import SectionError from '#lib/features/shared/settings/SectionError.svelte';
 	import {
 		commitImport,
 		planFromDiff,
 		type ImportResult,
 		type LeadEdits
-	} from '$lib/storage/agent/import-commit';
+	} from '#lib/storage/agent/import-commit.ts';
 	import { validateQuickAdd, type QuickAddField } from '../crm/quick-add';
 
 	type Status = 'new' | 'update' | 'duplicate' | 'same' | 'cant';

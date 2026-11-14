@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import Dexie from 'dexie';
 import { afterEach, describe, expect, it } from 'vitest';
-import { AI_STORES } from '$lib/ai/storage/tables';
-import { PHASE4_STORES } from '$lib/data/tables';
+import { AI_STORES } from '#lib/ai/storage/tables.ts';
+import { PHASE4_STORES } from '#lib/data/tables.ts';
 import { AGENT_STORES } from './agent/tables';
 import { STUDIO_STORES } from './studio/tables';
-import { INVESTOR_STORES } from '$lib/features/investor/deals/tables';
-import { freshIdb } from '$lib/storage/test-utils';
+import { INVESTOR_STORES } from '#lib/features/investor/deals/tables.ts';
+import { freshIdb } from '#lib/storage/test-utils.ts';
 import { StorageBlockedError, TranDb, _resetDb, getDb, openDb } from './db';
 
 const dbSource = readFileSync(new URL('./db.ts', import.meta.url), 'utf8');

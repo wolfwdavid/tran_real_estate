@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { newSyncable, type ProviderId } from '@tran/core';
-import type { KeyState } from '$lib/storage/secrets';
-import { _resetKeyTesters, getKeyTester, hasKeyTester } from '$lib/storage/secrets/testers';
+import type { KeyState } from '#lib/storage/secrets/index.ts';
+import { _resetKeyTesters, getKeyTester, hasKeyTester } from '#lib/storage/secrets/testers.ts';
 import {
 	_resetPlatform,
 	bindRentCastVault,

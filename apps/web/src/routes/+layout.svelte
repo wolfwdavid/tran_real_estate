@@ -3,8 +3,8 @@
 	import '@fontsource-variable/inter';
 	import '../app.css';
 	import { afterNavigate } from '$app/navigation';
-	import SkipLink from '$lib/components/layout/SkipLink.svelte';
-	import LiveAnnouncer from '$lib/components/a11y/LiveAnnouncer.svelte';
+	import SkipLink from '#lib/components/layout/SkipLink.svelte';
+	import LiveAnnouncer from '#lib/components/a11y/LiveAnnouncer.svelte';
 
 	let { children } = $props();
 
@@ -18,7 +18,7 @@
 	if (__ANALYTICS_HOST__ && __ANALYTICS_WEBSITE_ID__) {
 		afterNavigate(({ to, shallow, type }) => {
 			if (shallow && type === 'goto') return;
-			if (to) import('$lib/analytics/boot').then((m) => m.pageview(to.url)).catch(() => {});
+			if (to) import('#lib/analytics/boot.ts').then((m) => m.pageview(to.url)).catch(() => {});
 		});
 	}
 </script>

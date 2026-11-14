@@ -15,10 +15,10 @@
 		normalizeHex,
 		type BrandRole
 	} from '@tran/brand/brand-color';
-	import { announce } from '$lib/components/a11y/announcer.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
+	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
+	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
+	import { Label } from '#lib/components/ui/label/index.js';
 
 	interface Props {
 		role: BrandRole;

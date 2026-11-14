@@ -6,9 +6,9 @@
 	// Escape closes and returns focus to the trigger (bits-ui default).
 	import ArrowRightLeft from '@lucide/svelte/icons/arrow-right-left';
 	import { STAGES, STAGE_LABELS, type Contact, type Stage } from '@tran/core/agent/types';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { buttonVariants } from '$lib/features/shared/data/platform-ui';
-	import { cn } from '$lib/utils.js';
+	import * as DropdownMenu from '#lib/components/ui/dropdown-menu/index.js';
+	import { buttonVariants } from '#lib/features/shared/data/platform-ui.ts';
+	import { cn } from '#lib/utils.js';
 
 	let { contact, onmove }: { contact: Contact; onmove: (stage: Stage) => void } = $props();
 

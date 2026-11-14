@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PROVIDER_IDS, type ProviderId } from '@tran/core';
-import { freshIdb, memoryStorage, type MemoryStorage } from '$lib/storage/test-utils';
+import { freshIdb, memoryStorage, type MemoryStorage } from '#lib/storage/test-utils.ts';
 import { fakeKey } from '../../../../tests/support/fake-keys';
 import type { ChannelLike, VaultMessage } from './channel';
 import { IV_BYTES, SALT_BYTES, open, seal } from './crypto';

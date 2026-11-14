@@ -11,8 +11,8 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Printer from '@lucide/svelte/icons/printer';
 	import { longDate } from '@tran/core/format';
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { CHIP_SAMPLE } from '$lib/features/shared/data/copy/provenance';
+	import { buttonVariants } from '#lib/components/ui/button/index.js';
+	import { CHIP_SAMPLE } from '#lib/features/shared/data/copy/provenance.ts';
 
 	const PRINT_HELP =
 		"In the print dialog, choose Save as PDF as the destination. This toolbar won't appear on the page.";

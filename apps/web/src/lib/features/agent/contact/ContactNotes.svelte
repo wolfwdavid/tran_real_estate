@@ -5,9 +5,9 @@
 	import type { Contact } from '@tran/core/agent/types';
 	import { MAX_CONTACT_NOTES } from '@tran/core/agent/schemas';
 	import { cleanText, firstName } from '@tran/core/leads/normalize';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { Button, Label, announce } from '$lib/features/shared/data/platform-ui';
-	import { updateContact } from '$lib/storage/agent/contacts-repo';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import { Button, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { updateContact } from '#lib/storage/agent/contacts-repo.ts';
 	import UndoStatus from '../ui/UndoStatus.svelte';
 
 	let { contact }: { contact: Contact } = $props();

@@ -7,11 +7,11 @@
 	import { tick } from 'svelte';
 	import UserPlus from '@lucide/svelte/icons/user-plus';
 	import type { Contact } from '@tran/core/agent';
-	import ContactsView from '$lib/features/agent/crm/ContactsView.svelte';
-	import CrmEmptyState from '$lib/features/agent/crm/CrmEmptyState.svelte';
-	import QuickAddDialog from '$lib/features/agent/crm/QuickAddDialog.svelte';
-	import { Button } from '$lib/features/shared/data/platform-ui';
-	import { useContacts } from '$lib/storage/agent/live.svelte';
+	import ContactsView from '#lib/features/agent/crm/ContactsView.svelte';
+	import CrmEmptyState from '#lib/features/agent/crm/CrmEmptyState.svelte';
+	import QuickAddDialog from '#lib/features/agent/crm/QuickAddDialog.svelte';
+	import { Button } from '#lib/features/shared/data/platform-ui.ts';
+	import { useContacts } from '#lib/storage/agent/live.svelte.ts';
 
 	const contacts = useContacts();
 	const isEmpty = $derived(contacts.loaded && contacts.current.length === 0);

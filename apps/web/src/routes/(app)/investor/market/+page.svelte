@@ -16,22 +16,22 @@
 		isGatewayError,
 		type CostEstimate,
 		type GatewayError as GatewayErrorType
-	} from '$lib/data';
-	import CostLabel from '$lib/features/shared/data/CostLabel.svelte';
-	import GatewayError from '$lib/features/shared/data/GatewayError.svelte';
-	import ProvenanceRow from '$lib/features/shared/data/ProvenanceRow.svelte';
-	import { Button, announce } from '$lib/features/shared/data/platform-ui';
-	import NotFoundPanel from '$lib/features/shared/NotFoundPanel.svelte';
-	import PortalSubNav from '$lib/features/shared/nav/PortalSubNav.svelte';
-	import { INVESTOR_NAV } from '$lib/features/investor/nav';
-	import ChartFigure from '$lib/features/shared/markets/ChartFigure.svelte';
-	import { loadMarket, readMarketOnMount } from '$lib/features/shared/markets/market-load';
-	import { useMarketsPort, type MarketResult } from '$lib/features/shared/markets/markets-port';
+	} from '#lib/data/index.ts';
+	import CostLabel from '#lib/features/shared/data/CostLabel.svelte';
+	import GatewayError from '#lib/features/shared/data/GatewayError.svelte';
+	import ProvenanceRow from '#lib/features/shared/data/ProvenanceRow.svelte';
+	import { Button, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import NotFoundPanel from '#lib/features/shared/NotFoundPanel.svelte';
+	import PortalSubNav from '#lib/features/shared/nav/PortalSubNav.svelte';
+	import { INVESTOR_NAV } from '#lib/features/investor/nav.ts';
+	import ChartFigure from '#lib/features/shared/markets/ChartFigure.svelte';
+	import { loadMarket, readMarketOnMount } from '#lib/features/shared/markets/market-load.ts';
+	import { useMarketsPort, type MarketResult } from '#lib/features/shared/markets/markets-port.ts';
 	import {
 		watchZip,
 		watchedZipsLive,
 		type WatchedZip
-	} from '$lib/features/shared/markets/watchedZipsRepo';
+	} from '#lib/features/shared/markets/watchedZipsRepo.ts';
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- the two chart components share one prop shape
 	type ChartComponent = Component<any>;
@@ -76,8 +76,8 @@
 		document.title = `ZIP ${v.zip} market: Tran Real Estate Tools`;
 		watchedLive = watchedZipsLive();
 		void Promise.all([
-			import('$lib/features/shared/markets/ZipTrendChart.svelte'),
-			import('$lib/features/shared/markets/PriceToRentChart.svelte')
+			import('#lib/features/shared/markets/ZipTrendChart.svelte'),
+			import('#lib/features/shared/markets/PriceToRentChart.svelte')
 		]).then(([trend, priceToRent]) => {
 			charts = { trend: trend.default, priceToRent: priceToRent.default };
 		});

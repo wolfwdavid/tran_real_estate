@@ -6,7 +6,7 @@
 // Matching lives in @tran/core/studio (checkResultsBeat, findAttributedQuotes); this module only
 // adapts hits to Findings with the UI-SPEC copy.
 import { RESULTS_PLACEHOLDER, checkResultsBeat, findAttributedQuotes } from '@tran/core/studio';
-import { createPostCheck, type PostCheck } from '$lib/ai/ui/post-check';
+import { createPostCheck, type PostCheck } from '#lib/ai/ui/post-check.ts';
 
 export type { PostCheck };
 

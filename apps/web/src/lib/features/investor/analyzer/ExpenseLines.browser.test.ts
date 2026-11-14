@@ -3,7 +3,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
+import { axeViolations } from '#lib/testing/axe.ts';
 import { addCustomLine, defaultForm, type AnalyzerForm } from './form-model';
 import ExpenseLinesHarness from './testing/ExpenseLinesHarness.svelte';
 

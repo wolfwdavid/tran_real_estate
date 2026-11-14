@@ -1,7 +1,7 @@
 <script lang="ts">
 	// 06-UI-SPEC "Empty state (filters hide everything)": the search found rentals, but the local
 	// filters hide all of them. Clearing filters is local and free, so the copy says so.
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button } from '#lib/components/ui/button/index.js';
 	import type { RenterSearch } from './search-state.svelte';
 
 	interface Props {

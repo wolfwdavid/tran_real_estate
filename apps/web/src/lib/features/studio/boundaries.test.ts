@@ -123,7 +123,7 @@ describe('planted controls (real files under os.tmpdir())', () => {
 		write('data/tables.ts', 'export const t = 1;\n');
 		const entry = write(
 			'features/studio/planted/Planted.svelte',
-			"<script lang=\"ts\">\n\timport { x } from '$lib/data/x';\n\timport { t } from '$lib/data/tables';\n</script>\n"
+			"<script lang=\"ts\">\n\timport { x } from '#lib/data/x';\n\timport { t } from '$lib/data/tables';\n</script>\n"
 		);
 		expect(reachesData([entry], lib)).toEqual([posix.join(lib, 'data/x.ts')]);
 	});
@@ -134,11 +134,11 @@ describe('planted controls (real files under os.tmpdir())', () => {
 		write('leads/normalize.ts', 'export const n = 1;\n');
 		write(
 			'features/shared/barrel.ts',
-			"export * from '$lib/features/agent/crm/contacts';\nexport { d } from '../investor/deals/deal';\nexport const lazy = () => import('$lib/leads/normalize');\n"
+			"export * from '#lib/features/agent/crm/contacts';\nexport { d } from '../investor/deals/deal';\nexport const lazy = () => import('$lib/leads/normalize');\n"
 		);
 		const entry = write(
 			'features/studio/planted/entry.ts',
-			"import { c } from '$lib/features/shared/barrel';\n"
+			"import { c } from '#lib/features/shared/barrel';\n"
 		);
 		const reached = [...importGraph([entry], lib)].filter((f) =>
 			['features/investor', 'features/agent/crm', 'leads'].some((d) => under(posix.join(lib, d))(f))

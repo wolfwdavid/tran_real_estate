@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
-import { axeViolations } from '$lib/testing/axe';
-import { announcerMessage } from '$lib/components/a11y/announcer.svelte';
+import { axeViolations } from '#lib/testing/axe.ts';
+import { announcerMessage } from '#lib/components/a11y/announcer.svelte.ts';
 import DueSearchesDialog from './DueSearchesDialog.svelte';
 
 const BODY =

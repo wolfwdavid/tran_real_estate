@@ -2,7 +2,7 @@
 	// Reconciled: a plain row on a 1px `border` baseline (no pill background, no muted fill). The
 	// selected trigger draws its 2px `foreground` underline over the baseline.
 	import { Tabs as TabsPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '#lib/utils.js';
 
 	let { ref = $bindable(null), class: className, ...restProps }: TabsPrimitive.ListProps = $props();
 </script>

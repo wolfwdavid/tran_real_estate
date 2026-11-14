@@ -9,8 +9,8 @@
 // value an adapter reads from the vault. It never lands in a result, a message or a log.
 import type { ProviderId } from '@tran/core';
 import type { LiveProviderId } from '@tran/core/ai';
-import type { KeyState, KeyTestResult, KeyTestStatus } from '$lib/storage/secrets';
-import type { registerKeyTester } from '$lib/storage/secrets/testers';
+import type { KeyState, KeyTestResult, KeyTestStatus } from '#lib/storage/secrets/index.ts';
+import type { registerKeyTester } from '#lib/storage/secrets/testers.ts';
 import { PROVIDER_LABELS, PROVIDER_ORDER, hostFor } from './models';
 import type {
 	AdapterDeps,

@@ -8,9 +8,9 @@
 	import SearchX from '@lucide/svelte/icons/search-x';
 	import { onMount, tick } from 'svelte';
 	import { diffLeads, type LeadDiff } from '@tran/core/leads/diff-leads';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { Button, Label, announce } from '$lib/features/shared/data/platform-ui';
-	import { listContacts } from '$lib/storage/agent/contacts-repo';
+	import { Textarea } from '#lib/components/ui/textarea/index.js';
+	import { Button, Label, announce } from '#lib/features/shared/data/platform-ui.ts';
+	import { listContacts } from '#lib/storage/agent/contacts-repo.ts';
 	import ImportReview from './ImportReview.svelte';
 	import { MAX_PASTE_CHARS, pasteToLeads } from './paste-to-leads';
 
