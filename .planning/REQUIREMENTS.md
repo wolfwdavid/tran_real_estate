@@ -52,7 +52,7 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 
 ### Toolchain (TOOL)
 
-- [ ] **TOOL-01**: pnpm 12 is the pinned `packageManager`; the lockfile is regenerated once; the supply-chain test, `build-web.mjs`, and the launch-audit test no longer hardcode `11.27.0`; `pnpm install --frozen-lockfile` passes locally and in CI
+- [x] **TOOL-01**: pnpm 12 is the pinned `packageManager`; the lockfile is regenerated once; the supply-chain test, `build-web.mjs`, and the launch-audit test no longer hardcode `11.27.0`; `pnpm install --frozen-lockfile` passes locally and in CI
 - [ ] **TOOL-02**: The web app runs on SvelteKit 3.1 with adapter-static 4, migrated with `sv migrate sveltekit-3` one task per commit: Kit options move into `vite.config.ts` with a plugin-free `kit.options.js` that the CSP, models, and service-worker guard tests import; `$lib` becomes `#lib` with explicit extensions across source, ESLint import groups, `components.json`, the Vitest alias, and the boundary tests (which stay non-vacuous); `resolve()` pathnames, `$app/env`, and shallow routing follow the Kit 3 forms
 - [ ] **TOOL-03**: The service worker is rewritten on `$app/manifest` with the dotfile filter inside the worker (Kit 3 removes `serviceWorker.files`), and it registers and precaches on the live origin as proven by the live smoke
 - [ ] **TOOL-04**: Unit and browser tests run on Vitest 5 with `@vitest/browser-playwright` 5 and `vitest-browser-svelte` 3: every `render` is awaited, exact-text matchers and `clearMocks` defaults are accounted for, the JSON reporter path used by `audit-evidence.mjs` still works, and the full `pnpm verify` is green
@@ -144,7 +144,7 @@ Which phases cover which requirements. Filled during roadmap creation.
 | TEST-04 | Phase 15 | Complete |
 | TEST-05 | Phase 15 | Complete |
 | TEST-06 | Phase 15 | Complete |
-| TOOL-01 | Phase 16 | Pending |
+| TOOL-01 | Phase 16 | Complete |
 | TOOL-02 | Phase 16 | Pending |
 | TOOL-03 | Phase 16 | Pending |
 | TOOL-04 | Phase 16 | Pending |
