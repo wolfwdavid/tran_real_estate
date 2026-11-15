@@ -87,9 +87,10 @@ async function seedKeys(page: Page): Promise<void> {
 async function seedDueSearch(page: Page): Promise<void> {
 	await page.goto('agent/');
 	await expect(page.locator('html')).not.toHaveAttribute('hidden');
-	await page.waitForFunction(async () =>
-		(await indexedDB.databases()).some((d) => d.name === 'tran')
-	);
+	// The loading line goes only after the contacts live query read the database, so the app's open
+	// at the current schema has finished. waitForFunction cannot wait for this: it does not await an
+	// async predicate (a Promise is truthy). Opening 'tran' first would create an empty version 1.
+	await expect(page.getByText('Loading your contacts')).toHaveCount(0);
 	const stores = await page.evaluate(
 		() =>
 			new Promise<string[]>((resolve, reject) => {
