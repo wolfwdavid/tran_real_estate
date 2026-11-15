@@ -1,7 +1,7 @@
 // Content Studio table names, Dexie stores, row shapes, the snapshot privacy guard and the backup
-// registration (Phase 9, STU-01 / STU-04). No Dexie or $lib/storage runtime import (zod/mini and
+// registration (Phase 9, STU-01 / STU-04). No Dexie or #lib/storage runtime import (zod/mini and
 // pure @tran/core constants only), like the agent, investor and renter tables modules, so
-// $lib/storage/db.ts and backup-registry.ts can import it without a cycle.
+// #lib/storage/db.ts and backup-registry.ts can import it without a cycle.
 //
 // Every stored row is a Phase 3 Syncable record (uuid id, ownerId 'local', ISO timestamps,
 // deletedAt omitted), because the backup envelope validates every exported row that way:

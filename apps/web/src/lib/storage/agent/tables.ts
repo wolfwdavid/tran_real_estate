@@ -1,5 +1,5 @@
 // Agent CRM table names, Dexie stores and typed accessors (Phase 8). Dependency-free at runtime
-// (type imports only), like the renter and investor tables modules, so $lib/storage/db.ts can
+// (type imports only), like the renter and investor tables modules, so #lib/storage/db.ts can
 // import AGENT_STORES without an import cycle.
 //
 // Index notes (08-RESEARCH Pattern 1):

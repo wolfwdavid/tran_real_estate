@@ -1,6 +1,6 @@
 // Saved Market Snapshots (STU-04, 09-UI-SPEC "Your snapshots"). Records are FROZEN: there is no
 // update, only add and delete (to change one, the agent builds a new snapshot). Lives under
-// $lib/storage (not $lib/data) so the print route reads snapshots without touching the gateway.
+// #lib/storage (not #lib/data) so the print route reads snapshots without touching the gateway.
 //
 // addSnapshot runs the aggregate-only privacy guard before writing: a record with an unknown
 // top-level key, a listings-summary key outside the whitelists, a listing identity field

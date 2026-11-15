@@ -46,20 +46,20 @@ export class TranDb extends Dexie {
 	dataPrefs!: Table<DataPrefRow, string>;
 	// Phase 5 AI drafts (apps/web/src/lib/ai/storage/tables.ts).
 	aiArtifacts!: Table<AiArtifact, string>;
-	// Phase 6 renter shortlist + saved-search filters ($lib/features/renter/storage).
+	// Phase 6 renter shortlist + saved-search filters (#lib/features/renter/storage).
 	renterShortlist!: Table<ShortlistItem, string>;
 	renterSearchMeta!: Table<RenterSearchMeta, string>;
-	// Phase 7 investor deals, analyzer draft, buy boxes and watched ZIPs ($lib/features/investor/deals/tables).
+	// Phase 7 investor deals, analyzer draft, buy boxes and watched ZIPs (#lib/features/investor/deals/tables).
 	deals!: Table<DealRecord, string>;
 	investorDraft!: Table<Syncable, string>;
 	buyBoxes!: Table<Syncable, string>;
 	watchedZips!: Table<WatchedZipRecord, string>;
-	// Phase 8 agent CRM: contacts, tasks, activities and the singleton profile ($lib/storage/agent).
+	// Phase 8 agent CRM: contacts, tasks, activities and the singleton profile (#lib/storage/agent).
 	contacts!: Table<Contact, string>;
 	tasks!: Table<Task, string>;
 	activities!: Table<Activity, string>;
 	agentProfile!: Table<AgentProfileRow, string>;
-	// Phase 9 Content Studio: one autosaved form per tool and frozen Market Snapshots ($lib/storage/studio).
+	// Phase 9 Content Studio: one autosaved form per tool and frozen Market Snapshots (#lib/storage/studio).
 	studioDraft!: Table<StudioDraftRow, StudioTool>;
 	snapshots!: Table<SnapshotRow, string>;
 

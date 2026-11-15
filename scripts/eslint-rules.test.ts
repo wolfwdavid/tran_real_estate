@@ -1042,7 +1042,7 @@ describe('boundary groups are escaped for gitignore semantics (non-vacuity)', ()
 		expect(unescapedHashGroups(entry?.[1] as RestrictedOptions)).toEqual([]);
 	});
 
-	test('every web boundary names #lib, never the retired $lib alias', async () => {
+	test('every web boundary names #lib, never the retired alias', async () => {
 		const config = await eslint.calculateConfigForFile(
 			resolve(repoRoot, `${WEB}/routes/(app)/renter/+page.svelte`)
 		);

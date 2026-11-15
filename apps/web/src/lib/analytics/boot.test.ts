@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe('analytics boot', () => {
-	test('config matches $lib/site (the canonical reader of the build-time defines)', () => {
+	test('config matches #lib/site (the canonical reader of the build-time defines)', () => {
 		expect(trackerConfig).toEqual({
 			host: ANALYTICS.host,
 			websiteId: ANALYTICS.websiteId,

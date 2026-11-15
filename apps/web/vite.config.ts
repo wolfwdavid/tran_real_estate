@@ -15,11 +15,11 @@ import {
 // Kit's Vite plugin pins Vite's root to process.cwd() at import time. Under the root Vitest
 // `projects` harness (cwd = repo root) it would then look for src/app.html
 // in the wrong directory and hide this package's tests. Unit tests only need the Svelte compiler
-// and the $lib alias, so they use the plain plugin; dev, build and check keep the Kit plugin.
+// and the $app/paths stub, so they use the plain plugin (#lib/* resolves through package.json imports); dev, build and check keep the Kit plugin.
 const isVitest = process.env.VITEST === 'true';
 
 // Phase 10 owner settings, validated once (src/lib/site-config.js). Read them in app code only
-// through $lib/site; absolute URLs come from __SITE_URL__, never from the relative `base`.
+// through #lib/site; absolute URLs come from __SITE_URL__, never from the relative `base`.
 const analytics = resolveAnalytics();
 
 export default defineConfig({
@@ -27,7 +27,6 @@ export default defineConfig({
 	resolve: isVitest
 		? {
 				alias: {
-					$lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
 					'$app/paths': fileURLToPath(
 						new URL('./src/lib/testing/app-paths.stub.ts', import.meta.url)
 					)

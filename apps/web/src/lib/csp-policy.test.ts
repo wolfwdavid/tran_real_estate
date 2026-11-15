@@ -10,7 +10,7 @@ import { resolveAnalytics } from './site-config.js';
 const ORACLE = new URL('../../../../scripts/assert-csp.mjs', import.meta.url).href;
 const { CONNECT } = (await import(/* @vite-ignore */ ORACLE)) as { CONNECT: string[] };
 
-// The kit.csp literal that svelte.config.js carried before Phase 10, copied verbatim.
+// The kit.csp literal that Kit 2's svelte config carried before Phase 10, copied verbatim.
 const PRE_PHASE_10 = {
 	mode: 'hash',
 	directives: {

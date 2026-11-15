@@ -7,7 +7,7 @@ import { FEEDBACK_COPY } from './forms-feedback';
 
 export { WAITLIST_COPY, FEEDBACK_COPY };
 
-// Every form's copy. The forms import $lib/content/forms-waitlist or forms-feedback directly: the
+// Every form's copy. The forms import #lib/content/forms-waitlist or forms-feedback directly: the
 // Object.freeze call here is not treated as pure by the bundler, so importing this module would
 // pull both forms' copy into every page that has either form.
 export const FORMS_COPY = Object.freeze({

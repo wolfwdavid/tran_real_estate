@@ -1,4 +1,4 @@
-// First-run guide state. localStorage only: the landing page may not import Dexie or $lib/storage
+// First-run guide state. localStorage only: the landing page may not import Dexie or #lib/storage
 // (RESEARCH Pitfall 9). Nothing here touches storage at import time, because prerendering has no
 // localStorage; components read it in onMount. The value holds no personal data.
 

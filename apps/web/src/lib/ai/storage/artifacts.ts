@@ -1,6 +1,6 @@
 // Stored AI generations ('AI drafts'). Every generation the user keeps is one aiArtifacts row in
-// the Phase 3 'tran' Dexie database (version block appended in $lib/storage/db.ts), and the table
-// is part of the backup (built into the default list in $lib/storage/backup-registry.ts).
+// the Phase 3 'tran' Dexie database (version block appended in #lib/storage/db.ts), and the table
+// is part of the backup (built into the default list in #lib/storage/backup-registry.ts).
 //
 // Security rule (05-UI-SPEC): an artifact never holds raw prompt inputs or key material. Only the
 // SHA-256 hex of the post-redaction prompt (inputHash) and the draft text are kept. create()

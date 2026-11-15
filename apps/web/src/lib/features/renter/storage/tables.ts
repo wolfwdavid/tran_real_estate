@@ -1,8 +1,8 @@
 // Renter table names, backup labels and typed accessors. Dependency-free at runtime (type imports
-// only), like $lib/data/tables and $lib/ai/storage/tables, so $lib/storage/backup-registry.ts can
+// only), like #lib/data/tables and #lib/ai/storage/tables, so #lib/storage/backup-registry.ts can
 // import RENTER_BACKUP_TABLES without an import cycle.
 //
-// Dexie stores live in TranDb's version 4 block ($lib/storage/db.ts):
+// Dexie stores live in TranDb's version 4 block (#lib/storage/db.ts):
 //   renterShortlist:  'id, &listingId, status, updatedAt, deletedAt'
 //   renterSearchMeta: 'id, updatedAt, deletedAt'
 //

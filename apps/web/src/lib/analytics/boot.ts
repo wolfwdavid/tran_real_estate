@@ -5,10 +5,10 @@
  * only the initial JS). Everything the layout used to do per navigation lives here, which keeps the
  * layout's share of every page's initial JS to the afterNavigate call alone.
  *
- * It reads the build-time defines directly instead of importing $lib/site: the tool and marketing
- * pages import $lib/site statically, and a second (dynamic) importer would make the bundler split
+ * It reads the build-time defines directly instead of importing #lib/site: the tool and marketing
+ * pages import #lib/site statically, and a second (dynamic) importer would make the bundler split
  * it into an extra chunk that every one of those pages then preloads. The values match
- * $lib/site's ANALYTICS and SITE_BASE exactly; boot.test.ts pins that.
+ * #lib/site's ANALYTICS and SITE_BASE exactly; boot.test.ts pins that.
  */
 import { createTracker } from './beacon.js';
 

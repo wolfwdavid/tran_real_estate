@@ -1,5 +1,5 @@
 // Agent CRM backup registration (Phase 8). The four tables are in the registry's built-in list
-// ($lib/storage/backup-registry.ts DEFAULT_TABLES), not a runtime registerBackupTable() call, so a
+// (#lib/storage/backup-registry.ts DEFAULT_TABLES), not a runtime registerBackupTable() call, so a
 // backup made from Settings before any agent module loads still includes them, and the coverage
 // test (every TranDb table registered XOR excluded) enforces it.
 //

@@ -2,7 +2,7 @@ import type { FixtureSet } from './fixture-fetch';
 
 /**
  * Loads the six fixture files by dynamic import so they land in their own chunk and only
- * sample mode pulls them (marketing routes never import $lib/data).
+ * sample mode pulls them (marketing routes never import #lib/data).
  */
 export async function loadFixtureSet(): Promise<FixtureSet> {
 	const [meta, metros, rentals, sales, estimates, markets] = await Promise.all([

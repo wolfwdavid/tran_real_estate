@@ -1,6 +1,6 @@
 // The renter search controller (06-13, RENT-01/RENT-02). Spends only on an explicit search() or
 // narrow(); URL restore and every filter/sort change are 0 calls. Runs through the public
-// $lib/data port in live mode with a spy fetch, an injected clock and an isolated fake IndexedDB
+// #lib/data port in live mode with a spy fetch, an injected clock and an isolated fake IndexedDB
 // (never vi.useFakeTimers with fake-indexeddb).
 import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';

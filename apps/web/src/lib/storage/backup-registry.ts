@@ -49,7 +49,7 @@ const DEFAULT_TABLES: readonly BackupTable[] = [
 	// (buyBoxes), 'Watched ZIP codes' (watchedZips), each with a record schema.
 	...INVESTOR_BACKUP_TABLES,
 	// Phase 8: 'Contacts', 'Tasks', 'Activity', 'Agent profile' (each with a record schema; the
-	// profile also carries its two scan-exempt paths, see $lib/storage/agent/backup.ts).
+	// profile also carries its two scan-exempt paths, see #lib/storage/agent/backup.ts).
 	...AGENT_BACKUP_TABLES,
 	// Phase 9: 'Studio forms' (studioDraft) and 'Market Snapshots' (snapshots), each with a record
 	// schema (snapshots also re-run the aggregate-only privacy guard on import).

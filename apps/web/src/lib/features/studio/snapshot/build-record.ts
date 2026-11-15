@@ -2,7 +2,7 @@
 // data already loaded, so saving spends 0 RentCast calls and the print route never reads the
 // expiring response cache.
 //
-// Pure and data-layer free: no $lib/data import, no network, no Dexie. The record carries only the
+// Pure and data-layer free: no #lib/data import, no network, no Dexie. The record carries only the
 // 14 SNAPSHOT_RECORD_KEYS: computed metrics, the Phase 7 chart inputs, the aggregate-only listings
 // summary, the reviewed narrative, the options, provenance, a copy of the disclosure fields and the
 // effective brand colors. Never a raw response, a listing field or the logo bytes (`hasLogo` only).

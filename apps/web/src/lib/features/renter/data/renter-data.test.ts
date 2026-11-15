@@ -1,5 +1,5 @@
 // Renter data contract (06-11): every renter RentCast request comes from requests.ts, and sample
-// mode — reached through the public $lib/data port exactly as the renter UI reaches it — serves
+// mode — reached through the public #lib/data port exactly as the renter UI reaches it — serves
 // every fixture metro at 0 network calls, with listing dates that never age out of "7 days".
 import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
@@ -171,7 +171,7 @@ async function sampleRows(gateway: DataGateway, req: ReturnType<typeof searchReq
 	return peeked.result.data;
 }
 
-describe('sample mode via the $lib/data port', () => {
+describe('sample mode via the #lib/data port', () => {
 	it.each(SAMPLE_METROS.flatMap((m) => m.zipCodes))(
 		'peek(searchRequest(%s)) returns rows at 0 network calls',
 		async (zip) => {

@@ -1,5 +1,5 @@
 // Audience-page copy for /for-renters/, /for-investors/ and /for-agents/.
-// Lives in $lib/content (never $lib/data) so marketing routes may import it.
+// Lives in #lib/content (never #lib/data) so marketing routes may import it.
 // Every string is scanned by the banned-terms gate.
 
 import { renterAudience } from './audience-renter';

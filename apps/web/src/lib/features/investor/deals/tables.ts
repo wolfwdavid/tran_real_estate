@@ -1,6 +1,6 @@
 // Phase 7 table names, Dexie stores and backup labels. Dependency-free at runtime apart from the
-// zod/mini record schemas (no Dexie, no $lib/storage import), like $lib/data/tables and the renter
-// tables module, so $lib/storage/db.ts and backup-registry.ts can import it without a cycle.
+// zod/mini record schemas (no Dexie, no #lib/storage import), like #lib/data/tables and the renter
+// tables module, so #lib/storage/db.ts and backup-registry.ts can import it without a cycle.
 //
 // Every Phase 7 row is a Phase 3 Syncable record (uuid id, ownerId 'local', ISO timestamps,
 // deletedAt OMITTED on live rows and set on tombstones), because the backup envelope validates

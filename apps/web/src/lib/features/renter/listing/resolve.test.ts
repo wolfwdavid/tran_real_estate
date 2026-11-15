@@ -1,7 +1,7 @@
 // Listing detail resolution (06-14, RENT-03): `/renter/listing/?id=` finds its listing at 0 calls,
 // in a fixed order (shortlist snapshot, then cached search rows or sample fixtures), and only the
 // explicit "Look it up again (1 call)" action fetches by id. The gateways are the real ones, built
-// through the public $lib/data port exactly as the page gets them; fetch is a recording stand-in.
+// through the public #lib/data port exactly as the page gets them; fetch is a recording stand-in.
 import { afterEach, describe, expect, it } from 'vitest';
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb';
 import type { Listing } from '@tran/core/listings';

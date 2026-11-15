@@ -1,6 +1,6 @@
 // Phase 5 table names, Dexie stores, backup entries and the stored row shape. Dependency-free
-// (type imports only), like $lib/data/tables, so $lib/storage/db.ts and
-// $lib/storage/backup-registry.ts can import it without an import cycle.
+// (type imports only), like #lib/data/tables, so #lib/storage/db.ts and
+// #lib/storage/backup-registry.ts can import it without an import cycle.
 import type { Syncable } from '@tran/core';
 import type { AiProviderId } from '@tran/core/ai';
 

@@ -2,7 +2,7 @@
 // GTM-03. Each tool's own copy lives in its own module (./cap-rate.ts etc.), so a tool page ships
 // only its own strings: the 60 KB gz tool-page budget has no room for all four (10-13).
 // Every string is verbatim from 10-UI-SPEC "Copywriting Contract > Tool pages", "Per-tool inputs
-// and outputs" and "OG Share Cards". Lives in $lib/content (never $lib/data) so marketing routes
+// and outputs" and "OG Share Cards". Lives in #lib/content (never #lib/data) so marketing routes
 // may import it, and the banned-terms gate scans it. Data only: no imports with runtime cost.
 //
 // The visible FAQ and the FAQPage JSON-LD both read `faq`, so they cannot drift.

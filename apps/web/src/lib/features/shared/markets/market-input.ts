@@ -1,5 +1,5 @@
 // Phase 4 domain MarketStats -> the core chart input (MarketStatsInput) the Phase 7 ZipTrendChart /
-// PriceToRentChart take. Dependency-free (types plus pure mapping, no $lib/data import), so a
+// PriceToRentChart take. Dependency-free (types plus pure mapping, no #lib/data import), so a
 // frozen Market Snapshot record and the built-in sample report can build chart series without
 // loading the data layer. markets-port.ts re-exports it.
 import type { MarketStatsInput } from '@tran/core/markets';

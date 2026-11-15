@@ -1,4 +1,4 @@
-// InvestorDataPort: the ONLY module under features/investor that imports $lib/data at runtime
+// InvestorDataPort: the ONLY module under features/investor that imports #lib/data at runtime
 // (other investor files may use type-only imports). It adapts the Phase 4 data runtime to the
 // investor portal's needs: AVM rent and value estimates for the analyzer and sale listings for the
 // deal finder, with RentCast dollars converted to integer cents exactly once, here.
@@ -29,7 +29,7 @@ import type { PropertyType } from '../deals/schema';
 export type { CostEstimate, Provenance };
 /**
  * The Phase 4 saved-search repository, re-exported so buy boxes (07-14) persist through Phase 4's
- * alerts model without a second $lib/data runtime import under features/investor.
+ * alerts model without a second #lib/data runtime import under features/investor.
  */
 export { savedSearchRepo };
 export type { SavedSearchRepo };

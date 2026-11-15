@@ -82,17 +82,17 @@ export const SEEDED = Object.freeze({
 
 /** Fixed row ids the app uses for singleton-style rows (copied from the source modules). */
 const FIXED = {
-	// $lib/data/tables DATA_PREF_IDS.rentcastCap
+	// #lib/data/tables DATA_PREF_IDS.rentcastCap
 	rentcastCapPref: '6f1c2b1e-4b8a-4d0e-9a51-3c7d2e8f4a01',
-	// $lib/features/investor/analyzer/draftRepo DRAFT_ID
+	// #lib/features/investor/analyzer/draftRepo DRAFT_ID
 	analyzerDraft: '00000000-0000-4000-8000-00000000d4af',
-	// $lib/storage/agent/tables PROFILE_ROW_ID
+	// #lib/storage/agent/tables PROFILE_ROW_ID
 	agentProfile: '00000000-0000-4000-8000-000000a6e170',
-	// $lib/storage/studio/tables STUDIO_DRAFT_IDS.social
+	// #lib/storage/studio/tables STUDIO_DRAFT_IDS.social
 	studioSocial: '00000000-0000-4000-8000-000000057d02'
 } as const;
 
-/** $lib/features/shared/markets/watched-zip-record watchedZipId(zip). */
+/** #lib/features/shared/markets/watched-zip-record watchedZipId(zip). */
 const watchedZipId = (zip: string) => `00000000-0000-4000-8000-0000000${zip}`;
 
 /** A 1x1 PNG (the agent logo field is a scan-exempt path; the bytes are harmless). */

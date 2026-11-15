@@ -1,5 +1,5 @@
 // SvelteKit 3 reads its options from the sveltekit() plugin call in vite.config.ts, not from
-// svelte.config.js. They live here, in a module with no runtime import of Kit's Vite plugin, so
+// a separate config file. They live here, in a module with no runtime import of Kit's Vite plugin, so
 // unit tests and scripts can read the same object the build uses.
 import { spawnSync } from 'node:child_process';
 import adapter from '@sveltejs/adapter-static';

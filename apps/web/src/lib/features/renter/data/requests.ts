@@ -1,6 +1,6 @@
 // Every RentCast request the renter portal makes is built here (06-RESEARCH: a renter task that
 // starts writing a fetch, a cache or a request shape elsewhere is in the wrong layer). These are
-// pure descriptions; only the gateway (through $lib/data) decides whether one costs a call.
+// pure descriptions; only the gateway (through #lib/data) decides whether one costs a call.
 import type { DataRequest } from '#lib/data/index.ts';
 import {
 	DEFAULT_FILTERS,
