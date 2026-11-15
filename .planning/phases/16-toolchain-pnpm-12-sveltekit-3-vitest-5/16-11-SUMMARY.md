@@ -1,12 +1,21 @@
 ---
 phase: 16-toolchain-pnpm-12-sveltekit-3-vitest-5
 plan: 11
-status: paused at Task 4 (owner-approved push checkpoint); Tasks 1-3 committed, verify chain green except two load-induced E2E failures (see Task 3)
+status: complete (Vitest 5 pushed 587c51c and live-verified; TOOL-04 tick waits for plan 13)
 ---
 
-# Phase 16 Plan 11: Vitest 5 migration (paused at Task 4)
+# Phase 16 Plan 11: Vitest 5 migration (complete; live on 587c51c)
 
-Not complete. Nothing is pushed, ci and live smoke have not run, and TOOL-04 / TOOL-06 are not ticked (plan 13 ticks them). STATE.md and ROADMAP.md are untouched.
+Complete. The owner approved the push (ed3210e..587c51c, 6 commits). TOOL-04 and TOOL-06 stay unticked here (plan 13 Task 5 ticks them, citing the runs below).
+
+## Task 4: push and live evidence
+
+- ci run 43712512564 on 587c51c: success (hygiene, root, sub, configured, deploy). First Vitest 5 run on the CI runner; it passed with --fail-on-flaky-tests.
+- live-smoke run 43714943846: success, "smoke: 587c51ca2b96db64ec7ea8beb010c4638323d2f5 live at https://wolfwdavid.github.io/tran_real_estate/ after 0 s", 121 passed.
+
+## Carried risk (pre-existing, not from this plan)
+
+agent-followup.spec.ts:251 and studio-social.spec.ts:278 (and the first run's six other specs) fail intermittently under heavy local CPU load, 5s element-not-found on the first interaction after hydration. Evidence: 5 of 20 failures at 2d7423f (Kit 3 plus Vitest 4, before this plan) on the same machine, 1 of 8 at HEAD; passes on CI. Not fixed; candidate for a deferred item.
 
 ## Commits (unpushed; origin/main..HEAD is 5 commits, the first is the 16-10 close-out docs)
 

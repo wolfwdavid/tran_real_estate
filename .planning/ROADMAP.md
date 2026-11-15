@@ -258,7 +258,7 @@ Plans:
 
 **Wave 11** *(blocked on Wave 10 completion)*
 
-- [ ] 16-11-PLAN.md — Wave 11: Vitest 5.1.0 + browser-playwright 5 + vitest-browser-svelte 3: awaited renders, exact-text fixes, reporter path, gate, push, live smoke (TOOL-04)
+- [x] 16-11-PLAN.md — Wave 11: Vitest 5.1.0 + browser-playwright 5 + vitest-browser-svelte 3: awaited renders, exact-text fixes, reporter path, gate, push, live smoke (TOOL-04)
 
 **Wave 12** *(blocked on Wave 11 completion)*
 

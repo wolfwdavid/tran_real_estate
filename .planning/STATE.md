@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: "16-10 complete (Kit 3 pushed and live: ci 43673499633 and live-smoke 43675572754 green on ed3210e; audit exceptions five to two; next 16-11 Vitest 5); 16-01 to 16-10 done"
+stopped_at: "16-11 complete (Vitest 5 pushed and live: ci 43712512564 and live-smoke 43714943846 green on 587c51c); 16-01 to 16-11 done; next 16-12 routine bumps"
 last_updated: "2026-11-15T00:37:39.110Z"
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 67
-  completed_plans: 63
+  completed_plans: 64
   percent: 67
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
-Plan: 11 of 13 (16-10 done)
+Plan: 12 of 13 (16-11 done)
 
 ## Performance Metrics
 
@@ -781,6 +781,8 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
+- **2026-11-15 (16-11):** E2E agent-followup.spec.ts:251 and studio-social.spec.ts:278 flake under heavy local CPU load (5 of 20 at 2d7423f, pre-Vitest-5; green on CI). Pre-existing hydration/click race, unfixed.
+
 - **2026-10-13 (Phase 10 orchestrator):** `apps/web/src/lib/features/renter/search/ResultsView.browser.test.ts` flakes under full `test:unit` load (2 different tests failed in 2 full runs today; 3/3 green in isolation each time; code unchanged since Phase 6). 10-23's full gate must fix the root cause (likely a too-short waitFor/axe timeout under load), not retry.
 - **2026-10-13:** `scripts/precommit.test.ts` also flakes under parallel load (56 s; 10/10 alone). Same rule: 10-23 root-causes it.
 - **2026-10-13:** 10-22 launch-audit naming contracts (keyed axe titles, `disclaimer: <name>`, report JSONs before `audit:launch`) are listed in 10-22-SUMMARY.md; 10-11..10-23 must match them or audit rows FAIL.
@@ -793,6 +795,6 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 ## Session Continuity
 
 Last session: 2026-11-15T00:37:39.099Z
-Stopped at: 16-10 complete (Kit 3 live on ed3210e; stale-worker owner row skipped by owner decision 2026-11-14); 16-01 to 16-10 done. Next: 16-11 Vitest 5. Decisions: Kit sequence 05-10 pushed once and live-verified; TOOL-02/03/05 ticks wait for plan 13 Task 5.
+Stopped at: 16-10 complete (Kit 3 live on ed3210e; stale-worker owner row skipped by owner decision 2026-11-14); 16-01 to 16-10 done. Next: 16-12. 16-11 done (Vitest 5 live on 587c51c). Decisions: Kit sequence 05-10 pushed once and live-verified; TOOL-02/03/05 ticks wait for plan 13 Task 5.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
