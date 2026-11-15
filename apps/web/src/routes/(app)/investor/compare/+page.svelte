@@ -61,6 +61,7 @@
 		if (i < 0) return;
 		const name = records[i].name;
 		records = records.filter((r) => r.id !== id);
+		// eslint-disable-next-line svelte/no-navigation-without-resolve -- compareHref resolves the base
 		void goto(compareHref(records.map((r) => r.id)), { shallow: true, replace: true });
 		announce(`${name} removed from the comparison.`);
 		await tick();
