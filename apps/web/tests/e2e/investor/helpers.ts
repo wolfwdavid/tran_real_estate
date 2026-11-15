@@ -225,10 +225,15 @@ export async function expectNoAxeViolations(page: Page, label: string): Promise<
 	expect(results.violations, `axe violations on ${label}:\n${ids.join('\n')}`).toEqual([]);
 }
 
-/** The document never scrolls sideways at the current viewport. */
+/**
+ * The document never scrolls sideways at the current viewport. Polled: the width settles after a
+ * viewport change or a late layout, and an instant read once saw 672 px on a slow CI runner that the
+ * retry never reproduced. A persistent overflow still fails when the poll times out.
+ */
 export async function expectNoHorizontalScroll(page: Page): Promise<void> {
-	const overflow = await page.evaluate(
-		() => document.documentElement.scrollWidth - window.innerWidth
-	);
-	expect(overflow, 'horizontal overflow in px').toBeLessThanOrEqual(0);
+	await expect
+		.poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), {
+			message: 'horizontal overflow in px'
+		})
+		.toBeLessThanOrEqual(0);
 }
