@@ -89,6 +89,17 @@ describe('audit exceptions', () => {
 		expect(ignored.length).toBe(AUDIT_EXCEPTIONS.length);
 	});
 
+	test('the three Kit 2 advisories are gone from both files, and the predicate rejects a re-added id', () => {
+		const removed = ['GHSA-pxg6-pf52-xh8x', 'GHSA-pfhg-q3qv-9q6r', 'GHSA-27mw-82g8-phjj'];
+		const present = (yaml: string, ids: string[]) =>
+			auditIgnoreIds(yaml).some((id) => ids.includes(id));
+		const yaml = read('pnpm-workspace.yaml');
+		expect(present(yaml, removed)).toBe(false);
+		expect(AUDIT_EXCEPTIONS.some((e) => removed.includes(e.ghsa))).toBe(false);
+		// planted: the same yaml with one removed id appended must be flagged
+		expect(present(yaml.replace(/\n*$/, '\n') + '    - GHSA-pxg6-pf52-xh8x\n', removed)).toBe(true);
+	});
+
 	test('every exception records package, path, reason and an ISO revisit date', () => {
 		expect(Object.isFrozen(AUDIT_EXCEPTIONS)).toBe(true);
 		for (const e of AUDIT_EXCEPTIONS) {

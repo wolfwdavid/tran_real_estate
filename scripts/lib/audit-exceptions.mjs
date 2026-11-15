@@ -5,34 +5,10 @@
  */
 export const AUDIT_EXCEPTIONS = Object.freeze([
 	{
-		ghsa: 'GHSA-pxg6-pf52-xh8x',
-		package: 'cookie',
-		severity: 'low',
-		path: '@sveltejs/kit > cookie (also via adapter-static, runed > @sveltejs/kit)',
-		why: 'Kit 2.x server cookie API only (cookie@0.6.0 pinned ^0.6.0 by @sveltejs/kit 2.70.3); adapter-static output never includes it (no cookie symbols in apps/web/build/_app). Re-check on the Kit 3 migration.',
-		revisitBy: '2027-01-31'
-	},
-	{
-		ghsa: 'GHSA-pfhg-q3qv-9q6r',
-		package: '@sveltejs/kit',
-		severity: 'low',
-		path: 'apps/web > @sveltejs/kit (also via adapter-static, runed > @sveltejs/kit)',
-		why: 'Open redirect through enhanced form actions (use:enhance) on routes accepting // paths. The site is fully prerendered (adapter-static, prerender = true) and defines no form actions: 0 use:enhance, 0 export const actions in apps/web/src. Fixed only in Kit 3.0.0 (major). Re-check on the Kit 3 migration.',
-		revisitBy: '2027-01-31'
-	},
-	{
-		ghsa: 'GHSA-27mw-82g8-phjj',
-		package: '@sveltejs/kit',
-		severity: 'low',
-		path: 'apps/web > @sveltejs/kit (also via adapter-static, runed > @sveltejs/kit)',
-		why: 'XSS via an untrusted cache-control value passed to setHeaders on a prerendered page. apps/web/src never calls setHeaders (0 matches); the only cache-control string in build/_app is the Kit client version-check request header, not the unescaped meta tag. Fixed only in Kit 3.0.0 (major). Re-check on the Kit 3 migration.',
-		revisitBy: '2027-01-31'
-	},
-	{
 		ghsa: 'GHSA-gcqx-w48m-w2h4',
 		package: 'deepmerge',
 		severity: 'low',
-		path: '@sveltejs/vite-plugin-svelte@7.3.0 > deepmerge@4.3.1 (apps/web and apps/extension build tooling)',
+		path: '@sveltejs/vite-plugin-svelte@7.3.1 > deepmerge@4.3.1 (apps/web and apps/extension build tooling)',
 		why: 'Prototype poisoning in deepmerge.mergeObject(). deepmerge is used only by the Svelte Vite plugin at build time to merge compiler options from trusted config files; no patched version exists (advisory lists none). It never ships: 0 matches for deepmerge/mergeObject in apps/web/build/_app and apps/extension/.output/chrome-mv3. Re-check when vite-plugin-svelte drops or bumps deepmerge.',
 		revisitBy: '2027-01-31'
 	},
@@ -41,7 +17,7 @@ export const AUDIT_EXCEPTIONS = Object.freeze([
 		package: 'minimatch',
 		severity: 'moderate',
 		path: 'eslint / typescript-eslint / wxt dev toolchain > minimatch@10.2.6',
-		why: 'Denial of service through globparts amplification in minimatch <11.0.1. Lint- and build-time glob matching on trusted config patterns only; minimatch is not present in apps/web/build/_app nor in the extension output (0 matches in apps/web/build/_app, apps/web/src and apps/extension/.output/chrome-mv3). eslint 10.14.0 and @eslint/config-array 0.23.5 still declare minimatch ^10.2.x, so no patched 10.x exists and no dependent accepts 11 yet. Revisit at the first eslint release that depends on minimatch >=11.0.1, and by the date below at the latest.',
-		revisitBy: '2026-11-30'
+		why: 'Denial of service through globparts amplification in minimatch <11.0.1. Lint- and build-time glob matching on trusted config patterns only; minimatch is not present in apps/web/build/_app nor in the extension output (0 matches in apps/web/build/_app, apps/web/src and apps/extension/.output/chrome-mv3). Checked 2026-11-14 with npm view: eslint 10.15.0 and @eslint/config-array 0.23.6 accept minimatch ^11.0.5, but @typescript-eslint/typescript-estree 8.72.2 (typescript-eslint latest 8.72.2) still declares ^10.2.2 and the lockfile resolves eslint 10.10.0, config-array 0.23.5, typescript-eslint 8.70.0 on minimatch 10.2.6, so no patched version is reachable without a family bump (plan 12 routine bumps). Revisit when typescript-estree moves to minimatch >=11.0.1, and by the date below at the latest.',
+		revisitBy: '2026-12-31'
 	}
 ]);
