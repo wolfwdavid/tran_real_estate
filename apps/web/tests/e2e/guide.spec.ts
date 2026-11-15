@@ -47,7 +47,7 @@ for (const portal of PORTALS) {
 		await openLanding(page);
 		const title = portal[0].toUpperCase() + portal.slice(1);
 		await guide(page)
-			.getByRole('button', { name: `${title} Start the tour` })
+			.getByRole('button', { name: new RegExp(`^${title}.*Start the tour$`) })
 			.click();
 		for (const [i, h3] of TOUR_H3[portal].entries()) {
 			const heading = guide(page).getByRole('heading', { level: 3, name: h3 });
@@ -79,7 +79,9 @@ test('axe guide: hide moves focus to the compact row, which survives a reload', 
 	page
 }) => {
 	await openLanding(page);
-	await guide(page).getByRole('button', { name: 'Investor Start the tour' }).click();
+	await guide(page)
+		.getByRole('button', { name: /^Investor.*Start the tour$/ })
+		.click();
 	await guide(page).getByRole('button', { name: 'Skip tour' }).click();
 	await expect(guide(page).getByRole('heading', { level: 3 })).toBeFocused();
 	await guide(page).getByRole('button', { name: 'Hide this guide' }).click();
@@ -97,7 +99,9 @@ test('axe guide: hide moves focus to the compact row, which survives a reload', 
 
 test('guide: a sample-data exit records done with the last portal', async ({ page }) => {
 	await openLanding(page);
-	await guide(page).getByRole('button', { name: 'Renter Start the tour' }).click();
+	await guide(page)
+		.getByRole('button', { name: /^Renter.*Start the tour$/ })
+		.click();
 	await guide(page).getByRole('button', { name: 'Skip tour' }).click();
 	await guide(page).getByRole('link', { name: 'Try sample data' }).click();
 	await page.waitForURL(/\/renter\//);
@@ -108,7 +112,9 @@ test('guide: a sample-data exit records done with the last portal', async ({ pag
 
 test('guide: hero Show me around resets the guide and focuses its heading', async ({ page }) => {
 	await openLanding(page);
-	await guide(page).getByRole('button', { name: 'Agent Start the tour' }).click();
+	await guide(page)
+		.getByRole('button', { name: /^Agent.*Start the tour$/ })
+		.click();
 	await expect(
 		guide(page).getByRole('heading', { level: 3, name: 'What the agent portal does' })
 	).toBeFocused();
@@ -116,7 +122,9 @@ test('guide: hero Show me around resets the guide and focuses its heading', asyn
 	await expect(guide(page).getByRole('heading', { level: 2, name: 'Get started' })).toBeFocused();
 	await expect(guide(page)).toContainText('Where do you want to start?');
 	// Second click while already at #get-started (no hashchange) still resets.
-	await guide(page).getByRole('button', { name: 'Agent Start the tour' }).click();
+	await guide(page)
+		.getByRole('button', { name: /^Agent.*Start the tour$/ })
+		.click();
 	await expect(
 		guide(page).getByRole('heading', { level: 3, name: 'What the agent portal does' })
 	).toBeFocused();

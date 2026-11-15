@@ -37,7 +37,7 @@ const guide = (page: Page) => page.locator('#get-started');
 const h2 = (page: Page) => guide(page).getByRole('heading', { level: 2, name: 'Get started' });
 const h3 = (page: Page, name: string) => guide(page).getByRole('heading', { level: 3, name });
 const tile = (page: Page, p: Portal) =>
-	guide(page).getByRole('button', { name: `${TITLE[p]} Start the tour` });
+	guide(page).getByRole('button', { name: new RegExp(`^${TITLE[p]}.*Start the tour$`) });
 const button = (page: Page, name: string) => guide(page).getByRole('button', { name, exact: true });
 const announcer = (page: Page) => page.getByTestId('live-announcer');
 const stored = (page: Page) => page.evaluate((k) => localStorage.getItem(k), KEY);

@@ -128,7 +128,9 @@ test('Settings Getting started: Show the tour again resets the guide and focuses
 		.poll(() => page.evaluate(() => document.activeElement?.id))
 		.toBe('get-started-heading');
 	await expect(guide).toContainText('Where do you want to start?');
-	for (const name of ['Renter Start the tour', 'Investor Start the tour', 'Agent Start the tour']) {
+	// The tile name is the title, the visible description and the action (WCAG 2.5.3).
+	for (const title of ['Renter', 'Investor', 'Agent']) {
+		const name = new RegExp(`^${title}.*Start the tour$`);
 		await expect(guide.getByRole('button', { name })).toBeVisible();
 	}
 	const stored = await page.evaluate((k) => localStorage.getItem(k), ONBOARDING_KEY);
