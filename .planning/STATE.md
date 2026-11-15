@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: "16-05 complete 2026-11-14 (Kit 3 pins, kit.options.js, environment/paths/shallow-routing codemods; tree red by design until 16-10, nothing pushed); next 16-06"
-last_updated: "2026-11-14T23:30:47.153Z"
+stopped_at: "16-06 complete 2026-11-14 (lib-alias codemod, hand fixes, Kit 3 paths stub; svelte-check 0 errors; tree red by design until 16-10, nothing pushed); next 16-07"
+last_updated: "2026-11-15T00:04:08.117Z"
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 67
-  completed_plans: 59
+  completed_plans: 60
   percent: 67
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
-Plan: 6 of 13 (16-05 done)
+Plan: 7 of 13 (16-06 done)
 
 ## Performance Metrics
 
@@ -786,7 +786,7 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-14T23:30:47.134Z
-Stopped at: 16-05 complete (Kit 3 part 1; tree red by design until 16-10, nothing pushed); 16-01 to 16-05 done
-Resume file: none (run /gsd-execute-phase 16, continues at 16-06)
+Last session: 2026-11-15T00:04:08.099Z
+Stopped at: 16-06 complete (Kit 3 part 2; tree red by design until 16-10, nothing pushed); 16-01 to 16-06 done
+Resume file: none (run /gsd-execute-phase 16, continues at 16-07)
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
