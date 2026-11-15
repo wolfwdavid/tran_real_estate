@@ -296,7 +296,12 @@ describe('createInvestorPort', () => {
 	});
 });
 
-describe('boundary: only this adapter imports $lib/data at runtime', () => {
+// A value import of the data barrel: `#lib/data/index.ts` (explicit extension, as every import in the
+// tree is written), its `.js` spelling, or the bare directory form. `import type` is allowed.
+const DATA_BARREL_VALUE_IMPORT =
+	/import\s+(?!type\b)[^;]*from\s+'#lib\/data(?:\/index(?:\.(?:ts|js))?)?'/;
+
+describe('boundary: only this adapter imports #lib/data at runtime', () => {
 	const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 	const files = (dir: string): string[] =>
 		readdirSync(dir).flatMap((f) => {
@@ -304,10 +309,34 @@ describe('boundary: only this adapter imports $lib/data at runtime', () => {
 			return statSync(p).isDirectory() ? files(p) : /\.(ts|svelte)$/.test(f) ? [p] : [];
 		});
 
-	it('no other features/investor file has a value import from $lib/data', () => {
-		const offenders = files(root)
+	it('no other features/investor file has a value import from #lib/data', () => {
+		const all = files(root);
+		// Non-vacuity: the scan covers the tree, and the adapter itself does import the barrel.
+		expect(all.length).toBeGreaterThan(20);
+		expect(
+			DATA_BARREL_VALUE_IMPORT.test(readFileSync(join(root, 'data/investor-port.ts'), 'utf8'))
+		).toBe(true);
+		const offenders = all
 			.filter((f) => !/investor-port\.(test\.)?ts$/.test(f))
-			.filter((f) => /import\s+(?!type\b)[^;]*from\s+'\$lib\/data'/.test(readFileSync(f, 'utf8')));
+			.filter((f) => DATA_BARREL_VALUE_IMPORT.test(readFileSync(f, 'utf8')));
 		expect(offenders).toEqual([]);
+	});
+
+	it.each([
+		"import { gateway } from '#lib/data/index.ts';",
+		"import { gateway } from '#lib/data/index.js';",
+		"import {\n\tgateway,\n\truntime\n} from '#lib/data/index.ts';",
+		"import { gateway } from '#lib/data';"
+	])('planted: %j is reported', (line) => {
+		expect(DATA_BARREL_VALUE_IMPORT.test(line)).toBe(true);
+	});
+
+	it.each([
+		"import type { DataRuntime } from '#lib/data/index.ts';",
+		"import { fmt } from '#lib/features/shared/format.ts';",
+		"import { rows } from '#lib/data/tables.ts';",
+		"import { a } from './investor-port';"
+	])('control: %j stays silent', (line) => {
+		expect(DATA_BARREL_VALUE_IMPORT.test(line)).toBe(false);
 	});
 });

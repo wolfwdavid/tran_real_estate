@@ -118,14 +118,23 @@ describe('planted controls (real files under os.tmpdir())', () => {
 	};
 	afterAll(() => rmSync(root, { recursive: true, force: true }));
 
-	test('a studio entry importing $lib/data/x is reported', () => {
+	test('a studio entry importing #lib/data/x is reported', () => {
 		write('data/x.ts', 'export const x = 1;\n');
 		write('data/tables.ts', 'export const t = 1;\n');
 		const entry = write(
 			'features/studio/planted/Planted.svelte',
-			"<script lang=\"ts\">\n\timport { x } from '#lib/data/x';\n\timport { t } from '$lib/data/tables';\n</script>\n"
+			"<script lang=\"ts\">\n\timport { x } from '#lib/data/x.ts';\n\timport { t } from '#lib/data/tables.ts';\n</script>\n"
 		);
 		expect(reachesData([entry], lib)).toEqual([posix.join(lib, 'data/x.ts')]);
+	});
+
+	test('control: a studio entry importing only shared code reaches no lib/data module', () => {
+		write('features/shared/ok.ts', 'export const ok = 1;\n');
+		const entry = write(
+			'features/studio/planted/clean.ts',
+			"import { ok } from '#lib/features/shared/ok.ts';\nexport const v = ok;\n"
+		);
+		expect(reachesData([entry], lib)).toEqual([]);
 	});
 
 	test('a studio entry reaching the agent CRM, the investor portal or lib/leads via a barrel is reported', () => {
@@ -134,11 +143,11 @@ describe('planted controls (real files under os.tmpdir())', () => {
 		write('leads/normalize.ts', 'export const n = 1;\n');
 		write(
 			'features/shared/barrel.ts',
-			"export * from '#lib/features/agent/crm/contacts';\nexport { d } from '../investor/deals/deal';\nexport const lazy = () => import('$lib/leads/normalize');\n"
+			"export * from '#lib/features/agent/crm/contacts.ts';\nexport { d } from '../investor/deals/deal';\nexport const lazy = () => import('#lib/leads/normalize.ts');\n"
 		);
 		const entry = write(
 			'features/studio/planted/entry.ts',
-			"import { c } from '#lib/features/shared/barrel';\n"
+			"import { c } from '#lib/features/shared/barrel.ts';\n"
 		);
 		const reached = [...importGraph([entry], lib)].filter((f) =>
 			['features/investor', 'features/agent/crm', 'leads'].some((d) => under(posix.join(lib, d))(f))

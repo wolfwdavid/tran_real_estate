@@ -6,6 +6,9 @@ import { REFERENCE_CASES } from '@tran/core/finance';
 import { AnalyzerPageState } from './analyzer-page.svelte';
 import { sampleDealCopy } from './sample-deal';
 
+// The analyzer page state is pure: it must reach neither the investor port nor anything under lib/data.
+const DATA_OR_PORT_IMPORT = /investor-port|#lib\/data/;
+
 const A = REFERENCE_CASES.find((c) => c.id === 'A')!;
 
 describe('AnalyzerPageState', () => {
@@ -65,6 +68,24 @@ describe('AnalyzerPageState', () => {
 
 	it('imports no data gateway or port module', () => {
 		const src = readFileSync(new URL('./analyzer-page.svelte.ts', import.meta.url), 'utf8');
-		expect(src).not.toMatch(/investor-port|\$lib\/data/);
+		expect(src).not.toMatch(DATA_OR_PORT_IMPORT);
 	});
+
+	// Built from the specifier so this file's own text never looks like a data import to the
+	// features/investor source scan in data/investor-port.test.ts.
+	const importOf = (spec: string) => `import { x } from '${spec}';`;
+
+	it.each(['#lib/data/index.ts', '#lib/data/gateway.ts', '../data/investor-port'])(
+		'planted: an import of %s is reported',
+		(spec) => {
+			expect(importOf(spec)).toMatch(DATA_OR_PORT_IMPORT);
+		}
+	);
+
+	it.each(['./sample-deal', '#lib/features/shared/format.ts'])(
+		'control: an import of %s stays silent',
+		(spec) => {
+			expect(importOf(spec)).not.toMatch(DATA_OR_PORT_IMPORT);
+		}
+	);
 });

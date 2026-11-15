@@ -7,7 +7,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { resolve, sep } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { collectImportGraph, scriptOf, type GraphIo } from './import-graph';
+import { collectImportGraph, scriptOf, type GraphEdge, type GraphIo } from './import-graph';
 
 const posix = (p: string) => p.split(sep).join('/');
 
@@ -22,7 +22,7 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 	test('follows a dynamic import through a second file into lib/leads', () => {
 		const io = memoryIo({
 			'/v/web/lib/ai/a.ts': "import { b } from './b';\nexport const a = b;\n",
-			'/v/web/lib/ai/b.ts': "export const b = () => import('#lib/leads/web3forms');\n",
+			'/v/web/lib/ai/b.ts': "export const b = () => import('#lib/leads/web3forms.ts');\n",
 			'/v/web/lib/leads/web3forms.ts': 'export const send = () => 1;\n'
 		});
 		const g = collectImportGraph(['/v/web/lib/ai/a.ts'], { io, ...V });
@@ -57,7 +57,7 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 
 	test('type-only imports are followed (the boundary is module coupling)', () => {
 		const io = memoryIo({
-			'/v/web/lib/ai/t.ts': "import type { T } from '#lib/leads/types';\nexport type U = T;\n",
+			'/v/web/lib/ai/t.ts': "import type { T } from '#lib/leads/types.ts';\nexport type U = T;\n",
 			'/v/web/lib/leads/types.ts': 'export type T = string;\n'
 		});
 		const g = collectImportGraph(['/v/web/lib/ai/t.ts'], { io, ...V });
@@ -115,6 +115,45 @@ describe('collectImportGraph (planted graphs, injected io)', () => {
 	});
 });
 
+// The two ways a specifier can hide a file from the walker: a local specifier that resolves to nothing
+// (a typo), and a "#" or "$" alias the walker does not map (it would be filed as an external package).
+const isLocalSpec = (spec: string) => spec.startsWith('.') || spec.startsWith('#lib/');
+const unresolvedLocal = (edges: GraphEdge[]) =>
+	edges.filter((e) => e.to === null && isLocalSpec(e.spec));
+const unmappedAliases = (external: string[]) => external.filter((s) => s.startsWith('#'));
+
+describe('walker guards bite (planted graphs)', () => {
+	const planted = collectImportGraph(['/v/web/lib/ai/p.ts'], {
+		io: memoryIo({
+			'/v/web/lib/ai/p.ts':
+				"import { a } from '#lib/leads/typo.ts';\nimport { b } from '#other/leads.ts';\nexport const p = [a, b];\n"
+		}),
+		...V
+	});
+
+	test('a #lib typo is reported as unresolved', () => {
+		expect(unresolvedLocal(planted.edges).map((e) => e.spec)).toEqual(['#lib/leads/typo.ts']);
+	});
+
+	test('an unmapped # alias is reported', () => {
+		expect(unmappedAliases(planted.external)).toEqual(['#other/leads.ts']);
+	});
+
+	test('control: resolvable #lib and bare packages are silent', () => {
+		const ok = collectImportGraph(['/v/web/lib/ai/ok.ts'], {
+			io: memoryIo({
+				'/v/web/lib/ai/ok.ts':
+					"import { s } from '#lib/ai/s.ts';\nimport 'svelte';\nexport const o = s;\n",
+				'/v/web/lib/ai/s.ts': 'export const s = 1;\n'
+			}),
+			...V
+		});
+		expect(unresolvedLocal(ok.edges)).toEqual([]);
+		expect(unmappedAliases(ok.external)).toEqual([]);
+		expect(ok.edges.find((e) => e.spec === '#lib/ai/s.ts')?.to).toBe('/v/web/lib/ai/s.ts');
+	});
+});
+
 // ---- The real tree -------------------------------------------------------------------------------
 
 const aiDir = import.meta.dirname;
@@ -158,11 +197,12 @@ describe('no auto-send: the real lib/ai import graph', () => {
 		expect(graph.edges.filter((e) => /web3forms/i.test(e.spec))).toEqual([]);
 	});
 
-	test('zero unresolved relative or $lib specifiers (a typo cannot hide a file)', () => {
-		const unresolved = graph.edges.filter(
-			(e) => e.to === null && (e.spec.startsWith('.') || e.spec.startsWith('$lib/'))
-		);
-		expect(unresolved).toEqual([]);
+	test('zero unresolved relative or #lib specifiers (a typo cannot hide a file)', () => {
+		expect(unresolvedLocal(graph.edges)).toEqual([]);
+	});
+
+	test('no # alias slips through as an external package', () => {
+		expect(unmappedAliases(graph.external)).toEqual([]);
 	});
 
 	test('no production module imports the test-only providers/fake-sse helper', () => {

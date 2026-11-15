@@ -18,6 +18,12 @@ const SOURCES = readdirSync(DIR)
 	.filter((f) => /\.(svelte|ts)$/.test(f) && !f.includes('.test.'))
 	.map((f) => ({ file: f, text: readFileSync(join(DIR, f), 'utf8') }));
 
+// Files whose text contains `needle`. Substring match on purpose: specifiers carry explicit
+// extensions (#lib/data/index.ts), so a needle of #lib/data matches every spelling.
+type Source = { file: string; text: string };
+const filesContaining = (sources: Source[], needle: string) =>
+	sources.filter((s) => s.text.includes(needle)).map((s) => s.file);
+
 const outputs: string[] = [];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -223,7 +229,7 @@ describe('zero I/O and honest copy', () => {
 
 	test.each([
 		'#lib/storage',
-		'#lib/data/index.ts',
+		'#lib/data',
 		'#lib/ai',
 		'localStorage',
 		'sessionStorage',
@@ -232,9 +238,22 @@ describe('zero I/O and honest copy', () => {
 		'goto(',
 		'fetch('
 	])('no source file uses %s', (needle) => {
-		for (const { file, text: src } of SOURCES) {
-			expect(src.includes(needle), `${file} contains ${needle}`).toBe(false);
-		}
+		expect(filesContaining(SOURCES, needle), `files containing ${needle}`).toEqual([]);
+	});
+
+	test.each([
+		['#lib/storage', "import { db } from '#lib/storage/db.ts';"],
+		['#lib/data', "import { gateway } from '#lib/data/index.ts';"],
+		['#lib/ai', "import { run } from '#lib/ai/runner.ts';"]
+	])('planted: a source importing %s is reported', (needle, line) => {
+		const planted = [
+			{ file: 'Planted.svelte', text: `<script lang="ts">\n\t${line}\n</script>\n` },
+			{
+				file: 'Clean.svelte',
+				text: '<script lang="ts">\n\timport F from \'./AffordabilityForm.svelte\';\n</script>\n'
+			}
+		];
+		expect(filesContaining(planted, needle)).toEqual(['Planted.svelte']);
 	});
 
 	test.each(['you can afford', 'you qualify', 'recommended', 'you should'])(

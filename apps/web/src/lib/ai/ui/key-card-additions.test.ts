@@ -133,6 +133,25 @@ describe('TestConnectionResult', () => {
 	});
 });
 
+// A default import of `name` from the exact specifier (explicit extension, as the real tree writes it).
+const importsDefault = (source: string, name: string, spec: string) =>
+	source.includes(`import ${name} from '${spec}'`);
+
+describe('importsDefault bites (planted)', () => {
+	const good = "import AiModelField from '#lib/ai/ui/AiModelField.svelte';";
+	test('reports the right import', () => {
+		expect(importsDefault(good, 'AiModelField', '#lib/ai/ui/AiModelField.svelte')).toBe(true);
+	});
+	test.each([
+		"import AiModelField from '#lib/ai/ui/AiModelField';",
+		"import AiModelField from '#lib/ai/ui/OtherField.svelte';",
+		"import AiModelField from '#lib/ai/ui/AiModelFieldXsvelte';",
+		"import Other from '#lib/ai/ui/AiModelField.svelte';"
+	])('control: %j is not the wired import', (line) => {
+		expect(importsDefault(line, 'AiModelField', '#lib/ai/ui/AiModelField.svelte')).toBe(false);
+	});
+});
+
 describe('ProviderKeyCard AI wiring (source)', () => {
 	const src = readFileSync(
 		fileURLToPath(
@@ -146,10 +165,10 @@ describe('ProviderKeyCard AI wiring (source)', () => {
 	});
 
 	test('AI cards render the Model field and TestConnectionResult', () => {
-		expect(src).toMatch(/import AiModelField from '\$lib\/ai\/ui\/AiModelField\.svelte'/);
-		expect(src).toMatch(
-			/import TestConnectionResult from '\$lib\/ai\/ui\/TestConnectionResult\.svelte'/
-		);
+		expect(importsDefault(src, 'AiModelField', '#lib/ai/ui/AiModelField.svelte')).toBe(true);
+		expect(
+			importsDefault(src, 'TestConnectionResult', '#lib/ai/ui/TestConnectionResult.svelte')
+		).toBe(true);
 		expect(src).toMatch(/<AiModelField\b/);
 		expect(src).toMatch(/<TestConnectionResult\b/);
 		expect(src).toContain('{#if aiId && ctx.ready}');
