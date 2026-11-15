@@ -158,10 +158,9 @@ never skips waiting, so a used profile keeps serving the previous build's HTML a
 
 ## Dependabot policy
 
-`.github/dependabot.yml` ignores semver-major updates of exactly these packages until Phase 16 finishes
-(pnpm 12, Kit 3 and Vitest 5): `vitest`, `@vitest/*`, `vitest-browser-svelte`, `pnpm` and
-`@types/node`. The `@sveltejs/kit` and `@sveltejs/adapter-static` majors were released after Kit 3
-landed. The `@types/node` entry is owner
+`.github/dependabot.yml` ignores semver-major updates of exactly these packages until Phase 16 finishes:
+`pnpm` and `@types/node`. The `@sveltejs/kit`, `@sveltejs/adapter-static`, `vitest`, `@vitest/*` and
+`vitest-browser-svelte` majors were released after Kit 3 and Vitest 5 landed. The `@types/node` entry is owner
 decision B (Phase 13), re-evaluated in Phase 14/16. If a major PR for one of these is open from
 before the ignore list landed, close it by hand with a comment naming Phase 16.
 

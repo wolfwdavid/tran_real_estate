@@ -73,16 +73,17 @@ describe('every vitest-browser-svelte render is awaited', () => {
 		expect(bareRenders('x.test.ts', `${IMP}it('x', () => {\n\trender(C);\n});`)).toEqual([3]);
 	});
 	test('planted: an awaited render is not reported', () => {
-		expect(bareRenders('x.test.ts', `${IMP}it('x', async () => {\n\tawait render(C);\n});`)).toEqual(
-			[]
-		);
+		expect(
+			bareRenders('x.test.ts', `${IMP}it('x', async () => {\n\tawait render(C);\n});`)
+		).toEqual([]);
 	});
 	test('planted: SSR render from svelte/server is out of scope', () => {
 		const src = "import { render } from 'svelte/server';\nit('x', () => {\n\trender(C);\n});";
 		expect(bareRenders('x.test.ts', src)).toEqual([]);
 	});
 	test('planted: a renamed import is tracked by its local name', () => {
-		const src = "import { render as r } from 'vitest-browser-svelte';\nit('x', () => {\n\tr(C);\n});";
+		const src =
+			"import { render as r } from 'vitest-browser-svelte';\nit('x', () => {\n\tr(C);\n});";
 		expect(bareRenders('x.test.ts', src)).toEqual([3]);
 	});
 });

@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -221,5 +222,38 @@ describe('mergeEvidence (files)', () => {
 	test('a missing evidence directory is an error', () => {
 		root = mkdtempSync(join(tmpdir(), 'audit-evidence-'));
 		expect(() => mergeEvidence(root)).toThrow(/does not exist/);
+	});
+});
+
+describe('the real Vitest JSON shard (Vitest 5 reporter path)', () => {
+	test('--reporter=json --outputFile.json=<path> writes a report the merge accepts', () => {
+		const dir = mkdtempSync(join(tmpdir(), 'audit-evidence-vt-'));
+		try {
+			writeFileSync(join(dir, 'one.test.ts'), "test('one', () => { expect(1).toBe(1); });\n");
+			const out = join(dir, 'shard.json');
+			// The same three reporter flags scripts/audit-evidence.mjs passes; no config file, so no
+			// project climbing: --root pins the fixture directory and --globals needs no vitest import.
+			const r = spawnSync(
+				process.execPath,
+				[
+					join(import.meta.dirname, '..', 'node_modules/vitest/vitest.mjs'),
+					'run',
+					'--root',
+					dir,
+					'--globals',
+					'--reporter=dot',
+					'--reporter=json',
+					`--outputFile.json=${out}`
+				],
+				{ encoding: 'utf8' }
+			);
+			expect(r.status, r.stderr).toBe(0);
+			const shard = JSON.parse(readFileSync(out, 'utf8'));
+			expect(shard.numTotalTests).toBeGreaterThan(0);
+			expect(Array.isArray(shard.testResults)).toBe(true);
+			expect(mergeVitestReports([{ name: 'fixture', report: shard }]).numTotalTests).toBe(1);
+		} finally {
+			rmSync(dir, { recursive: true, force: true });
+		}
 	});
 });

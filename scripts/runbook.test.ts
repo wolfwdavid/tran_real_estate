@@ -245,7 +245,7 @@ describe('Dependabot policy', () => {
 	const ignores = dependabotIgnores();
 
 	test('names every major-ignored dependency from dependabot.yml', () => {
-		expect(ignores.length).toBeGreaterThanOrEqual(5); // non-vacuity
+		expect(ignores.length).toBeGreaterThanOrEqual(2); // non-vacuity
 		for (const name of ignores) expect(s, name).toContain(`\`${name}\``);
 		expect(s).toMatch(/Phase 16/);
 	});

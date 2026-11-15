@@ -5,15 +5,9 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
-    # Phase 16 released the SvelteKit and adapter-static majors after Kit 3 landed; the majors still held
-    # back are the vitest family, pnpm and @types/node. The weekly minor/patch group stays. Security updates are reviewed by the pnpm audit gate.
+    # Phase 16 released the SvelteKit, adapter-static and Vitest-family majors after they landed; the majors still held
+    # back are pnpm and @types/node. The weekly minor/patch group stays. Security updates are reviewed by the pnpm audit gate.
     ignore:
-      - dependency-name: 'vitest'
-        update-types: ['version-update:semver-major']
-      - dependency-name: '@vitest/*'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'vitest-browser-svelte'
-        update-types: ['version-update:semver-major']
       - dependency-name: 'pnpm'
         update-types: ['version-update:semver-major']
       # @types/node majors: owner decision B (Phase 13), re-evaluated in Phase 14/16.

@@ -65,14 +65,9 @@ function majorIgnores(body: string): string[] {
 
 // D-06 (plan 13-07): majors of the toolchain set can only land in Phase 16 (pnpm 12 -> Vitest 5), and
 // @types/node majors follow the Node 24 pin until Phase 14/16 (owner decision B). The @sveltejs/kit
-// and @sveltejs/adapter-static entries were removed after the Kit 3 landing (plan 16-10).
-const TOOLCHAIN_MAJOR_IGNORES = [
-	'vitest',
-	'@vitest/*',
-	'vitest-browser-svelte',
-	'pnpm',
-	'@types/node'
-];
+// and @sveltejs/adapter-static entries were removed after the Kit 3 landing (plan 16-10), the vitest,
+// @vitest/* and vitest-browser-svelte entries after the Vitest 5 landing (plan 16-11).
+const TOOLCHAIN_MAJOR_IGNORES = ['pnpm', '@types/node'];
 
 describe('audit exceptions', () => {
 	test('the helper extracts GHSA ids from a synthetic audit block (non-vacuity)', () => {
