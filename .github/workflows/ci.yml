@@ -138,6 +138,16 @@ jobs:
           PUBLIC_ANALYTICS_WEBSITE_ID: ${{ matrix.target == 'root' && vars.PUBLIC_ANALYTICS_WEBSITE_ID || '' }}
           PUBLIC_WEB3FORMS_KEY: ${{ matrix.target == 'root' && vars.PUBLIC_WEB3FORMS_KEY || '' }}
           PUBLIC_CONTACT_EMAIL: ${{ matrix.target == 'root' && vars.PUBLIC_CONTACT_EMAIL || '' }}
+      # A red or flaky E2E keeps its first-attempt trace (trace: retain-on-failure) so it can be
+      # root-caused instead of retried; same first-party action and SHA as live-smoke.yml.
+      - name: Upload E2E traces on failure
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-traces-${{ matrix.target }}
+          path: apps/web/test-results/
+          retention-days: 14
+          if-no-files-found: ignore
       # The extension runs once, on the root leg. Its privacy link is the site URL (PUBLIC_SITE_URL +
       # BASE_PATH through resolveSiteUrl, D-04); the build and the oracle read the same two variables.
       # Chromium is already installed above; the E2E runs new-headless Chromium.

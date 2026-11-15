@@ -249,8 +249,20 @@ describe('quality matrix', () => {
 		expect(pkg.scripts['audit:deps']).toBe('pnpm audit --audit-level low');
 	});
 
-	test('the new gates add no third-party action: exactly 7 uses: lines', () => {
-		expect(count(text, 'uses: ')).toBe(7);
+	test('no third-party action: exactly 8 uses: lines', () => {
+		expect(count(text, 'uses: ')).toBe(8);
+	});
+
+	test('a failed or flaky E2E uploads its traces, and only on failure', () => {
+		const quality = job('quality');
+		const e2e = quality.indexOf('name: E2E + axe');
+		const upload = quality.indexOf('name: Upload E2E traces on failure');
+		expect(e2e).toBeGreaterThan(-1);
+		expect(upload).toBeGreaterThan(e2e);
+		const step = quality.slice(upload, quality.indexOf('- name:', upload + 1));
+		expect(step).toContain('if: failure()');
+		expect(step).toMatch(/uses: actions\/upload-artifact@[0-9a-f]{40} /);
+		expect(step).toContain('path: apps/web/test-results/');
 	});
 
 	test('quality runs check, lint and unit before the build', () => {
