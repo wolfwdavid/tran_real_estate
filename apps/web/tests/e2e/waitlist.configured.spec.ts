@@ -218,21 +218,11 @@ test('lazy chunk failure: nothing is sent, the network error shows, a retry re-i
 	expect(web3forms).toHaveLength(0);
 
 	// The failed promise was cleared, so a second submit makes a fresh import attempt. Chromium
-	// keeps a failed module fetch in its module map for the life of the page, so that attempt
-	// fails again here (still sending nothing); a reload recovers.
+	// 153 (Playwright 1.63) kept a failed module fetch in its module map for the life of the page,
+	// so that attempt failed again; Chromium 158 (Playwright 1.65) fetches the module again, so the
+	// retry now recovers without a reload.
+	await expect.poll(failures).toBeGreaterThan(0);
 	await page.unroute('**/_app/immutable/**');
-	const before = await failures();
-	await button(page).click();
-	await expect(button(page)).toBeFocused();
-	await expect.poll(failures).toBeGreaterThan(before);
-	await expect(section).toContainText("Your email wasn't sent");
-	expect(posts).toHaveLength(0);
-	expect(web3forms).toHaveLength(0);
-
-	await page.reload();
-	await expect(page.locator('#waitlist form[data-ready]')).toHaveCount(1);
-	await input(page).fill(EMAIL);
-	await page.clock.fastForward(3500);
 	await button(page).click();
 	await expect(section).toContainText("You're on the renter waitlist");
 	expect(posts).toHaveLength(1);
