@@ -213,7 +213,7 @@ Plans:
 
 **Research flag:** YES. Run `/gsd:research-phase 16`: whether `/_app/version.json` keeps its path and shape under Kit 3 (the smoke's poll depends on it); whether `svelte-kit sync` is still needed in `prepare`; Rolldown chunking against the 60 KB per-page budget (0.5-1.9 KB headroom today); shadcn-svelte CLI 1.7.1 `#lib` behaviour on one `add` dry run; whether `fileParallelism` / `maxWorkers` is per-project in Vitest 5 (the `groupOrder` single-invocation experiment); WXT 0.21.5 under Vitest 5 (`pnpm vitest run --project extension` first); the `--outputFile.json=` CLI form; `eslint-plugin-svelte` 3.23.1 Kit-3 rule changes.
 **UI hint:** no (a full axe and visual pass over the migrated app is part of the gate, not new UI).
-**Plans:** 8/13 plans executed
+**Plans:** 10/13 plans executed
 Plans:
 
 **Wave 1**
@@ -254,7 +254,7 @@ Plans:
 
 **Wave 10** *(blocked on Wave 9 completion)*
 
-- [ ] 16-10-PLAN.md — Wave 10: Kit 3 part 6: audit exceptions five to two, roadmap/requirement wording, RUNBOOK range-revert rollback recipe, full gate, the one Kit push, live worker proof (TOOL-02, TOOL-03, TOOL-05)
+- [x] 16-10-PLAN.md — Wave 10: Kit 3 part 6: audit exceptions five to two, roadmap/requirement wording, RUNBOOK range-revert rollback recipe, full gate, the one Kit push, live worker proof (TOOL-02, TOOL-03, TOOL-05)
 
 **Wave 11** *(blocked on Wave 10 completion)*
 

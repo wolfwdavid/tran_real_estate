@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: executing
-stopped_at: "16-08 complete (Kit 3 part 4: worker on $app/manifest, first Kit 3 builds and local oracles green, budget red for 16-09; nothing pushed); 16-01 to 16-08 done"
+stopped_at: "16-10 complete (Kit 3 pushed and live: ci 43673499633 and live-smoke 43675572754 green on ed3210e; audit exceptions five to two; next 16-11 Vitest 5); 16-01 to 16-10 done"
 last_updated: "2026-11-15T00:37:39.110Z"
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 67
-  completed_plans: 62
+  completed_plans: 63
   percent: 67
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
-Plan: 10 of 13 (16-09 done)
+Plan: 11 of 13 (16-10 done)
 
 ## Performance Metrics
 
@@ -793,6 +793,6 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 ## Session Continuity
 
 Last session: 2026-11-15T00:37:39.099Z
-Stopped at: 16-07 complete (Kit 3 part 3: #lib boundaries proven, zero-grep gate; tree red by design until 16-10, nothing pushed); 16-01 to 16-07 done
+Stopped at: 16-10 complete (Kit 3 live on ed3210e; stale-worker owner row skipped by owner decision 2026-11-14); 16-01 to 16-10 done. Next: 16-11 Vitest 5. Decisions: Kit sequence 05-10 pushed once and live-verified; TOOL-02/03/05 ticks wait for plan 13 Task 5.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
