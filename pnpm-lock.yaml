@@ -272,8 +272,8 @@ importers:
   apps/web:
     dependencies:
       layerchart:
-        specifier: 2.5.1
-        version: 2.5.1(@sveltejs/kit@3.1.1(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(zod@4.6.7)
+        specifier: 2.9.2
+        version: 2.9.2(@sveltejs/kit@3.1.1(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(zod@4.6.7)
       leaflet:
         specifier: 1.9.4
         version: 1.9.4
@@ -1287,6 +1287,15 @@ packages:
     resolution: {integrity: sha512-AJDdYOdnyRDV5b6ArilzCPPwc1ejkHcoyFarqlPqT7zRYjhavcT3uSrqcMvsgh2CgoPbK3RCwyHaVyxYcP2Arg==}
     engines: {node: '>=12'}
 
+  d3-geo-polygon@2.0.1:
+    resolution: {integrity: sha512-e+CxAgyQLWaitzftCisJ7DUIYhUzSN8VSbDozouKp3bMb6QbRrRLShplpPLYisuyyZLtrdC1+5yAjpiTOne33g==}
+    engines: {node: '>=18'}
+
+  d3-geo-projection@4.0.0:
+    resolution: {integrity: sha512-p0bK60CEzph1iqmnxut7d/1kyTmm3UWtPlwdkM31AU+LW+BXazd5zJdoCn7VFxNCHXRngPHRnsNn5uGjLRGndg==}
+    engines: {node: '>=12'}
+    hasBin: true
+
   d3-geo-voronoi@2.1.0:
     resolution: {integrity: sha512-kqE4yYuOjPbKdBXG0xztCacPwkVSK2REF1opSNrnqqtXJmNcM++UbwQ8SxvwP6IQTj9RvIjjK4qeiVsEfj0Z2Q==}
     engines: {node: '>=12'}
@@ -1746,8 +1755,8 @@ packages:
   known-css-properties@0.37.0:
     resolution: {integrity: sha512-JCDrsP4Z1Sb9JwG0aJ8Eo2r7k4Ou5MwmThS/6lcIe1ICyb7UBJKGRIUUdqc2ASdE/42lgz6zFUnzAIhtXnBVrQ==}
 
-  layerchart@2.5.1:
-    resolution: {integrity: sha512-OMrjH4yHTIJ0pQ5Qs/o7M9S5IoF15c/1/CEBKcCaZ3xqKxh4Tm5hzqoIjt0uud65t7BxgseavUh1Ah/bWUmjaA==}
+  layerchart@2.9.2:
+    resolution: {integrity: sha512-KC2eH8657diyZ8pdSlsgxGMCk61GQslP/wpcfbaGoIgKTnefw3sl7Xl+vrYnhPdSst4IxGGclPTXOeOeCYC6PQ==}
     peerDependencies:
       svelte: ^5.0.0
 
@@ -3481,6 +3490,18 @@ snapshots:
 
   d3-format@3.1.2: {}
 
+  d3-geo-polygon@2.0.1:
+    dependencies:
+      d3-array: 3.2.4
+      d3-geo: 3.1.1
+      d3-geo-projection: 4.0.0
+
+  d3-geo-projection@4.0.0:
+    dependencies:
+      commander: 7.2.0
+      d3-array: 3.2.4
+      d3-geo: 3.1.1
+
   d3-geo-voronoi@2.1.0:
     dependencies:
       d3-array: 3.2.4
@@ -3899,7 +3920,7 @@ snapshots:
 
   known-css-properties@0.37.0: {}
 
-  layerchart@2.5.1(@sveltejs/kit@3.1.1(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(zod@4.6.7):
+  layerchart@2.9.2(@sveltejs/kit@3.1.1(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(typescript@6.0.3)(vite@8.3.5(@types/node@24.13.5)(jiti@2.7.0)))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(zod@4.6.7):
     dependencies:
       '@dagrejs/dagre': 2.0.4
       '@layerstack/svelte-actions': 1.0.1-next.20
@@ -3915,6 +3936,7 @@ snapshots:
       d3-dsv: 3.0.1
       d3-force: 3.0.0
       d3-geo: 3.1.1
+      d3-geo-polygon: 2.0.1
       d3-geo-voronoi: 2.1.0
       d3-hierarchy: 3.1.2
       d3-interpolate: 3.0.1
