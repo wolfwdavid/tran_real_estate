@@ -34,7 +34,17 @@ export default defineConfig({
 			}
 		: undefined,
 	// UI-SPEC: no data: URIs for fonts or SVG; every asset ships as a hashed same-origin file.
-	build: { assetsInlineLimit: 0 },
+	build: {
+		assetsInlineLimit: 0,
+		// Kit 3 compiles every route node as a dynamic import, and Vite lists each node's JS chunks
+		// in a dependency table inside app.js that every page downloads. Keep only the CSS in that
+		// table: the JS chunks still load through the module graph, and the service worker precaches
+		// them all, so the table was ~2 KB gz of initial JS for no benefit.
+		modulePreload: {
+			resolveDependencies: (_file, deps, { hostType }) =>
+				hostType === 'js' ? deps.filter((d) => d.endsWith('.css')) : deps
+		}
+	},
 	// Top level, so dev, build, SSR/prerender and the Vitest branch all get the same constants.
 	define: {
 		__BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
