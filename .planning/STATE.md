@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 ## Current Position
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — EXECUTING
-Plan: 9 of 13 (16-08 done)
+Plan: 10 of 13 (16-09 done)
 
 ## Performance Metrics
 
@@ -762,6 +762,7 @@ Recent decisions affecting current work:
 - [Phase 16-07]: shadcn-svelte CLI 1.6.1 cannot parse Kit 3's `extends: "$app/tsconfig"`; with a plain tsconfig it honours `#lib` and writes nothing back. The CLI bump (plan 12) is the fix.
 - [Phase 16-08]: Worker precache = immutable + precacheFiles(assets) + prerendered through resolve()/asset(); resolve is widened to (path: string) => string because its types reject the root '/' path that works at runtime. Guard flipped (REQUIRED $app/manifest and $app/env, FORBIDDEN $service-worker); the ESLint fetch exemption is the one file service-worker/index.ts; web check also runs tsc on the worker tsconfig.
 - [Phase 16-08]: First Kit 3 builds green (csp 45 pages, seo 44/14/6, smoke 121 x3, 278 E2E on root and sub). Budget red at 60.6-64.3 KB on 8 gated pages, owned by 16-09. TOOL-03 stays Pending until the live-origin proof after 16-10.
+- [Phase 16-09]: Budget green on the unchanged 60 KB without escalation: Vite modulePreload.resolveDependencies keeps only CSS in app.js (-3.7 KB everywhere) and ui/SiteIcon replaces Lucide on audience pages and forms (-3.7 KB there). Tool pages have only 0.06 to 0.38 KB headroom (worst: cash-on-cash, configured); re-measure on the configured build after any shared change. Kit 3 fetches the error node after boot, which the oracle does not count.
 
 ### Pending Todos
 

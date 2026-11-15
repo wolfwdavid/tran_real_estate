@@ -250,7 +250,7 @@ Plans:
 
 **Wave 9** *(blocked on Wave 8 completion)*
 
-- [ ] 16-09-PLAN.md — Wave 9: Kit 3 part 5: bundle-budget forensic and trim to 60 KB with owner escalation checkpoint (TOOL-02, D-04)
+- [x] 16-09-PLAN.md — Wave 9: Kit 3 part 5: bundle-budget forensic and trim to 60 KB with owner escalation checkpoint (TOOL-02, D-04)
 
 **Wave 10** *(blocked on Wave 9 completion)*
 
