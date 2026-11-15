@@ -35,7 +35,7 @@ export function resolveSpec(
 	fs: GraphFs = nodeFs
 ): string | null {
 	let base: string;
-	if (spec === '$lib' || spec.startsWith('$lib/')) {
+	if (spec === '#lib' || spec.startsWith('#lib/')) {
 		base = posix.join(toPosix(libDir), spec.slice(4));
 	} else if (spec === '.' || spec === '..' || spec.startsWith('./') || spec.startsWith('../')) {
 		// join, not resolve: resolve would prefix the cwd to a virtual "/v/…" path on Windows.

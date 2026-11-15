@@ -36,7 +36,7 @@ const agentEntries = [
 
 // The one lib/data module agent code may reach: the Phase 4 Dexie store schemas, which
 // lib/storage/db.ts needs to open the shared database that every agent repository uses. It is the
-// same single exemption eslint.config.js grants storage ("$lib/data/tables and nothing else from
+// same single exemption eslint.config.js grants storage ("#lib/data/tables and nothing else from
 // lib/data"). It holds schema strings, row types and backup-registry constants only; the test
 // below proves it stays a leaf (no local imports, no network), so it can never become a path to
 // the RentCast gateway.
@@ -109,8 +109,8 @@ describe('agent and public import-graph boundaries', () => {
 
 	test('planted control: a gateway import two hops away is reported', () => {
 		const files = new Map<string, string>([
-			['/v/lib/features/agent/a.ts', "import { b } from '$lib/features/shared/b';\n"],
-			['/v/lib/features/shared/b.ts', "export * from '$lib/data/rentcast/c';\n"],
+			['/v/lib/features/agent/a.ts', "import { b } from '#lib/features/shared/b.ts';\n"],
+			['/v/lib/features/shared/b.ts', "export * from '#lib/data/rentcast/c.ts';\n"],
 			['/v/lib/data/rentcast/c.ts', 'export const c = 1;\n'],
 			[
 				'/v/lib/features/agent/View.svelte',

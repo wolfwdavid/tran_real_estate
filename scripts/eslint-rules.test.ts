@@ -44,7 +44,7 @@ const expectNoParseErrors = (messages: Message[]) => {
 };
 
 const marketingViolations = `<script lang="ts">
-	import { db } from '$lib/storage/db';
+	import { db } from '#lib/storage/db.ts';
 	let value = $state('<b>hi</b>');
 	async function load() {
 		await fetch('https://x.test');
@@ -63,12 +63,12 @@ const adapterFetch = `export async function listListings(apiKey: string): Promis
 }
 `;
 
-const crossPortalImport = `import { analyze } from '$lib/features/investor/analyzer';
+const crossPortalImport = `import { analyze } from '#lib/features/investor/analyzer/index.ts';
 
 export const renterView = () => analyze();
 `;
 
-const sharedImport = `import { format } from '$lib/features/shared/format';
+const sharedImport = `import { format } from '#lib/features/shared/format.ts';
 
 export const renterView = () => format();
 `;
@@ -287,7 +287,7 @@ describe('Phase 3 guardrails', () => {
 	test('a marketing page importing the key vault is rejected', async () => {
 		const messages = await lint(
 			`${WEB}/routes/(marketing)/__lintfix__/vault-import.ts`,
-			`import { getVault } from '$lib/storage/secrets';
+			`import { getVault } from '#lib/storage/secrets/index.ts';
 
 export const vault = getVault;
 `
@@ -298,7 +298,7 @@ export const vault = getVault;
 });
 
 // Phase 4: the budget guard holds only if (a) no reactive $effect ever spends a RentCast call and
-// (b) nothing outside lib/data reaches past the $lib/data port to the rentcast client, fixtures or
+// (b) nothing outside lib/data reaches past the #lib/data port to the rentcast client, fixtures or
 // internal repos. Both live in shared arrays because flat config REPLACES rule options (Pitfall 6).
 const RENTER_ROUTE = `${WEB}/routes/(app)/renter/__lintfix__`;
 const EFFECT_MESSAGE = 'Never spend RentCast calls from $effect';
@@ -395,27 +395,30 @@ $effect.pre(() => {
 	});
 
 	test.each([
-		'$lib/data/rentcast/client',
-		'$lib/data/fixtures/fixture-fetch',
-		'$lib/data/ledger-repo'
+		'#lib/data/rentcast/client.ts',
+		'#lib/data/fixtures/fixture-fetch.ts',
+		'#lib/data/ledger-repo.ts'
 	])('a renter route importing %s is rejected', async (spec) => {
 		const messages = await lint(`${RENTER_ROUTE}/data-import.ts`, importModule(spec));
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
 	});
 
-	test('a renter route importing the $lib/data port is allowed', async () => {
-		const messages = await lint(`${RENTER_ROUTE}/data-import.ts`, importModule('$lib/data'));
+	test('a renter route importing the #lib/data port is allowed', async () => {
+		const messages = await lint(
+			`${RENTER_ROUTE}/data-import.ts`,
+			importModule('#lib/data/index.ts')
+		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
 	});
 
-	test('features/shared importing $lib/data/gateway is rejected; $lib/data is allowed', async () => {
+	test('features/shared importing #lib/data/gateway is rejected; #lib/data is allowed', async () => {
 		const file = `${WEB}/lib/features/shared/data/__lintfix__/c.ts`;
-		const bad = await lint(file, importModule('$lib/data/gateway'));
+		const bad = await lint(file, importModule('#lib/data/gateway.ts'));
 		expectNoParseErrors(bad);
 		expect(errorsFor(bad, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
-		const good = await lint(file, importModule('$lib/data'));
+		const good = await lint(file, importModule('#lib/data/index.ts'));
 		expect(errorsFor(good, 'no-restricted-imports')).toEqual([]);
 	});
 
@@ -423,7 +426,7 @@ $effect.pre(() => {
 		const messages = await lint(
 			`${WEB}/lib/data/__lintfix__/gateway-fixture.ts`,
 			`import * as a from './rentcast/client';
-import * as b from '$lib/data/rentcast/client';
+import * as b from '#lib/data/rentcast/client.ts';
 
 export const used = [a, b];
 `
@@ -448,7 +451,7 @@ export const used = [a, b];
 	test('regression: the portal import boundary still fires alongside the data-port pattern', async () => {
 		const messages = await lint(
 			`${RENTER_ROUTE}/cross-import.ts`,
-			importModule('$lib/features/investor/x')
+			importModule('#lib/features/investor/x')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports').length).toBeGreaterThanOrEqual(1);
@@ -476,11 +479,11 @@ describe('AI no-auto-send boundary (lintText, in memory)', () => {
 		hasGlobalConfirmBan = errorsFor(probe, 'no-restricted-globals').length > 0;
 	});
 
-	test('a lib/ai Svelte component importing $lib/leads/web3forms is rejected', async () => {
+	test('a lib/ai Svelte component importing #lib/leads/web3forms is rejected', async () => {
 		const messages = await lint(
 			`${AI}/ui/__lintfix__/panel-fixture.svelte`,
 			`<script lang="ts">
-	import { send } from '$lib/leads/web3forms';
+	import { send } from '#lib/leads/web3forms.ts';
 	const go = () => send();
 </script>
 
@@ -559,12 +562,12 @@ export async function relay(): Promise<unknown> {
 	test('lib/ai keeps the Phase 4 data-port import boundary', async () => {
 		const messages = await lint(
 			`${AI}/__lintfix__/data-import.ts`,
-			importModule('$lib/data/rentcast/client')
+			importModule('#lib/data/rentcast/client.ts')
 		);
 		expectNoParseErrors(messages);
 		const errors = errorsFor(messages, 'no-restricted-imports');
 		expect(errors).toHaveLength(1);
-		expect(errors[0].message).toContain('$lib/data');
+		expect(errors[0].message).toContain('#lib/data');
 	});
 
 	test('control: lib/leads itself is not under the AI block', async () => {
@@ -622,7 +625,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test('the map folder still may not import a portal folder or data internals', async () => {
 		const messages = await lint(
 			MAP,
-			svelteImports('$lib/features/renter/x', '$lib/data/rentcast/client')
+			svelteImports('#lib/features/renter/x', '#lib/data/rentcast/client.ts')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(2);
@@ -631,7 +634,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test('the affordability calculator may not import storage, data or AI', async () => {
 		const messages = await lint(
 			AFFORD,
-			svelteImports('$lib/storage/db', '$lib/data', '$lib/ai/runner')
+			svelteImports('#lib/storage/db.ts', '#lib/data/index.ts', '#lib/ai/runner.ts')
 		);
 		expectNoParseErrors(messages);
 		const errors = errorsFor(messages, 'no-restricted-imports');
@@ -642,7 +645,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test('the affordability calculator may import core math and UI primitives', async () => {
 		const messages = await lint(
 			AFFORD,
-			svelteImports('@tran/core/renter/affordability', '$lib/components/ui/slider')
+			svelteImports('@tran/core/renter/affordability', '#lib/components/ui/slider/index.ts')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
@@ -651,7 +654,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test.each(['renter', 'investor', 'agent'])(
 		'the affordability calculator may not import features/%s',
 		async (p) => {
-			const messages = await lint(AFFORD, svelteImports(`$lib/features/${p}/x`));
+			const messages = await lint(AFFORD, svelteImports(`#lib/features/${p}/x`));
 			expectNoParseErrors(messages);
 			expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
 		}
@@ -662,7 +665,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 		async (p) => {
 			const messages = await lint(
 				`${WEB}/lib/features/shared/listings/PriceHistory.svelte`,
-				svelteImports(`$lib/features/${p}/x`)
+				svelteImports(`#lib/features/${p}/x`)
 			);
 			expectNoParseErrors(messages);
 			const errors = errorsFor(messages, 'no-restricted-imports');
@@ -674,18 +677,21 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test('features/shared keeps the Phase 4 data-port boundary', async () => {
 		const messages = await lint(
 			`${WEB}/lib/features/shared/listings/x.ts`,
-			importModule('$lib/data/gateway')
+			importModule('#lib/data/gateway.ts')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
-		const ok = await lint(`${WEB}/lib/features/shared/listings/x.ts`, importModule('$lib/data'));
+		const ok = await lint(
+			`${WEB}/lib/features/shared/listings/x.ts`,
+			importModule('#lib/data/index.ts')
+		);
 		expect(errorsFor(ok, 'no-restricted-imports')).toEqual([]);
 	});
 
 	test('regression: portals keep their cross-portal ban alongside MAP_LIBS', async () => {
 		const messages = await lint(
 			`${WEB}/lib/features/renter/__lintfix__/x.ts`,
-			importModule('$lib/features/investor/x')
+			importModule('#lib/features/investor/x')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
@@ -694,7 +700,7 @@ describe('Phase 6 map-library and shared-folder boundaries (lintText, in memory)
 	test('regression: marketing keeps the storage ban alongside MAP_LIBS', async () => {
 		const messages = await lint(
 			`${WEB}/routes/(marketing)/+page.svelte`,
-			svelteImports('$lib/storage/db', 'leaflet')
+			svelteImports('#lib/storage/db.ts', 'leaflet')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(2);
@@ -712,16 +718,16 @@ describe('agent and public boundaries (lintText, in memory)', () => {
 		);
 
 	test('the agent CRM may not import the RentCast gateway', async () => {
-		const messages = await lint(CRM, importModule('$lib/data/rentcast/client'));
+		const messages = await lint(CRM, importModule('#lib/data/rentcast/client.ts'));
 		expectNoParseErrors(messages);
 		expect(gatewayErrors(messages)).toHaveLength(1);
-		const port = await lint(CRM, importModule('$lib/data'));
+		const port = await lint(CRM, importModule('#lib/data/index.ts'));
 		expectNoParseErrors(port);
 		expect(gatewayErrors(port)).toHaveLength(1);
 	});
 
 	test('the merged agent entry keeps the cross-portal ban', async () => {
-		const messages = await lint(CRM, importModule('$lib/features/renter/thing'));
+		const messages = await lint(CRM, importModule('#lib/features/renter/thing'));
 		expectNoParseErrors(messages);
 		const errors = errorsFor(messages, 'no-restricted-imports');
 		expect(errors).toHaveLength(1);
@@ -729,19 +735,19 @@ describe('agent and public boundaries (lintText, in memory)', () => {
 	});
 
 	test('agent routes may not import the gateway either', async () => {
-		const messages = await lint(PIPELINE, svelteImports('$lib/data/x'));
+		const messages = await lint(PIPELINE, svelteImports('#lib/data/x'));
 		expectNoParseErrors(messages);
 		expect(gatewayErrors(messages)).toHaveLength(1);
 	});
 
 	test('the agent/studio carve-out may use the gateway port but keeps the cross-portal ban', async () => {
-		const ok = await lint(STUDIO, svelteImports('$lib/data'));
+		const ok = await lint(STUDIO, svelteImports('#lib/data/index.ts'));
 		expectNoParseErrors(ok);
 		expect(errorsFor(ok, 'no-restricted-imports')).toEqual([]);
-		const internals = await lint(STUDIO, svelteImports('$lib/data/x'));
+		const internals = await lint(STUDIO, svelteImports('#lib/data/x'));
 		expectNoParseErrors(internals);
 		expect(gatewayErrors(internals)).toEqual([]);
-		const cross = await lint(STUDIO, svelteImports('$lib/features/renter/x'));
+		const cross = await lint(STUDIO, svelteImports('#lib/features/renter/x'));
 		expectNoParseErrors(cross);
 		const errors = errorsFor(cross, 'no-restricted-imports');
 		expect(errors).toHaveLength(1);
@@ -749,11 +755,11 @@ describe('agent and public boundaries (lintText, in memory)', () => {
 	});
 
 	test.each([
-		'$lib/storage/db',
-		'$lib/features/agent/ui/StageBadge.svelte',
-		'$lib/ai/x',
-		'$lib/security/x',
-		'$lib/data'
+		'#lib/storage/db.ts',
+		'#lib/features/agent/ui/StageBadge.svelte',
+		'#lib/ai/x',
+		'#lib/security/x',
+		'#lib/data/index.ts'
 	])('the (public) inquiry page may not import %s', async (spec) => {
 		const messages = await lint(INQUIRE, svelteImports(spec));
 		expectNoParseErrors(messages);
@@ -763,7 +769,7 @@ describe('agent and public boundaries (lintText, in memory)', () => {
 	test('the (public) inquiry page may import lib/leads and @tran/core', async () => {
 		const messages = await lint(
 			INQUIRE,
-			svelteImports('$lib/leads/web3forms-sink', '@tran/core/leads/lead-block')
+			svelteImports('#lib/leads/web3forms-sink.ts', '@tran/core/leads/lead-block')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
@@ -801,7 +807,7 @@ describe('Phase 10 boundaries', () => {
 		expect(errors[0].message).toContain('lib/analytics');
 	});
 
-	test.each(['$lib/storage/db', '$lib/features/investor/analyzer/x'])(
+	test.each(['#lib/storage/db.ts', '#lib/features/investor/analyzer/x'])(
 		'a tool calculator may not import %s',
 		async (spec) => {
 			const messages = await lint(CAP_RATE, svelteImports(spec));
@@ -819,10 +825,10 @@ describe('Phase 10 boundaries', () => {
 	});
 
 	test.each([
-		[ONBOARDING, '$lib/data/platform'],
-		[SEO_HEAD, '$lib/ai/x'],
-		[CONTENT, '$lib/storage/x'],
-		[AFFORD, '$lib/data/x']
+		[ONBOARDING, '#lib/data/platform.ts'],
+		[SEO_HEAD, '#lib/ai/x'],
+		[CONTENT, '#lib/storage/x'],
+		[AFFORD, '#lib/data/x']
 	])('%s importing %s is rejected', async (file, spec) => {
 		const code = file.endsWith('.svelte') ? svelteImports(spec) : importModule(spec);
 		const messages = await lint(file, code);
@@ -831,9 +837,9 @@ describe('Phase 10 boundaries', () => {
 	});
 
 	test.each([
-		['$lib/storage/db', 1],
-		['$lib/ai/runner', 1],
-		['$lib/data', 1],
+		['#lib/storage/db.ts', 1],
+		['#lib/ai/runner.ts', 1],
+		['#lib/data/index.ts', 1],
 		['leaflet', 1]
 	])('%s is rejected in every marketing-safe folder', async (spec, n) => {
 		for (const file of [ONBOARDING, CONTENT, BEACON, `${WEB}/lib/seo/jsonld.ts`]) {
@@ -844,13 +850,13 @@ describe('Phase 10 boundaries', () => {
 	});
 
 	test('forms may import lib/leads (the only send path)', async () => {
-		const messages = await lint(WAITLIST, svelteImports('$lib/leads/web3forms-sink'));
+		const messages = await lint(WAITLIST, svelteImports('#lib/leads/web3forms-sink.ts'));
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
 	});
 
 	test('a marketing route may not import a portal feature', async () => {
-		const messages = await lint(TOOL_ROUTE, svelteImports('$lib/features/renter/x'));
+		const messages = await lint(TOOL_ROUTE, svelteImports('#lib/features/renter/x'));
 		expectNoParseErrors(messages);
 		const errors = errorsFor(messages, 'no-restricted-imports');
 		expect(errors).toHaveLength(1);
@@ -861,8 +867,8 @@ describe('Phase 10 boundaries', () => {
 		const messages = await lint(
 			TOOL_ROUTE,
 			svelteImports(
-				'$lib/features/shared/affordability/AffordabilityCalculator.svelte',
-				'$lib/components/tools/ToolPage.svelte'
+				'#lib/features/shared/affordability/AffordabilityCalculator.svelte',
+				'#lib/components/tools/ToolPage.svelte'
 			)
 		);
 		expectNoParseErrors(messages);
@@ -872,7 +878,7 @@ describe('Phase 10 boundaries', () => {
 	test('regression: portals still import their own features and features/shared', async () => {
 		const messages = await lint(
 			`${WEB}/routes/(app)/investor/__lintfix__/+page.svelte`,
-			svelteImports('$lib/features/investor/x', '$lib/features/shared/affordability')
+			svelteImports('#lib/features/investor/x', '#lib/features/shared/affordability/index.ts')
 		);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
@@ -963,4 +969,129 @@ describe('extension zero-network (EXT-03)', () => {
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
 	});
+});
+
+// Kit 3 / Pattern 4: no-restricted-imports groups use gitignore semantics, where a leading "#" starts
+// a comment. A group written '#lib/data/*' matches nothing and silently disables the boundary; it must
+// be written '\#lib/data/*'. This predicate runs over the EFFECTIVE config, not the source text.
+type RestrictedOptions = { patterns?: ({ group?: string[] } | string)[] };
+function unescapedHashGroups(options: RestrictedOptions | undefined): string[] {
+	const groups = (options?.patterns ?? []).flatMap((p) =>
+		typeof p === 'string' ? [p] : (p.group ?? [])
+	);
+	return groups.filter((g) => g.replace(/^!/, '').startsWith('#'));
+}
+
+describe('boundary groups are escaped for gitignore semantics (non-vacuity)', () => {
+	const probes = [
+		`${WEB}/routes/(marketing)/+page.svelte`,
+		`${WEB}/routes/(public)/agent/inquire/+page.svelte`,
+		`${WEB}/routes/(app)/renter/+page.svelte`,
+		`${WEB}/routes/(app)/investor/+page.svelte`,
+		`${WEB}/routes/(app)/agent/+page.svelte`,
+		`${WEB}/routes/(app)/agent/studio/snapshot/+page.svelte`,
+		`${WEB}/lib/features/shared/x.ts`,
+		`${WEB}/lib/features/shared/listings/map/x.ts`,
+		`${WEB}/lib/features/shared/affordability/x.ts`,
+		`${WEB}/lib/storage/x.ts`,
+		`${WEB}/lib/ai/x.ts`,
+		`${WEB}/lib/content/x.ts`,
+		`${WEB}/lib/seo/x.ts`
+	];
+
+	test('planted: an unescaped #lib group is rejected, the escaped one is accepted', () => {
+		expect(unescapedHashGroups({ patterns: [{ group: ['#lib/data/*', '#lib/data/**'] }] })).toEqual(
+			['#lib/data/*', '#lib/data/**']
+		);
+		expect(unescapedHashGroups({ patterns: [{ group: ['!#lib/data/tables'] }] })).toEqual([
+			'!#lib/data/tables'
+		]);
+		expect(
+			unescapedHashGroups({ patterns: [{ group: ['\\#lib/data/*', '!\\#lib/data/tables'] }] })
+		).toEqual([]);
+	});
+
+	test('planted: an unescaped group matches nothing, the escaped group reports (the trap is real)', async () => {
+		const probe = (group: string) =>
+			new ESLint({
+				cwd: repoRoot,
+				overrideConfigFile: true,
+				overrideConfig: [
+					{
+						files: ['**/*.ts'],
+						rules: {
+							'no-restricted-imports': ['error', { patterns: [{ group: [group], message: 'm' }] }]
+						}
+					}
+				]
+			}).lintText("import * as a from '#lib/data/x.ts';\nexport const b = a;\n", {
+				filePath: resolve(repoRoot, `${WEB}/lib/__lintfix__/trap.ts`)
+			});
+		const bare = (await probe('#lib/data/**')).flatMap((r) => r.messages);
+		const escaped = (await probe('\\#lib/data/**')).flatMap((r) => r.messages);
+		expect(errorsFor(bare as Message[], 'no-restricted-imports')).toEqual([]);
+		expect(errorsFor(escaped as Message[], 'no-restricted-imports')).toHaveLength(1);
+	});
+
+	test.each(probes)('effective config for %s has no unescaped #lib group', async (file) => {
+		const config = await eslint.calculateConfigForFile(resolve(repoRoot, file));
+		const entry = config?.rules?.['no-restricted-imports'] as unknown[] | undefined;
+		// Non-vacuity of the probe itself: the rule is configured with patterns for every probed path.
+		expect(entry?.length ?? 0).toBeGreaterThan(1);
+		expect((entry?.[1] as RestrictedOptions).patterns?.length ?? 0).toBeGreaterThan(0);
+		expect(unescapedHashGroups(entry?.[1] as RestrictedOptions)).toEqual([]);
+	});
+
+	test('every web boundary names #lib, never the retired $lib alias', async () => {
+		const config = await eslint.calculateConfigForFile(
+			resolve(repoRoot, `${WEB}/routes/(app)/renter/+page.svelte`)
+		);
+		const opts = (config?.rules?.['no-restricted-imports'] as unknown[])[1] as RestrictedOptions;
+		const groups = (opts.patterns ?? []).flatMap((p) =>
+			typeof p === 'string' ? [p] : (p.group ?? [])
+		);
+		expect(groups.some((g) => g.startsWith('\\#lib/'))).toBe(true);
+		expect(groups.some((g) => g.includes(['$', 'lib'].join('')))).toBe(false);
+	});
+});
+
+// Pitfall 6: Kit 3 resolve() and eslint-plugin-svelte 3.x. The "every internal link goes through
+// resolve()" guard must still fire on a bare anchor and stay silent when the link is resolved.
+describe('svelte/no-navigation-without-resolve on Kit 3', () => {
+	const ROUTE = `${WEB}/routes/(app)/renter/__lintfix__/link-fixture.svelte`;
+	const bare = `<a href="/x">x</a>\n`;
+	const resolved = `<script lang="ts">\n\timport { resolve } from '$app/paths';\n</script>\n\n<a href={resolve('x/')}>x</a>\n`;
+
+	test('a bare internal anchor is reported', async () => {
+		const messages = await lint(ROUTE, bare);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'svelte/no-navigation-without-resolve')).toHaveLength(1);
+	});
+
+	test('control: the same link through resolve() is silent', async () => {
+		const messages = await lint(ROUTE, resolved);
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'svelte/no-navigation-without-resolve')).toEqual([]);
+	});
+});
+
+// The storage carve-out: lib/storage/*.ts may import the table schema module and nothing else from
+// lib/data (a `!` exemption inside the group, so it too must be written against #lib).
+describe('storage table-schema carve-out (lintText, in memory)', () => {
+	const DB = `${WEB}/lib/storage/__lintfix__x.ts`;
+
+	test('lib/storage/*.ts may import #lib/data/tables.ts', async () => {
+		const messages = await lint(DB, importModule('#lib/data/tables.ts'));
+		expectNoParseErrors(messages);
+		expect(errorsFor(messages, 'no-restricted-imports')).toEqual([]);
+	});
+
+	test.each(['#lib/data/gateway.ts', '#lib/data/ledger-repo.ts', '#lib/data/rentcast/client.ts'])(
+		'lib/storage/*.ts importing %s is rejected',
+		async (spec) => {
+			const messages = await lint(DB, importModule(spec));
+			expectNoParseErrors(messages);
+			expect(errorsFor(messages, 'no-restricted-imports')).toHaveLength(1);
+		}
+	);
 });

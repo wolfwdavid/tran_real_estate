@@ -33,10 +33,20 @@ const restrictedSyntax = [
 ];
 // Merged into EVERY no-restricted-imports entry for apps/web/src: flat config replaces rule options,
 // so a pattern set only in a catch-all entry would be dropped by the per-portal entries below.
+// Group strings use gitignore semantics: a leading "#" starts a comment and matches nothing, so the
+// #lib alias is written "\\#lib" in source (scripts/eslint-rules.test.ts rejects an unescaped group).
+// Specifiers carry explicit extensions, so the port module is exempted as #lib/data/index.ts.
 const DATA_INTERNALS = {
-	group: ['$lib/data/*', '$lib/data/**', '**/lib/data/*', '**/lib/data/**'],
+	group: [
+		'\\#lib/data/*',
+		'\\#lib/data/**',
+		'!\\#lib/data/index.ts',
+		'!\\#lib/data/index.js',
+		'**/lib/data/*',
+		'**/lib/data/**'
+	],
 	message:
-		'Import the data layer only through $lib/data (the gateway port). Internals stay inside lib/data.'
+		'Import the data layer only through #lib/data (the gateway port). Internals stay inside lib/data.'
 };
 // The Phase 3 global restriction lists, hoisted so the lib/ai block below can repeat them:
 // flat config REPLACES a rule's options per matching block, it never merges them.
@@ -52,7 +62,7 @@ const GLOBAL_RESTRICTED_PROPERTIES = [
 const NO_SEND = 'No sending from the AI layer (AI-04: a person sends, never the code).';
 const NO_NAV = 'No programmatic navigation from the AI layer (AI-04).';
 const forbid = (mods, message) => ({
-	group: mods.flatMap((m) => [`$lib/${m}`, `$lib/${m}/**`, `**/lib/${m}`, `**/lib/${m}/**`]),
+	group: mods.flatMap((m) => [`\\#lib/${m}`, `\\#lib/${m}/**`, `**/lib/${m}`, `**/lib/${m}/**`]),
 	message
 });
 // Phase 6: the map libraries are lazy-loaded from ONE folder (the Map tab). Merged into EVERY
@@ -119,7 +129,7 @@ export default defineConfig(
 	{ languageOptions: { globals: { ...globals.browser, ...globals.node } } },
 	{
 		// Build-time constants (apps/web/vite.config.ts and apps/extension/wxt.config.ts define), read only
-		// through $lib/site (web) and src/lib/site.ts (extension).
+		// through #lib/site (web) and src/lib/site.ts (extension).
 		languageOptions: {
 			globals: {
 				__SITE_URL__: 'readonly',
@@ -204,7 +214,7 @@ export default defineConfig(
 	},
 	{
 		// Phase 3 storage hosts the Phase 4 tables (TranDb version block, backup registry), so these
-		// files may import the table schema module $lib/data/tables and nothing else from lib/data.
+		// files may import the table schema module #lib/data/tables and nothing else from lib/data.
 		files: [`${WEB}/lib/storage/*.ts`],
 		rules: {
 			'no-restricted-imports': [
@@ -213,7 +223,14 @@ export default defineConfig(
 					patterns: [
 						{
 							...DATA_INTERNALS,
-							group: [...DATA_INTERNALS.group, '!$lib/data/tables', '!**/lib/data/tables']
+							group: [
+								...DATA_INTERNALS.group,
+								'!\\#lib/data/tables',
+								'!\\#lib/data/tables.ts',
+								'!\\#lib/data/tables.js',
+								'!**/lib/data/tables',
+								'!**/lib/data/tables.ts'
+							]
 						},
 						MAP_LIBS
 					]
