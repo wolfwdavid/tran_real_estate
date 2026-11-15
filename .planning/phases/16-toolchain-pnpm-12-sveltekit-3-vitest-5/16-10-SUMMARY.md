@@ -62,3 +62,13 @@ Tasks 1 to 3 are done and committed. Task 4 (push, ci, live smoke, owner stale-w
 ## Pending (Task 4)
 
 Owner approval of `git push origin main`, ci run URL, live-smoke run URL with pwa spec proof, owner stale-worker answer.
+
+## Task 4 progress (after the owner-approved push of 70e030a)
+
+- Pushed 368b56e..70e030a. Rebase SHAs: bbf0291 is now fd09573, 33ad514 is now 70e030a (tree identical). KIT_FIRST_SHA 65c4575; last Kit code commit fd09573.
+- ci run 43663793959 (https://github.com/wolfwdavid/tran_real_estate/actions/runs/43663793959): FAILURE. root and configured jobs green; sub job red on one flaky test (--fail-on-flaky-tests): investor/markets.spec.ts:184 "horizontal overflow in px" received 672 at the final instant read (helpers.ts expectNoHorizontalScroll after a 375 px viewport resize); passed on retry. Deploy skipped, so no live-smoke ran for 70e030a; production still serves the Kit 2 build.
+- Root cause: not reproduced locally (30 repeats at 6 workers, 12 repeats with a per-frame probe, 20x and 6x CPU throttling: overflow 0 from the first frame). The only read in question is an instant, un-polled measurement after a viewport change, the same pattern as lessons 2026-10-25. No CI trace was uploaded. Treated as a test measuring too early; unproven.
+- Fix: d7a7661 makes expectNoHorizontalScroll an expect.poll (a persistent overflow still fails at timeout). Test-only, so budget unchanged (configured: cash-on-cash 59.9, dscr 59.9, affordability 59.9, cap-rate 59.8).
+- Local after fix: full sub project 1146 passed; the 3 failures were build-stamp specs on a stale build (HEAD moved); after `pnpm build:sub`, build-stamp + markets specs 12 passed.
+- Dependabot (10 alerts reported on push): alerts 1 to 11 inspected via the API. Nine are now fixed by Kit 3 (GHSA-pxg6, pfhg, 27mw earlier; plus two new Kit 2 medium advisories GHSA-mw6w-2fmv-pvw3 on @sveltejs/kit and GHSA-jf9x-2fg2-hx4w on adapter-static, created 2026-11-14). Open: #7 minimatch GHSA-g3hv-75wg-m249 (medium) and #6 deepmerge GHSA-gcqx-w48m-w2h4 (low), exactly the two recorded exceptions. The 10 figure was the pre-fix count.
+- live-smoke: NOT RUN (needs a green ci and deploy of a new push). Stale-worker owner row: PENDING.
