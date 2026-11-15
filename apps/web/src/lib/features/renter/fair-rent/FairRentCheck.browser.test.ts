@@ -148,8 +148,8 @@ function fakeRuntime(opts: {
 /** Visible text with whitespace collapsed (markup line breaks are not part of the copy). */
 const flat = (el: Element) => (el.textContent ?? '').replace(/\s+/g, ' ');
 
-const mount = (runtime: DataRuntime) =>
-	render(FairRentHarness, { props: { runtime, row: ROW, provenance: LIVE } });
+const mount = async (runtime: DataRuntime) =>
+	await render(FairRentHarness, { props: { runtime, row: ROW, provenance: LIVE } });
 
 afterEach(() => {
 	vi.mocked(announce).mockClear();

@@ -131,7 +131,7 @@ afterEach(() => {
 describe('popup states', () => {
 	test.each(STATES)('$name renders its copy, both notices and passes axe', async (c) => {
 		const { deps } = fakeDeps({ ...c.scenario });
-		render(App, { deps });
+		await render(App, { deps });
 		await settle(c);
 
 		const region = statusRegion();
@@ -165,7 +165,7 @@ describe('popup states', () => {
 describe('popup interaction', () => {
 	test('switch shows On when enabled and Off after the user turns it off', async () => {
 		const { deps } = fakeDeps({ response: { enabled: true, count: 3 } });
-		render(App, { deps });
+		await render(App, { deps });
 		await expect.element(theSwitch()).toBeChecked();
 		await expect.element(page.getByText(COPY.switchOn, { exact: true })).toBeVisible();
 
@@ -180,7 +180,7 @@ describe('popup interaction', () => {
 
 	test('the state word is hidden while the setting is still loading', async () => {
 		const { deps } = fakeDeps({ enabled: 'pending' });
-		render(App, { deps });
+		await render(App, { deps });
 		await expect.element(theSwitch()).toBeDisabled();
 		expect(page.getByText(COPY.switchOn, { exact: true }).elements()).toHaveLength(0);
 		expect(page.getByText(COPY.switchOff, { exact: true }).elements()).toHaveLength(0);
@@ -188,7 +188,7 @@ describe('popup interaction', () => {
 
 	test('a live count push from the active tab updates the count; other tabs are ignored', async () => {
 		const { deps, push } = fakeDeps({ response: { enabled: true, count: 3 } });
-		render(App, { deps });
+		await render(App, { deps });
 		await expect.element(page.getByText(COPY.countOther, { exact: true })).toBeVisible();
 
 		push({ type: COUNT_PUSH, enabled: true, count: 9 }, 99);
@@ -202,7 +202,7 @@ describe('popup interaction', () => {
 		const remover = vi.fn();
 		const { deps } = fakeDeps({});
 		deps.onCountPush.mockImplementation(() => remover);
-		const screen = render(App, { deps });
+		const screen = await render(App, { deps });
 		await expect.element(theSwitch()).toBeEnabled();
 		screen.unmount();
 		expect(remover).toHaveBeenCalledOnce();
@@ -212,7 +212,7 @@ describe('popup interaction', () => {
 describe('axe non-vacuity', () => {
 	test('a planted unnamed button next to the popup is reported', async () => {
 		const { deps } = fakeDeps({ response: { enabled: true, count: 3 } });
-		render(App, { deps });
+		await render(App, { deps });
 		await expect.element(page.getByText(COPY.countOther, { exact: true })).toBeVisible();
 
 		const planted = document.createElement('button');
