@@ -3,3 +3,8 @@
 export function isPrecacheable(path: string): boolean {
 	return !/(^|[\\/])\./.test(path);
 }
+
+/** The surviving paths of a Kit manifest `assets` list; Kit 3 includes every file under static/, dotfiles too. */
+export function precacheFiles<T extends { path: string }>(assets: T[]): T['path'][] {
+	return assets.filter((e) => isPrecacheable(e.path)).map((e) => e.path);
+}

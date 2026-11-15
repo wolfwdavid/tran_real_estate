@@ -1,4 +1,4 @@
-// Static guard over apps/web/src/service-worker.ts. The worker runs on an origin that holds
+// Static guard over apps/web/src/service-worker/index.ts. The worker runs on an origin that holds
 // provider keys, so its shape is pinned here: it may only answer same-origin GETs for files in
 // the build's own precache list, and it may never write to a cache at runtime, take over open
 // pages early, or load code from anywhere. The precache dotfile filter is checked by
@@ -7,13 +7,14 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { isPrecacheable } from '../apps/web/src/lib/precache-filter';
+import { isPrecacheable, precacheFiles } from '../apps/web/src/lib/precache-filter';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const SW_PATH = join(REPO_ROOT, 'apps', 'web', 'src', 'service-worker.ts');
+const SW_PATH = join(REPO_ROOT, 'apps', 'web', 'src', 'service-worker', 'index.ts');
 
 const REQUIRED = [
-	"from '$service-worker'",
+	"from '$app/manifest'",
+	"from '$app/env'",
 	"req.method !== 'GET'",
 	'url.origin !== sw.location.origin',
 	'!ASSETS.has(url.pathname)',
@@ -28,6 +29,7 @@ const FORBIDDEN = [
 	'navigationPreload',
 	'importScripts',
 	'$app/service-worker',
+	'$service-worker',
 	'http://',
 	'https://'
 ];
@@ -42,7 +44,7 @@ function guardFaults(source: string): string[] {
 
 const readSw = () => (existsSync(SW_PATH) ? readFileSync(SW_PATH, 'utf8') : '');
 
-describe('service-worker.ts shape', () => {
+describe('service-worker/index.ts shape', () => {
 	test('the worker source exists', () => {
 		expect(existsSync(SW_PATH)).toBe(true);
 	});
@@ -58,13 +60,20 @@ describe('service-worker.ts shape', () => {
 		expect(faults).toContain('forbidden .put(');
 	});
 
+	test('non-vacuity: the retired $service-worker import and a dropped manifest import are caught', () => {
+		const retired = readSw().replace("from '$app/manifest'", "from '$service-worker'");
+		expect(guardFaults(retired)).toEqual(
+			expect.arrayContaining(["missing from '$app/manifest'", 'forbidden $service-worker'])
+		);
+	});
+
 	test('non-vacuity: dropping the cross-origin early return is caught', () => {
 		const planted = readSw().replace('url.origin !== sw.location.origin', 'false');
 		expect(guardFaults(planted)).toContain('missing url.origin !== sw.location.origin');
 	});
 });
 
-describe('precache dotfile filter', () => {
+describe('precache dotfile filter (precache-filter)', () => {
 	test('excludes dotfiles anywhere in the path and keeps real assets', () => {
 		for (const f of ['.nojekyll', 'sub/.hidden', '.well-known/x', 'sub\\.hidden']) {
 			expect(isPrecacheable(f), f).toBe(false);
@@ -72,6 +81,20 @@ describe('precache dotfile filter', () => {
 		for (const f of ['frame-guard.js', 'icons/icon-192.png', 'manifest.webmanifest']) {
 			expect(isPrecacheable(f), f).toBe(true);
 		}
+	});
+
+	test('a Kit 3 manifest assets list drops .nojekyll and .well-known, keeps real files', () => {
+		const assets = [
+			{ path: '.nojekyll' },
+			{ path: 'manifest.webmanifest' },
+			{ path: 'icons/icon-192.png' },
+			{ path: '.well-known/x' }
+		];
+		expect(precacheFiles(assets)).toEqual(['manifest.webmanifest', 'icons/icon-192.png']);
+	});
+
+	test('the worker builds its precache through precacheFiles', () => {
+		expect(readSw()).toContain('precacheFiles(assets)');
 	});
 });
 

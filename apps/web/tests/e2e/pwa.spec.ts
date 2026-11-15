@@ -2,7 +2,7 @@ import { test, expect, type Page, type TestInfo } from '@playwright/test';
 import { NOT_FOUND } from './routes';
 
 // PLAT-06 at runtime: the app-shell service worker and the install manifest, on both bases.
-// The worker is allowlist-only (src/service-worker.ts), so beyond "it works offline" these tests
+// The worker is allowlist-only (src/service-worker/index.ts), so beyond "it works offline" these tests
 // prove what it must NOT do: answer unknown paths (404s stay real), touch provider hosts
 // (page.route() mocks still intercept), precache dotfiles, or trip the meta CSP.
 

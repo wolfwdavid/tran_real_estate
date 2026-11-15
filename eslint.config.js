@@ -184,7 +184,7 @@ export default defineConfig(
 	{
 		// The SvelteKit service worker must forward same-origin precache misses to the network.
 		// Scoped to this ONE file; every other module keeps the Phase 1 fetch ban.
-		files: [`${WEB}/service-worker.ts`],
+		files: [`${WEB}/service-worker/index.ts`],
 		rules: { 'no-restricted-syntax': 'off' }
 	},
 	{

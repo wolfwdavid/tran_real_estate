@@ -15,11 +15,23 @@
 //      version; activating a new worker under it would delete those chunks from the cache after
 //      GitHub Pages has already deleted them from the server. A new version takes over once
 //      every Tran tab is closed.
-import { build, files, prerendered, version } from '$service-worker';
+import { assets, immutable, prerendered } from '$app/manifest';
+import { version } from '$app/env';
+import { asset, resolve } from '$app/paths';
+import { precacheFiles } from '../lib/precache-filter.ts';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 const CACHE = `tran-shell-${version}`;
-const ASSETS = new Set([...build, ...files, ...prerendered]);
+// Base-prefixed absolute paths, so the fetch guard below compares like with like. Kit 3's `assets`
+// lists every file under static/ (dotfiles included), hence the in-worker filter.
+// Manifest paths are base-relative pathnames ('/' for the root page), which resolve() accepts at runtime;
+// its types only admit route IDs and the non-root pathnames, hence the widened signature.
+const toUrl = resolve as (path: string) => string;
+const ASSETS = new Set([
+	...immutable.map((e) => toUrl(e.path)),
+	...precacheFiles(assets).map((p) => asset(p)),
+	...prerendered.map((e) => toUrl(e.path))
+]);
 
 sw.addEventListener('install', (event) => {
 	event.waitUntil(caches.open(CACHE).then((c) => c.addAll([...ASSETS])));

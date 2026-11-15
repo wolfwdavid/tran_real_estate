@@ -20,6 +20,7 @@
 	],
 	"exclude": [
 		"node_modules/**",
+		"src/service-worker",
 		"src/service-worker.js",
 		"src/service-worker/**/*.js",
 		"src/service-worker.ts",

@@ -224,10 +224,19 @@ describe('Phase 3 guardrails', () => {
 	});
 
 	test('the service worker may call fetch()', async () => {
-		const messages = await lint(`${WEB}/service-worker.ts`, serviceWorkerFetch);
+		const messages = await lint(`${WEB}/service-worker/index.ts`, serviceWorkerFetch);
 		expectNoParseErrors(messages);
 		expect(errorsFor(messages, 'no-restricted-syntax')).toEqual([]);
 	});
+
+	test.each([`${WEB}/service-worker.ts`, `${WEB}/service-worker/helper.ts`])(
+		'the exemption is one exact file: %s is still under the fetch ban',
+		async (path) => {
+			const messages = await lint(path, siblingFetch);
+			expectNoParseErrors(messages);
+			expect(errorsFor(messages, 'no-restricted-syntax')).toHaveLength(1);
+		}
+	);
 
 	test('a sibling of the service worker is still under the fetch ban', async () => {
 		const messages = await lint(`${WEB}/lib/pwa/install.ts`, siblingFetch);

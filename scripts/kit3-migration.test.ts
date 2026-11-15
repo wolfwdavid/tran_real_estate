@@ -16,11 +16,16 @@ const FORBIDDEN_TOKENS = [
 	'@migration-task',
 	'$app/environment',
 	'$app/stores',
-	'svelte.config.js'
+	'svelte.config.js',
+	'$service-worker'
 ] as const;
 
 /** Exact repo-relative paths, no globs. Frozen so a test cannot widen it at runtime. */
-const ALLOWLIST: readonly string[] = Object.freeze(['scripts/kit3-migration.test.ts']);
+const ALLOWLIST: readonly string[] = Object.freeze([
+	'scripts/kit3-migration.test.ts',
+	// Its FORBIDDEN list has to spell the retired `$service-worker` import to ban it.
+	'scripts/service-worker-guard.test.ts'
+]);
 
 const BINARY_EXT =
 	/\.(png|jpe?g|gif|webp|avif|ico|icns|woff2?|ttf|otf|eot|pdf|zip|gz|br|mp4|webm|wasm|lockb|xlsx?)$/i;
@@ -44,6 +49,8 @@ describe('findings() reports every forbidden token (planted)', () => {
 	test('a path that is not on the allowlist is reported even when it sits next to an allowed one', () => {
 		const text = `// ${FORBIDDEN_TOKENS.join(' ')}\n`;
 		expect(findings('scripts/kit3-migration.test.ts', text)).toEqual([]);
+		expect(findings('scripts/service-worker-guard.test.ts', text)).toEqual([]);
+		expect(findings('scripts/service-worker-guard.test.tsx', text)).toEqual([...FORBIDDEN_TOKENS]);
 		expect(findings('scripts/kit3-migration.test.tsx', text)).toEqual([...FORBIDDEN_TOKENS]);
 		expect(findings('scripts/other.test.ts', text)).toEqual([...FORBIDDEN_TOKENS]);
 	});
@@ -56,9 +63,12 @@ describe('findings() reports every forbidden token (planted)', () => {
 		expect(findings('static/blob.bin', `${FORBIDDEN_TOKENS[0]}\0`)).toEqual([]);
 	});
 
-	test('the allowlist is frozen, exact-path and contains only this file', () => {
+	test('the allowlist is frozen, exact-path and holds only this file and the worker guard', () => {
 		expect(Object.isFrozen(ALLOWLIST)).toBe(true);
-		expect([...ALLOWLIST]).toEqual(['scripts/kit3-migration.test.ts']);
+		expect([...ALLOWLIST]).toEqual([
+			'scripts/kit3-migration.test.ts',
+			'scripts/service-worker-guard.test.ts'
+		]);
 		expect(ALLOWLIST.some((p) => /[*?[\]{}]/.test(p))).toBe(false);
 	});
 });
