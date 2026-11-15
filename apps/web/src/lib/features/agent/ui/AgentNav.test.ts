@@ -82,6 +82,9 @@ describe('AgentNav', () => {
 		const [today, ...rest] = links(html({ dueCount: 3 }));
 		expect(today.inner).toMatch(/<span\b[^>]*aria-hidden="true"[^>]*>3<\/span>/);
 		expect(today.inner).toContain('bg-accent-surface');
+		// axe 4.14 label-content-name-mismatch compares the visible text "Today 3" with the name, so a
+		// real space must separate the word from the pill.
+		expect(today.inner).toMatch(/Today\s+<span/);
 		expect(today.attrs).toContain('aria-label="Today, 3 tasks due"');
 		expect(accessibleName(today)).toBe('Today, 3 tasks due');
 		// The label starts with the visible word (WCAG 2.5.3 label in name).
