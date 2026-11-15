@@ -2,7 +2,7 @@
 	// Neutral "not open yet" panel for the site's own forms when the owner's Web3Forms key is not
 	// built in (UI-SPEC WaitlistForm coming-soon state). It renders NO form fields. The mailto link
 	// appears only when a real contact address is configured; there is never a placeholder address.
-	import Mail from '@lucide/svelte/icons/mail';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
 	import { mailtoHref } from './form-gate';
 
 	interface Props {
@@ -17,7 +17,7 @@
 </script>
 
 <div data-coming-soon class="flex gap-3 rounded-lg bg-surface p-4 sm:p-6">
-	<Mail size={20} class="mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+	<SiteIcon name="mail" size={20} class="mt-0.5 shrink-0 text-muted-foreground" />
 	<div class="grid gap-1">
 		<p class="font-semibold">{title}</p>
 		<p>{body}</p>

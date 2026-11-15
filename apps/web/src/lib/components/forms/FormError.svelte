@@ -4,7 +4,7 @@
 	// with a mailto link under it. The parent form announces "{title}. {body}" on every failure
 	// (this alert never announces on mount, so a repeated failure is announced again).
 	// DEBT-09: the Alert destructive output is written out statically (no tv/cn in the initial JS).
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
 	import { mailtoHref } from './form-gate';
 
 	interface Props {
@@ -24,7 +24,7 @@
 		data-slot="alert"
 		class="group/alert relative grid gap-1 rounded-lg border border-l-4 border-border border-l-destructive bg-card p-4 text-foreground has-[>svg]:grid-cols-[20px_1fr] has-[>svg]:gap-x-3 sm:p-6 *:[svg]:row-span-2 *:[svg]:translate-y-0.5"
 	>
-		<CircleAlert class="size-5 text-destructive" aria-hidden="true" />
+		<SiteIcon name="circle-alert" class="size-5 text-destructive" />
 		<div data-slot="alert-title" class="text-body font-semibold group-has-[>svg]/alert:col-start-2">
 			{title}
 		</div>

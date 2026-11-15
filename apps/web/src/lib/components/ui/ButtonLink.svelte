@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import ArrowRight from '@lucide/svelte/icons/arrow-right';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
 
 	let {
 		href,
@@ -36,6 +36,6 @@
 	]}
 >
 	{@render children()}
-	{#if arrow}<ArrowRight size={16} aria-hidden="true" />{/if}
+	{#if arrow}<SiteIcon name="arrow-right" size={16} />{/if}
 </a>
 <!-- eslint-enable svelte/no-navigation-without-resolve -->

@@ -4,19 +4,8 @@
 	import SeoHead from '#lib/seo/SeoHead.svelte';
 	import WaitlistForm from '#lib/components/forms/WaitlistForm.svelte';
 	import { CONTACT_EMAIL, WEB3FORMS_KEY } from '#lib/site.ts';
-	import type { Audience, FeatureIcon } from '#lib/content/audiences.ts';
-	import Search from '@lucide/svelte/icons/search';
-	import Bell from '@lucide/svelte/icons/bell';
-	import Scale from '@lucide/svelte/icons/scale';
-	import MessageSquareText from '@lucide/svelte/icons/message-square-text';
-	import Calculator from '@lucide/svelte/icons/calculator';
-	import Columns2 from '@lucide/svelte/icons/columns-2';
-	import Target from '@lucide/svelte/icons/target';
-	import MapPin from '@lucide/svelte/icons/map-pin';
-	import Inbox from '@lucide/svelte/icons/inbox';
-	import ListChecks from '@lucide/svelte/icons/list-checks';
-	import PenLine from '@lucide/svelte/icons/pen-line';
-	import FileText from '@lucide/svelte/icons/file-text';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
+	import type { Audience } from '#lib/content/audiences.ts';
 
 	let { audience }: { audience: Audience } = $props();
 
@@ -28,21 +17,6 @@
 		agent: resolve('agent/')
 	};
 	const href = $derived(portalHref[audience.portal]);
-
-	const icons: Record<FeatureIcon, typeof Search> = {
-		search: Search,
-		bell: Bell,
-		scale: Scale,
-		'message-square-text': MessageSquareText,
-		calculator: Calculator,
-		'columns-2': Columns2,
-		target: Target,
-		'map-pin': MapPin,
-		inbox: Inbox,
-		'list-checks': ListChecks,
-		'pen-line': PenLine,
-		'file-text': FileText
-	};
 </script>
 
 <SeoHead title={audience.docTitle} description={audience.description} />
@@ -65,9 +39,8 @@
 	</h2>
 	<ul class="mt-6 grid gap-6 md:grid-cols-2">
 		{#each audience.features as feature (feature.title)}
-			{@const Icon = icons[feature.icon]}
 			<li class="rounded-lg border border-border bg-card p-6 shadow-card">
-				<Icon size={24} class="text-secondary" aria-hidden="true" />
+				<SiteIcon name={feature.icon} class="text-secondary" />
 				<h3 class="mt-4 text-body font-semibold">{feature.title}</h3>
 				<p class="mt-2 text-muted-foreground">{feature.body}</p>
 			</li>

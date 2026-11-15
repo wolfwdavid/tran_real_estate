@@ -8,9 +8,7 @@
 	// GET to the same page, and without names nothing typed lands in the URL or history.
 	import { onMount, tick } from 'svelte';
 	import { resolve } from '$app/paths';
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import Send from '@lucide/svelte/icons/send';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
 	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import { FEEDBACK_COPY } from '#lib/content/forms-feedback.ts';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
@@ -241,7 +239,7 @@
 			{/if}
 			{#if tooFast}
 				<p data-too-fast class="flex items-start gap-2 text-foreground">
-					<CircleAlert size={20} class="mt-0.5 shrink-0 text-destructive" aria-hidden="true" />
+					<SiteIcon name="circle-alert" size={20} class="mt-0.5 shrink-0 text-destructive" />
 					<span>{copy.tooFast}</span>
 				</p>
 			{/if}
@@ -288,7 +286,7 @@
 				</p>
 				<p id="feedback-message-error" class={errorLine}>
 					{#if messageError !== null}
-						<CircleAlert size={16} class="shrink-0" aria-hidden="true" />{copy.validation[
+						<SiteIcon name="circle-alert" size={16} class="shrink-0" />{copy.validation[
 							messageError
 						]}
 					{/if}
@@ -316,9 +314,7 @@
 				<p id="feedback-email-helper" class={helper}>{copy.emailHelper}</p>
 				<p id="feedback-email-error" class={errorLine}>
 					{#if emailError !== null}
-						<CircleAlert size={16} class="shrink-0" aria-hidden="true" />{copy.validation[
-							emailError
-						]}
+						<SiteIcon name="circle-alert" size={16} class="shrink-0" />{copy.validation[emailError]}
 					{/if}
 				</p>
 			</div>
@@ -335,16 +331,16 @@
 							class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
 							class:invisible={sending}
 						>
-							<Send size={16} aria-hidden="true" />{copy.button}
+							<SiteIcon name="send" size={16} />{copy.button}
 						</span>
 						<span
 							class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
 							class:invisible={!sending}
 						>
-							<LoaderCircle
+							<SiteIcon
+								name="loader-circle"
 								size={16}
 								class="motion-safe:animate-spin"
-								aria-hidden="true"
 							/>{copy.sending}
 						</span>
 					</span>

@@ -6,9 +6,7 @@
 	// The email input deliberately has no `name`: a submit before hydration falls back to a native
 	// GET to the same page, and without a name the address never lands in the URL or history.
 	import { onMount, tick } from 'svelte';
-	import CircleAlert from '@lucide/svelte/icons/circle-alert';
-	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import Send from '@lucide/svelte/icons/send';
+	import SiteIcon from '#lib/components/ui/SiteIcon.svelte';
 	import { announce } from '#lib/components/a11y/announcer.svelte.ts';
 	import { WAITLIST_COPY } from '#lib/content/forms-waitlist.ts';
 	import ComingSoonPanel from './ComingSoonPanel.svelte';
@@ -185,11 +183,7 @@
 						{/if}
 						{#if tooFast}
 							<p data-too-fast class="flex items-start gap-2 text-foreground">
-								<CircleAlert
-									size={20}
-									class="mt-0.5 shrink-0 text-destructive"
-									aria-hidden="true"
-								/>
+								<SiteIcon name="circle-alert" size={20} class="mt-0.5 shrink-0 text-destructive" />
 								<span>{copy.tooFast}</span>
 							</p>
 						{/if}
@@ -222,16 +216,16 @@
 										class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
 										class:invisible={sending}
 									>
-										<Send size={16} aria-hidden="true" />{copy.button}
+										<SiteIcon name="send" size={16} />{copy.button}
 									</span>
 									<span
 										class="col-start-1 row-start-1 inline-flex items-center justify-center gap-2"
 										class:invisible={!sending}
 									>
-										<LoaderCircle
+										<SiteIcon
+											name="loader-circle"
 											size={16}
 											class="motion-safe:animate-spin"
-											aria-hidden="true"
 										/>{copy.sending}
 									</span>
 								</span>
@@ -240,7 +234,7 @@
 						<p id={privacyId} class="text-label text-muted-foreground">{copy.privacy(portal)}</p>
 						<p id={errorId} class="flex items-center gap-1 text-label text-destructive">
 							{#if fieldError !== null}
-								<CircleAlert size={16} class="shrink-0" aria-hidden="true" />{copy.validation[
+								<SiteIcon name="circle-alert" size={16} class="shrink-0" />{copy.validation[
 									fieldError
 								]}
 							{/if}
