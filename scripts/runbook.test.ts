@@ -123,6 +123,15 @@ describe('Roll back', () => {
 		expect(s.indexOf('git revert')).toBeLessThan(s.indexOf('Re-run all jobs'));
 	});
 
+	test('a multi-commit migration is rolled back as a range, between the revert and the re-run', () => {
+		expect(s).toContain('git revert --no-commit');
+		expect(s).toContain('<first-sha>^..<last-sha>');
+		expect(s).toContain('pnpm install --frozen-lockfile');
+		const range = s.indexOf('<first-sha>^..<last-sha>');
+		expect(range).toBeGreaterThan(s.indexOf('git revert <bad-sha>'));
+		expect(range).toBeLessThan(s.indexOf('Re-run all jobs'));
+	});
+
 	test('names the re-run alternative with its two windows', () => {
 		expect(s).toContain('Re-run all jobs');
 		expect(s).toContain('retention-days: 1');
@@ -236,7 +245,7 @@ describe('Dependabot policy', () => {
 	const ignores = dependabotIgnores();
 
 	test('names every major-ignored dependency from dependabot.yml', () => {
-		expect(ignores.length).toBeGreaterThanOrEqual(6); // non-vacuity
+		expect(ignores.length).toBeGreaterThanOrEqual(5); // non-vacuity
 		for (const name of ignores) expect(s, name).toContain(`\`${name}\``);
 		expect(s).toMatch(/Phase 16/);
 	});

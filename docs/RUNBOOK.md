@@ -64,6 +64,21 @@ git push
 Then watch `ci`, its `deploy` job and `live-smoke` on the revert commit, exactly as for a
 redeploy.
 
+A multi-commit migration (the SvelteKit 3 push spans plans 16-05 to 16-10, about 30 commits) is
+NOT undone by a single `git revert <bad-sha>`; that would leave the site half migrated. Record the
+first and last commit of the migration (for Kit: KIT_FIRST_SHA from `16-05-SUMMARY.md` and the HEAD
+that was pushed, recorded in `16-10-SUMMARY.md`) and revert the whole range:
+
+```bash
+git revert --no-commit <first-sha>^..<last-sha>
+git restore --source=HEAD --staged --worktree -- .planning   # only if the range holds phase-summary commits
+pnpm install --frozen-lockfile
+pnpm verify
+git commit -m "revert: roll back <migration name>"
+```
+
+Push only with the owner's approval, then watch `ci` and `live-smoke` as above.
+
 Alternative, when `main` cannot be changed right away: Actions > the previous green `ci` run >
 **Re-run all jobs**. This rebuilds the same commit and ref (about 27 minutes) and is possible up
 to 30 days after the run. Re-running only the `deploy` job works only within 1 day of that run,
@@ -143,9 +158,10 @@ never skips waiting, so a used profile keeps serving the previous build's HTML a
 
 ## Dependabot policy
 
-`.github/dependabot.yml` ignores semver-major updates of exactly these packages until Phase 16
-(pnpm 12 -> Vitest 5 -> SvelteKit 3): `@sveltejs/kit`, `@sveltejs/adapter-static`, `vitest`,
-`@vitest/*`, `vitest-browser-svelte`, `pnpm` and `@types/node`. The `@types/node` entry is owner
+`.github/dependabot.yml` ignores semver-major updates of exactly these packages until Phase 16 finishes
+(pnpm 12, Kit 3 and Vitest 5): `vitest`, `@vitest/*`, `vitest-browser-svelte`, `pnpm` and
+`@types/node`. The `@sveltejs/kit` and `@sveltejs/adapter-static` majors were released after Kit 3
+landed. The `@types/node` entry is owner
 decision B (Phase 13), re-evaluated in Phase 14/16. If a major PR for one of these is open from
 before the ignore list landed, close it by hand with a comment naming Phase 16.
 

@@ -9,7 +9,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 
 ### Constraints
 
-- **Tech stack**: SvelteKit 2 (Svelte 5) + adapter-static, TypeScript pinned to 6.x, Tailwind 4 + shadcn-svelte, Dexie, pnpm workspace — user requirement (Svelte) + research
+- **Tech stack**: SvelteKit 3 (Svelte 5) + adapter-static, TypeScript pinned to 6.x, Tailwind 4 + shadcn-svelte, Dexie, pnpm workspace — user requirement (Svelte) + research
 - **Workflow**: GSD for planning/execution; UI/UX Pro Max skill active for all UI work — user requirement
 - **Hosting**: GitHub Pages under a dedicated free GitHub organization (own origin); Hugging Face only if needed — user decision, $0
 - **Budget**: $0/month — RentCast free tier + BYOK; no paid infra, no paid store listings
@@ -27,11 +27,11 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 ### Core Technologies
 | Technology | Version | Purpose | Why Recommended | Confidence |
 |------------|---------|---------|-----------------|------------|
-| SvelteKit (`@sveltejs/kit`) | **2.70.3** | App framework, file routing, prerendering | User constraint. Latest stable 2.x (2026-08-18). Kit 3 is still RC; see Headline 4. | HIGH |
-| Svelte | **5.57.0** | UI runtime (runes) | Current stable. `vite-plugin-svelte@7` requires `svelte ^5.46.4`; bits-ui requires `^5.33`. | HIGH |
-| `@sveltejs/adapter-static` | **3.0.10** | Emit static site for GitHub Pages | Official adapter. v4 is `next` only. Supports `fallback: '404.html'` for client-routed deep links on Pages. | HIGH |
+| SvelteKit (`@sveltejs/kit`) | **3.1.1** | App framework, file routing, prerendering | User constraint. Kit 3 stable since Phase 16 (plans 05 to 10); `$lib` is now `#lib`. | HIGH |
+| Svelte | **5.57.3** | UI runtime (runes) | Current stable. `vite-plugin-svelte@7` requires `svelte ^5.46.4`; bits-ui requires `^5.33`. | HIGH |
+| `@sveltejs/adapter-static` | **4.0.1** | Emit static site for GitHub Pages | Official adapter, v4 for Kit 3. Supports `fallback: '404.html'` for client-routed deep links on Pages. | HIGH |
 | Vite | **8.3.5** | Build/dev server | `@sveltejs/vite-plugin-svelte@7.3.0` requires Vite 8. Kit 2.70, Tailwind 4.3, WXT, and CRXJS all accept Vite 8. | HIGH |
-| `@sveltejs/vite-plugin-svelte` | **7.3.0** | Svelte compilation in Vite | Required by Kit + Vite 8. Engines: Node `^20.19 \|\| ^22.12 \|\| >=24`. | HIGH |
+| `@sveltejs/vite-plugin-svelte` | **7.3.1** | Svelte compilation in Vite | Required by Kit + Vite 8. Engines: Node `^20.19 \|\| ^22.12 \|\| >=24`. | HIGH |
 | TypeScript | **6.0.3** (pin `~6.0.3`) | Types | See Headline 3. **Do not install 7.x.** | HIGH |
 | Node.js (CI + local) | **24 LTS** (24.21.0, "Krypton") | Runtime for tooling | Active LTS. WXT requires Node `>=22`; the OpenAI SDK's Node minimum is 22. 24 satisfies everything. | HIGH |
 | pnpm | **12.18.0** (pin via `packageManager`) | Package manager + workspace | User preference. Workspaces host the web app and extension in one repo. pnpm 12 is a native binary (Rust rewrite): `npm_execpath` points at `pnpm.exe`, so scripts spawn it through `scripts/lib/pnpm-cmd.mjs`, and `pnpm-lock.yaml` has a leading boot document (`packageManagerDependencies`) before the project document. | MEDIUM |

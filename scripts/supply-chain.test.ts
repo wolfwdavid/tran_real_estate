@@ -63,11 +63,10 @@ function majorIgnores(body: string): string[] {
 	return out;
 }
 
-// D-06 (plan 13-07): majors of the toolchain set can only land in Phase 16 (pnpm 12 -> Vitest 5 ->
-// SvelteKit 3), and @types/node majors follow the Node 24 pin until Phase 14/16 (owner decision B).
+// D-06 (plan 13-07): majors of the toolchain set can only land in Phase 16 (pnpm 12 -> Vitest 5), and
+// @types/node majors follow the Node 24 pin until Phase 14/16 (owner decision B). The @sveltejs/kit
+// and @sveltejs/adapter-static entries were removed after the Kit 3 landing (plan 16-10).
 const TOOLCHAIN_MAJOR_IGNORES = [
-	'@sveltejs/kit',
-	'@sveltejs/adapter-static',
 	'vitest',
 	'@vitest/*',
 	'vitest-browser-svelte',
