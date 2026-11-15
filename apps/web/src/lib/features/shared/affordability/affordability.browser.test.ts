@@ -28,11 +28,11 @@ describe('AffordabilityCalculator (browser)', () => {
 		await expect.element(slider).toHaveAttribute('aria-valuetext', '$1,800 a month');
 		await expect.element(slider).toHaveAttribute('aria-valuemax', '10000');
 		await expect.element(slider).toHaveAttribute('aria-labelledby', 'afford-try-label');
-		await expect.element(page.getByText('within the 30% guideline')).toBeVisible();
+		await expect.element(page.getByText('within the 30% guideline', { exact: false })).toBeVisible();
 
 		await page.getByRole('spinbutton', { name: 'Try a rent amount a month' }).fill('2100');
 		await expect.element(slider).toHaveAttribute('aria-valuetext', '$2,100 a month');
-		await expect.element(page.getByText('above the 40% check')).toBeVisible();
+		await expect.element(page.getByText('above the 40% check', { exact: false })).toBeVisible();
 		expect(await axeViolations(container)).toEqual([]);
 	});
 

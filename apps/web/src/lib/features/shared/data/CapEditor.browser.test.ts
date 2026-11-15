@@ -178,9 +178,9 @@ describe('CapAboveLimitDialog (through CapEditor)', () => {
 		await expect
 			.element(page.getByRole('heading', { name: "Allow calls past RentCast's free 50?" }))
 			.toBeVisible();
-		await expect.element(dialog).toHaveTextContent('up to 10 calls a month');
-		await expect.element(dialog).toHaveTextContent('$2.00 a month');
-		await expect.element(dialog).toHaveTextContent('Tran never bills you.');
+		await expect.element(dialog).toMatchTextContent('up to 10 calls a month');
+		await expect.element(dialog).toMatchTextContent('$2.00 a month');
+		await expect.element(dialog).toMatchTextContent('Tran never bills you.');
 		await expect.element(keep).toHaveFocus();
 		const el = word.element() as HTMLInputElement;
 		expect(el.getAttribute('autocomplete')).toBe('off');

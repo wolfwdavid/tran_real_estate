@@ -79,7 +79,7 @@ describe('DueSearchesDialog', () => {
 		await expect
 			.element(page.getByRole('heading', { name: 'Check 5 saved searches for new listings?' }))
 			.toBeVisible();
-		await expect.element(dialog).toHaveTextContent(BODY);
+		await expect.element(dialog).toMatchTextContent(BODY);
 		expect(dialog.element().textContent).not.toContain('Only ');
 		const items = dialog.element().querySelectorAll('ul > li');
 		expect(items.length).toBe(5);
@@ -100,13 +100,13 @@ describe('DueSearchesDialog', () => {
 	test('12 names: 10 list items plus "and 2 more"', async () => {
 		const { dialog } = await open({ names: names(12) });
 		expect(dialog.element().querySelectorAll('ul > li').length).toBe(10);
-		await expect.element(dialog).toHaveTextContent('and 2 more');
+		await expect.element(dialog).toMatchTextContent('and 2 more');
 		expect(await axeViolations(dialog.element())).toEqual([]);
 	});
 
 	test('partial fit: sentence and confirm for the runnable count', async () => {
 		const { dialog } = await open({ names: names(5), dueCount: 5, runCount: 2, used: 38 });
-		await expect.element(dialog).toHaveTextContent(PARTIAL);
+		await expect.element(dialog).toMatchTextContent(PARTIAL);
 		await expect
 			.element(page.getByRole('button', { name: 'Check 2 searches (2 calls)' }))
 			.toBeVisible();

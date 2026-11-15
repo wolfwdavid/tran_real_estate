@@ -57,7 +57,7 @@ describe('ShortlistToggle (detail)', () => {
 			.toBeVisible();
 		await expect
 			.element(dialog)
-			.toHaveTextContent(`Your status and notes for ${STREET} will be deleted from this browser.`);
+			.toMatchTextContent(`Your status and notes for ${STREET} will be deleted from this browser.`);
 		const keep = page.getByRole('button', { name: 'Keep it' });
 		await expect.element(keep).toHaveFocus();
 		expect(await axeViolations(document.body)).toEqual([]);

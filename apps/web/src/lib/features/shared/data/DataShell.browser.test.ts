@@ -190,16 +190,16 @@ describe('DataShell status bar', () => {
 			props: { runtime: pending, request: rentals('75001') }
 		});
 		teardown.push(() => screen.unmount());
-		await expect.element(region()).toHaveTextContent('Checking data source…');
+		await expect.element(region()).toMatchTextContent('Checking data source…');
 	});
 
 	test('keyless: Sample data with the no-key explanation, first child of <main>, axe clean', async () => {
 		const w = await world({ keys: 'none' });
 		const screen = await mount(w);
-		await expect.element(region()).toHaveTextContent('Sample data');
+		await expect.element(region()).toMatchTextContent('Sample data');
 		await expect
 			.element(region())
-			.toHaveTextContent('The places, people, and numbers here are made up.');
+			.toMatchTextContent('The places, people, and numbers here are made up.');
 		await expect
 			.element(region().getByRole('link', { name: 'Add a RentCast key' }))
 			.toHaveAttribute('href', '/settings/#api-keys');
@@ -221,9 +221,9 @@ describe('DataShell status bar', () => {
 	test('live: the compact meter, axe clean', async () => {
 		const w = await world({ cap: 40, used: 2 });
 		const screen = await mount(w);
-		await expect.element(region()).not.toHaveTextContent('Checking data source…');
-		await expect.element(region()).not.toHaveTextContent('Sample data');
-		await expect.element(region()).toHaveTextContent('2 of 50');
+		await expect.element(region()).not.toMatchTextContent('Checking data source…');
+		await expect.element(region()).not.toMatchTextContent('Sample data');
+		await expect.element(region()).toMatchTextContent('2 of 50');
 		expect(await axeViolations(screen.container)).toEqual([]);
 	});
 });
@@ -232,7 +232,7 @@ describe('DataShell cap prompt host', () => {
 	test('a spend at the cap opens CapConfirmDialog; Spend 1 call anyway makes exactly 1 fetch', async () => {
 		const w = await world({ cap: 1, used: 1 });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('1 of 50');
+		await expect.element(region()).toMatchTextContent('1 of 50');
 		await page.getByRole('button', { name: 'Search rentals' }).click();
 		const dialog = page.getByRole('alertdialog');
 		await expect
@@ -249,7 +249,7 @@ describe('DataShell cap prompt host', () => {
 	test('Not now announces "Nothing was spent." and the spend rejects as dismissed', async () => {
 		const w = await world({ cap: 1, used: 1 });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('1 of 50');
+		await expect.element(region()).toMatchTextContent('1 of 50');
 		await page.getByRole('button', { name: 'Search rentals' }).click();
 		await page.getByRole('button', { name: 'Not now' }).click();
 		await expect.element(page.getByTestId('outcome')).toHaveTextContent('error:dismissed');
@@ -269,7 +269,7 @@ describe('DataShell check-on-open', () => {
 			.toBeVisible();
 		expect(w.net.calls).toHaveLength(0);
 		await page.getByRole('button', { name: 'Check 5 searches (5 calls)' }).click();
-		await expect.element(dialog).toHaveTextContent('Checking 1 of 5…');
+		await expect.element(dialog).toMatchTextContent('Checking 1 of 5…');
 		w.net.release();
 		await expect.element(dialog).not.toBeInTheDocument();
 		await vi.waitFor(() => expect(announced()).toContain('Checked 5 saved searches. Nothing new.'));
@@ -299,7 +299,7 @@ describe('DataShell check-on-open', () => {
 		const screen = await mount(w);
 		await expect
 			.element(region())
-			.toHaveTextContent(
+			.toMatchTextContent(
 				"Saved searches weren't checked because you've reached your cap. 5 are waiting."
 			);
 		expect(document.querySelector('[role="alertdialog"]')).toBeNull();
@@ -310,7 +310,7 @@ describe('DataShell check-on-open', () => {
 	test('sample mode: due searches run free and silently when nothing is new', async () => {
 		const w = await world({ keys: 'none', searches: ['74201', '74203', '70201', '70204'] });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('Sample data');
+		await expect.element(region()).toMatchTextContent('Sample data');
 		await settle();
 		await settle();
 		expect(document.querySelector('[role="alertdialog"]')).toBeNull();
@@ -325,7 +325,7 @@ describe('DataShell runAlerts gate (08-27, SC5)', () => {
 	const checkedCount = (text: string) => announced().filter((m) => m === text).length;
 	/** The runtime has started once the live bar shows the meter. */
 	const started = async () => {
-		await expect.element(region()).toHaveTextContent('RentCast calls:');
+		await expect.element(region()).toMatchTextContent('RentCast calls:');
 		await settle();
 		await settle();
 	};
@@ -433,7 +433,7 @@ describe('DataShell announcements', () => {
 	test('crossing into Near cap announces once; loading already near announces nothing', async () => {
 		const w = await world({ cap: 10, used: 4 });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('4 of 50');
+		await expect.element(region()).toMatchTextContent('4 of 50');
 		await settle();
 		expect(announced()).toEqual([]);
 		await page.getByRole('button', { name: 'Search rentals' }).click();
@@ -448,7 +448,7 @@ describe('DataShell announcements', () => {
 	test('loading at Near cap announces nothing', async () => {
 		const w = await world({ cap: 10, used: 5 });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('5 of 50');
+		await expect.element(region()).toMatchTextContent('5 of 50');
 		await settle();
 		expect(announced()).toEqual([]);
 	});
@@ -456,7 +456,7 @@ describe('DataShell announcements', () => {
 	test('a cap change in another tab is announced', async () => {
 		const w = await world({ cap: 40 });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('0 of 50');
+		await expect.element(region()).toMatchTextContent('0 of 50');
 		w.channel.deliver('cap-changed');
 		await vi.waitFor(() =>
 			expect(announced()).toContain('Your RentCast cap was changed in another Tran tab.')
@@ -466,7 +466,7 @@ describe('DataShell announcements', () => {
 	test('a data source change in another tab announces the new source', async () => {
 		const live = await world({ cap: 40 });
 		await mount(live);
-		await expect.element(region()).toHaveTextContent('0 of 50');
+		await expect.element(region()).toMatchTextContent('0 of 50');
 		live.channel.deliver('source-changed');
 		await vi.waitFor(() => expect(announced()).toContain('Showing RentCast data.'));
 	});
@@ -474,7 +474,7 @@ describe('DataShell announcements', () => {
 	test('sample source change from another tab announces sample data', async () => {
 		const w = await world({ keys: 'none' });
 		await mount(w);
-		await expect.element(region()).toHaveTextContent('Sample data');
+		await expect.element(region()).toMatchTextContent('Sample data');
 		w.channel.deliver('source-changed');
 		await vi.waitFor(() => expect(announced()).toContain('Showing sample data.'));
 	});

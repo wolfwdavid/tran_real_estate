@@ -53,7 +53,7 @@ describe('CapConfirmDialog', () => {
 		await expect
 			.element(page.getByRole('heading', { name: 'This call goes past your cap' }))
 			.toBeVisible();
-		await expect.element(dialog).toHaveTextContent(BODY_A);
+		await expect.element(dialog).toMatchTextContent(BODY_A);
 		const dl = dialog.element().querySelector('dl');
 		expect(dl).not.toBeNull();
 		expect(dl!.textContent).toContain('Used this month: 40 of 50');
@@ -68,8 +68,8 @@ describe('CapConfirmDialog', () => {
 
 	test('variant B: past-plan body and destructive confirm', async () => {
 		const { dialog, notNow, spend } = await open(50, 50);
-		await expect.element(dialog).toHaveTextContent(BODY_B);
-		await expect.element(dialog).toHaveTextContent('Used this month: 50 of 50');
+		await expect.element(dialog).toMatchTextContent(BODY_B);
+		await expect.element(dialog).toMatchTextContent('Used this month: 50 of 50');
 		await expect.element(notNow).toHaveFocus();
 		expect(spend.element().className).toContain('bg-destructive');
 		expect(await axeViolations(dialog.element())).toEqual([]);
