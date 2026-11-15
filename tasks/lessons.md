@@ -139,3 +139,14 @@
   runs `pnpm ...` (audit:deps, verify): the inner PATH `pnpm` is the global 11 and refuses to run under
   corepack ("Your current pnpm is v11.27.0"). Run the gate with a plain `pnpm`, which self-switches to the pin
   and puts pnpm 12 in the children's environment. Do not change the global tool to fix it.
+
+## 2026-11-14: Kit 3 ci flakes
+
+- Rule: Playwright `page.waitForFunction` does not await an async predicate; the returned Promise is truthy,
+  so the wait resolves on the first poll. Wait on a DOM readiness signal the app already emits, or use
+  `expect.poll(() => page.evaluate(async () => ...))`. Kit 3 hydrates after the root error node loads (one
+  more serial fetch than Kit 2), which turned that no-op wait in `a11y-keyed.spec.ts` into a CI-only flake.
+- Rule: before pushing a change to a workflow file or to a count/pin a test asserts, run the full
+  `pnpm test:unit`, not only the test file next to the change. `ci.yml` facts are asserted in more than one
+  file (`workflow-gate.test.ts` and `live-smoke-gate.test.ts`); pushing after running one of them made a red
+  ci (43668365203).
