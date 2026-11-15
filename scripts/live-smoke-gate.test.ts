@@ -182,9 +182,10 @@ describe('supply chain', () => {
 		}
 	});
 
-	test('upload-artifact is the literal v7.0.2 pin (ci.yml has nothing to compare against)', () => {
+	test('upload-artifact is the literal v7.0.2 pin, the same one ci.yml uploads E2E traces with', () => {
 		expect(count(text, UPLOAD_ARTIFACT)).toBe(1);
 		expect(count(text, 'uses: actions/upload-artifact@')).toBe(1);
+		expect(count(ci, UPLOAD_ARTIFACT)).toBe(1);
 	});
 
 	test('checkout never persists the token in the working tree', () => {
@@ -197,8 +198,8 @@ describe('supply chain', () => {
 		expect(text).not.toMatch(/tranrealestate|wolfwdavid/i);
 	});
 
-	test('ci.yml is untouched by this workflow: still exactly 7 uses: lines', () => {
-		expect(count(ci, 'uses: ')).toBe(7);
+	test('ci.yml is untouched by this workflow: exactly 8 uses: lines (7 plus the E2E trace upload)', () => {
+		expect(count(ci, 'uses: ')).toBe(8);
 	});
 });
 
