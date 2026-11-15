@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import { WxtVitest } from 'wxt/testing/vitest-plugin';
 import { resolveSiteUrl } from '../web/src/lib/site-config.js';
+import { MAX_WORKERS } from '../../tooling/vitest/lanes';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 
@@ -10,6 +11,7 @@ export default defineConfig({
 	define: { __TRAN_SITE_URL__: JSON.stringify(resolveSiteUrl()) },
 	test: {
 		name: 'extension',
+		maxWorkers: MAX_WORKERS,
 		environment: 'happy-dom',
 		include: ['tests/**/*.test.ts'],
 		exclude: ['tests/browser/**', 'e2e/**', '**/node_modules/**'],

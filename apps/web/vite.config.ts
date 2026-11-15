@@ -3,7 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { files } from '../../tooling/vitest/lanes';
+import { files, MAX_WORKERS } from '../../tooling/vitest/lanes';
 import kitOptions from './kit.options.js';
 import {
 	resolveAnalytics,
@@ -24,6 +24,10 @@ const analytics = resolveAnalytics();
 
 export default defineConfig({
 	plugins: isVitest ? [svelte()] : [tailwindcss(), sveltekit(kitOptions)],
+	// Vitest 5 runs the Svelte plugin's config hook before it applies the project root, so under the
+	// root `projects` run (cwd = repo root) the plugin scanned the wrong package.json and left
+	// @lucide/svelte and bits-ui external ("Unknown file extension .svelte"). Pin the root.
+	root: isVitest ? fileURLToPath(new URL('.', import.meta.url)) : undefined,
 	resolve: isVitest
 		? {
 				alias: {
@@ -56,6 +60,7 @@ export default defineConfig({
 	},
 	test: {
 		name: 'web',
+		maxWorkers: MAX_WORKERS,
 		environment: 'node',
 		include: ['src/**/*.{test,spec}.ts'],
 		// *.browser.test.ts belong to the web-browser project (vitest.browser.config.ts); files('web')
