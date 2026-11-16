@@ -262,7 +262,7 @@ Plans:
 
 **Wave 12** *(blocked on Wave 11 completion)*
 
-- [ ] 16-12-PLAN.md — Wave 12: routine bumps (Playwright, axe, wxt, ESLint family, bits-ui, layerchart, shadcn CLI), minimatch check, supersede Dependabot PRs #9/#10
+- [x] 16-12-PLAN.md — Wave 12: routine bumps (Playwright, axe, wxt, ESLint family, bits-ui, layerchart, shadcn CLI), minimatch check, supersede Dependabot PRs #9/#10
 
 **Wave 13** *(blocked on Wave 12 completion)*
 

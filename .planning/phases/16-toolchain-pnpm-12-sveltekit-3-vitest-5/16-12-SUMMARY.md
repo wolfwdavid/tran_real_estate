@@ -1,13 +1,19 @@
 ---
 phase: 16-toolchain-pnpm-12-sveltekit-3-vitest-5
 plan: 12
-status: partial (Tasks 1 to 4 done locally and green; Task 5, the owner-approved push, not started)
+status: complete (pushed 587c51c..ab1dc90; ci and live-smoke green)
 requirements: [TOOL-06]
 ---
 
 # Phase 16 Plan 12: Routine bumps (partial, local only)
 
-Tasks 1 to 4 are committed locally. Nothing is pushed: origin/main is 587c51c, HEAD is bd4d6a8 (12 commits ahead, the first is the 16-11 close-out). TOOL-06 and TOOL-05 stay unticked here (plan 13).
+Complete. The owner approved the push (587c51c..ab1dc90, 13 commits, the first is the 16-11 close-out). TOOL-06 and TOOL-05 stay unticked here (plan 13).
+
+## Task 5: push and live evidence
+
+- ci run 43790148391 on ab1dc90: success (hygiene, root, sub, configured, deploy).
+- live-smoke run 43793250837: success, "smoke: ab1dc90c208f6dde3a3696b6505b903e09ed5ea8 live at https://wolfwdavid.github.io/tran_real_estate/ after 0 s", 121 passed.
+- Dependabot: #9 was already closed by Dependabot; #10 (tailwind-variants major) stays open by owner decision. No PR changes made.
 
 ## Versions chosen (checked with `npm view` on 2026-11-15, 7-day rule: release on or before 2026-11-08)
 
@@ -137,4 +143,4 @@ None.
 
 ## Resume point
 
-Task 5 only: owner approval of `git push origin main` (12 commits), ci green, live-smoke green for the pushed SHA, record URLs. Then plan 13.
+Plan 13: close-out, TOOL ticks, CLAUDE.md stack table.
