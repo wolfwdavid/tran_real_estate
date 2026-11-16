@@ -70,7 +70,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | fake-indexeddb | **6.2.5** | Dexie tests in the Node Vitest project | For fast pure-logic tests of repositories/migrations without a browser. | HIGH |
 | `@playwright/test` | **1.65.0** | E2E across the 3 portals | Mock *all* outbound calls with `page.route()` + synthetic fixtures. CI must never hit RentCast (50 calls/month) or LLM providers. | HIGH |
 | `@axe-core/playwright` | **4.14.0** | Accessibility assertions (WCAG AA) inside E2E | Run `AxeBuilder` on every route in both empty-key (demo) and key-present states. | HIGH |
-| svelte-check | **4.7.6** | Type-check `.svelte` files in CI | Requires TS ≤6. | HIGH |
+| svelte-check | **4.7.8** | Type-check `.svelte` files in CI | Requires TS ≤6. | HIGH |
 | ESLint + eslint-plugin-svelte + typescript-eslint | **10.14.0** + **3.24.1** + **8.72.1** (peer TS `<6.1.0`) | Lint | Flat config as scaffolded by `sv`. | HIGH |
 | Prettier + prettier-plugin-svelte + prettier-plugin-tailwindcss | **3.9.6** + **4.1.1** + **0.8.1** | Formatting + class sorting | | HIGH |
 | GitHub Actions | `actions/checkout@v7`, `pnpm/action-setup@v6`, `actions/setup-node@v7`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5` | CI: lint → check → unit → E2E+axe → build → deploy Pages; extension: `wxt zip` → release artifact | Latest release tags verified via GitHub API. (The SvelteKit docs sample still shows `setup-node@v6`; v7 is current.) Set `BASE_PATH=/tran_real_estate` in the build step. | HIGH |
@@ -162,7 +162,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 |-----------|-----------------|-------|
 | `@sveltejs/kit@3.1.1` | `vite ^8`, `svelte ^5`, `typescript ^6`, `vite-plugin-svelte ^7`, `adapter-static ^4` | As installed in Phase 16; the lockfile is the source of truth for peer ranges. |
 | `@sveltejs/vite-plugin-svelte@7.3.0` | `vite ^8`, `svelte ^5.46.4`; Node `^20.19 \|\| ^22.12 \|\| >=24` | Forces Vite 8. |
-| `svelte-check@4.7.6` | `typescript ^5 \|\| ^6` | **Blocks TS 7.** |
+| `svelte-check@4.7.8` | `typescript ^5 \|\| ^6` | **Blocks TS 7.** |
 | `typescript-eslint` (latest) | `typescript >=4.8.4 <6.1.0`, `eslint ^8.57 \|\| ^9 \|\| ^10` | **Blocks TS 7**; pin TS `~6.0.3`. |
 | `@tailwindcss/vite@4.3.3` | `vite ^5.2 \|\| ^6 \|\| ^7 \|\| ^8` | OK. |
 | `bits-ui@2.20.6` | `svelte ^5.33`, `@internationalized/date ^3.8.1`; Node `>=20` | Install `@internationalized/date` (shadcn-svelte init does). |
