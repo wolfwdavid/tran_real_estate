@@ -2,7 +2,7 @@
 phase: 17
 slug: extension-release-edge-add-ons-submission
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-11-16
 ---
@@ -40,12 +40,12 @@ Task IDs are filled in by the planner; the rows below are the requirement-level 
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| TBD | TBD | TBD | EXT-05 | supply chain | tag, package and built manifest versions are equal; zip and `SHA256SUMS.txt` verify | unit + step pin | `pnpm vitest run --project scripts scripts/extension-release-checks.test.ts scripts/extension-release-gate.test.ts` | ❌ W0 (checks test) / ✅ (gate test) | ⬜ pending |
-| TBD | TBD | TBD | EXT-06 | — | changelog has the 0.1.0 entry; release notes come from it, not the install guide | unit | `pnpm vitest run --project scripts scripts/extension-release-checks.test.ts scripts/extension-release-gate.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | EXT-07 | data protection | listing copy names no other browser; certification notes state the ad-slot fact; screenshots are synthetic only | unit (store copy) | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ✅ extend | ⬜ pending |
-| TBD | TBD | TBD | EXT-07 | data protection | two or three PNG screenshots, exactly 1280x800 | unit (PNG header) | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | EXT-08 | supply chain, input validation | dispatch dry-run never publishes; `--draft`; tag is an ancestor of `main`; zip allowlist rejects `.map`, `.ts`, `.env`; live privacy URL probe | unit text pins + script tests (temp git repo, synthetic zips, stub fetch) | `pnpm vitest run --project scripts scripts/extension-release-gate.test.ts scripts/assert-extension.test.ts scripts/extension-release-checks.test.ts && pnpm lint:workflows` | ✅ rewrite (gate) / ❌ W0 (others) | ⬜ pending |
-| TBD | TBD | TBD | EXT-09 | — | install guide has the placeholder sentence or an Edge listing link, never neither | unit | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ❌ W0 | ⬜ pending |
+| 17-01-T1, 17-03-T1 | 17-01, 17-03 | 1, 3 | EXT-05 | supply chain | tag, package and built manifest versions are equal; zip and `SHA256SUMS.txt` verify | unit + step pin | `pnpm vitest run --project scripts scripts/extension-release-checks.test.ts scripts/extension-release-gate.test.ts` | ❌ W0 (checks test) / ✅ (gate test) | ⬜ pending |
+| 17-01-T3, 17-03-T1 | 17-01, 17-03 | 1, 3 | EXT-06 | — | changelog has the 0.1.0 entry; release notes come from it, not the install guide | unit | `pnpm vitest run --project scripts scripts/extension-release-checks.test.ts scripts/extension-release-gate.test.ts` | ❌ W0 | ⬜ pending |
+| 17-02-T2 | 17-02 | 2 | EXT-07 | data protection | listing copy names no other browser; certification notes state the ad-slot fact; screenshots are synthetic only | unit (store copy) | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ✅ extend | ⬜ pending |
+| 17-02-T1, 17-02-T2 | 17-02 | 2 | EXT-07 | data protection | two or three PNG screenshots, exactly 1280x800 | unit (PNG header) | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ❌ W0 | ⬜ pending |
+| 17-01-T1, 17-01-T2, 17-03-T1 | 17-01, 17-03 | 1, 3 | EXT-08 | supply chain, input validation | dispatch dry-run never publishes; `--draft`; tag is an ancestor of `main`; zip allowlist rejects `.map`, `.ts`, `.env`; live privacy URL probe | unit text pins + script tests (temp git repo, synthetic zips, stub fetch) | `pnpm vitest run --project scripts scripts/extension-release-gate.test.ts scripts/assert-extension.test.ts scripts/extension-release-checks.test.ts && pnpm lint:workflows` | ✅ rewrite (gate) / ❌ W0 (others) | ⬜ pending |
+| 17-02-T2 | 17-02 | 2 | EXT-09 | — | install guide has the placeholder sentence or an Edge listing link, never neither | unit | `pnpm vitest run --project scripts scripts/extension-docs.test.ts` | ❌ W0 | ⬜ pending |
 
 Each new check needs a negative test: non-ancestor tag, mismatched version, `.map` in zip, `.env` in zip, 404 probe, empty changelog section, 1280x799 PNG, install guide with neither placeholder nor link.
 

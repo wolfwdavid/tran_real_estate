@@ -284,7 +284,14 @@ Plans:
 **Owner gate:** Zillow ToU read with go/no-go recorded, Showcase badge decision, `EXTENSION_RELEASES_ENABLED=true`, push the tag, confirm the draft loads unpacked, publish, submit the Release zip to Partner Center, record the SHA256 in the consolidated UAT file, edit the install guide after certification (7 business days is a floor).
 **Research flag:** light. Re-read the Partner Center form fields and the Edge developer policies on the day of submission (last read on the 2026-09 / 2026-07 revisions; review turnaround is rising per the 2026-09 Edge dev blog).
 **UI hint:** no (screenshots are captures of the existing popup and fixture page).
-**Plans:** TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 17-01-PLAN.md: release check scripts (version, ancestor, probe, notes), zip entry allowlist, CHANGELOG
+- [ ] 17-02-PLAN.md: store screenshots (1280x800 fixture capture), listing copy, store-copy and EXT-09 tests
+- [ ] 17-03-PLAN.md: harden extension-release.yml (dispatch dry-run, draft, gates) with gate test pins, runbook and checklist
+- [ ] 17-04-PLAN.md: owner gates before the tag (assets look, ToU go/no-go, push, variable, dry-run)
+- [ ] 17-05-PLAN.md: owner gates for the release (tag, draft verify, live smoke, publish, Partner Center submission, records)
 
 ## Progress
 

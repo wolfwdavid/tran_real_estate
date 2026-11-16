@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: phase_complete
-stopped_at: "Phase 16 complete and verified (5/5 criteria, 16-VERIFICATION.md); live on 679b0a1 (ci 43864552755, live-smoke 43867700929); next: Phase 17"
+status: ready_to_execute
+stopped_at: "Phase 17 planned (5 plans, checker passed with warnings fixed); next: /gsd:execute-phase 17"
 last_updated: "2026-11-15T00:37:39.110Z"
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 67
+  total_plans: 71
   completed_plans: 66
   percent: 69
 ---
