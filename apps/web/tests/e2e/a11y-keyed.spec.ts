@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { fakeKey, FAKE_PROVIDERS } from '../support/fake-keys';
 import { seedSavedSearches } from './helpers/data';
+import { expectHydrated } from './helpers/hydration';
 import { CHROME_ROUTES, INVESTOR_ROUTES, ROUTES, RENTER_ROUTES, STUDIO_ROUTES } from './routes';
 import { RENTER_TEST_OPTIONS, expect, test } from './support/network';
 
@@ -86,7 +87,7 @@ async function seedKeys(page: Page): Promise<void> {
  */
 async function seedDueSearch(page: Page): Promise<void> {
 	await page.goto('agent/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	// The loading line goes only after the contacts live query read the database, so the app's open
 	// at the current schema has finished. waitForFunction cannot wait for this: it does not await an
 	// async predicate (a Promise is truthy). Opening 'tran' first would create an empty version 1.

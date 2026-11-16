@@ -6,6 +6,7 @@ import {
 	expectNoHorizontalScroll,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // Paste and CSV import on the real built site, both bases (08-20; AGT-03, AGT-07): TRAN-LEAD
 // blocks in clean, collapsed and quoted form, free-form pattern leads, duplicate / update
@@ -72,7 +73,7 @@ const resultHeading = (page: Page) =>
 
 async function openImport(page: Page) {
 	await page.goto('agent/import/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Import leads' })).toBeVisible();
 }
 

@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls, type Net } from './support/network';
 import { mockRentCast } from './support/rentcast-mocks';
 import { expectLiveMode, expectSampleMode, withRentCastKey } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 import { RENTER_ROUTES } from './routes';
 
 // The Phase 6 demo-credibility matrix (06-22, ROADMAP criterion 5): every renter route x
@@ -76,7 +77,7 @@ const resultsHeading = (page: Page) => page.locator('#results-heading');
 
 async function goto(page: Page, path: string) {
 	await page.goto(path);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1').first()).toBeVisible();
 }
 

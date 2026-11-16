@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { expectAxeClean, expectNoHorizontalScroll, rentcastTripwire } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The agent profile page, details part (AGT-01, plan 08-16): the live disclosure preview against
 // the core composer, save and reload through IndexedDB, validation focus, the dirty status line
@@ -15,6 +16,7 @@ const TX_LINE = [
 
 async function open(page: Page) {
 	await page.goto('agent/profile/');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your profile');
 	await expect(page.getByRole('button', { name: 'Save profile' })).toBeVisible();
 }

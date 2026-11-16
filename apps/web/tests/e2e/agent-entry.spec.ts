@@ -8,6 +8,7 @@ import {
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The CRM's entry points (08-15; AGT-03, success criterion 5) on the real built site, both bases:
 // the empty state, the keyless sample contacts (load, notice on every agent page, remove, undo),
@@ -23,8 +24,10 @@ const NOTICE_ROUTES = ['agent/', ...AGENT_ROUTES.filter((r) => r !== 'agent/cont
 
 async function openContacts(page: Page) {
 	await page.goto('agent/contacts/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Contacts' })).toBeVisible();
+	// The live query swaps the Add a lead buttons once it has read the database.
+	await expect(page.getByText('Loading your contacts')).toHaveCount(0);
 }
 
 async function openAddDialog(page: Page) {
@@ -73,7 +76,7 @@ test('load sample contacts, see the notice everywhere, remove and undo', async (
 
 	for (const route of NOTICE_ROUTES) {
 		await page.goto(route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		await expect(sampleRegion(page), `Sample contacts notice on ${route}`).toBeVisible();
 		await expect(
 			sampleRegion(page).getByRole('button', { name: 'Remove sample contacts' })

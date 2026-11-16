@@ -6,6 +6,7 @@ import {
 	expectNoHorizontalScroll,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The brand kit on the agent profile page (AGT-01, plan 08-22) against the BUILT site: a logo
 // rendered from a blob: URL under the production CSP, SVG rasterized to PNG, refusals by content
@@ -88,6 +89,7 @@ const OVER_CAP = 524_289;
 
 async function open(page: Page) {
 	await page.goto('agent/profile/');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your profile');
 	await expect(page.getByRole('button', { name: 'Save profile' })).toBeVisible();
 }

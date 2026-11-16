@@ -8,6 +8,7 @@ import {
 } from './support/rentcast-mocks';
 import { expectLiveMode, withRentCastKey } from './support/seed';
 import { AI_HOSTS, countRequests } from './helpers/ai-mocks';
+import { expectHydrated } from './helpers/hydration';
 
 // The renter call budget end to end (06-22, ROADMAP criterion 5), on both bases: one renter with a
 // (mocked) RentCast key and no AI key walks the whole portal. The only spends are the three the UI
@@ -41,7 +42,7 @@ const outreach = (page: Page) => page.locator('[data-outreach]');
 const panel = (page: Page) => outreach(page).getByRole('region', { name: 'Your message' });
 
 async function waitForPage(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1').first()).toBeVisible();
 }
 

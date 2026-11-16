@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { ROUTES, NOT_FOUND } from './routes';
+import { expectHydrated } from './helpers/hydration';
+import { CHROME_ROUTES, ROUTES, NOT_FOUND } from './routes';
 
 // The automated accessibility gate (FND-04, BRND-03): axe over every prerendered route at the
 // default 1280px viewport and at 375px, on the 404 page, and with the mobile menu open, on both
@@ -29,6 +30,8 @@ async function open(page: Page, route: string) {
 	await page.goto(route);
 	await expect(page.locator('html')).not.toHaveAttribute('hidden');
 	await expect(page.locator('h1')).toBeVisible();
+	// The chrome-free print and public pages have no site header, so no hydration marker.
+	if (CHROME_ROUTES.includes(route)) await expectHydrated(page);
 }
 
 for (const route of ROUTES) {
@@ -53,7 +56,7 @@ test.describe('375px', () => {
 
 test('axe on the 404 page', async ({ page }) => {
 	await page.goto(NOT_FOUND);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1')).toContainText('404');
 	await expectNoViolations(page, 'the 404 page');
 });

@@ -6,6 +6,7 @@ import {
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The pipeline board (08-19; AGT-04, success criterion 3) on the real built site, both bases:
 // every move has a keyboard and single-tap path (the Move menu, WCAG 2.5.7), pointer drag works
@@ -34,7 +35,7 @@ const stageCount = (page: Page, stage: StageName) =>
 async function openPipeline(page: Page) {
 	await loadSampleContacts(page);
 	await page.goto('agent/pipeline/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Pipeline' })).toBeVisible();
 	await expect(section(page, 'New')).toBeVisible();
 }

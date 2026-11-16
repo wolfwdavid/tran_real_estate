@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { WCAG_TAGS } from './agent-helpers';
 import { PRINT_SNAPSHOT, STUDIO_ROUTES } from './routes';
+import { expectHydrated } from './helpers/hydration';
 
 // Phase 9 gate (09-23, ROADMAP SC5): every Studio route and the sample printout on the real built
 // site, root and sub bases, with no keys. Every request is routed: RentCast and the four AI provider
@@ -99,12 +100,15 @@ async function expectNoPageScroll(page: Page, width: number, label: string): Pro
 async function open(page: Page, path: string): Promise<void> {
 	const response = await page.goto(path);
 	expect(response?.status(), `${path} status`).toBe(200);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
 	if (path.startsWith(PRINT_SNAPSHOT)) {
+		// The print layout has no site header, so nav[data-hydrated] never appears; [data-ready] is
+		// set by the page's own client code.
+		await expect(page.locator('html')).not.toHaveAttribute('hidden');
 		await expect(page.locator('[data-ready]')).toBeVisible();
 		await expect(page.getByRole('button', { name: 'Print or save as PDF' })).toBeEnabled();
 		await expect(page.locator('article.print-sheet h1')).toHaveText(H1[path]!);
 	} else {
+		await expectHydrated(page);
 		await expect(page.locator('h1')).toHaveText(H1[path]!);
 		await expect(page.getByText('Loading your studio')).toHaveCount(0);
 	}
@@ -150,8 +154,8 @@ async function saveProfile(
 	await page.goto('agent/profile/');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your profile');
 	await expect(page.getByRole('button', { name: 'Save profile' })).toBeVisible();
+	await expectHydrated(page);
 	await page.evaluate(() => document.fonts.ready.then(() => undefined));
-	await page.waitForTimeout(200);
 	const field = (label: string) => page.getByLabel(label, { exact: true });
 	await field('Full name').fill('Sample Agent');
 	await field('Brokerage').fill('Example Realty');

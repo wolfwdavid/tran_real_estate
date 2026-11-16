@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { expectHydrated } from './helpers/hydration';
 import { AGENT_ROUTES, PUBLIC_ROUTES } from './routes';
 import {
 	TEST_ACCESS_KEY,
@@ -21,9 +22,14 @@ const STATES = ['empty', 'samples'] as const;
 const WIDTHS = [1280, 375] as const;
 const SAMPLE_NAME = 'Jordan Example';
 
-/** Waits for the frame guard, hydration and the first live query (no loading line left). */
-async function settle(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+/**
+ * Waits for hydration and the first live query (no loading line left). The public inquiry page has
+ * no site header, so no hydration marker (`chrome: false`): its callers assert the h1 that onMount
+ * sets.
+ */
+async function settle(page: Page, chrome = true) {
+	if (chrome) await expectHydrated(page);
+	else await expect(page.locator('html')).not.toHaveAttribute('hidden');
 	await expect(page.locator('h1:visible')).toHaveCount(1);
 	await expect(page.getByText(/^Loading (your|this) /)).toHaveCount(0);
 	await page.evaluate(() => document.fonts.ready);
@@ -98,7 +104,7 @@ for (const width of WIDTHS) {
 		for (const [label, path, h1] of inquiry) {
 			test(`public inquiry page (${label}) is axe clean`, async ({ page }) => {
 				await page.goto(path);
-				await settle(page);
+				await settle(page, false);
 				await expect(page.getByRole('heading', { level: 1 })).toHaveText(h1);
 				await expectAxeClean(page, `inquiry ${label} (${width}px)`);
 				if (width === 375) await expectNoHorizontalScroll(page);

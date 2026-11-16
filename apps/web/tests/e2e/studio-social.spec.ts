@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { WCAG_TAGS, announcer } from './agent-helpers';
 import { fakeKey, openAiSettings, routeAnthropic, saveKey, type AiCall } from './helpers/ai-mocks';
+import { expectHydrated } from './helpers/hydration';
 
 // Social post pack (09-20, STU-02) on the real built site, both bases. Keyless runs use the
 // Fixture provider (studio/social.v1 sample() built from the brief); the parse-error and axe runs
@@ -109,7 +110,7 @@ test.afterEach(() => {
 /** Opens the studio and waits until the form is interactive. */
 async function openStudio(page: Page): Promise<void> {
 	await page.goto(ROUTE);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1')).toHaveText('Social post pack');
 	await expect(page.locator('[data-social-studio]')).toBeVisible();
 	await expect(page.getByText('Loading your studio')).toHaveCount(0);
@@ -175,6 +176,7 @@ async function expectNoPageScroll(page: Page, width: number): Promise<void> {
 /** Saves a complete Texas profile through the shipped profile page. */
 async function saveProfile(page: Page): Promise<void> {
 	await page.goto('agent/profile/');
+	await expectHydrated(page);
 	await expect(page.getByRole('button', { name: 'Save profile' })).toBeVisible();
 	const field = (label: string) => page.getByLabel(label, { exact: true });
 	await field('Full name').fill('Sample Agent');
@@ -268,7 +270,7 @@ test('the sample brief writes three checked posts, each ending with the disclosu
 
 	// The Studio hub counts the saved pack under studio-social.
 	await page.goto('agent/studio/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	const tool = page
 		.getByRole('listitem')
 		.filter({ has: page.getByRole('heading', { name: 'Social post pack' }) });
@@ -360,6 +362,7 @@ test('a listing description can start the brief, without its disclosure', async 
 	test.setTimeout(PACK_FLOW_MS);
 	// One listing description in Draft history (keyless).
 	await page.goto('agent/studio/listing/');
+	await expectHydrated(page);
 	await expect(page.locator('[data-listing-studio]')).toBeVisible();
 	await page.evaluate(() => document.fonts.ready);
 	await page.waitForTimeout(200);

@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { expectHydrated } from './helpers/hydration';
 import { AGENT_ROUTES } from './routes';
 
 // The agent portal shell (08-11; 08-UI-SPEC "Routes", "(app) agent layout", "AgentNav") on the
@@ -38,7 +39,7 @@ for (const route of AGENT_ROUTES) {
 		page
 	}) => {
 		await page.goto(route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		await expect(page.locator('h1')).toHaveCount(1);
 		await expect(page.locator('h1')).toHaveText(h1);
 		await expect(page).toHaveTitle(`${title}: Agent portal · Tran Real Estate Tools`);

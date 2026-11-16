@@ -26,6 +26,7 @@ import {
 	type MockResult,
 	type Net
 } from './investor/helpers';
+import { expectHydrated } from './helpers/hydration';
 
 test.use(INVESTOR_TEST_OPTIONS);
 
@@ -65,7 +66,7 @@ async function expectNoAxeViolations(page: Page, label: string): Promise<void> {
 /** Opens the builder and waits until the browser reads are done and step 1 is interactive. */
 async function openBuilder(page: Page): Promise<void> {
 	await page.goto('agent/studio/snapshot/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(builder(page)).toBeVisible();
 	await expect(page.getByText('Loading your studio')).toHaveCount(0);
 	await expect(loadZip(page)).toBeVisible();

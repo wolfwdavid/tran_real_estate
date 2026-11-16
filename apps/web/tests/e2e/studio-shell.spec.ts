@@ -8,6 +8,7 @@ import {
 	saveRentCastKey,
 	seedSavedSearches
 } from './helpers/data';
+import { expectHydrated } from './helpers/hydration';
 
 // The agent Studio shell (09-09; 09-UI-SPEC "Routes", "(app) agent layout additions") on the real
 // built site, both bases: the five Studio routes and the snapshot printout prerender with their h1
@@ -69,7 +70,7 @@ for (const route of STUDIO_ROUTES) {
 		baseURL
 	}) => {
 		await page.goto(route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		await expect(page.locator('h1')).toHaveCount(1);
 		await expect(page.locator('h1')).toHaveText(h1);
 		await expect(page).toHaveTitle(title);
@@ -145,6 +146,7 @@ test('print/snapshot/: the prerendered printout shell has its h1 and title and n
 	page
 }) => {
 	await page.goto(PRINT_SNAPSHOT);
+	// Not expectHydrated: the print layout has no site header, so nav[data-hydrated] never appears.
 	await expect(page.locator('html')).not.toHaveAttribute('hidden');
 	await expect(page.locator('h1')).toHaveCount(1);
 	await expect(page.locator('h1')).toContainText('Market Snapshot');
@@ -158,6 +160,7 @@ test('client-side navigation: the Data source bar appears on the snapshot builde
 	page
 }) => {
 	await page.goto('agent/today/');
+	await expectHydrated(page);
 	await expect(statusBar(page)).toHaveCount(0);
 	await agentNav(page).getByRole('link', { name: 'Studio', exact: true }).click();
 	await expect(page.locator('h1')).toHaveText('Studio');

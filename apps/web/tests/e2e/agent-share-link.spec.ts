@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { expectHydrated } from './helpers/hydration';
 import {
 	TEST_ACCESS_KEY,
 	announcer,
@@ -35,6 +36,7 @@ async function open(page: Page) {
 	await page.goto('agent/profile/');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your profile');
 	await expect(section(page).getByRole('heading', { level: 2 })).toHaveText('Your inquiry page');
+	await expectHydrated(page);
 	await page.waitForLoadState('networkidle');
 	await page.evaluate(() => document.fonts.ready);
 }

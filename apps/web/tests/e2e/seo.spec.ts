@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { expectHydrated } from './helpers/hydration';
 import { APP_ROUTES, LEGAL_ROUTES, MARKETING_ROUTES, PRINT } from './routes';
 
 // GTM-03 in a real browser. scripts/assert-seo.mjs proves the prerendered HTML; this spec proves
@@ -11,7 +12,7 @@ const OG_CARDS = ['default', 'tools', 'affordability', 'cap-rate', 'cash-on-cash
 for (const route of [...MARKETING_ROUTES, ...LEGAL_ROUTES]) {
 	test(`head tags once after hydration on ${JSON.stringify(route)}`, async ({ page }) => {
 		await page.goto(route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		await expect(page.locator('h1')).toBeVisible();
 
 		await expect(page.locator('head title')).toHaveCount(1);
@@ -41,7 +42,9 @@ test('noindex on app and print pages', async ({ page }) => {
 	test.setTimeout((APP_ROUTES.length + 1) * 6_000);
 	for (const route of [...APP_ROUTES, PRINT]) {
 		await page.goto(route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		// The print layout renders no site header, so nav[data-hydrated] never appears there.
+		if (route === PRINT) await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		else await expectHydrated(page);
 		await expect(
 			page.locator('meta[name="robots"][content="noindex"]'),
 			`noindex on ${JSON.stringify(route)}`

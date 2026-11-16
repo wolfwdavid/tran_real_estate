@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { seedSavedSearches } from './helpers/data';
+import { expectHydrated } from './helpers/hydration';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls, type Net } from './support/network';
 import { mockRentCast, RENTAL_LISTINGS_PATH, rentcastFixtures } from './support/rentcast-mocks';
 import { expectLiveMode, expectSampleMode, withRentCastKey } from './support/seed';
@@ -42,7 +43,7 @@ const listingCalls = (net: Net) => rentcastCalls(net, RENTAL_LISTINGS_PATH);
 
 async function open(page: Page, path = 'renter/') {
 	await page.goto(path);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Find a rental' })).toBeVisible();
 }
 

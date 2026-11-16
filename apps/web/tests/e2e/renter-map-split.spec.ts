@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls } from './support/network';
 import { expectSampleMode } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 
 // RENT-02 split view end to end on both bases (06-21): from 1024px the Map tab is a 400px list of
 // the rentals inside the current map view beside a sticky map. Hover/focus link cards and pins
@@ -26,7 +27,7 @@ const zoom = (page: Page) => container(page).evaluate((el) => Number(el.getAttri
 
 async function sampleSearch(page: Page): Promise<number> {
 	await page.goto('renter/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Find a rental' })).toBeVisible();
 	await expectSampleMode(page);
 	await page.getByRole('button', { name: 'Try a sample search' }).click();

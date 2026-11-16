@@ -6,6 +6,7 @@ import {
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The contact detail page (08-23; AGT-04, AGT-05) on the real built site, both bases: the record
 // opens from the pipeline, the Stage select moves through the same path as the board (activity,
@@ -32,10 +33,6 @@ const editDetails = (page: Page) => page.getByRole('button', { name: 'Edit detai
 const saveDetails = (page: Page) => page.getByRole('button', { name: 'Save details' });
 const optOutBox = (page: Page) =>
 	page.getByRole('checkbox', { name: `${NAME} asked not to get emails from me` });
-
-async function expectHydrated(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
-}
 
 /** Seeds the samples, opens the pipeline and follows Jordan's card link to the detail page. */
 async function openJordan(page: Page) {

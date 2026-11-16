@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls, type Net } from './support/network';
 import { MARKETS_PATH, mockRentCast, RENT_ESTIMATE_PATH } from './support/rentcast-mocks';
 import { withRentCastKey } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 
 // RENT-06 end to end on both bases: the fair-rent check on the listing detail. Tier 1 (ZIP median)
 // is free when the ZIP's market stats are cached and always free in sample mode; when they are not
@@ -30,7 +31,7 @@ async function expectNoViolations(page: Page, label: string) {
 
 async function openListing(page: Page, id: string) {
 	await page.goto(`renter/listing/?id=${encodeURIComponent(id)}`);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByText('Loading listing…')).toHaveCount(0);
 }
 

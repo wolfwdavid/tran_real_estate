@@ -3,6 +3,7 @@ import { expect, test, type Page, type Request } from '@playwright/test';
 import { TOOLS, type ToolSlug } from '../../src/lib/content/tools';
 import { faqPage, webApplication } from '../../src/lib/seo/jsonld';
 import { TOOL_ROUTES } from './routes';
+import { expectHydrated } from './helpers/hydration';
 
 // GTM-03 end to end (10-14): the four free calculators and the /tools/ hub. Proves, on root and
 // sub, that the pages make zero network calls while used, reproduce the UI-SPEC example figures
@@ -28,8 +29,7 @@ const WCAG = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 async function open(page: Page, route: string) {
 	const res = await page.goto(route);
 	expect(res?.status(), `status for ${route}`).toBe(200);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
-	await expect(page.locator('nav[data-hydrated]')).toHaveCount(1);
+	await expectHydrated(page);
 }
 
 const results = (page: Page, slug: CalcSlug) =>

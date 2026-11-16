@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { expectHydrated } from './helpers/hydration';
 import { ROUTES } from './routes';
 import { announcer, fakeKey, openSettings, saveKey } from './helpers/settings';
 
@@ -52,6 +53,7 @@ test('a Svelte transition and an inline style attribute run without a style-src-
 }) => {
 	await installCollector(page);
 	await page.goto('settings/');
+	await expect(page.locator('[data-settings-page][data-hydrated="true"]')).toBeAttached();
 	const toggle = page.getByTestId('csp-transition-toggle');
 	const target = page.getByTestId('csp-transition-target');
 
@@ -166,7 +168,7 @@ test('a same-origin blob: image (agent logo path) loads with zero CSP violations
 }) => {
 	await installCollector(page);
 	await page.goto('agent/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	const width = await page.evaluate(async () => {
 		const c = document.createElement('canvas');
 		c.width = 4;
@@ -193,7 +195,7 @@ test('a same-origin blob: image (agent logo path) loads with zero CSP violations
 test('a data: image is still blocked by img-src', async ({ page }) => {
 	await installCollector(page);
 	await page.goto('agent/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await page.evaluate(() => {
 		const img = document.createElement('img');
 		img.alt = 'probe';

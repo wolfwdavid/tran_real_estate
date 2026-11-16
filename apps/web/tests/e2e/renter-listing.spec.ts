@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls } from './support/network';
 import { mockRentCast, rentcastFixtures, RENTAL_LISTINGS_PATH } from './support/rentcast-mocks';
 import { withRentCastKey } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 
 // RENT-03 / RENT-05 end to end on both bases: /renter/listing/?id= resolves at 0 calls (shortlist
 // snapshot, cached rows, sample fixtures), spends exactly one call only when the renter presses
@@ -54,7 +55,7 @@ async function unbadgedSampleCards(page: Page): Promise<number> {
 
 async function openListing(page: Page, id: string | null) {
 	await page.goto(id === null ? 'renter/listing/' : `renter/listing/?id=${encodeURIComponent(id)}`);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByText('Loading listing…')).toHaveCount(0);
 }
 

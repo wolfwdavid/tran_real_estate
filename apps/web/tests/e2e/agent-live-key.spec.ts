@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { AGENT_ROUTES } from './routes';
 import { blockRentCast, mockRentCast, saveRentCastKey, seedSavedSearches } from './helpers/data';
+import { expectHydrated } from './helpers/hydration';
 
 // Phase 8 gap closure (08-27, success criterion 5 with a live key): with a real-format RentCast key
 // saved and due renter saved searches, the agent CRM spends zero RentCast calls and never shows the
@@ -30,7 +31,7 @@ async function seedFromHome(page: Page, n: number): Promise<void> {
 }
 
 async function settle(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1:visible')).toHaveCount(1);
 	await expect(page.getByText(/^Loading (your|this) /)).toHaveCount(0);
 }

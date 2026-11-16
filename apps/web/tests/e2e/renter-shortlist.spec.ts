@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expectHydrated } from './helpers/hydration';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls } from './support/network';
 import { rentcastFixtures } from './support/rentcast-mocks';
 
@@ -37,7 +38,7 @@ async function expectNoViolations(page: Page, label: string) {
 
 async function openShortlist(page: Page) {
 	await page.goto('renter/shortlist/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Your shortlist' })).toBeVisible();
 }
 

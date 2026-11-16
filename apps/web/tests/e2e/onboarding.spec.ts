@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { blockRentCast } from './helpers/data';
+import { expectHydrated } from './helpers/hydration';
 
 // GTM-01 end to end (10-20): the landing's inline Get started guide (10-15) on the real built site,
 // both bases. Every test gets a fresh browser context, so localStorage starts empty. Proves the
@@ -48,7 +49,7 @@ const base = () => String(test.info().project.use.baseURL);
 
 async function openLanding(page: Page): Promise<void> {
 	await page.goto('');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(guide(page)).toHaveAttribute('data-ready', '');
 }
 

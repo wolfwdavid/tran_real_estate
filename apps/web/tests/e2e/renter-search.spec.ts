@@ -1,5 +1,6 @@
 import type { Page, TestInfo } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expectHydrated } from './helpers/hydration';
 import {
 	test,
 	expect,
@@ -38,7 +39,7 @@ const listingCalls = (net: Net) => rentcastCalls(net, RENTAL_LISTINGS_PATH);
 
 async function open(page: Page, path = 'renter/') {
 	await page.goto(path);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Find a rental' })).toBeVisible();
 }
 
@@ -151,7 +152,7 @@ test('live budget: 1 call per search, filters and sort spend nothing, reload and
 		await mockRentCast(other, otherNet);
 		await withRentCastKey(other);
 		await other.goto(sharedUrl);
-		await expect(other.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(other);
 		await expectLiveMode(other);
 		await expect(locationInput(other)).toHaveValue('74201');
 		await expect(maxInput(other)).toHaveValue('2000');

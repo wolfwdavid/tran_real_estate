@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { WCAG_TAGS } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // Listing description studio (09-15, STU-01) on the real built site, both bases, keyless: with no
 // AI key the Phase 5 GenerationPanel uses the Fixture provider, whose text is built from the
@@ -63,7 +64,7 @@ test.afterEach(() => {
 /** Opens the studio and waits until the form is interactive. */
 async function openStudio(page: Page): Promise<void> {
 	await page.goto(ROUTE);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1')).toHaveText('Listing description');
 	await expect(page.locator('[data-listing-studio]')).toBeVisible();
 	await expect(page.getByText('Loading your studio')).toHaveCount(0);

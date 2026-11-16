@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { test, expect, type Page } from '@playwright/test';
 import { addLeadByHand, announcer, loadSampleContacts, rentcastTripwire } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // CSV export (08-18, AGT-07 export half) on the real built site, both bases: with only samples
 // nothing downloads and the empty line is shown and announced; with a real contact the download's
@@ -113,7 +114,7 @@ test('export re-imports as Already in contacts (browser round trip)', async ({ p
 	for (const name of ['Avery Round', 'Blake Round', 'Casey Round']) expect(text).toContain(name);
 
 	await page.goto('agent/import/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Import leads' })).toBeVisible();
 	const csv = page.locator('#csv');
 	await csv.getByLabel('Choose CSV file').setInputFiles(path);

@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expectHydrated } from './helpers/hydration';
 
 // Landing Get started guide (GTM-01, plan 10-15): axe over step 0, every tour step of every portal,
 // and the compact row; plus focus moves and persistence. Full journey E2E is plan 10-20.
@@ -24,7 +25,7 @@ async function axeGuide(page: Page, label: string) {
 
 async function openLanding(page: Page) {
 	await page.goto('');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('#get-started')).toBeVisible();
 	// Drive the guide only after its onMount ran: a pre-hydration click on a tile does nothing.
 	await expect(page.locator('#get-started')).toHaveAttribute('data-ready', '');

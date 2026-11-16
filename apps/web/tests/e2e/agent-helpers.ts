@@ -1,5 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expectHydrated } from './helpers/hydration';
 
 // Shared helpers for the agent portal and public inquiry E2E specs (plain module, not a spec).
 // The access key is a low-entropy test UUID so secret scanners never flag it.
@@ -101,7 +102,7 @@ export async function loadSampleContacts(page: Page): Promise<void> {
  */
 export async function openContactsReady(page: Page): Promise<void> {
 	await page.goto('agent/contacts/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByText('Loading your contacts')).toHaveCount(0);
 	await expect(page.getByRole('button', { name: 'Add a lead' }).first()).toBeVisible();
 }

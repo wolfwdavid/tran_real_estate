@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls } from './support/network';
 import { mockRentCast, rentcastFixtures } from './support/rentcast-mocks';
+import { expectHydrated } from './helpers/hydration';
 import { withRentCastKey } from './support/seed';
 import { AI_HOSTS, countRequests, fakeKey, routeAnthropic, routeGemini } from './helpers/ai-mocks';
 
@@ -85,7 +86,7 @@ async function withAiKey(page: Page, provider: 'anthropic' | 'gemini'): Promise<
 
 async function openListing(page: Page, id: string) {
 	await page.goto(`renter/listing/?id=${encodeURIComponent(id)}`);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByText('Loading listing…')).toHaveCount(0);
 }
 

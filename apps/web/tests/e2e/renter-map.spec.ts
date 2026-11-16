@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls, type Net } from './support/network';
 import { mockRentCast, rentcastFixtures, RENTAL_LISTINGS_PATH } from './support/rentcast-mocks';
 import { expectLiveMode, expectSampleMode, withRentCastKey } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 
 // RENT-02 map end to end on both bases (06-19): Leaflet + supercluster load only when the Map tab
 // opens; live mode draws OpenStreetMap tiles (mocked with the synthetic PNG) with the default
@@ -81,7 +82,7 @@ const listingCalls = (net: Net) => rentcastCalls(net, RENTAL_LISTINGS_PATH);
 
 async function open(page: Page) {
 	await page.goto('renter/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Find a rental' })).toBeVisible();
 }
 

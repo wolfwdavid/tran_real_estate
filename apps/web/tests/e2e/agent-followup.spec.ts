@@ -1,10 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
 import {
+	addLeadByHand,
 	expectAxeClean,
 	expectNoHorizontalScroll,
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // AI follow-up email drafts (08-25, AGT-06) on the real built site, both bases, keyless: with no
 // AI key the Phase 5 GenerationPanel uses the Fixture provider, so no AI host may be reached
@@ -61,10 +63,6 @@ const draftButton = (page: Page) =>
 	page.getByRole('button', { name: 'Draft follow-up email', exact: true });
 const footer = (page: Page) => panel(page).locator('p', { hasText: `${FOOTER_LABEL}:` });
 
-async function expectHydrated(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
-}
-
 /** Opens a contact from its pipeline card and waits for the follow-up section to settle. */
 async function openContact(page: Page, name: string) {
 	await page.goto('agent/pipeline/');
@@ -84,25 +82,6 @@ async function draftNow(page: Page) {
 	await expect(panel(page).getByText('Draft ready.', { exact: true })).toBeVisible({
 		timeout: 20_000
 	});
-}
-
-/**
- * Adds a real (non-sample) lead through the Add a lead dialog, waiting for hydration first (the
- * shared helper can race it). Stays local so agent-helpers.ts is untouched.
- */
-async function addRealLead(page: Page, name: string, email: string) {
-	await page.goto('agent/contacts/');
-	await expectHydrated(page);
-	const open = page.getByRole('button', { name: 'Add a lead' }).first();
-	await expect(open).toBeVisible();
-	await page.evaluate(() => document.fonts.ready);
-	await open.click();
-	const dialog = page.getByRole('dialog', { name: 'Add a lead' });
-	await expect(dialog).toBeVisible();
-	await dialog.getByLabel('Name', { exact: true }).fill(name);
-	await dialog.getByLabel('Email', { exact: true }).fill(email);
-	await dialog.getByRole('button', { name: 'Add lead' }).click();
-	await expect(dialog).toBeHidden();
 }
 
 let rentcastHits: string[];
@@ -249,7 +228,7 @@ test('no email gates only Open in email app', async ({ page }) => {
 });
 
 test('real contact with an incomplete profile is blocked', async ({ page }) => {
-	await addRealLead(page, 'Pat Real', 'pat.real@example.com');
+	await addLeadByHand(page, { name: 'Pat Real', email: 'pat.real@example.com' });
 	await openContact(page, 'Pat Real');
 	await expect(composer(page)).toHaveAttribute('data-followup', 'profile-incomplete');
 	const block = page.locator('[data-followup-prerequisite]');
@@ -286,7 +265,7 @@ for (const width of [1280, 375]) {
 			if (width === 375) await expectNoHorizontalScroll(page);
 		};
 
-		await addRealLead(page, 'Pat Real', 'pat.real@example.com');
+		await addLeadByHand(page, { name: 'Pat Real', email: 'pat.real@example.com' });
 		await openContact(page, 'Pat Real');
 		await expect(page.locator('[data-followup-prerequisite]')).toBeVisible();
 		await check('follow-up prerequisite');

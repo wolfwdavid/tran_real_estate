@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { expectAxeClean } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 import { openSettings } from './helpers/settings';
 import { siteEnv } from './site-env';
 import { mailtoHref } from '../../src/lib/components/forms/form-gate';
@@ -33,7 +34,7 @@ test("feedback/ is a coming-soon panel with no fields: The feedback form isn't o
 	});
 
 	await page.goto('feedback/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Send feedback');
 	const main = page.getByRole('main');
 	await expect(main).toContainText("The feedback form isn't open yet");
@@ -55,7 +56,7 @@ test("feedback/ is a coming-soon panel with no fields: The feedback form isn't o
 
 test('axe: feedback coming-soon state', async ({ page }) => {
 	await page.goto('feedback/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expectAxeClean(page, 'feedback/ coming soon');
 });
 

@@ -1,5 +1,6 @@
 import { test, expect, type Page, type Route } from '@playwright/test';
 import { expectAxeClean } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 import { siteEnv } from './site-env';
 
 // GTM-02 waitlist on the configured build (test owner key + contact email baked in). Web3Forms is
@@ -52,8 +53,8 @@ async function mockSubmit(page: Page, reply: Reply = ok): Promise<Recorded[]> {
 async function open(page: Page, route: string) {
 	await page.clock.install({ time: new Date('2026-10-04T12:00:00Z') });
 	await page.goto(route);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
-	// Wait for hydration: the prerendered form is inert until onMount runs.
+	await expectHydrated(page);
+	// The form's own marker: the prerendered form is inert until its onMount runs.
 	await expect(page.locator('#waitlist form[data-ready]')).toHaveCount(1);
 }
 

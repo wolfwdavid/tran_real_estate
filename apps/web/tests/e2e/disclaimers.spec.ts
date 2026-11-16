@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
-import { CHROME_ROUTES, TOOL_ROUTES } from './routes';
+import { expectHydrated } from './helpers/hydration';
+import { CHROME_ROUTES, TOOL_ROUTES, isPrintRoute } from './routes';
 import { RENTER_TEST_OPTIONS, expect, test } from './support/network';
 
 // The disclaimer presence audit (10-21; PITFALLS "Looks Done But Isn't": Disclaimers; 10-UI-SPEC
@@ -122,7 +123,9 @@ async function expectCarries(scope: Locator, text: string): Promise<void> {
 async function open(page: Page, path: string): Promise<void> {
 	const response = await page.goto(path);
 	expect(response?.status(), `${path} status`).toBe(200);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	// The print sheets have no site header (no nav[data-hydrated]); their tests wait on [data-ready].
+	if (isPrintRoute(path)) await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	else await expectHydrated(page);
 }
 
 test.use(RENTER_TEST_OPTIONS);

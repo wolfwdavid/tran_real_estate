@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { WCAG_TAGS } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // Reel script studio (09-22, STU-03) on the real built site, both bases, keyless: with no AI key
 // the Phase 5 GenerationPanel uses the Fixture provider, whose text is built from the agent's
@@ -89,7 +90,7 @@ test.afterEach(() => {
 /** Opens the studio and waits until the form is interactive. */
 async function openStudio(page: Page): Promise<void> {
 	await page.goto(ROUTE);
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.locator('h1')).toHaveText('Reel script');
 	await expect(page.locator('[data-reel-studio]')).toBeVisible();
 	await expect(page.getByText('Loading your studio')).toHaveCount(0);
@@ -274,7 +275,7 @@ test('the Studio hub counts the reel draft under studio-reel', async ({ page }) 
 		page.getByRole('region', { name: 'Draft history' }).getByText('1 saved in this browser')
 	).toBeVisible();
 	await page.goto('agent/studio/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	const tool = page
 		.getByRole('listitem')
 		.filter({ has: page.getByRole('heading', { name: 'Reel script' }) });

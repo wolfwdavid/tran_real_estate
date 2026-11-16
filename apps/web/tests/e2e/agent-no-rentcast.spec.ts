@@ -8,6 +8,7 @@ import {
 	mockWeb3Forms,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // Phase 8 gate (08-26, success criterion 5): one walk through every agent flow with the RentCast
 // tripwire armed from the first request: every agent route empty, samples loaded, every route
@@ -46,8 +47,10 @@ const BLOCK = [
 // The second selector also catches SMS: and other casings (URL schemes are case-insensitive).
 const smsLinks = (page: Page) => page.locator('a[href^="sms:"], a[href^="sms:" i]');
 
-async function settle(page: Page) {
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+async function settle(page: Page, chrome: boolean) {
+	// The chrome-free inquiry page has no header nav to signal hydration; its prerendered
+	// "Loading this form" line clears in the page's onMount instead.
+	if (chrome) await expectHydrated(page);
 	await expect(page.locator('h1:visible')).toHaveCount(1);
 	await expect(page.getByText(/^Loading (your|this) /)).toHaveCount(0);
 }
@@ -55,9 +58,9 @@ async function settle(page: Page) {
 const visited: string[] = [];
 
 /** Opens a page, waits for it to settle and checks it offers no sms: link. */
-async function visit(page: Page, path: string) {
+async function visit(page: Page, path: string, chrome = true) {
 	await page.goto(path);
-	await settle(page);
+	await settle(page, chrome);
 	await expectNoSms(page, path);
 }
 
@@ -153,7 +156,8 @@ test('every agent flow makes zero RentCast requests and offers no sms: links', a
 	await page.clock.install();
 	await visit(
 		page,
-		inquiryPath({ v: '1', k: TEST_ACCESS_KEY, n: 'Sample Agent', b: 'Example Realty' })
+		inquiryPath({ v: '1', k: TEST_ACCESS_KEY, n: 'Sample Agent', b: 'Example Realty' }),
+		false
 	);
 	await page.getByLabel('Your name').fill('Jordan Walk');
 	await page.getByLabel('Email').fill('jordan.walk@example.com');

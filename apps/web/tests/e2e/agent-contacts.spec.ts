@@ -7,6 +7,7 @@ import {
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The Contacts list (08-18) on the real built site, both bases: the sample contacts newest first
 // with their chips (table at 1280, cards at 375), in-memory search by name / email / phone digits
@@ -116,7 +117,7 @@ test('search by name, email and phone digits', async ({ page }) => {
 
 	// Reload keeps the search (read from ?q= on mount).
 	await page.reload();
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(search(page)).toHaveValue('0105');
 	await expectRowNames(page, ['Taylor Mockridge']);
 
@@ -156,7 +157,7 @@ test('smart lists filter and announce', async ({ page }) => {
 
 	// Reload keeps the list; All clears the param.
 	await page.reload();
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(listButton(page, 'No contact in 7 days (3)')).toHaveAttribute(
 		'aria-pressed',
 		'true'
@@ -169,7 +170,7 @@ test('smart lists filter and announce', async ({ page }) => {
 
 	// Search and list combine, and a deep link restores both.
 	await page.goto('agent/contacts/?list=due-today&q=jordan');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expectRowNames(page, ['Jordan Example']);
 	await expect(search(page)).toHaveValue('jordan');
 	await expect(listButton(page, 'Due today (5)')).toHaveAttribute('aria-pressed', 'true');

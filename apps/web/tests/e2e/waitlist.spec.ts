@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { expectAxeClean } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 import { siteEnv } from './site-env';
 import { mailtoHref } from '../../src/lib/components/forms/form-gate';
 
@@ -30,7 +31,7 @@ for (const p of PAGES) {
 		});
 
 		await page.goto(p.route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		const section = page.locator('#waitlist');
 		await expect(section).toHaveCount(1);
 		await expect(section.locator('input')).toHaveCount(0);
@@ -54,7 +55,7 @@ for (const p of PAGES) {
 
 	test(`axe: waitlist coming-soon state on ${p.route}`, async ({ page }) => {
 		await page.goto(p.route);
-		await expect(page.locator('html')).not.toHaveAttribute('hidden');
+		await expectHydrated(page);
 		await page.locator('#waitlist').scrollIntoViewIfNeeded();
 		await expectAxeClean(page, `${p.route} waitlist coming soon`);
 	});

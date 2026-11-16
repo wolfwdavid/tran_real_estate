@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, RENTER_TEST_OPTIONS, rentcastCalls, type Net } from './support/network';
 import { mockRentCast } from './support/rentcast-mocks';
 import { withRentCastKey } from './support/seed';
+import { expectHydrated } from './helpers/hydration';
 
 // RENT-08 end to end: the affordability calculator gives the contract range, makes zero network
 // requests to any host, saves nothing, passes axe empty and filled, and its CTA prefills the
@@ -34,7 +35,7 @@ function collectExternal(page: Page): string[] {
 
 async function open(page: Page) {
 	await page.goto('renter/affordability/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(
 		page.getByRole('heading', { level: 1, name: 'What rent fits your budget' })
 	).toBeVisible();

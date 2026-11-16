@@ -6,6 +6,7 @@ import {
 	loadSampleContacts,
 	rentcastTripwire
 } from './agent-helpers';
+import { expectHydrated } from './helpers/hydration';
 
 // The due-today queue "when opening the app" (08-21; AGT-05, success criterion 3) on the real
 // built site, both bases: /agent/ shows overdue then due-today tasks first, the nav pill counts
@@ -38,7 +39,7 @@ const pill = (page: Page, n: number) =>
 
 async function openHome(page: Page) {
 	await page.goto('agent/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Agent portal' })).toBeVisible();
 	// Get set up renders in both the empty and the populated state once the data has loaded.
 	await expect(page.locator('[data-section="get-set-up"]')).toBeVisible();
@@ -63,7 +64,7 @@ async function addFirstLead(page: Page, name: string, email: string) {
 
 async function openToday(page: Page) {
 	await page.goto('agent/today/');
-	await expect(page.locator('html')).not.toHaveAttribute('hidden');
+	await expectHydrated(page);
 	await expect(page.getByRole('heading', { level: 1, name: 'Today' })).toBeVisible();
 	await expect(page.locator('[data-queue-empty], [data-group]').first()).toBeVisible();
 }

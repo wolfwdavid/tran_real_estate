@@ -30,6 +30,7 @@ import {
 	useMockedRentCastKey,
 	type MockResult
 } from './helpers';
+import { expectHydrated } from '../helpers/hydration';
 import { expectLiveMode, expectSampleMode } from '../support/seed';
 
 test.use(INVESTOR_TEST_OPTIONS);
@@ -345,7 +346,8 @@ async function sweep(page: Page, s: Seeded, mode: 'keyless' | 'mocked'): Promise
 			const label = `${t.url} (${mode})`;
 			await page.setViewportSize({ width: 1280, height: 900 });
 			await page.goto(t.url);
-			await expect(page.locator('html')).not.toHaveAttribute('hidden');
+			// The chrome-free print route has no header nav; its ready() waits on [data-ready].
+			if (!t.url.startsWith('print/')) await expectHydrated(page);
 			await expect(page.locator('h1').first()).toBeVisible();
 			await t.ready(page);
 
