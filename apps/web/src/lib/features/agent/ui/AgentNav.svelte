@@ -29,7 +29,8 @@
 		if (id === null) return undefined;
 		return ids.includes(id) || (prefix !== undefined && id.startsWith(prefix)) ? 'page' : undefined;
 	};
-	// A real text space (not margin) before the pill; a bare space in the markup is trimmed by Svelte.
+	// A real text space before the pill (axe needs it; a bare space in the markup is trimmed by
+	// Svelte). It collapses inside the inline-flex link, so the pill's ml-1 makes the visible gap.
 	const space = ' ';
 	const showCount = $derived(Number.isInteger(dueCount) && dueCount > 0);
 	// The link's full name, "Today, 3 tasks due", is an aria-label: a visually hidden span would be
@@ -49,7 +50,7 @@
 					aria-label={l.label === 'Today' && showCount ? dueLabel : undefined}
 					class="inline-flex min-h-11 items-center px-2 text-body text-foreground underline-offset-[6px] hover:underline aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-2 sm:px-4"
 					>{l.label}{#if l.label === 'Today' && showCount}{space}<span
-							class="rounded-full bg-accent-surface px-2 text-label font-semibold text-foreground tabular-nums"
+							class="ml-1 rounded-full bg-accent-surface px-2 text-label font-semibold text-foreground tabular-nums"
 							aria-hidden="true">{dueCount}</span
 						>{/if}</a
 				>
