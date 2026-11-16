@@ -5,7 +5,7 @@ import { tokens } from '@tran/brand';
  * classes are replaced by the matching `tokens.color` values. Keep in step with the sources:
  * - RenterMark:   apps/web/src/lib/components/brand/marks/RenterMark.svelte   (64x64)
  * - InvestorMark: apps/web/src/lib/components/brand/marks/InvestorMark.svelte (64x64)
- * - Contours:     apps/web/src/routes/(marketing)/+page.svelte `const contours` (480x360 viewBox)
+ * - Contours:     apps/web/src/routes/(marketing)/hero-contours.svg (480x360 viewBox)
  */
 const c = tokens.color;
 const line = `fill="none" stroke="${c.foreground}"`;
