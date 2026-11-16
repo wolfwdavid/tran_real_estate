@@ -150,3 +150,29 @@
   `pnpm test:unit`, not only the test file next to the change. `ci.yml` facts are asserted in more than one
   file (`workflow-gate.test.ts` and `live-smoke-gate.test.ts`); pushing after running one of them made a red
   ci (43668365203).
+
+## 2026-11-16: Phase 16 toolchain migration
+
+- Rule: `html not hidden` is not a hydration signal. `frame-guard.js` removes the attribute at parse time, so a
+  prerendered page passes that wait long before Svelte attaches handlers; a click or `setInputFiles` fired right
+  after is lost under load (agent-csv:91 took 33 s under CPU pressure and failed with "Check file" never
+  appearing). Gate interacting specs on `nav[data-hydrated]` through `expectHydrated` (helpers/hydration.ts); keep the
+  hidden check only for frame-guard/CSP checks and header-less pages (print/*, agent/inquire/), which have no such nav.
+  `scripts/hydration-gate.test.ts` allowlists the kept uses. Prove a hydration fix with a per-request delay on
+  `_app/immutable/**/*.js` (300 ms is enough; 1 s makes hydration itself exceed the 5 s expect default), old spec
+  failing and new spec passing.
+- Rule: pnpm 12 sets `npm_execpath` to a native binary, so scripts spawn pnpm through `scripts/lib/pnpm-cmd.mjs`; on a
+  machine whose global pnpm is 11, run the gates with plain `pnpm` (it self-switches to the pin).
+- Rule: ESLint boundary groups are written `\#lib/...` (gitignore escape), and an unescaped group is a sweep failure.
+- Rule: Kit 3 grows the shared JS (it fetches the error node after boot); re-measure the gated tool pages on the
+  configured analytics-on build and cross-check against real transfer size, not only the oracle.
+- Rule: Vitest 5 `toHaveTextContent` is exact; use `toMatchTextContent` for "contains", move negated assertions too
+  (they would pass vacuously), and await every `render` from vitest-browser-svelte.
+- Rule: a docs-only or code commit invalidates the measured builds (the stamp is the commit SHA). Measure at one head, write
+  the evidence file last, and when a fix lands mid-protocol restart from step 1 at the new head.
+- Rule: in Git Bash, a `BASE_PATH=/x` assignment is rewritten to a Windows path unless `MSYS_NO_PATHCONV=1` is set;
+  `gh variable list --jq` output carries a trailing CR, strip it before exporting.
+- Rule: the launch audit marks the landing `/` FAIL over 60 KB although `assert-budget` only reports it, so `pnpm verify`
+  stays green. After any change that grows shared code, check the landing row with `audit:launch`, not only the gated
+  pages (Kit 3 took the landing from 59,261 to 61,819 bytes; the hero contours moved out of the page script into an
+  `?no-inline` SVG asset used as a CSS mask).
