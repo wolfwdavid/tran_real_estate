@@ -53,11 +53,11 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 ### Toolchain (TOOL)
 
 - [x] **TOOL-01**: pnpm 12 is the pinned `packageManager`; the lockfile is regenerated once; the supply-chain test, `build-web.mjs`, and the launch-audit test no longer hardcode `11.27.0`; `pnpm install --frozen-lockfile` passes locally and in CI
-- [ ] **TOOL-02**: The web app runs on SvelteKit 3.1 with adapter-static 4, migrated with `sv migrate sveltekit-3` one task per commit: Kit options move into `vite.config.ts` with a plugin-free `kit.options.js` that the CSP, models, and service-worker guard tests import; `$lib` becomes `#lib` with explicit extensions across source, ESLint import groups, `components.json`, the Vitest alias, and the boundary tests (which stay non-vacuous); `resolve()` pathnames, `$app/env`, and shallow routing follow the Kit 3 forms
-- [ ] **TOOL-03**: The service worker is rewritten on `$app/manifest` with the dotfile filter inside the worker (Kit 3 removes `serviceWorker.files`), and it registers and precaches on the live origin as proven by the live smoke
-- [ ] **TOOL-04**: Unit and browser tests run on Vitest 5 with `@vitest/browser-playwright` 5 and `vitest-browser-svelte` 3: every `render` is awaited, exact-text matchers and `clearMocks` defaults are accounted for, the JSON reporter path used by `audit-evidence.mjs` still works, and the full `pnpm verify` is green
-- [ ] **TOOL-05**: The recorded audit exceptions shrink from five to two (build-time deepmerge, revisit 2027-01-31, and dev-toolchain minimatch, revisit 2026-12-31) in both `scripts/lib/audit-exceptions.mjs` and `pnpm-workspace.yaml`, and `pnpm audit --audit-level low` is clean apart from them
-- [ ] **TOOL-06**: Each toolchain step (pnpm, Kit, Vitest) is landed as its own plan or plan sequence (the Kit 3 sequence is plans 16-05 to 16-10, with its full `pnpm verify` and local smoke gate at 16-10 before its single push), and the phase closes with a deploy and a green live smoke
+- [x] **TOOL-02**: The web app runs on SvelteKit 3.1 with adapter-static 4, migrated with `sv migrate sveltekit-3` one task per commit: Kit options move into `vite.config.ts` with a plugin-free `kit.options.js` that the CSP, models, and service-worker guard tests import; `$lib` becomes `#lib` with explicit extensions across source, ESLint import groups, `components.json`, the Vitest alias, and the boundary tests (which stay non-vacuous); `resolve()` pathnames, `$app/env`, and shallow routing follow the Kit 3 forms
+- [x] **TOOL-03**: The service worker is rewritten on `$app/manifest` with the dotfile filter inside the worker (Kit 3 removes `serviceWorker.files`), and it registers and precaches on the live origin as proven by the live smoke
+- [x] **TOOL-04**: Unit and browser tests run on Vitest 5 with `@vitest/browser-playwright` 5 and `vitest-browser-svelte` 3: every `render` is awaited, exact-text matchers and `clearMocks` defaults are accounted for, the JSON reporter path used by `audit-evidence.mjs` still works, and the full `pnpm verify` is green
+- [x] **TOOL-05**: The recorded audit exceptions shrink from five to two (build-time deepmerge, revisit 2027-01-31, and dev-toolchain minimatch, revisit 2026-12-31) in both `scripts/lib/audit-exceptions.mjs` and `pnpm-workspace.yaml`, and `pnpm audit --audit-level low` is clean apart from them
+- [x] **TOOL-06**: Each toolchain step (pnpm, Kit, Vitest) is landed as its own plan or plan sequence (the Kit 3 sequence is plans 16-05 to 16-10, with its full `pnpm verify` and local smoke gate at 16-10 before its single push), and the phase closes with a deploy and a green live smoke
 
 ### Extension release (EXT, continues v1.0 numbering)
 
@@ -145,11 +145,11 @@ Which phases cover which requirements. Filled during roadmap creation.
 | TEST-05 | Phase 15 | Complete |
 | TEST-06 | Phase 15 | Complete |
 | TOOL-01 | Phase 16 | Complete |
-| TOOL-02 | Phase 16 | Pending |
-| TOOL-03 | Phase 16 | Pending |
-| TOOL-04 | Phase 16 | Pending |
-| TOOL-05 | Phase 16 | Pending |
-| TOOL-06 | Phase 16 | Pending |
+| TOOL-02 | Phase 16 | Complete |
+| TOOL-03 | Phase 16 | Complete |
+| TOOL-04 | Phase 16 | Complete |
+| TOOL-05 | Phase 16 | Complete |
+| TOOL-06 | Phase 16 | Complete |
 | EXT-05 | Phase 17 | Pending |
 | EXT-06 | Phase 17 | Pending |
 | EXT-07 | Phase 17 | Pending |

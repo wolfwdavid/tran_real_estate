@@ -266,7 +266,7 @@ Plans:
 
 **Wave 13** *(blocked on Wave 12 completion)*
 
-- [ ] 16-13-PLAN.md — Wave 13: Vitest 5 evidence protocol re-run, launch audit at the deployed commit, final deploy and green live smoke, TOOL-01..06 ticked (TOOL-04, TOOL-06)
+- [x] 16-13-PLAN.md — Wave 13: Vitest 5 evidence protocol re-run, launch audit at the deployed commit, final deploy and green live smoke, TOOL-01..06 ticked (TOOL-04, TOOL-06)
 
 ### Phase 17: Extension Release & Edge Add-ons Submission
 

@@ -30,14 +30,14 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | SvelteKit (`@sveltejs/kit`) | **3.1.1** | App framework, file routing, prerendering | User constraint. Kit 3 stable since Phase 16 (plans 05 to 10); `$lib` is now `#lib`. | HIGH |
 | Svelte | **5.57.3** | UI runtime (runes) | Current stable. `vite-plugin-svelte@7` requires `svelte ^5.46.4`; bits-ui requires `^5.33`. | HIGH |
 | `@sveltejs/adapter-static` | **4.0.1** | Emit static site for GitHub Pages | Official adapter, v4 for Kit 3. Supports `fallback: '404.html'` for client-routed deep links on Pages. | HIGH |
-| Vite | **8.3.5** | Build/dev server | `@sveltejs/vite-plugin-svelte@7.3.0` requires Vite 8. Kit 2.70, Tailwind 4.3, WXT, and CRXJS all accept Vite 8. | HIGH |
+| Vite | **8.3.5** | Build/dev server | `@sveltejs/vite-plugin-svelte@7.3.0` requires Vite 8. Kit 3.1, Tailwind 4.3, WXT, and CRXJS all accept Vite 8. | HIGH |
 | `@sveltejs/vite-plugin-svelte` | **7.3.1** | Svelte compilation in Vite | Required by Kit + Vite 8. Engines: Node `^20.19 \|\| ^22.12 \|\| >=24`. | HIGH |
 | TypeScript | **6.0.3** (pin `~6.0.3`) | Types | See Headline 3. **Do not install 7.x.** | HIGH |
 | Node.js (CI + local) | **24 LTS** (24.21.0, "Krypton") | Runtime for tooling | Active LTS. WXT requires Node `>=22`; the OpenAI SDK's Node minimum is 22. 24 satisfies everything. | HIGH |
 | pnpm | **12.18.0** (pin via `packageManager`) | Package manager + workspace | User preference. Workspaces host the web app and extension in one repo. pnpm 12 is a native binary (Rust rewrite): `npm_execpath` points at `pnpm.exe`, so scripts spawn it through `scripts/lib/pnpm-cmd.mjs`, and `pnpm-lock.yaml` has a leading boot document (`packageManagerDependencies`) before the project document. | MEDIUM |
 | Tailwind CSS (+ `@tailwindcss/vite`) | **4.3.3** | Styling | Required by shadcn-svelte and LayerChart (depends on `@layerstack/tailwind`). v4's CSS-first `@theme` block *is* a design-token system, so "Tailwind vs vanilla CSS tokens" is a false choice: define warm editorial tokens (colors, serif/sans families, radii, spacing) once in `@theme` and they are both CSS variables and utilities. | HIGH |
-| bits-ui | **2.19.2** | Headless accessible primitives (Dialog, Popover, Tabs, Select, Combobox…) | Svelte 5-native, WAI-ARIA compliant. The primitive layer under shadcn-svelte. | HIGH |
-| shadcn-svelte (CLI) | **1.6.1** | Copy-in component source built on bits-ui + Tailwind v4 | Components live in *your* repo (`$lib/components/ui`), so the UI/UX Pro Max warm-editorial restyle is plain source edits, not theme-override fights. Supports Svelte 5 + Tailwind v4. | HIGH |
+| bits-ui | **2.20.6** | Headless accessible primitives (Dialog, Popover, Tabs, Select, Combobox…) | Svelte 5-native, WAI-ARIA compliant. The primitive layer under shadcn-svelte. | HIGH |
+| shadcn-svelte (CLI) | **1.8.0** | Copy-in component source built on bits-ui + Tailwind v4 | Components live in *your* repo (`#lib/components/ui`), so the UI/UX Pro Max warm-editorial restyle is plain source edits, not theme-override fights. Supports Svelte 5 + Tailwind v4. | HIGH |
 ### Data, AI, and Integration Layer
 | Library | Version | Purpose | When to Use | Confidence |
 |---------|---------|---------|-------------|------------|
@@ -47,8 +47,8 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | `openai` | **7.15.0** | OpenAI calls | Use the **Responses API** (`client.responses.create`), which the official docs recommend over Chat Completions. `dangerouslyAllowBrowser: true`. Dynamic import. | HIGH |
 | `@google/genai` | **2.22.0** | Gemini calls | The current unified SDK with a `browser` export. Dynamic import. | HIGH |
 | Dexie | **4.4.6** | IndexedDB wrapper: saved searches, listing/response cache, quota ledger, CRM, alert "seen" state, drafts | IndexedDB is the only browser store with enough capacity and structured queries (compound indexes, e.g., `[searchId+firstSeenAt]`) for a CRM and a response cache. Dexie has typed tables, schema versioning/migrations, transactions, and `liveQuery`. Released 2026-09-10, actively maintained. | HIGH |
-| runed | **0.37.1** | Svelte 5 utilities; `PersistedState` for small localStorage-backed prefs | Use `PersistedState` for tiny synchronous prefs only (active portal, chosen LLM provider/model, UI density). Everything else goes to Dexie. | HIGH |
-| LayerChart | **2.5.0** | Market dashboards (rent trends, price-to-rent, DOM, inventory) | Svelte 5-native, composable, SVG output. Stable 2.0.0 shipped 2026-07-01. The underlying lib for shadcn-svelte's `Chart` component. SVG output feeds straight into PDF export. **Note:** shadcn-svelte's chart docs still say `layerchart@next` (stale); install `layerchart@^2.5.0`. | HIGH (version) / MEDIUM (docs lag) |
+| runed | **0.38.0** | Svelte 5 utilities; `PersistedState` for small localStorage-backed prefs | Use `PersistedState` for tiny synchronous prefs only (active portal, chosen LLM provider/model, UI density). Everything else goes to Dexie. | HIGH |
+| LayerChart | **2.9.2** | Market dashboards (rent trends, price-to-rent, DOM, inventory) | Svelte 5-native, composable, SVG output. Stable 2.0.0 shipped 2026-07-01. The underlying lib for shadcn-svelte's `Chart` component. SVG output feeds straight into PDF export. **Note:** shadcn-svelte's chart docs still say `layerchart@next` (stale); install `layerchart@^2.9.2`. | HIGH (version) / MEDIUM (docs lag) |
 | pdfmake | **0.3.11** | Client-side PDF: agent market reports, investor memos | Declarative document definitions (headers, tables, columns, page breaks). Embeds custom TTF fonts (serif headings) and **renders SVG natively** (bundled `svg-to-pdfkit`, confirmed in tarball), so LayerChart SVGs go in as vectors with selectable text. **Always lazy-load** (large bundle with fonts). | HIGH |
 | Web3Forms (service, no npm package) | Free plan | Lead inbox delivery to agents | **250 submissions/month free** (vs Formspree 50), unlimited forms/domains, hCaptcha + honeypot `botcheck`. The access key is **public-safe by design**, so each agent pastes their own key (BYOK-consistent). **Client-side only on free.** A non-browser request returned `403 "Use our API in client side… (Pro plan is required)"` in testing, which is fine for this architecture. No file uploads or integrations on free; 30-day retention. | MEDIUM (limits from docs search + third-party comparisons; official pages 403'd automated fetch) |
 | `@fontsource-variable/fraunces` + `@fontsource-variable/inter` | **5.3.0** / **5.3.0** | Self-hosted serif headings + sans body | Self-hosting avoids a Google Fonts CDN (privacy, CSP simplicity, no FOUT from 3rd-party). Final pairing is a UI/UX Pro Max decision; Source Serif 4 (`@fontsource-variable/source-serif-4@5.3.0`) is the drop-in alternative. The same TTFs must be registered with pdfmake for on-brand PDFs. | MEDIUM |
@@ -58,20 +58,20 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 ### Browser Extension (Zillow sponsored-card filter)
 | Tool | Version | Purpose | Notes | Confidence |
 |------|---------|---------|-------|------------|
-| WXT | **0.21.4** | MV3 extension framework (Vite-based) | Entrypoint-driven manifest generation, HMR, `wxt zip` for Chrome/Edge (and `-b firefox`). Built-in `ctx.addEventListener(window, 'wxt:locationchange', …)` handles SPA navigation, **which Zillow's search results require** (cards re-render without page loads). Engines: Node `>=22`. 10.5k stars, pushed 2026-09-12. | HIGH |
+| WXT | **0.21.5** | MV3 extension framework (Vite-based) | Entrypoint-driven manifest generation, HMR, `wxt zip` for Chrome/Edge (and `-b firefox`). Built-in `ctx.addEventListener(window, 'wxt:locationchange', …)` handles SPA navigation, **which Zillow's search results require** (cards re-render without page loads). Engines: Node `>=22`. 10.5k stars, pushed 2026-09-12. | HIGH |
 | `@wxt-dev/module-svelte` | **2.0.5** | Svelte for the popup/options page | Only for the popup (on/off toggle, hidden-count badge). **The content script itself should be plain TypeScript**: a `MutationObserver` + CSS class toggle. No Svelte and no shadow-root UI needed to hide nodes. | HIGH |
 | `@types/chrome` | **0.1.x** latest | Types, if not using WXT's `browser` global | WXT provides typed `browser.*`; usually unnecessary. | MEDIUM |
 ### Development Tools
 | Tool | Version | Purpose | Notes | Confidence |
 |------|---------|---------|-------|------------|
-| `sv` CLI | **0.17.0** | Scaffold (`sv create --add tailwindcss,vitest,playwright,eslint,prettier`) | Scaffolds Vitest `^4.1.8`, TS `^6.0.3`, Tailwind `^4.3.0`, matching this doc's pins. Do **not** use `sv@next` (targets Kit 3). | HIGH |
-| Vitest | **4.1.12** (not 5.0.x) | Unit tests (deal math, cap rate, cache/quota ledger, RentCast client, prompt builders) | Vitest 5.0.0 released 2026-09-03 (10 days old); `sv` still scaffolds 4.x. Upgrade in a later phase. Deal-analyzer math is pure functions, so it should be the highest-coverage module. | HIGH |
-| `@vitest/browser-playwright` + `vitest-browser-svelte` | **4.1.12** + **2.2.1** | Component tests in a real browser | Match the Vitest major (4). Real browser = real IndexedDB, no jsdom quirks. | HIGH |
+| `sv` CLI | **0.17.0** | Scaffold (`sv create --add tailwindcss,vitest,playwright,eslint,prettier`) | Used for the original Kit 2 scaffold (Vitest 4, TS `^6.0.3`, Tailwind `^4.3.0`). The repo has since moved to Kit 3 and Vitest 5 (Phase 16); do not re-scaffold over it. | HIGH |
+| Vitest | **5.1.0** | Unit tests (deal math, cap rate, cache/quota ledger, RentCast client, prompt builders) | Vitest 5 since Phase 16 (plan 11): `toHaveTextContent` is exact (use `toMatchTextContent` for "contains"), `render` must be awaited, and every project sets `maxWorkers`. Deal-analyzer math is pure functions, so it should be the highest-coverage module. | HIGH |
+| `@vitest/browser-playwright` + `vitest-browser-svelte` | **5.1.0** + **3.1.0** | Component tests in a real browser | Match the Vitest major (5). Real browser = real IndexedDB, no jsdom quirks. | HIGH |
 | fake-indexeddb | **6.2.5** | Dexie tests in the Node Vitest project | For fast pure-logic tests of repositories/migrations without a browser. | HIGH |
-| `@playwright/test` | **1.63.0** | E2E across the 3 portals | Mock *all* outbound calls with `page.route()` + synthetic fixtures. CI must never hit RentCast (50 calls/month) or LLM providers. | HIGH |
-| `@axe-core/playwright` | **4.13.0** | Accessibility assertions (WCAG AA) inside E2E | Run `AxeBuilder` on every route in both empty-key (demo) and key-present states. | HIGH |
+| `@playwright/test` | **1.65.0** | E2E across the 3 portals | Mock *all* outbound calls with `page.route()` + synthetic fixtures. CI must never hit RentCast (50 calls/month) or LLM providers. | HIGH |
+| `@axe-core/playwright` | **4.14.0** | Accessibility assertions (WCAG AA) inside E2E | Run `AxeBuilder` on every route in both empty-key (demo) and key-present states. | HIGH |
 | svelte-check | **4.7.6** | Type-check `.svelte` files in CI | Requires TS ≤6. | HIGH |
-| ESLint + eslint-plugin-svelte + typescript-eslint | **10.10.0** + **3.23.0** + latest (peer TS `<6.1.0`) | Lint | Flat config as scaffolded by `sv`. | HIGH |
+| ESLint + eslint-plugin-svelte + typescript-eslint | **10.14.0** + **3.24.1** + **8.72.1** (peer TS `<6.1.0`) | Lint | Flat config as scaffolded by `sv`. | HIGH |
 | Prettier + prettier-plugin-svelte + prettier-plugin-tailwindcss | **3.9.6** + **4.1.1** + **0.8.1** | Formatting + class sorting | | HIGH |
 | GitHub Actions | `actions/checkout@v7`, `pnpm/action-setup@v6`, `actions/setup-node@v7`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5` | CI: lint → check → unit → E2E+axe → build → deploy Pages; extension: `wxt zip` → release artifact | Latest release tags verified via GitHub API. (The SvelteKit docs sample still shows `setup-node@v6`; v7 is current.) Set `BASE_PATH=/tran_real_estate` in the build step. | HIGH |
 ## Current LLM Model IDs (for the provider registry)
@@ -102,7 +102,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | `kit.csp` | `mode: 'hash'`, `connect-src 'self' https://api.rentcast.io https://api.anthropic.com https://api.openai.com https://generativelanguage.googleapis.com https://api.web3forms.com` | Pages can't set response headers; SvelteKit emits CSP as a `<meta>` tag for prerendered pages. Locking `connect-src` is the main defense for keys held in the browser (an injected script can't exfiltrate to arbitrary hosts). | MEDIUM (verify meta-tag emission with `fallback` pages during the platform phase) |
 ## Installation
 # Toolchain
-# Scaffold web app (Kit 2 stable — NOT sv@next)
+# Scaffold web app (historical: scaffolded on Kit 2, migrated to Kit 3 in Phase 16)
 # UI primitives (copy-in components)
 # Data + AI + persistence
 # Charts + export
@@ -112,26 +112,26 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 ## Alternatives Considered
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| SvelteKit 2.70 | SvelteKit 3 RC (`3.0.0-next.27`) | Once Kit 3 is stable **and** shadcn-svelte's CLI/`components.json` supports `#lib` subpath imports. Run `sv migrate sveltekit-3` as a dedicated maintenance phase. |
+| SvelteKit 3.1 | SvelteKit 2.70 | Only as a rollback if Kit 3 regresses. The migration (config in `vite.config.ts`, `#lib` imports, adapter-static 4) landed in Phase 16. |
 | Tailwind v4 `@theme` tokens + shadcn-svelte | Vanilla CSS custom properties + bits-ui only | If UI/UX Pro Max produces a fully bespoke design system and you want zero utility classes. You lose shadcn-svelte's copy-in components and LayerChart's Tailwind-based defaults. Not worth it here. |
 | Dexie 4 | `idb` 8.0.3 (thin promise wrapper) | A tiny key-value-only app. This app has a CRM with indexes, migrations, and live queries, which is Dexie territory. |
 | Dexie 4 | `idb-keyval` 6.3.0 | Storing one or two blobs. No indexes, no queries. |
 | Custom Dexie cache + quota ledger | `@tanstack/svelte-query` 6.1.48 + persister | Server-backed apps where freshness is the concern. Here the concern is a hard 50-call budget, which TanStack Query's refetch-on-focus/stale-while-revalidate model fights. The persister packages are also still on the 5.x line (version skew). |
 | Official SDKs (lazy-loaded) | Raw `fetch` for all three providers | If bundle size becomes a problem. The three APIs are simple POSTs, but SSE streaming parsing and error typing are what the SDKs give you for free. |
 | Official SDKs | Vercel AI SDK (`ai`) unified provider layer | If you later add many more providers. Not verified in this research for browser-direct BYOK. (LOW) |
-| LayerChart 2.5 | ECharts 6.1.0 | Heavy interactive dashboards with huge datasets (canvas rendering). Heavier bundle, not Svelte-native, canvas output is worse for vector PDF. |
-| LayerChart 2.5 | Chart.js 4.5.1 | Quick canvas charts without Tailwind. Imperative API, raster output in PDFs. |
+| LayerChart 2.9 | ECharts 6.1.0 | Heavy interactive dashboards with huge datasets (canvas rendering). Heavier bundle, not Svelte-native, canvas output is worse for vector PDF. |
+| LayerChart 2.9 | Chart.js 4.5.1 | Quick canvas charts without Tailwind. Imperative API, raster output in PDFs. |
 | pdfmake 0.3.11 | jsPDF 4.2.1 + jspdf-autotable 5.0.8 | Imperative, coordinate-based layouts or existing jsPDF code. More manual layout work; SVG needs extra plugins. |
 | pdfmake | Print stylesheet (`@media print` + `window.print()`) | **Ship this too** as a zero-dependency "Save as PDF" fallback for any report page. It isn't the primary path because the output varies by browser and can't be branded consistently. |
 | Web3Forms (250/mo) | Formspree free (50/mo account-wide, 2 linked emails, 30-day history) | If an agent needs Formspree's dashboard/integrations. CORS verified live (echoes origin). Keep the form adapter pluggable so an agent can choose either. |
-| WXT 0.21.4 | CRXJS `@crxjs/vite-plugin` 2.7.1 | If you prefer a hand-written `manifest.json` in a plain Vite project. Actively maintained (pushed 2026-09-13), but no built-in SPA location-change helper or zip/publish tooling. |
+| WXT 0.21.5 | CRXJS `@crxjs/vite-plugin` 2.7.1 | If you prefer a hand-written `manifest.json` in a plain Vite project. Actively maintained (pushed 2026-09-13), but no built-in SPA location-change helper or zip/publish tooling. |
 | Browser-direct RentCast | Cloudflare Workers free tier (`wrangler` 4.131.1) thin pass-through | **Only if RentCast ever removes CORS.** A stateless Worker forwarding the user's `X-Api-Key` without logging. Not needed today. |
 | pnpm 12.18 | pnpm 11.27 | Only if pnpm 12 regresses. Lockfile and commands carry over; roll back by reverting the pin commit. |
 ## What NOT to Use
 | Avoid | Why | Use Instead |
 |-------|-----|-------------|
 | `typescript@7.x` (current `latest`) | Outside the peer ranges of `@sveltejs/kit@2`, `svelte-check@4`, `typescript-eslint`. Type-check and lint break. | `typescript@~6.0.3` |
-| `sv@next` / `@sveltejs/kit@next` for v1 | Kit 3 RC: config moves to `vite.config.ts`, `$lib` becomes `#lib`, and the UI ecosystem hasn't followed yet. | `sv@0.17.0` + Kit 2.70.3 |
+| `@sveltejs/kit@next` / prerelease Kit builds | The repo is on stable Kit 3; prereleases are outside the tested pins. | `@sveltejs/kit@3.1.1` |
 | `@google/generative-ai` (0.24.1) | Legacy Gemini SDK, superseded by `@google/genai`. | `@google/genai@2.22.0` |
 | `gemini-2.0-flash` / `gemini-2.0-flash-lite` model IDs | Shut down per official model page. | `gemini-3.8-flash` / `gemini-3.5-flash-lite` |
 | `claude-haiku-4-5` as a *default* | Retirement window opens 2026-10-15. | `claude-sonnet-5` default. Haiku only as a user-selected option. |
@@ -144,7 +144,7 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 | Google Fonts CDN `<link>` | Third-party request (privacy), complicates CSP, and PDF export needs the TTFs locally anyway. | `@fontsource-variable/*` self-hosted. |
 | Svelte UI / shadow-root UI inside the Zillow content script | Unneeded weight on a third-party page. Hiding cards is a `MutationObserver` + class/`display:none`. More surface for Zillow DOM breakage. | Plain TS content script; Svelte only for the popup. |
 | Any Zillow data extraction in the extension (reading prices, sending DOM data to the app) | Crosses from "hide elements" into scraping, violating Zillow ToU and PROJECT.md constraints. Also triggers stricter Chrome Web Store review. | Content script reads only selectors/labels needed to identify sponsored cards; no network permissions, no `host_permissions` beyond Zillow match patterns, no messaging of page content. |
-| Vitest 5.0.0 right now | 10 days old; `sv` scaffolds 4.x; browser-mode companion packages must match the major exactly. | Vitest 4.1.12 now; upgrade as a chore later. |
+| Mixed Vitest majors | Browser-mode companion packages must match the Vitest major exactly. | Vitest 5.1.0 with `@vitest/browser-playwright` 5.1.0 and `vitest-browser-svelte` 3.1.0. |
 | sveltekit-superforms / form actions | Built around server actions. There is no server on GitHub Pages. | Plain Svelte 5 forms + Zod validation client-side. |
 ## Stack Patterns by Variant
 - Swap the RentCast client for a `FixtureRentCastClient` behind the same interface (dependency-injected at app init).
@@ -160,18 +160,18 @@ Tran Real Estate is a go-to-market (GTM) SaaS platform: one Svelte web app with 
 ## Version Compatibility
 | Package A | Compatible With | Notes |
 |-----------|-----------------|-------|
-| `@sveltejs/kit@2.70.3` | `vite ^5–^8`, `svelte ^4 \|\| ^5`, `typescript ^5.3.3 \|\| ^6`, `vite-plugin-svelte ^3–^7` | Verified from registry peerDependencies. |
+| `@sveltejs/kit@3.1.1` | `vite ^8`, `svelte ^5`, `typescript ^6`, `vite-plugin-svelte ^7`, `adapter-static ^4` | As installed in Phase 16; the lockfile is the source of truth for peer ranges. |
 | `@sveltejs/vite-plugin-svelte@7.3.0` | `vite ^8`, `svelte ^5.46.4`; Node `^20.19 \|\| ^22.12 \|\| >=24` | Forces Vite 8. |
 | `svelte-check@4.7.6` | `typescript ^5 \|\| ^6` | **Blocks TS 7.** |
 | `typescript-eslint` (latest) | `typescript >=4.8.4 <6.1.0`, `eslint ^8.57 \|\| ^9 \|\| ^10` | **Blocks TS 7**; pin TS `~6.0.3`. |
 | `@tailwindcss/vite@4.3.3` | `vite ^5.2 \|\| ^6 \|\| ^7 \|\| ^8` | OK. |
-| `bits-ui@2.19.2` | `svelte ^5.33`, `@internationalized/date ^3.8.1`; Node `>=20` | Install `@internationalized/date` (shadcn-svelte init does). |
-| `layerchart@2.5.0` | `svelte ^5`; depends on `runed ^0.37.1`, `@layerstack/tailwind` | Align your `runed` to 0.37.x to avoid duplicates. |
-| `runed@0.37.1` | `svelte ^5.7`, `@sveltejs/kit ^2.21`, `zod ^4.1` | Another reason to stay on Kit 2 for now. |
-| `wxt@0.21.4` | `vite ^6.3.4 \|\| ^7 \|\| ^8`, `typescript >=5.4`; Node `>=22` | CI Node 24 satisfies it. |
+| `bits-ui@2.20.6` | `svelte ^5.33`, `@internationalized/date ^3.8.1`; Node `>=20` | Install `@internationalized/date` (shadcn-svelte init does). |
+| `layerchart@2.9.2` | `svelte ^5`; depends on `runed`, `@layerstack/tailwind` | Keep the app's `runed` on the same minor to avoid duplicates. |
+| `runed@0.38.0` | `svelte ^5.7`, `zod ^4.1` | Installed alongside Kit 3. |
+| `wxt@0.21.5` | `vite ^6.3.4 \|\| ^7 \|\| ^8`, `typescript >=5.4`; Node `>=22` | CI Node 24 satisfies it. |
 | `@wxt-dev/module-svelte@2.0.5` | `wxt >=0.18.6`, `svelte >=5` | OK. |
-| `vitest-browser-svelte@2.2.1` | `vitest ^4` (3.x line requires Vitest 5) | Keep all Vitest-family packages on one major. |
-| `@vitest/browser-playwright@4.1.12` | `vitest 4.1.12` (exact) | Exact-match pin. |
+| `vitest-browser-svelte@3.1.0` | `vitest ^5` | Keep all Vitest-family packages on one major. |
+| `@vitest/browser-playwright@5.1.0` | `vitest 5.1.0` (exact) | Exact-match pin. |
 | `jspdf-autotable@5.0.8` | `jspdf ^2 \|\| ^3 \|\| ^4` | Only if choosing the jsPDF alternative. |
 | `openai@7.15.0` | TS `>=4.9`; Node 22+ (browser OK with flag) | Node minimum only affects running it in Node tests. |
 | `@anthropic-ai/sdk@0.125.0` | TS `>=5.0`; Node 20+ (browser OK with flag) | |
