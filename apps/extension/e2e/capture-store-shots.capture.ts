@@ -33,8 +33,9 @@ async function launch(headless: boolean): Promise<{ ctx: BrowserContext; worker?
 		reducedMotion: 'reduce',
 		args: [`--disable-extensions-except=${EXT_DIR}`, `--load-extension=${EXT_DIR}`]
 	});
-	// 15 s is the measured precedent of extension.spec.ts (whole 7-test suite incl. one launch in
-	// 3.6 s, 15-03 run 2026-11-09).
+	// Timeout: measured 3.6 s for the whole 7-test extension.spec.ts suite including one launch
+	// (15-03 run 2026-11-09), so 15 s keeps a 4x margin.
+	// Cause: the MV3 service worker registers asynchronously after launchPersistentContext.
 	const worker =
 		ctx.serviceWorkers()[0] ??
 		(await ctx.waitForEvent('serviceworker', { timeout: 15_000 }).catch(() => undefined));

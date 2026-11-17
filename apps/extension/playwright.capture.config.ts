@@ -16,8 +16,9 @@ export default defineConfig({
 	workers: 1,
 	retries: 0,
 	reporter: 'list',
-	// Timeout: same value as playwright.config.ts, which measured 3.6 s for the whole 7-test suite
-	// including its one persistent-context launch (15-03 run 2026-11-09); 60 s keeps that margin for
-	// the headless launch plus the headed relaunch fallback.
+	// Timeout: measured 3.6 s for the whole 7-test suite including its one persistent-context launch
+	// (playwright.config.ts, 15-03 run 2026-11-09); this capture ran in 2.9 s on 2026-11-16.
+	// Cause: a missing service worker triggers a headed relaunch with a second 15 s wait, which can
+	// pass Playwright's 30 s default, so 60 s is the same value as playwright.config.ts.
 	timeout: 60_000
 });
