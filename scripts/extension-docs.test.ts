@@ -1,7 +1,7 @@
 // Plan 11-07: the extension install guide, the Edge Add-ons listing copy and the Tran privacy
 // section the popup links to (PRIVACY_URL#browser-extension). UI-SPEC Copywriting Contract and
 // RESEARCH "Edge Add-ons Requirements" (policy 1.1.2: no references to other browsers).
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { resolveSiteUrl } from '../apps/web/src/lib/site-config.js';
@@ -166,5 +166,118 @@ describe('privacy page #browser-extension section', () => {
 		const h2 = page.indexOf('id="browser-extension"');
 		expect(h2).toBeGreaterThan(page.indexOf('<h2>Contact</h2>'));
 		expect(h2).toBeLessThan(page.indexOf('</LegalPage>'));
+	});
+});
+
+const SHOTS_DIR = join(ROOT, 'apps', 'extension', 'store', 'screenshots');
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+/** Width and height from the IHDR chunk, or null when the 8-byte PNG signature is wrong. */
+function pngSize(buf: Buffer): { width: number; height: number } | null {
+	if (buf.length < 24 || !buf.subarray(0, 8).equals(PNG_SIGNATURE)) return null;
+	return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+}
+const isStoreSize = (s: { width: number; height: number } | null): boolean =>
+	s !== null && s.width === 1280 && s.height === 800;
+
+function fakePng(width: number, height: number): Buffer {
+	const buf = Buffer.alloc(33);
+	PNG_SIGNATURE.copy(buf);
+	buf.writeUInt32BE(width, 16);
+	buf.writeUInt32BE(height, 20);
+	return buf;
+}
+
+const shotFiles = (): string[] => (existsSync(SHOTS_DIR) ? readdirSync(SHOTS_DIR).sort() : []);
+
+describe('edge-listing.md store sections', () => {
+	const listing = read(LISTING);
+	const site = resolveSiteUrl(LIVE_SITE_ENV);
+
+	test('Website is the project site', () => {
+		expect(section(listing, 'Website')).toBe(`${site}/`);
+	});
+
+	test('Support contact detail is a single site URL with no email', () => {
+		const body = section(listing, 'Support contact detail');
+		expect(body.startsWith(`${site}/`)).toBe(true);
+		expect(body).not.toMatch(/[\r\n]/);
+		expect(body).not.toContain('@');
+	});
+
+	test('Notes for certification state the ad-slot ground truth', () => {
+		const notes = collapse(section(listing, 'Notes for certification'));
+		expect(notes).toContain('On live Zillow today only advertising-slot list items are dimmed');
+		expect(notes).toContain('No account, login or test data is needed');
+		expect(notes.length).toBeLessThanOrEqual(5000);
+	});
+
+	test('screenshots are described as synthetic, never a live search', () => {
+		expect(listing).toContain('synthetic');
+		expect(listing).not.toMatch(/captured from a live search/i);
+	});
+
+	test('Assets lists exactly the screenshot files present', () => {
+		const listed = [...section(listing, 'Assets').matchAll(/store\/screenshots\/(\S+?\.png)/g)]
+			.map((m) => m[1])
+			.sort();
+		expect(listed).toEqual(shotFiles());
+	});
+});
+
+describe('store screenshots', () => {
+	test('the directory holds 2 or 3 PNG files and nothing else', () => {
+		const files = shotFiles();
+		expect(files.length).toBeGreaterThanOrEqual(2);
+		expect(files.length).toBeLessThanOrEqual(3);
+		for (const f of files) expect(f).toMatch(/\.png$/);
+	});
+
+	test('every file is a PNG of exactly 1280x800', () => {
+		for (const f of shotFiles()) {
+			const size = pngSize(readFileSync(join(SHOTS_DIR, f)));
+			expect(size, f).not.toBeNull();
+			expect(isStoreSize(size), `${f} is ${size?.width}x${size?.height}`).toBe(true);
+		}
+	});
+
+	test('planted wrong files are rejected', () => {
+		expect(isStoreSize(pngSize(fakePng(1280, 800)))).toBe(true);
+		expect(pngSize(fakePng(1280, 799))?.height).toBe(799);
+		expect(isStoreSize(pngSize(fakePng(1280, 799)))).toBe(false);
+		expect(isStoreSize(pngSize(fakePng(640, 480)))).toBe(false);
+		expect(isStoreSize(pngSize(fakePng(3000, 1800)))).toBe(false);
+		const bad = fakePng(1280, 800);
+		bad[0] = 0;
+		expect(pngSize(bad)).toBeNull();
+	});
+});
+
+// EXT-09: the phase closes with the placeholder; replacing it with the listing URL after
+// certification is an owner follow-up and must keep this test green.
+const PLACEHOLDER =
+	'The listing link will appear here once the Microsoft Edge Add-ons listing is live.';
+function installListingState(body: string): 'placeholder' | 'link' | 'neither' {
+	const text = collapse(body);
+	if (text.includes(PLACEHOLDER)) return 'placeholder';
+	if (/https:\/\/microsoftedge\.microsoft\.com\//.test(text)) return 'link';
+	return 'neither';
+}
+
+describe('EXT-09 install guide Edge Add-ons section', () => {
+	test('carries the placeholder sentence or a listing link', () => {
+		const state = installListingState(
+			section(read(INSTALL), 'Install from Microsoft Edge Add-ons')
+		);
+		expect(['placeholder', 'link']).toContain(state);
+	});
+
+	test('planted sections are classified correctly', () => {
+		expect(installListingState('Nothing useful here.')).toBe('neither');
+		expect(installListingState(`${PLACEHOLDER} Installs update.`)).toBe('placeholder');
+		expect(
+			installListingState('https://microsoftedge.microsoft.com/addons/detail/example/abc')
+		).toBe('link');
+		expect(installListingState('https://example.com/addons')).toBe('neither');
 	});
 });

@@ -1,7 +1,9 @@
 # Microsoft Edge Add-ons listing: Sponsored Listing Filter
 
 Paste-ready copy for Partner Center. The name and short description come from the manifest and are
-read-only in Partner Center. Screenshots are an owner HUMAN-UAT item.
+read-only in Partner Center. Screenshots are captured by `pnpm --filter extension capture:store`
+from a synthetic results page (fictional addresses), never from live Zillow, and live in
+`store/screenshots/`.
 
 ## Name
 
@@ -64,7 +66,30 @@ collected, stored remotely or shared.
 
 ## Category: Shopping
 
+## Website
+
+https://wolfwdavid.github.io/tran_real_estate/
+
+## Support contact detail
+
+https://wolfwdavid.github.io/tran_real_estate/feedback/
+
+## Notes for certification
+
+The extension runs only on zillow.com search results pages. It dims list items that Zillow marks as
+advertising slots and cards labelled Sponsored, Promoted or Featured, and adds a small "Sponsored -
+show" button to each dimmed card. On live Zillow today only advertising-slot list items are dimmed;
+labelled cards are matched by exact short text and may not appear on every search. No account, login
+or test data is needed. Open a Zillow rentals or for-sale search and the toolbar badge shows how many
+items were dimmed; the popup has one on/off switch. The extension makes no network requests and
+reads no listing details; the popup content security policy sets connect-src to 'none'. The
+screenshots show a synthetic results page with fictional addresses, not live Zillow.
+
 ## Assets
 
 - Logo: `store/edge-logo-300.png` (300 x 300).
-- Screenshots (640 x 480 or 1280 x 800): owner HUMAN-UAT item, captured from a live search.
+- `store/screenshots/01-dimmed-results.png` (1280 x 800)
+- `store/screenshots/02-reveal-card.png` (1280 x 800)
+- `store/screenshots/03-popup.png` (1280 x 800)
+
+Synthetic fixture page, not live Zillow.
