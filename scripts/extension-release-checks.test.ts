@@ -2,7 +2,7 @@
 // No network, no timers: the probe takes an injected fetch, git runs in a temp repo, zips are
 // synthetic. Nothing is written into the repository.
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -310,5 +310,50 @@ describe('CLI version', () => {
 
 	test('an unknown command exits 2', () => {
 		expect(spawnSync(process.execPath, [CLI, 'nope'], { encoding: 'utf8' }).status).toBe(2);
+	});
+});
+
+describe('apps/extension/CHANGELOG.md', () => {
+	const BANNED = /\b(block|blocks|blocker|ad-free|remove|removes|official)\b|Zillow['’]s/i;
+	const changelog = readFileSync(join(REPO_ROOT, 'apps/extension/CHANGELOG.md'), 'utf8');
+	const { version } = JSON.parse(
+		readFileSync(join(REPO_ROOT, 'apps/extension/package.json'), 'utf8')
+	) as { version: string };
+	const installGuide = readFileSync(join(REPO_ROOT, 'docs/EXTENSION-INSTALL.md'), 'utf8');
+
+	/** Version of the first dated heading, or '' when there is none. */
+	const topVersion = (text: string) =>
+		/^## \[(\d+\.\d+\.\d+)\] - \d{4}-\d{2}-\d{2}$/m.exec(text)?.[1] ?? '';
+
+	test('starts with a Changelog title and has Unreleased before the first version', () => {
+		expect(changelog.startsWith('# Changelog\n')).toBe(true);
+		const unreleased = changelog.indexOf('\n## [Unreleased]');
+		expect(unreleased).toBeGreaterThan(-1);
+		expect(unreleased).toBeLessThan(changelog.search(/^## \[\d/m));
+	});
+
+	test('the first versioned entry is the package.json version', () => {
+		expect(topVersion(changelog)).toBe(version);
+	});
+
+	test('a changelog whose top entry is 0.1.1 fails the package-version check', () => {
+		expect(topVersion('# Changelog\n\n## [0.1.1] - 2026-12-01\n\n- x\n')).not.toBe(version);
+	});
+
+	test('the notes are the Added section, free of link references and install-guide text', () => {
+		const notes = extractNotes(changelog, version);
+		expect(notes).toContain('### Added');
+		expect(notes).not.toContain('## [Unreleased]');
+		expect(notes).not.toMatch(/^\[[^\]]+\]: /m);
+		expect(notes).not.toContain(installGuide.slice(0, 200));
+		expect(notes).not.toBe(installGuide);
+		expect(notes.match(BANNED)).toBeNull();
+		expect(notes).not.toMatch(/[A-Z_]{4,}=\S/);
+	});
+
+	test('the file ends with link references for Unreleased and the version', () => {
+		expect(changelog).toMatch(/^\[Unreleased\]: \S+$/m);
+		const esc = version.replace(/\./g, '\\.');
+		expect(changelog).toMatch(new RegExp(`^\\[${esc}\\]: \\S+\\n$`, 'm'));
 	});
 });
