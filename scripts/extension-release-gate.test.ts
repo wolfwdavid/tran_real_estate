@@ -16,8 +16,47 @@ const actionlint = readFileSync(ACTIONLINT, 'utf8');
 
 const GATE = "vars.EXTENSION_RELEASES_ENABLED == 'true'";
 
+const INSTALL = 'run: pnpm install --frozen-lockfile';
+const ANCESTOR = 'node scripts/extension-release-checks.mjs ancestor';
+const VITEST = 'run: pnpm vitest run --project extension';
+const ZIP = 'run: pnpm --filter extension zip';
+const ORACLE =
+	'run: node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output';
+const VERSION = 'node scripts/extension-release-checks.mjs version';
+const PROBE = 'node scripts/extension-release-checks.mjs probe';
+const CHECKSUMS = 'sha256sum sponsored-listing-filter-*.zip > SHA256SUMS.txt';
+const SELF_CHECK = 'sha256sum -c SHA256SUMS.txt';
+const NOTES =
+	'node scripts/extension-release-checks.mjs notes --out "$RUNNER_TEMP/release-notes.md"';
+const SUMMARY = 'node scripts/extension-release-checks.mjs summary >> "$GITHUB_STEP_SUMMARY"';
+const DRAFT_PUBLISH = 'gh release create "$GITHUB_REF_NAME" --draft --verify-tag';
+const PUSH_ONLY = "if: github.event_name == 'push'";
+
 function count(haystack: string, needle: string): number {
 	return haystack.split(needle).length - 1;
+}
+
+// The `- ` step block of `src` that contains `run`.
+function stepOf(src: string, run: string): string {
+	const at = src.indexOf(run);
+	expect(at, run).toBeGreaterThan(-1);
+	const next = src.indexOf('\n      - ', at);
+	return src.slice(src.lastIndexOf('\n      - ', at), next === -1 ? undefined : next);
+}
+
+// Everything a publish step must satisfy; an empty list means the step is safe.
+function publishProblems(src: string): string[] {
+	const step = stepOf(src, 'gh release create');
+	const problems: string[] = [];
+	if (!step.includes(`${PUSH_ONLY}\n        env:\n          GH_TOKEN`))
+		problems.push('not push-only');
+	if (!step.includes(DRAFT_PUBLISH)) problems.push('not a draft');
+	return problems;
+}
+
+function checkoutProblems(src: string): string[] {
+	const step = stepOf(src, 'uses: actions/checkout@');
+	return step.includes('          fetch-depth: 0') ? [] : ['shallow checkout'];
 }
 
 // Everything after `jobs:\n  release:\n` is the release job body (it is the only job).
@@ -33,11 +72,12 @@ describe('trigger', () => {
 		expect(existsSync(RELEASE)).toBe(true);
 	});
 
-	test('the only trigger is a push of an ext-v* tag', () => {
-		expect(text).toContain("on:\n  push:\n    tags: ['ext-v*']\n\n");
+	test('the only triggers are a push of an ext-v* tag and an input-less manual dry run', () => {
+		expect(text).toContain("on:\n  push:\n    tags: ['ext-v*']\n  workflow_dispatch:\n\n");
+		expect(count(text, 'workflow_dispatch')).toBe(1);
 		expect(text).not.toContain('pull_request');
 		expect(text).not.toContain('branches:');
-		expect(text).not.toContain('workflow_dispatch');
+		expect(text).not.toContain('inputs:');
 		expect(text).not.toContain('schedule:');
 	});
 });
@@ -102,16 +142,21 @@ describe('supply chain', () => {
 
 describe('steps', () => {
 	const ORDER = [
-		'run: pnpm install --frozen-lockfile',
-		'"ext-v$(node -p',
-		'run: pnpm vitest run --project extension',
-		'run: pnpm --filter extension zip',
-		'run: node scripts/assert-extension.mjs apps/extension/.output/chrome-mv3 --zip-dir apps/extension/.output',
-		'sha256sum sponsored-listing-filter-*.zip > SHA256SUMS.txt',
-		'gh release create "$GITHUB_REF_NAME" --verify-tag'
+		INSTALL,
+		ANCESTOR,
+		VITEST,
+		ZIP,
+		ORACLE,
+		VERSION,
+		PROBE,
+		CHECKSUMS,
+		SELF_CHECK,
+		NOTES,
+		SUMMARY,
+		DRAFT_PUBLISH
 	];
 
-	test('install, version check, tests, zip, oracle, checksums, publish run in that order', () => {
+	test('install, ancestor, tests, zip, oracle, versions, probe, checksums, notes, summary, draft run in that order', () => {
 		const job = releaseJob();
 		const idx = ORDER.map((s) => job.indexOf(s));
 		ORDER.forEach((s, i) => expect(idx[i], s).toBeGreaterThan(-1));
@@ -125,28 +170,22 @@ describe('steps', () => {
 	// LIVE-08 / D-04: the published zip and its oracle run are built for the owner's site URL
 	// (origin + base path). Both variables sit in each step's own env block, never at job or
 	// workflow level.
-	test('the zip and oracle steps each carry PUBLIC_SITE_URL and BASE_PATH in their own step', () => {
+	test('the zip, oracle and probe steps each carry PUBLIC_SITE_URL and BASE_PATH in their own step', () => {
 		const SITE = 'PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}';
 		const BASE = 'BASE_PATH: ${{ vars.BASE_PATH }}';
-		const job = releaseJob();
-		const stepOf = (run: string): string => {
-			const at = job.indexOf(run);
-			expect(at, run).toBeGreaterThan(-1);
-			const next = job.indexOf('\n      - ', at);
-			return job.slice(job.lastIndexOf('\n      - ', at), next === -1 ? undefined : next);
-		};
 		for (const [name, run] of [
-			['Zip the extension', ORDER[3]],
-			['Manifest and zero-network oracle', ORDER[4]]
+			['Zip the extension', ZIP],
+			['Manifest and zero-network oracle', ORACLE],
+			['Live privacy URL', PROBE]
 		]) {
-			const step = stepOf(run);
+			const step = stepOf(text, run);
 			expect(step, run).toContain(`- name: ${name}\n`);
 			expect(step, run).toContain(`\n        env:\n          ${SITE}\n          ${BASE}`);
 		}
-		expect(count(text, SITE)).toBe(2);
-		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(2);
-		expect(count(text, BASE)).toBe(2);
-		expect(count(text, 'vars.BASE_PATH')).toBe(2);
+		expect(count(text, SITE)).toBe(3);
+		expect(count(text, 'vars.PUBLIC_SITE_URL')).toBe(3);
+		expect(count(text, BASE)).toBe(3);
+		expect(count(text, 'vars.BASE_PATH')).toBe(3);
 		expect(text).not.toMatch(/^(?:env:| {4}env:)/m);
 	});
 
@@ -154,6 +193,59 @@ describe('steps', () => {
 		expect(text).toContain('working-directory: apps/extension/.output');
 		expect(text).toContain('apps/extension/.output/sponsored-listing-filter-*.zip');
 		expect(text).toContain('apps/extension/.output/SHA256SUMS.txt');
+	});
+});
+
+describe('dry-run and draft (EXT-08)', () => {
+	test('the checkout is full-depth so the ancestor check can resolve origin/main', () => {
+		expect(count(text, 'fetch-depth: 0')).toBe(1);
+		expect(checkoutProblems(text)).toEqual([]);
+	});
+
+	test('only the ancestor step and the draft publish step are push-only', () => {
+		expect(count(text, PUSH_ONLY)).toBe(2);
+		expect(stepOf(text, ANCESTOR)).toContain(PUSH_ONLY);
+		expect(stepOf(text, DRAFT_PUBLISH)).toContain(PUSH_ONLY);
+	});
+
+	test('the release is a draft, created once, and never published or edited by the workflow', () => {
+		expect(publishProblems(text)).toEqual([]);
+		expect(count(text, 'gh release')).toBe(1);
+		expect(text.indexOf('--draft')).toBeLessThan(text.indexOf('--verify-tag'));
+		expect(text).not.toContain('--draft=false');
+		expect(text).not.toContain('gh release edit');
+		expect(text).not.toContain('gh release upload');
+		expect(text).not.toContain('inputs.');
+	});
+
+	test('notes come from the changelog file, not the install guide', () => {
+		expect(text).toContain('--notes-file "$RUNNER_TEMP/release-notes.md"');
+		expect(text).not.toContain('docs/EXTENSION-INSTALL.md');
+	});
+
+	test('the version step reads the tag only on a push', () => {
+		expect(stepOf(text, VERSION)).toContain(
+			"env:\n          RELEASE_TAG: ${{ github.event_name == 'push' && github.ref_name || '' }}"
+		);
+	});
+
+	test('no ${{ }} inside any run: line, no artifact upload action', () => {
+		const runs = text.split('\n').filter((l) => /^\s*(- )?run:/.test(l));
+		expect(runs.length).toBeGreaterThan(5);
+		for (const l of runs) expect(l, l).not.toContain('${{');
+		expect(text).not.toContain('actions/upload-artifact');
+		expect(count(text, 'uses: ')).toBe(3);
+	});
+
+	// Non-vacuity: each predicate must actually fail on a planted mutant.
+	test('planted mutants are caught', () => {
+		expect(publishProblems(text.replace(' --draft', ''))).toContain('not a draft');
+		expect(
+			publishProblems(
+				text.replace(`${PUSH_ONLY}\n        env:\n          GH_TOKEN`, 'env:\n          GH_TOKEN')
+			)
+		).toContain('not push-only');
+		expect(checkoutProblems(text.replace('fetch-depth: 0\n', ''))).toContain('shallow checkout');
 	});
 });
 

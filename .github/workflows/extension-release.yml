@@ -1,11 +1,14 @@
 name: extension-release
 
 # Dormant until the owner creates the remote and sets the repository variable named in the
-# release job's if: line to true. Pushing an ext-v<version> tag then builds, tests and
-# oracle-checks the extension and publishes the zip + SHA256SUMS.txt as a GitHub Release.
+# release job's if: line to true. Pushing an ext-v<version> tag builds, tests and oracle-checks the
+# extension, then creates a DRAFT release holding the zip + SHA256SUMS.txt. A manual run of this
+# workflow performs the same build and checks and never creates a release. Publishing the draft is
+# an owner action outside this workflow.
 on:
   push:
     tags: ['ext-v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,7 +19,7 @@ concurrency:
 
 jobs:
   release:
-    name: build, verify and publish the extension zip
+    name: build, verify and draft the extension release
     if: vars.EXTENSION_RELEASES_ENABLED == 'true'
     runs-on: ubuntu-24.04
     permissions:
@@ -25,14 +28,16 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       # No cache on a release job: a cache written by another ref could poison the published zip.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
-      - name: Tag matches the extension package version
-        run: test "$GITHUB_REF_NAME" = "ext-v$(node -p "require('./apps/extension/package.json').version")"
+      - name: Tag commit is on main
+        if: github.event_name == 'push'
+        run: node scripts/extension-release-checks.mjs ancestor
       - run: pnpm vitest run --project extension
       # The zip and its oracle read the same site URL (PUBLIC_SITE_URL + BASE_PATH through
       # resolveSiteUrl: the popup's PRIVACY_URL and the oracle's URL allowlist). Unset values expand
@@ -47,10 +52,24 @@ jobs:
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
           BASE_PATH: ${{ vars.BASE_PATH }}
+      - name: Tag, package, built manifest and zip versions agree
+        run: node scripts/extension-release-checks.mjs version
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'push' && github.ref_name || '' }}
+      - name: Live privacy URL
+        run: node scripts/extension-release-checks.mjs probe
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          BASE_PATH: ${{ vars.BASE_PATH }}
       - name: Checksums
         working-directory: apps/extension/.output
-        run: sha256sum sponsored-listing-filter-*.zip > SHA256SUMS.txt
-      - name: Publish release
+        run: sha256sum sponsored-listing-filter-*.zip > SHA256SUMS.txt && sha256sum -c SHA256SUMS.txt
+      - name: Release notes from the changelog
+        run: node scripts/extension-release-checks.mjs notes --out "$RUNNER_TEMP/release-notes.md"
+      - name: Job summary
+        run: node scripts/extension-release-checks.mjs summary >> "$GITHUB_STEP_SUMMARY"
+      - name: Create draft release
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "Sponsored Listing Filter $GITHUB_REF_NAME" --notes-file docs/EXTENSION-INSTALL.md apps/extension/.output/sponsored-listing-filter-*.zip apps/extension/.output/SHA256SUMS.txt
+        run: gh release create "$GITHUB_REF_NAME" --draft --verify-tag --title "Sponsored Listing Filter $GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/release-notes.md" apps/extension/.output/sponsored-listing-filter-*.zip apps/extension/.output/SHA256SUMS.txt
