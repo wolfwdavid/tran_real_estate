@@ -257,30 +257,45 @@ these in order, once. Record each result in `.planning/HUMAN-UAT.md`.
 
 1. **Read the current Zillow Terms of Use** in a browser (automated fetch is refused). Record the
    "Updated" date and the section 5 Prohibited Use wording in the HUMAN-UAT extension rows, and
-   decide go or no-go before any public release. This gates the store listing and the GitHub
-   Release, not the build.
+   decide go or no-go before any public release. Record the go/no-go in HUMAN-UAT row L93 before
+   the draft release is published and before the Partner Center submission. This gates the store
+   listing and the GitHub Release, not the build.
 2. **Confirm the privacy URL is live:**
    `https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension`
    (needs Steps 1-7). The popup links to it and the store listing asks for it.
-3. **Microsoft Edge Add-ons.** Create a free Partner Center developer account. Submit the
-   `sponsored-listing-filter-<version>-chrome.zip` produced by `pnpm ext:build` (or the
-   GitHub Release zip), with the copy in `apps/extension/store/edge-listing.md`, the logo
-   `apps/extension/store/edge-logo-300.png`, screenshots at 640x480 or 1280x800 (the popup and a
-   dimmed card), and the privacy URL from item 2. Certification takes up to 7 business days.
-   Once the listing is live, replace the placeholder sentence under "Install from Microsoft
-   Edge Add-ons" in `docs/EXTENSION-INSTALL.md` with the listing link.
+3. **Microsoft Edge Add-ons.** Create a free Partner Center developer account. Submit the zip
+   downloaded from the verified GitHub Release (item 4), not a local build. Use the copy in
+   `apps/extension/store/edge-listing.md` (fill Website, Support contact detail and Notes for
+   certification from it), the logo `apps/extension/store/edge-logo-300.png`, two or three PNG
+   screenshots at exactly 1280x800 from `apps/extension/store/screenshots/` (captured from the
+   synthetic fixture page with `pnpm --filter extension capture:store`, never from live Zillow),
+   and the privacy URL from item 2. Re-read the Partner Center form and the current Edge developer
+   policies on the day of submission and record the policy revision date in HUMAN-UAT.
+   Certification can take 7 business days or longer (treat 7 as a floor). Once the listing is
+   live, replace the placeholder sentence under "Install from Microsoft Edge Add-ons" in
+   `docs/EXTENSION-INSTALL.md` with the listing link; that edit is an owner follow-up and never
+   blocks anything.
 4. **GitHub Releases.** After Step 6 (the remote exists), add the repository variable
    `EXTENSION_RELEASES_ENABLED` with the value `true` (Settings, then Secrets and variables,
-   then Actions, then **Variables**). Then push a tag that matches
-   `apps/extension/package.json` `version`:
+   then Actions, then **Variables**). Then, in this order:
+   1. Push the commit that carries the workflow, the CHANGELOG and the store assets to `main` and
+      wait for ci to go green BEFORE any tag exists: the workflow fails a tag whose commit is not
+      an ancestor of `main`.
+   2. Dry run: `gh workflow run extension-release.yml --ref main`, then `gh run watch`.
+      `gh release list` must show no new release (a manual run never publishes).
+   3. Tag and push a tag that equals `apps/extension/package.json` `version`:
 
-   ```sh
-   git tag ext-v0.1.0
-   git push origin ext-v0.1.0
-   ```
+      ```sh
+      git tag ext-v0.1.0
+      git push origin ext-v0.1.0
+      ```
 
-   Confirm the Release carries `sponsored-listing-filter-0.1.0-chrome.zip` and
-   `SHA256SUMS.txt`, and that `sha256sum -c SHA256SUMS.txt` passes on the downloaded files.
+   4. The workflow creates a DRAFT release with the zip, `SHA256SUMS.txt` and the notes from
+      `apps/extension/CHANGELOG.md`.
+   5. Verify the draft: `gh release download ext-v0.1.0 --repo wolfwdavid/tran_real_estate --dir <empty folder>`,
+      then `sha256sum -c SHA256SUMS.txt` in that folder, unzip, and load it unpacked once.
+   6. Publish with `gh release edit ext-v0.1.0 --draft=false`. This is owner only, after the
+      Zillow Terms of Use go decision (item 1). The workflow itself never publishes.
 
 Firefox Add-ons is not part of v1 (ROADMAP cut line 2).
 

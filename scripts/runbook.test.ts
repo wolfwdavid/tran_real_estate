@@ -28,6 +28,7 @@ const HEADINGS = [
 	'## Dependabot policy',
 	'## Analytics: synthetic pageviews',
 	'## Launch proof screenshots',
+	'## Release the extension',
 	'## First deploy facts'
 ];
 
@@ -72,7 +73,7 @@ function dependabotIgnores(): string[] {
 }
 
 describe('structure', () => {
-	test('the eleven headings appear in the locked order and nothing else is a heading', () => {
+	test('the twelve headings appear in the locked order and nothing else is a heading', () => {
 		const found = DOC.split('\n').filter((l) => /^#{1,2} /.test(l));
 		expect(found).toEqual(HEADINGS);
 	});

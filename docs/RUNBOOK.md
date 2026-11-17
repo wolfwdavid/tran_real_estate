@@ -194,6 +194,32 @@ It exits non-zero if a fact misses its expected value or the bundle exceeds 5 MB
 Dashboard screenshots (Actions, Pages settings, Umami) are the one hand-captured part: redact e-mail
 addresses and account details from them before committing, and keep the whole bundle under 5 MB.
 
+## Release the extension
+
+The `extension-release` workflow needs the extension variable set to true and the release commit on
+`main`. It never publishes: a tag push creates a draft and a manual run creates nothing.
+
+1. Dry run: `gh workflow run extension-release.yml --ref main`, then `gh run watch`. It builds,
+   asserts, probes and checksums; `gh release list` must show no new release.
+2. Read the job summary: zip name, size, entry count and the `SHA256SUMS.txt` lines.
+3. Tag `ext-v<version>` (equal to `apps/extension/package.json`) and push the tag. The workflow
+   creates a draft release with the zip, `SHA256SUMS.txt` and the CHANGELOG notes.
+4. Verify the draft: `gh release download ext-v0.1.0 --repo wolfwdavid/tran_real_estate --dir <empty folder>`,
+   then `sha256sum -c SHA256SUMS.txt` in that folder (PowerShell:
+   `Get-FileHash -Algorithm SHA256 <zip>` and compare with the file).
+5. Publish, owner only: `gh release edit ext-v0.1.0 --draft=false`.
+
+Failures are fail-closed and each stops the job before anything is uploaded:
+
+- "not an ancestor of origin/main": push `main` first, then tag.
+- "versions disagree": the tag, package version, built manifest and zip name differ; fix the tag or
+  rebuild.
+- "zip entry not on allowlist": a stray file is in the extension output.
+- "privacy probe failed": the live site is down or the `BASE_PATH` variable is unset; re-run once.
+
+A bad draft is deleted by the owner with `gh release delete ext-v0.1.0`. A tag that is already
+pushed is removed only with the owner's explicit approval.
+
 ## First deploy facts
 
 Measured at the Phase 13 go-live and the two deploys that followed (plans 13-13, 13-15, 13-17;
