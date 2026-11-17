@@ -11,7 +11,8 @@
 		"check": "wxt prepare && svelte-check --tsconfig ./tsconfig.json",
 		"icons": "node scripts/make-icons.mjs",
 		"test:browser": "vitest run --config vitest.browser.config.ts",
-		"e2e": "playwright test"
+		"e2e": "playwright test",
+		"capture:store": "playwright test --config playwright.capture.config.ts"
 	},
 	"devDependencies": {
 		"@fontsource-variable/fraunces": "5.3.0",
