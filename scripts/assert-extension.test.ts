@@ -3,7 +3,7 @@
 // the oracle claims is proven by planting exactly one fault and asserting the oracle names it.
 // Nothing is written into the repository.
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -646,5 +646,70 @@ describe('assert-extension oracle: output directory and zip', () => {
 		const r = runCli();
 		expect(r.status).toBe(2);
 		expect(r.stderr).toContain('usage');
+	});
+});
+
+describe('assert-extension oracle: zip entry allowlist', () => {
+	// The entry set the real Phase 16 zip carries.
+	const GOLDEN_ENTRIES = [
+		...['400-normal', '500-normal', '600-normal', 'cyrillic', 'greek', 'latin', 'vietnamese'].map(
+			(s) => `assets/inter-${s}-wght-normal-abc123.woff2`
+		),
+		'assets/popup-abc123.css',
+		'background.js',
+		'chunks/popup-abc123.js',
+		'content-scripts/zillow.css',
+		'content-scripts/zillow.js',
+		'icon/16.png',
+		'icon/32.png',
+		'icon/48.png',
+		'icon/128.png',
+		'manifest.json',
+		'popup.html'
+	];
+	const zipOf = (root: string, extra: string[] = []) => {
+		const zip = join(root, 'sponsored-listing-filter-0.1.0-chrome.zip');
+		writeFileSync(zip, makeZip([...GOLDEN_ENTRIES, ...extra].map((n) => [n, ''])));
+		return zip;
+	};
+
+	test('the full real entry set passes', () => {
+		withTmp((root) => expect(checkZip(zipOf(root))).toEqual([]));
+	});
+
+	test.each([
+		'chunks/popup-x.js.map',
+		'src/popup.ts',
+		'.env',
+		'.env.production',
+		'key.pem',
+		'node_modules/x/index.js',
+		'.git/config',
+		'assets/popup.svelte',
+		'chrome-mv3/background.js',
+		'../escape.js',
+		'assets/'
+	])('an extra %s entry is named and rejected', (extra) => {
+		withTmp((root) => {
+			expect(checkZip(zipOf(root, [extra]))).toEqual([`zip entry not on allowlist: ${extra}`]);
+		});
+	});
+
+	test('CLI --zip-dir fails on a .map entry', () => {
+		withTmp((root) => {
+			const dir = writeOutput(root, 'chrome-mv3', golden());
+			zipOf(root, ['chunks/popup-x.js.map']);
+			const r = runCli(dir, '--zip-dir', root);
+			expect(r.status).toBe(1);
+			expect(r.stderr).toContain('zip entry not on allowlist');
+		});
+	});
+
+	const outDir = join(REPO_ROOT, 'apps', 'extension', '.output');
+	const realZip = existsSync(outDir)
+		? readdirSync(outDir).find((f) => /^sponsored-listing-filter-.*-chrome\.zip$/.test(f))
+		: undefined;
+	test.skipIf(!realZip)('the real built zip passes the allowlist', () => {
+		expect(checkZip(join(outDir, realZip as string))).toEqual([]);
 	});
 });

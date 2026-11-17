@@ -1,6 +1,7 @@
 // Independent zero-network / least-privilege oracle over a PRODUCTION WXT extension output
 // (EXT-03 build-output layer; the source layer is the eslint.config.js extension block and the
-// runtime layer is the popup CSP below).
+// runtime layer is the popup CSP below). The release zip is also checked against a default-deny
+// entry allowlist (ZIP_ENTRY_ALLOWLIST).
 //
 // The manifest strings and EXPECTED_CSP are deliberate literal duplicates of
 // apps/extension/src/lib/copy.ts and apps/extension/wxt.config.ts POPUP_CSP (same precedent as
@@ -286,7 +287,33 @@ export function listZipEntries(buf) {
 }
 
 /**
- * Returns [] when the zip has manifest.json as a root entry (the store rejects a nested one).
+ * Default-deny: the only zip entry shapes WXT emits. The `[\w.-]+` segments cannot contain `/`,
+ * so nested, dot-dot and directory entries never match.
+ */
+export const ZIP_ENTRY_ALLOWLIST = [
+	/^manifest\.json$/,
+	/^background\.js$/,
+	/^popup\.html$/,
+	/^chunks\/[\w.-]+\.js$/,
+	/^assets\/[\w.-]+\.(?:css|js|woff2)$/,
+	/^content-scripts\/[\w.-]+\.(?:js|css)$/,
+	/^icon\/\d+\.png$/
+];
+
+/**
+ * One problem per zip entry that matches no ZIP_ENTRY_ALLOWLIST pattern (.map, .ts, .env, ...).
+ * @param {string[]} entries
+ * @returns {string[]}
+ */
+export function checkZipEntries(entries) {
+	return entries
+		.filter((e) => !ZIP_ENTRY_ALLOWLIST.some((re) => re.test(e)))
+		.map((e) => `zip entry not on allowlist: ${e}`);
+}
+
+/**
+ * Returns [] when the zip has manifest.json as a root entry (the store rejects a nested one) and
+ * every entry is on the allowlist.
  * @param {string} path
  * @returns {string[]}
  */
@@ -297,10 +324,11 @@ export function checkZip(path) {
 	} catch (e) {
 		return [`${basename(path)}: not a readable zip (${e.message})`];
 	}
+	const errors = [];
 	if (!entries.includes('manifest.json')) {
-		return [`${basename(path)}: manifest.json is not at the zip root`];
+		errors.push(`${basename(path)}: manifest.json is not at the zip root`);
 	}
-	return [];
+	return [...errors, ...checkZipEntries(entries)];
 }
 
 /** Returns [] when zipDir holds exactly one release zip and that zip passes checkZip. */
