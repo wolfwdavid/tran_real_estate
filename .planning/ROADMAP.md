@@ -287,7 +287,7 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 17-01-PLAN.md: release check scripts (version, ancestor, probe, notes), zip entry allowlist, CHANGELOG
+- [x] 17-01-PLAN.md: release check scripts (version, ancestor, probe, notes), zip entry allowlist, CHANGELOG
 - [ ] 17-02-PLAN.md: store screenshots (1280x800 fixture capture), listing copy, store-copy and EXT-09 tests
 - [ ] 17-03-PLAN.md: harden extension-release.yml (dispatch dry-run, draft, gates) with gate test pins, runbook and checklist
 - [ ] 17-04-PLAN.md: owner gates before the tag (assets look, ToU go/no-go, push, variable, dry-run)

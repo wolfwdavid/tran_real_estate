@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: ready_to_execute
-stopped_at: "Phase 17 planned (5 plans, checker passed with warnings fixed); next: /gsd:execute-phase 17"
+stopped_at: "Phase 17 plan 01 complete (release check scripts, zip allowlist, CHANGELOG); next: 17-02 and 17-03"
 last_updated: "2026-11-15T00:37:39.110Z"
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 71
-  completed_plans: 66
+  completed_plans: 67
   percent: 69
 ---
 
@@ -26,6 +26,8 @@ See: .planning/PROJECT.md (updated 2026-10-29)
 
 Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — COMPLETE (verified 2026-11-16)
 Plan: 13 of 13 (all done)
+
+Phase 17 (extension-release-edge-add-ons-submission) — IN PROGRESS: plan 17-01 of 5 complete.
 
 ## Performance Metrics
 
