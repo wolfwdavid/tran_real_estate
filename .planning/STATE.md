@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
 status: ready_to_execute
-stopped_at: "Phase 17 plan 03 complete (hardened extension-release workflow, gate pins, runbook and checklist); next: 17-04"
+stopped_at: "Phase 17 plan 04 complete (owner gates before the tag: ToU go, push, variable, green dry-run); next: 17-05"
 last_updated: "2026-11-15T00:37:39.110Z"
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 71
-  completed_plans: 68
+  completed_plans: 69
   percent: 69
 ---
 
