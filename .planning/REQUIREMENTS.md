@@ -61,11 +61,11 @@ Research: `.planning/research/SUMMARY.md` (2026-10-29). v1.0 requirements (58, a
 
 ### Extension release (EXT, continues v1.0 numbering)
 
-- [ ] **EXT-05**: The `ext-v0.1.0` GitHub Release is published with the zip and `SHA256SUMS.txt`, the tag equals the extension package and manifest version, the checksums verify with `sha256sum -c`, and the zip loads unpacked once from the downloaded release
-- [ ] **EXT-06**: `apps/extension/CHANGELOG.md` (Keep a Changelog) exists with the 0.1.0 entry and release notes are drawn from it instead of the install guide
+- [x] **EXT-05**: The `ext-v0.1.0` GitHub Release is published with the zip and `SHA256SUMS.txt`, the tag equals the extension package and manifest version, the checksums verify with `sha256sum -c`, and the zip loads unpacked once from the downloaded release (evidence: HUMAN-UAT L96: https://github.com/wolfwdavid/tran_real_estate/releases/tag/ext-v0.1.0, zip SHA256 ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27; unpacked load in Chrome, not Edge)
+- [x] **EXT-06**: `apps/extension/CHANGELOG.md` (Keep a Changelog) exists with the 0.1.0 entry and release notes are drawn from it instead of the install guide (evidence: `apps/extension/CHANGELOG.md` 0.1.0 entry; release body check in 17-05-SUMMARY Task 2)
 - [ ] **EXT-07**: The Edge Add-ons listing gaps are closed: two or three screenshots at exactly 1280x800 captured from the synthetic fixture page, website and support contact fields, a "Notes for certification" section telling reviewers only ad-slot list items dim on live Zillow today, no other browser named in listing copy; the listing is submitted after the Zillow Terms of Use go/no-go is recorded and the privacy URL resolves live
-- [ ] **EXT-08**: The release workflow is hardened with a `workflow_dispatch` dry-run (build, assert, checksums, no publish), `--draft` releases, a tag-on-`main` ancestor check, manifest-version-equals-tag check, a zip entry allowlist (no `.map`, `.ts`, `.env`), and a live privacy-URL probe, with the release gate test updated for each
-- [ ] **EXT-09**: After certification, the Edge Add-ons placeholder in `docs/EXTENSION-INSTALL.md` is replaced by the listing URL (owner follow-up; non-blocking)
+- [x] **EXT-08**: The release workflow is hardened with a `workflow_dispatch` dry-run (build, assert, checksums, no publish), `--draft` releases, a tag-on-`main` ancestor check, manifest-version-equals-tag check, a zip entry allowlist (no `.map`, `.ts`, `.env`), and a live privacy-URL probe, with the release gate test updated for each (evidence: dry-run https://github.com/wolfwdavid/tran_real_estate/actions/runs/44362704933, tag run https://github.com/wolfwdavid/tran_real_estate/actions/runs/44534979713)
+- [ ] **EXT-09**: After certification, the Edge Add-ons placeholder in `docs/EXTENSION-INSTALL.md` is replaced by the listing URL (owner follow-up; non-blocking). Note: install-guide test accepts placeholder or link; link edit after certification is an owner follow-up
 
 ## v1.1.x / Future Requirements
 
@@ -150,10 +150,10 @@ Which phases cover which requirements. Filled during roadmap creation.
 | TOOL-04 | Phase 16 | Complete |
 | TOOL-05 | Phase 16 | Complete |
 | TOOL-06 | Phase 16 | Complete |
-| EXT-05 | Phase 17 | Pending |
-| EXT-06 | Phase 17 | Pending |
+| EXT-05 | Phase 17 | Complete |
+| EXT-06 | Phase 17 | Complete |
 | EXT-07 | Phase 17 | Pending |
-| EXT-08 | Phase 17 | Pending |
+| EXT-08 | Phase 17 | Complete |
 | EXT-09 | Phase 17 | Pending |
 
 **Coverage:**

@@ -45,3 +45,17 @@ Owner approval: "Publish (Recommended)" in the publish dialog.
 - `gh release edit ext-v0.1.0 --repo wolfwdavid/tran_real_estate --draft=false`; published 2026-11-19T17:01:11Z, not a prerelease: https://github.com/wolfwdavid/tran_real_estate/releases/tag/ext-v0.1.0
 - Anonymous `curl` of both assets into a new empty folder; `sha256sum -c SHA256SUMS.txt`: OK. Zip SHA256 ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27, 263998 bytes, the same as the draft.
 - L96 is `passed 2026-11-19`.
+
+### Task 7 (partial, 2026-11-19)
+
+- The five release test files: 5 files, 193 tests passed. `docs/EXTENSION-INSTALL.md` is unchanged this phase and still holds the placeholder sentence.
+- REQUIREMENTS: EXT-05, EXT-06 and EXT-08 ticked with evidence. EXT-07 stays unticked until the Partner Center submission (Task 6) is recorded. EXT-09 stays unticked with the follow-up note.
+
+## Follow-up (does not block phase close)
+
+When Partner Center certifies the listing (at least 7 business days after submission): copy the listing URL from the Overview page, replace the placeholder sentence under "Install from Microsoft Edge Add-ons" in `docs/EXTENSION-INSTALL.md` with a link that matches `https://microsoftedge.microsoft.com/`, run `pnpm vitest run --project scripts scripts/extension-docs.test.ts`, then update L95 to `passed <date>`.
+
+## Not verified
+
+- The reveal click on live Zillow, the popup count line, and Edge (see Task 4).
+- L93 still lacks the Zillow terms "Updated" date and quoted wording.
