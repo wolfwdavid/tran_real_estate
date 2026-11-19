@@ -36,3 +36,12 @@ The owner asked for the check to be done for them ("do it for me please"). The e
 - (d) Network: the extension's only requests were its own popup files. Captured by automation, not read from the service worker's Network tab.
 - Edge: not run.
 - L90 and L91 are `passed 2026-11-19` with these limits in the evidence cells.
+
+
+### Task 5: publish (2026-11-19)
+
+Owner approval: "Publish (Recommended)" in the publish dialog.
+
+- `gh release edit ext-v0.1.0 --repo wolfwdavid/tran_real_estate --draft=false`; published 2026-11-19T17:01:11Z, not a prerelease: https://github.com/wolfwdavid/tran_real_estate/releases/tag/ext-v0.1.0
+- Anonymous `curl` of both assets into a new empty folder; `sha256sum -c SHA256SUMS.txt`: OK. Zip SHA256 ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27, 263998 bytes, the same as the draft.
+- L96 is `passed 2026-11-19`.
