@@ -24,4 +24,15 @@ Owner approval: "Tag and push (Recommended)" in the tag dialog.
 - `gh release download` into a new empty folder outside the repo; `sha256sum -c SHA256SUMS.txt`: `sponsored-listing-filter-0.1.0-chrome.zip: OK`.
 - Zip SHA256: ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27, 263998 bytes.
 - Unzipped root holds `manifest.json`: name "Sponsored Listing Filter — for Zillow", version 0.1.0, permissions `storage`, host and content-script match `*://*.zillow.com/*`.
-- Owner's unpacked load in Edge: pending.
+- Owner's unpacked load: done in Chrome, not Edge (owner: "use chrome not edge please"). The owner's paste of the extensions page shows version 0.1.0, ID ghefnekmdmfebomempilhpifjjkplkfn, site access `*://*.zillow.com/*`, no errors.
+
+### Task 4: live Zillow check (2026-11-19)
+
+The owner asked for the check to be done for them ("do it for me please"). The extension did not run in the Chrome window the browser tools drive, so the released zip was loaded unpacked in a clean Chromium by a one-off script kept outside the repo. One page load of a Brooklyn rentals search; only the extension's own markers were read.
+
+- (a) Dimming: 3 advertising-slot list items dimmed, 3 pills, no property card marked. The certification note ("only ad-slot items dim") is confirmed as written.
+- (b) Badge "3" on the Zillow tab. Popup switch off cleared all marks and pills; on restored them. The popup's own count line was not checked (the popup was opened as a tab, where it shows the "open a Zillow search page" text).
+- (c) Reveal click: not run. A Zillow bot-check overlay covered the page; it was not bypassed and no further automated loads were made.
+- (d) Network: the extension's only requests were its own popup files. Captured by automation, not read from the service worker's Network tab.
+- Edge: not run.
+- L90 and L91 are `passed 2026-11-19` with these limits in the evidence cells.

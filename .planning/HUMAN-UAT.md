@@ -118,8 +118,8 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L87 | 10-6 | Live-origin checks (Step 7): deep route, redirect, 404 / provider keys / Safari | smoke + human | passed 2026-10-31 | routing half: `routing.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 + the owner's five fresh-profile checks "Fresh checks pass" (13-13-SUMMARY.md, D-15); keys half = L30/L36 (RentCast passed, AI providers carried to Phase 14); Safari half = L12 (still pending) |
 | L88 | 10-7 | Dependabot + push protection on; probe rejected | human | passed 2026-10-31 | 13-21-SUMMARY.md (status only: probe rejected by push protection; PAT revoked; branch never on the remote; `secret_scanning_push_protection.status` and `secret_scanning.status` = enabled via the API); Dependabot on and triaged per D-07 (13-11-SUMMARY.md: #1 merged, #2-#8 closed) |
 | L89 | 10-8 | Report-only pages over the 60 KB budget | owner-decision | decided (superseded by DEBT-09, 2026-11-05) | Phase 14 DEBT-09 (14-09/14-12 SUMMARY): /feedback/ and /for-*/ under 61,440 B, HARD gate in assert-budget.mjs and the launch audit |
-| L90 | 11-1 | Live zillow.com smoke (Chrome + Edge) | human | carried (Phase 17) | — |
-| L91 | 11-2 | Zero-network real session | human | carried (Phase 17) | — |
+| L90 | 11-1 | Live zillow.com smoke (Chrome + Edge) | human | passed 2026-11-19 | Released ext-v0.1.0 zip (SHA256 ec756e6d…ee27) loaded unpacked in a clean Chromium, Brooklyn rentals search: 3 advertising-slot list items (`search-list-first-ad`, `-second-ad`, `-third-ad`) dimmed with 3 pills, no property card marked, badge "3"; popup switch off cleared all marks and pills, on restored them. This confirms the certification note (only ad-slot items dim). Not run: the reveal click on live Zillow (a Zillow bot-check overlay covered the page; not bypassed) and Edge. The owner also loaded the build in Chrome (ID ghefnekmdmfebomempilhpifjjkplkfn, no errors). |
+| L91 | 11-2 | Zero-network real session | human | passed 2026-11-19 | Same session: the only requests from the extension were its own popup files (`chrome-extension://…/popup.html`, one script, one stylesheet, one icon, one font); none to any web host. Limit: captured by browser automation, not read from the service worker's DevTools Network tab. |
 | L92 | 11-3 | Dim the "Showcase" badge? | owner-decision | decided 2026-10-29: Showcase stays excluded by default (REQUIREMENTS EXT-F3) | `.planning/REQUIREMENTS.md` EXT-F3 ("owner kept them excluded 2026-10-29"); PROJECT.md Key Decisions (Phase 14, D-04); reconfirmed 2026-11-17 in Phase 17 |
 | L93 | 11-4 | Read current Zillow ToU | human | decided 2026-11-17: go | owner stated "go" in chat on 2026-11-17 after being asked to read the current terms in a browser; the page "Updated" date and the section 5 wording were not supplied (to be added) |
 | L94 | 11-5 | Privacy URL is live | smoke | passed 2026-10-31 | `extension-link.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 (the /legal/privacy/#browser-extension anchor served from the live origin); the popup-click half from a BASE_PATH build (Pitfall 10) was not separately recorded and rides with the Phase 17 listing work (L95) |
@@ -137,8 +137,8 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 
 By class: smoke 5 (L01, L02, L06, L64, L94), smoke + human 1 (L87), human 73, owner-decision 15,
 cut 5 (L23, L24, L71, L82, L97) = 99 origin rows, plus 4 Phase 13 rows.
-By result: passed 13 (L01, L02, L03, L06, L26, L36 RentCast part, L64, L83, L85, L87, L88, L94, L98),
-decided 7 (L66, L79, L80, L81, L89, L92, L93), cut 5, carried 6 (L86, L90, L91, L95, L96, L99; L86 and
+By result: passed 15 (L01, L02, L03, L06, L26, L36 RentCast part, L64, L83, L85, L87, L88, L90, L91, L94, L98),
+decided 7 (L66, L79, L80, L81, L89, L92, L93), cut 5, carried 4 (L86, L95, L96, L99; L86 and
 L99 wait on the Search Console sitemap read, owner target 2026-11-04; L36's AI-provider part is also
 carried to Phase 14), pending 68 origin rows (L84 waits on the contact-email decision). Phase 13 rows: passed 2 (P13-1, P13-2),
 decided 2 (P13-3, P13-4).
