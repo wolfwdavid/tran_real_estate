@@ -256,7 +256,7 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 | Client-side hard stop before RentCast free limit | Overage billed at $0.20/call with no provider cap | — Pending |
 | Lead inbox = Web3Forms email delivery + paste-to-import | Free tiers have no read API | — Pending |
 | Alerts re-run on app open when cache is stale | No background server; protects call budget | — Pending |
-| Zillow filter as hide-only MV3 extension, load-unpacked + Edge Add-ons | ToS-safe, no scraping; $0 distribution | — Pending |
+| Zillow filter as hide-only MV3 extension, load-unpacked from the GitHub Release only (no store listing; Edge Add-ons dropped by the owner 2026-11-20) | ToS-safe, no scraping; $0 distribution | ✓ ext-v0.1.0 published 2026-11-19 |
 | No CoStar at all | Academic terms prohibit indirect/financial benefit (reversed earlier "offline research" decision) | — Pending |
 | Include Gemini in v1 with training-data warning | User choice; Claude + OpenAI + Gemini | — Pending |
 | Deterministic Fair Housing checker on AI copy | FHA still applies after HUD guidance withdrawal; NY AI ad law | — Pending |

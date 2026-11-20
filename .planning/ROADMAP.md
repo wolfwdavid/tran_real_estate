@@ -281,6 +281,7 @@ Plans:
   4. A `workflow_dispatch` dry-run of `extension-release.yml` builds, asserts and checksums without publishing; real releases are created as drafts, fail unless the tag is an ancestor of `main` and the manifest version equals the tag, reject zip entries outside the allowlist (no `.map`, `.ts`, `.env`), and probe the live privacy URL, with `extension-release-gate.test.ts` updated for each step in the same commit.
   5. After certification, `docs/EXTENSION-INSTALL.md` carries the Edge listing URL in place of the placeholder (owner follow-up, non-blocking for phase close; the install-guide test accepts the placeholder sentence or a real listing link, never neither).
 
+**Scope change 2026-11-20:** the owner decided on GitHub Release only. Nothing is submitted to Edge Add-ons, so the submission half of criterion 3 and all of criterion 5 are cut (HUMAN-UAT L95, EXT-09); the install guide now promises no store listing, enforced by `scripts/extension-docs.test.ts`.
 **Owner gate:** Zillow ToU read with go/no-go recorded, Showcase badge decision, `EXTENSION_RELEASES_ENABLED=true`, push the tag, confirm the draft loads unpacked, publish, submit the Release zip to Partner Center, record the SHA256 in the consolidated UAT file, edit the install guide after certification (7 business days is a floor).
 **Research flag:** light. Re-read the Partner Center form fields and the Edge developer policies on the day of submission (last read on the 2026-09 / 2026-07 revisions; review turnaround is rising per the 2026-09 Edge dev blog).
 **UI hint:** no (screenshots are captures of the existing popup and fixture page).
@@ -291,7 +292,7 @@ Plans:
 - [x] 17-02-PLAN.md: store screenshots (1280x800 fixture capture), listing copy, store-copy and EXT-09 tests
 - [x] 17-03-PLAN.md: harden extension-release.yml (dispatch dry-run, draft, gates) with gate test pins, runbook and checklist
 - [x] 17-04-PLAN.md: owner gates before the tag (assets look, ToU go/no-go, push, variable, dry-run)
-- [ ] 17-05-PLAN.md: owner gates for the release (tag, draft verify, live smoke, publish, Partner Center submission, records)
+- [x] 17-05-PLAN.md: owner gates for the release (tag, draft verify, live smoke, publish, records; the Partner Center submission was cut by the owner on 2026-11-20)
 
 ## Progress
 

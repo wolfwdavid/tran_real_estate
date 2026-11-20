@@ -59,3 +59,16 @@ When Partner Center certifies the listing (at least 7 business days after submis
 
 - The reveal click on live Zillow, the popup count line, and Edge (see Task 4).
 - L93 still lacks the Zillow terms "Updated" date and quoted wording.
+
+## Scope change: no Edge Add-ons (2026-11-20)
+
+Owner, verbatim: "i do not want edge add ons"; then chose "GitHub Release only (Recommended)" in the distribution dialog. This replaces Task 6 and the follow-up section above.
+
+- Nothing was submitted to Partner Center. L95 is `decided 2026-11-20: no store listing`.
+- `docs/EXTENSION-INSTALL.md`: the "Install from Microsoft Edge Add-ons" section and its placeholder are removed; the guide says the release zip is the only way to install.
+- `scripts/extension-docs.test.ts`: the placeholder-or-link test is replaced by a test that the guide promises no store listing.
+- `docs/DEPLOY-CHECKLIST.md` Step 9 item 3 now records the decision.
+- REQUIREMENTS: EXT-07 closed (assets and tests done, submission cut); EXT-09 cut. PROJECT.md key decision updated.
+- Kept unused: `apps/extension/store/edge-listing.md`, the logo, the screenshots and their capture spec and tests.
+- Checks: full scripts project 39 files, 1258 tests passed; extension copy test passed; prettier and eslint clean on the changed files.
+- Deviation: this is a docs and test change outside the plan, so the records push is no longer docs-only under `.planning/`.

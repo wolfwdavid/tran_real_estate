@@ -123,7 +123,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | L92 | 11-3 | Dim the "Showcase" badge? | owner-decision | decided 2026-10-29: Showcase stays excluded by default (REQUIREMENTS EXT-F3) | `.planning/REQUIREMENTS.md` EXT-F3 ("owner kept them excluded 2026-10-29"); PROJECT.md Key Decisions (Phase 14, D-04); reconfirmed 2026-11-17 in Phase 17 |
 | L93 | 11-4 | Read current Zillow ToU | human | decided 2026-11-17: go | owner stated "go" in chat on 2026-11-17 after being asked to read the current terms in a browser; the page "Updated" date and the section 5 wording were not supplied (to be added) |
 | L94 | 11-5 | Privacy URL is live | smoke | passed 2026-10-31 | `extension-link.smoke.ts` in live-smoke https://github.com/wolfwdavid/tran_real_estate/actions/runs/41149881068 (the /legal/privacy/#browser-extension anchor served from the live origin); the popup-click half from a BASE_PATH build (Pitfall 10) was not separately recorded and rides with the Phase 17 listing work (L95) |
-| L95 | 11-6 | Edge Add-ons listing | human | carried (Phase 17) | — |
+| L95 | 11-6 | Edge Add-ons listing | human | decided 2026-11-20: no store listing | Owner, verbatim: "i do not want edge add ons", then chose "GitHub Release only". Nothing was submitted to Partner Center. The install guide no longer promises a listing; the listing copy and screenshots stay in the repo unused. |
 | L96 | 11-7 | Enable Releases, publish `ext-v0.1.0` | human | passed 2026-11-19 | published 2026-11-19 (owner approved in the publish dialog), https://github.com/wolfwdavid/tran_real_estate/releases/tag/ext-v0.1.0; anonymous download and sha256sum -c OK; draft verified 2026-11-19: tag ext-v0.1.0 on 6df2493, run https://github.com/wolfwdavid/tran_real_estate/actions/runs/44534979713, sha256sum -c OK, zip SHA256 ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27; unpacked load done in Chrome, not Edge |
 | L97 | 11-8 | Firefox Add-ons listing | cut | cut: Firefox Add-ons out of v1 (ROADMAP cut line 2) | — |
 | L98 | 12-1 | Owner go-live gate | human | passed 2026-10-29 | https://github.com/wolfwdavid/tran_real_estate/actions/runs/40961373692 (personal account; first `ci` run green, deploy skipped) |
@@ -138,7 +138,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 By class: smoke 5 (L01, L02, L06, L64, L94), smoke + human 1 (L87), human 73, owner-decision 15,
 cut 5 (L23, L24, L71, L82, L97) = 99 origin rows, plus 4 Phase 13 rows.
 By result: passed 16 (L01, L02, L03, L06, L26, L36 RentCast part, L64, L83, L85, L87, L88, L90, L91, L94, L96, L98),
-decided 7 (L66, L79, L80, L81, L89, L92, L93), cut 5, carried 3 (L86, L95, L99; L86 and
+decided 8 (L66, L79, L80, L81, L89, L92, L93, L95), cut 5, carried 2 (L86, L99; L86 and
 L99 wait on the Search Console sitemap read, owner target 2026-11-04; L36's AI-provider part is also
 carried to Phase 14), pending 68 origin rows (L84 waits on the contact-email decision). Phase 13 rows: passed 2 (P13-1, P13-2),
 decided 2 (P13-3, P13-4).
