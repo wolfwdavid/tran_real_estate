@@ -72,3 +72,13 @@ Owner, verbatim: "i do not want edge add ons"; then chose "GitHub Release only (
 - Kept unused: `apps/extension/store/edge-listing.md`, the logo, the screenshots and their capture spec and tests.
 - Checks: full scripts project 39 files, 1258 tests passed; extension copy test passed; prettier and eslint clean on the changed files.
 - Deviation: this is a docs and test change outside the plan, so the records push is no longer docs-only under `.planning/`.
+
+## Task 8: push (2026-11-20)
+
+Owner approval: "Push (Recommended)" in the push dialog.
+
+- Pre-push: status clean except the unstaged `.planning/config.json`; 0 trailers or assistant mentions in 8 commit messages; `pnpm secrets:scan` reported no leaks.
+- `git push origin main`: `6df2493..ae7f163`.
+- ci: https://github.com/wolfwdavid/tran_real_estate/actions/runs/44809028792, success (guard, three build matrices, deploy).
+- live-smoke: https://github.com/wolfwdavid/tran_real_estate/actions/runs/44812409812, success. The live site serves `ae7f16303406a811ab95426593a6c341321ea1b2`.
+- Tag `ext-v0.1.0` still points at 6df2493.
