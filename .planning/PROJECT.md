@@ -156,7 +156,7 @@ Validated in Phase 15: Load-Deterministic Test Lanes (2026-11-11) — 6/6 must-h
 - [x] Saved-search alerts: filter nationwide rentals by price, location, bedrooms, property type, and days-on-market; saved searches re-run on app open only when cache is stale, highlighting "N new since last visit" — shipped in Phase 6
 - [x] AI outreach drafts: draft an interest message to the listing agent (asking about availability, pets, amenities not in the data); human reviews and sends — shipped in Phase 6
 - [x] Fair-rent check: compare a listing's asking rent against estimated market rent — shipped in Phase 6
-- [x] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via load-unpacked zip + Edge Add-ons — shipped in Phase 11 (`apps/extension`: dim-with-reveal, popup toggle + count, storage + zillow.com permissions only, gated GitHub Release workflow, Edge listing copy; store submission and the live-site smoke are owner steps)
+- [x] Zillow sponsored filter: MV3 browser extension that only hides promoted/sponsored listing cards on Zillow pages the user views (no network calls, no scraping); distributed free via the load-unpacked GitHub Release zip only (the Edge Add-ons listing was dropped by the owner on 2026-11-20) — shipped in Phase 11 (`apps/extension`: dim-with-reveal, popup toggle + count, storage + zillow.com permissions only, gated GitHub Release workflow, Edge listing copy; store submission and the live-site smoke are owner steps)
 
 **Investor portal**
 - [x] Deal analyzer: cap rate, NOI, cash flow, cash-on-cash return, DSCR using rent estimates and comps — shipped in Phase 7
@@ -183,7 +183,7 @@ Validated in Phase 15: Load-Deterministic Test Lanes (2026-11-11) — 6/6 must-h
 - Auto-sending outreach emails/SMS — human-in-the-loop send only (CAN-SPAM/TCPA and reputation risk)
 - Tenant screening or housing-eligibility decisions — Fair Housing risk; restricted by LLM provider usage policies
 - Hosting under the shared `wolfwdavid.github.io` origin — browser storage is shared with every sibling Pages site, exposing stored keys — ✗ Superseded 2026-10-29 (owner decision at the Phase 12 gate): the site is a project site at `https://wolfwdavid.github.io/tran_real_estate/`; browser storage shared with sibling project sites is accepted; revisit with a custom domain (D-05)
-- Paid Chrome Web Store listing in v1 — $5 fee breaks $0 budget; load-unpacked + Edge Add-ons instead
+- Paid Chrome Web Store listing in v1 — $5 fee breaks $0 budget; load-unpacked from the GitHub Release instead (no store listing, owner decision 2026-11-20)
 
 ## Context
 
@@ -228,7 +228,7 @@ Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-M
 - Carried debt: origin drift test (extension ↔ web app), UI-level backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, the load-sensitive saved-search spec
 - Load-flake elimination: full `test:unit` and E2E runs deterministic under parallel load (timing-budget tests separated from the parallel run; no blind timeout raises)
 - Toolchain: SvelteKit 2 → 3, Vitest 5, pnpm 12 in one isolated phase after the debt is cleared, clearing the three low audit exceptions before their 2027-01-31 revisit
-- Extension release: `ext-v0.1.0` GitHub Release artifacts and Edge Add-ons listing assets ready to submit; store submission, the Showcase badge decision and the live-Zillow smoke stay owner steps
+- Extension release: `ext-v0.1.0` GitHub Release published 2026-11-19 and checksum-verified; Edge Add-ons listing assets exist but are unused (owner decided on GitHub Release only, 2026-11-20)
 
 **Out of this milestone:** new portal features, monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages), Chrome Web Store listing.
 

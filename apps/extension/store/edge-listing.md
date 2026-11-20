@@ -1,5 +1,8 @@
 # Microsoft Edge Add-ons listing: Sponsored Listing Filter
 
+Not submitted: on 2026-11-20 the owner decided to distribute through the GitHub Release only. This
+file is kept for reference.
+
 Paste-ready copy for Partner Center. The name and short description come from the manifest and are
 read-only in Partner Center. Screenshots are captured by `pnpm --filter extension capture:store`
 from a synthetic results page (fictional addresses), never from live Zillow, and live in

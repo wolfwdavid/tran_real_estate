@@ -46,12 +46,12 @@ Owner approval: "Publish (Recommended)" in the publish dialog.
 - Anonymous `curl` of both assets into a new empty folder; `sha256sum -c SHA256SUMS.txt`: OK. Zip SHA256 ec756e6d15fbca83ed5e0a69d7d34b60a0f0ee48ddb13a88a239cb680197ee27, 263998 bytes, the same as the draft.
 - L96 is `passed 2026-11-19`.
 
-### Task 7 (partial, 2026-11-19)
+### Task 7 (partial, 2026-11-19; superseded in part by the scope change at the end)
 
 - The five release test files: 5 files, 193 tests passed. `docs/EXTENSION-INSTALL.md` is unchanged this phase and still holds the placeholder sentence.
 - REQUIREMENTS: EXT-05, EXT-06 and EXT-08 ticked with evidence. EXT-07 stays unticked until the Partner Center submission (Task 6) is recorded. EXT-09 stays unticked with the follow-up note.
 
-## Follow-up (does not block phase close)
+## Follow-up (cut on 2026-11-20, see the scope change at the end)
 
 When Partner Center certifies the listing (at least 7 business days after submission): copy the listing URL from the Overview page, replace the placeholder sentence under "Install from Microsoft Edge Add-ons" in `docs/EXTENSION-INSTALL.md` with a link that matches `https://microsoftedge.microsoft.com/`, run `pnpm vitest run --project scripts scripts/extension-docs.test.ts`, then update L95 to `passed <date>`.
 

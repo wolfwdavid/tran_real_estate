@@ -133,7 +133,7 @@ earlier "77" was a miscount: it counted the 06/07 owner lists as 8 rows instead 
 | P13-3 | Phase 13 | Shared-origin privacy copy decision (Pitfall 7) | owner-decision | decided 2026-10-30: decision C (C-approve), the privacy "Deleting your data" copy names the shared wolfwdavid.github.io storage origin and points to Forget all keys (second paragraph rendered only under a sub-path) | `.planning/phases/13-live-origin-first-ci-run-first-deploy-post-deploy-smoke-uat-burn-down/13-01-SUMMARY.md` (verbatim "A-approve, B-ignore, C-approve"); applied by plan 13-07 |
 | P13-4 | Phase 13 | Umami "IP not stored" evidence (D-17) | owner-decision | decided 2026-10-30: owner answered "IPs not stored: proceed", then "Hold Umami for now", then chose "Cut Umami now (GTM-04 to v2)" (option b) | 13-14-SUMMARY.md (owner answers verbatim, in order; no 10-umami-ip-setting.png exists and none was created) |
 
-## Tally (2026-11-05)
+## Tally (2026-11-20)
 
 By class: smoke 5 (L01, L02, L06, L64, L94), smoke + human 1 (L87), human 73, owner-decision 15,
 cut 5 (L23, L24, L71, L82, L97) = 99 origin rows, plus 4 Phase 13 rows.

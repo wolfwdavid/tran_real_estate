@@ -100,7 +100,7 @@ Deferred, tracked, not in this roadmap.
 | New portal features | v1.1 is an operations milestone; the build has zero production evidence yet |
 | Hosted tier, accounts, Stripe billing | Needs a host other than GitHub Pages (commercial-use terms); v2.0-sized |
 | Chrome Web Store listing | $5 fee breaks the $0 budget (v1.0 decision stands) |
-| Firefox Add-ons submission | Not required for EXT-04 proof; revisit after Edge certification |
+| Firefox Add-ons submission | Not required for EXT-04 proof; no store listing is planned (owner decision 2026-11-20, GitHub Release only) |
 | Custom domain | Costs money and needs a second Search Console property |
 | TypeScript 7, `@next` tags, Node 26 | Kit 3 requires TS ^6; keep Node 24 LTS this milestone |
 | Third-party scripts on the origin (hosted analytics script, GA/GTM verification) | Any script on the origin can read stored keys |

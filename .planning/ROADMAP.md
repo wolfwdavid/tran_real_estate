@@ -41,7 +41,7 @@ Every phase closed with verifier status `human_needed` (no code gaps); the owner
 - [x] **Phase 14: Carried Debt** - The seven v1.0 follow-ups plus the emulator dotfile fix and the marketing-page JS trim, each closed to its sourced definition of done before the Kit 3 codemod (completed 2026-11-06)
 - [x] **Phase 15: Load-Deterministic Test Lanes** - Timing-budget tests in serial lanes, mechanical guard against blind timeouts and retries, capped workers, recorded evidence protocol and shuffle seed (completed 2026-11-11) (completed 2026-11-11)
 - [x] **Phase 16: Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5** - Three toolchain migrations (pnpm 12, SvelteKit 3 as plans 05 to 10, Vitest 5), each gated by `pnpm verify` + local smoke before its push, closed by a deploy and a green live smoke; audit exceptions 5 → 2 (completed 2026-11-16)
-- [ ] **Phase 17: Extension Release & Edge Add-ons Submission** - Published `ext-v0.1.0` GitHub Release with checksums, changelog, hardened release workflow, Edge listing assets and submission; certification link is an owner follow-up
+- [x] **Phase 17: Extension Release & Edge Add-ons Submission** - Published `ext-v0.1.0` GitHub Release with checksums, changelog, hardened release workflow and Edge listing assets; the store submission was cut by the owner on 2026-11-20 (GitHub Release only) (completed 2026-11-20)
 
 ### Dependency Graph
 
@@ -270,7 +270,7 @@ Plans:
 
 ### Phase 17: Extension Release & Edge Add-ons Submission
 
-**Goal:** The Zillow extension is published as a verifiable `ext-v0.1.0` GitHub Release from a hardened release workflow, and the Edge Add-ons listing is complete and submitted; certification and the install-guide link are owner follow-ups that never block another phase.
+**Goal:** The Zillow extension is published as a verifiable `ext-v0.1.0` GitHub Release from a hardened release workflow, and the Edge Add-ons listing assets are complete. (Original goal also had the listing submitted, with certification and the install-guide link as owner follow-ups; cut on 2026-11-20, see the scope change below.)
 **Depends on:** Phase 13 only (the remote and the live privacy URL). Runs alongside Phases 14 and 15 as soon as 13 is green; serialized against Phase 16 (never in flight while 16's plans are executing; if the owner's Zillow ToU decision slips, it lands after 16, never during).
 **Requirements:** EXT-05, EXT-06, EXT-07, EXT-08, EXT-09
 **Success Criteria** (what must be TRUE):
@@ -282,8 +282,8 @@ Plans:
   5. After certification, `docs/EXTENSION-INSTALL.md` carries the Edge listing URL in place of the placeholder (owner follow-up, non-blocking for phase close; the install-guide test accepts the placeholder sentence or a real listing link, never neither).
 
 **Scope change 2026-11-20:** the owner decided on GitHub Release only. Nothing is submitted to Edge Add-ons, so the submission half of criterion 3 and all of criterion 5 are cut (HUMAN-UAT L95, EXT-09); the install guide now promises no store listing, enforced by `scripts/extension-docs.test.ts`.
-**Owner gate:** Zillow ToU read with go/no-go recorded, Showcase badge decision, `EXTENSION_RELEASES_ENABLED=true`, push the tag, confirm the draft loads unpacked, publish, submit the Release zip to Partner Center, record the SHA256 in the consolidated UAT file, edit the install guide after certification (7 business days is a floor).
-**Research flag:** light. Re-read the Partner Center form fields and the Edge developer policies on the day of submission (last read on the 2026-09 / 2026-07 revisions; review turnaround is rising per the 2026-09 Edge dev blog).
+**Owner gate:** Zillow ToU read with go/no-go recorded, Showcase badge decision, `EXTENSION_RELEASES_ENABLED=true`, push the tag, confirm the draft loads unpacked, publish, record the SHA256 in the consolidated UAT file. (The Partner Center submission and the post-certification install-guide edit were cut on 2026-11-20.)
+**Research flag:** light, and moot after the 2026-11-20 scope change. Originally: re-read the Partner Center form fields and the Edge developer policies on the day of submission (last read on the 2026-09 / 2026-07 revisions; review turnaround is rising per the 2026-09 Edge dev blog).
 **UI hint:** no (screenshots are captures of the existing popup and fixture page).
 **Plans:** 5 plans
 
@@ -316,4 +316,4 @@ Plans:
 | 14. Carried Debt | v1.1 | 12/12 | Complete    | 2026-11-06 |
 | 15. Load-Deterministic Test Lanes | v1.1 | 11/11 | Complete    | 2026-11-11 |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 13/13 | Complete    | 2026-11-16 |
-| 17. Extension Release & Edge Add-ons Submission | v1.1 | 0/TBD | Not started | - |
+| 17. Extension Release & Edge Add-ons Submission | v1.1 | 5/5 | Complete    | 2026-11-20 |
