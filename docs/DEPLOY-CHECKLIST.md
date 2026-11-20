@@ -258,23 +258,13 @@ these in order, once. Record each result in `.planning/HUMAN-UAT.md`.
 1. **Read the current Zillow Terms of Use** in a browser (automated fetch is refused). Record the
    "Updated" date and the section 5 Prohibited Use wording in the HUMAN-UAT extension rows, and
    decide go or no-go before any public release. Record the go/no-go in HUMAN-UAT row L93 before
-   the draft release is published and before the Partner Center submission. This gates the store
-   listing and the GitHub Release, not the build.
+   the draft release is published. This gates the GitHub Release, not the build.
 2. **Confirm the privacy URL is live:**
    `https://wolfwdavid.github.io/tran_real_estate/legal/privacy/#browser-extension`
-   (needs Steps 1-7). The popup links to it and the store listing asks for it.
-3. **Microsoft Edge Add-ons.** Create a free Partner Center developer account. Submit the zip
-   downloaded from the verified GitHub Release (item 4), not a local build. Use the copy in
-   `apps/extension/store/edge-listing.md` (fill Website, Support contact detail and Notes for
-   certification from it), the logo `apps/extension/store/edge-logo-300.png`, two or three PNG
-   screenshots at exactly 1280x800 from `apps/extension/store/screenshots/` (captured from the
-   synthetic fixture page with `pnpm --filter extension capture:store`, never from live Zillow),
-   and the privacy URL from item 2. Re-read the Partner Center form and the current Edge developer
-   policies on the day of submission and record the policy revision date in HUMAN-UAT.
-   Certification can take 7 business days or longer (treat 7 as a floor). Once the listing is
-   live, replace the placeholder sentence under "Install from Microsoft Edge Add-ons" in
-   `docs/EXTENSION-INSTALL.md` with the listing link; that edit is an owner follow-up and never
-   blocks anything.
+   (needs Steps 1-7). The popup links to it.
+3. **No store listing.** Owner decision 2026-11-20: the extension is distributed through the
+   GitHub Release only (item 4). Nothing is submitted to Microsoft Edge Add-ons or any other
+   store. The listing copy and screenshots in `apps/extension/store/` are kept but unused.
 4. **GitHub Releases.** After Step 6 (the remote exists), add the repository variable
    `EXTENSION_RELEASES_ENABLED` with the value `true` (Settings, then Secrets and variables,
    then Actions, then **Variables**). Then, in this order:

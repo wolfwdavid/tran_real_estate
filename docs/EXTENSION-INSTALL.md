@@ -38,12 +38,7 @@ Installs from a zip never update on their own. To move to a new release:
 4. Refresh your open Zillow tabs.
 
 Managed or work devices may not allow developer-mode extensions. If **Developer mode** is greyed
-out, ask your administrator, or use the Microsoft Edge Add-ons listing below once it is live.
-
-## Install from Microsoft Edge Add-ons
-
-The listing link will appear here once the Microsoft Edge Add-ons listing is live. Installs from
-Edge Add-ons update automatically.
+out, ask your administrator. The release zip is the only way to install; there is no store listing.
 
 ## What it does
 

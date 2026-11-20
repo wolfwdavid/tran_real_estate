@@ -48,7 +48,6 @@ describe('docs/EXTENSION-INSTALL.md', () => {
 	test('has the UI-SPEC headings in order', () => {
 		const headings = [
 			'## Install from a release zip (Chrome, Edge, Brave)',
-			'## Install from Microsoft Edge Add-ons',
 			'## What it does',
 			"## What it doesn't do",
 			'## Privacy'
@@ -253,31 +252,9 @@ describe('store screenshots', () => {
 	});
 });
 
-// EXT-09: the phase closes with the placeholder; replacing it with the listing URL after
-// certification is an owner follow-up and must keep this test green.
-const PLACEHOLDER =
-	'The listing link will appear here once the Microsoft Edge Add-ons listing is live.';
-function installListingState(body: string): 'placeholder' | 'link' | 'neither' {
-	const text = collapse(body);
-	if (text.includes(PLACEHOLDER)) return 'placeholder';
-	if (/https:\/\/microsoftedge\.microsoft\.com\//.test(text)) return 'link';
-	return 'neither';
-}
-
-describe('EXT-09 install guide Edge Add-ons section', () => {
-	test('carries the placeholder sentence or a listing link', () => {
-		const state = installListingState(
-			section(read(INSTALL), 'Install from Microsoft Edge Add-ons')
-		);
-		expect(['placeholder', 'link']).toContain(state);
-	});
-
-	test('planted sections are classified correctly', () => {
-		expect(installListingState('Nothing useful here.')).toBe('neither');
-		expect(installListingState(`${PLACEHOLDER} Installs update.`)).toBe('placeholder');
-		expect(
-			installListingState('https://microsoftedge.microsoft.com/addons/detail/example/abc')
-		).toBe('link');
-		expect(installListingState('https://example.com/addons')).toBe('neither');
+// Owner decision 2026-11-20: GitHub Release only. The guide must not promise a store listing.
+describe('install guide store listing', () => {
+	test('promises no store listing', () => {
+		expect(read(INSTALL)).not.toMatch(/Add-ons|Web Store|microsoftedge\.microsoft\.com/i);
 	});
 });
