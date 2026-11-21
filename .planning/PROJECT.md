@@ -140,6 +140,19 @@ Validated in Phase 15: Load-Deterministic Test Lanes (2026-11-11) — 6/6 must-h
 - ✓ TEST-05 — Evidence protocol recorded: three clean `pnpm verify` runs, `--repeat-each 3` on twelve load-sensitive specs, one full E2E run under 12 CPU burners with zero failures (Phase 15)
 - ✓ TEST-06 — Shuffled unit run green with recorded seed 1794340461 (Phase 15)
 
+Validated in Phase 16: Toolchain (2026-11-16) — 5/5 must-haves verified
+
+- ✓ TOOL-01..06 — pnpm 12.18, SvelteKit 3.1 with adapter-static 4 and the service worker on `$app/manifest`, Vitest 5 with its browser companions; each step gated by `pnpm verify` and the local smoke and closed by a deploy with a green live smoke; audit exceptions five to two (Phase 16)
+
+Validated in Phase 17: Extension Release (2026-11-20) — 5/6 on the revised goal, the one records gap closed after the report
+
+- ✓ EXT-05 — `ext-v0.1.0` GitHub Release published 2026-11-19 with the zip and `SHA256SUMS.txt`; anonymous download verifies with `sha256sum -c` (Phase 17)
+- ✓ EXT-06 — `apps/extension/CHANGELOG.md` with the 0.1.0 entry; release notes drawn from it (Phase 17)
+- ✓ EXT-07 — Edge listing assets complete (screenshots, copy, certification notes); the submission itself was cut by the owner (Phase 17)
+- ✓ EXT-08 — Release workflow hardened: dispatch dry-run, draft releases, tag-on-main and version checks, zip entry allowlist, live privacy URL probe (Phase 17)
+
+Not validated in v1.1: LIVE-05 (partial; the Search Console sitemap read is carried, HUMAN-UAT L86/L99) and EXT-09 (cut 2026-11-20, GitHub Release only).
+
 ### Active
 
 **Platform (shared)**
@@ -216,21 +229,20 @@ Validated in Phase 15: Load-Deterministic Test Lanes (2026-11-11) — 6/6 must-h
 
 **Phase 15 complete (2026-11-11): unit and E2E runs are deterministic under parallel load.** Eleven plans; serial lanes for timing-budget tests, a mechanical guard against unannotated timeout raises and retries, capped workers, and a dated evidence file. ci 42947670555 is green on `11b58f9`. Open items: the advisory code review (`15-REVIEW.md`) found guard bypasses (1 critical: a timeout of `0` passes every rule; 9 warnings), none exploited by a file in the tree today, not yet fixed; the live smoke fails on HTTP 429 from the live site (open quick task); the Search Console sitemap read is still carried from Phase 13.
 
-Archive: `.planning/milestones/v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
+**Shipped v1.1 Launch & Hardening on 2026-11-20** (6 phases, 72 plans, 143 tasks, 332 commits). The site is live at `https://wolfwdavid.github.io/tran_real_estate/` with a read-only live smoke after every deploy; the toolchain is pnpm 12, SvelteKit 3.1 and Vitest 5 (Phase 16, 2026-11-16); the extension is published as the `ext-v0.1.0` GitHub Release (Phase 17; no store listing, owner decision 2026-11-20). Last proven state: ci 44809028792 and live-smoke 44812409812 green on `ae7f163`. Requirements 39/41 (LIVE-05 partial, EXT-09 cut). The milestone audit closed with status `tech_debt` and no blocker; the open items are listed under Next Milestone Goals.
 
-## Current Milestone: v1.1 Launch & Hardening
+Archive: `.planning/milestones/v1.1-ROADMAP.md`, `v1.1-REQUIREMENTS.md`, `v1.1-MILESTONE-AUDIT.md`, `v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
-**Goal:** Take the locally verified v1.0 build live on its own origin, make go-live and every future deploy boring, and clear the debt and toolchain drift carried out of v1.0 so the platform is on current, supported foundations.
+## Next Milestone Goals
 
-**Target features:**
-- Go-live: the owner pushes `main` early in the milestone (done 2026-10-29 to `wolfwdavid/tran_real_estate`), Phase 13 enables Pages; the deferred live-origin checks (CSP on the real origin, deep-link refresh, Umami beacon, Web3Forms delivery, share-card unfurl, Search Console) become phase gates and GTM-01..04 get their proof
-- Live-origin smoke suite: a repeatable, configurable-origin check that runs the deferred v1.0 verifications against any deployed origin (local stand-in first, real origin once it exists), shrinking the 77 owner HUMAN-UAT rows to the few that truly need a human
-- Carried debt: origin drift test (extension ↔ web app), UI-level backup round-trip spec across all portal stores, tailwind-merge font-size token class, ListingCard address-link id, print recheck without notes, save-gate reason text, the load-sensitive saved-search spec
-- Load-flake elimination: full `test:unit` and E2E runs deterministic under parallel load (timing-budget tests separated from the parallel run; no blind timeout raises)
-- Toolchain: SvelteKit 2 → 3, Vitest 5, pnpm 12 in one isolated phase after the debt is cleared, clearing the three low audit exceptions before their 2027-01-31 revisit
-- Extension release: `ext-v0.1.0` GitHub Release published 2026-11-19 and checksum-verified; Edge Add-ons listing assets exist but are unused (owner decided on GitHub Release only, 2026-11-20)
+No milestone is defined yet; run `/gsd:new-milestone`. Candidates carried out of v1.1 (`milestones/v1.1-MILESTONE-AUDIT.md`):
 
-**Out of this milestone:** new portal features, monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages), Chrome Web Store listing.
+- JS budget: restore headroom on `tools/cash-on-cash` (0.06 KB today; the weekly Dependabot PR #18 fails CI on it) and make the budget oracle count what Kit 3 actually ships (59.78 KB counted against 62.85 KB measured)
+- Workflow order: run the smoke suite in CI before the deploy; have the release workflow check ci was green for the tagged commit; actionlint in CI
+- Privacy page contact details (the live page still says they will be posted before public launch)
+- A link from the site to the extension Releases page; README refresh after phases 12-17
+- Owner items: the Search Console sitemap read (LIVE-05), 68 pending HUMAN-UAT rows, the minimatch audit exception review due 2026-12-31
+- Still out: monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages) and any store listing for the extension
 
 ## Constraints
 
@@ -298,4 +310,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-11 after the Phase 15 (load-deterministic test lanes) close-out: Phase 15 complete, TEST-01..06 validated, ci green at `11b58f9`; code-review findings on the lane guard open; one carried item from Phase 13 (Search Console sitemap read)*
+*Last updated: 2026-11-20 after the v1.1 milestone (Launch & Hardening): phases 12-17 complete, live on the project site, toolchain current, ext-v0.1.0 released; tech debt carried per the milestone audit*

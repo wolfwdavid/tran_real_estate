@@ -2,32 +2,33 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Launch & Hardening
-status: phase_complete
-stopped_at: "Phase 17 plan 05 complete (ext-v0.1.0 published and verified; Edge Add-ons submission cut by the owner 2026-11-20); phase verified 2026-11-20; next: owner-approved push of the local commits"
-last_updated: "2026-11-15T00:37:39.110Z"
+status: Awaiting next milestone
+stopped_at: "Milestone v1.1 completed and archived 2026-11-20; next: /gsd-new-milestone"
+last_updated: "2026-11-21T02:56:01.556Z"
+last_activity: 2026-11-20 — Milestone v1.1 completed and archived
 progress:
   total_phases: 6
   completed_phases: 6
-  total_plans: 71
-  completed_plans: 70
-  percent: 69
+  total_plans: 72
+  completed_plans: 72
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-29)
+See: .planning/PROJECT.md (updated 2026-11-20)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 16 — toolchain-pnpm-12-sveltekit-3-vitest-5
+**Current focus:** Planning the next milestone
 
 ## Current Position
 
-Phase: 16 (toolchain-pnpm-12-sveltekit-3-vitest-5) — COMPLETE (verified 2026-11-16)
-Plan: 13 of 13 (all done)
-
-Phase 17 (extension-release-edge-add-ons-submission) — IN PROGRESS: plans 17-01 to 17-03 of 5 complete.
+Phase: Milestone v1.1 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-11-20 — Milestone v1.1 completed and archived
 
 ## Performance Metrics
 
@@ -800,3 +801,22 @@ Last session: 2026-11-15T00:37:39.099Z
 Stopped at: 16-10 complete (Kit 3 live on ed3210e; stale-worker owner row skipped by owner decision 2026-11-14); 16-01 to 16-10 done. Next: 16-12. 16-11 done (Vitest 5 live on 587c51c). Decisions: Kit sequence 05-10 pushed once and live-verified; TOOL-02/03/05 ticks wait for plan 13 Task 5.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-11-20 (owner chose to complete v1.1 and carry the debt):
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat_gap | 02-HUMAN-UAT.md (3 open scenarios) | superseded by .planning/HUMAN-UAT.md |
+| uat_gap | 03-HUMAN-UAT.md (9 open scenarios) | superseded by .planning/HUMAN-UAT.md |
+| uat_gap | 12-HUMAN-UAT.md (1 open scenario) | superseded by .planning/HUMAN-UAT.md |
+| uat_gap | 01, 04 to 11 HUMAN-UAT.md (9 files, 0 open scenarios) | superseded |
+| verification_gap | 01 to 13 VERIFICATION.md (13 files) | human_needed (owner rows in .planning/HUMAN-UAT.md: 68 pending, 2 carried) |
+| verification_gap | 17-VERIFICATION.md | gaps_found; the one records gap was closed after the report (closure note in the file) |
+
+Tech debt W1 to W5 and I1 to I8: .planning/milestones/v1.1-MILESTONE-AUDIT.md.
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone

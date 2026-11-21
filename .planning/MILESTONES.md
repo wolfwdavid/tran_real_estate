@@ -1,5 +1,37 @@
 # Milestones
 
+## v1.1 Launch & Hardening (Shipped: 2026-11-20)
+
+**Delivered:** The v1.0 build is live at `https://wolfwdavid.github.io/tran_real_estate/`, every deploy is followed by a read-only live smoke, the debt carried out of v1.0 is closed, the test suites are deterministic under load, the toolchain is on pnpm 12, SvelteKit 3 and Vitest 5, and the Zillow extension is published as the `ext-v0.1.0` GitHub Release. No new portal features.
+
+**Phases completed:** 6 phases (12-17), 72 plans, 143 tasks
+**Timeline:** 2026-10-29 → 2026-11-20 (22 days), 332 commits, 960 files changed (+55,343 / −5,870)
+**Git range:** `a60413c` (docs(v1.0): milestone audit) → `1679237` (docs(17-05): record the green ci and live-smoke runs)
+**Audit:** `milestones/v1.1-MILESTONE-AUDIT.md` (status `tech_debt`: 39/41 requirements, 6/6 phases verified, integration 20/24 clean with 0 broken, 3/3 flows)
+
+**Key accomplishments:**
+
+1. **Go-live readiness and a local smoke suite (Phase 12).** History rewritten to carry no assistant attribution, every build stamped with its commit SHA, `PUBLIC_SITE_URL` driving every absolute URL and the extension's origin, and a fail-closed, read-only smoke suite green on three local builds.
+2. **Live origin (Phase 13).** First green CI on GitHub, first deploy, `live-smoke.yml` chained behind every deploy, GTM-01..03 proven and GTM-04 cut, one owner HUMAN-UAT ledger in place of twelve files, a launch-proof bundle and `docs/RUNBOOK.md`.
+3. **Carried debt closed (Phase 14).** Nine v1.0 follow-ups closed to their sourced definitions of done, including the UI-level backup round-trip, the bounded-wait scheduler lock and the 60 KB JS budget as a hard gate on the marketing pages.
+4. **Load-deterministic test lanes (Phase 15).** Timing-budget tests in serial lanes, a mechanical guard against unannotated timeout raises and retries, capped workers, pass-on-retry fails CI, and a dated evidence file.
+5. **Toolchain (Phase 16).** pnpm 12, SvelteKit 3.1 with adapter-static 4 and the service worker on `$app/manifest`, Vitest 5; each step gated by `pnpm verify` and the local smoke, closed by a deploy and a green live smoke; audit exceptions down from five to two.
+6. **Extension release (Phase 17).** `ext-v0.1.0` published from a hardened release workflow (dispatch dry-run, draft releases, tag-on-main and version checks, zip entry allowlist) with checksums and a changelog; checked on live Zillow (three ad-slot items dimmed, no property card marked).
+
+### Known Gaps
+
+Accepted as tech debt at completion (owner choice 2026-11-20; full list in `milestones/v1.1-MILESTONE-AUDIT.md`):
+
+- **LIVE-05 partial.** The checklist corrections are done; the Search Console sitemap read is still carried (HUMAN-UAT L86, L99).
+- **EXT-09 cut.** The owner decided on 2026-11-20 to distribute through the GitHub Release only; nothing was submitted to Edge Add-ons. The listing copy, logo and screenshots are kept unused.
+- **W1/W2: JS budget.** The weekly Dependabot minor/patch PR (#18) fails CI on the budget (0.06 KB headroom on `tools/cash-on-cash`), and the budget oracle undercounts under Kit 3 (59.78 KB counted against 62.85 KB measured).
+- **W3/W4: workflow order.** CI does not run the smoke suite before deploying; the release workflow does not check that ci was green for the tagged commit.
+- **W5: privacy page.** The live page still says contact details will be posted before public launch.
+- **Not checked on live Zillow:** the reveal click, the popup count line and Edge. L93 lacks the terms "Updated" date and quoted wording.
+- **68 owner HUMAN-UAT rows pending**, 2 carried.
+
+Known deferred items at close: 26 (see STATE.md Deferred Items)
+
 ## v1.0 MVP (Shipped: 2026-10-29)
 
 **Delivered:** Tran Real Estate Tools v1: one statically built SvelteKit app with three portals (renters, investors, agents), a $0 browser-only architecture where every user brings their own RentCast and LLM keys, a launch surface with SEO tool pages and a first-party analytics beacon, and a hide-only Zillow sponsored-listing browser extension. Built and verified locally; the live demo waits on the owner creating the `tranrealestate` GitHub org and pushing.

@@ -45,6 +45,49 @@
 
 ---
 
+## Milestone: v1.1 — Launch & Hardening
+
+**Shipped:** 2026-11-20
+**Phases:** 6 (12-17) | **Plans:** 72 | **Tasks:** 143 | **Commits:** 332 | **Calendar:** 22 days (2026-10-29 → 2026-11-20)
+
+### What Was Built
+- The live site at `https://wolfwdavid.github.io/tran_real_estate/`, with CI, deploy and a read-only live smoke chained behind every push to `main`.
+- Nine carried-debt fixes, serial test lanes with a mechanical guard against unannotated timeouts and retries, and the move to pnpm 12, SvelteKit 3.1 and Vitest 5.
+- The `ext-v0.1.0` GitHub Release from a hardened release workflow, with checksums and a changelog.
+
+### What Worked
+- **One tool per plan with a full gate and a live smoke after each push** (Phase 16). Every toolchain step was provable on its own, and the Kit 3 service-worker change was observed on the live origin.
+- **Measuring before fixing.** The Pages dotfile behaviour, the first-deploy facts and the live Zillow DOM were read live before the code that depends on them.
+- **One owner ledger** (`.planning/HUMAN-UAT.md`) with a text oracle in place of twelve per-phase files; every status change is checked by a test.
+- **Approval dialogs for owner gates** (tag, publish, push). Each was answered in one step.
+
+### What Was Inefficient
+- **The JS budget ran at near-zero headroom through the Kit 3 migration** and still does (0.06 KB), so the weekly Dependabot PR fails CI. The budget oracle also undercounts under Kit 3.
+- **Scope changed after the work was done.** The Edge listing assets, capture spec and tests were built in Phase 17 and then the store submission was cut; the records needed a second pass to match.
+- **Stale wording after decisions.** The origin change (org to personal account) and the store cut each left old text in ROADMAP, PROJECT and REQUIREMENTS that a verifier had to find.
+- **The extension would not run in the owner's Chrome window driven by the browser tools**, cause never found; the live check moved to a clean Chromium, where a Zillow bot check then stopped the reveal-click step.
+- **SUMMARY frontmatter does not list all completed requirements**, so the three-source cross-check at the audit fell back to the phase verifications.
+
+### Patterns Established
+- `scripts/smoke.mjs` with a fail-closed env gate, zero retries and an exit-2 precondition path; the same specs run local and live.
+- `tooling/vitest/lanes.ts` as the lane manifest, with a repo-wide guard test.
+- Release workflow: dispatch dry-run, draft release, owner publishes; tag created on the pushed commit by SHA.
+- Every push, tag push and publish is approved by the owner each time, and the run links are recorded in the plan summary.
+
+### Key Lessons
+1. Keep real headroom on a hard budget before a framework major, and check that the oracle counts what the framework ships.
+2. When the owner changes scope, grep every planning file for the old wording in the same change.
+3. Confirm an owner decision that removes scope (a store listing) before building its assets.
+4. For a live third-party check, have a clean-browser fallback ready and stop at a bot check.
+5. Fill `requirements-completed` in each SUMMARY as the plan closes; the audit depends on it.
+
+### Cost Observations
+- Model mix: not recorded for this milestone.
+- Sessions: not counted; Phase 17 and the audit ran in one long session with several context compactions.
+- Notable: multi-agent orchestration was turned off by the owner part-way through Phase 17; single agents (verifier, integration checker) were enough.
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -52,12 +95,14 @@
 | Milestone | Sessions | Phases | Key Change |
 |-----------|----------|--------|------------|
 | v1.0 | ~12 | 11 | Wave-parallel executors with contracts-first wave 1; evidence-derived launch audit; audit exceptions module |
+| v1.1 | not counted | 6 | Live smoke after every deploy; one tool per plan with a gate and a push; one owner UAT ledger; owner approval dialog for every push, tag and publish |
 
 ### Cumulative Quality
 
 | Milestone | Tests | Coverage | Zero-Dep Additions |
 |-----------|-------|----------|-------------------|
 | v1.0 | 6,647 unit + 2,327 E2E + 261 extension | not measured (oracles + axe per route instead) | assert-csp, assert-seo, assert-budget, assert-extension, serve-pages, guard-real-data, launch-audit, audit-evidence |
+| v1.1 | totals not re-counted at close (last full gate: Phase 16 plan 13; scripts project 1,258 and extension unit 242 on 2026-11-20) | not measured | smoke.mjs and the smoke specs, live-smoke gate, lane guard, origin-parity, release check scripts (version, ancestor, probe, notes, zip allowlist) |
 
 ### Top Lessons (Verified Across Milestones)
 
