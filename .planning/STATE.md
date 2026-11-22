@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Maintenance & Release Hygiene
 status: executing
-stopped_at: "Completed 18-02-PLAN.md (projected live smoke volume 1,535 requests, down from 5,939; local smoke green on three targets). Next: 18-03."
-last_updated: "2026-11-22T14:15:46.830Z"
-last_activity: 2026-11-22 - Completed 18-02 (live smoke volume cut: nine-route sample, one worker install, share tags from HTML; projected 1,535 requests)
+stopped_at: "Completed 18-03-PLAN.md (every 429 source is exit-2 evidence; a newer deployed commit is superseded, exit 0 with a notice, for chained runs only; local smoke green on three targets). Next: 18-04."
+last_updated: "2026-11-22T14:37:00.000Z"
+last_activity: 2026-11-22 - Completed 18-03 (no 429 ignored, superseded outcome in smoke.mjs, token env on the smoke step)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-20)
 ## Current Position
 
 Phase: 18 of 21 (Live Smoke Stability) - in progress
-Plan: 3 of 5 (18-01 and 18-02 complete)
-Status: Executing (2 of 5 plans done)
-Last activity: 2026-11-22 - Completed 18-02 (live smoke volume cut: nine-route sample, one worker install, share tags from HTML; projected 1,535 requests)
+Plan: 4 of 5 (18-01, 18-02 and 18-03 complete)
+Status: Executing (3 of 5 plans done)
+Last activity: 2026-11-22 - Completed 18-03 (no 429 ignored, superseded outcome in smoke.mjs, token env on the smoke step)
 
 ## Performance Metrics
 
@@ -287,6 +287,7 @@ Last activity: 2026-11-22 - Completed 18-02 (live smoke volume cut: nine-route s
 | Phase 16 P02 | n/a | 3 tasks | 6 files |
 | Phase 18 P01 | 20min | 3 tasks | 3 files |
 | Phase 18 P02 | 12min | 3 tasks | 7 files |
+| Phase 18 P03 | 20min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -774,6 +775,9 @@ Recent decisions affecting current work:
 - [Phase 18-02]: Live third-party smoke loads LIVE_THIRD_PARTY_SAMPLE (nine routes, one per route group); the local emulator run (SMOKE_ALLOW_HTTP is 1) loads all 44. A new route group must be added to the sample and to the pin in scripts/smoke.test.ts.
 - [Phase 18-02]: The smoke suite is 119 tests in 9 spec files: assets.smoke.ts is merged into pwa.smoke.ts, which installs the worker once and reads hashed-asset statuses from the cache. seo.smoke.ts makes no page loads.
 - [Phase 18-02]: Projected live volume is 1,535 requests (third-party 576, pwa 421, seo 19, unchanged specs 519), 74% below the 5,939 baseline; the local root run is 4,294. The live sample branch first executes on a live run. SMOKE-07 stays unchecked until the 18-05 proof runs.
+- [Phase 18-03]: Every 429 is exit-2 evidence whatever its source: the context listener logs any 429 response (navigation, sub-resource, service worker install) and a Proxy over the request fixture logs API-context ones. No smoke spec may use page.request, context.request or a new request context (pinned). installedPrecache fails at once on a 429.
+- [Phase 18-03]: Superseded is exit 0 with a ::notice::, only for a chained workflow_run with a repository and a token, and only when GitHub's compare of expected...served answers ahead for a different 40-hex SHA. Behind, diverged, identical, a failed lookup, a dispatch and a local run keep the red path. A superseded run never counts as a proof run.
+- [Phase 18-03]: live-smoke.yml passes GITHUB_TOKEN from github.token to the smoke step only; smoke.mjs deletes it from the env given to Playwright. SMOKE-08 is implemented and pinned but left unchecked until a chained run shows the compare call works on a runner; the runbook text is 18-04's.
 
 ### Pending Todos
 
@@ -805,8 +809,8 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-22T14:16:03.703Z
-Stopped at: Completed 18-02-PLAN.md (projected live smoke volume 1,535 requests, down from 5,939; local smoke green on three targets). Next: 18-03.
+Last session: 2026-11-22T14:37:00.000Z
+Stopped at: Completed 18-03-PLAN.md (every 429 source is exit-2 evidence; a newer deployed commit is superseded, exit 0 with a notice, for chained runs only; local smoke green on three targets). Next: 18-04.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
 
