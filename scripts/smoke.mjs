@@ -10,8 +10,12 @@
 //   ... -- <args>                    passed through to `playwright test`
 //
 // Exit codes: 0 ok, 1 suite failed, 2 precondition (env, stale/missing build, emulator) or a 429 on
-// a smoke navigation (CDN rate-limited, re-dispatch once), 3 version not propagated, 4 over the
+// any smoke request (CDN rate-limited, re-dispatch once), 3 version not propagated, 4 over the
 // 5-minute budget.
+//
+// Superseded (exit 0 with a ::notice::, chained workflow_run runs only): when the origin serves a
+// different commit that GitHub's compare API reports as ahead of the expected one, this commit is
+// not smoked, because the newer commit's own live-smoke judges it. Anything else stays red.
 //
 // Dependency-free: node: builtins only (the repo bans bare fetch).
 import { spawn, spawnSync } from 'node:child_process';
@@ -117,13 +121,14 @@ export function staleBuilds(targets, head, read = readStamp) {
 /**
  * GET with caching disabled; resolves { status, body }, rejects on a network error or timeout.
  * @param {string} url
+ * @param {Record<string, string>} [headers] extra request headers
  * @returns {Promise<{ status: number, body: string }>}
  */
-export function httpGet(url) {
+export function httpGet(url, headers = {}) {
 	return new Promise((resolve, reject) => {
 		const req = (url.startsWith('https:') ? https : http).get(
 			url,
-			{ headers: { 'cache-control': 'no-cache' } },
+			{ headers: { 'cache-control': 'no-cache', ...headers } },
 			(res) => {
 				let body = '';
 				res.setEncoding('utf8');
@@ -137,27 +142,131 @@ export function httpGet(url) {
 	});
 }
 
+const SHA = /^[0-9a-f]{40}$/;
+
+/**
+ * What a served version means for a smoke that expects `expected`. Pure, and fail-closed: only an
+ * explicit `ahead` from the compare lookup for a different 40-hex SHA is superseded. Behind
+ * (propagation lag or a rollback), diverged, identical, a failed lookup and a non-SHA are pending.
+ * @param {string} expected
+ * @param {unknown} served
+ * @param {unknown} compareStatus status of `expected...served` from the compare lookup, or null
+ * @returns {'ok' | 'superseded' | 'pending'}
+ */
+export function classifyServed(expected, served, compareStatus) {
+	if (served === expected) return 'ok';
+	if (typeof served === 'string' && SHA.test(served) && compareStatus === 'ahead') {
+		return 'superseded';
+	}
+	return 'pending';
+}
+
+/**
+ * The `status` GitHub's compare API reports for `base...head` (`ahead` means head is newer), or
+ * null on any failure. Both SHAs and the repository are validated before a URL is built, because
+ * `head` comes from a served file. The token travels in the Authorization header only.
+ * @param {string | undefined} repo owner/name
+ * @param {string} base
+ * @param {string} head
+ * @param {string | undefined} token
+ * @param {(url: string, headers?: Record<string, string>) => Promise<{ status: number, body: string }>} [get]
+ * @returns {Promise<string | null>}
+ */
+export async function githubCompare(repo, base, head, token, get = httpGet) {
+	if (!repo || !/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo)) return null;
+	if (!SHA.test(base) || !SHA.test(head)) return null;
+	/** @type {Record<string, string>} */
+	const headers = { 'user-agent': 'live-smoke', accept: 'application/vnd.github+json' };
+	if (token) headers.authorization = `Bearer ${token}`;
+	try {
+		const r = await get(`https://api.github.com/repos/${repo}/compare/${base}...${head}`, headers);
+		if (r.status !== 200) return null;
+		const status = JSON.parse(r.body).status;
+		return typeof status === 'string' ? status : null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * The compare lookup for a run, or null when superseded detection is off. It is on only for a
+ * chained run (GITHUB_EVENT_NAME is workflow_run) that has a repository and a token; a dispatch,
+ * a local run or a missing token keeps the red path.
+ * @param {Record<string, string | undefined>} env
+ * @param {string} expected
+ * @param {Parameters<typeof githubCompare>[4]} [get]
+ * @returns {((served: string) => Promise<string | null>) | null}
+ */
+export function supersededLookup(env, expected, get = httpGet) {
+	if (env.GITHUB_EVENT_NAME !== 'workflow_run') return null;
+	if (!env.GITHUB_REPOSITORY || !env.GITHUB_TOKEN) return null;
+	return (served) => githubCompare(env.GITHUB_REPOSITORY, expected, served, env.GITHUB_TOKEN, get);
+}
+
+/**
+ * One cache-busted read of <base>_app/version.json: its version string, or null on any failure
+ * (a network error, a non-200, a Pages 404 page or a CDN error body that is not JSON).
+ * @param {string} base
+ * @param {string} expected
+ * @param {(url: string) => Promise<{ status: number, body: string }>} get
+ * @returns {Promise<string | null>}
+ */
+async function servedVersion(base, expected, get) {
+	try {
+		const r = await get(`${base}_app/version.json?_=${expected}-${Date.now()}`);
+		const version = r.status === 200 ? JSON.parse(r.body).version : null;
+		return typeof version === 'string' ? version : null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * The newer SHA when `served` supersedes `expected`, else null. A lookup that throws counts as
+ * no answer. `asked` keeps one answer per served SHA.
+ * @param {string} expected
+ * @param {string | null} served
+ * @param {((served: string) => Promise<string | null>) | undefined} compare
+ * @param {Map<string, string | null>} [asked]
+ * @returns {Promise<string | null>}
+ */
+async function supersededBy(expected, served, compare, asked = new Map()) {
+	if (!compare || !served || served === expected || !SHA.test(served)) return null;
+	if (!asked.has(served)) {
+		asked.set(
+			served,
+			await Promise.resolve()
+				.then(() => compare(served))
+				.catch(() => null)
+		);
+	}
+	return classifyServed(expected, served, asked.get(served)) === 'superseded' ? served : null;
+}
+
 /**
  * Poll <base>_app/version.json (cache-busted) until it reports `expected`. Never exits the process.
+ * With `compare` (absent by default: no network lookup), a different served SHA that compares
+ * ahead ends the poll with 'superseded'; the lookup is asked once per distinct served SHA.
  * @param {string} base origin + base path, with a trailing slash
  * @param {string} expected
- * @param {{ timeoutMs?: number, everyMs?: number, get?: (url: string) => Promise<{ status: number, body: string }> }} [opts]
- * @returns {Promise<'ok' | 'timeout'>}
+ * @param {{ timeoutMs?: number, everyMs?: number, get?: (url: string) => Promise<{ status: number, body: string }>, compare?: (served: string) => Promise<string | null>, onSuperseded?: (served: string) => void }} [opts]
+ * @returns {Promise<'ok' | 'timeout' | 'superseded'>}
  */
 export async function waitForVersion(
 	base,
 	expected,
-	{ timeoutMs = 600_000, everyMs = 15_000, get = httpGet } = {}
+	{ timeoutMs = 600_000, everyMs = 15_000, get = httpGet, compare, onSuperseded } = {}
 ) {
 	const deadline = Date.now() + timeoutMs;
+	/** @type {Map<string, string | null>} */
+	const asked = new Map();
 	for (;;) {
-		const r = await get(`${base}_app/version.json?_=${expected}-${Date.now()}`).catch(() => null);
-		if (r?.status === 200) {
-			try {
-				if (JSON.parse(r.body).version === expected) return 'ok';
-			} catch {
-				// not JSON yet (a Pages 404 page, a CDN error body): keep polling
-			}
+		const served = await servedVersion(base, expected, get);
+		if (served === expected) return 'ok';
+		const newer = await supersededBy(expected, served, compare, asked);
+		if (newer) {
+			onSuperseded?.(newer);
+			return 'superseded';
 		}
 		if (Date.now() >= deadline) return 'timeout';
 		await new Promise((s) => setTimeout(s, everyMs));
@@ -165,7 +274,19 @@ export async function waitForVersion(
 }
 
 /**
- * Map a finished suite's exit status and the number of recorded 429 navigations to the exit code.
+ * After a failed suite: one fresh read of version.json. Returns the newer served SHA when it
+ * supersedes `expected` (a newer commit deployed mid-run), else null; every failure is null.
+ * @param {string} base
+ * @param {string} expected
+ * @param {{ get?: (url: string) => Promise<{ status: number, body: string }>, compare?: (served: string) => Promise<string | null> }} [opts]
+ * @returns {Promise<string | null>}
+ */
+export async function checkSuperseded(base, expected, { get = httpGet, compare } = {}) {
+	return supersededBy(expected, await servedVersion(base, expected, get), compare);
+}
+
+/**
+ * Map a finished suite's exit status and the number of recorded 429 responses to the exit code.
  * A green run is never relabelled; a failed run with 429 evidence is the Pages CDN rate-limiting
  * the runner (exit 2, re-dispatch once); any other failure keeps its status.
  * @param {number} status
@@ -178,7 +299,7 @@ export function classifySuiteExit(status, rateLimitedCount) {
 }
 
 /**
- * Count the evidence lines (one URL per 429 navigation) in the SMOKE_429_LOG text.
+ * Count the evidence lines (one URL per 429 response) in the SMOKE_429_LOG text.
  * @param {string | undefined} text
  * @returns {number}
  */
@@ -236,7 +357,22 @@ async function remote(passthrough) {
 	}
 	// Pitfall 3: measure how long the deploy takes to propagate; never raise the 10-minute poll.
 	const started = Date.now();
-	if ((await waitForVersion(smoke.baseUrl, smoke.expectVersion)) === 'timeout') {
+	// Null unless this is a chained workflow_run with a token: a dispatch or a local run never asks.
+	const lookup = supersededLookup(process.env, smoke.expectVersion);
+	/** @param {string} served */
+	const superseded = (served) => {
+		console.log(
+			`::notice::smoke: ${smoke.expectVersion} superseded by ${served}; not smoked (the newer commit's own live-smoke judges it)`
+		);
+		return 0;
+	};
+	let newer = '';
+	const waited = await waitForVersion(smoke.baseUrl, smoke.expectVersion, {
+		compare: lookup ?? undefined,
+		onSuperseded: (served) => (newer = served)
+	});
+	if (waited === 'superseded') return superseded(newer);
+	if (waited === 'timeout') {
 		console.error(
 			`smoke: ${smoke.baseUrl}_app/version.json never reported ${smoke.expectVersion} within 10 minutes (deploy not propagated)`
 		);
@@ -245,18 +381,26 @@ async function remote(passthrough) {
 	console.log(
 		`smoke: ${smoke.expectVersion} live at ${smoke.baseUrl} after ${Math.round((Date.now() - started) / 1000)} s`
 	);
-	// The fixtures append the URL of every 429 navigation to this file (workers are separate
+	// The fixtures append the URL of every 429 response to this file (workers are separate
 	// processes); the file only ever holds public smoke-target URLs and is removed below.
 	const dir = mkdtempSync(path.join(tmpdir(), 'smoke-429-'));
 	const log = path.join(dir, 'rate-limited.log');
 	try {
 		appendFileSync(log, '');
-		const status = runPlaywright(passthrough, { ...process.env, SMOKE_429_LOG: log });
+		// The token is for the compare lookup only: it never reaches the browser workers or traces.
+		const env = { ...process.env, SMOKE_429_LOG: log };
+		delete env.GITHUB_TOKEN;
+		const status = runPlaywright(passthrough, env);
+		if (status !== 0 && lookup) {
+			// A newer commit deployed mid-run fails this one's version and cache checks: not its fault.
+			const served = await checkSuperseded(smoke.baseUrl, smoke.expectVersion, { compare: lookup });
+			if (served) return superseded(served);
+		}
 		const n = countRateLimited(readFileSync(log, 'utf8'));
 		const code = classifySuiteExit(status, n);
 		if (code === 2 && status !== 2) {
 			console.error(
-				`smoke: HTTP 429 from the Pages CDN on ${n} navigation(s): CDN rate-limited, re-dispatch once (never in a loop; see docs/RUNBOOK.md)`
+				`smoke: HTTP 429 from the Pages CDN on ${n} request(s): CDN rate-limited, re-dispatch once (never in a loop; see docs/RUNBOOK.md)`
 			);
 		}
 		return code;
