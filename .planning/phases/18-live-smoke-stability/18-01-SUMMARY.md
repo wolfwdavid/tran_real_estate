@@ -93,6 +93,43 @@ completed: 2026-11-22
 
 ## Probe results
 
+Both probes ran on loopback only (Playwright 1.65.0, Chromium). The scripts are `.tools/probes/probe-a.mjs` and `.tools/probes/probe-b.mjs` (ignored, not committed).
+
+### Probe A: which requests the context listeners see
+
+A stub server on an ephemeral 127.0.0.1 port answered 429 on `/limited` and 200 elsewhere. One browser context had `context.on('request')`, `context.on('response')` and `context.on('requestfailed')` registered. The stub's own log confirms all five requests reached it.
+
+| Case | Call | Status returned | Context request listener saw it | Context response listener saw it |
+| --- | --- | --- | --- | --- |
+| 1 | `context.request.get('/limited')` | 429 | no | no |
+| 2 | `page.request.get('/limited')` | 429 | no | no |
+| 3 | standalone `request.newContext()` then `get('/limited')` | 429 | no | no |
+| 4 | `page.goto('/limited')` | 429 | yes | yes (`isNavigationRequest()` true) |
+| 5 | service worker install, `cache.addAll` over one ok URL plus `/limited` | n/a | yes | yes (status 429, `request().serviceWorker()` set, `isNavigationRequest()` false) |
+
+- **Cases 1 to 3:** APIRequestContext traffic is invisible to the context listeners, requests and responses alike. Assumption A2 is confirmed. The suite's `request` fixture is the case 3 kind.
+- **Case 5:** the context listeners see the worker's requests and the 429 response with the default settings (no experimental flag), followed by a `requestfailed` for the same URL. A `page.on('response')` listener does not see it. The install fails fast and does not hang: the worker went from `installing` to `redundant` in 27 ms. The cache key exists afterwards with **zero entries**.
+
+### Probe B: cached precache status
+
+The root build (same SHA as the baseline) was served by `scripts/serve-pages.mjs`, the base was opened with service workers allowed, and after the install every cache key was read with `caches.match` in the page.
+
+- **322 of 322 cached immutable entries have status 200** and `ok === true`.
+- All 381 of 381 precache entries have status 200 and `ok === true`; every response type is `basic` (none opaque).
+- The check issued zero network requests, and the install took about 0.4 s locally.
+- Assumption A4 is confirmed: a cache-status check can replace the per-hash GET loop.
+
+## Findings for later plans
+
+Measured facts that differ from what plans 18-02 and 18-03 assume. Nothing was redesigned here.
+
+1. **18-03, 429 logging needs both mechanisms, a combination the plan does not spell out.** The plan offers "listener sees API traffic, so drop the navigation restriction" or "it does not, so wrap the `request` fixture and keep the navigation branch", and separately Branch A for the worker ("the same unrestricted listener already records it"). Measured: the listener does **not** see API-context responses (wrapper needed) and it **does** see the worker's 429, but only with `isNavigationRequest()` false. Keeping the navigation-only condition next to the wrapper would leave a 429 during the install unlogged. Branch A applies only if the listener condition is widened (unrestricted, or navigation or service worker request).
+2. **18-03, what a rate-limited install looks like.** The worker turns redundant within tens of milliseconds and the cache key exists with zero entries, so `installedPrecache` (which waits for one key with entries) would wait its full 20 s and then fail. The 429 itself is visible on the context listener the moment it happens.
+3. **18-02, the per-hash GET loop is 322 requests, not about 370.** The plan's wording "the 370 per-hash GETs" overstates the saving by about 48. The precache total is 381 entries.
+4. **18-02, third-party costs 75.8 requests per load, not 73.** With the plan's nine-route live sample that is about 682 requests, not the research figure of about 440 for seven routes. A rough projection from these measurements (arithmetic, not a measurement): third-party about 682, one shared install about 421, seo about 20, unchanged specs 519 (version 1, analytics 38, extension-link 33, csp 45, routing 225, a11y 177), in total about 1,640. That is inside the plan's 1,500 to 1,800 target and under its 2,000 stop line.
+5. **18-02 and 18-04, how to read the count file.** Set `SERVE_PAGES_COUNT_FILE` to a Windows-style absolute path (`$(pwd -W)/...` in Git Bash). Treat an empty or missing file as a failed run. Expect routing to vary by a few requests between runs; every other spec was identical run to run. The orchestrator's poll is one `version.json` GET per target.
+6. **The Kit 3 total is about 4% above the research figure** (5,939 against about 5,700), with the same shape: third-party, pwa and assets are 83% of all requests.
+
 ## Deviations from Plan
 
 ### Auto-fixed Issues
