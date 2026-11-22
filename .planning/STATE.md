@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Maintenance & Release Hygiene
 status: executing
-stopped_at: "Completed 18-03-PLAN.md (every 429 source is exit-2 evidence; a newer deployed commit is superseded, exit 0 with a notice, for chained runs only; local smoke green on three targets). Next: 18-04."
-last_updated: "2026-11-22T14:37:00.000Z"
-last_activity: 2026-11-22 - Completed 18-03 (no 429 ignored, superseded outcome in smoke.mjs, token env on the smoke step)
+stopped_at: "Completed 18-04-PLAN.md (RUNBOOK volume table and LIVE_REQUEST_CEILING 1600 tied by a test; superseded outcome documented; scripts projects, lint:workflows, check and smoke:local green at c84cc6e, builds stamped c84cc6e). Next: 18-05 (owner-gated proof pushes; rebuild first)."
+last_updated: "2026-11-22T14:43:05.740Z"
+last_activity: 2026-11-22 - Completed 18-04 (live request volume and 1600 ceiling in the RUNBOOK with an oracle, superseded outcome documented, local verification green at c84cc6e)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-20)
 ## Current Position
 
 Phase: 18 of 21 (Live Smoke Stability) - in progress
-Plan: 4 of 5 (18-01, 18-02 and 18-03 complete)
-Status: Executing (3 of 5 plans done)
-Last activity: 2026-11-22 - Completed 18-03 (no 429 ignored, superseded outcome in smoke.mjs, token env on the smoke step)
+Plan: 5 of 5 (18-01 to 18-04 complete)
+Status: Executing (4 of 5 plans done)
+Last activity: 2026-11-22 - Completed 18-04 (live request volume and 1600 ceiling in the RUNBOOK with an oracle, superseded outcome documented, local verification green at c84cc6e)
 
 ## Performance Metrics
 
@@ -288,6 +288,7 @@ Last activity: 2026-11-22 - Completed 18-03 (no 429 ignored, superseded outcome 
 | Phase 18 P01 | 20min | 3 tasks | 3 files |
 | Phase 18 P02 | 12min | 3 tasks | 7 files |
 | Phase 18 P03 | 20min | 3 tasks | 5 files |
+| Phase 18 P04 | 10min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -778,6 +779,8 @@ Recent decisions affecting current work:
 - [Phase 18-03]: Every 429 is exit-2 evidence whatever its source: the context listener logs any 429 response (navigation, sub-resource, service worker install) and a Proxy over the request fixture logs API-context ones. No smoke spec may use page.request, context.request or a new request context (pinned). installedPrecache fails at once on a 429.
 - [Phase 18-03]: Superseded is exit 0 with a ::notice::, only for a chained workflow_run with a repository and a token, and only when GitHub's compare of expected...served answers ahead for a different 40-hex SHA. Behind, diverged, identical, a failed lookup, a dispatch and a local run keep the red path. A superseded run never counts as a proof run.
 - [Phase 18-03]: live-smoke.yml passes GITHUB_TOKEN from github.token to the smoke step only; smoke.mjs deletes it from the env given to Playwright. SMOKE-08 is implemented and pinned but left unchecked until a chained run shows the compare call works on a runner; the runbook text is 18-04's.
+- [Phase 18-04]: LIVE_REQUEST_CEILING (1600, exported by scripts/smoke.mjs) is the stated live smoke ceiling; scripts/runbook.test.ts fails if the RUNBOOK volume table total exceeds it or the stated number differs. Changing it means re-measuring and updating both. 1,535 is a projection from local emulator measurements until the first live run.
+- [Phase 18-04]: The RUNBOOK documents superseded as an exit-0 outcome in prose (no new exit row) and exit 2 as a 429 on any smoke request. smoke:local requires the build stamp to equal HEAD, so builds must be rebuilt after any commit, including a docs commit.
 
 ### Pending Todos
 
@@ -809,8 +812,8 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-22T14:37:00.000Z
-Stopped at: Completed 18-03-PLAN.md (every 429 source is exit-2 evidence; a newer deployed commit is superseded, exit 0 with a notice, for chained runs only; local smoke green on three targets). Next: 18-04.
+Last session: 2026-11-22T14:43:00.000Z
+Stopped at: Completed 18-04-PLAN.md (RUNBOOK volume table and LIVE_REQUEST_CEILING 1600 tied by a test; superseded outcome documented; scripts projects, lint:workflows, check and smoke:local green at c84cc6e, builds stamped c84cc6e). Next: 18-05 (owner-gated proof pushes; rebuild first).
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
 

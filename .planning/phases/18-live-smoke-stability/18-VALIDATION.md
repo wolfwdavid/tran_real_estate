@@ -3,7 +3,7 @@ phase: 18
 slug: live-smoke-stability
 status: draft
 nyquist_compliant: false
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-11-21
 ---
 
@@ -41,14 +41,16 @@ Filled by the planner; task IDs are assigned in the PLAN files. Requirement-leve
 
 | Requirement | Behavior | Test Type | Automated Command | File Exists | Status |
 |-------------|----------|-----------|-------------------|-------------|--------|
-| SMOKE-07 | Live sample is a subset of the route list and spans every route group; the local run keeps the full list | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ❌ W0 (new case) | ⬜ pending |
-| SMOKE-07 | One shared service worker install for the pwa and assets specs; no per-hash GET loop; worker still blocked elsewhere | unit (text pin) | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ update | ⬜ pending |
-| SMOKE-07 | Retries stay 0; no `toPass`; no sleeps | unit | `pnpm vitest run --project scripts scripts/test-lane-rules.test.ts scripts/smoke-env.test.ts` | ✅ | ⬜ pending |
-| SMOKE-07 | No 429 ignored: an API-context 429 is logged; any 429 maps to exit 2 | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ + new | ⬜ pending |
-| SMOKE-07 | Request volume recorded and under the stated maximum | unit + docs oracle | `pnpm vitest run --project scripts scripts/runbook.test.ts` | ❌ W0 | ⬜ pending |
-| SMOKE-08 | A newer served SHA is classified superseded; behind, diverged or a failed lookup is not | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ❌ W0 | ⬜ pending |
-| SMOKE-08 | Removing the handling fails a test | unit (mutation) | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ❌ W0 | ⬜ pending |
-| SMOKE-08 | Workflow passes the token, stays read-only, four pinned actions, `cancel-in-progress: false` | unit (text) | `pnpm vitest run --project scripts scripts/live-smoke-gate.test.ts` | ✅ extend | ⬜ pending |
+| SMOKE-07 | Live sample is a subset of the route list and spans every route group; the local run keeps the full list | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ | ✅ green |
+| SMOKE-07 | One shared service worker install for the pwa and assets specs; no per-hash GET loop; worker still blocked elsewhere | unit (text pin) | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ | ✅ green |
+| SMOKE-07 | Retries stay 0; no `toPass`; no sleeps | unit | `pnpm vitest run --project scripts scripts/test-lane-rules.test.ts scripts/smoke-env.test.ts` | ✅ | ✅ green |
+| SMOKE-07 | No 429 ignored: an API-context 429 is logged; any 429 maps to exit 2 | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ | ✅ green |
+| SMOKE-07 | Request volume recorded and under the stated maximum | unit + docs oracle | `pnpm vitest run --project scripts scripts/runbook.test.ts` | ✅ | ✅ green |
+| SMOKE-08 | A newer served SHA is classified superseded; behind, diverged or a failed lookup is not | unit | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ | ✅ green |
+| SMOKE-08 | Removing the handling fails a test | unit (mutation) | `pnpm vitest run --project scripts scripts/smoke.test.ts` | ✅ | ✅ green |
+| SMOKE-08 | Workflow passes the token, stays read-only, four pinned actions, `cancel-in-progress: false` | unit (text) | `pnpm vitest run --project scripts scripts/live-smoke-gate.test.ts` | ✅ | ✅ green |
+
+Task map: SMOKE-07 sample and seo -> 18-02-T1; single install -> 18-02-T2; 429 evidence -> 18-03-T1; volume record -> 18-04-T1; three runs -> 18-05 (manual, pending). SMOKE-08 classification and mutation -> 18-03-T2; workflow pin -> 18-03-T3. All eight rows were green in the full `scripts` and `scripts-serial` run at `c84cc6e` (18-04-T2).
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -56,10 +58,10 @@ Filled by the planner; task IDs are assigned in the PLAN files. Requirement-leve
 
 ## Wave 0 Requirements
 
-- [ ] Opt-in request counter in `scripts/serve-pages.mjs` and a place to record its output
-- [ ] Served-version classification with an injectable compare in `scripts/smoke.mjs`, with its tests in `scripts/smoke.test.ts`
-- [ ] Live-sample pin test; fixture volume and 429 needle pins
-- [ ] Runbook volume table and an oracle assertion for it in `scripts/runbook.test.ts`
+- [x] Opt-in request counter in `scripts/serve-pages.mjs` and a place to record its output
+- [x] Served-version classification with an injectable compare in `scripts/smoke.mjs`, with its tests in `scripts/smoke.test.ts`
+- [x] Live-sample pin test; fixture volume and 429 needle pins
+- [x] Runbook volume table and an oracle assertion for it in `scripts/runbook.test.ts`
 
 ---
 
