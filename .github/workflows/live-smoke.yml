@@ -47,9 +47,12 @@ jobs:
       - run: pnpm --filter web exec playwright install --with-deps chromium
       # Remote mode: waits up to 10 minutes for <base>_app/version.json to report the deployed SHA,
       # then runs the read-only suite with zero retries. Exit 2 = env precondition, 3 = not propagated.
+      # GITHUB_TOKEN is used only for the read-only compare lookup that detects a superseded
+      # commit (scripts/smoke.mjs); smoke.mjs removes it from the env it gives Playwright.
       - name: Smoke the deployed build
         run: pnpm smoke
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           SMOKE_BASE_URL: ${{ inputs.base_url || format('{0}{1}/', vars.PUBLIC_SITE_URL, vars.BASE_PATH) }}
           SMOKE_SITE_URL: ${{ inputs.base_url || format('{0}{1}/', vars.PUBLIC_SITE_URL, vars.BASE_PATH) }}
           SMOKE_EXPECT_VERSION: ${{ github.event.workflow_run.head_sha || inputs.expect_version || github.sha }}

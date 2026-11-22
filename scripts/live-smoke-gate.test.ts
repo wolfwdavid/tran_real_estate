@@ -138,6 +138,59 @@ describe('smoke env', () => {
 	});
 });
 
+describe('superseded lookup token (SMOKE-08)', () => {
+	const TOKEN_ENV = '          GITHUB_TOKEN: ${{ github.token }}\n';
+	/** What is wrong with the token wiring and the read-only posture around it. */
+	const problems = (yml: string) => {
+		const out: string[] = [];
+		if (count(yml, TOKEN_ENV) !== 1) out.push('the token env line is not present exactly once');
+		if (count(yml, 'github.token') !== 1) out.push('github.token is not used exactly once');
+		// Inside the smoke step: after its run line and before the next step starts.
+		const step = yml.slice(yml.indexOf('run: pnpm smoke\n'));
+		if (!step.slice(0, step.indexOf('\n      - ')).includes(TOKEN_ENV)) {
+			out.push('the token is not in the smoke step env');
+		}
+		if (!yml.includes('cancel-in-progress: false')) out.push('cancel-in-progress is not false');
+		const uses = [...yml.matchAll(/uses: \S+@(\S+)/g)];
+		if (uses.length !== 4 || uses.some((m) => !/^[0-9a-f]{40}$/.test(m[1]))) {
+			out.push('not exactly four SHA-pinned uses lines');
+		}
+		for (const banned of ['write', 'secrets.', 'https://', 'gh ']) {
+			if (yml.includes(banned)) out.push(`contains ${JSON.stringify(banned)}`);
+		}
+		return out;
+	};
+
+	test('the smoke step gets the read-only token once, and nothing else changed posture', () => {
+		expect(problems(text)).toEqual([]);
+	});
+
+	test('non-vacuity: a workflow without the token line is reported', () => {
+		expect(problems(text.replace(TOKEN_ENV, ''))).toEqual([
+			'the token env line is not present exactly once',
+			'github.token is not used exactly once',
+			'the token is not in the smoke step env'
+		]);
+	});
+
+	test('non-vacuity: the token on another step, a fifth action, a secret or a cancel are reported', () => {
+		const moved = text
+			.replace(TOKEN_ENV, '')
+			.replace(
+				'if-no-files-found: ignore\n',
+				`if-no-files-found: ignore\n        env:\n${TOKEN_ENV}`
+			);
+		expect(problems(moved)).toEqual(['the token is not in the smoke step env']);
+		expect(problems(text + '      - uses: actions/cache@v4\n')).toEqual([
+			'not exactly four SHA-pinned uses lines'
+		]);
+		expect(problems(text.replace('github.token', 'secrets.PAT'))).toContain('contains "secrets."');
+		expect(problems(text.replace('cancel-in-progress: false', 'cancel-in-progress: true'))).toEqual(
+			['cancel-in-progress is not false']
+		);
+	});
+});
+
 describe('permissions', () => {
 	test('workflow-level permissions are read-only', () => {
 		expect(text).toContain('\npermissions:\n  contents: read\n');
