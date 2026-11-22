@@ -25,7 +25,7 @@ export default defineConfig({
 	use: {
 		...devices['Desktop Chrome'],
 		baseURL: smoke.baseUrl,
-		// Only pwa.smoke.ts and assets.smoke.ts exercise the service worker (they opt back in). Every
+		// Only pwa.smoke.ts exercises the service worker (it opts back in, with one install). Every
 		// other spec used to install it and fetch the whole ~380-entry precache per page load, which
 		// is what the live Pages CDN rate-limited (HTTP 429); fewer requests, not waits.
 		serviceWorkers: 'block',

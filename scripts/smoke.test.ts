@@ -287,7 +287,7 @@ describe('SMOKE-07 volume pins: live third-party sample and page-free seo spec',
 	});
 });
 
-describe('service worker is blocked outside the two worker specs (live CDN request volume)', () => {
+describe('service worker is blocked outside the one worker spec (live CDN request volume)', () => {
 	const root = join(import.meta.dirname, '..');
 	const read = (rel: string) => readFileSync(join(root, rel), 'utf8').replace(/\r\n/g, '\n');
 	const stripComments = (src: string) => src.replace(/\/\/.*$/gm, '');
@@ -300,7 +300,16 @@ describe('service worker is blocked outside the two worker specs (live CDN reque
 		return out;
 	};
 	const CONFIG = 'apps/web/playwright.smoke.config.ts';
-	const WORKER_SPECS = ['pwa.smoke.ts', 'assets.smoke.ts'];
+	const WORKER_SPECS = ['pwa.smoke.ts'];
+	/** Violations of the single-install contract in the worker spec's text. */
+	const installProblems = (spec: string) => {
+		const code = stripComments(spec);
+		const out: string[] = [];
+		const installs = code.split('installedPrecache(').length - 1;
+		if (installs !== 1) out.push(`installedPrecache is called ${installs} times`);
+		if (/request\.get\(u\)|CHUNK/.test(code)) out.push('per-hash GET loop');
+		return out;
+	};
 
 	test("the suite default is serviceWorkers 'block' with retries still 0", () => {
 		expect(configProblems(read(CONFIG))).toEqual([]);
@@ -311,7 +320,19 @@ describe('service worker is blocked outside the two worker specs (live CDN reque
 		expect(configProblems(cfg)).toEqual(["missing serviceWorkers: 'block'"]);
 	});
 
-	test("the two worker specs opt back in with serviceWorkers 'allow'", () => {
+	test('pwa.smoke.ts installs the worker exactly once and has no per-hash GET loop', () => {
+		expect(installProblems(read('apps/web/tests/smoke/pwa.smoke.ts'))).toEqual([]);
+	});
+
+	test('non-vacuity: the check reports a second install and a per-hash loop', () => {
+		const spec = read('apps/web/tests/smoke/pwa.smoke.ts');
+		expect(installProblems(spec + '\nawait installedPrecache(page);\nrequest.get(u);')).toEqual([
+			'installedPrecache is called 2 times',
+			'per-hash GET loop'
+		]);
+	});
+
+	test("the worker spec opts back in with serviceWorkers 'allow'", () => {
 		for (const f of WORKER_SPECS) {
 			expect(read(`apps/web/tests/smoke/${f}`), f).toContain("serviceWorkers: 'allow'");
 		}

@@ -116,7 +116,7 @@ const P = `${SMOKE_DIR}/planted.smoke.ts`;
 describe('the real smoke suite', () => {
 	test('passes every rule', () => {
 		const files = realFiles();
-		expect(files.filter((f) => isSpec(f.path)).length).toBe(10); // non-vacuity
+		expect(files.filter((f) => isSpec(f.path)).length).toBe(9); // non-vacuity
 		expect(readOnlyViolations(files)).toEqual([]);
 	});
 
