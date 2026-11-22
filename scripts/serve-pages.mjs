@@ -41,9 +41,18 @@ const web = path.resolve(
 // SERVE_PAGES_COUNT_FILE: opt-in measurement; counts GET/HEAD on the build mounts into that JSON file.
 const countFile = process.env.SERVE_PAGES_COUNT_FILE;
 const counter = countFile ? createRequestCounter() : null;
+// Nothing is rewritten when the total is unchanged: on Windows the parent's exit kills this process
+// at once (job object), and a kill between truncate and write would leave an empty file.
+let flushedTotal = -1;
 const flush = () => {
-	if (counter && countFile) fs.writeFileSync(countFile, JSON.stringify(counter.snapshot()));
+	if (!counter || !countFile) return;
+	const snap = counter.snapshot();
+	if (snap.total === flushedTotal) return;
+	fs.writeFileSync(countFile, JSON.stringify(snap));
+	flushedTotal = snap.total;
 };
+/** @type {NodeJS.Timeout | undefined} */
+let idleFlush;
 
 const types = {
 	'.html': 'text/html; charset=utf-8',
@@ -75,8 +84,12 @@ function site(port, mount, dir) {
 		const url = new URL(req.url, 'http://x');
 		if (counter) {
 			counter.record(port, req.method, url.pathname);
-			// A hard kill (Windows kill() skips exit handlers) loses at most 24 counts.
+			// The shutdown flush loses a race with the parent's exit, so the durable write is the idle
+			// one, 5 ms after the last request (pages still fetch until the browser closes, and the
+			// runner needs far longer than that to exit). An empty file is a failed measurement.
 			if (counter.snapshot().total % 25 === 0) flush();
+			clearTimeout(idleFlush);
+			idleFlush = setTimeout(flush, 5);
 		}
 		const notFound = () => send(res, 404, path.join(root, '404.html'));
 		if (prefix && !url.pathname.startsWith(prefix)) return notFound();
