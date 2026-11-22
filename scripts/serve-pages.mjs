@@ -32,11 +32,19 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { targetEnv } from './lib/build-targets.mjs';
+import { createRequestCounter } from './lib/request-counter.mjs';
 
 // SERVE_PAGES_WEB_DIR: test-only override (scripts/serve-pages.test.ts); unset in E2E and smoke.
 const web = path.resolve(
 	process.env.SERVE_PAGES_WEB_DIR ?? path.join(import.meta.dirname, '../apps/web')
 );
+// SERVE_PAGES_COUNT_FILE: opt-in measurement; counts GET/HEAD on the build mounts into that JSON file.
+const countFile = process.env.SERVE_PAGES_COUNT_FILE;
+const counter = countFile ? createRequestCounter() : null;
+const flush = () => {
+	if (counter && countFile) fs.writeFileSync(countFile, JSON.stringify(counter.snapshot()));
+};
+
 const types = {
 	'.html': 'text/html; charset=utf-8',
 	'.js': 'text/javascript',
@@ -65,6 +73,11 @@ function site(port, mount, dir) {
 	};
 	const server = http.createServer((req, res) => {
 		const url = new URL(req.url, 'http://x');
+		if (counter) {
+			counter.record(port, req.method, url.pathname);
+			// A hard kill (Windows kill() skips exit handlers) loses at most 24 counts.
+			if (counter.snapshot().total % 25 === 0) flush();
+		}
 		const notFound = () => send(res, 404, path.join(root, '404.html'));
 		if (prefix && !url.pathname.startsWith(prefix)) return notFound();
 		let rel;
@@ -196,11 +209,18 @@ http
 // because a shell background job (`node scripts/serve-pages.mjs &`) inherits a closed stdin and
 // would otherwise exit before serving a single request.
 for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
-	process.on(signal, () => process.exit(0));
+	process.on(signal, () => {
+		flush();
+		process.exit(0);
+	});
 }
 if (process.env.SERVE_PAGES_EXIT_ON_STDIN_END === '1') {
 	for (const event of ['end', 'close', 'error']) {
-		process.stdin.on(event, () => process.exit(0));
+		process.stdin.on(event, () => {
+			flush();
+			process.exit(0);
+		});
 	}
 	process.stdin.resume();
 }
+if (counter) process.on('exit', () => flush());
