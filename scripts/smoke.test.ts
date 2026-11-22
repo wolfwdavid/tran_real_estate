@@ -6,6 +6,20 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, test, vi } from 'vitest';
 import { resolveSiteOrigin } from '../apps/web/src/lib/site-config.js';
+import {
+	AGENT_ROUTES,
+	APP_ROUTES,
+	INVESTOR_ROUTES,
+	LEGAL_ROUTES,
+	LIVE_THIRD_PARTY_SAMPLE,
+	MARKETING_ROUTES,
+	PRINT_ROUTES,
+	PUBLIC_ROUTES,
+	RENTER_ROUTES,
+	ROUTES,
+	STUDIO_ROUTES,
+	TOOL_ROUTES
+} from '../apps/web/tests/e2e/routes';
 import { targetEnv } from './lib/build-targets.mjs';
 import {
 	classifySuiteExit,
@@ -220,6 +234,56 @@ describe('429 evidence fixture pin', () => {
 	test('non-vacuity: the pin reports a fixture without the env var', () => {
 		const src = read('apps/web/tests/smoke/fixtures.ts').replaceAll('SMOKE_429_LOG', 'X');
 		expect(missing(src)).toEqual(['SMOKE_429_LOG']);
+	});
+});
+
+describe('SMOKE-07 volume pins: live third-party sample and page-free seo spec', () => {
+	const read = (rel: string) =>
+		readFileSync(join(import.meta.dirname, '..', rel), 'utf8').replace(/\r\n/g, '\n');
+	// A route group added to routes.ts later is not enforced until it is added to this list.
+	const GROUPS: Record<string, readonly string[]> = {
+		TOOL_ROUTES,
+		MARKETING_ROUTES,
+		LEGAL_ROUTES,
+		RENTER_ROUTES,
+		APP_ROUTES,
+		INVESTOR_ROUTES,
+		AGENT_ROUTES,
+		STUDIO_ROUTES,
+		PUBLIC_ROUTES,
+		PRINT_ROUTES
+	};
+	/** What the third-party spec must reference; returns the missing needles. */
+	const missing = (src: string) =>
+		['LIVE_THIRD_PARTY_SAMPLE', 'SMOKE_ALLOW_HTTP'].filter((n) => !src.includes(n));
+
+	test('the sample is nine distinct routes, all members of ROUTES', () => {
+		expect(new Set(LIVE_THIRD_PARTY_SAMPLE).size).toBe(9);
+		expect(LIVE_THIRD_PARTY_SAMPLE).toHaveLength(9);
+		expect(LIVE_THIRD_PARTY_SAMPLE.filter((r) => !ROUTES.includes(r))).toEqual([]);
+	});
+
+	test('the sample holds at least one route of every route group', () => {
+		const uncovered = Object.entries(GROUPS)
+			.filter(([, group]) => !group.some((r) => LIVE_THIRD_PARTY_SAMPLE.includes(r)))
+			.map(([name]) => name);
+		expect(uncovered).toEqual([]);
+	});
+
+	test('third-party.smoke.ts picks the sample or all routes by SMOKE_ALLOW_HTTP', () => {
+		expect(missing(read('apps/web/tests/smoke/third-party.smoke.ts'))).toEqual([]);
+	});
+
+	test('non-vacuity: the pin reports a spec without the sample', () => {
+		const src = read('apps/web/tests/smoke/third-party.smoke.ts').replaceAll(
+			'LIVE_THIRD_PARTY_SAMPLE',
+			'ROUTES'
+		);
+		expect(missing(src)).toEqual(['LIVE_THIRD_PARTY_SAMPLE']);
+	});
+
+	test('seo.smoke.ts makes no page loads', () => {
+		expect(read('apps/web/tests/smoke/seo.smoke.ts')).not.toMatch(/page\.(goto|locator|request)/);
 	});
 });
 

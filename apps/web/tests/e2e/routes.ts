@@ -105,6 +105,18 @@ export const ROUTES: readonly string[] = [
 	...PUBLIC_ROUTES,
 	...PRINT_ROUTES
 ];
+// One route per route group: live smoke runs load this sample, smoke:local loads all of ROUTES.
+export const LIVE_THIRD_PARTY_SAMPLE: readonly string[] = [
+	'', // MARKETING_ROUTES
+	'tools/cap-rate/', // TOOL_ROUTES
+	'legal/privacy/', // LEGAL_ROUTES
+	'renter/', // RENTER_ROUTES and APP_ROUTES
+	'investor/deals/', // INVESTOR_ROUTES
+	'agent/contacts/', // AGENT_ROUTES
+	'agent/studio/', // STUDIO_ROUTES
+	'agent/inquire/', // PUBLIC_ROUTES
+	'print/' // PRINT_ROUTES
+];
 /** Every route that renders the site header and footer (all but the chrome-free print and public pages). */
 export const CHROME_ROUTES: readonly string[] = ROUTES.filter(
 	(r) => !isPrintRoute(r) && !isPublicRoute(r)
