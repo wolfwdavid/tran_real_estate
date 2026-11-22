@@ -229,20 +229,24 @@ Not validated in v1.1: LIVE-05 (partial; the Search Console sitemap read is carr
 
 **Phase 15 complete (2026-11-11): unit and E2E runs are deterministic under parallel load.** Eleven plans; serial lanes for timing-budget tests, a mechanical guard against unannotated timeout raises and retries, capped workers, and a dated evidence file. ci 42947670555 is green on `11b58f9`. Open items: the advisory code review (`15-REVIEW.md`) found guard bypasses (1 critical: a timeout of `0` passes every rule; 9 warnings), none exploited by a file in the tree today, not yet fixed; the live smoke fails on HTTP 429 from the live site (open quick task); the Search Console sitemap read is still carried from Phase 13.
 
-**Shipped v1.1 Launch & Hardening on 2026-11-20** (6 phases, 72 plans, 143 tasks, 332 commits). The site is live at `https://wolfwdavid.github.io/tran_real_estate/` with a read-only live smoke after every deploy; the toolchain is pnpm 12, SvelteKit 3.1 and Vitest 5 (Phase 16, 2026-11-16); the extension is published as the `ext-v0.1.0` GitHub Release (Phase 17; no store listing, owner decision 2026-11-20). Last proven state: ci 44809028792 and live-smoke 44812409812 green on `ae7f163`. Requirements 39/41 (LIVE-05 partial, EXT-09 cut). The milestone audit closed with status `tech_debt` and no blocker; the open items are listed under Next Milestone Goals.
+**Shipped v1.1 Launch & Hardening on 2026-11-20** (6 phases, 72 plans, 143 tasks, 332 commits). The site is live at `https://wolfwdavid.github.io/tran_real_estate/` with a read-only live smoke after every deploy; the toolchain is pnpm 12, SvelteKit 3.1 and Vitest 5 (Phase 16, 2026-11-16); the extension is published as the `ext-v0.1.0` GitHub Release (Phase 17; no store listing, owner decision 2026-11-20). Last proven state: ci 44809028792 and live-smoke 44812409812 green on `ae7f163`. Requirements 39/41 (LIVE-05 partial, EXT-09 cut). The milestone audit closed with status `tech_debt` and no blocker; the open items are the scope of milestone v1.2 below.
 
 Archive: `.planning/milestones/v1.1-ROADMAP.md`, `v1.1-REQUIREMENTS.md`, `v1.1-MILESTONE-AUDIT.md`, `v1.0-ROADMAP.md`, `v1.0-REQUIREMENTS.md`, `v1.0-MILESTONE-AUDIT.md`; summary in `.planning/MILESTONES.md`; lessons in `.planning/RETROSPECTIVE.md` and `tasks/lessons.md`.
 
-## Next Milestone Goals
+## Current Milestone: v1.2 Maintenance & Release Hygiene
 
-No milestone is defined yet; run `/gsd:new-milestone`. Candidates carried out of v1.1 (`milestones/v1.1-MILESTONE-AUDIT.md`):
+**Goal:** Clear the debt carried out of v1.1 so routine dependency updates and deploys pass without manual help. No new portal features.
 
-- JS budget: restore headroom on `tools/cash-on-cash` (0.06 KB today; the weekly Dependabot PR #18 fails CI on it) and make the budget oracle count what Kit 3 actually ships (59.78 KB counted against 62.85 KB measured)
-- Workflow order: run the smoke suite in CI before the deploy; have the release workflow check ci was green for the tagged commit; actionlint in CI
-- Privacy page contact details (the live page still says they will be posted before public launch)
-- A link from the site to the extension Releases page; README refresh after phases 12-17
-- Owner items: the Search Console sitemap read (LIVE-05), 68 pending HUMAN-UAT rows, the minimatch audit exception review due 2026-12-31
-- Still out: monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages) and any store listing for the extension
+**Target features:**
+- Live smoke and rate limits: the live smoke stays green when the Pages CDN rate-limits (HTTP 429). Both runs on the v1.1 archive push `f91b91b` failed this way (chained run 44932727516 with 25 navigations at 429, the one permitted re-dispatch 44959696791 with 26), while ci 44930906984 and the deploy were green and the site serves `f91b91b`
+- JS size budget: restore headroom on `tools/cash-on-cash` (0.06 KB today; the weekly Dependabot PR #18 fails CI on it) and make the budget oracle count what Kit 3 actually ships (59.78 KB counted against 62.85 KB measured)
+- Deploy order: run the smoke suite in CI before the deploy; actionlint in CI; `pnpm verify` and CI run the same hygiene checks
+- Release workflow: a release is refused unless ci was green for the tagged commit
+- Site and docs: privacy page contact text, a link from the site to the extension Releases page, README refresh after phases 12-17, stale records (roadmap host name, stale audit exception, Vitest guard comments)
+
+**Owner items riding along (not phase work):** the Search Console sitemap read (LIVE-05, HUMAN-UAT L86/L99), 68 pending HUMAN-UAT rows, the minimatch audit exception review due 2026-12-31, the decision on Dependabot PRs #10 and #13.
+
+**Out of this milestone:** new portal features, monetization (hosted tier, accounts, billing; needs a host other than GitHub Pages), any store listing for the extension.
 
 ## Constraints
 
@@ -310,4 +314,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-11-20 after the v1.1 milestone (Launch & Hardening): phases 12-17 complete, live on the project site, toolchain current, ext-v0.1.0 released; tech debt carried per the milestone audit*
+*Last updated: 2026-11-21 at the start of milestone v1.2 (Maintenance & Release Hygiene); v1.1 shipped 2026-11-20 with tech debt carried per its audit*

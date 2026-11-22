@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Launch & Hardening
-status: Awaiting next milestone
-stopped_at: "Milestone v1.1 completed and archived 2026-11-20; next: /gsd-new-milestone"
-last_updated: "2026-11-21T02:56:01.556Z"
-last_activity: 2026-11-20 — Milestone v1.1 completed and archived
+milestone: v1.2
+milestone_name: Maintenance & Release Hygiene
+status: planning
+last_updated: "2026-11-22T00:04:49.087Z"
+last_activity: 2026-11-21
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 72
-  completed_plans: 72
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-20)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Planning the next milestone
+**Current focus:** Milestone v1.2 Maintenance & Release Hygiene (defining requirements)
 
 ## Current Position
 
-Phase: Milestone v1.1 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-11-20 — Milestone v1.1 completed and archived
+Status: Defining requirements
+Last activity: 2026-11-21 — Milestone v1.2 started
 
 ## Performance Metrics
 
