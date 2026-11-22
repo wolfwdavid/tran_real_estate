@@ -204,6 +204,7 @@ describe('classifySuiteExit (429 relabel)', () => {
 	test('a green run is never relabelled, even with 429 evidence', () => {
 		expect(classifySuiteExit(0, 0)).toBe(0);
 		expect(classifySuiteExit(0, 5)).toBe(0);
+		expect(classifySuiteExit(0, 3)).toBe(0);
 	});
 	test('any non-zero status with 429 evidence is 2', () => {
 		expect(classifySuiteExit(4, 2)).toBe(2);
@@ -224,16 +225,53 @@ describe('countRateLimited', () => {
 describe('429 evidence fixture pin', () => {
 	const read = (rel: string) =>
 		readFileSync(join(import.meta.dirname, '..', rel), 'utf8').replace(/\r\n/g, '\n');
-	/** What the fixture must contain; returns the missing needles. */
-	const missing = (src: string) =>
-		['SMOKE_429_LOG', 'isNavigationRequest()', '429'].filter((n) => !src.includes(n));
+	const FIXTURES = 'apps/web/tests/smoke/fixtures.ts';
+	// The context listener (navigations, sub-resources, the worker's install fetches), the `request`
+	// fixture wrapper (API-context traffic, which the listener never sees) and the fast install failure.
+	const LISTENER = 'if (response.status() === 429) appendFileSync(log, response.url()';
+	const WRAPPER = 'request: async ({ request }, use) =>';
+	const INSTALL = 'HTTP 429 during the service worker install';
+	/** What is wrong with the fixture's 429 evidence; empty when every source is recorded. */
+	const problems = (src: string) => {
+		const out = ['SMOKE_429_LOG', WRAPPER, INSTALL]
+			.filter((n) => !src.includes(n))
+			.map((n) => `missing ${n}`);
+		// Once in the listener and once in the wrapper.
+		if (src.split(LISTENER).length - 1 !== 2) out.push('a 429 observer is missing or restricted');
+		if (/isNavigationRequest|serviceWorker\(\)/.test(src)) out.push('429 limited to one source');
+		return out;
+	};
+	/** API-context calls that bypass the wrapped `request` fixture. */
+	const BYPASS = /\b(page|context)\.request\b|\bnewContext\(/;
 
-	test('fixtures.ts records 429 navigations to SMOKE_429_LOG', () => {
-		expect(missing(read('apps/web/tests/smoke/fixtures.ts'))).toEqual([]);
+	test('fixtures.ts records every 429 to SMOKE_429_LOG, whatever its source', () => {
+		expect(problems(read(FIXTURES))).toEqual([]);
 	});
 	test('non-vacuity: the pin reports a fixture without the env var', () => {
-		const src = read('apps/web/tests/smoke/fixtures.ts').replaceAll('SMOKE_429_LOG', 'X');
-		expect(missing(src)).toEqual(['SMOKE_429_LOG']);
+		const src = read(FIXTURES).replaceAll('SMOKE_429_LOG', 'X');
+		expect(problems(src)).toEqual(['missing SMOKE_429_LOG']);
+	});
+	test('non-vacuity: a navigation-only listener is reported (the worker install would go unlogged)', () => {
+		const src = read(FIXTURES).replace(
+			LISTENER,
+			'if (response.status() === 429 && response.request().isNavigationRequest()) appendFileSync(log, response.url()'
+		);
+		expect(problems(src)).toEqual([
+			'a 429 observer is missing or restricted',
+			'429 limited to one source'
+		]);
+	});
+	test('non-vacuity: a fixture without the request wrapper or the install check is reported', () => {
+		const src = read(FIXTURES).replace(WRAPPER, 'x: async () =>').replace(INSTALL, 'HTTP 429');
+		expect(problems(src)).toEqual([`missing ${WRAPPER}`, `missing ${INSTALL}`]);
+	});
+	test('no smoke spec makes API-context requests around the wrapped request fixture', () => {
+		const dir = join(import.meta.dirname, '..', 'apps/web/tests/smoke');
+		const specs = readdirSync(dir).filter((f) => f.endsWith('.smoke.ts'));
+		expect(specs.length).toBe(9); // non-vacuity
+		expect(specs.filter((f) => BYPASS.test(read(`apps/web/tests/smoke/${f}`)))).toEqual([]);
+		expect(BYPASS.test("await page.request.get('x')")).toBe(true);
+		expect(BYPASS.test('await playwright.request.newContext()')).toBe(true);
 	});
 });
 

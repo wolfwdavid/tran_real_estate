@@ -3,9 +3,11 @@
 //   - a read-only network monitor: provider hosts are aborted at the route layer and fail the test,
 //     any write (non-GET/HEAD) beyond the analytics beacon budget fails it, and so does any request
 //     carrying a key header
+//   - 429 evidence for the orchestrator: every HTTP 429 on a navigation, a sub-resource, an
+//     API-context request or the service worker install is appended to SMOKE_429_LOG
 // `testGpcOff` drops the GPC part only. analytics.smoke.ts is its one legitimate user.
 import { appendFileSync } from 'node:fs';
-import { test as base, expect, type Page } from '@playwright/test';
+import { test as base, expect, type APIResponse, type Page } from '@playwright/test';
 import { CONNECT } from '../../../../scripts/assert-csp.mjs';
 import { parseSmokeEnv } from './env.js';
 
@@ -74,23 +76,42 @@ const withMonitor = base.extend<{ beaconBudget: number; monitor: void }>({
 
 export const test = withMonitor.extend<{ gpc: void; rateLimit429: void }>({
 	extraHTTPHeaders: { 'Sec-GPC': '1' },
-	// scripts/smoke.mjs sets SMOKE_429_LOG for the live run: a navigation answered with HTTP 429 is
-	// the Pages CDN rate-limiting the runner, and the orchestrator relabels that failure as exit 2.
+	// scripts/smoke.mjs sets SMOKE_429_LOG for the live run: any response with HTTP 429 is the Pages
+	// CDN rate-limiting the runner, and the orchestrator relabels that failure as exit 2. Two
+	// observers, because no single one sees everything (measured, 18-01): the context listener sees
+	// navigations, sub-resources and the service worker's install fetches; API-context requests
+	// (the `request` fixture) are invisible to it and are observed by the wrapper below.
 	// Observe-only: appends the URL (one line per hit, workers are separate processes) and nothing else.
 	rateLimit429: [
 		async ({ context }, use) => {
 			const log = process.env.SMOKE_429_LOG;
 			if (log) {
 				context.on('response', (response) => {
-					if (response.status() === 429 && response.request().isNavigationRequest()) {
-						appendFileSync(log, response.url() + '\n');
-					}
+					if (response.status() === 429) appendFileSync(log, response.url() + '\n');
 				});
 			}
 			await use();
 		},
 		{ auto: true }
 	],
+	request: async ({ request }, use) => {
+		const log = process.env.SMOKE_429_LOG;
+		if (!log) return use(request);
+		await use(
+			new Proxy(request, {
+				get(target, prop) {
+					const value: unknown = Reflect.get(target, prop);
+					if (typeof value !== 'function') return value;
+					if (prop !== 'get' && prop !== 'head' && prop !== 'fetch') return value.bind(target);
+					return async (...args: unknown[]) => {
+						const response: APIResponse = await value.apply(target, args);
+						if (response.status() === 429) appendFileSync(log, response.url() + '\n');
+						return response;
+					};
+				}
+			})
+		);
+	},
 	gpc: [
 		async ({ context }, use) => {
 			await context.addInitScript(() =>
@@ -137,22 +158,37 @@ const swCache = (page: Page) =>
  * Open the base, wait until the one precache exists and holds entries (install is asynchronous),
  * and return the registration and precache facts. Logs the install time so a slow CDN is measured,
  * not guessed at.
+ *
+ * A 429 during the install ends the wait at once: `cache.addAll` is atomic, so one rate-limited
+ * fetch leaves the cache empty and the worker redundant within milliseconds (measured, 18-01), and
+ * the poll could only run out its full timeout. The 429 itself is logged by the rateLimit429 fixture.
  */
 export async function installedPrecache(page: Page) {
+	const rateLimited = new Promise<never>((_, reject) => {
+		page.context().on('response', (response) => {
+			if (response.status() === 429) {
+				reject(new Error(`HTTP 429 during the service worker install: ${response.url()}`));
+			}
+		});
+	});
+	rateLimited.catch(() => {}); // handled by the race below; this only covers a 429 before it starts
 	await page.goto('');
 	const started = Date.now();
-	await expect
-		.poll(
-			async () => {
-				const { keys, urls } = await swCache(page);
-				return keys.length === 1 && urls.length > 0;
-			},
-			{
-				timeout: PRECACHE_INSTALL_TIMEOUT_MS,
-				message: 'the service worker precache did not install'
-			}
-		)
-		.toBe(true);
+	await Promise.race([
+		rateLimited,
+		expect
+			.poll(
+				async () => {
+					const { keys, urls } = await swCache(page);
+					return keys.length === 1 && urls.length > 0;
+				},
+				{
+					timeout: PRECACHE_INSTALL_TIMEOUT_MS,
+					message: 'the service worker precache did not install'
+				}
+			)
+			.toBe(true)
+	]);
 	const cache = await swCache(page);
 	console.log(`precache: ${cache.urls.length} entries installed after ${Date.now() - started} ms`);
 	return cache;
