@@ -65,7 +65,7 @@ Live at `https://wolfwdavid.github.io/tran_real_estate/`. Requirements 39/41: LI
 
 Plans:
 - [x] 18-01-PLAN.md - Baseline: emulator request counter, per-spec volume on the Kit 3 build, two local probes
-- [ ] 18-02-PLAN.md - Cut live volume: 7-route third-party sample, one shared service worker install, SEO share tags from HTML
+- [x] 18-02-PLAN.md - Cut live volume: 9-route third-party sample, one shared service worker install, SEO share tags from HTML
 - [ ] 18-03-PLAN.md - No 429 ignored (API-context) and superseded-SHA outcome in smoke.mjs, token env in live-smoke.yml
 - [ ] 18-04-PLAN.md - Record volume in the RUNBOOK with an oracle, full pre-push verification
 - [ ] 18-05-PLAN.md - Owner-gated proof: three sequential pushes, each with a green chained live-smoke run
@@ -131,7 +131,7 @@ Plans:
 | 15. Load-Deterministic Test Lanes | v1.1 | 11/11 | Complete    | 2026-11-11 |
 | 16. Toolchain: pnpm 12 → SvelteKit 3 → Vitest 5 | v1.1 | 13/13 | Complete    | 2026-11-16 |
 | 17. Extension Release & Edge Add-ons Submission | v1.1 | 5/5 | Complete    | 2026-11-20 |
-| 18. Live Smoke Stability | v1.2 | 1/5 | In Progress|  |
+| 18. Live Smoke Stability | v1.2 | 2/5 | In Progress|  |
 | 19. JS Budget Accuracy & Headroom | v1.2 | 0/0 | Not started | - |
 | 20. CI & Release Gates | v1.2 | 0/0 | Not started | - |
 | 21. Site, Docs & Rollback Drill | v1.2 | 0/0 | Not started | - |

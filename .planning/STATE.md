@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Maintenance & Release Hygiene
 status: executing
-stopped_at: "Completed 18-01-PLAN.md (baseline 5,939 requests per root smoke run; probes answered). Next: 18-02."
-last_updated: "2026-11-22T14:06:10.761Z"
-last_activity: 2026-11-22 - Completed 18-01 (emulator request counter, Kit 3 smoke baseline, two probes)
+stopped_at: "Completed 18-02-PLAN.md (projected live smoke volume 1,535 requests, down from 5,939; local smoke green on three targets). Next: 18-03."
+last_updated: "2026-11-22T14:15:46.830Z"
+last_activity: 2026-11-22 - Completed 18-02 (live smoke volume cut: nine-route sample, one worker install, share tags from HTML; projected 1,535 requests)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-11-20)
 ## Current Position
 
 Phase: 18 of 21 (Live Smoke Stability) - in progress
-Plan: 2 of 5 (18-01 complete)
-Status: Executing (1 of 5 plans done)
-Last activity: 2026-11-22 - Completed 18-01 (emulator request counter, Kit 3 smoke baseline, two probes)
+Plan: 3 of 5 (18-01 and 18-02 complete)
+Status: Executing (2 of 5 plans done)
+Last activity: 2026-11-22 - Completed 18-02 (live smoke volume cut: nine-route sample, one worker install, share tags from HTML; projected 1,535 requests)
 
 ## Performance Metrics
 
@@ -286,6 +286,7 @@ Last activity: 2026-11-22 - Completed 18-01 (emulator request counter, Kit 3 smo
 | Phase 15 P09 | 18min | 2 tasks | 3 files |
 | Phase 16 P02 | n/a | 3 tasks | 6 files |
 | Phase 18 P01 | 20min | 3 tasks | 3 files |
+| Phase 18 P02 | 12min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -770,6 +771,9 @@ Recent decisions affecting current work:
 - [Phase 18-01]: The emulator count file (SERVE_PAGES_COUNT_FILE) is written 5 ms after the last request; an empty or missing file is a failed measurement, never zero. On Windows the parent's exit kills the emulator before its shutdown handlers finish.
 - [Phase 18-01]: Kit 3 smoke baseline is 5,939 requests per root run (third-party 3,337 at 75.8 per load; precache 381 entries, 322 immutable). SMOKE-07 stays unchecked until the 18-05 proof runs.
 - [Phase 18-01]: Playwright context listeners never see APIRequestContext traffic; they do see service worker requests (isNavigationRequest false). Cached precache responses read as status 200 (322 of 322). 18-03 needs the request wrapper and a listener that is not navigation-only.
+- [Phase 18-02]: Live third-party smoke loads LIVE_THIRD_PARTY_SAMPLE (nine routes, one per route group); the local emulator run (SMOKE_ALLOW_HTTP is 1) loads all 44. A new route group must be added to the sample and to the pin in scripts/smoke.test.ts.
+- [Phase 18-02]: The smoke suite is 119 tests in 9 spec files: assets.smoke.ts is merged into pwa.smoke.ts, which installs the worker once and reads hashed-asset statuses from the cache. seo.smoke.ts makes no page loads.
+- [Phase 18-02]: Projected live volume is 1,535 requests (third-party 576, pwa 421, seo 19, unchanged specs 519), 74% below the 5,939 baseline; the local root run is 4,294. The live sample branch first executes on a live run. SMOKE-07 stays unchecked until the 18-05 proof runs.
 
 ### Pending Todos
 
@@ -801,8 +805,8 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-22T14:06:10.750Z
-Stopped at: Completed 18-01-PLAN.md (baseline 5,939 requests per root smoke run; probes answered). Next: 18-02.
+Last session: 2026-11-22T14:16:03.703Z
+Stopped at: Completed 18-02-PLAN.md (projected live smoke volume 1,535 requests, down from 5,939; local smoke green on three targets). Next: 18-03.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
 
