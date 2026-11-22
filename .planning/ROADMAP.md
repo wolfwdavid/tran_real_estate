@@ -61,7 +61,14 @@ Live at `https://wolfwdavid.github.io/tran_real_estate/`. Requirements 39/41: LI
   4. A test on the workflow or smoke entry script fails when the superseded-SHA handling is removed
 **Research flag**: No (fix to existing code)
 **UI hint**: no
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 18-01-PLAN.md - Baseline: emulator request counter, per-spec volume on the Kit 3 build, two local probes
+- [ ] 18-02-PLAN.md - Cut live volume: 7-route third-party sample, one shared service worker install, SEO share tags from HTML
+- [ ] 18-03-PLAN.md - No 429 ignored (API-context) and superseded-SHA outcome in smoke.mjs, token env in live-smoke.yml
+- [ ] 18-04-PLAN.md - Record volume in the RUNBOOK with an oracle, full pre-push verification
+- [ ] 18-05-PLAN.md - Owner-gated proof: three sequential pushes, each with a green chained live-smoke run
 
 ### Phase 19: JS Budget Accuracy & Headroom
 **Goal**: The JS size gate measures what a route really loads under SvelteKit 3, every route passes it with margin, and routine dependency updates can merge
