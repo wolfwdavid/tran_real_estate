@@ -6,6 +6,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
+import { LIVE_REQUEST_CEILING } from './smoke.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const read = (p: string) => readFileSync(join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
@@ -182,6 +183,87 @@ describe('Read a live-smoke result', () => {
 	test('the CDN note measures propagation and never raises the poll', () => {
 		expect(s).toContain('smoke: <sha> live at <url> after <n> s');
 		expect(FLAT).toMatch(/Never raise the poll/);
+	});
+});
+
+/**
+ * Problems with the "Live smoke request volume" table (columns: spec, before, after, note): every
+ * count is an integer, the after column sums to the bold total row, and the total is within the
+ * ceiling. An empty list means the table is sound.
+ */
+function volumeProblems(text: string, ceiling: number): string[] {
+	const problems: string[] = [];
+	const int = (cell: string) => {
+		const c = cell.trim().replace(/\*\*/g, '');
+		return /^(\d{1,3}(,\d{3})+|\d+)$/.test(c) ? Number(c.replace(/,/g, '')) : NaN;
+	};
+	let sum = 0;
+	let total = NaN;
+	let rows = 0;
+	for (const m of text.matchAll(/^\| ([^|]+?)\s*\|([^|]*)\|([^|]*)\|/gm)) {
+		const [, name, before, after] = m;
+		if (name === 'Spec' || /^-+$/.test(name)) continue; // header and separator; every other row counts
+		if (!Number.isInteger(int(before)) || !Number.isInteger(int(after))) {
+			problems.push(`${name}: before and after must be integers`);
+			continue;
+		}
+		if (name === '**Total**') total = int(after);
+		else {
+			sum += int(after);
+			rows += 1;
+		}
+	}
+	if (rows === 0) problems.push('no spec rows');
+	if (Number.isNaN(total)) problems.push('no total row');
+	else {
+		if (sum !== total) problems.push(`after column sums to ${sum}, total row says ${total}`);
+		if (total > ceiling) problems.push(`total ${total} is over the ceiling ${ceiling}`);
+	}
+	return problems;
+}
+
+describe('Live smoke request volume', () => {
+	const s = section('## Read a live-smoke result');
+	const start = s.indexOf('\n### Live smoke request volume\n');
+	const volume = s.slice(start, s.indexOf('\n#### ', start));
+
+	test('the subsection exists, with the proof-run rule after it', () => {
+		expect(start).toBeGreaterThan(-1);
+		expect(s).toContain('\n#### Proof runs (SMOKE-07)\n');
+		expect(volume).toMatch(/[0-9a-f]{40}/); // the build SHA of the measurement
+		expect(volume).toContain('SERVE_PAGES_COUNT_FILE');
+	});
+
+	test('the table is integers, sums to its total, and the total is within the ceiling', () => {
+		expect(LIVE_REQUEST_CEILING).toBeLessThanOrEqual(2000);
+		expect(volumeProblems(volume, LIVE_REQUEST_CEILING)).toEqual([]);
+	});
+
+	test('states the ceiling exported by scripts/smoke.mjs', () => {
+		expect(volume.replace(/\s+/g, ' ')).toContain(`stays under ${LIVE_REQUEST_CEILING} requests`);
+	});
+
+	test('the checker is not vacuous: a raised value, an over-ceiling total and a non-integer fail', () => {
+		expect(volumeProblems('', LIVE_REQUEST_CEILING)).toEqual(['no spec rows', 'no total row']);
+		const raised = volume.replace('| 576 ', '| 2,576 ');
+		expect(raised).not.toBe(volume);
+		expect(volumeProblems(raised, LIVE_REQUEST_CEILING)).toEqual([
+			'after column sums to 3535, total row says 1535'
+		]);
+		expect(volumeProblems(raised.replace('**1,535**', '**3,535**'), LIVE_REQUEST_CEILING)).toEqual([
+			`total 3535 is over the ceiling ${LIVE_REQUEST_CEILING}`
+		]);
+		expect(
+			volumeProblems(volume.replace('| 421 ', '| about 421 '), LIVE_REQUEST_CEILING)
+		).toContain('pwa: before and after must be integers');
+	});
+
+	test('the superseded outcome is prose, chained runs only, and never proof', () => {
+		expect(FLAT).toMatch(/only possible for chained runs \(the run event is `workflow_run`/);
+		expect(FLAT).toMatch(/A compare failure never produces this outcome/);
+		expect(FLAT).toMatch(/not evidence that the suite passed/);
+		expect(s).toContain('a 429 on any smoke request');
+		expect(s).not.toContain('429 on a smoke navigation');
 	});
 });
 

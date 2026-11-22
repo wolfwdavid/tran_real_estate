@@ -33,6 +33,8 @@ import { pnpmCommand } from './lib/pnpm-cmd.mjs';
 
 const REPO = path.resolve(import.meta.dirname, '..');
 const BUDGET_S = 300;
+// The live suite stays under this many requests; changing it requires re-measuring and updating docs/RUNBOOK.md.
+export const LIVE_REQUEST_CEILING = 1600;
 
 /**
  * @typedef {{ name: string, baseUrl: string, siteUrl: string, analyticsHost: string, dir: string }} LocalTarget

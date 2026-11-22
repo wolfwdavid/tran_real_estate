@@ -106,13 +106,34 @@ pnpm --filter web exec playwright show-trace <trace.zip>
 
 Exit codes of `scripts/smoke.mjs` (the step's exit code is the job's):
 
-| Code | Meaning                                                                                                                                                                                                                            |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0    | ok                                                                                                                                                                                                                                 |
-| 1    | suite failed: a read-only contract broke on the deployed site; open the traces                                                                                                                                                     |
-| 2    | precondition: the env gate rejected the run (URL, SHA or analytics host malformed, or a variable unset); fix the variables, redeploy. Also a 429 on a smoke navigation (Pages CDN rate-limited): re-dispatch once, never in a loop |
-| 3    | version not propagated: `_app/version.json` never reported the deployed SHA within 10 minutes; the deploy failed or the CDN did not pick it up                                                                                     |
-| 4    | over the 5-minute budget (local three-target mode only; the remote run has no budget)                                                                                                                                              |
+| Code | Meaning                                                                                                                                                                                                                           |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0    | ok                                                                                                                                                                                                                                |
+| 1    | suite failed: a read-only contract broke on the deployed site; open the traces                                                                                                                                                    |
+| 2    | precondition: the env gate rejected the run (URL, SHA or analytics host malformed, or a variable unset); fix the variables, redeploy. Also a 429 on any smoke request (Pages CDN rate-limited): re-dispatch once, never in a loop |
+| 3    | version not propagated: `_app/version.json` never reported the deployed SHA within 10 minutes; the deploy failed or the CDN did not pick it up                                                                                    |
+| 4    | over the 5-minute budget (local three-target mode only; the remote run has no budget)                                                                                                                                             |
+
+Exit 2 for a 429 covers every request the suite makes: a page navigation, a sub-resource of a page,
+the service worker install and an API-context request (the seo, csp, version and routing specs and
+the manifest read). A failed suite with any logged 429 exits 2, not 1. A passing suite is never
+relabelled.
+
+Superseded: a run can also exit 0 without running the suite. When two pushes land close together,
+the origin may already serve the second commit when the first commit's chained run starts. If the
+served commit is ahead of the expected one (GitHub's compare API answers `ahead`), the run ends
+green with a `::notice::smoke: <sha> superseded by <sha>` line and no test counts, because the
+newer commit's own chained run judges the site.
+
+- It is only possible for chained runs (the run event is `workflow_run`, with the repository and
+  the read-only token present). A `workflow_dispatch` run or a local run is never superseded and
+  keeps the red path.
+- Every other state fails closed: a served commit that is behind, diverged or identical, a compare
+  lookup that fails (non-200, not JSON, network error, 401 or 403), or a version that is not a
+  40-character SHA stays red (exit 3 from the poll, exit 1 or 2 after a failed suite). A compare
+  failure never produces this outcome.
+- A superseded run is not evidence that the suite passed. Read the newer commit's run, and never
+  count a superseded run toward the three-run proof.
 
 A skipped run means Pages is off (`PAGES_ENABLED` is not `true`) or the `ci` run it followed was
 not a green push to `main`; nothing was deployed, so there was nothing to smoke.
@@ -126,6 +147,50 @@ gh workflow run live-smoke.yml --repo wolfwdavid/tran_real_estate -f base_url=ht
 CDN note: the Pages CDN ignores the `?_=` cache-busting query, so the smoke's 10-minute poll relies
 on GitHub purging the CDN on deploy. Never raise the poll or add retries; measure instead. Each
 green run logs `smoke: <sha> live at <url> after <n> s`, and those seconds are the fact to record.
+
+### Live smoke request volume
+
+GitHub Pages rate-limits by request volume and publishes no rate-limit figure. The first 429 was
+observed after roughly 3.7k to 4k requests, and the threshold varied between runs, so the suite is
+kept well below that. The live suite stays under 1600 requests per run.
+
+Requests per run on the root build, measured at build `2aeff6b72877f89c35444e4e31a6335ab8e924a5`
+(the before column at `8f4541ced2fd2e473d19b0f88e38a43352a20b08`, the suite as it was before the
+cut):
+
+| Spec           | Before    | After     | Live sample note                                                                   |
+| -------------- | --------- | --------- | ---------------------------------------------------------------------------------- |
+| third-party    | 3,337     | 576       | 9 page loads live (one per route group); 44 loads and 3,337 requests locally       |
+| pwa            | 841       | 421       | one shared service worker install; hashed-asset statuses read from the cache       |
+| assets         | 742       | 0         | spec removed; its check moved into pwa                                             |
+| seo            | 504       | 19        | share tags read from prerendered HTML, no page loads                               |
+| routing        | 225       | 225       | unchanged; varies by a few requests between runs                                   |
+| a11y           | 177       | 177       | unchanged                                                                          |
+| csp            | 45        | 45        | unchanged                                                                          |
+| analytics      | 38        | 38        | unchanged                                                                          |
+| extension-link | 33        | 33        | unchanged                                                                          |
+| version        | 1         | 1         | unchanged                                                                          |
+| **Total**      | **5,939** | **1,535** | before is the full-suite run (the rows sum to 5,943); after is the live projection |
+
+- **The live figure is a projection.** 1,535 is arithmetic over local emulator measurements until
+  the first live run confirms it. A live run lists 84 tests; the local run keeps every route, with
+  119 tests in 9 spec files and 4,294 requests on the root target.
+- **How it was measured.** The Pages emulator (`scripts/serve-pages.mjs`) counts GET and HEAD
+  requests when the environment variable `SERVE_PAGES_COUNT_FILE` names a file. Run
+  `pnpm smoke:local --target root -- tests/smoke/<spec>.smoke.ts` once per spec and subtract the
+  orchestrator's one `version.json` poll. Give the file as a Windows-style absolute path
+  (`$(pwd -W)/...` in Git Bash). An empty or missing count file is a failed measurement to redo,
+  never zero.
+- **The three levers.** A 9-route third-party sample live (one per route group) and 44 locally;
+  one shared service worker install; share tags read from HTML.
+- **A fourth lever** is `workers: 1` in the smoke config, only if a 429 still appears.
+- **Changing the ceiling** means re-measuring, then updating this table and `LIVE_REQUEST_CEILING`
+  in `scripts/smoke.mjs` together; `scripts/runbook.test.ts` compares the two.
+
+#### Proof runs (SMOKE-07)
+
+A run counts as proof only if its event is `workflow_run`, its head SHA equals the pushed SHA, it
+concluded success with zero failed tests and no 429, and retries is 0.
 
 ## Run the suites locally
 
