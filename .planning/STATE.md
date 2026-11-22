@@ -6,7 +6,7 @@ status: planning
 last_updated: "2026-11-22T00:04:49.087Z"
 last_activity: 2026-11-21
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -20,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-20)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Milestone v1.2 Maintenance & Release Hygiene (defining requirements)
+**Current focus:** Phase 18 - Live Smoke Stability (ready to plan)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 18 of 21 (Live Smoke Stability) - not started
 Plan: —
-Status: Defining requirements
-Last activity: 2026-11-21 — Milestone v1.2 started
+Status: Ready to plan
+Last activity: 2026-11-21 - Roadmap created for v1.2 (phases 18-21)
 
 ## Performance Metrics
 

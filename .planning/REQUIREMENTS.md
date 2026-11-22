@@ -71,22 +71,22 @@ Which phases cover which requirements. Filled during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SMOKE-07 | TBD | Pending |
-| SMOKE-08 | TBD | Pending |
-| SMOKE-09 | TBD | Pending |
-| BUDGET-01 | TBD | Pending |
-| BUDGET-02 | TBD | Pending |
-| BUDGET-03 | TBD | Pending |
-| CI-01 | TBD | Pending |
-| CI-02 | TBD | Pending |
-| CI-03 | TBD | Pending |
-| EXT-10 | TBD | Pending |
-| EXT-11 | TBD | Pending |
-| DOCS-01 | TBD | Pending |
-| DOCS-02 | TBD | Pending |
-| DOCS-03 | TBD | Pending |
+| SMOKE-07 | Phase 18 | Pending |
+| SMOKE-08 | Phase 18 | Pending |
+| SMOKE-09 | Phase 21 | Pending |
+| BUDGET-01 | Phase 19 | Pending |
+| BUDGET-02 | Phase 19 | Pending |
+| BUDGET-03 | Phase 19 | Pending |
+| CI-01 | Phase 20 | Pending |
+| CI-02 | Phase 20 | Pending |
+| CI-03 | Phase 20 | Pending |
+| EXT-10 | Phase 20 | Pending |
+| EXT-11 | Phase 21 | Pending |
+| DOCS-01 | Phase 21 | Pending |
+| DOCS-02 | Phase 21 | Pending |
+| DOCS-03 | Phase 21 | Pending |
 
-**Coverage:** 14 requirements, 0 mapped (roadmap pending).
+**Coverage:** 14 requirements, 14 mapped to phases 18-21, 0 unmapped.
 
 ---
 *Defined 2026-11-21 at the start of milestone v1.2*
