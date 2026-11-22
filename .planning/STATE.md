@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Maintenance & Release Hygiene
-status: planning
-last_updated: "2026-11-22T00:04:49.087Z"
-last_activity: 2026-11-21
+status: executing
+stopped_at: "Completed 18-01-PLAN.md (baseline 5,939 requests per root smoke run; probes answered). Next: 18-02."
+last_updated: "2026-11-22T14:06:10.761Z"
+last_activity: 2026-11-22 - Completed 18-01 (emulator request counter, Kit 3 smoke baseline, two probes)
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 5
+  completed_plans: 1
   percent: 0
 ---
 
@@ -20,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-11-20)
 
 **Core value:** A visitor in any of the three portals can go from "what I'm looking for" to an actionable result (matching listings, an analyzed deal, or a ready-to-send message) in minutes instead of hours, using only legitimate data sources.
-**Current focus:** Phase 18 - Live Smoke Stability (ready to plan)
+**Current focus:** Phase 18 - Live Smoke Stability (executing)
 
 ## Current Position
 
-Phase: 18 of 21 (Live Smoke Stability) - not started
-Plan: —
-Status: Ready to execute (5 plans)
-Last activity: 2026-11-21 - Roadmap created for v1.2 (phases 18-21)
+Phase: 18 of 21 (Live Smoke Stability) - in progress
+Plan: 2 of 5 (18-01 complete)
+Status: Executing (1 of 5 plans done)
+Last activity: 2026-11-22 - Completed 18-01 (emulator request counter, Kit 3 smoke baseline, two probes)
 
 ## Performance Metrics
 
@@ -284,6 +285,7 @@ Last activity: 2026-11-21 - Roadmap created for v1.2 (phases 18-21)
 | Phase 15 P08 | 25min | 3 tasks | 7 files |
 | Phase 15 P09 | 18min | 2 tasks | 3 files |
 | Phase 16 P02 | n/a | 3 tasks | 6 files |
+| Phase 18 P01 | 20min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -765,6 +767,9 @@ Recent decisions affecting current work:
 - [Phase 16-08]: Worker precache = immutable + precacheFiles(assets) + prerendered through resolve()/asset(); resolve is widened to (path: string) => string because its types reject the root '/' path that works at runtime. Guard flipped (REQUIRED $app/manifest and $app/env, FORBIDDEN $service-worker); the ESLint fetch exemption is the one file service-worker/index.ts; web check also runs tsc on the worker tsconfig.
 - [Phase 16-08]: First Kit 3 builds green (csp 45 pages, seo 44/14/6, smoke 121 x3, 278 E2E on root and sub). Budget red at 60.6-64.3 KB on 8 gated pages, owned by 16-09. TOOL-03 stays Pending until the live-origin proof after 16-10.
 - [Phase 16-09]: Budget green on the unchanged 60 KB without escalation: Vite modulePreload.resolveDependencies keeps only CSS in app.js (-3.7 KB everywhere) and ui/SiteIcon replaces Lucide on audience pages and forms (-3.7 KB there). Tool pages have only 0.06 to 0.38 KB headroom (worst: cash-on-cash, configured); re-measure on the configured build after any shared change. Kit 3 fetches the error node after boot, which the oracle does not count.
+- [Phase 18-01]: The emulator count file (SERVE_PAGES_COUNT_FILE) is written 5 ms after the last request; an empty or missing file is a failed measurement, never zero. On Windows the parent's exit kills the emulator before its shutdown handlers finish.
+- [Phase 18-01]: Kit 3 smoke baseline is 5,939 requests per root run (third-party 3,337 at 75.8 per load; precache 381 entries, 322 immutable). SMOKE-07 stays unchecked until the 18-05 proof runs.
+- [Phase 18-01]: Playwright context listeners never see APIRequestContext traffic; they do see service worker requests (isNavigationRequest false). Cached precache responses read as status 200 (322 of 322). 18-03 needs the request wrapper and a listener that is not navigation-only.
 
 ### Pending Todos
 
@@ -796,8 +801,8 @@ Hosting and owner-account items are deferred, non-blocking todos (see Pending To
 
 ## Session Continuity
 
-Last session: 2026-11-15T00:37:39.099Z
-Stopped at: 16-10 complete (Kit 3 live on ed3210e; stale-worker owner row skipped by owner decision 2026-11-14); 16-01 to 16-10 done. Next: 16-12. 16-11 done (Vitest 5 live on 587c51c). Decisions: Kit sequence 05-10 pushed once and live-verified; TOOL-02/03/05 ticks wait for plan 13 Task 5.
+Last session: 2026-11-22T14:06:10.750Z
+Stopped at: Completed 18-01-PLAN.md (baseline 5,939 requests per root smoke run; probes answered). Next: 18-02.
 Resume file: None
 Next: Phase 13 closed 2026-11-01 on the green 7372b61 trio (ci 41218226897, live-smoke 41220812811). Carried: Search Console sitemap read (LIVE-05, ledger L86/L99, owner target 2026-11-04; when it lands add 41-search-console-sitemap.png, set L86/L99 passed, tick LIVE-05; if still "Couldn't fetch" on 2026-11-04 resubmit once with the full URL, then investigate). Open quick task: map HTTP 429 on live-smoke navigation to the exit-2 precondition path. Then Phase 14 (Carried Debt).
 

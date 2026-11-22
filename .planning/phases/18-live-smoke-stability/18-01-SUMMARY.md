@@ -60,8 +60,8 @@ completed: 2026-11-22
 ## Task Commits
 
 1. **Task 1: opt-in request counter in the emulator, with unit tests** - `6d4e39d` (test), follow-up fix `8f4541c` (fix, see Deviations)
-2. **Task 2: rebuild the three targets and measure the baseline per spec** - this summary's first commit (docs)
-3. **Task 3: local probes for the two open questions** - this summary's second commit (docs); probe scripts stay under the ignored `.tools/probes/`
+2. **Task 2: rebuild the three targets and measure the baseline per spec** - `26bb461` (docs)
+3. **Task 3: local probes for the two open questions** - `bb3ae81` (docs); probe scripts stay under the ignored `.tools/probes/`
 
 ## Baseline: requests per spec (root target, Kit 3)
 
@@ -151,4 +151,8 @@ Measured facts that differ from what plans 18-02 and 18-03 assume. Nothing was r
 
 - A temporary debug edit made through a shell string broke the emulator file's syntax once; it was discarded with `git checkout -- scripts/serve-pages.mjs` and redone with the edit tool. Nothing of it was committed.
 
-## Self-Check
+## Self-Check: PASSED
+
+- Files found: scripts/lib/request-counter.mjs, scripts/request-counter.test.ts, scripts/serve-pages.mjs
+- Commits found: 6d4e39d, 8f4541c, 26bb461, bb3ae81
+- Nothing under .tools/ is tracked; .planning/config.json was never staged
