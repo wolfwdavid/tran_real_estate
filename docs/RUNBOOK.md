@@ -192,6 +192,9 @@ cut):
 A run counts as proof only if its event is `workflow_run`, its head SHA equals the pushed SHA, it
 concluded success with zero failed tests and no 429, and retries is 0.
 
+- Run 1: push `e9fbb74`, ci 45461083565, live-smoke run 45464746530 (2026-11-24): 84 passed, 0
+  failed, no 429, 22.9 s
+
 ## Run the suites locally
 
 Known-good worker counts. The development machine has 16 logical CPUs; CI runs on `ubuntu-24.04`
