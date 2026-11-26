@@ -18,9 +18,9 @@
 		"check": "tsc --noEmit"
 	},
 	"devDependencies": {
-		"fast-check": "4.10.2",
+		"fast-check": "4.11.0",
 		"typescript": "~6.0.3",
-		"vitest": "5.1.0"
+		"vitest": "5.1.1"
 	},
 	"dependencies": {
 		"date-fns": "4.4.0",
